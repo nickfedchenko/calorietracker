@@ -1,0 +1,14 @@
+#! /bin/bash                                                               
+set -eu
+
+# Переходим на текущую директорию 
+dir="`dirname \"$0\"`"
+
+# Переходим в директорию проекта 
+echo "cd-ing to $dir"
+cd "$dir" || exit 1
+cd ..
+cd ..
+cd ./Uniq/Commands
+ 
+bash Setup.command
