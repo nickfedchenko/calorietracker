@@ -35,8 +35,8 @@ excluded:
   - ServiceGenerator
   # Добавить пути на другие сгенерированные классы – цвета/модели/шрифты
   - ./CalorieTracker/Sources/Generated/R.generated.swift
-  - ./.ustwo VIP Templates/
-
+  - ./ustwo VIP Templates/
+  - VIPGenerator
 identifier_name:
   min_length: 1
   max_length: 60

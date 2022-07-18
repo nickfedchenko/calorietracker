@@ -46,5 +46,5 @@ done
 eval "xcodegen generate"
 #Запускаем установку pod-ов 
 eval "pod install"
-# Установка VIP templates
-eval "sh .install_templates.sh"
+eval "cd Commands"
+eval "chmod +x CreateModule.command"
