@@ -8,4 +8,5 @@ target 'CalorieTracker' do
   # Pods for CalorieTracker
   pod 'R.swift'
   pod 'SwiftLint'
+  pod 'Texture'
 end
