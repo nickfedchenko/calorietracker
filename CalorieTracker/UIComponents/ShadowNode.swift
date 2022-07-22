@@ -13,7 +13,7 @@ final class ShadowNode: ASDisplayNode {
     
     struct Shadow {
         let color: UIColor
-        let opasity: Float
+        let opaсity: Float
         let offset: CGSize
         let radius: CGFloat
         let shape: ShadowShape
@@ -63,7 +63,7 @@ final class ShadowNode: ASDisplayNode {
         let shadowLayer = CALayer()
         shadowLayer.shadowPath = path.cgPath
         shadowLayer.shadowColor = shadow.color.cgColor
-        shadowLayer.shadowOpacity = shadow.opasity
+        shadowLayer.shadowOpacity = shadow.opaсity
         shadowLayer.shadowOffset = shadow.offset
         shadowLayer.shadowRadius = shadow.radius
         shadowLayer.bounds = bounds

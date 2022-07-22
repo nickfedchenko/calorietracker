@@ -256,14 +256,14 @@ extension MainWidgetViewNode {
         static let shadows: [ShadowNode.Shadow] = [
             .init(
                 color: .white,
-                opasity: 0.04,
+                opaсity: 0.04,
                 offset: CGSize(width: -3, height: -3),
                 radius: 4,
                 shape: .circle
             ),
             .init(
                 color: .black,
-                opasity: 0.15,
+                opaсity: 0.15,
                 offset: CGSize(width: 0, height: 3),
                 radius: 3,
                 shape: .circle
