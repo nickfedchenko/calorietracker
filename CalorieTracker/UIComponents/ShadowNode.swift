@@ -24,6 +24,7 @@ final class ShadowNode: ASDisplayNode {
         case rectangle(radius: CGFloat)
     }
     
+    private var flag = true
     var shadows: [Shadow]?
     
     init(node: ASDisplayNode) {
@@ -42,12 +43,12 @@ final class ShadowNode: ASDisplayNode {
         }
     }
     
-    override func willEnterHierarchy() {
-        super.willEnterHierarchy()
-        guard let shadows = shadows else { return }
+    override func layoutDidFinish() {
+        guard let shadows = shadows, flag else { return }
         shadows.forEach { shadow in
             addShadowLayer(shadow: shadow)
         }
+        flag = false
     }
     
     private func addShadowLayer(shadow: Shadow) {
