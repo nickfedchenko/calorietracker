@@ -10,6 +10,7 @@ import UIKit
 
 final class CTTabBarController: ASTabBarController {
     enum Constants {
+        /// Так как в макете отступ не соответствует отступу SafeAreaInsets.bottom - такое вот полуручное управления пришлось применить
         static let bottomInset: CGFloat = {
             switch UIDevice.screenType {
             case .h19x414:
@@ -37,12 +38,12 @@ final class CTTabBarController: ASTabBarController {
         tabBar.removeFromSuperview()
         customTabBar.delegate = self
         setupSubviews()
-        print("current frame is \(view.frame)")
+        let viewControllers = customTabBar.tabItems.map{ $0.configuration.viewControler }
+        setViewControllers(viewControllers, animated: false)
     }
     
     private func setupSubviews() {
         view.addSubview(customTabBar)
-        
         customTabBar.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.bottom.equalToSuperview().inset(Constants.bottomInset)

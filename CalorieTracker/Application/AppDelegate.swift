@@ -24,11 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     ) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
         let tabBar = CTTabBarController()
-        let mockControllerFirst = UIViewController()
-        let mockControllerSecond = UIViewController()
-        mockControllerFirst.view.backgroundColor = R.color.mainBackground()
-        mockControllerSecond.view.backgroundColor = R.color.mainBackground()
-        tabBar.viewControllers = [MainScreenViewController(), mockControllerFirst, mockControllerSecond]
+      
         window?.rootViewController = tabBar
         window?.makeKeyAndVisible()
         return true

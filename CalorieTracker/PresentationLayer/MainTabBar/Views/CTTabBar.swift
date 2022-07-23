@@ -14,17 +14,20 @@ protocol CTTabBarDelegate: AnyObject {
 
 final class CTTabBar: UIView {
     
+    // MARK: - Constants
     enum Constants {
         static let tabSpacing: CGFloat = (UIScreen.main.bounds.width - 40 - CGFloat(3 * 64)) / CGFloat(3 + 1)
     }
     
+    // MARK: - Public properties
     lazy var tabItems: [CTTabItem] = CTTabItem.CTTabConfiguration.allCases
         .map { CTTabItem(with: $0) }
-    var isFirstLayout = true
     
+    var isFirstLayout = true
     weak var delegate: CTTabBarDelegate?
     
-    let leftBackground: UIView = {
+    // MARK: - Private properties
+    private let leftBackground: UIView = {
         let view = UIView()
         view.backgroundColor = R.color.tabBarBackground()
         view.layer.cornerRadius = 12
@@ -32,37 +35,13 @@ final class CTTabBar: UIView {
         return view
     }()
     
-    let rightBackground: UIView = {
+    private let rightBackground: UIView = {
         let view = UIView()
         view.backgroundColor = R.color.tabBarBackground()
         view.layer.cornerRadius = 12
         view.layer.cornerCurve = .continuous
         return view
     }()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupSubviews()
-        setTags()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        guard isFirstLayout else { return }
-        tabSelected(at: 0)
-        isFirstLayout = false
-    }
-    
-    private func setTags() {
-        tabItems.enumerated().forEach { index, view in
-            view.tag = index
-            view.delegate = self
-        }
-    }
     
     private lazy var HStack: UIStackView = {
         let stackView = UIStackView()
@@ -77,17 +56,40 @@ final class CTTabBar: UIView {
             bottom: 0,
             trailing: spacing
         )
-        //        stackView.backgroundColor = R.color.tabBarBackground()
-        //        stackView.layer.cornerRadius = 12
-        //        stackView.layer.cornerCurve = .continuous
         return stackView
     }()
+    
+    // MARK: - Init
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupSubviews()
+        setTags()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Lifecycle
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        guard isFirstLayout else { return }
+        tabSelected(at: 0)
+        isFirstLayout = false
+    }
+    
+    // MARK: - Private methods
+    private func setTags() {
+        tabItems.enumerated().forEach { index, view in
+            view.tag = index
+            view.delegate = self
+        }
+    }
     
     private func setupSubviews() {
         addSubview(leftBackground)
         addSubview(rightBackground)
         addSubview(HStack)
-        
         
         tabItems.forEach {
             HStack.addArrangedSubview($0)
@@ -111,6 +113,7 @@ final class CTTabBar: UIView {
     }
 }
 
+// MARK: - CTTabItemDelegate
 extension CTTabBar: CTTabItemDelegate {
     func tabSelected(at index: Int) {
         delegate?.tabSelected(at: index)
@@ -129,7 +132,7 @@ extension CTTabBar: CTTabItemDelegate {
     }
     
     private func updateBackground(for selectedIndex: Int) {
-        
+    
         leftBackground.snp.remakeConstraints { make in
             make.top.bottom.equalToSuperview()
             make.leading.equalToSuperview().offset(20)
@@ -146,7 +149,7 @@ extension CTTabBar: CTTabItemDelegate {
             }
         }
 
-        UIView.animate(withDuration: 0.2) {
+        UIView.animate(withDuration: 0.3) {
             self.layoutIfNeeded()
         }
     }

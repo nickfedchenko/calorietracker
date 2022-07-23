@@ -12,6 +12,7 @@ protocol CTTabItemDelegate: AnyObject {
 }
 
 final class CTTabItem: UIView {
+    /// Configuration enum
     enum CTTabConfiguration: CaseIterable {
         case myDay, progress, food // cook
         
@@ -53,16 +54,20 @@ final class CTTabItem: UIView {
         }
     }
     
-    let configuration: CTTabConfiguration
-    weak var delegate: CTTabItemDelegate?
+    // MARK: - Private properties
+    private(set) var configuration: CTTabConfiguration
+
+    private let iconImage = UIImageView()
     
-    let iconImage = UIImageView()
-    let title: UILabel = {
+    private let title: UILabel = {
         let label = UILabel()
         label.font = R.font.sfProDisplaySemibold(size: 11)
         label.textColor = R.color.tabTitleTextColor()
         return label
     }()
+    
+    // MARK: - Public properties
+    weak var delegate: CTTabItemDelegate?
     
     var isSelected: Bool = false {
         didSet {
@@ -78,7 +83,7 @@ final class CTTabItem: UIView {
                 self.iconImage.snp.remakeConstraints { make in
                     make.centerX.centerY.equalToSuperview()
                 }
-                UIView.animate(withDuration: 0.1) {
+                UIView.animate(withDuration: 0.3) {
                     self.title.alpha = 0
                     self.layoutIfNeeded()
                 }
@@ -87,7 +92,7 @@ final class CTTabItem: UIView {
                     make.centerX.equalToSuperview()
                     make.top.equalToSuperview().offset(7)
                 }
-                UIView.animate(withDuration: 0.1) {
+                UIView.animate(withDuration: 0.3) {
                     self.title.alpha = 1
                     self.layoutIfNeeded()
                 }
@@ -95,6 +100,7 @@ final class CTTabItem: UIView {
         }
     }
     
+    // MARK: - Init
     init(with configuration: CTTabConfiguration) {
         self.configuration = configuration
         super.init(frame: .zero)
@@ -106,6 +112,7 @@ final class CTTabItem: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Private methods
     private func setupGestureRecognizer() {
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(toggleSelection)))
     }
