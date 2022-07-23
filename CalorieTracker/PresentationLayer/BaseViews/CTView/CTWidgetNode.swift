@@ -26,8 +26,8 @@ class CTWidgetNode: ASDisplayNode {
         .init(
             color: R.color.widgetShadowColorSecondaryLayer()!,
             opacity: 0.2,
-            offset: .init(width: 0, height: 2),
-            radius: 4,
+            offset: .init(width: 0, height: 0.5),
+            radius: 2,
             shape: .rectangle(radius: 16)
         ),
         .init(
@@ -59,16 +59,19 @@ class CTWidgetNode: ASDisplayNode {
     
     // MARK: - Private properties
     private var configuration: CTWidgetNodeConfiguration!
+    private var isFirstDraw = true
     
     // MARK: - Init
-    
     init(with configuration: CTWidgetNodeConfiguration) {
         super.init()
         automaticallyManagesSubnodes = true
         self.configuration = configuration
         setupView()
+    }
+    
+    override func didLoad() {
+        super.didLoad()
         setupCorners()
-        clipsToBounds = false
        
     }
     
@@ -78,7 +81,9 @@ class CTWidgetNode: ASDisplayNode {
     
     override func willEnterHierarchy() {
         super.willEnterHierarchy()
+        guard isFirstDraw else { return }
         drawShadows()
+        isFirstDraw = false
     }
     
     private func drawShadows() {
@@ -93,8 +98,6 @@ class CTWidgetNode: ASDisplayNode {
         case .rectangle(let radius):
             path = UIBezierPath(roundedRect: bounds, cornerRadius: radius)
         }
-        print(shadows)
-        print("bounds now are \(bounds)")
         let shadowLayer = CALayer()
         shadowLayer.shadowPath = path.cgPath
         shadowLayer.shadowColor = shadow.color.cgColor

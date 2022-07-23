@@ -23,7 +23,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
-        window?.rootViewController = MainScreenViewController()
+        let tabBar = CTTabBarController()
+        let mockControllerFirst = UIViewController()
+        let mockControllerSecond = UIViewController()
+        mockControllerFirst.view.backgroundColor = R.color.mainBackground()
+        mockControllerSecond.view.backgroundColor = R.color.mainBackground()
+        tabBar.viewControllers = [MainScreenViewController(), mockControllerFirst, mockControllerSecond]
+        window?.rootViewController = tabBar
         window?.makeKeyAndVisible()
         return true
     }

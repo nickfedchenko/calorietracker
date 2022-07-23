@@ -58,8 +58,6 @@ final class ShadowNode: ASDisplayNode {
         case .rectangle(let radius):
             path = UIBezierPath(roundedRect: bounds, cornerRadius: radius)
         }
-        print(shadows)
-        print("bounds now are \(bounds)")
         let shadowLayer = CALayer()
         shadowLayer.shadowPath = path.cgPath
         shadowLayer.shadowColor = shadow.color.cgColor

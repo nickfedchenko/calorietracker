@@ -156,7 +156,6 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         if let scrollNode = scrollNode,
            let containerNode = containerNode {
             scrollNode.layoutSpecBlock = { _, _ in
-                print("Safe area must changed")
                 let insetSpecs = ASInsetLayoutSpec(
                     insets: UIEdgeInsets(
                         top: 0,
