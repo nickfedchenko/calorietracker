@@ -6,8 +6,6 @@
 //
 
 import AsyncDisplayKit
-import Foundation
-import UIKit
 
 final class ShadowNode: ASDisplayNode {
     
@@ -25,6 +23,7 @@ final class ShadowNode: ASDisplayNode {
     }
     
     private var flag = true
+
     var shadows: [Shadow]?
     
     init(node: ASDisplayNode) {
@@ -59,7 +58,7 @@ final class ShadowNode: ASDisplayNode {
         case .rectangle(let radius):
             path = UIBezierPath(roundedRect: bounds, cornerRadius: radius)
         }
- 
+
         let shadowLayer = CALayer()
         shadowLayer.shadowPath = path.cgPath
         shadowLayer.shadowColor = shadow.color.cgColor
