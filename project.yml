@@ -35,11 +35,11 @@ targets:
     type: application
     platform: iOS
     deploymentTarget: 14.0
-    info:
-      path: CalorieTracker/Info.plist
-      properties:
-        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
-        UILaunchStoryboardName: LaunchScreen
+    # info:
+    #   path: CalorieTracker/Info.plist
+    #   properties:
+    #     UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+    #     UILaunchStoryboardName: LaunchScreen
 
     settings:
       base:
