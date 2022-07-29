@@ -7,17 +7,21 @@
 
 import AsyncDisplayKit
 
-final class AppWidgetNode: ASDisplayNode {
-    private lazy var imageNode: ASImageNode = {
+final class AppWidgetNode: CTWidgetButtonNode {
+    private lazy var iconNode: ASImageNode = {
         let node = ASImageNode()
         node.image = R.image.appWidget.circles()
-        node.contentMode = UIView.ContentMode.scaleAspectFill
+        node.contentMode = UIView.ContentMode.scaleAspectFit
         return node
     }()
     
-    override init() {
-        super.init()
+    override init(with configuration: CTWidgetNodeConfiguration) {
+        super.init(with: configuration)
         setupView()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
@@ -30,7 +34,7 @@ final class AppWidgetNode: ASDisplayNode {
                 bottom: spasing,
                 right: spasing
             ),
-            child: imageNode
+            child: iconNode
         )
     }
     
