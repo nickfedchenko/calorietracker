@@ -7,7 +7,7 @@
 
 import AsyncDisplayKit
 
-final class BasicButtonNode: ASButtonNode {
+final class BasicButtonNode: CTWidgetButtonNode {
     enum BasicButtonType {
         case add
         case save
@@ -33,10 +33,14 @@ final class BasicButtonNode: ASButtonNode {
         }
     }
     
-    init(type: BasicButtonType) {
+    init(type: BasicButtonType, with configuration: CTWidgetNodeConfiguration) {
         self.type = type
-        super.init()
+        super.init(with: configuration)
         setupView()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
