@@ -19,40 +19,116 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
     var presenter: MainScreenPresenterInterface?
     
     // MARK: - Private properties
-    private let menuButton: CTWidgetNode = {
-        let node = CTWidgetNode(with: CTWidgetNodeConfiguration(type: .compact))
-        node.backgroundColor = R.color.yellow()
+    private let menuButton: AppWidgetNode = {
+        let node = AppWidgetNode(with: CTWidgetNodeConfiguration(type: .compact))
         return node
     }()
     
-    private let messageNode: CTWidgetNode = {
-        let node = CTWidgetNode(with: CTWidgetNodeConfiguration(type: .compact))
-        node.backgroundColor = R.color.lightTeal()
+    private let messageNode: AppMessageWidgetNode = {
+        let node = AppMessageWidgetNode(with: CTWidgetNodeConfiguration(type: .compact))
         node.style.preferredSize = CGSize(width: 308, height: node.constants.height)
         node.style.flexShrink = 0.75
+        node.backgroundColor = .clear
+        node.text = "Have a nice day! Don't forget to track your breakfast "
         return node
     }()
     
-    private let mainActivityWidget: CTWidgetNode = {
-        let node = CTWidgetNode(with: CTWidgetNodeConfiguration(type: .widget))
+    private let mainActivityWidget: MainWidgetViewNode = {
+        let node = MainWidgetViewNode(with: CTWidgetNodeConfiguration(type: .widget))
         node.backgroundColor = R.color.mainDarkGreen()
         node.style.preferredSize = CGSize(
             width: 388,
             height: node.constants.height
         )
         node.style.flexShrink = 0.75
+        node.model = MainWidgetViewNode.Model(
+            text: MainWidgetViewNode.Model.Text(
+                firstLine: "1680 / 1950 kcal",
+                secondLine: "133 / 145 carbs",
+                thirdLine: "133 / 145 protein",
+                fourthLine: "23 / 30 fat",
+                excludingBurned: "778",
+                includingBurned: "1200"
+            ),
+            circleData: MainWidgetViewNode.Model.CircleData(
+                rings: [
+                    MainWidgetViewNode.Model.CircleData.RingData(
+                        progress: 0.5,
+                        color: .red,
+                        title: nil,
+                        titleColor: nil,
+                        image: nil
+                    ),
+                    MainWidgetViewNode.Model.CircleData.RingData(
+                        progress: 0.7,
+                        color: .red,
+                        title: nil,
+                        titleColor: nil,
+                        image: nil
+                    ),
+                    MainWidgetViewNode.Model.CircleData.RingData(
+                        progress: 0.6,
+                        color: .red,
+                        title: nil,
+                        titleColor: nil,
+                        image: nil
+                    ),
+                    MainWidgetViewNode.Model.CircleData.RingData(
+                        progress: 0.8,
+                        color: .red,
+                        title: nil,
+                        titleColor: nil,
+                        image: nil
+                    )
+                ]
+            )
+        )
         return node
     }()
     
-    private let calendarWidget: CTWidgetNode = {
-        let node = CTWidgetNode(with: CTWidgetNodeConfiguration(type: .large))
-        node.backgroundColor = R.color.carrot()
+    private let calendarWidget: CalendarWidgetNode = {
+        let node = CalendarWidgetNode(with: CTWidgetNodeConfiguration(type: .large))
+        node.model = .init(dateString: "May 29", daysStreak: 12)
         return node
     }()
     
-    private let waterBalanceWidget: CTWidgetNode = {
-        let node = CTWidgetNode(with: CTWidgetNodeConfiguration(type: .large))
-        node.backgroundColor = R.color.teal()
+    private let waterBalanceWidget: WaterWidgetNode = {
+        let node = WaterWidgetNode(with: CTWidgetNodeConfiguration(type: .large))
+        node.style.preferredSize = CGSize(
+            width: 260,
+            height: node.constants.height
+        )
+        node.model = .init(progress: 0.7, waterMl: NSAttributedString(string: "1600 / 2400 ml"), waterPercent: "60")
+        node.style.flexShrink = 0.75
+        return node
+    }()
+    
+    private let exercisesWidget: ExercisesWidgetNode = {
+        let node = ExercisesWidgetNode(
+            ExercisesWidgetNode.Model(
+                exercises: [
+                    ExercisesWidgetNode.Model.Exercise(
+                        burnedKcal: 240,
+                        exerciseType: ExerciseType.basketball
+                    ),
+                    ExercisesWidgetNode.Model.Exercise(
+                        burnedKcal: 320,
+                        exerciseType: ExerciseType.swim
+                    ),
+                    ExercisesWidgetNode.Model.Exercise(
+                        burnedKcal: 135,
+                        exerciseType: ExerciseType.core
+                    ),
+                    ExercisesWidgetNode.Model.Exercise(
+                        burnedKcal: 100,
+                        exerciseType: ExerciseType.boxing
+                    )
+                ],
+                progress: 0.7,
+                burnedKcal: 772,
+                goalBurnedKcal: 900
+            ),
+            with: CTWidgetNodeConfiguration(type: .large))
         node.style.preferredSize = CGSize(
             width: 260,
             height: node.constants.height
@@ -61,9 +137,20 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         return node
     }()
     
-    private let exercisesWidget: CTWidgetNode = {
-        let node = CTWidgetNode(with: CTWidgetNodeConfiguration(type: .large))
-        node.backgroundColor = R.color.purple()
+    private let stepsWidget: StepsWidgetNode = {
+        let node = StepsWidgetNode(with: CTWidgetNodeConfiguration(type: .large))
+        node.progress = 0
+        node.steps = 5000
+        return node
+    }()
+    
+    private let weightMeasureWidget: WeightWidgetNode = {
+        let node = WeightWidgetNode(with: CTWidgetNodeConfiguration(type: .large))
+        return node
+    }()
+    
+    private let notesWidget: NoteWidgetNode = {
+        let node = NoteWidgetNode(with: CTWidgetNodeConfiguration(type: .large))
         node.style.preferredSize = CGSize(
             width: 260,
             height: node.constants.height
@@ -72,43 +159,25 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         return node
     }()
     
-    private let stepsWidget: CTWidgetNode = {
-        let node = CTWidgetNode(with: CTWidgetNodeConfiguration(type: .large))
-        node.backgroundColor = R.color.violet()
-        return node
-    }()
-    
-    private let weightMeasureWidget: CTWidgetNode = {
-        let node = CTWidgetNode(with: CTWidgetNodeConfiguration(type: .large))
-        node.backgroundColor = R.color.olive()
-        return node
-    }()
-    
-    private let notesWidget: CTWidgetNode = {
-        let node = CTWidgetNode(with: CTWidgetNodeConfiguration(type: .large))
-        node.backgroundColor = R.color.terracotta()
-        node.style.preferredSize = CGSize(
-            width: 260,
-            height: node.constants.height
-        )
-        node.style.flexShrink = 0.75
-        return node
-    }()
-    
-    private let addWidgetButton: CTWidgetNode = {
-        let node = CTWidgetNode(with: CTWidgetNodeConfiguration(type: .compact))
-        node.backgroundColor = R.color.mainDarkGreen()
+    private let addWidgetButton: BasicButtonNode = {
+        let node = BasicButtonNode(type: .add, with: CTWidgetNodeConfiguration(type: .compact))
         node.style.preferredSize = CGSize(
             width: 308,
             height: node.constants.height
         )
         node.style.flexShrink = 0.75
+        node.addTarget(nil,
+                       action: #selector(didTapButton),
+                       forControlEvents: .touchUpInside)
         return node
     }()
     
-    private let barCodeScannerButton: CTWidgetNode = {
-        let node = CTWidgetNode(with: CTWidgetNodeConfiguration(type: .compact))
-        node.backgroundColor = R.color.grey()
+    @objc private func didTapButton() {
+        stepsWidget.progress += 0.05
+    }
+    
+    private let barCodeScannerButton: ScanButtonNode = {
+        let node = ScanButtonNode(with: CTWidgetNodeConfiguration(type: .compact))
         return node
     }()
     

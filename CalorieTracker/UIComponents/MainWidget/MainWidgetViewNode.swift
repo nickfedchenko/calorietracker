@@ -7,7 +7,7 @@
 
 import AsyncDisplayKit
 
-final class MainWidgetViewNode: ASDisplayNode {
+final class MainWidgetViewNode: CTWidgetNode {
     
     struct Model {
         let text: Text
@@ -64,9 +64,13 @@ final class MainWidgetViewNode: ASDisplayNode {
         }
     }
     
-    override init() {
-        super.init()
+    override init(with configuration: CTWidgetNodeConfiguration) {
+        super.init(with: configuration)
         setupView()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func layoutDidFinish() {
@@ -93,7 +97,7 @@ final class MainWidgetViewNode: ASDisplayNode {
         ]
         
         let mainLabelStack = ASStackLayoutSpec.vertical()
-        mainLabelStack.spacing = 21
+        mainLabelStack.justifyContent = .spaceBetween
         mainLabelStack.children = [
             topLabelStack,
             bottomLabelStack
@@ -101,9 +105,9 @@ final class MainWidgetViewNode: ASDisplayNode {
         
         let insetLayoutLabel = ASInsetLayoutSpec(
             insets: UIEdgeInsets(
-                top: 32,
-                left: 24,
-                bottom: 6,
+                top: 17,
+                left: 0,
+                bottom: 0,
                 right: 0
             ),
             child: mainLabelStack
@@ -113,7 +117,7 @@ final class MainWidgetViewNode: ASDisplayNode {
         shadowNode.shadows = Color.shadows
         
         let rightStack = ASStackLayoutSpec.vertical()
-        rightStack.spacing = 20
+        rightStack.justifyContent = .spaceBetween
         rightStack.horizontalAlignment = .middle
         rightStack.children = [
             shadowNode,
@@ -121,14 +125,14 @@ final class MainWidgetViewNode: ASDisplayNode {
         ]
 
         let mainStack = ASStackLayoutSpec.horizontal()
-        mainStack.spacing = 22
+        mainStack.justifyContent = .spaceBetween
         mainStack.children = [
             insetLayoutLabel,
             rightStack
         ]
 
         return ASInsetLayoutSpec(
-            insets: UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12),
+            insets: UIEdgeInsets(top: 12, left: 20, bottom: 12, right: 12),
             child: mainStack
         )
     }
