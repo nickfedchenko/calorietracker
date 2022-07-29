@@ -7,16 +7,20 @@
 
 import AsyncDisplayKit
 
-final class ScanButtonNode: ASButtonNode {
+final class ScanButtonNode: CTWidgetButtonNode {
     private lazy var scanImageNode: ASImageNode = {
         let node = ASImageNode()
         node.image = R.image.scanButton.buttonNotPressed()
         return node
     }()
     
-    override init() {
-        super.init()
+    override init(with configuration: CTWidgetNodeConfiguration) {
+        super.init(with: configuration)
         setupView()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
@@ -38,7 +42,6 @@ final class ScanButtonNode: ASButtonNode {
         backgroundColor = .white
         layer.cornerRadius = 16
         layer.cornerCurve = .continuous
-        layer.masksToBounds = true
         
         addTarget(
             self,
