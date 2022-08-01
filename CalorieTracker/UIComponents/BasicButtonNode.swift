@@ -12,11 +12,39 @@ final class BasicButtonNode: CTWidgetButtonNode {
         case add
         case save
         case apply
+        case custom(CustomType)
+    }
+    
+    struct CustomType {
+        let image: Image?
+        let title: Title?
+        let backgroundColorInactive: UIColor
+        let gradientColors: [UIColor]
+        let borderColorInactive: UIColor
+        let borderColorDefault: UIColor
+        
+        struct Image {
+            let isPressImage: UIImage
+            let defaultImage: UIImage
+            let inactiveImage: UIImage
+        }
+        
+        struct Title {
+            let isPressTitle: String
+            let defaultTitle: String
+            let isPressTitleColor: UIColor
+            let defaultTitleColor: UIColor
+        }
     }
     
     private lazy var gradientLayer: CAGradientLayer = {
         let layer = CAGradientLayer()
-        layer.colors = Color.gradientColors.compactMap { $0?.cgColor }
+        switch type {
+        case .custom(let model):
+            layer.colors = model.gradientColors.map { $0.cgColor }
+        case .add, .apply, .save:
+            layer.colors = Color.gradientColors.compactMap { $0?.cgColor }
+        }
         layer.startPoint = CGPoint(x: 0, y: 0)
         layer.endPoint = CGPoint(x: 1, y: 0)
         return layer
@@ -53,6 +81,8 @@ final class BasicButtonNode: CTWidgetButtonNode {
             children = [iconNode, textNode]
         case .apply:
             children = [textNode]
+        case .custom:
+            children = [iconNode, textNode]
         }
         
         let stack = ASStackLayoutSpec.horizontal()
@@ -108,6 +138,11 @@ final class BasicButtonNode: CTWidgetButtonNode {
             textNode.attributedText = getAttributedString(string: Text.save, color: .white)
         case .apply:
             textNode.attributedText = getAttributedString(string: Text.apply, color: .white)
+        case .custom(let model):
+            iconNode.image = model.image?.inactiveImage
+            if let text = model.title {
+                textNode.attributedText = getAttributedString(string: text.defaultTitle, color: .white)
+            }
         }
     }
     
@@ -128,6 +163,16 @@ final class BasicButtonNode: CTWidgetButtonNode {
                 string: Text.apply,
                 color: isPress ? Color.borderColor : UIColor.white
             )
+        case .custom(let model):
+            borderColor = model.borderColorDefault.cgColor
+            
+            iconNode.image = isPress ? model.image?.isPressImage : model.image?.defaultImage
+            if let text = model.title {
+                textNode.attributedText = getAttributedString(
+                    string: isPress ? text.isPressTitle : text.defaultTitle,
+                    color: isPress ? text.isPressTitleColor : text.defaultTitleColor
+                )
+            }
         }
     }
     
