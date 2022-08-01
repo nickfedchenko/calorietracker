@@ -26,20 +26,12 @@ final class ShadowNode: ASDisplayNode {
 
     var shadows: [Shadow]?
     
-    init(node: ASDisplayNode) {
+    override init() {
         super.init()
         backgroundColor = .clear
         layer.masksToBounds = false
         clipsToBounds = false
         automaticallyManagesSubnodes = true
-        
-        addSubnode(node)
-        layoutSpecBlock = { _, _ in
-            return ASInsetLayoutSpec(
-                insets: UIEdgeInsets.zero,
-                child: ASWrapperLayoutSpec(layoutElement: node)
-            )
-        }
     }
     
     override func layoutDidFinish() {

@@ -55,15 +55,15 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
                     MainWidgetViewNode.Model.CircleData.RingData(
                         progress: 0.5,
                         color: .red,
-                        title: nil,
+                        title: "C",
                         titleColor: nil,
                         image: nil
                     ),
                     MainWidgetViewNode.Model.CircleData.RingData(
                         progress: 0.7,
                         color: .red,
-                        title: nil,
-                        titleColor: nil,
+                        title: "B",
+                        titleColor: .blue,
                         image: nil
                     ),
                     MainWidgetViewNode.Model.CircleData.RingData(
@@ -71,12 +71,12 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
                         color: .red,
                         title: nil,
                         titleColor: nil,
-                        image: nil
+                        image: R.image.mainWidgetViewNode.burned()
                     ),
                     MainWidgetViewNode.Model.CircleData.RingData(
                         progress: 0.8,
-                        color: .red,
-                        title: nil,
+                        color: .green,
+                        title: "H",
                         titleColor: nil,
                         image: nil
                     )

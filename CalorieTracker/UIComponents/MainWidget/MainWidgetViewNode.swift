@@ -41,11 +41,10 @@ final class MainWidgetViewNode: CTWidgetNode {
     private let fourthLabel = ASTextNode()
     private let fifthLabel = ASTextNode()
     private let sixthLabel = ASTextNode()
-    private let circleActivityView = CircleActivityView()
     private let burnedKcalSwitchNode = BurnedKcalSwitchNode()
     
-    private lazy var circleActivityViewNode: ASDisplayNode = {
-        let node = ASDisplayNode { self.circleActivityView }
+    private lazy var circleActivityNode: CircleActivityNode = {
+        let node = CircleActivityNode()
         node.style.preferredSize = CGSize(width: 134, height: 134)
         return node
     }()
@@ -79,7 +78,7 @@ final class MainWidgetViewNode: CTWidgetNode {
         backgroundColor = gradientLayer.gradientColor()
     }
     
-    override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
+    override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {        
         let topLabelStack = ASStackLayoutSpec.vertical()
         topLabelStack.spacing = 8
         topLabelStack.children = [
@@ -113,14 +112,14 @@ final class MainWidgetViewNode: CTWidgetNode {
             child: mainLabelStack
         )
         
-        let shadowNode = ShadowNode(node: circleActivityViewNode)
+        let shadowNode = ShadowNode()
         shadowNode.shadows = Color.shadows
         
         let rightStack = ASStackLayoutSpec.vertical()
         rightStack.justifyContent = .spaceBetween
         rightStack.horizontalAlignment = .middle
         rightStack.children = [
-            shadowNode,
+            ASBackgroundLayoutSpec(child: circleActivityNode, background: shadowNode),
             burnedKcalSwitchNode
         ]
 
@@ -138,11 +137,9 @@ final class MainWidgetViewNode: CTWidgetNode {
     }
     
     private func setupView() {
-        circleActivityView.colorBackCircles = R.color.mainWidgetViewNode.circleBackgroundColor()
-        circleActivityView.titleFont = UIFont.roundedFont(ofSize: 10, weight: .bold)
-        circleActivityView.dataSource = self
+        circleActivityNode.colorBackCircles = R.color.mainWidgetViewNode.circleBackgroundColor()
+        circleActivityNode.dataSource = self
         
-        layer.masksToBounds = true
         layer.cornerRadius = 16
         layer.cornerCurve = .continuous
         automaticallyManagesSubnodes = true
@@ -165,7 +162,7 @@ final class MainWidgetViewNode: CTWidgetNode {
     
     private func didChangeModel() {
         guard let model = model else { return }
-        circleActivityView.reloadData()
+        circleActivityNode.reloadData()
         
         firstLabel.attributedText = getAttributedString(
             string: model.text.firstLine,
@@ -211,33 +208,33 @@ final class MainWidgetViewNode: CTWidgetNode {
 
 // MARK: - CircleActivityViewDataSource
 
-extension MainWidgetViewNode: CircleActivityViewDataSource {
-    func circleActivityView(_ view: CircleActivityView, strokeColor index: Int) -> UIColor {
+extension MainWidgetViewNode: CircleActivityNodeDataSource {
+    func circleActivityNode(_ node: CircleActivityNode, strokeColor index: Int) -> UIColor {
         guard let model = model else { return .red }
         return model.circleData.rings[index].color ?? .blue
     }
     
-    func numberOfActivityCircles(_ view: CircleActivityView) -> Int {
+    func numberOfActivityCircles(_ node: CircleActivityNode) -> Int {
         guard let model = model else { return 0 }
         return model.circleData.rings.count
     }
     
-    func circleActivityView(_ view: CircleActivityView, percentageOfFilling index: Int) -> CGFloat {
+    func circleActivityNode(_ node: CircleActivityNode, percentageOfFilling index: Int) -> CGFloat {
         guard let model = model else { return 1 }
         return model.circleData.rings[index].progress
     }
     
-    func circleActivityView(_ view: CircleActivityView, activityCircleTitleString index: Int) -> String? {
+    func circleActivityNode(_ node: CircleActivityNode, activityCircleTitleString index: Int) -> String? {
         guard let model = model else { return nil }
         return model.circleData.rings[index].title
     }
     
-    func circleActivityView(_ view: CircleActivityView, activityCircleTitleImage index: Int) -> UIImage? {
+    func circleActivityNode(_ node: CircleActivityNode, activityCircleTitleImage index: Int) -> UIImage? {
         guard let model = model else { return nil }
         return model.circleData.rings[index].image
     }
     
-    func circleActivityView(_ view: CircleActivityView, activityCircleTitleColor index: Int) -> UIColor? {
+    func circleActivityNode(_ node: CircleActivityNode, activityCircleTitleColor index: Int) -> UIColor? {
         guard let model = model else { return nil }
         return model.circleData.rings[index].titleColor
     }
