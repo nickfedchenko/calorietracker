@@ -6,6 +6,7 @@
 //
 
 import AsyncDisplayKit
+import Lottie
 
 protocol CTTabItemDelegate: AnyObject {
     func tabSelected(at index: Int)
@@ -16,16 +17,16 @@ final class CTTabItem: UIView {
     enum CTTabConfiguration: CaseIterable {
         case myDay, progress, food // cook
         
-        var stateImages: (selected: UIImage?, deselected: UIImage?) {
+        var animationName: String {
             switch self {
             case .myDay:
-                return (R.image.myDaySelected(), R.image.myDayDeselected())
+                return R.file.myDayJson()?.relativePath ?? ""
             case .progress:
-                return (R.image.progressSelected(), R.image.progressDeselected())
+                return R.file.progressJson()?.relativePath ?? ""
             case .food:
-                return (R.image.foodSelected(), R.image.foodDeselected())
-//            case .cook:
-//
+                return R.file.foodJson()?.relativePath ?? ""
+                //            case .cook:
+                //
             }
         }
         
@@ -37,8 +38,8 @@ final class CTTabItem: UIView {
                 return "PROGRESS"
             case .food:
                 return "FOOD"
-//            case .cook:
-//                return "COOK"
+                //            case .cook:
+                //                return "COOK"
             }
         }
         
@@ -56,8 +57,8 @@ final class CTTabItem: UIView {
     
     // MARK: - Private properties
     private(set) var configuration: CTTabConfiguration
-
-    private let iconImage = UIImageView()
+    
+    private let iconView = AnimationView()
     
     private let title: UILabel = {
         let label = UILabel()
@@ -70,31 +71,20 @@ final class CTTabItem: UIView {
     weak var delegate: CTTabItemDelegate?
     
     var isSelected: Bool = false {
+        
         didSet {
-          let transition = CATransition()
-            transition.duration = 0.1
-            transition.type = .fade
-            transition.subtype = .fromBottom
-                self.iconImage.image = self.isSelected
-                ? self.configuration.stateImages.selected
-                : self.configuration.stateImages.deselected
-            iconImage.layer.add(transition, forKey: nil)
             if isSelected {
-                self.iconImage.snp.remakeConstraints { make in
-                    make.centerX.centerY.equalToSuperview()
-                }
-                UIView.animate(withDuration: 0.3) {
+                
+                UIView.animate(withDuration: 0.2) {
                     self.title.alpha = 0
-                    self.layoutIfNeeded()
+                } completion: { _ in
+                    self.iconView.play(toProgress: 1)
                 }
             } else {
-                self.iconImage.snp.remakeConstraints { make in
-                    make.centerX.equalToSuperview()
-                    make.top.equalToSuperview().offset(7)
-                }
-                UIView.animate(withDuration: 0.3) {
-                    self.title.alpha = 1
-                    self.layoutIfNeeded()
+                iconView.play(fromProgress: 1, toProgress: 0, loopMode: nil) { _ in
+                    UIView.animate(withDuration: 0.2) {
+                        self.title.alpha = 1
+                    }
                 }
             }
         }
@@ -103,9 +93,13 @@ final class CTTabItem: UIView {
     // MARK: - Init
     init(with configuration: CTTabConfiguration) {
         self.configuration = configuration
+        iconView.contentMode = .scaleAspectFill
+        iconView.contentScaleFactor = 1
+        iconView.animationSpeed = 3.2
         super.init(frame: .zero)
         setupSubviews()
         setupGestureRecognizer()
+        iconView.animation = .filepath(configuration.animationName)
     }
     
     required init?(coder: NSCoder) {
@@ -118,23 +112,24 @@ final class CTTabItem: UIView {
     }
     
     private func setupSubviews() {
-        addSubview(iconImage)
+        addSubview(iconView)
         addSubview(title)
-        iconImage.image = configuration.stateImages.deselected
+        //        iconImage.image = configuration.stateAnimations.deselected
         title.attributedText = NSAttributedString(string: configuration.title)
         
         snp.makeConstraints { make in
             make.height.width.equalTo(64)
         }
         
-        iconImage.snp.makeConstraints { make in
+        iconView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalToSuperview().offset(7)
+            make.width.height.equalTo(64)
+            make.top.equalToSuperview()
         }
         
         title.snp.makeConstraints { make in
-            make.top.equalTo(iconImage.snp.bottom).offset(1)
-            make.centerX.equalTo(iconImage)
+            make.bottom.equalTo(iconView).inset(6)
+            make.centerX.equalTo(iconView)
         }
     }
     

@@ -27,17 +27,15 @@ final class CTTabBar: UIView {
     weak var delegate: CTTabBarDelegate?
     
     // MARK: - Private properties
-    private let leftBackground: UIView = {
-        let view = UIView()
-        view.backgroundColor = R.color.tabBarBackground()
+    private let leftBackground: GradientBackgroundView = {
+        let view = GradientBackgroundView(direction: .left)
         view.layer.cornerRadius = 12
         view.layer.cornerCurve = .continuous
         return view
     }()
     
-    private let rightBackground: UIView = {
-        let view = UIView()
-        view.backgroundColor = R.color.tabBarBackground()
+    private let rightBackground: GradientBackgroundView = {
+        let view = GradientBackgroundView(direction: .right)
         view.layer.cornerRadius = 12
         view.layer.cornerCurve = .continuous
         return view
@@ -68,6 +66,19 @@ final class CTTabBar: UIView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func updateGradients() {
+        leftBackground.layer.sublayers?.removeAll()
+        let leftGradient = CAGradientLayer()
+        leftGradient.colors = [UIColor.blue, UIColor.white].compactMap { $0.cgColor }
+        leftGradient.startPoint = CGPoint(x: 0.85, y: 0.5)
+        leftGradient.endPoint = CGPoint(x: 1, y: 0.5)
+        leftGradient.locations = [0, 1]
+        leftGradient.frame = leftBackground.bounds
+        leftGradient
+    
+        leftBackground.layer.addSublayer(leftGradient)
     }
     
     // MARK: - Lifecycle
