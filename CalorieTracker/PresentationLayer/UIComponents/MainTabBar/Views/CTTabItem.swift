@@ -50,7 +50,7 @@ final class CTTabItem: UIView {
             case .progress:
                 return ProgressRouter.setupModule()
             case .food:
-                return MainScreenViewController()
+                return RecipesScreenRouter.setupModule()
             }
         }
     }

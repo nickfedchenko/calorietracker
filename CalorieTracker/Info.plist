@@ -39,6 +39,9 @@
 		<string>SF-Pro-Text-MediumItalic.otf</string>
 		<string>SFProText-Regular.otf</string>
 		<string>SFProDisplay-Semibold.ttf</string>
+		<string>SFProText-Semibold.ttf</string>
+		<string>SFProRounded-Bold.otf</string>
+		<string>SFProRounded-Semibold.otf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

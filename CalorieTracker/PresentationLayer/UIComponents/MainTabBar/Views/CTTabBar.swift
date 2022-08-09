@@ -148,6 +148,8 @@ extension CTTabBar: CTTabItemDelegate {
             make.leading.equalToSuperview().offset(20)
             if selectedIndex != 0 {
             make.trailing.equalTo(tabItems[selectedIndex].snp.leading)
+            } else {
+                make.trailing.equalTo(leftBackground.snp.leading)
             }
         }
 
@@ -156,6 +158,8 @@ extension CTTabBar: CTTabItemDelegate {
             make.trailing.equalToSuperview().inset(20)
             if selectedIndex != 2 {
             make.leading.equalTo(tabItems[selectedIndex].snp.trailing)
+            } else {
+                make.leading.equalTo(rightBackground.snp.trailing)
             }
         }
 
