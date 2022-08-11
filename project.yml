@@ -11,6 +11,9 @@ options:
   developmentLanguage: en
   createIntermediateGroups: true
 packages:
+    Alamofire:
+      url: https://github.com/Alamofire/Alamofire.git
+      majorVersion: 5.6.1
     SnapKit:
       url: https://github.com/SnapKit/SnapKit.git
       majorVersion: 5.0.1
@@ -60,6 +63,7 @@ targets:
       - package: Kingfisher
       - package: Lottie
       - package: Swinject
+      - package: Alamofire
     sources:
        - path: ./CalorieTracker
     preBuildScripts:

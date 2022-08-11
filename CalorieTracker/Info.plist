@@ -28,5 +28,7 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>backendKey</key>
+	<string>nfcKe99yXems6W8QstzV</string>
 </dict>
 </plist>

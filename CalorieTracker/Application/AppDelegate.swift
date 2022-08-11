@@ -13,6 +13,7 @@ import Lottie
 import SnapKit
 import Swinject
 import UIKit
+import Alamofire
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -24,9 +25,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     ) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
         let tabBar = CTTabBarController()
-      
         window?.rootViewController = tabBar
         window?.makeKeyAndVisible()
+        NetworkEngine.shared.fetchDishes { result in
+            
+            switch result {
+            case .success(let dishes):
+                print(dishes.first)
+            case .failure(let error):
+                if case let .AFError(error: aFerror) = error {
+                    dump(aFerror)
+                }
+            }
+        }
         return true
     }
 }
