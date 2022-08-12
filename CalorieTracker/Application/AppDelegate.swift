@@ -4,7 +4,7 @@
 //
 //  Created by Vladimir Banushkin on 15.07.2022.
 //
-
+import Alamofire
 import AsyncDisplayKit
 import Firebase
 import Gzip
@@ -13,7 +13,6 @@ import Lottie
 import SnapKit
 import Swinject
 import UIKit
-import Alamofire
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -27,16 +26,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let tabBar = CTTabBarController()
         window?.rootViewController = tabBar
         window?.makeKeyAndVisible()
-        NetworkEngine.shared.fetchDishes { result in
-            
-            switch result {
-            case .success(let dishes):
-                print(dishes.first)
-            case .failure(let error):
-                if case let .AFError(error: aFerror) = error {
-                    dump(aFerror)
-                }
+        var now = Date().timeIntervalSince1970
+        DSF.shared.updateStoredDishes()
+//        DSF.shared.updateStoredProducts()
+        DispatchQueue.main.async {
+            var dishes = DSF.shared.getAllStoredDishes()
+             while dishes.isEmpty {
+                dishes = DSF.shared.getAllStoredDishes()
             }
+            print("Time elapsed = \(Date().timeIntervalSince1970 - now)")
+            print(dishes.count)
+            print(dishes.first)
         }
         return true
     }

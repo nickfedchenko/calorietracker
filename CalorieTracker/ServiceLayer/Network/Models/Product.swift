@@ -2,6 +2,7 @@ import Foundation
 
 typealias ProductsResult = (Result<[Product], ErrorDomain>) -> Void
 
+/// Codable структура.
 struct Product: Codable {
     var id: Int
     let barcode: String?
@@ -13,6 +14,32 @@ struct Product: Codable {
     let isBasic, isBasicState, isDished: Bool?
     let brand: String?
     let servings: [Serving]?
+    
+    init?(from managedModel: DomainProduct) {
+        id = Int(managedModel.id)
+        barcode = managedModel.barcode
+        title = managedModel.title
+        protein = managedModel.protein
+        fat = managedModel.fat
+        carbs = managedModel.carbs
+        kcal = Int(managedModel.kcal)
+        photo = managedModel.photo
+        isBasic = managedModel.isBasic
+        isBasicState = managedModel.isBasicState
+        isDished = managedModel.isDished
+        brand = managedModel.brand
+        if let servingsData = managedModel.servings {
+            servings = try? JSONDecoder().decode([Serving].self, from: servingsData)
+        } else {
+            servings = nil
+        }
+        
+        if let compositionData = managedModel.composition {
+            composition = try? JSONDecoder().decode(Composition.self, from: compositionData)
+        } else {
+            composition = nil
+        }
+    }
 }
 
 struct Composition: Codable {
@@ -51,5 +78,5 @@ struct Composition: Codable {
 struct Serving: Codable {
     let title: String
     let plural: String?
-    let weight: Double
+    let weight: Int?
 }

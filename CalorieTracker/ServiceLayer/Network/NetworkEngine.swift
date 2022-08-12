@@ -8,6 +8,12 @@ import Alamofire
 import Foundation
 import Gzip
 
+typealias GenericResult<T> = (Result<T, ErrorDomain>) -> Void
+protocol NetworkEngineInterface {
+    func fetchProducts(completion: @escaping ProductsResult )
+    func fetchDishes(completion: @escaping DishesResponse)
+}
+
 enum ErrorDomain: Error {
     case AFError(error: AFError?)
 }
@@ -89,20 +95,19 @@ enum RequestGenerator {
             }
             url = optUrl
         }
+       
         let request = URLRequest(url: url)
-        print(request.url)
         return request
     }
 }
 
 final class NetworkEngine {
-
-    private init() {}
-  
-//
-    static let shared = NetworkEngine()
     
-//
+    /// Core method
+    /// - Parameters:
+    ///   - request: прокидываем сюда значение enum RequestGenerator, который собирает request  c нужными параметрами
+    ///   - completion: стандартный хендлер, тип - generic Result((Result<T, ErrorDomain>) -> Void,  тоесть подкинуть можно вместо Т
+    ///   то угодно комформящееся Codable
     private func performDecodableRequest<T: Codable>(
         request: RequestGenerator,
         completion: @escaping ((Result<T, ErrorDomain>) -> Void)
@@ -122,6 +127,9 @@ final class NetworkEngine {
             }
     }
     
+}
+
+extension NetworkEngine: NetworkEngineInterface {
     func fetchProducts(completion: @escaping ProductsResult ) {
         performDecodableRequest(request: .fetchProductZipped, completion: completion)
     }
