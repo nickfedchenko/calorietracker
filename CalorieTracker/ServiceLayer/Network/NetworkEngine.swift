@@ -37,7 +37,7 @@ enum RequestGenerator {
                 }
             case .fetchDishesZipped:
                 if let targetCode = LinkLanguageCodes.allCases.first(where: { $0.rawValue == currentLanguageCode }) {
-                    switch (UDM.isMetric, targetCode == .en) {
+                    switch (UDM.isGloballyMetric, targetCode == .en) {
                     case (true, true):
                         return .en
                     case (false, true):

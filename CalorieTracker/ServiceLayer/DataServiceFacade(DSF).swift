@@ -47,7 +47,17 @@ extension DSF: DataServiceFacadeInterface {
             case .failure(let error):
                 dump(error)
             case .success(let dishes):
-                self?.localPersistentStore.saveDishes(dishes: dishes)
+//                self?.localPersistentStore.saveDishes(dishes: dishes)
+                self?.checkForIngredients(dishes: dishes)
+            }
+        }
+    }
+    
+    private func checkForIngredients(dishes: [Dish]) {
+        print("Overall dishes count \(dishes.count)")
+        dishes.forEach {
+            if $0.ingredients.isEmpty {
+                print("Dish with id of \($0.id) have no ingredients stored")
             }
         }
     }

@@ -6,7 +6,9 @@
 //
 
 import Foundation
+
 typealias DishesResponse = (Result<[Dish], ErrorDomain>) -> Void
+
 struct Dish: Codable {
     let id: Int
     let title: String
