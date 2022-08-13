@@ -58,6 +58,53 @@ final class UDM {
         }
     }
     
+    static var energyIsMetric: Bool {
+        get {
+            guard let value: Bool = getValue(for: .energyIsMetric) else {
+                return true
+            }
+            return value
+        }
+        
+        set {
+            if !newValue {
+                UDM.isGloballyMetric = false
+            }
+            setValue(value: newValue, for: .energyIsMetric)
+        }
+    }
+    
+    static var liquidCapacityIsMetric: Bool {
+        get {
+            guard let value: Bool = getValue(for: .liquidCapacityIsMetric) else {
+                return true
+            }
+            return value
+        }
+        
+        set {
+            if !newValue {
+                UDM.isGloballyMetric = false
+            }
+            setValue(value: newValue, for: .liquidCapacityIsMetric)
+        }
+    }
+    
+    static var servingIsMetric: Bool {
+        get {
+            guard let value: Bool = getValue(for: .servingWeightIsMetric) else {
+                return true
+            }
+            return value
+        }
+        
+        set {
+            if !newValue {
+                UDM.isGloballyMetric = false
+            }
+            setValue(value: newValue, for: .servingWeightIsMetric)
+        }
+    }
     
     private static func setValue<T>(value: T, for key: UDMKeys) {
         UserDefaults.standard.set(value, forKey: key.rawValue)
