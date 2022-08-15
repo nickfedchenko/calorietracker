@@ -6,14 +6,12 @@
 //
 
 import AsyncDisplayKit
-import Foundation
-import UIKit
 
 final class ShadowNode: ASDisplayNode {
     
     struct Shadow {
         let color: UIColor
-        let opacity: Float
+        let opaсity: Float
         let offset: CGSize
         let radius: CGFloat
         let shape: ShadowShape
@@ -24,30 +22,24 @@ final class ShadowNode: ASDisplayNode {
         case rectangle(radius: CGFloat)
     }
     
+    private var flag = true
+
     var shadows: [Shadow]?
     
-    init(node: ASDisplayNode) {
+    override init() {
         super.init()
         backgroundColor = .clear
         layer.masksToBounds = false
         clipsToBounds = false
         automaticallyManagesSubnodes = true
-        
-        addSubnode(node)
-        layoutSpecBlock = { _, _ in
-            return ASInsetLayoutSpec(
-                insets: UIEdgeInsets.zero,
-                child: ASWrapperLayoutSpec(layoutElement: node)
-            )
-        }
     }
     
-    override func willEnterHierarchy() {
-        super.willEnterHierarchy()
-        guard let shadows = shadows else { return }
+    override func layoutDidFinish() {
+        guard let shadows = shadows, flag else { return }
         shadows.forEach { shadow in
             addShadowLayer(shadow: shadow)
         }
+        flag = false
     }
     
     private func addShadowLayer(shadow: Shadow) {
@@ -58,10 +50,11 @@ final class ShadowNode: ASDisplayNode {
         case .rectangle(let radius):
             path = UIBezierPath(roundedRect: bounds, cornerRadius: radius)
         }
+
         let shadowLayer = CALayer()
         shadowLayer.shadowPath = path.cgPath
         shadowLayer.shadowColor = shadow.color.cgColor
-        shadowLayer.shadowOpacity = shadow.opacity
+        shadowLayer.shadowOpacity = shadow.opaсity
         shadowLayer.shadowOffset = shadow.offset
         shadowLayer.shadowRadius = shadow.radius
         shadowLayer.bounds = bounds
