@@ -176,12 +176,15 @@ final class CircleActivityNode: ASDisplayNode {
         }
     }
     
-    private func createRingShape(center: CGPoint,
-                                 radius: CGFloat,
-                                 start: CGFloat,
-                                 end: CGFloat,
-                                 color: UIColor?,
-                                 lineWidth: CGFloat) -> CAShapeLayer {
+    // swiftlint:disable:next function_parameter_count
+    private func createRingShape(
+        center: CGPoint,
+        radius: CGFloat,
+        start: CGFloat,
+        end: CGFloat,
+        color: UIColor?,
+        lineWidth: CGFloat
+    ) -> CAShapeLayer {
         
         let circlePath = UIBezierPath(
             arcCenter: center,

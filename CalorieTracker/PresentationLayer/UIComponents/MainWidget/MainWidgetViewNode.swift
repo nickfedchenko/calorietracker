@@ -7,6 +7,7 @@
 
 import AsyncDisplayKit
 
+// swiftlint:disable nesting
 final class MainWidgetViewNode: CTWidgetNode {
     
     struct Model {

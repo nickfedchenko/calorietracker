@@ -15,6 +15,7 @@ final class ExercisesWidgetNode: CTWidgetNode {
         let burnedKcal: Int
         let goalBurnedKcal: Int?
         
+        // swiftlint:disable:next nesting
         struct Exercise {
             let burnedKcal: Int
             let exerciseType: ExerciseType
@@ -263,6 +264,7 @@ final class ExercisesWidgetNode: CTWidgetNode {
         )
     }
     
+    // swiftlint:disable:next cyclomatic_complexity
     private func getElementChart(_ with: CGFloat) -> ElementChart {
         switch with * 10 {
         case 0...1:

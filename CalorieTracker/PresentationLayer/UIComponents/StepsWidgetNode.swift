@@ -37,7 +37,7 @@ final class StepsWidgetNode: CTWidgetNode {
     
     private lazy var imageNode: ASImageNode = {
         let node = ASImageNode()
-        node.image = R.image.stepsWidget.flag()
+        node.image = R.image.stepsWidget.flaG()
         node.contentMode = UIView.ContentMode.center
         return node
     }()
@@ -100,7 +100,7 @@ final class StepsWidgetNode: CTWidgetNode {
     private func didChangeProgress() {
         if progress <= 1 {
             imageNode.image = progress < 1
-            ? R.image.stepsWidget.flag()
+            ? R.image.stepsWidget.flaG()
             : R.image.stepsWidget.performedFlag()
             
             guard let progressLayer = layers.first else { return }

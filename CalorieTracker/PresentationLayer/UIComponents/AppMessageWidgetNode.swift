@@ -66,6 +66,7 @@ final class AppMessageWidgetNode: CTWidgetNode {
         return shape
     }
     
+    // swiftlint:disable:next function_body_length
     private func getPath(size: CGSize) -> UIBezierPath {
         let radius = min(
             layer.cornerRadius,

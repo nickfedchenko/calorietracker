@@ -6,7 +6,7 @@
 //
 
 import AsyncDisplayKit
-
+// swiftlint:disable nesting
 final class BasicButtonNode: CTWidgetButtonNode {
     enum BasicButtonType {
         case add
