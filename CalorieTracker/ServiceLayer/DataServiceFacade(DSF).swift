@@ -19,6 +19,12 @@ protocol DataServiceFacadeInterface {
     /// Возвращает все блюда сохраненные в локальной ДБ
     /// - Returns: массив Dish
     func getAllStoredDishes() -> [Dish]
+    /// Метода поиска продуктов, по умолчанию локальный
+    /// - Parameters:
+    ///   - phrase: search query
+    ///   - userNetwork: флаг отвечающий за поиск через бэк
+    ///   - completion: результат приходит сюда.
+    func searchProducts(by phrase: String, userNetwork: Bool,  completion: @escaping ([Product]) -> Void)
 }
 
 final class DSF {
@@ -47,8 +53,8 @@ extension DSF: DataServiceFacadeInterface {
             case .failure(let error):
                 dump(error)
             case .success(let dishes):
-//                self?.localPersistentStore.saveDishes(dishes: dishes)
-                self?.checkForIngredients(dishes: dishes)
+                self?.localPersistentStore.saveDishes(dishes: dishes)
+//                self?.checkForIngredients(dishes: dishes)
             }
         }
     }
@@ -70,5 +76,9 @@ extension DSF: DataServiceFacadeInterface {
     func getAllStoredDishes() -> [Dish] {
         let dishes = localPersistentStore.fetchDishes()
         return dishes
+    }
+    
+    func searchProducts(by phrase: String, userNetwork: Bool = false, completion: @escaping ([Product]) -> Void) {
+     return 
     }
 }

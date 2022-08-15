@@ -27,17 +27,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = tabBar
         window?.makeKeyAndVisible()
         var now = Date().timeIntervalSince1970
-        DSF.shared.updateStoredDishes()
-//        DSF.shared.updateStoredProducts()
-//        DispatchQueue.main.async {
-//            var dishes = DSF.shared.getAllStoredDishes()
-//             while dishes.isEmpty {
-//                dishes = DSF.shared.getAllStoredDishes()
-//            }
-//            print("Time elapsed = \(Date().timeIntervalSince1970 - now)")
-//            print(dishes.count)
-//            print(dishes[4])
-//        }
+//        DSF.shared.updateStoredDishes()
+        DSF.shared.updateStoredProducts()
+        DispatchQueue.main.async {
+            var dishes = DSF.shared.getAllStoredProducts()
+             while dishes.isEmpty {
+                dishes = DSF.shared.getAllStoredProducts()
+            }
+            print("Time elapsed = \(Date().timeIntervalSince1970 - now)")
+            print(dishes.count)
+            print(dishes[4])
+        }
         return true
     }
 }

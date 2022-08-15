@@ -17,7 +17,7 @@
         <attribute name="title" attributeType="String"/>
         <attribute name="updatedAt" attributeType="String"/>
         <attribute name="videoURL" optional="YES" attributeType="URI"/>
-        <attribute name="weight" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="weight" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="id"/>
@@ -30,7 +30,7 @@
         <attribute name="carbs" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="composition" optional="YES" attributeType="Binary"/>
         <attribute name="fat" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="id" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="id" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="isBasic" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="isBasicState" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="isDished" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
@@ -46,7 +46,7 @@
         </uniquenessConstraints>
     </entity>
     <elements>
-        <element name="DomainDish" positionX="-54" positionY="108" width="128" height="14"/>
+        <element name="DomainDish" positionX="-54" positionY="108" width="128" height="284"/>
         <element name="DomainProduct" positionX="-63" positionY="-9" width="128" height="239"/>
     </elements>
 </model>

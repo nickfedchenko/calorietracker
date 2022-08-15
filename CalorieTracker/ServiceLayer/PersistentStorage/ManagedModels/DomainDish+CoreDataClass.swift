@@ -21,8 +21,8 @@ public class DomainDish: NSManagedObject {
         dish.fat = model.fat
         dish.carbs = model.carbs
         dish.photo = model.photo
-        dish.weight = (model.weight ?? -1) == -1 ? -1 : Int16(model.weight!)
-        dish.servings = (model.weight ?? -1) == -1 ? -1 : Int16(model.servings!)
+        dish.weight = (model.rawWeight ?? -1) == -1 ? -1 : model.rawWeight!
+        dish.servings = (model.servings ?? -1) == -1 ? -1 : Int16(model.servings!)
         dish.videoURL = model.videoURL
         dish.updatedAt = model.updatedAt
         if let ingredientsData = try? JSONEncoder().encode(model.ingredients) {

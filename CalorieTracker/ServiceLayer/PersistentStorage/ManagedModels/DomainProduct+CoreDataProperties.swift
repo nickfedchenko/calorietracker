@@ -14,7 +14,7 @@ extension DomainProduct {
         return NSFetchRequest<DomainProduct>(entityName: "DomainProduct")
     }
 
-    @NSManaged public var id: Int16
+    @NSManaged public var id: Int32
     @NSManaged public var barcode: String?
     @NSManaged public var title: String
     @NSManaged public var protein: Double

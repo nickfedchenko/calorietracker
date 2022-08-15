@@ -23,7 +23,7 @@ extension DomainDish {
     @NSManaged public var photo: URL?
     @NSManaged public var protein: Double
     @NSManaged public var title: String
-    @NSManaged public var weight: Int16
+    @NSManaged public var weight: Double
     @NSManaged public var servings: Int16
     @NSManaged public var videoURL: URL?
     @NSManaged public var updatedAt: String

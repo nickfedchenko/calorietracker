@@ -12,7 +12,7 @@ import CoreData
 public class DomainProduct: NSManagedObject {
     static func prepare(fromPlainModel model: Product, context: NSManagedObjectContext) -> DomainProduct {
         let product = DomainProduct(context: context)
-        product.id = Int16(model.id)
+        product.id = Int32(model.id)
         product.barcode = model.barcode
         product.title = model.title
         product.protein = model.protein

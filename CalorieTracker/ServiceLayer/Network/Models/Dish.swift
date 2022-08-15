@@ -16,7 +16,7 @@ struct Dish: Codable {
     let cookTime, kсal: Int
     let protein, fat, carbs: Double
     let photo: URL?
-    let weight: Int?
+    var rawWeight: Double?
     let servings: Int?
     let videoURL: URL?
     let updatedAt: String
@@ -24,14 +24,29 @@ struct Dish: Codable {
     let methods: [Method]
     let tags: [Tag]
     let photos: [Photo]?
+    
+    /// For use in layout
+    var weight: Double? {
+        get {
+            guard let rawWeight = rawWeight else {
+                return nil
+            }
+            return UDM.weightIsMetric ? rawWeight : rawWeight * ImperialConstants.lbsToGramsRatio
+        }
+        set {
+            guard let newValue = newValue else { return }
+            rawWeight = UDM.weightIsMetric ? newValue : newValue / ImperialConstants.lbsToGramsRatio
+        }
+    }
 
     enum CodingKeys: String, CodingKey {
         case id, title, info
         case cookTime = "cook_time"
-        case kсal, protein, fat, carbs, photo, weight, servings
+        case kсal, protein, fat, carbs, photo, servings
         case videoURL = "video_url"
         case updatedAt = "updated_at"
         case methods, tags, photos, ingredients
+        case rawWeight = "weight"
     }
     
     init?(from managedModel: DomainDish) {
@@ -44,7 +59,7 @@ struct Dish: Codable {
         fat = managedModel.fat
         carbs = managedModel.carbs
         photo = managedModel.photo
-        weight = managedModel.weight == -1 ? nil : Int(managedModel.weight)
+        rawWeight = managedModel.weight == -1 ? nil : managedModel.weight
         servings = managedModel.servings == -1 ? nil : Int(managedModel.servings)
         videoURL = managedModel.videoURL
         updatedAt = managedModel.updatedAt

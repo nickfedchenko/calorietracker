@@ -17,7 +17,7 @@ struct Product: Codable {
     
     var protein: Double {
         get {
-            UDM.weightIsMetric ? rawProtein : rawFat * ImperialConstants.lbsToGramsRatio
+            UDM.weightIsMetric ? rawProtein : rawProtein * ImperialConstants.lbsToGramsRatio
         }
         
         set {
@@ -140,7 +140,7 @@ struct Composition: Codable {
             processWeightToGet(rawSodium)
         }
         set {
-           rawSodium =  processWeightToSet(newValue)
+            rawSodium = processWeightToSet(newValue)
         }
     }
     
@@ -149,9 +149,10 @@ struct Composition: Codable {
             processWeightToGet(rawSaturatedFat)
         }
         set {
-           rawSaturatedFat =  processWeightToSet(newValue)
+            rawSaturatedFat = processWeightToSet(newValue)
         }
     }
+    
     var sugar: Double? {
         get {
             processWeightToGet(rawSugar)
@@ -193,7 +194,7 @@ struct Composition: Codable {
             processWeightToGet(rawPotassium)
         }
         set {
-           rawPotassium = processWeightToSet(newValue)
+            rawPotassium = processWeightToSet(newValue)
         }
     }
     
@@ -235,7 +236,7 @@ struct Composition: Codable {
     
     var vitaminC: Double? {
         get {
-           processWeightToGet(rawVitaminC)
+            processWeightToGet(rawVitaminC)
         }
         set {
             rawVitaminC = processWeightToSet(newValue)
@@ -310,7 +311,7 @@ struct Composition: Codable {
             processWeightToGet(rawVitB3)
         }
         set {
-           rawVitB3 = processWeightToSet(newValue)
+            rawVitB3 = processWeightToSet(newValue)
         }
     }
     
@@ -400,7 +401,7 @@ struct Composition: Codable {
             processWeightToGet(rawVitB9)
         }
         set {
-           rawVitB9 = processWeightToSet(newValue)
+            rawVitB9 = processWeightToSet(newValue)
         }
     }
     
@@ -409,7 +410,7 @@ struct Composition: Codable {
             processWeightToGet(rawVitB12)
         }
         set {
-           rawVitB12 = processWeightToSet(newValue)
+            rawVitB12 = processWeightToSet(newValue)
         }
     }
     
@@ -433,12 +434,30 @@ struct Composition: Codable {
         guard let value = value else {
             return nil
         }
-        return UDM.weightIsMetric ? value : value /  ImperialConstants.lbsToGramsRatio
+        return UDM.weightIsMetric ? value : value / ImperialConstants.lbsToGramsRatio
     }
 }
 
 struct Serving: Codable {
     let title: String
     let plural: String?
-    let weight: Int?
+    private var rawWeight: Double?
+    
+    var weight: Double? {
+        get {
+            guard let rawWeight = rawWeight else {
+                return nil
+            }
+            return UDM.weightIsMetric ? rawWeight : rawWeight * ImperialConstants.lbsToGramsRatio
+        }
+        set {
+            guard let newValue = newValue else { return }
+            rawWeight = UDM.weightIsMetric ? newValue : newValue / ImperialConstants.lbsToGramsRatio
+        }
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case title, plural
+        case rawWeight = "weight"
+    }
 }
