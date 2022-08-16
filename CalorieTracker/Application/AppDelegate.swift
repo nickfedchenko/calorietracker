@@ -29,13 +29,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         DSF.shared.updateStoredDishes()
         DSF.shared.updateStoredProducts()
         
-        // TODO: После ревью удалить
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            let products = DSF.shared.getAllStoredProducts()
-            let dishes = DSF.shared.getAllStoredDishes()
-            print("received products count is \(products.count)")
-            print("received dishes count is \(dishes.count)")
-        }
         return true
     }
     
