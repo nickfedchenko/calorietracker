@@ -4,7 +4,7 @@
 //
 //  Created by Vladimir Banushkin on 15.07.2022.
 //
-
+import Alamofire
 import AsyncDisplayKit
 import Firebase
 import Gzip
@@ -24,9 +24,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     ) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
         let tabBar = CTTabBarController()
-      
         window?.rootViewController = tabBar
         window?.makeKeyAndVisible()
+        DSF.shared.updateStoredDishes()
+        DSF.shared.updateStoredProducts()
+        
         return true
     }
+    
 }

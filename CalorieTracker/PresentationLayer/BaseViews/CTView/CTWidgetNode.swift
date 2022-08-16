@@ -90,6 +90,14 @@ class CTWidgetNode: ASDisplayNode {
         shadows.forEach { addShadowLayer(shadow: $0) }
     }
     
+    fileprivate func extractedFunc(_ shadowLayer: CALayer, _ path: UIBezierPath, _ shadow: CTWidgetNode.Shadow) {
+        shadowLayer.shadowPath = path.cgPath
+        shadowLayer.shadowColor = shadow.color.cgColor
+        shadowLayer.shadowOpacity = shadow.opacity
+        shadowLayer.shadowOffset = shadow.offset
+        shadowLayer.shadowRadius = shadow.radius
+    }
+    
     private func addShadowLayer(shadow: Shadow) {
         var path: UIBezierPath
         switch shadow.shape {
@@ -99,11 +107,7 @@ class CTWidgetNode: ASDisplayNode {
             path = UIBezierPath(roundedRect: bounds, cornerRadius: radius)
         }
         let shadowLayer = CALayer()
-        shadowLayer.shadowPath = path.cgPath
-        shadowLayer.shadowColor = shadow.color.cgColor
-        shadowLayer.shadowOpacity = shadow.opacity
-        shadowLayer.shadowOffset = shadow.offset
-        shadowLayer.shadowRadius = shadow.radius
+        extractedFunc(shadowLayer, path, shadow)
         shadowLayer.frame = bounds
         path.append(UIBezierPath(rect: CGRect(
             origin: CGPoint(

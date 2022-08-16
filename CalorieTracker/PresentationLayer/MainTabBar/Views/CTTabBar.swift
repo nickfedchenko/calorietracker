@@ -76,8 +76,6 @@ final class CTTabBar: UIView {
         leftGradient.endPoint = CGPoint(x: 1, y: 0.5)
         leftGradient.locations = [0, 1]
         leftGradient.frame = leftBackground.bounds
-        leftGradient
-    
         leftBackground.layer.addSublayer(leftGradient)
     }
     
