@@ -24,7 +24,7 @@ protocol DataServiceFacadeInterface {
     ///   - phrase: search query
     ///   - userNetwork: флаг отвечающий за поиск через бэк
     ///   - completion: результат приходит сюда.
-    func searchProducts(by phrase: String, userNetwork: Bool,  completion: @escaping ([Product]) -> Void)
+    func searchProducts(by phrase: String, useNetwork: Bool, completion: @escaping ([Product]) -> Void)
 }
 
 final class DSF {
@@ -54,20 +54,10 @@ extension DSF: DataServiceFacadeInterface {
                 dump(error)
             case .success(let dishes):
                 self?.localPersistentStore.saveDishes(dishes: dishes)
-//                self?.checkForIngredients(dishes: dishes)
             }
         }
     }
-    
-    private func checkForIngredients(dishes: [Dish]) {
-        print("Overall dishes count \(dishes.count)")
-        dishes.forEach {
-            if $0.ingredients.isEmpty {
-                print("Dish with id of \($0.id) have no ingredients stored")
-            }
-        }
-    }
-    
+        
     func getAllStoredProducts() -> [Product] {
         let products = localPersistentStore.fetchProducts()
         return products
@@ -78,7 +68,23 @@ extension DSF: DataServiceFacadeInterface {
         return dishes
     }
     
-    func searchProducts(by phrase: String, userNetwork: Bool = false, completion: @escaping ([Product]) -> Void) {
-     return 
+    func searchProducts(by phrase: String, useNetwork: Bool = false, completion: @escaping ([Product]) -> Void) {
+        var products = localPersistentStore.searchProducts(by: phrase)
+        guard useNetwork else {
+            completion(products)
+            return
+        }
+        
+        networkService.remoteSearch(by: phrase) { result in
+            switch result {
+            case .failure(let error):
+                print(error)
+            case .success(let searchedProducts):
+                products.append(contentsOf: searchedProducts.data.compactMap { $0.getConventionalProduct() })
+                completion(products.sorted { $0.title.count < $1.title.count })
+            }
+        }
+        
     }
+        
 }

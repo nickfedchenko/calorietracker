@@ -6,13 +6,16 @@
 //
 
 import CoreData
+import UIKit
 
 protocol LocalDomainServiceInterface {
     func fetchProducts() -> [Product]
     func fetchDishes() -> [Dish]
     func saveProducts(products: [Product])
     func saveDishes(dishes: [Dish])
+    func searchProducts(by phrase: String) -> [Product]
 }
+
 final class LocalDomainService {
     // MARK: - Constants
     
@@ -42,17 +45,21 @@ final class LocalDomainService {
     
     private lazy var context = container.viewContext
     
-    private lazy var taskContext: NSManagedObjectContext = {
-        let context = container.newBackgroundContext()
-        context.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
-        return context
-    }()
+//    private lazy var taskContext: NSManagedObjectContext = {
+//        let context = container.newBackgroundContext()
+//        context.mergePolicy = NSMergePolicy(merge: .mergeByPropertyStoreTrumpMergePolicyType)
+//        return context
+//    }()
     
     // MARK: - Public Methods
     
     private func save() {
-        guard taskContext.hasChanges else { return }
-        taskContext.perform { [taskContext] in
+        let taskContext = container.newBackgroundContext()
+        taskContext.automaticallyMergesChangesFromParent = true
+        guard taskContext.hasChanges else {
+            return
+        }
+        taskContext.perform {
             do {
                 try taskContext.save()
             } catch let error {
@@ -63,7 +70,7 @@ final class LocalDomainService {
     }
     
     private func deleteObject<T: NSManagedObject> (object: T) {
-        taskContext.delete(object)
+        context.delete(object)
         save()
     }
     
@@ -88,7 +95,7 @@ final class LocalDomainService {
 
 // MARK: - LocalDomainServiceInterface
 extension LocalDomainService: LocalDomainServiceInterface {
-    // TODO: - На подумать, маппинг отдать фасаду может?
+
     func fetchProducts() -> [Product] {
         guard let domainProducts = fetchData(for: DomainProduct.self) else { return [] }
         return domainProducts.compactMap { Product(from: $0) }
@@ -101,13 +108,27 @@ extension LocalDomainService: LocalDomainServiceInterface {
     
     func saveProducts(products: [Product]) {
         let _: [DomainProduct] = products
-            .map { DomainProduct.prepare(fromPlainModel: $0, context: taskContext) }
+            .map { DomainProduct.prepare(fromPlainModel: $0, context: context) }
         save()
     }
     
     func saveDishes(dishes: [Dish]) {
         let _: [DomainDish] = dishes
-            .map { DomainDish.prepare(fromPlainModel: $0, context: taskContext) }
+            .map { DomainDish.prepare(fromPlainModel: $0, context: context) }
         save()
+    }
+    
+    func searchProducts(by phrase: String) -> [Product] {
+        let titlePredicate = NSPredicate(format: "title CONTAINS[cd] %@", phrase)
+        let brandPredicate = NSPredicate(format: "brand CONTAINS[cd] %@", phrase)
+        let compoundPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [titlePredicate, brandPredicate])
+     
+        guard let products = fetchData(
+            for: DomainProduct.self,
+            withPredicate: compoundPredicate
+        ) else {
+            return []
+        }
+        return products.compactMap { Product(from: $0) }.sorted { $0.title.count < $1.title.count }
     }
 }

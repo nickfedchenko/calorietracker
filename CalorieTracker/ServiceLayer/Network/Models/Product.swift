@@ -2,7 +2,7 @@ import Foundation
 
 typealias ProductsResult = (Result<[Product], ErrorDomain>) -> Void
 
-/// Codable структура.
+/// Product
 struct Product: Codable {
     let id: Int
     let barcode: String?
@@ -88,339 +88,104 @@ struct Product: Codable {
             composition = nil
         }
     }
+    
+    init?(from searchModel: SearchProduct) {
+        id = searchModel.productID
+        barcode = searchModel.sourceObject.barcode
+        title = searchModel.title
+        rawProtein = searchModel.proteins
+        rawFat = searchModel.fats
+        rawCarbs = searchModel.carbohydrates
+        rawKcal = searchModel.kcal
+        photo = searchModel.photo
+        composition = Composition(from: searchModel.sourceObject)
+        isBasic = searchModel.sourceObject.isBasic == 0 ? false : true
+        isBasicState = searchModel.sourceObject.isBasicState == 0 ? false : true
+        isDished = searchModel.sourceObject.isDished == 0 ? false : true
+        brand = searchModel.sourceObject.brand
+        servings = searchModel.sourceObject.servings.compactMap { Serving(from: $0) }
+    }
 }
 
 struct Composition: Codable {
-    private var rawVitaminA, rawVitaminD, rawVitaminC, rawVitaminK, rawVitaminB1, rawCalcium, rawSugar, rawSalt,
-                rawFiber, rawSaturatedFat, rawUnsaturatedFat, rawTransFat, rawSodium, rawCholesterol, rawPotassium,
-                rawSugarAlc, rawIron, rawMagnesium, rawPhosphorus, rawZinc, rawCopper, rawManganese,
-                rawSelenium, rawFluoride, rawVitB2, rawVitB3, rawVitB5, rawVitB6, rawVitB7, rawVitB9, rawVitB12,
-                rawVitE: Double?
+    private var vitaminA, vitaminD, vitaminC, vitaminK, vitaminB1, calcium, sugar, salt,
+                fiber, saturatedFat, unsaturatedFat, transFat, sodium, cholesterol, potassium,
+                sugarAlc, iron, magnesium, phosphorus, zinc, copper, manganese,
+                selenium, fluoride, vitB2, vitB3, vitB5, vitB6, vitB7, vitB9, vitB12,
+                vitE: Double?
     
     let glycemicIndex: Double?
     
+    init?(from model: SourceObject) {
+        vitaminA = Double(model.vitaminA100G ?? "0")
+        vitaminD = Double(model.vitaminD100G ?? "0")
+        vitaminC = Double(model.vitaminC100G ?? "0")
+        vitaminK = model.vitaminK100G
+        vitaminB1 = model.vitaminB1100G
+        calcium = Double(model.calcium100G ?? "0")
+        sugar = Double(model.sugars100G ?? "0")
+        salt = Double(model.salt100G ?? "0")
+        fiber = Double(model.fiber100G ?? "0")
+        saturatedFat = model.saturatedFat
+        unsaturatedFat = model.unsaturatedFat
+        transFat = model.transFat
+        sodium = model.sodium
+        cholesterol = model.cholesterol
+        potassium = model.potassium
+        sugarAlc = model.sugarAlc
+        iron = model.iron
+        magnesium = model.magnesium
+        phosphorus = model.phosphorus
+        zinc = model.zinc
+        copper = model.copper
+        manganese = model.manganese
+        selenium = model.selenium
+        fluoride = model.fluoride
+        vitB2 = model.vitB2
+        vitB3 = model.vitB3
+        vitB5 = model.vitB5
+        vitB6 = model.vitB6
+        vitB7 = model.vitB7
+        vitB9 = model.vitB9
+        vitB12 = model.vitB12
+        vitE = Double(model.vitE ?? 0)
+        glycemicIndex = model.glycemicIndex
+    }
+    
     enum CodingKeys: String, CodingKey {
-        case rawSodium = "sodium"
-        case rawSaturatedFat = "saturated_fat"
-        case rawSugar = "sugar"
-        case rawFiber = "fiber"
-        case rawUnsaturatedFat = "unsaturated_fat"
-        case rawCholesterol = "cholesterol"
-        case rawPotassium = "potassium"
-        case rawCalcium = "calcium"
-        case rawIron = "iron"
-        case rawSalt = "salt"
-        case rawTransFat = "trans_fat"
-        case rawVitaminC = "vitamin_c"
-        case rawManganese = "manganese"
-        case rawSelenium = "selenium"
-        case rawVitB2 = "vit_b2"
-        case rawPhosphorus = "phosphorus"
-        case rawZinc = "zinc"
-        case rawCopper = "copper"
-        case rawVitB3 = "vit_b3"
-        case rawVitaminK = "vitamin_k"
-        case rawVitE = "vit_e"
-        case rawVitaminD = "vitamin_d"
-        case rawVitaminA = "vitamin_a"
-        case rawVitaminB1 = "vitamin_b1"
-        case rawFluoride = "flouride"
-        case rawVitB5 = "vit_b5"
-        case rawVitB6 = "vit_b6"
-        case rawVitB7 = "vit_b7"
-        case rawVitB9 = "vit_b9"
-        case rawVitB12 = "vit_b12"
-        case rawSugarAlc = "sugar_alc"
+        case sodium
+        case saturatedFat = "saturated_fat"
+        case sugar
+        case fiber
+        case unsaturatedFat = "unsaturated_fat"
+        case cholesterol
+        case potassium
+        case calcium
+        case iron
+        case salt
+        case transFat = "trans_fat"
+        case vitaminC = "vitamin_c"
+        case manganese
+        case selenium
+        case vitB2 = "vit_b2"
+        case phosphorus
+        case zinc
+        case copper
+        case vitB3 = "vit_b3"
+        case vitaminK = "vitamin_k"
+        case vitE = "vit_e"
+        case vitaminD = "vitamin_d"
+        case vitaminA = "vitamin_a"
+        case vitaminB1 = "vitamin_b1"
+        case fluoride
+        case vitB5 = "vit_b5"
+        case vitB6 = "vit_b6"
+        case vitB7 = "vit_b7"
+        case vitB9 = "vit_b9"
+        case vitB12 = "vit_b12"
+        case sugarAlc = "sugar_alc"
         case glycemicIndex = "glycemic_index"
-        case rawMagnesium = "magnesium"
-    }
-    
-    var sodium: Double? {
-        get {
-            processWeightToGet(rawSodium)
-        }
-        set {
-            rawSodium = processWeightToSet(newValue)
-        }
-    }
-    
-    var saturatedFat: Double? {
-        get {
-            processWeightToGet(rawSaturatedFat)
-        }
-        set {
-            rawSaturatedFat = processWeightToSet(newValue)
-        }
-    }
-    
-    var sugar: Double? {
-        get {
-            processWeightToGet(rawSugar)
-        }
-        set {
-            rawSugar = processWeightToSet(newValue)
-        }
-    }
-    
-    var fiber: Double? {
-        get {
-            processWeightToGet(rawFiber)
-        }
-        set {
-            rawFiber = processWeightToSet(newValue)
-        }
-    }
-    
-    var unsaturatedFat: Double? {
-        get {
-            processWeightToGet(rawUnsaturatedFat)
-        }
-        set {
-            rawUnsaturatedFat = processWeightToSet(newValue)
-        }
-    }
-    
-    var cholesterol: Double? {
-        get {
-            processWeightToGet(rawCholesterol)
-        }
-        set {
-            rawCholesterol = processWeightToSet(newValue)
-        }
-    }
-    
-    var potassium: Double? {
-        get {
-            processWeightToGet(rawPotassium)
-        }
-        set {
-            rawPotassium = processWeightToSet(newValue)
-        }
-    }
-    
-    var calcium: Double? {
-        get {
-            processWeightToGet(rawCalcium)
-        }
-        set {
-            rawCalcium = processWeightToSet(newValue)
-        }
-    }
-    
-    var iron: Double? {
-        get {
-            processWeightToGet(rawIron)
-        }
-        set {
-            rawIron = processWeightToSet(newValue)
-        }
-    }
-    
-    var salt: Double? {
-        get {
-            processWeightToGet(rawSalt)
-        }
-        set {
-            rawSalt = processWeightToSet(newValue)
-        }
-    }
-    
-    var transFat: Double? {
-        get {
-            processWeightToGet(rawTransFat)
-        }
-        set {
-            rawTransFat = processWeightToSet(newValue)
-        }
-    }
-    
-    var vitaminC: Double? {
-        get {
-            processWeightToGet(rawVitaminC)
-        }
-        set {
-            rawVitaminC = processWeightToSet(newValue)
-        }
-    }
-    
-    var manganese: Double? {
-        get {
-            processWeightToGet(rawManganese)
-        }
-        set {
-            rawManganese = processWeightToSet(newValue)
-        }
-    }
-    
-    var selenium: Double? {
-        get {
-            processWeightToGet(rawSelenium)
-        }
-        set {
-            rawSelenium = processWeightToSet(newValue)
-        }
-    }
-    
-    var magnesium: Double? {
-        get {
-            processWeightToGet(rawMagnesium)
-        }
-        set {
-            rawMagnesium = processWeightToSet(newValue)
-        }
-    }
-    
-    var vitB2: Double? {
-        get {
-            processWeightToGet(rawVitB2)
-        }
-        set {
-            rawVitB2 = processWeightToSet(newValue)
-        }
-    }
-    
-    var phosphorus: Double? {
-        get {
-            processWeightToGet(rawPhosphorus)
-        }
-        set {
-            rawPhosphorus = processWeightToSet(newValue)
-        }
-    }
-    
-    var zinc: Double? {
-        get {
-            processWeightToGet(rawZinc)
-        }
-        set {
-            rawZinc = processWeightToSet(newValue)
-        }
-    }
-    
-    var copper: Double? {
-        get {
-            processWeightToGet(rawCopper)
-        }
-        set {
-            rawCopper = processWeightToSet(newValue)
-        }
-    }
-    
-    var vitB3: Double? {
-        get {
-            processWeightToGet(rawVitB3)
-        }
-        set {
-            rawVitB3 = processWeightToSet(newValue)
-        }
-    }
-    
-    var vitaminK: Double? {
-        get {
-            processWeightToGet(rawVitaminK)
-        }
-        set {
-            rawVitaminK = processWeightToSet(newValue)
-        }
-    }
-    
-    var vitE: Double? {
-        get {
-            processWeightToGet(rawVitE)
-        }
-        set {
-            rawVitE = processWeightToSet(newValue)
-        }
-    }
-    
-    var vitaminD: Double? {
-        get {
-            processWeightToGet(rawVitaminD)
-        }
-        set {
-            rawVitaminD = processWeightToSet(newValue)
-        }
-    }
-    
-    var vitaminA: Double? {
-        get {
-            processWeightToGet(rawVitaminA)
-        }
-        set {
-            rawVitaminA = processWeightToSet(newValue)
-        }
-    }
-    
-    var vitaminB1: Double? {
-        get {
-            processWeightToGet(rawVitaminB1)
-        }
-        set {
-            rawVitaminB1 = processWeightToSet(newValue)
-        }
-    }
-    
-    var fluoride: Double? {
-        get {
-            processWeightToGet(rawFluoride)
-        }
-        set {
-            rawFluoride = processWeightToSet(newValue)
-        }
-    }
-    
-    var vitB5: Double? {
-        get {
-            processWeightToGet(rawVitB5)
-        }
-        set {
-            rawVitB5 = processWeightToSet(newValue)
-        }
-    }
-    
-    var vitB6: Double? {
-        get {
-            processWeightToGet(rawVitB6)
-        }
-        set {
-            rawVitB6 = processWeightToSet(newValue)
-        }
-    }
-    
-    var vitB7: Double? {
-        get {
-            processWeightToGet(rawVitB7)
-        }
-        set {
-            rawVitB7 = processWeightToSet(newValue)
-        }
-    }
-    
-    var vitB9: Double? {
-        get {
-            processWeightToGet(rawVitB9)
-        }
-        set {
-            rawVitB9 = processWeightToSet(newValue)
-        }
-    }
-    
-    var vitB12: Double? {
-        get {
-            processWeightToGet(rawVitB12)
-        }
-        set {
-            rawVitB12 = processWeightToSet(newValue)
-        }
-    }
-    
-    var sugarAlc: Double? {
-        get {
-            processWeightToGet(rawSugarAlc)
-        }
-        set {
-            rawSugarAlc = processWeightToSet(newValue)
-        }
+        case magnesium
     }
     
     private func processWeightToGet(_ value: Double?) -> Double? {
@@ -442,6 +207,11 @@ struct Serving: Codable {
     let title: String
     let plural: String?
     private var rawWeight: Double?
+    
+    init?(from model: SearchServing) {
+        title = model.title
+        plural = nil
+    }
     
     var weight: Double? {
         get {

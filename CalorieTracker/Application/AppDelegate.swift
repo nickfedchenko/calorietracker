@@ -26,18 +26,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let tabBar = CTTabBarController()
         window?.rootViewController = tabBar
         window?.makeKeyAndVisible()
-        var now = Date().timeIntervalSince1970
-//        DSF.shared.updateStoredDishes()
+        DSF.shared.updateStoredDishes()
         DSF.shared.updateStoredProducts()
-        DispatchQueue.main.async {
-            var dishes = DSF.shared.getAllStoredProducts()
-             while dishes.isEmpty {
-                dishes = DSF.shared.getAllStoredProducts()
-            }
-            print("Time elapsed = \(Date().timeIntervalSince1970 - now)")
-            print(dishes.count)
-            print(dishes[4])
+        
+        // TODO: После ревью удалить
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            let products = DSF.shared.getAllStoredProducts()
+            let dishes = DSF.shared.getAllStoredDishes()
+            print("received products count is \(products.count)")
+            print("received dishes count is \(dishes.count)")
         }
         return true
     }
+    
 }

@@ -9,9 +9,11 @@ import Foundation
 import Gzip
 
 typealias GenericResult<T> = (Result<T, ErrorDomain>) -> Void
+
 protocol NetworkEngineInterface {
     func fetchProducts(completion: @escaping ProductsResult )
     func fetchDishes(completion: @escaping DishesResponse)
+    func remoteSearch(by phrase: String, completion: @escaping SearchProductsResponse)
 }
 
 enum ErrorDomain: Error {
@@ -48,12 +50,19 @@ enum RequestGenerator {
                 } else {
                     return .en
                 }
+            case  .searchProduct(by: _):
+                if let targetCode = LinkLanguageCodes.allCases.first(where: { $0.rawValue == currentLanguageCode }) {
+                    return targetCode
+                } else {
+                    return .en
+                }
             }
         }
     }
     
     case fetchProductZipped
     case fetchDishesZipped
+    case searchProduct(by: String)
     
     private var backendToken: String {
         guard let filePath = Bundle.main.path(forResource: "Info", ofType: "plist") else {
@@ -61,7 +70,7 @@ enum RequestGenerator {
         }
         let plist = NSDictionary(contentsOfFile: filePath)
         guard let value = plist?.object(forKey: "backendKey") as? String else {
-            fatalError("Couldn't find key 'API_KEY' in 'Info.plist'.")
+            fatalError("Couldn't find key 'backendKey' in 'Info.plist'.")
         }
         return value
     }
@@ -83,7 +92,24 @@ enum RequestGenerator {
             url = newUrl
         }
         
+        func prepareSearchUrl(url: inout URL, by phrase: String) {
+            var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
+            components?.queryItems?.append(.init(name: "lang", value: langCode.rawValue))
+            components?.queryItems?.append(.init(name: "q", value: phrase))
+            guard let newUrl = components?.url else {
+                return
+            }
+            url = newUrl
+        }
+        
         switch self {
+        case .searchProduct(by: let phrase):
+            guard var optUrl = URL(string: "http://tracker.finanse.space/api/search") else {
+                fatalError("wrong url")
+            }
+            injectTokenQuery(for: &optUrl)
+            prepareSearchUrl(url: &optUrl, by: phrase)
+            url = optUrl
         case .fetchProductZipped:
             guard let optUrl = URL(string: "https://tracker.finanse.space/archive/\(langCode)_products.json.gz") else {
                 fatalError("wrong url")
@@ -136,5 +162,9 @@ extension NetworkEngine: NetworkEngineInterface {
     
     func fetchDishes(completion: @escaping DishesResponse) {
         performDecodableRequest(request: .fetchDishesZipped, completion: completion)
+    }
+    
+    func remoteSearch(by phrase: String, completion: @escaping SearchProductsResponse) {
+        performDecodableRequest(request: .searchProduct(by: phrase), completion: completion)
     }
 }
