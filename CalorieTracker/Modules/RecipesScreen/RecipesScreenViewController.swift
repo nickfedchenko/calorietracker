@@ -15,15 +15,15 @@ protocol RecipesScreenViewControllerInterface: AnyObject {
 
 class RecipesScreenViewController: UIViewController {
     var presenter: RecipesScreenPresenterInterface?
-    let layoutInspector = RecipesCollectionLayoutInspector()
-    let header = RecipesFolderHeader()
+
+    let header = CTRecipesScreenHeader()
     
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: makeLayout())
         collectionView.dataSource = self
         collectionView.backgroundColor = R.color.mainBackground()
         collectionView.contentInset = UIEdgeInsets(
-            top: 0,
+            top: 40,
             left: 0,
             bottom: 84,
             right: 0
@@ -101,7 +101,12 @@ class RecipesScreenViewController: UIViewController {
     }
     
     private func setupSubviews() {
-        view.addSubview(collectionView)
+        view.addSubviews(header, collectionView)
+        header.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(40)
+        }
         collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }

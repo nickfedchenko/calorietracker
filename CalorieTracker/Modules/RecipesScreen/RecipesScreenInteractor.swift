@@ -9,12 +9,12 @@
 import Foundation
 
 struct MockModel {
-    struct MockViewModel {
-        struct MockItem {}
+    struct MockItem {}
+    struct RecipesScreenViewModel {
         var items = Array(repeating: MockItem(), count: 8)
     }
     
-    var sections = Array(repeating: MockViewModel(), count: 6)
+    var sections = Array(repeating: RecipesScreenViewModel(), count: 6)
     
 }
 
@@ -25,7 +25,8 @@ protocol RecipesScreenInteractorInterface: AnyObject {
 
 class RecipesScreenInteractor {
     weak var presenter: RecipesScreenPresenterInterface?
-    var dataModel = MockModel()
+    private let dataService = DSF.shared
+    private let dataModel = MockModel()
 }
 
 extension RecipesScreenInteractor: RecipesScreenInteractorInterface {
