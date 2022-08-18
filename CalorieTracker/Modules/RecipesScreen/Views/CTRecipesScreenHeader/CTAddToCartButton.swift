@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class AddToCartButton: UIView {
+final class CTAddToCartButton: UIView {
     var addToCartTapped: (() -> Void)?
     private var isFirstLayout = true
     private let contentView = UIView()

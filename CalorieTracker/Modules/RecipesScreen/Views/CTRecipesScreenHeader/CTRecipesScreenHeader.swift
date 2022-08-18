@@ -6,8 +6,13 @@
 //
 
 import UIKit
-// TODO: - СДелать блюр фон
+
 final class CTRecipesScreenHeader: UIView {
+    let contentView: UIVisualEffectView = {
+        let view = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+        return view
+    }()
+    
     private let layoutChangeButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(R.image.layoutGridSectionsIcon(), for: .normal)
@@ -27,4 +32,31 @@ final class CTRecipesScreenHeader: UIView {
         button.setAttributedTitle(title, for: .normal)
         return button
     }()
+    
+    private let addToCartButton: CTAddToCartButton = {
+       let button = CTAddToCartButton()
+        return button
+    }()
+    
+    private func setupSubviews() {
+        addSubviews(contentView)
+        contentView.addSubviews(layoutChangeButton, createFolderButton, addToCartButton)
+        contentView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        layoutChangeButton.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.equalToSuperview().offset(28)
+        }
+        
+        createFolderButton.snp.makeConstraints { make in
+            make.centerY.centerX.equalToSuperview()
+        }
+        
+        addToCartButton.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.trailing.equalToSuperview().inset(20)
+        }
+    }
 }
