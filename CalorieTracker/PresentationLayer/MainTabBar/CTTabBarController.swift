@@ -38,7 +38,7 @@ final class CTTabBarController: ASTabBarController {
         tabBar.removeFromSuperview()
         customTabBar.delegate = self
         setupSubviews()
-        let viewControllers = customTabBar.tabItems.map{ $0.configuration.viewControler }
+        let viewControllers = customTabBar.tabItems.map { $0.configuration.viewControler }
         setViewControllers(viewControllers, animated: false)
     }
     
