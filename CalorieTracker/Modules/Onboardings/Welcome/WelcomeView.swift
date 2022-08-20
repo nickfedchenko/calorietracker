@@ -14,8 +14,6 @@ final class WelcomeView: UIView {
     // MARK: - Views properties
 
     private let welcomBackButton: BackButton = .init()
-    private let arrowImageView: UIImageView = .init()
-    private let backLabel: UILabel = .init()
     private let welcomImageView: UIImageView = .init()
     private let titleLabel: UILabel = .init()
     private let descriptionLabel: UILabel = .init()
@@ -30,6 +28,8 @@ final class WelcomeView: UIView {
     private let delimeterView: UIView = .init()
     private let welcomCommonButton: CommonButton = .init(style: .filled, text: "Let’s Go!")
     
+    // MARK: - Initialization
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -40,7 +40,7 @@ final class WelcomeView: UIView {
     private func configureViews() {
         backgroundColor = .white
         
-        let gesture = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:)))
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(self.didTapWelcomBackButton(_:)))
         welcomBackButton.addGestureRecognizer(gesture)
         
         welcomImageView.image = R.image.onboardings.welcom()
@@ -190,7 +190,7 @@ final class WelcomeView: UIView {
         }
     }
     
-    @objc func handleTap(_ sender: UITapGestureRecognizer) {
+    @objc func didTapWelcomBackButton(_ sender: UITapGestureRecognizer) {
          print("back")
     }
     
