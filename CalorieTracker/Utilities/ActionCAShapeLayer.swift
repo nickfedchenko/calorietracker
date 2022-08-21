@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ActionCAShapeLayer: CAShapeLayer {
+class ActionCAShapeLayer: CAShapeLayer {
     var allowActions: Bool = false
 
     override func action(forKey event: String) -> CAAction? {
