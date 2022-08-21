@@ -9,6 +9,6 @@ import Foundation
 
 protocol DescriptionOfExperiencePresenterInterface: AnyObject {}
 
-class  DescriptionOfExperiencePresenter {}
+class DescriptionOfExperiencePresenter {}
 
 extension  DescriptionOfExperiencePresenter: DescriptionOfExperiencePresenterInterface {}

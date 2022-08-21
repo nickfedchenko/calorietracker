@@ -24,10 +24,10 @@ final class DescriptionOfExperienceView: UIView {
     private let titleLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
     private let neverLostAnswerOption: AnswerOption = .init(text: "I’ve never lost much weight before")
-    private let lostWeightAndGainedAllBack: AnswerOption = .init( text: "I lost weight and gained it all back")
-    private let lostWeightAndGainedSomeBack: AnswerOption = .init( text: "I lost weight and gained it some back")
-    private let lostWeightAndHaveMoreLose: AnswerOption = .init( text: "I lost weight and have more lose")
-    private let lostWeightAndMaintaining: AnswerOption = .init(text: "I lost weight and am maintaining it")
+    private let lostWeightAndGainedAllBackAnswerOption: AnswerOption = .init( text: "I lost weight and gained it all back")
+    private let lostWeightAndGainedSomeBackAnswerOption: AnswerOption = .init( text: "I lost weight and gained it some back")
+    private let lostWeightAndHaveMoreLoseAnswerOption: AnswerOption = .init( text: "I lost weight and have more lose")
+    private let lostWeightAndMaintainingAnswerOption: AnswerOption = .init(text: "I lost weight and am maintaining it")
     private let nextCommonButton: CommonButton = .init(style: .filled, text: "Next".uppercased())
     
     // MARK: - Initialization
@@ -62,16 +62,16 @@ final class DescriptionOfExperienceView: UIView {
         neverLostAnswerOption.addGestureRecognizer(neverLostAnswerOptionGesture)
         
         let lostWeightAndGainedAllBackGesture = UITapGestureRecognizer(target: self, action: #selector(self.didTapLostWeightAndGainedAllBack(_:)))
-        lostWeightAndGainedAllBack.addGestureRecognizer(lostWeightAndGainedAllBackGesture)
+        lostWeightAndGainedAllBackAnswerOption.addGestureRecognizer(lostWeightAndGainedAllBackGesture)
         
         let lostWeightAndGainedSomeBackGesture = UITapGestureRecognizer(target: self, action: #selector(self.didTapLostWeightAndGainedSomeBack(_:)))
-        lostWeightAndGainedSomeBack.addGestureRecognizer(lostWeightAndGainedSomeBackGesture)
+        lostWeightAndGainedSomeBackAnswerOption.addGestureRecognizer(lostWeightAndGainedSomeBackGesture)
         
         let lostWeightAndHaveMoreLoseGesture = UITapGestureRecognizer(target: self, action: #selector(self.didTapLostWeightAndHaveMoreLose(_:)))
-        lostWeightAndHaveMoreLose.addGestureRecognizer(lostWeightAndHaveMoreLoseGesture)
+        lostWeightAndHaveMoreLoseAnswerOption.addGestureRecognizer(lostWeightAndHaveMoreLoseGesture)
         
         let lostWeightAndMaintainingGesture = UITapGestureRecognizer(target: self, action: #selector(self.didTapLostWeightAndMaintaining(_:)))
-        lostWeightAndMaintaining.addGestureRecognizer(lostWeightAndMaintainingGesture)
+        lostWeightAndMaintainingAnswerOption.addGestureRecognizer(lostWeightAndMaintainingGesture)
         
         
         nextCommonButton.isHidden = true
@@ -85,10 +85,10 @@ final class DescriptionOfExperienceView: UIView {
         addSubview(stackView)
         
         stackView.addArrangedSubview(neverLostAnswerOption)
-        stackView.addArrangedSubview(lostWeightAndGainedAllBack)
-        stackView.addArrangedSubview(lostWeightAndGainedSomeBack)
-        stackView.addArrangedSubview(lostWeightAndHaveMoreLose)
-        stackView.addArrangedSubview(lostWeightAndMaintaining)
+        stackView.addArrangedSubview(lostWeightAndGainedAllBackAnswerOption)
+        stackView.addArrangedSubview(lostWeightAndGainedSomeBackAnswerOption)
+        stackView.addArrangedSubview(lostWeightAndHaveMoreLoseAnswerOption)
+        stackView.addArrangedSubview(lostWeightAndMaintainingAnswerOption)
         
         addSubview(nextCommonButton)
         
@@ -128,22 +128,22 @@ final class DescriptionOfExperienceView: UIView {
     }
     
     @objc func didTapLostWeightAndGainedAllBack(_ sender: UITapGestureRecognizer) {
-        lostWeightAndGainedAllBack.isSelected = !lostWeightAndGainedAllBack.isSelected
+        lostWeightAndGainedAllBackAnswerOption.isSelected = !lostWeightAndGainedAllBackAnswerOption.isSelected
         nextCommonButton.isHidden = !nextCommonButton.isHidden
     }
     
     @objc func didTapLostWeightAndGainedSomeBack(_ sender: UITapGestureRecognizer) {
-        lostWeightAndGainedSomeBack.isSelected = !lostWeightAndGainedSomeBack.isSelected
+        lostWeightAndGainedSomeBackAnswerOption.isSelected = !lostWeightAndGainedSomeBackAnswerOption.isSelected
         nextCommonButton.isHidden = !nextCommonButton.isHidden
     }
     
     @objc func didTapLostWeightAndHaveMoreLose(_ sender: UITapGestureRecognizer) {
-        lostWeightAndHaveMoreLose.isSelected = !lostWeightAndHaveMoreLose.isSelected
+        lostWeightAndHaveMoreLoseAnswerOption.isSelected = !lostWeightAndHaveMoreLoseAnswerOption.isSelected
         nextCommonButton.isHidden = !nextCommonButton.isHidden
     }
     
     @objc func didTapLostWeightAndMaintaining(_ sender: UITapGestureRecognizer) {
-        lostWeightAndMaintaining.isSelected = !lostWeightAndMaintaining.isSelected
+        lostWeightAndMaintainingAnswerOption.isSelected = !lostWeightAndMaintainingAnswerOption.isSelected
         nextCommonButton.isHidden = !nextCommonButton.isHidden
     }
     
