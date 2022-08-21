@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
-        let tabBar = QuestionOfLosingWeightViewController()
+        let tabBar = DescriptionOfExperienceViewController()
         window?.rootViewController = tabBar
         window?.makeKeyAndVisible()
         DSF.shared.updateStoredDishes()

@@ -34,7 +34,7 @@ final class GetStartedView: UIView {
     }
     
     private func configureViews() {
-        backgroundColor = .white
+        backgroundColor = R.color.mainBackground()
         
         stackView.axis = .vertical
         stackView.alignment = .center

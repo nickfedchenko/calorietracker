@@ -28,7 +28,7 @@ final class QuestionOfLosingWeightView: UIView {
     }
     
     private func configureViews() {
-        backgroundColor = .white
+        backgroundColor = R.color.mainBackground()
         
         plugView.backgroundColor = R.color.onboardings.radialGradientFirst()
         
@@ -41,6 +41,12 @@ final class QuestionOfLosingWeightView: UIView {
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.systemFont(ofSize: 30, weight: .medium)
+        
+        approvalCommonButton.addTarget(self, action: #selector(didTapApprovalCommonButton),
+                                       for: .touchUpInside)
+        
+        rejectionCommonButton.addTarget(self, action: #selector(didTapRejectionCommonButton),
+                                        for: .touchUpInside)
     }
     
     private func configureLayouts() {
@@ -80,6 +86,14 @@ final class QuestionOfLosingWeightView: UIView {
             $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-35)
             $0.height.equalTo(64)
         }
+    }
+    
+    @objc private func didTapApprovalCommonButton() {
+        print("didTapApprovalCommonButton")
+    }
+    
+    @objc private func didTapRejectionCommonButton() {
+        print("didTapApprovalCommonButton")
     }
     
     required init?(coder: NSCoder) {
