@@ -1,22 +1,21 @@
 //
-//  RecentWeightChangesViewController.swift
+//  CallToAchieveGoalViewController.swift
 //  CalorieTracker
 //
-//  Created by Алексей on 21.08.2022.
+//  Created by Алексей on 22.08.2022.
 //
 
 import SnapKit
 import UIKit
 // swiftlint:disable all
 
-final class RecentWeightChangesViewController: UIViewController {
-
+final class CallToAchieveGoalViewController: UIViewController {
+    
     // MARK: - Views properties
     
     private let plugView: UIView = .init()
     private let titleLabel: UILabel = .init()
-    private let approvalCommonButton: CommonButton = .init(style: .bordered, text: "Yes".uppercased())
-    private let rejectionCommonButton: CommonButton = .init(style: .bordered, text: "No".uppercased())
+    private let continueCommonButton: CommonButton = .init(style: .filled, text: "Continue".uppercased())
     
     // MARK: - Lifecycle methods
     
@@ -34,19 +33,16 @@ final class RecentWeightChangesViewController: UIViewController {
         
         let attributedString = NSMutableAttributedString()
         
-        attributedString.append(NSAttributedString(string: "Think back to when\n you last worked on\n your weight. ", attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]))
-        attributedString.append(NSAttributedString(string: "Is \nanything different \nabout this time than \nlast time?", attributes: [.foregroundColor: R.color.onboardings.basicDark()]))
+        attributedString.append(NSAttributedString(string: "Awesome! ", attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]))
+        attributedString.append(NSAttributedString(string: "Kcalс will \nhelp you build the \nhabits you need to \nreach your goals.", attributes: [.foregroundColor: R.color.onboardings.basicDark()]))
         
         titleLabel.attributedText = attributedString
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.systemFont(ofSize: 32, weight: .medium)
         
-        approvalCommonButton.addTarget(self, action: #selector(didTapApprovalCommonButton),
+        continueCommonButton.addTarget(self, action: #selector(didTapContinueCommonButton),
                                        for: .touchUpInside)
-        
-        rejectionCommonButton.addTarget(self, action: #selector(didTapRejectionCommonButton),
-                                        for: .touchUpInside)
     }
     
     private func configureLayouts() {
@@ -54,9 +50,7 @@ final class RecentWeightChangesViewController: UIViewController {
         
         view.addSubview(titleLabel)
         
-        view.addSubview(approvalCommonButton)
-        
-        view.addSubview(rejectionCommonButton)
+        view.addSubview(continueCommonButton)
         
         plugView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
@@ -73,14 +67,7 @@ final class RecentWeightChangesViewController: UIViewController {
             $0.centerY.equalTo(view.snp.centerY)
         }
         
-        approvalCommonButton.snp.makeConstraints {
-            $0.left.equalTo(view.snp.left).offset(40)
-            $0.right.equalTo(view.snp.right).offset(-40)
-            $0.height.equalTo(64)
-        }
-        
-        rejectionCommonButton.snp.makeConstraints {
-            $0.top.equalTo(approvalCommonButton.snp.bottom).offset(16)
+        continueCommonButton.snp.makeConstraints {
             $0.left.equalTo(view.snp.left).offset(40)
             $0.right.equalTo(view.snp.right).offset(-40)
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-35)
@@ -88,11 +75,7 @@ final class RecentWeightChangesViewController: UIViewController {
         }
     }
     
-    @objc private func didTapApprovalCommonButton() {
-        print("didTapApprovalCommonButton")
-    }
-    
-    @objc private func didTapRejectionCommonButton() {
-        print("didTapApprovalCommonButton")
+    @objc private func didTapContinueCommonButton() {
+        print("didTapContinueCommonButton")
     }
 }

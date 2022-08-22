@@ -1,15 +1,15 @@
 //
-//  DescriptionOfExperienceViewController.swift
+//  AchievingDifficultGoalViewController.swift
 //  CalorieTracker
 //
-//  Created by Алексей on 20.08.2022.
+//  Created by Алексей on 22.08.2022.
 //
 
-import Foundation
+import SnapKit
 import UIKit
 // swiftlint:disable all
 
-final class DescriptionOfExperienceViewController: UIViewController {
+final class AchievingDifficultGoalViewController: UIViewController {
     
     // MARK: - Private properties
     
@@ -21,12 +21,10 @@ final class DescriptionOfExperienceViewController: UIViewController {
     
     private let plugView: UIView = .init()
     private let titleLabel: UILabel = .init()
+    private let descriptionLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
-    private let neverLostAnswerOption: AnswerOption = .init(text: "I’ve never lost much weight before")
-    private let lostWeightAndGainedAllBackAnswerOption: AnswerOption = .init( text: "I lost weight and gained it all back")
-    private let lostWeightAndGainedSomeBackAnswerOption: AnswerOption = .init( text: "I lost weight and gained it some back")
-    private let lostWeightAndHaveMoreLoseAnswerOption: AnswerOption = .init( text: "I lost weight and have more lose")
-    private let lostWeightAndMaintainingAnswerOption: AnswerOption = .init(text: "I lost weight and am maintaining it")
+    private let willpowerMentalStrength: AnswerOption = .init(text: "Natural willpower and mental strength")
+    private let planAndGoodHabitsAnswerOption: AnswerOption = .init(text: "A plan and good habits")
     private let nextCommonButton: CommonButton = .init(style: .filled, text: "Next".uppercased())
     
     // MARK: - Lifecycle methods
@@ -42,29 +40,29 @@ final class DescriptionOfExperienceViewController: UIViewController {
         view.backgroundColor = R.color.mainBackground()
         
         plugView.backgroundColor = R.color.onboardings.radialGradientFirst()
-
+        
         let attributedString = NSMutableAttributedString()
         
-        attributedString.append(NSAttributedString(string: "What best describes\n ", attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]))
-        attributedString.append(NSAttributedString(string: "your past experiences \nwith weight loss?", attributes: [.foregroundColor: R.color.onboardings.basicDark()]))
+        attributedString.append(NSAttributedString(string: "Think about someone \nin your life ", attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]))
+        attributedString.append(NSAttributedString(string: "who has \nachieved a difficult \ngoal.", attributes: [.foregroundColor: R.color.onboardings.basicDark()]))
         
         titleLabel.attributedText = attributedString
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 0
-        titleLabel.font = UIFont.systemFont(ofSize: 32, weight: .medium)
+        titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .medium)
+        
+        descriptionLabel.text = "What do you think helped them become successful?"
+        descriptionLabel.textAlignment = .center
+        descriptionLabel.numberOfLines = 0
+        descriptionLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
+        descriptionLabel.textColor = R.color.onboardings.backTitle()
         
         stackView.axis = .vertical
         stackView.spacing = 12
         
-        neverLostAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
+        willpowerMentalStrength.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
         
-        lostWeightAndGainedAllBackAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
-        
-        lostWeightAndGainedSomeBackAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
-        
-        lostWeightAndHaveMoreLoseAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
-        
-        lostWeightAndMaintainingAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
+        planAndGoodHabitsAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
         
         nextCommonButton.isHidden = true
     }
@@ -74,16 +72,14 @@ final class DescriptionOfExperienceViewController: UIViewController {
         
         view.addSubview(titleLabel)
         
+        view.addSubview(descriptionLabel)
+        
         view.addSubview(stackView)
         
-        stackView.addArrangedSubview(neverLostAnswerOption)
-        stackView.addArrangedSubview(lostWeightAndGainedAllBackAnswerOption)
-        stackView.addArrangedSubview(lostWeightAndGainedSomeBackAnswerOption)
-        stackView.addArrangedSubview(lostWeightAndHaveMoreLoseAnswerOption)
-        stackView.addArrangedSubview(lostWeightAndMaintainingAnswerOption)
+        stackView.addArrangedSubview(willpowerMentalStrength)
+        stackView.addArrangedSubview(planAndGoodHabitsAnswerOption)
         
         view.addSubview(nextCommonButton)
-        
         
         plugView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
@@ -100,8 +96,14 @@ final class DescriptionOfExperienceViewController: UIViewController {
             $0.centerX.equalTo(view.snp.centerX)
         }
         
+        descriptionLabel.snp.makeConstraints {
+            $0.top.equalTo(titleLabel.snp.bottom).offset(16)
+            $0.left.equalTo(view.snp.left).offset(43)
+            $0.right.equalTo(view.snp.right).offset(-43)
+        }
+        
         stackView.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(32)
+            $0.top.equalTo(descriptionLabel.snp.bottom).offset(32)
             $0.left.equalTo(view.snp.left).offset(40)
             $0.right.equalTo(view.snp.right).offset(-40)
         }

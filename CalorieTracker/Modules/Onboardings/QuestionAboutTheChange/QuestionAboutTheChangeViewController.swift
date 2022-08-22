@@ -1,15 +1,15 @@
 //
-//  PurposeOfTheParishViewController.swift
+//  QuestionAboutTheChangeViewController.swift
 //  CalorieTracker
 //
-//  Created by Алексей on 21.08.2022.
+//  Created by Алексей on 22.08.2022.
 //
 
-import Foundation
+import SnapKit
 import UIKit
 // swiftlint:disable all
 
-final class PurposeOfTheParishViewController: UIViewController {
+final class QuestionAboutTheChangeViewController: UIViewController {
     
     // MARK: - Private properties
     
@@ -21,13 +21,14 @@ final class PurposeOfTheParishViewController: UIViewController {
     
     private let plugView: UIView = .init()
     private let titleLabel: UILabel = .init()
+    private let descriptionLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
-    private let timeToGetBackHealthyHabitsAnswerOption: AnswerOption = .init(text: "It’s time to get back to healthy habits")
-    private let unhappyWithMyWeightAnswerOption: AnswerOption = .init(text: "I’m unhappy with my weight")
-    private let haveSomeFreshMotivationAnswerOption: AnswerOption = .init(text: "I have some fresh motivation")
-    private let readyStartFeelingGoodAgainAnswerOption: AnswerOption = .init(text: "I’m ready to start feeling good again")
-    private let curiousCheckOutKcalcAnswerOption: AnswerOption = .init(text: "I am curious to check out Kcalc")
-    private let somethingElseAnswerOption: AnswerOption = .init(text: "Something else")
+    private let differentMindsetAnswerOption: AnswerOption = .init(text: "I have a different mindset")
+    private let hadSomeBigChangesAnswerOption: AnswerOption = .init(text: "I’ve had some big changes in my life")
+    private let weightMoreAnswerOption: AnswerOption = .init(text: "I weight more than I did last time")
+    private let ryingDifferentWayAnswerOption: AnswerOption = .init(text: "I’m trying a different way of eating")
+    private let tryingNewExercisePlanAnswerOption: AnswerOption = .init(text: "I’m trying a new exercise plan")
+    private let someHealthChangesAnswerOption: AnswerOption = .init(text: "I’ve had some health changes")
     private let nextCommonButton: CommonButton = .init(style: .filled, text: "Next".uppercased())
     
     // MARK: - Lifecycle methods
@@ -46,28 +47,33 @@ final class PurposeOfTheParishViewController: UIViewController {
         
         let attributedString = NSMutableAttributedString()
         
-        attributedString.append(NSAttributedString(string: "What brings ", attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]))
-        attributedString.append(NSAttributedString(string: "you here\n now?", attributes: [.foregroundColor: R.color.onboardings.basicDark()]))
+        attributedString.append(NSAttributedString(string: "What’s defferent ", attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]))
+        attributedString.append(NSAttributedString(string: "from \nlast time?", attributes: [.foregroundColor: R.color.onboardings.basicDark()]))
         
         titleLabel.attributedText = attributedString
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .medium)
         
+        descriptionLabel.text = "Other than you using Kcalс, of cource"
+        descriptionLabel.textAlignment = .center
+        descriptionLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
+        descriptionLabel.textColor = R.color.onboardings.backTitle()
+        
         stackView.axis = .vertical
         stackView.spacing = 12
         
-        timeToGetBackHealthyHabitsAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
+        differentMindsetAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
         
-        unhappyWithMyWeightAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
+        hadSomeBigChangesAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
         
-        haveSomeFreshMotivationAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
+        weightMoreAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
         
-        readyStartFeelingGoodAgainAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
+        ryingDifferentWayAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
         
-        curiousCheckOutKcalcAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
+        tryingNewExercisePlanAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
         
-        somethingElseAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
+        someHealthChangesAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
         
         nextCommonButton.isHidden = true
     }
@@ -77,14 +83,16 @@ final class PurposeOfTheParishViewController: UIViewController {
         
         view.addSubview(titleLabel)
         
+        view.addSubview(descriptionLabel)
+        
         view.addSubview(stackView)
         
-        stackView.addArrangedSubview(timeToGetBackHealthyHabitsAnswerOption)
-        stackView.addArrangedSubview(unhappyWithMyWeightAnswerOption)
-        stackView.addArrangedSubview(haveSomeFreshMotivationAnswerOption)
-        stackView.addArrangedSubview(readyStartFeelingGoodAgainAnswerOption)
-        stackView.addArrangedSubview(curiousCheckOutKcalcAnswerOption)
-        stackView.addArrangedSubview(somethingElseAnswerOption)
+        stackView.addArrangedSubview(differentMindsetAnswerOption)
+        stackView.addArrangedSubview(hadSomeBigChangesAnswerOption)
+        stackView.addArrangedSubview(weightMoreAnswerOption)
+        stackView.addArrangedSubview(ryingDifferentWayAnswerOption)
+        stackView.addArrangedSubview(tryingNewExercisePlanAnswerOption)
+        stackView.addArrangedSubview(someHealthChangesAnswerOption)
         
         view.addSubview(nextCommonButton)
         
@@ -103,8 +111,14 @@ final class PurposeOfTheParishViewController: UIViewController {
             $0.centerX.equalTo(view.snp.centerX)
         }
         
+        descriptionLabel.snp.makeConstraints {
+            $0.top.equalTo(titleLabel.snp.bottom).offset(16)
+            $0.left.equalTo(view.snp.left).offset(43)
+            $0.right.equalTo(view.snp.right).offset(-43)
+        }
+        
         stackView.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(32)
+            $0.top.equalTo(descriptionLabel.snp.bottom).offset(32)
             $0.left.equalTo(view.snp.left).offset(40)
             $0.right.equalTo(view.snp.right).offset(-40)
         }
@@ -129,5 +143,4 @@ final class PurposeOfTheParishViewController: UIViewController {
             nextCommonButton.isHidden = true
         }
     }
-    
 }
