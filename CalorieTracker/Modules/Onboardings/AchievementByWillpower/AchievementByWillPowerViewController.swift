@@ -9,7 +9,13 @@ import Foundation
 import UIKit
 // swiftlint:disable all
 
-final class AchievementByWillpowerViewController: UIViewController {
+protocol AchievementByWillPowerViewControllerInterface: AnyObject {}
+
+final class AchievementByWillPowerViewController: UIViewController {
+    
+    // MARK: - Public properties
+    
+    var presenter: AchievementByWillPowerPresenterInterface?
     
     // MARK: - Views properties
     
@@ -103,3 +109,5 @@ final class AchievementByWillpowerViewController: UIViewController {
         print("didTapAnswerOption")
     }
 }
+
+extension AchievementByWillPowerViewController: AchievementByWillPowerViewControllerInterface {}

@@ -9,7 +9,13 @@ import SnapKit
 import UIKit
 // swiftlint:disable all
 
+protocol QuestionAboutTheChangeViewControllerInterface: AnyObject {}
+
 final class QuestionAboutTheChangeViewController: UIViewController {
+    
+    // MARK: - Public properties
+    
+    var presenter: QuestionAboutTheChangePresenterInterface?
     
     // MARK: - Private properties
     
@@ -144,3 +150,5 @@ final class QuestionAboutTheChangeViewController: UIViewController {
         }
     }
 }
+
+extension QuestionAboutTheChangeViewController: QuestionAboutTheChangeViewControllerInterface {}

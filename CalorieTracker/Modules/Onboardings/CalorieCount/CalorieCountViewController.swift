@@ -9,7 +9,13 @@ import SnapKit
 import UIKit
 // swiftlint:disable all
 
+protocol CalorieCountViewControllerInterface: AnyObject {}
+
 final class CalorieCountViewController: UIViewController {
+    
+    // MARK: - Public properties
+    
+    var presenter: CalorieCountPresenterInterface?
     
     // MARK: - Views properties
     
@@ -109,3 +115,5 @@ final class CalorieCountViewController: UIViewController {
         print("didTapApprovalCommonButton")
     }
 }
+
+extension CalorieCountViewController: CalorieCountViewControllerInterface {}

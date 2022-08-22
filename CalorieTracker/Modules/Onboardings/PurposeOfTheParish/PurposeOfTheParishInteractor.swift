@@ -10,7 +10,7 @@ import Foundation
 protocol PurposeOfTheParishInteractorInterface: AnyObject {}
 
 class PurposeOfTheParishInteractor {
-    weak var presenter: PurposeOfTheParishInteractorInterface?
+    weak var presenter: PurposeOfTheParishPresenterInterface?
 }
 
 extension PurposeOfTheParishInteractor: PurposeOfTheParishInteractorInterface {}

@@ -9,7 +9,13 @@ import SnapKit
 import UIKit
 // swiftlint:disable all
 
+protocol WelcomeViewControllerInterface: AnyObject {}
+
 final class WelcomeViewController: UIViewController {
+    
+    // MARK: - Public properties
+    
+    var presenter: WelcomePresenterInterface?
     
     // MARK: - Views properties
 
@@ -198,3 +204,5 @@ final class WelcomeViewController: UIViewController {
         print("didTapWelcomCommonButton")
     }
 }
+
+extension WelcomeViewController: WelcomeViewControllerInterface {}

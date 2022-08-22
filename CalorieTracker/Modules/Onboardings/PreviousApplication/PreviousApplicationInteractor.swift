@@ -6,3 +6,11 @@
 //
 
 import Foundation
+
+protocol PreviousApplicationInteractorInterface: AnyObject {}
+
+class PreviousApplicationInteractor {
+    weak var presenter: PreviousApplicationPresenterInterface?
+}
+
+extension PreviousApplicationInteractor: PreviousApplicationInteractorInterface {}

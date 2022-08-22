@@ -9,6 +9,21 @@ import Foundation
 
 protocol PurposeOfTheParishPresenterInterface: AnyObject {}
 
-class PurposeOfTheParishPresenter {}
+class PurposeOfTheParishPresenter {
+    
+    unowned var view: PurposeOfTheParishViewControllerInterface
+    let router: PurposeOfTheParishRouterInterface?
+    let interactor: PurposeOfTheParishInteractorInterface?
+
+    init(
+        interactor: PurposeOfTheParishInteractorInterface,
+        router: PurposeOfTheParishRouterInterface,
+        view: PurposeOfTheParishViewControllerInterface
+      ) {
+        self.view = view
+        self.interactor = interactor
+        self.router = router
+    }
+}
 
 extension PurposeOfTheParishPresenter: PurposeOfTheParishPresenterInterface {}

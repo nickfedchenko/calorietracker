@@ -9,7 +9,13 @@ import Foundation
 import UIKit
 // swiftlint:disable all
 
+protocol PreviousApplicationViewControllerInterface: AnyObject {}
+
 final class PreviousApplicationViewController: UIViewController {
+    
+    // MARK: - Public properties
+    
+    var presenter: PreviousApplicationPresenterInterface?
     
     // MARK: - Private properties
     
@@ -150,3 +156,5 @@ final class PreviousApplicationViewController: UIViewController {
         }
     }
 }
+
+extension PreviousApplicationViewController: PreviousApplicationViewControllerInterface {}

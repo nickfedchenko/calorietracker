@@ -7,8 +7,23 @@
 
 import Foundation
 
-protocol QuestionOfLosingWeightPresentorInterface: AnyObject {}
+protocol QuestionOfLosingWeightPresenterInterface: AnyObject {}
 
-class  QuestionOfLosingWeightPresentor {}
+class  QuestionOfLosingWeightPresenter {
+    
+    unowned var view: QuestionOfLosingWeightViewControllerInterface
+    let router: QuestionOfLosingWeightRouterInterface?
+    let interactor: QuestionOfLosingWeightInteractorInterface?
 
-extension  QuestionOfLosingWeightPresentor: QuestionOfLosingWeightPresentorInterface {}
+    init(
+        interactor: QuestionOfLosingWeightInteractorInterface,
+        router: QuestionOfLosingWeightRouterInterface,
+        view: QuestionOfLosingWeightViewControllerInterface
+      ) {
+        self.view = view
+        self.interactor = interactor
+        self.router = router
+    }
+}
+
+extension  QuestionOfLosingWeightPresenter: QuestionOfLosingWeightPresenterInterface {}

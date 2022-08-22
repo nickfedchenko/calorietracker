@@ -9,7 +9,13 @@ import Foundation
 import UIKit
 // swiftlint:disable all
 
+protocol DescriptionOfExperienceViewControllerInterface: AnyObject {}
+
 final class DescriptionOfExperienceViewController: UIViewController {
+    
+    // MARK: - Public properties
+    
+    var presenter: DescriptionOfExperiencePresenterInterface?
     
     // MARK: - Private properties
     
@@ -127,3 +133,5 @@ final class DescriptionOfExperienceViewController: UIViewController {
         }
     }
 }
+
+extension DescriptionOfExperienceViewController: DescriptionOfExperienceViewControllerInterface {}

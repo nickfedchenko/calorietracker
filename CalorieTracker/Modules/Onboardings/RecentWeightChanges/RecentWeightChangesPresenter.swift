@@ -9,6 +9,21 @@ import Foundation
 
 protocol RecentWeightChangesPresenterInterface: AnyObject {}
 
-class RecentWeightChangesPresenter {}
+class RecentWeightChangesPresenter {
+    
+    unowned var view: RecentWeightChangesViewControllerInterface
+    let router: RecentWeightChangesRouterInterface?
+    let interactor: RecentWeightChangesInteractorInterface?
+
+    init(
+        interactor: RecentWeightChangesInteractorInterface,
+        router: RecentWeightChangesRouterInterface,
+        view: RecentWeightChangesViewControllerInterface
+      ) {
+        self.view = view
+        self.interactor = interactor
+        self.router = router
+    }
+}
 
 extension RecentWeightChangesPresenter: RecentWeightChangesPresenterInterface {}

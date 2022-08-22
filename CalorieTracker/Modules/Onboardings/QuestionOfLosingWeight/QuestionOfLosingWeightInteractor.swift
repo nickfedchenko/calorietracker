@@ -10,7 +10,7 @@ import Foundation
 protocol QuestionOfLosingWeightInteractorInterface: AnyObject {}
 
 class QuestionOfLosingWeightInteractor {
-    weak var presentor: QuestionOfLosingWeightPresentorInterface?
+    weak var presenter: QuestionOfLosingWeightPresenterInterface?
 }
 
 extension QuestionOfLosingWeightInteractor: QuestionOfLosingWeightInteractorInterface {}

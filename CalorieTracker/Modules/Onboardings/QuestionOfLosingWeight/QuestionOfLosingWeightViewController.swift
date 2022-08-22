@@ -9,7 +9,13 @@ import Foundation
 import UIKit
 // swiftlint:disable all
 
+protocol QuestionOfLosingWeightViewControllerInterface: AnyObject {}
+
 final class QuestionOfLosingWeightViewController: UIViewController {
+    
+    // MARK: - Public properties
+    
+    var presenter: QuestionOfLosingWeightPresenterInterface?
     
     // MARK: - Views properties
 
@@ -96,3 +102,5 @@ final class QuestionOfLosingWeightViewController: UIViewController {
         print("didTapApprovalCommonButton")
     }
 }
+
+extension QuestionOfLosingWeightViewController: QuestionOfLosingWeightViewControllerInterface {}

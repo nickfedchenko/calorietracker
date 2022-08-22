@@ -9,7 +9,13 @@ import SnapKit
 import UIKit
 // swiftlint:disable all
 
+protocol AchievingDifficultGoalViewControllerInterface: AnyObject {}
+
 final class AchievingDifficultGoalViewController: UIViewController {
+    
+    // MARK: - Public properties
+    
+    var presenter: AchievingDifficultGoalPresenterInterface?
     
     // MARK: - Private properties
     
@@ -129,3 +135,5 @@ final class AchievingDifficultGoalViewController: UIViewController {
         }
     }
 }
+
+extension AchievingDifficultGoalViewController: AchievingDifficultGoalViewControllerInterface {}

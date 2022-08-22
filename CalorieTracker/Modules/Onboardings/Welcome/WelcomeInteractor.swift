@@ -9,8 +9,8 @@ import Foundation
 
 protocol WelcomeInterctorInterface: AnyObject {}
 
-class WelcomeInterctor {
-    weak var presentor: WelcomePresentorInterface?
+class WelcomeInteractor {
+    weak var presenter: WelcomePresenterInterface?
 }
 
-extension WelcomeInterctor: WelcomeInterctorInterface {}
+extension WelcomeInteractor: WelcomeInterctorInterface {}

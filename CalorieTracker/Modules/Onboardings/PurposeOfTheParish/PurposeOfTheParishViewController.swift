@@ -9,7 +9,13 @@ import Foundation
 import UIKit
 // swiftlint:disable all
 
+protocol PurposeOfTheParishViewControllerInterface: AnyObject {}
+
 final class PurposeOfTheParishViewController: UIViewController {
+    
+    // MARK: - Public properties
+    
+    var presenter: PurposeOfTheParishPresenterInterface?
     
     // MARK: - Private properties
     
@@ -129,5 +135,6 @@ final class PurposeOfTheParishViewController: UIViewController {
             nextCommonButton.isHidden = true
         }
     }
-    
 }
+
+extension PurposeOfTheParishViewController: PurposeOfTheParishViewControllerInterface {}

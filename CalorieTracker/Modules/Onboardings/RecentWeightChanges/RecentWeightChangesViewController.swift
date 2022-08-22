@@ -9,7 +9,13 @@ import SnapKit
 import UIKit
 // swiftlint:disable all
 
+protocol RecentWeightChangesViewControllerInterface: AnyObject {}
+
 final class RecentWeightChangesViewController: UIViewController {
+    
+    // MARK: - Public properties
+    
+    var presenter: RecentWeightChangesPresenterInterface?
 
     // MARK: - Views properties
     
@@ -96,3 +102,5 @@ final class RecentWeightChangesViewController: UIViewController {
         print("didTapApprovalCommonButton")
     }
 }
+
+extension RecentWeightChangesViewController: RecentWeightChangesViewControllerInterface {}

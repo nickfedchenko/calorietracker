@@ -9,7 +9,13 @@ import SnapKit
 import UIKit
 // swiftlint:disable all
 
+protocol LastCalorieCountViewControllerInterface: AnyObject {}
+
 final class LastCalorieCountViewController: UIViewController {
+    
+    // MARK: - Public properties
+    
+    var presenter: LastCalorieCountPresenterInterface?
     
     // MARK: - Private properties
     
@@ -127,3 +133,5 @@ final class LastCalorieCountViewController: UIViewController {
         }
     }
 }
+
+extension LastCalorieCountViewController: LastCalorieCountViewControllerInterface {}

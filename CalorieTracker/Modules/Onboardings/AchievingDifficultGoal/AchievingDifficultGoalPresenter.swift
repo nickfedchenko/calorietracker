@@ -9,6 +9,21 @@ import Foundation
 
 protocol AchievingDifficultGoalPresenterInterface: AnyObject {}
 
-class AchievingDifficultGoalPresenter {}
+class AchievingDifficultGoalPresenter {
+    
+    unowned var view: AchievingDifficultGoalViewControllerInterface
+    let router: AchievingDifficultGoalRouterInterface?
+    let interactor: AchievingDifficultGoalInteractorInterface?
+
+    init(
+        interactor: AchievingDifficultGoalInteractorInterface,
+        router: AchievingDifficultGoalRouterInterface,
+        view: AchievingDifficultGoalViewControllerInterface
+      ) {
+        self.view = view
+        self.interactor = interactor
+        self.router = router
+    }
+}
 
 extension AchievingDifficultGoalPresenter: AchievingDifficultGoalPresenterInterface {}

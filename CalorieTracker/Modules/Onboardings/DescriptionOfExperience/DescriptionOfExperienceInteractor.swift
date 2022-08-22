@@ -10,7 +10,7 @@ import Foundation
 protocol DescriptionOfExperienceInteractorInterface: AnyObject {}
 
 class DescriptionOfExperienceInteractor {
-    weak var presentor: DescriptionOfExperiencePresenterInterface?
+    weak var presenter: DescriptionOfExperiencePresenterInterface?
 }
 
 extension DescriptionOfExperienceInteractor: DescriptionOfExperienceInteractorInterface {}

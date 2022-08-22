@@ -9,7 +9,13 @@ import SnapKit
 import UIKit
 // swiftlint:disable all
 
+protocol CallToAchieveGoalViewControllerInterface: AnyObject {}
+
 final class CallToAchieveGoalViewController: UIViewController {
+    
+    // MARK: - Public properties
+    
+    var presenter: CallToAchieveGoalPresenterInterface?
     
     // MARK: - Views properties
     
@@ -79,3 +85,5 @@ final class CallToAchieveGoalViewController: UIViewController {
         print("didTapContinueCommonButton")
     }
 }
+
+extension CallToAchieveGoalViewController: CallToAchieveGoalViewControllerInterface {}
