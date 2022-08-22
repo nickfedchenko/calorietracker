@@ -1,10 +1,8 @@
 //
-//  AchievementByWillpowerRouter.swift
+//  CalorieCountPresenter.swift
 //  CalorieTracker
 //
 //  Created by Алексей on 22.08.2022.
 //
 
 import Foundation
-
-protocol AchievementByWillpowerRouter: AnyObject {}

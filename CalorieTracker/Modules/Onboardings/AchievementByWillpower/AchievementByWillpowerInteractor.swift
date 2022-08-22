@@ -6,3 +6,11 @@
 //
 
 import Foundation
+
+protocol AchievementByWillpowerInteractorInterface: AnyObject {}
+
+class AchievementByWillpowerInteractor {
+    weak var presenter: AchievingDifficultGoalPresenterInterface?
+}
+
+extension AchievementByWillpowerInteractor: AchievementByWillpowerInteractorInterface {}

@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+protocol AchievementByWillpowerPresenterInterface: AnyObject {}
+
+class AchievementByWillpowerPresenter {}
+
+extension AchievementByWillpowerPresenter: AchievementByWillpowerPresenterInterface {}
