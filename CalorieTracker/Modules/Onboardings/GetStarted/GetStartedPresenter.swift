@@ -7,8 +7,29 @@
 
 import Foundation
 
-protocol GetStartedPresenterInterface: AnyObject {}
+protocol GetStartedPresenterInterface: AnyObject {
+    func didTapGetStartedCommonButton()
+}
 
-class GetStartedPresenter {}
+class GetStartedPresenter {
+    
+    unowned var view: GetStartedViewControllerInterface
+    let router: GetStartedRouterInterface?
+    let interactor: GetStartedInteractorInterface?
 
-extension GetStartedPresenter: GetStartedPresenterInterface {}
+    init(
+        interactor: GetStartedInteractorInterface,
+        router: GetStartedRouterInterface,
+        view: GetStartedViewControllerInterface
+      ) {
+        self.view = view
+        self.interactor = interactor
+        self.router = router
+    }
+}
+
+extension GetStartedPresenter: GetStartedPresenterInterface {
+    func didTapGetStartedCommonButton() {
+        router?.openWelcome()
+    }
+}

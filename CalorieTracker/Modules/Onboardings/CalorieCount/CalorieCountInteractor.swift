@@ -13,4 +13,4 @@ class CalorieCountInteractor {
     weak var presenter: CalorieCountPresenterInterface?
 }
 
-extension CalorieCountInteractor: CalorieCountInteractorInterface
+extension CalorieCountInteractor: CalorieCountInteractorInterface {}

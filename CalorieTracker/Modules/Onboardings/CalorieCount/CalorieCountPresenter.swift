@@ -11,4 +11,4 @@ protocol CalorieCountPresenterInterface: AnyObject {}
 
 class CalorieCountPresenter {}
 
-extension CalorieCountPresenter: CalorieCountPresenterInterface
+extension CalorieCountPresenter: CalorieCountPresenterInterface {}

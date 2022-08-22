@@ -8,7 +8,13 @@
 import Foundation
 import UIKit
 
+protocol GetStartedViewControllerInterface: AnyObject {}
+
 final class GetStartedViewController: UIViewController {
+    
+    // MARK: - Public properties
+    
+    var presenter: GetStartedPresenterInterface?
     
     // MARK: - Views properties
     
@@ -109,10 +115,12 @@ final class GetStartedViewController: UIViewController {
     }
     
     @objc private func didTapGetStartedCommonButton() {
-        print("didTapGetStartedCommonButton")
+        presenter?.didTapGetStartedCommonButton()
     }
     
     @objc private func didTapGetStartedSignInAppleButton() {
         print("didTapGetStartedSignInAppleButton")
     }
 }
+
+extension GetStartedViewController: GetStartedViewControllerInterface {}
