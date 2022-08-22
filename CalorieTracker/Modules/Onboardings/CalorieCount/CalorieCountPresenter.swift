@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+protocol CalorieCountPresenterInterface: AnyObject {}
+
+class CalorieCountPresenter {}
+
+extension CalorieCountPresenter: CalorieCountPresenterInterface

@@ -6,3 +6,11 @@
 //
 
 import Foundation
+
+protocol CalorieCountInteractorInterface: AnyObject {}
+
+class CalorieCountInteractor {
+    weak var presenter: CalorieCountPresenterInterface?
+}
+
+extension CalorieCountInteractor: CalorieCountInteractorInterface
