@@ -23,8 +23,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
-        let tabBar = AchievingDifficultGoalViewController()
-        window?.rootViewController = tabBar
+        
+        let getStartedViewController = GetStartedRouter.setupModule()
+        let navigationController = UINavigationController(rootViewController: getStartedViewController)
+        
+        window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
 //        DSF.shared.updateStoredDishes()
 //        DSF.shared.updateStoredProducts()
