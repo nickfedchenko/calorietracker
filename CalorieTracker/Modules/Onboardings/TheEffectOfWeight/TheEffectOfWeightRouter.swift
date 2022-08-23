@@ -7,7 +7,9 @@
 
 import Foundation
 
-protocol TheEffectOfWeightRouterInterface: AnyObject {}
+protocol TheEffectOfWeightRouterInterface: AnyObject {
+    func openFormationGoodHabits()
+}
 
 class TheEffectOfWeightRouter: NSObject {
     
@@ -30,4 +32,6 @@ class TheEffectOfWeightRouter: NSObject {
     }
 }
 
-extension TheEffectOfWeightRouter: TheEffectOfWeightRouterInterface {}
+extension TheEffectOfWeightRouter: TheEffectOfWeightRouterInterface {
+    func openFormationGoodHabits() {}
+}

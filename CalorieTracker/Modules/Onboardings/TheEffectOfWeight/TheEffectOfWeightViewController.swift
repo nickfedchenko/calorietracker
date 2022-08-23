@@ -36,6 +36,7 @@ final class TheEffectOfWeightViewController: UIViewController {
     }
     
     private func configureViews() {
+        
         view.backgroundColor = R.color.mainBackground()
         
         let attributedString = NSMutableAttributedString()

@@ -39,6 +39,7 @@ class AnswerOption: UIButton {
         layer.borderColor = UIColor(named: R.color.onboardings.basicSecondaryDark.name)?.cgColor
         
         titleLabel1.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        titleLabel1.numberOfLines = 0
     }
     
     private func configureLayouts() {
