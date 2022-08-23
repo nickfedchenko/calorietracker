@@ -19,7 +19,6 @@ final class FinalOfTheFirstStageViewController: UIViewController {
     
     // MARK: - Views properties
     
-    private let stageCounterView: StageCounterView = .init()
     private let passedImageView: UIImageView = .init()
     private let titleLabel: UILabel = .init()
     private let descriptionLabel: UILabel = .init()
@@ -95,8 +94,6 @@ final class FinalOfTheFirstStageViewController: UIViewController {
     }
     
     private func configureLayouts() {
-        view.addSubview(stageCounterView)
-    
         view.addSubview(passedImageView)
         
         view.addSubview(titleLabel)
@@ -119,14 +116,8 @@ final class FinalOfTheFirstStageViewController: UIViewController {
         
         view.addSubview(comingCommonButton)
         
-        stageCounterView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
-            $0.centerX.equalTo(view.snp.centerX)
-            $0.height.equalTo(30)
-        }
-        
         passedImageView.snp.makeConstraints {
-            $0.top.equalTo(stageCounterView.snp.bottom).offset(36)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
             $0.centerX.equalTo(view.snp.centerX)
             $0.size.equalTo(48)
         }
