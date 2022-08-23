@@ -25,7 +25,7 @@ protocol RecipesScreenInteractorInterface: AnyObject {
 
 class RecipesScreenInteractor {
     weak var presenter: RecipesScreenPresenterInterface?
-    private let dataService = DSF.shared
+//    private let dataService = DSF.shared
     private let dataModel = MockModel()
 }
 

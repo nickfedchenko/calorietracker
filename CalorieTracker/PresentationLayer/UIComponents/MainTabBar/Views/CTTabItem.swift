@@ -117,6 +117,10 @@ final class CTTabItem: UIView {
         //        iconImage.image = configuration.stateAnimations.deselected
         title.attributedText = NSAttributedString(string: configuration.title)
         
+        snp.makeConstraints { make in
+            make.height.equalTo(64)
+        }
+        
         iconView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.width.height.equalTo(CTTabBar.Constants.itemHeight)

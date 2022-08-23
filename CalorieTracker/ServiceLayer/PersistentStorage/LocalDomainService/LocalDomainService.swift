@@ -70,25 +70,23 @@ final class LocalDomainService {
         return context
     }()
     
-//    private lazy var taskContext: NSManagedObjectContext = {
-//        let context = container.newBackgroundContext()
-//        context.mergePolicy = NSMergePolicy(merge: .mergeByPropertyStoreTrumpMergePolicyType)
-//        return context
-//    }()
+    private lazy var taskContext: NSManagedObjectContext = {
+        let context = container.newBackgroundContext()
+        context.mergePolicy = NSMergePolicy(merge: .mergeByPropertyStoreTrumpMergePolicyType)
+        return context
+    }()
     
     // MARK: - Public Methods
     
     private func save() {
-        let taskContext = container.newBackgroundContext()
-        taskContext.automaticallyMergesChangesFromParent = true
         guard taskContext.hasChanges else {
             return
         }
-        taskContext.perform {
+        taskContext.perform { [weak taskContext] in
             do {
-                try taskContext.save()
+                 try taskContext?.save()
             } catch let error {
-                taskContext.rollback()
+                taskContext?.rollback()
                 print(error)
             }
         }
