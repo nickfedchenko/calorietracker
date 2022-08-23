@@ -6,3 +6,11 @@
 //
 
 import Foundation
+
+protocol FinalOfTheFirstStageInteractorInterface: AnyObject {}
+
+class FinalOfTheFirstStageInteractor {
+    weak var presenter: FinalOfTheFirstStagePresenterInterface?
+}
+
+extension FinalOfTheFirstStageInteractor: FinalOfTheFirstStageInteractorInterface {}
