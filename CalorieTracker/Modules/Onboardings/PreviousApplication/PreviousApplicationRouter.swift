@@ -7,7 +7,9 @@
 
 import Foundation
 
-protocol PreviousApplicationRouterInterface: AnyObject {}
+protocol PreviousApplicationRouterInterface: AnyObject {
+    func openObsessingOverFood()
+}
 
 class PreviousApplicationRouter: NSObject {
     
@@ -30,4 +32,6 @@ class PreviousApplicationRouter: NSObject {
     }
 }
 
-extension PreviousApplicationRouter: PreviousApplicationRouterInterface {}
+extension PreviousApplicationRouter: PreviousApplicationRouterInterface {
+    func openObsessingOverFood() {}
+}
