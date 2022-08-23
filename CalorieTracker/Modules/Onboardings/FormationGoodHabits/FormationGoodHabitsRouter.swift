@@ -8,7 +8,7 @@
 import Foundation
 
 protocol FormationGoodHabitsRouterInterface: AnyObject {
-    
+    func openThanksForTheInformation()
 }
 
 class FormationGoodHabitsRouter: NSObject {
@@ -33,5 +33,5 @@ class FormationGoodHabitsRouter: NSObject {
 }
 
 extension FormationGoodHabitsRouter: FormationGoodHabitsRouterInterface {
-    func openFormationGoodHabits() {}
+    func openThanksForTheInformation() {}
 }

@@ -7,8 +7,6 @@
 
 import Foundation
 
-import Foundation
-
 protocol FormationGoodHabitsInteractorInterface: AnyObject {}
 
 class FormationGoodHabitsInteractor {
