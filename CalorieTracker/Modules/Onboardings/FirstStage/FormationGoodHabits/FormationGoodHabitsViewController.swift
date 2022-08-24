@@ -9,7 +9,9 @@ import Foundation
 import UIKit
 // swiftlint:disable all
 
-protocol FormationGoodHabitsViewControllerInterface: AnyObject {}
+protocol FormationGoodHabitsViewControllerInterface: AnyObject {
+    func set(formationGoodHabits: [FormationGoodHabits])
+}
 
 final class FormationGoodHabitsViewController: UIViewController {
     
@@ -25,18 +27,15 @@ final class FormationGoodHabitsViewController: UIViewController {
     private let titleLabel: UILabel = .init()
     private let descriptionLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
-    private let logEveryMealBeforeAnswerOption: AnswerOption = .init(text: "Log every meal before I eat it")
-    private let logOnDaysEvenAnswerOption: AnswerOption = .init(text: "Log on days even when I know I’m \ngoing over budget")
-    private let stayOnTrackAnswerOption: AnswerOption = .init(text: "Stay on track with an accountability\n buddy")
-    private let mealsInAdvanceAnswerOption: AnswerOption = .init(text: "Plan out my meals in advance")
-    private let trackingStreakAnswerOption: AnswerOption = .init(text: "See how long of a tracking streak I can\n keep up")
-    private let planOutDaysAnswerOption: AnswerOption = .init(text: "Plan out days where I know I’ll be\n eating indulgent foods")
+    private var answerOptions: [AnswerOption] = []
     private let continueCommonButton: CommonButton = .init(style: .filled, text: "Continue".uppercased())
     
     // MARK: - Lifecycle methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        presenter?.viewDidLoad()
         
         configureBackBarButtonItem()
         configureViews()
@@ -66,18 +65,6 @@ final class FormationGoodHabitsViewController: UIViewController {
         stackView.axis = .vertical
         stackView.spacing = 12
         
-        logEveryMealBeforeAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
-        
-        logOnDaysEvenAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
-        
-        stayOnTrackAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
-        
-        mealsInAdvanceAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
-        
-        trackingStreakAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
-        
-        planOutDaysAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
-        
         continueCommonButton.addTarget(self, action: #selector(didTapContinueCommonButton), for: .touchUpInside)
     }
     
@@ -93,13 +80,6 @@ final class FormationGoodHabitsViewController: UIViewController {
         contentView.addSubview(descriptionLabel)
         
         contentView.addSubview(stackView)
-        
-        stackView.addArrangedSubview(logEveryMealBeforeAnswerOption)
-        stackView.addArrangedSubview(logOnDaysEvenAnswerOption)
-        stackView.addArrangedSubview(stayOnTrackAnswerOption)
-        stackView.addArrangedSubview(mealsInAdvanceAnswerOption)
-        stackView.addArrangedSubview(trackingStreakAnswerOption)
-        stackView.addArrangedSubview(planOutDaysAnswerOption)
         
         contentView.addSubview(continueCommonButton)
         
@@ -150,7 +130,25 @@ final class FormationGoodHabitsViewController: UIViewController {
     }
     
     @objc func didTapAnswerOption(_ sender: AnswerOption) {
-        sender.isSelected = !sender.isSelected
+        answerOptions.enumerated().forEach { index, answerOption in
+            if answerOption == sender {
+                let isSelected = !answerOption.isSelected
+                
+                answerOption.isSelected = isSelected
+                
+                isSelected ? presenter?.didSelectFormationGoodHabits(with: index) : presenter?.didDeselectFormationGoodHabits()
+            } else {
+                answerOption.isSelected = false
+            }
+        }
+        
+        if answerOptions.contains(where: { $0.isSelected == true }) {
+            answerOptions.forEach { $0.isTransparent = !$0.isSelected }
+        } else {
+            answerOptions.forEach { $0.isTransparent = false }
+        }
+        
+        continueCommonButton.isHidden = !answerOptions.contains(where: { $0.isSelected == true })
     }
     
     @objc func didTapContinueCommonButton(_ sender: AnswerOption) {
@@ -158,4 +156,37 @@ final class FormationGoodHabitsViewController: UIViewController {
     }
 }
 
-extension FormationGoodHabitsViewController: FormationGoodHabitsViewControllerInterface {}
+extension FormationGoodHabitsViewController: FormationGoodHabitsViewControllerInterface {
+    func set(formationGoodHabits: [FormationGoodHabits]) {
+        stackView.removeAllArrangedSubviews()
+        answerOptions = []
+        
+        for formationGoodHabits in formationGoodHabits {
+            let answerOption = AnswerOption(text: formationGoodHabits.description)
+            
+            answerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
+            
+            stackView.addArrangedSubview(answerOption)
+            answerOptions.append(answerOption)
+        }
+    }
+}
+
+fileprivate extension FormationGoodHabits {
+    var description: String {
+        switch self {
+        case .logEveryMealBefore:
+            return "Log every meal before I eat it"
+        case .logOnDaysEvenWhenKnow:
+            return "Log on days even when I know I’m \ngoing over budget"
+        case .stayOnTrackWithAnAccountabilityBuddy:
+            return "Stay on track with an accountability\n buddy"
+        case .planOutMyMealsInAdvance:
+            return "Plan out my meals in advance"
+        case .seeHowLongOfTrackingStreak:
+            return "See how long of a tracking streak I can\n keep up"
+        case .planOutDaysWhereKnow:
+            return "Plan out days where I know I’ll be\n eating indulgent foods"
+        }
+    }
+}

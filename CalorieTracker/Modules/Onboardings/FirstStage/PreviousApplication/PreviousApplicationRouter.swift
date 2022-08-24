@@ -19,7 +19,7 @@ class PreviousApplicationRouter: NSObject {
     
     static func setupModule() -> PreviousApplicationViewController {
         let vc = PreviousApplicationViewController()
-        let interactor = PreviousApplicationInteractor()
+        let interactor = PreviousApplicationInteractor(onboardingManager: OnboardingManager.shared)
         let router = PreviousApplicationRouter()
         let presenter = PreviousApplicationPresenter(
             interactor: interactor,

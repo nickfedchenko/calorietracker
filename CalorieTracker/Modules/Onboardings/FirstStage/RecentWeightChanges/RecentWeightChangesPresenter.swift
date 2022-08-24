@@ -31,10 +31,12 @@ class RecentWeightChangesPresenter {
 
 extension RecentWeightChangesPresenter: RecentWeightChangesPresenterInterface {
     func didTapApprovalCommonButton() {
+        interactor?.set(recentWeightChanges: true)
         router?.openCallToAchieveGoal()
     }
     
     func didTapRejectionCommonButton() {
+        interactor?.set(recentWeightChanges: false)
         router?.openCallToAchieveGoal()
     }
 }

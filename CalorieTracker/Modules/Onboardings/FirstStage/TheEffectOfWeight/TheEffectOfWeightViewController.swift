@@ -9,7 +9,9 @@ import Foundation
 import UIKit
 // swiftlint:disable all
 
-protocol TheEffectOfWeightViewControllerInterface: AnyObject {}
+protocol TheEffectOfWeightViewControllerInterface: AnyObject {
+    func set(theEffectOfWeight: [TheEffectOfWeight])
+}
 
 final class TheEffectOfWeightViewController: UIViewController {
     
@@ -17,19 +19,26 @@ final class TheEffectOfWeightViewController: UIViewController {
     
     var presenter: TheEffectOfWeightPresenterInterface?
     
+    // MARK: - Private properties
+    
+    var isHedden: Bool = false {
+        didSet { didChangeIsHeaden() }
+    }
+    
     // MARK: - Views properties
     
     private let stageCounterView: StageCounterView = .init()
     private let titleLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
-    private let aLotAnswerOption: AnswerOption = .init(text: "Yes, a lot")
-    private let sureBitAnswerOption: AnswerOption = .init(text: "Sure, a bit")
-    private let notReallyAnswerOption: AnswerOption = .init(text: "No, not really")
+    private var answerOptions: [AnswerOption] = []
+    private let nextCommonButton: CommonButton = .init(style: .filled, text: "Next".uppercased())
     
     // MARK: - Lifecycle methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        presenter?.viewDidLoad()
         
         configureBackBarButtonItem()
         configureViews()
@@ -54,11 +63,8 @@ final class TheEffectOfWeightViewController: UIViewController {
         stackView.axis = .vertical
         stackView.spacing = 12
         
-        aLotAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
-        
-        sureBitAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
-        
-        notReallyAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
+        nextCommonButton.isHidden = true
+        nextCommonButton.addTarget(self, action: #selector(didTapNextCommonButton), for: .touchUpInside)
     }
     
     private func configureLayouts() {
@@ -68,9 +74,7 @@ final class TheEffectOfWeightViewController: UIViewController {
         
         view.addSubview(stackView)
         
-        stackView.addArrangedSubview(aLotAnswerOption)
-        stackView.addArrangedSubview(sureBitAnswerOption)
-        stackView.addArrangedSubview(notReallyAnswerOption)
+        view.addSubview(nextCommonButton)
         
         stageCounterView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
@@ -92,12 +96,75 @@ final class TheEffectOfWeightViewController: UIViewController {
             $0.left.equalTo(view.snp.left).offset(40)
             $0.right.equalTo(view.snp.right).offset(-40)
         }
+        
+        nextCommonButton.snp.makeConstraints {
+            $0.left.equalTo(view.snp.left).offset(40)
+            $0.right.equalTo(view.snp.right).offset(-40)
+            $0.bottom.equalTo(view.snp.bottom).offset(-35)
+            $0.height.equalTo(64)
+        }
     }
     
     @objc func didTapAnswerOption(_ sender: AnswerOption) {
-        sender.isSelected = !sender.isSelected
-        presenter?.didTapAnswerOption()
+        answerOptions.enumerated().forEach { index, answerOption in
+            if answerOption == sender {
+                let isSelected = !answerOption.isSelected
+                
+                answerOption.isSelected = isSelected
+                
+                isSelected ? presenter?.didSelectTheEffectOfWeight(with: index) : presenter?.didDeselectTheEffectOfWeight()
+            } else {
+                answerOption.isSelected = false
+            }
+        }
+        
+        if answerOptions.contains(where: { $0.isSelected == true }) {
+            answerOptions.forEach { $0.isTransparent = !$0.isSelected }
+        } else {
+            answerOptions.forEach { $0.isTransparent = false }
+        }
+        
+        nextCommonButton.isHidden = !answerOptions.contains(where: { $0.isSelected == true })
+    }
+    
+    @objc func didTapNextCommonButton() {
+        presenter?.didTapNextCommonButton()
+    }
+    
+    private func didChangeIsHeaden() {
+        if isHedden {
+            nextCommonButton.isHidden = false
+        } else {
+            nextCommonButton.isHidden = true
+        }
     }
 }
 
-extension TheEffectOfWeightViewController: TheEffectOfWeightViewControllerInterface {}
+extension TheEffectOfWeightViewController: TheEffectOfWeightViewControllerInterface {
+    func set(theEffectOfWeight: [TheEffectOfWeight]) {
+        stackView.removeAllArrangedSubviews()
+        answerOptions = []
+        
+        for theEffectOfWeight in theEffectOfWeight {
+            let answerOption = AnswerOption(text: theEffectOfWeight.description)
+            
+            answerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
+            
+            stackView.addArrangedSubview(answerOption)
+            answerOptions.append(answerOption)
+        }
+    }
+}
+
+fileprivate extension TheEffectOfWeight {
+    var description: String {
+        switch self {
+        case .yesLot:
+            return "Yes, a lot"
+        case .sureBit:
+            return "Sure, a bit"
+        case .noNotReall:
+            return "No, not really"
+        }
+    }
+}

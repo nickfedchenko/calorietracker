@@ -19,7 +19,8 @@ class AchievingDifficultGoalRouter: NSObject {
     
     static func setupModule() -> AchievingDifficultGoalViewController {
         let vc = AchievingDifficultGoalViewController()
-        let interactor = AchievingDifficultGoalInteractor()
+        let interactor = AchievingDifficultGoalInteractor(
+            onboardingManager: OnboardingManager.shared)
         let router = AchievingDifficultGoalRouter()
         let presenter = AchievingDifficultGoalPresenter(
             interactor: interactor,

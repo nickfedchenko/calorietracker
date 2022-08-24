@@ -19,7 +19,7 @@ class ObsessingOverFoodRouter: NSObject {
     
     static func setupModule() -> ObsessingOverFoodViewController {
         let vc = ObsessingOverFoodViewController()
-        let interactor = ObsessingOverFoodInteractor()
+        let interactor = ObsessingOverFoodInteractor(onboardingManager: OnboardingManager.shared)
         let router = ObsessingOverFoodRouter()
         let presenter = ObsessingOverFoodPresenter(
             interactor: interactor,

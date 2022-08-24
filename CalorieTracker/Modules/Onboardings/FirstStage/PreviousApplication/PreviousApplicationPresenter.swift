@@ -8,7 +8,10 @@
 import Foundation
 
 protocol PreviousApplicationPresenterInterface: AnyObject {
+    func viewDidLoad()
     func didTapNextCommonButton()
+    func didSelectPreviousApplication(with index: Int)
+    func didDeselectPreviousApplication()
 }
 
 class PreviousApplicationPresenter {
@@ -17,6 +20,9 @@ class PreviousApplicationPresenter {
     let router: PreviousApplicationRouterInterface?
     let interactor: PreviousApplicationInteractorInterface?
 
+    private var previousApplication: [PreviousApplication] = []
+    private var previousApplicationIndex: Int?
+    
     init(
         interactor: PreviousApplicationInteractorInterface,
         router: PreviousApplicationRouterInterface,
@@ -29,7 +35,22 @@ class PreviousApplicationPresenter {
 }
 
 extension PreviousApplicationPresenter: PreviousApplicationPresenterInterface {
+    func viewDidLoad() {
+        previousApplication = interactor?.getAllPreviousApplication() ?? []
+        
+        view.set(previousApplication: previousApplication)
+    }
+    
     func didTapNextCommonButton() {
+        interactor?.set(previousApplication: .myFitnessPal)
         router?.openObsessingOverFood()
+    }
+    
+    func didSelectPreviousApplication(with index: Int) {
+        previousApplicationIndex = index
+    }
+    
+    func didDeselectPreviousApplication() {
+        previousApplicationIndex = nil
     }
 }

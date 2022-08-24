@@ -19,7 +19,9 @@ class DescriptionOfExperienceRouter: NSObject {
     
     static func setupModule() -> DescriptionOfExperienceViewController {
         let vc = DescriptionOfExperienceViewController()
-        let interactor = DescriptionOfExperienceInteractor()
+        let interactor = DescriptionOfExperienceInteractor(
+            onboardingManager: OnboardingManager.shared
+        )
         let router = DescriptionOfExperienceRouter()
         let presenter = DescriptionOfExperiencePresenter(
             interactor: interactor,

@@ -19,7 +19,8 @@ class QuestionAboutTheChangeRouter: NSObject {
     
     static func setupModule() -> QuestionAboutTheChangeViewController {
         let vc = QuestionAboutTheChangeViewController()
-        let interactor = QuestionAboutTheChangeInteractor()
+        let interactor = QuestionAboutTheChangeInteractor(
+            onboardingManager: OnboardingManager.shared)
         let router = QuestionAboutTheChangeRouter()
         let presenter = QuestionAboutTheChangePresenter(
             interactor: interactor,

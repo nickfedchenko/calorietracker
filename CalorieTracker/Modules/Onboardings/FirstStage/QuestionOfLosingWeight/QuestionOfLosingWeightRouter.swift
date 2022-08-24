@@ -19,7 +19,9 @@ class QuestionOfLosingWeightRouter: NSObject {
     
     static func setupModule() -> QuestionOfLosingWeightViewController {
         let vc = QuestionOfLosingWeightViewController()
-        let interactor = QuestionOfLosingWeightInteractor()
+        let interactor = QuestionOfLosingWeightInteractor(
+            onboardingManager: OnboardingManager.shared
+        )
         let router = QuestionOfLosingWeightRouter()
         let presenter = QuestionOfLosingWeightPresenter(
             interactor: interactor,

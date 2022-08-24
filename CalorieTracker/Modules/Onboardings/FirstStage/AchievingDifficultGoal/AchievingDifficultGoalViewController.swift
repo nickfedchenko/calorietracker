@@ -9,7 +9,9 @@ import SnapKit
 import UIKit
 // swiftlint:disable all
 
-protocol AchievingDifficultGoalViewControllerInterface: AnyObject {}
+protocol AchievingDifficultGoalViewControllerInterface: AnyObject {
+    func set(achievingDifficultGoal: [AchievingDifficultGoal])
+}
 
 final class AchievingDifficultGoalViewController: UIViewController {
     
@@ -29,14 +31,15 @@ final class AchievingDifficultGoalViewController: UIViewController {
     private let titleLabel: UILabel = .init()
     private let descriptionLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
-    private let willpowerMentalStrength: AnswerOption = .init(text: "Natural willpower and mental strength")
-    private let planAndGoodHabitsAnswerOption: AnswerOption = .init(text: "A plan and good habits")
+    private var answerOptions: [AnswerOption] = []
     private let nextCommonButton: CommonButton = .init(style: .filled, text: "Next".uppercased())
     
     // MARK: - Lifecycle methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        presenter?.viewDidLoad()
         
         configureBackBarButtonItem()
         configureViews()
@@ -69,10 +72,6 @@ final class AchievingDifficultGoalViewController: UIViewController {
         stackView.axis = .vertical
         stackView.spacing = 12
         
-        willpowerMentalStrength.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
-        
-        planAndGoodHabitsAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
-        
         nextCommonButton.isHidden = true
         nextCommonButton.addTarget(self, action: #selector(didTapNextCommonButton), for: .touchUpInside)
     }
@@ -85,9 +84,6 @@ final class AchievingDifficultGoalViewController: UIViewController {
         view.addSubview(descriptionLabel)
         
         view.addSubview(stackView)
-        
-        stackView.addArrangedSubview(willpowerMentalStrength)
-        stackView.addArrangedSubview(planAndGoodHabitsAnswerOption)
         
         view.addSubview(nextCommonButton)
         
@@ -127,8 +123,25 @@ final class AchievingDifficultGoalViewController: UIViewController {
     }
     
     @objc func didTapAnswerOption(_ sender: AnswerOption) {
-        sender.isSelected = !sender.isSelected
-        nextCommonButton.isHidden = !nextCommonButton.isHidden
+        answerOptions.enumerated().forEach { index, answerOption in
+            if answerOption == sender {
+                let isSelected = !answerOption.isSelected
+                
+                answerOption.isSelected = isSelected
+                
+                isSelected ? presenter?.didSelectAchievingDifficultGoal(with: index) : presenter?.didDeselectAchievingDifficultGoal()
+            } else {
+                answerOption.isSelected = false
+            }
+        }
+        
+        if answerOptions.contains(where: { $0.isSelected == true }) {
+            answerOptions.forEach { $0.isTransparent = !$0.isSelected }
+        } else {
+            answerOptions.forEach { $0.isTransparent = false }
+        }
+        
+        nextCommonButton.isHidden = !answerOptions.contains(where: { $0.isSelected == true })
     }
     
     @objc func didTapNextCommonButton() {
@@ -144,4 +157,29 @@ final class AchievingDifficultGoalViewController: UIViewController {
     }
 }
 
-extension AchievingDifficultGoalViewController: AchievingDifficultGoalViewControllerInterface {}
+extension AchievingDifficultGoalViewController: AchievingDifficultGoalViewControllerInterface {
+    func set(achievingDifficultGoal: [AchievingDifficultGoal]) {
+        stackView.removeAllArrangedSubviews()
+        answerOptions = []
+        
+        for achievingDifficultGoal in achievingDifficultGoal {
+            let answerOption = AnswerOption(text: achievingDifficultGoal.description)
+            
+            answerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
+            
+            stackView.addArrangedSubview(answerOption)
+            answerOptions.append(answerOption)
+        }
+    }
+}
+
+fileprivate extension AchievingDifficultGoal {
+    var description: String {
+        switch self {
+        case .naturalWillpowerAndMentalStrength:
+            return "Natural willpower and mental strength"
+        case .aPlanAndGoodHabits:
+            return "A plan and good habits"
+        }
+    }
+}

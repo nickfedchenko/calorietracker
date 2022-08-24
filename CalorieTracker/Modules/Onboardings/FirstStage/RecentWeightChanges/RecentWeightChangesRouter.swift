@@ -19,7 +19,8 @@ class RecentWeightChangesRouter: NSObject {
     
     static func setupModule() -> RecentWeightChangesViewController {
         let vc = RecentWeightChangesViewController()
-        let interactor = RecentWeightChangesInteractor()
+        let interactor = RecentWeightChangesInteractor(
+            onboardingManager: OnboardingManager.shared)
         let router = RecentWeightChangesRouter()
         let presenter = RecentWeightChangesPresenter(
             interactor: interactor,

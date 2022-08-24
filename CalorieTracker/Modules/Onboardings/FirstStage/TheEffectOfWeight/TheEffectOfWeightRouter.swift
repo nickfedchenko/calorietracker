@@ -19,7 +19,7 @@ class TheEffectOfWeightRouter: NSObject {
     
     static func setupModule() -> TheEffectOfWeightViewController {
         let vc = TheEffectOfWeightViewController()
-        let interactor = TheEffectOfWeightInteractor()
+        let interactor = TheEffectOfWeightInteractor(onboardingManager: OnboardingManager.shared)
         let router = TheEffectOfWeightRouter()
         let presenter = TheEffectOfWeightPresenter(
             interactor: interactor,

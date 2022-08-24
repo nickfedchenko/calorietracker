@@ -9,7 +9,9 @@ import Foundation
 import UIKit
 // swiftlint:disable all
 
-protocol PurposeOfTheParishViewControllerInterface: AnyObject {}
+protocol PurposeOfTheParishViewControllerInterface: AnyObject {
+    func set(purposeOfTheParish: [PurposeOfTheParish])
+}
 
 final class PurposeOfTheParishViewController: UIViewController {
     
@@ -28,18 +30,15 @@ final class PurposeOfTheParishViewController: UIViewController {
     private let plugView: UIView = .init()
     private let titleLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
-    private let timeToGetBackHealthyHabitsAnswerOption: AnswerOption = .init(text: "It’s time to get back to healthy habits")
-    private let unhappyWithMyWeightAnswerOption: AnswerOption = .init(text: "I’m unhappy with my weight")
-    private let haveSomeFreshMotivationAnswerOption: AnswerOption = .init(text: "I have some fresh motivation")
-    private let readyStartFeelingGoodAgainAnswerOption: AnswerOption = .init(text: "I’m ready to start feeling good again")
-    private let curiousCheckOutKcalcAnswerOption: AnswerOption = .init(text: "I am curious to check out Kcalc")
-    private let somethingElseAnswerOption: AnswerOption = .init(text: "Something else")
+    private var answerOptions: [AnswerOption] = []
     private let nextCommonButton: CommonButton = .init(style: .filled, text: "Next".uppercased())
     
     // MARK: - Lifecycle methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        presenter?.viewDidLoad()
         
         configureBackBarButtonItem()
         configureViews()
@@ -66,18 +65,6 @@ final class PurposeOfTheParishViewController: UIViewController {
         stackView.axis = .vertical
         stackView.spacing = 12
         
-        timeToGetBackHealthyHabitsAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
-        
-        unhappyWithMyWeightAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
-        
-        haveSomeFreshMotivationAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
-        
-        readyStartFeelingGoodAgainAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
-        
-        curiousCheckOutKcalcAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
-        
-        somethingElseAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
-        
         nextCommonButton.isHidden = true
         nextCommonButton.addTarget(self, action: #selector(didTapNextCommonButton), for: .touchUpInside)
     }
@@ -88,13 +75,6 @@ final class PurposeOfTheParishViewController: UIViewController {
         view.addSubview(titleLabel)
         
         view.addSubview(stackView)
-        
-        stackView.addArrangedSubview(timeToGetBackHealthyHabitsAnswerOption)
-        stackView.addArrangedSubview(unhappyWithMyWeightAnswerOption)
-        stackView.addArrangedSubview(haveSomeFreshMotivationAnswerOption)
-        stackView.addArrangedSubview(readyStartFeelingGoodAgainAnswerOption)
-        stackView.addArrangedSubview(curiousCheckOutKcalcAnswerOption)
-        stackView.addArrangedSubview(somethingElseAnswerOption)
         
         view.addSubview(nextCommonButton)
         
@@ -128,8 +108,25 @@ final class PurposeOfTheParishViewController: UIViewController {
     }
     
     @objc func didTapAnswerOption(_ sender: AnswerOption) {
-        sender.isSelected = !sender.isSelected
-        nextCommonButton.isHidden = !nextCommonButton.isHidden
+        answerOptions.enumerated().forEach { index, answerOption in
+            if answerOption == sender {
+                let isSelected = !answerOption.isSelected
+                
+                answerOption.isSelected = isSelected
+                
+                isSelected ? presenter?.didSelectPurposeOfTheParish(with: index) : presenter?.didDeselectPurposeOfTheParish()
+            } else {
+                answerOption.isSelected = false
+            }
+        }
+        
+        if answerOptions.contains(where: { $0.isSelected == true }) {
+            answerOptions.forEach { $0.isTransparent = !$0.isSelected }
+        } else {
+            answerOptions.forEach { $0.isTransparent = false }
+        }
+        
+        nextCommonButton.isHidden = !answerOptions.contains(where: { $0.isSelected == true })
     }
     
     @objc func didTapNextCommonButton() {
@@ -145,4 +142,39 @@ final class PurposeOfTheParishViewController: UIViewController {
     }
 }
 
-extension PurposeOfTheParishViewController: PurposeOfTheParishViewControllerInterface {}
+// MARK: - PurposeOfTheParishViewControllerInterface
+
+extension PurposeOfTheParishViewController: PurposeOfTheParishViewControllerInterface {
+    func set(purposeOfTheParish: [PurposeOfTheParish]) {
+        stackView.removeAllArrangedSubviews()
+        answerOptions = []
+        
+        for purposeOfTheParish in purposeOfTheParish {
+            let answerOption = AnswerOption(text: purposeOfTheParish.description)
+            
+            answerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
+            
+            stackView.addArrangedSubview(answerOption)
+            answerOptions.append(answerOption)
+        }
+    }
+}
+
+fileprivate extension PurposeOfTheParish {
+    var description: String {
+        switch self {
+        case .thisTimeToGetBackToHealthyHabits:
+            return "It’s time to get back to healthy habits"
+        case .iUnhappyWithMyWeight:
+            return "I’m unhappy with my weight"
+        case .iHaveSomeFreshMotivation:
+            return "I have some fresh motivation"
+        case .iReadyToStartFeelingGoodAgain:
+            return "I’m ready to start feeling good again"
+        case .iAmCuriousToCheckOutKcalc:
+            return "I am curious to check out Kcalc"
+        case .somethingElse:
+            return "Something else"
+        }
+    }
+}

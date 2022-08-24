@@ -7,10 +7,31 @@
 
 import Foundation
 
-protocol AchievingDifficultGoalInteractorInterface: AnyObject {}
+protocol AchievingDifficultGoalInteractorInterface: AnyObject {
+    func getAllAchievingDifficultGoal() -> [AchievingDifficultGoal]
+    func set(achievingDifficultGoal: AchievingDifficultGoal)
+}
 
 class AchievingDifficultGoalInteractor {
     weak var presenter: AchievingDifficultGoalPresenterInterface?
+    
+    // MARK: - Managers
+    
+    private let onboardingManager: OnboardingManagerInterface
+    
+    // MARK: - Initialization
+    
+    init(onboardingManager: OnboardingManagerInterface) {
+        self.onboardingManager = onboardingManager
+    }
 }
 
-extension AchievingDifficultGoalInteractor: AchievingDifficultGoalInteractorInterface {}
+extension AchievingDifficultGoalInteractor: AchievingDifficultGoalInteractorInterface {
+    func getAllAchievingDifficultGoal() -> [AchievingDifficultGoal] {
+        return onboardingManager.getAllAchievingDifficultGoal()
+    }
+    
+    func set(achievingDifficultGoal: AchievingDifficultGoal) {
+        onboardingManager.set(achievingDifficultGoal: achievingDifficultGoal)
+    }
+}

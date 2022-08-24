@@ -20,7 +20,8 @@ class PurposeOfTheParishRouter: NSObject {
     
     static func setupModule() -> PurposeOfTheParishViewController {
         let vc = PurposeOfTheParishViewController()
-        let interactor = PurposeOfTheParishInteractor()
+        let interactor = PurposeOfTheParishInteractor(
+            onboardingManager: OnboardingManager.shared)
         let router = PurposeOfTheParishRouter()
         let presenter = PurposeOfTheParishPresenter(
             interactor: interactor,

@@ -7,10 +7,31 @@
 
 import Foundation
 
-protocol QuestionAboutTheChangeInteractorInterface: AnyObject {}
+protocol QuestionAboutTheChangeInteractorInterface: AnyObject {
+    func getAllQuestionAboutTheChange() -> [QuestionAboutTheChange]
+    func set(questionAboutTheChange: QuestionAboutTheChange)
+}
 
 class QuestionAboutTheChangeInteractor {
     weak var presenter: QuestionAboutTheChangePresenterInterface?
+    
+    // MARK: - Managers
+    
+    private let onboardingManager: OnboardingManagerInterface
+    
+    // MARK: - Initialization
+    
+    init(onboardingManager: OnboardingManagerInterface) {
+        self.onboardingManager = onboardingManager
+    }
 }
 
-extension QuestionAboutTheChangeInteractor: QuestionAboutTheChangeInteractorInterface {}
+extension QuestionAboutTheChangeInteractor: QuestionAboutTheChangeInteractorInterface {
+    func getAllQuestionAboutTheChange() -> [QuestionAboutTheChange] {
+        return onboardingManager.getAllQuestionAboutTheChange()
+    }
+    
+    func set(questionAboutTheChange: QuestionAboutTheChange) {
+        onboardingManager.set(questionAboutTheChange: questionAboutTheChange)
+    }
+}

@@ -9,7 +9,9 @@ import SnapKit
 import UIKit
 // swiftlint:disable all
 
-protocol QuestionAboutTheChangeViewControllerInterface: AnyObject {}
+protocol QuestionAboutTheChangeViewControllerInterface: AnyObject {
+    func set(questionAboutTheChange: [QuestionAboutTheChange])
+}
 
 final class QuestionAboutTheChangeViewController: UIViewController {
     
@@ -28,19 +30,17 @@ final class QuestionAboutTheChangeViewController: UIViewController {
     private let plugView: UIView = .init()
     private let titleLabel: UILabel = .init()
     private let descriptionLabel: UILabel = .init()
+    private var answerOptions: [AnswerOption] = []
     private let stackView: UIStackView = .init()
-    private let differentMindsetAnswerOption: AnswerOption = .init(text: "I have a different mindset")
-    private let hadSomeBigChangesAnswerOption: AnswerOption = .init(text: "I’ve had some big changes in my life")
-    private let weightMoreAnswerOption: AnswerOption = .init(text: "I weight more than I did last time")
-    private let ryingDifferentWayAnswerOption: AnswerOption = .init(text: "I’m trying a different way of eating")
-    private let tryingNewExercisePlanAnswerOption: AnswerOption = .init(text: "I’m trying a new exercise plan")
-    private let someHealthChangesAnswerOption: AnswerOption = .init(text: "I’ve had some health changes")
+    
     private let nextCommonButton: CommonButton = .init(style: .filled, text: "Next".uppercased())
     
     // MARK: - Lifecycle methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        presenter?.viewDidLoad()
         
         configureBackBarButtonItem()
         configureViews()
@@ -72,18 +72,6 @@ final class QuestionAboutTheChangeViewController: UIViewController {
         stackView.axis = .vertical
         stackView.spacing = 12
         
-        differentMindsetAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
-        
-        hadSomeBigChangesAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
-        
-        weightMoreAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
-        
-        ryingDifferentWayAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
-        
-        tryingNewExercisePlanAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
-        
-        someHealthChangesAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
-        
         nextCommonButton.isHidden = true
         nextCommonButton.addTarget(self, action: #selector(didTapNextCommonButton), for: .touchUpInside)
     }
@@ -96,13 +84,6 @@ final class QuestionAboutTheChangeViewController: UIViewController {
         view.addSubview(descriptionLabel)
         
         view.addSubview(stackView)
-        
-        stackView.addArrangedSubview(differentMindsetAnswerOption)
-        stackView.addArrangedSubview(hadSomeBigChangesAnswerOption)
-        stackView.addArrangedSubview(weightMoreAnswerOption)
-        stackView.addArrangedSubview(ryingDifferentWayAnswerOption)
-        stackView.addArrangedSubview(tryingNewExercisePlanAnswerOption)
-        stackView.addArrangedSubview(someHealthChangesAnswerOption)
         
         view.addSubview(nextCommonButton)
         
@@ -142,8 +123,25 @@ final class QuestionAboutTheChangeViewController: UIViewController {
     }
     
     @objc func didTapAnswerOption(_ sender: AnswerOption) {
-        sender.isSelected = !sender.isSelected
-        nextCommonButton.isHidden = !nextCommonButton.isHidden
+        answerOptions.enumerated().forEach { index, answerOption in
+            if answerOption == sender {
+                let isSelected = !answerOption.isSelected
+                
+                answerOption.isSelected = isSelected
+                
+                isSelected ? presenter?.didSelectQuestionAboutTheChange(with: index) : presenter?.didDeselectQuestionAboutTheChange()
+            } else {
+                answerOption.isSelected = false
+            }
+        }
+        
+        if answerOptions.contains(where: { $0.isSelected == true }) {
+            answerOptions.forEach { $0.isTransparent = !$0.isSelected }
+        } else {
+            answerOptions.forEach { $0.isTransparent = false }
+        }
+        
+        nextCommonButton.isHidden = !answerOptions.contains(where: { $0.isSelected == true })
     }
     
     @objc func didTapNextCommonButton() {
@@ -159,4 +157,37 @@ final class QuestionAboutTheChangeViewController: UIViewController {
     }
 }
 
-extension QuestionAboutTheChangeViewController: QuestionAboutTheChangeViewControllerInterface {}
+extension QuestionAboutTheChangeViewController: QuestionAboutTheChangeViewControllerInterface {
+    func set(questionAboutTheChange: [QuestionAboutTheChange]) {
+        stackView.removeAllArrangedSubviews()
+        answerOptions = []
+        
+        for questionAboutTheChange in questionAboutTheChange {
+            let answerOption = AnswerOption(text: questionAboutTheChange.description)
+            
+            answerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
+            
+            stackView.addArrangedSubview(answerOption)
+            answerOptions.append(answerOption)
+        }
+    }
+}
+
+fileprivate extension QuestionAboutTheChange {
+    var description: String {
+        switch self {
+        case .iHaveDifferentMindset:
+            return "I have a different mindset"
+        case .iHadSomeBigChangesInMyLife:
+            return "I’ve had some big changes in my life"
+        case .iWeightMoreThanIdidLastTime:
+            return "I weight more than I did last time"
+        case .iTryingDifferentWayOfEating:
+            return "I’m trying a different way of eating"
+        case .iTryingNewExercisePlan:
+            return "I’m trying a new exercise plan"
+        case .iHadSomeHealthChanges:
+            return "I’ve had some health changes"
+        }
+    }
+}

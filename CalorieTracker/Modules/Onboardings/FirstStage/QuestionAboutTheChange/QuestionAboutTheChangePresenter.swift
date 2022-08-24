@@ -8,7 +8,10 @@
 import Foundation
 
 protocol QuestionAboutTheChangePresenterInterface: AnyObject {
+    func viewDidLoad()
     func didTapNextCommonButton()
+    func didSelectQuestionAboutTheChange(with index: Int)
+    func didDeselectQuestionAboutTheChange()
 }
 
 class QuestionAboutTheChangePresenter {
@@ -17,6 +20,9 @@ class QuestionAboutTheChangePresenter {
     let router: QuestionAboutTheChangeRouterInterface?
     let interactor: QuestionAboutTheChangeInteractorInterface?
 
+    private var questionAboutTheChange: [QuestionAboutTheChange] = []
+    private var questionAboutTheChangeIndex: Int?
+    
     init(
         interactor: QuestionAboutTheChangeInteractorInterface,
         router: QuestionAboutTheChangeRouterInterface,
@@ -29,7 +35,22 @@ class QuestionAboutTheChangePresenter {
 }
 
 extension QuestionAboutTheChangePresenter: QuestionAboutTheChangePresenterInterface {
+    func viewDidLoad() {
+        questionAboutTheChange = interactor?.getAllQuestionAboutTheChange() ?? []
+        
+        view.set(questionAboutTheChange: questionAboutTheChange)
+    }
+    
     func didTapNextCommonButton() {
+        interactor?.set(questionAboutTheChange: .iHaveDifferentMindset)
         router?.openAchievingDifficultGoal()
+    }
+    
+    func didSelectQuestionAboutTheChange(with index: Int) {
+        questionAboutTheChangeIndex = index
+    }
+    
+    func didDeselectQuestionAboutTheChange() {
+        questionAboutTheChangeIndex = nil
     }
 }

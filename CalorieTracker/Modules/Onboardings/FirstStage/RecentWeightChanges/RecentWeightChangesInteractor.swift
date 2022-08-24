@@ -7,10 +7,29 @@
 
 import Foundation
 
-protocol RecentWeightChangesInteractorInterface: AnyObject {}
-
-class RecentWeightChangesInteractor {
-    weak var presenter: RecentWeightChangesPresenterInterface?
+protocol RecentWeightChangesInteractorInterface: AnyObject {
+    func set(recentWeightChanges: Bool)
 }
 
-extension RecentWeightChangesInteractor: RecentWeightChangesInteractorInterface {}
+class RecentWeightChangesInteractor {
+    
+    // MARK: - Public properties
+    
+    weak var presenter: RecentWeightChangesPresenterInterface?
+    
+    // MARK: - Managers
+    
+    private let onboardingManager: OnboardingManagerInterface
+    
+    // MARK: - Initialization
+    
+    init(onboardingManager: OnboardingManagerInterface) {
+        self.onboardingManager = onboardingManager
+    }
+}
+
+extension RecentWeightChangesInteractor: RecentWeightChangesInteractorInterface {
+    func set(recentWeightChanges: Bool) {
+        onboardingManager.set(recentWeightChanges: recentWeightChanges)
+    }
+}

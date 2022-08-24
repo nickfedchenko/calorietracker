@@ -19,7 +19,8 @@ class CalorieCountRouter: NSObject {
     
     static func setupModule() -> CalorieCountViewController {
         let vc = CalorieCountViewController()
-        let interactor = CalorieCountInteractor()
+        let interactor = CalorieCountInteractor(
+            onboardingManager: OnboardingManager.shared)
         let router = CalorieCountRouter()
         let presenter = CalorieCountPresenter(
             interactor: interactor,

@@ -8,7 +8,10 @@
 import Foundation
 
 protocol FormationGoodHabitsPresenterInterface: AnyObject {
+    func viewDidLoad()
     func didTapContinueCommonButton()
+    func didSelectFormationGoodHabits(with index: Int)
+    func didDeselectFormationGoodHabits()
 }
 
 class FormationGoodHabitsPresenter {
@@ -17,6 +20,9 @@ class FormationGoodHabitsPresenter {
     let router: FormationGoodHabitsRouterInterface?
     let interactor: FormationGoodHabitsInteractorInterface?
 
+    private var formationGoodHabits: [FormationGoodHabits] = []
+    private var formationGoodHabitsIndex: Int?
+    
     init(
         interactor: FormationGoodHabitsInteractorInterface,
         router: FormationGoodHabitsRouterInterface,
@@ -29,7 +35,22 @@ class FormationGoodHabitsPresenter {
 }
 
 extension FormationGoodHabitsPresenter: FormationGoodHabitsPresenterInterface {
+    func viewDidLoad() {
+        formationGoodHabits = interactor?.getAllFormationGoodHabits() ?? []
+        
+        view.set(formationGoodHabits: formationGoodHabits)
+    }
+    
     func didTapContinueCommonButton() {
+        interactor?.set(formationGoodHabits: .logEveryMealBefore)
         router?.openThanksForTheInformation()
+    }
+    
+    func didSelectFormationGoodHabits(with index: Int) {
+        formationGoodHabitsIndex = index
+    }
+    
+    func didDeselectFormationGoodHabits() {
+        formationGoodHabitsIndex = nil
     }
 }

@@ -9,7 +9,9 @@ import Foundation
 import UIKit
 // swiftlint:disable all
 
-protocol PreviousApplicationViewControllerInterface: AnyObject {}
+protocol PreviousApplicationViewControllerInterface: AnyObject {
+    func set(previousApplication: [PreviousApplication])
+}
 
 final class PreviousApplicationViewController: UIViewController {
     
@@ -30,14 +32,7 @@ final class PreviousApplicationViewController: UIViewController {
     private let stageCounterView: StageCounterView = .init()
     private let titleLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
-    private let myFitnessPalAnswerOption: AnswerOption = .init(text: "MyFitnessPal")
-    private let weightWatchersAnswerOption: AnswerOption = .init(text: "WW (formerly Weight Watchers)")
-    private let noomAnswerOption: AnswerOption = .init(text: "Noom")
-    private let kcalcAnswerOption: AnswerOption = .init(text: "Kcalc")
-    private let fitbitAnswerOption: AnswerOption = .init(text: "Fitbit")
-    private let loseItAnswerOption: AnswerOption = .init(text: "Lose It!")
-    private let anotherAppAnswerOption: AnswerOption = .init(text: "Another app")
-    private let dontRememberAnswerOption: AnswerOption = .init(text: "I don’t remember")
+    private var answerOptions: [AnswerOption] = []
     private let nextCommonButton: CommonButton = .init(style: .filled, text: "Next".uppercased())
     
     // MARK: - Lifecycle methods
@@ -45,7 +40,8 @@ final class PreviousApplicationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        configureBackBarButtonItem()
+        presenter?.viewDidLoad()
+        
         configureViews()
         configureLayouts()
     }
@@ -64,22 +60,6 @@ final class PreviousApplicationViewController: UIViewController {
         stackView.axis = .vertical
         stackView.spacing = 12
         
-        myFitnessPalAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
-        
-        weightWatchersAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
-        
-        noomAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
-        
-        kcalcAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
-        
-        fitbitAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
-        
-        loseItAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
-        
-        anotherAppAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
-        
-        dontRememberAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
-        
         nextCommonButton.isHidden = true
         nextCommonButton.addTarget(self, action: #selector(didTapNextCommonButton), for: .touchUpInside)
     }
@@ -94,15 +74,6 @@ final class PreviousApplicationViewController: UIViewController {
         contentView.addSubview(titleLabel)
         
         contentView.addSubview(stackView)
-        
-        stackView.addArrangedSubview(myFitnessPalAnswerOption)
-        stackView.addArrangedSubview(weightWatchersAnswerOption)
-        stackView.addArrangedSubview(noomAnswerOption)
-        stackView.addArrangedSubview(kcalcAnswerOption)
-        stackView.addArrangedSubview(fitbitAnswerOption)
-        stackView.addArrangedSubview(loseItAnswerOption)
-        stackView.addArrangedSubview(anotherAppAnswerOption)
-        stackView.addArrangedSubview(dontRememberAnswerOption)
         
         contentView.addSubview(nextCommonButton)
         
@@ -148,8 +119,25 @@ final class PreviousApplicationViewController: UIViewController {
     }
     
     @objc func didTapAnswerOption(_ sender: AnswerOption) {
-        sender.isSelected = !sender.isSelected
-        nextCommonButton.isHidden = !nextCommonButton.isHidden
+        answerOptions.enumerated().forEach { index, answerOption in
+            if answerOption == sender {
+                let isSelected = !answerOption.isSelected
+                
+                answerOption.isSelected = isSelected
+                
+                isSelected ? presenter?.didSelectPreviousApplication(with: index) : presenter?.didDeselectPreviousApplication()
+            } else {
+                answerOption.isSelected = false
+            }
+        }
+        
+        if answerOptions.contains(where: { $0.isSelected == true }) {
+            answerOptions.forEach { $0.isTransparent = !$0.isSelected }
+        } else {
+            answerOptions.forEach { $0.isTransparent = false }
+        }
+        
+        nextCommonButton.isHidden = !answerOptions.contains(where: { $0.isSelected == true })
     }
     
     @objc func didTapNextCommonButton() {
@@ -165,4 +153,41 @@ final class PreviousApplicationViewController: UIViewController {
     }
 }
 
-extension PreviousApplicationViewController: PreviousApplicationViewControllerInterface {}
+extension PreviousApplicationViewController: PreviousApplicationViewControllerInterface {
+    func set(previousApplication: [PreviousApplication]) {
+        stackView.removeAllArrangedSubviews()
+        answerOptions = []
+        
+        for previousApplication in previousApplication {
+            let answerOption = AnswerOption(text: previousApplication.description)
+            
+            answerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
+            
+            stackView.addArrangedSubview(answerOption)
+            answerOptions.append(answerOption)
+        }
+    }
+}
+
+fileprivate extension PreviousApplication {
+    var description: String {
+        switch self {
+        case .myFitnessPal:
+            return "MyFitnessPal"
+        case .formerlyWeightWatchers:
+            return "WW (formerly Weight Watchers)"
+        case .noom:
+            return "Noom"
+        case .kcalc:
+            return "Kcalc"
+        case .fitbit:
+            return "Fitbit"
+        case .loseIt:
+            return "Lose It!"
+        case .anotherApp:
+            return "Another app"
+        case .iDontRemember:
+            return "I don’t remember"
+        }
+    }
+}

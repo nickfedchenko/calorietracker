@@ -10,14 +10,18 @@ import UIKit
 
 class AnswerOption: UIButton {
     
-    // MARK: - Private properties
+    // MARK: - Public properties
     
     override var isSelected: Bool {
         didSet { didChageIsSelected() }
     }
     
+    var isTransparent: Bool = false {
+        didSet { didChageIsTransparent() }
+    }
+    
     // MARK: - View properties
-
+    
     private let titleLabel1: UILabel = .init()
     private let checkMarkImageView: UIImageView = .init()
 
@@ -69,6 +73,10 @@ class AnswerOption: UIButton {
             checkMarkImageView.image = R.image.onboardings.off()
             titleLabel1.textColor = R.color.onboardings.basicDark()
         }
+    }
+    
+    private func didChageIsTransparent() {
+        alpha = isTransparent ? 0.5 : 1.0
     }
 
     required init?(coder: NSCoder) {

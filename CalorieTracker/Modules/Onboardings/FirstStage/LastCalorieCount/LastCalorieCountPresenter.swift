@@ -8,7 +8,10 @@
 import Foundation
 
 protocol LastCalorieCountPresenterInterface: AnyObject {
+    func viewDidLoad()
     func didTapNextCommonButton()
+    func didSelectLastCalorieCount(with index: Int)
+    func didDeselectLastCalorieCount()
 }
 
 class LastCalorieCountPresenter {
@@ -16,6 +19,9 @@ class LastCalorieCountPresenter {
     let router: LastCalorieCountRouterInterface?
     let interactor: LastCalorieCountInteractorInterface?
 
+    private var lastCalorieCount: [LastCalorieCount] = []
+    private var lastCalorieCountIndex: Int?
+    
     init(
         interactor: LastCalorieCountInteractorInterface,
         router: LastCalorieCountRouterInterface,
@@ -28,7 +34,23 @@ class LastCalorieCountPresenter {
 }
 
 extension LastCalorieCountPresenter: LastCalorieCountPresenterInterface {
+    func viewDidLoad() {
+        lastCalorieCount = interactor?.getAllLastCalorieCount() ?? []
+        
+        view.set(lastCalorieCount: lastCalorieCount)
+    }
+
+    
     func didTapNextCommonButton() {
+        interactor?.set(lastCalorieCount: .usingAnApp)
         router?.openCalorieCount()
+    }
+    
+    func didSelectLastCalorieCount(with index: Int) {
+        lastCalorieCountIndex = index
+    }
+    
+    func didDeselectLastCalorieCount() {
+        lastCalorieCountIndex = nil
     }
 }

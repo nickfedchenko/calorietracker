@@ -7,10 +7,31 @@
 
 import Foundation
 
-protocol LastCalorieCountInteractorInterface: AnyObject {}
+protocol LastCalorieCountInteractorInterface: AnyObject {
+    func getAllLastCalorieCount() -> [LastCalorieCount]
+    func set(lastCalorieCount: LastCalorieCount)
+}
 
 class LastCalorieCountInteractor {
     weak var presenter: LastCalorieCountPresenterInterface?
+    
+    // MARK: - Managers
+    
+    private let onboardingManager: OnboardingManagerInterface
+    
+    // MARK: - Initialization
+    
+    init(onboardingManager: OnboardingManagerInterface) {
+        self.onboardingManager = onboardingManager
+    }
 }
 
-extension LastCalorieCountInteractor: LastCalorieCountInteractorInterface {}
+extension LastCalorieCountInteractor: LastCalorieCountInteractorInterface {
+    func getAllLastCalorieCount() -> [LastCalorieCount] {
+        return onboardingManager.getAllLastCalorieCount()
+    }
+    
+    func set(lastCalorieCount: LastCalorieCount) {
+        onboardingManager.set(lastCalorieCount: lastCalorieCount)
+    }
+}

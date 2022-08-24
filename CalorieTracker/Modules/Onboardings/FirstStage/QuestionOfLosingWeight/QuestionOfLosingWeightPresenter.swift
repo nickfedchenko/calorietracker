@@ -31,10 +31,12 @@ class  QuestionOfLosingWeightPresenter {
 
 extension  QuestionOfLosingWeightPresenter: QuestionOfLosingWeightPresenterInterface {
     func didTapApprovalCommonButton() {
+        interactor?.set(isHaveYouTriedToLoseWeightBefor: true)
         router?.openDescriptionOfExperience()
     }
     
     func didTapRejectionCommonButton() {
+        interactor?.set(isHaveYouTriedToLoseWeightBefor: false)
         router?.openDescriptionOfExperience()
     }
 }

@@ -9,7 +9,9 @@ import Foundation
 import UIKit
 // swiftlint:disable all
 
-protocol ObsessingOverFoodViewControllerInterface: AnyObject {}
+protocol ObsessingOverFoodViewControllerInterface: AnyObject {
+    func set(obsessingOverFood: [ObsessingOverFood])
+}
 
 final class ObsessingOverFoodViewController: UIViewController {
     
@@ -17,19 +19,26 @@ final class ObsessingOverFoodViewController: UIViewController {
     
     var presenter: ObsessingOverFoodPresenterInterface?
     
+    // MARK: - Private properties
+    
+    var isHedden: Bool = false {
+        didSet { didChangeIsHeaden() }
+    }
+    
     // MARK: - Views properties
     
     private let stageCounterView: StageCounterView = .init()
     private let titleLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
-    private let definitelyAnswerOption: AnswerOption = .init(text: "Yes, definitely")
-    private let sometimesAnswerOption: AnswerOption = .init(text: "Sure, sometimes")
-    private let notReallyAnswerOption: AnswerOption = .init(text: "No, not really")
+    private var answerOptions: [AnswerOption] = []
+    private let nextCommonButton: CommonButton = .init(style: .filled, text: "Next".uppercased())
     
     // MARK: - Lifecycle methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        presenter?.viewDidLoad()
         
         configureBackBarButtonItem()
         configureViews()
@@ -54,11 +63,8 @@ final class ObsessingOverFoodViewController: UIViewController {
         stackView.axis = .vertical
         stackView.spacing = 12
         
-        definitelyAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
-        
-        sometimesAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
-        
-        notReallyAnswerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
+        nextCommonButton.isHidden = true
+        nextCommonButton.addTarget(self, action: #selector(didTapNextCommonButton), for: .touchUpInside)
     }
     
     private func configureLayouts() {
@@ -68,9 +74,7 @@ final class ObsessingOverFoodViewController: UIViewController {
         
         view.addSubview(stackView)
         
-        stackView.addArrangedSubview(definitelyAnswerOption)
-        stackView.addArrangedSubview(sometimesAnswerOption)
-        stackView.addArrangedSubview(notReallyAnswerOption)
+        view.addSubview(nextCommonButton)
         
         stageCounterView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
@@ -92,12 +96,76 @@ final class ObsessingOverFoodViewController: UIViewController {
             $0.left.equalTo(view.snp.left).offset(40)
             $0.right.equalTo(view.snp.right).offset(-40)
         }
+        
+        nextCommonButton.snp.makeConstraints {
+            $0.left.equalTo(view.snp.left).offset(40)
+            $0.right.equalTo(view.snp.right).offset(-40)
+            $0.bottom.equalTo(view.snp.bottom).offset(-35)
+            $0.height.equalTo(64)
+        }
     }
     
     @objc func didTapAnswerOption(_ sender: AnswerOption) {
-        presenter?.didTapAnswerOption()
-        sender.isSelected = !sender.isSelected
+        answerOptions.enumerated().forEach { index, answerOption in
+            if answerOption == sender {
+                let isSelected = !answerOption.isSelected
+                
+                answerOption.isSelected = isSelected
+                
+                isSelected ? presenter?.didSelectObsessingOverFood(with: index) : presenter?.didDeselectObsessingOverFood()
+            } else {
+                answerOption.isSelected = false
+            }
+        }
+        
+        if answerOptions.contains(where: { $0.isSelected == true }) {
+            answerOptions.forEach { $0.isTransparent = !$0.isSelected }
+        } else {
+            answerOptions.forEach { $0.isTransparent = false }
+        }
+        
+        nextCommonButton.isHidden = !answerOptions.contains(where: { $0.isSelected == true })
+    }
+    
+    @objc func didTapNextCommonButton() {
+        presenter?.didTapNextCommonButton()
+    }
+    
+    private func didChangeIsHeaden() {
+        if isHedden {
+            nextCommonButton.isHidden = false
+        } else {
+            nextCommonButton.isHidden = true
+        }
     }
 }
 
-extension ObsessingOverFoodViewController: ObsessingOverFoodViewControllerInterface {}
+extension ObsessingOverFoodViewController: ObsessingOverFoodViewControllerInterface {
+    func set(obsessingOverFood: [ObsessingOverFood]) {
+        stackView.removeAllArrangedSubviews()
+        answerOptions = []
+        
+        for obsessingOverFood in obsessingOverFood {
+            let answerOption = AnswerOption(text: obsessingOverFood.description)
+            
+            answerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
+            
+            stackView.addArrangedSubview(answerOption)
+            answerOptions.append(answerOption)
+        }
+    }
+}
+
+
+fileprivate extension ObsessingOverFood {
+    var description: String {
+        switch self {
+        case .yesDefinitely:
+            return "Yes, definitely"
+        case .sureSometimes:
+            return "Sure, sometimes"
+        case .noNotReall:
+            return "No, not really"
+        }
+    }
+}

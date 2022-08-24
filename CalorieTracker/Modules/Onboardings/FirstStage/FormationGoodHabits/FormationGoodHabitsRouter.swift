@@ -19,7 +19,7 @@ class FormationGoodHabitsRouter: NSObject {
     
     static func setupModule() -> FormationGoodHabitsViewController {
         let vc = FormationGoodHabitsViewController()
-        let interactor = FormationGoodHabitsInteractor()
+        let interactor = FormationGoodHabitsInteractor(onboardingManager: OnboardingManager.shared)
         let router = FormationGoodHabitsRouter()
         let presenter = FormationGoodHabitsPresenter(
             interactor: interactor,

@@ -7,10 +7,36 @@
 
 import Foundation
 
-protocol DescriptionOfExperienceInteractorInterface: AnyObject {}
-
-class DescriptionOfExperienceInteractor {
-    weak var presenter: DescriptionOfExperiencePresenterInterface?
+protocol DescriptionOfExperienceInteractorInterface: AnyObject {
+    func getAllDescriptionOfExperience() -> [DescriptionOfExperience]
+    func set(descriptionOfExperience: DescriptionOfExperience)
 }
 
-extension DescriptionOfExperienceInteractor: DescriptionOfExperienceInteractorInterface {}
+class DescriptionOfExperienceInteractor {
+    
+    // MARK: - Public properties
+    
+    weak var presenter: DescriptionOfExperiencePresenterInterface?
+    
+    // MARK: - Managers
+    
+    private let onboardingManager: OnboardingManagerInterface
+    
+    // MARK: - Initialization
+    
+    init(onboardingManager: OnboardingManagerInterface) {
+        self.onboardingManager = onboardingManager
+    }
+}
+
+// MARK: - DescriptionOfExperienceInteractorInterface
+
+extension DescriptionOfExperienceInteractor: DescriptionOfExperienceInteractorInterface {
+    func getAllDescriptionOfExperience() -> [DescriptionOfExperience] {
+        return onboardingManager.getAllDescriptionOfExperience()
+    }
+    
+    func set(descriptionOfExperience: DescriptionOfExperience) {
+        onboardingManager.set(descriptionOfExperience: descriptionOfExperience)
+    }
+}

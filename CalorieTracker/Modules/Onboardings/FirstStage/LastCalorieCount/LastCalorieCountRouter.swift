@@ -19,7 +19,8 @@ class LastCalorieCountRouter: NSObject {
     
     static func setupModule() -> LastCalorieCountViewController {
         let vc = LastCalorieCountViewController()
-        let interactor = LastCalorieCountInteractor()
+        let interactor = LastCalorieCountInteractor(
+            onboardingManager: OnboardingManager.shared)
         let router = LastCalorieCountRouter()
         let presenter = LastCalorieCountPresenter(
             interactor: interactor,
