@@ -14,8 +14,12 @@ protocol RecentWeightChangesRouterInterface: AnyObject {
 
 class RecentWeightChangesRouter: NSObject {
     
+    // MARK: - Public properties
+    
     weak var presenter: RecentWeightChangesPresenterInterface?
     weak var viewController: UIViewController?
+    
+    // MARK: - Static methods
     
     static func setupModule() -> RecentWeightChangesViewController {
         let vc = RecentWeightChangesViewController()
@@ -35,6 +39,8 @@ class RecentWeightChangesRouter: NSObject {
         return vc
     }
 }
+
+// MARK: - RecentWeightChangesRouterInterface
 
 extension RecentWeightChangesRouter: RecentWeightChangesRouterInterface {
     func openCallToAchieveGoal() {

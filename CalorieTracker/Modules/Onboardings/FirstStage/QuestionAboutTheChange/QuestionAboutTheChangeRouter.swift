@@ -14,8 +14,12 @@ protocol QuestionAboutTheChangeRouterInterface: AnyObject {
 
 class QuestionAboutTheChangeRouter: NSObject {
     
+    // MARK: - Public properties
+    
     weak var presenter: QuestionAboutTheChangePresenterInterface?
     weak var viewController: UIViewController?
+    
+    // MARK: - Static methods
     
     static func setupModule() -> QuestionAboutTheChangeViewController {
         let vc = QuestionAboutTheChangeViewController()
@@ -35,6 +39,8 @@ class QuestionAboutTheChangeRouter: NSObject {
         return vc
     }
 }
+
+// MARK: - QuestionAboutTheChangeRouterInterface
 
 extension QuestionAboutTheChangeRouter: QuestionAboutTheChangeRouterInterface {
     func openAchievingDifficultGoal() {

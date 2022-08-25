@@ -16,12 +16,18 @@ protocol QuestionAboutTheChangePresenterInterface: AnyObject {
 
 class QuestionAboutTheChangePresenter {
     
+    // MARK: - Public properties
+    
     unowned var view: QuestionAboutTheChangeViewControllerInterface
     let router: QuestionAboutTheChangeRouterInterface?
     let interactor: QuestionAboutTheChangeInteractorInterface?
 
+    // MARK: - Private properties
+    
     private var questionAboutTheChange: [QuestionAboutTheChange] = []
     private var questionAboutTheChangeIndex: Int?
+    
+    // MARK: - Initialization
     
     init(
         interactor: QuestionAboutTheChangeInteractorInterface,
@@ -33,6 +39,8 @@ class QuestionAboutTheChangePresenter {
         self.router = router
     }
 }
+
+// MARK: - QuestionAboutTheChangePresenterInterface
 
 extension QuestionAboutTheChangePresenter: QuestionAboutTheChangePresenterInterface {
     func viewDidLoad() {

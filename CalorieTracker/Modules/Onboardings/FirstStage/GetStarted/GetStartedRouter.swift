@@ -14,8 +14,12 @@ protocol GetStartedRouterInterface: AnyObject {
 
 class GetStartedRouter: NSObject {
     
+    // MARK: - Public properties
+    
     weak var presenter: GetStartedPresenterInterface?
     weak var viewController: UIViewController?
+    
+    // MARK: - Static methods
     
     static func setupModule() -> GetStartedViewController {
         let vc = GetStartedViewController()
@@ -34,6 +38,8 @@ class GetStartedRouter: NSObject {
         return vc
     }
 }
+
+// MARK: - GetStartedRouterInterface
 
 extension GetStartedRouter: GetStartedRouterInterface {
     func openWelcome() {

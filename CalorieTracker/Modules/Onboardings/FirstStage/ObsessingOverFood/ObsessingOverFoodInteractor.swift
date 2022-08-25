@@ -13,6 +13,9 @@ protocol ObsessingOverFoodInterctorInterface: AnyObject {
 }
 
 class ObsessingOverFoodInteractor {
+    
+    // MARK: - Public properties
+
     weak var presenter: ObsessingOverFoodPresenterInterface?
     
     // MARK: - Managers
@@ -25,6 +28,8 @@ class ObsessingOverFoodInteractor {
         self.onboardingManager = onboardingManager
     }
 }
+
+// MARK: - ObsessingOverFoodInterctorInterface
 
 extension ObsessingOverFoodInteractor: ObsessingOverFoodInterctorInterface {
     func getAllObsessingOverFood() -> [ObsessingOverFood] {

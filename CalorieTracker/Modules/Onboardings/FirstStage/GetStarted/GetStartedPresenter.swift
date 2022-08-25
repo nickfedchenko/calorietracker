@@ -13,10 +13,14 @@ protocol GetStartedPresenterInterface: AnyObject {
 
 class GetStartedPresenter {
     
+    // MARK: - Public properties
+    
     unowned var view: GetStartedViewControllerInterface
     let router: GetStartedRouterInterface?
     let interactor: GetStartedInteractorInterface?
 
+    // MARK: - Initialization
+    
     init(
         interactor: GetStartedInteractorInterface,
         router: GetStartedRouterInterface,
@@ -27,6 +31,8 @@ class GetStartedPresenter {
         self.router = router
     }
 }
+
+// MARK: - GetStartedPresenterInterface
 
 extension GetStartedPresenter: GetStartedPresenterInterface {
     func didTapGetStartedCommonButton() {

@@ -13,10 +13,14 @@ protocol WelcomePresenterInterface: AnyObject {
 
 class WelcomePresenter {
     
+    // MARK: - Public properties
+
     unowned var view: WelcomeViewControllerInterface
     let router: WelcomeRouterInterface?
     let interactor: WelcomeInterctorInterface?
 
+    // MARK: - Initialization
+    
     init(
         interactor: WelcomeInterctorInterface,
         router: WelcomeRouterInterface,
@@ -27,6 +31,8 @@ class WelcomePresenter {
         self.router = router
     }
 }
+
+// MARK: - WelcomePresenterInterface
 
 extension WelcomePresenter: WelcomePresenterInterface {
     func didTapWelcomCommonButton() {

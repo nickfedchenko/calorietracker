@@ -14,6 +14,8 @@ protocol LastCalorieCountRouterInterface: AnyObject {
 
 class LastCalorieCountRouter: NSObject {
     
+    // MARK: - Public properties
+    
     weak var presenter: LastCalorieCountPresenterInterface?
     weak var viewController: UIViewController?
     
@@ -35,6 +37,7 @@ class LastCalorieCountRouter: NSObject {
         return vc
     }
 }
+// MARK: - LastCalorieCountRouterInterface
 
 extension LastCalorieCountRouter: LastCalorieCountRouterInterface {
     func openCalorieCount() {

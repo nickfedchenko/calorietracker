@@ -15,13 +15,20 @@ protocol LastCalorieCountPresenterInterface: AnyObject {
 }
 
 class LastCalorieCountPresenter {
+    
+    // MARK: - Public properties
+
     unowned var view: LastCalorieCountViewControllerInterface
     let router: LastCalorieCountRouterInterface?
     let interactor: LastCalorieCountInteractorInterface?
 
+    // MARK: - Private properties
+
     private var lastCalorieCount: [LastCalorieCount] = []
     private var lastCalorieCountIndex: Int?
     
+    // MARK: - Initialization
+
     init(
         interactor: LastCalorieCountInteractorInterface,
         router: LastCalorieCountRouterInterface,
@@ -33,6 +40,8 @@ class LastCalorieCountPresenter {
     }
 }
 
+// MARK: - LastCalorieCountPresenterInterface
+
 extension LastCalorieCountPresenter: LastCalorieCountPresenterInterface {
     func viewDidLoad() {
         lastCalorieCount = interactor?.getAllLastCalorieCount() ?? []
@@ -40,7 +49,6 @@ extension LastCalorieCountPresenter: LastCalorieCountPresenterInterface {
         view.set(lastCalorieCount: lastCalorieCount)
     }
 
-    
     func didTapNextCommonButton() {
         interactor?.set(lastCalorieCount: .usingAnApp)
         router?.openCalorieCount()

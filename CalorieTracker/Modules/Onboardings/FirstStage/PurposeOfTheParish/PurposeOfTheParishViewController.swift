@@ -7,7 +7,8 @@
 
 import Foundation
 import UIKit
-// swiftlint:disable all
+
+// swiftlint:disable line_length
 
 protocol PurposeOfTheParishViewControllerInterface: AnyObject {
     func set(purposeOfTheParish: [PurposeOfTheParish])
@@ -54,8 +55,14 @@ final class PurposeOfTheParishViewController: UIViewController {
         
         let attributedString = NSMutableAttributedString()
         
-        attributedString.append(NSAttributedString(string: "What brings ", attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]))
-        attributedString.append(NSAttributedString(string: "you here\n now?", attributes: [.foregroundColor: R.color.onboardings.basicDark()]))
+        attributedString.append(NSAttributedString(
+            string: "What brings ",
+            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]
+        ))
+        attributedString.append(NSAttributedString(
+            string: "you here\n now?",
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+        ))
         
         titleLabel.attributedText = attributedString
         titleLabel.textAlignment = .center
@@ -159,6 +166,8 @@ extension PurposeOfTheParishViewController: PurposeOfTheParishViewControllerInte
         }
     }
 }
+
+// MARK: - PurposeOfTheParish+description
 
 fileprivate extension PurposeOfTheParish {
     var description: String {

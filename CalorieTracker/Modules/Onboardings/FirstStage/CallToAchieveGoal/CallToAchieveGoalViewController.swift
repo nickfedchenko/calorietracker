@@ -7,7 +7,6 @@
 
 import SnapKit
 import UIKit
-// swiftlint:disable all
 
 protocol CallToAchieveGoalViewControllerInterface: AnyObject {}
 
@@ -42,8 +41,14 @@ final class CallToAchieveGoalViewController: UIViewController {
         
         let attributedString = NSMutableAttributedString()
         
-        attributedString.append(NSAttributedString(string: "Awesome! ", attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]))
-        attributedString.append(NSAttributedString(string: "Kcalс will \nhelp you build the \nhabits you need to \nreach your goals.", attributes: [.foregroundColor: R.color.onboardings.basicDark()]))
+        attributedString.append(NSAttributedString(
+            string: "Awesome! ",
+            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]
+        ))
+        attributedString.append(NSAttributedString(
+            string: "Kcalс will \nhelp you build the \nhabits you need to \nreach your goals.",
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+        ))
         
         titleLabel.attributedText = attributedString
         titleLabel.textAlignment = .center
@@ -88,5 +93,7 @@ final class CallToAchieveGoalViewController: UIViewController {
         presenter?.didTapContinueCommonButton()
     }
 }
+
+// MARK: - CallToAchieveGoalViewControllerInterface
 
 extension CallToAchieveGoalViewController: CallToAchieveGoalViewControllerInterface {}

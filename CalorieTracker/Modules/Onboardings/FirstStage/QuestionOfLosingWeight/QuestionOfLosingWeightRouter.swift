@@ -14,8 +14,12 @@ protocol QuestionOfLosingWeightRouterInterface: AnyObject {
 
 class QuestionOfLosingWeightRouter: NSObject {
     
+    // MARK: - Public properties
+    
     weak var presenter: QuestionOfLosingWeightPresenterInterface?
     weak var viewController: UIViewController?
+    
+    // MARK: - Static methods
     
     static func setupModule() -> QuestionOfLosingWeightViewController {
         let vc = QuestionOfLosingWeightViewController()
@@ -36,6 +40,8 @@ class QuestionOfLosingWeightRouter: NSObject {
         return vc
     }
 }
+
+// MARK: - QuestionOfLosingWeightRouterInterface
 
 extension QuestionOfLosingWeightRouter: QuestionOfLosingWeightRouterInterface {
     func openDescriptionOfExperience() {

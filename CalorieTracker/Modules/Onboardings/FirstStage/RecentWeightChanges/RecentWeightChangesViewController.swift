@@ -7,7 +7,6 @@
 
 import SnapKit
 import UIKit
-// swiftlint:disable all
 
 protocol RecentWeightChangesViewControllerInterface: AnyObject {}
 
@@ -43,8 +42,14 @@ final class RecentWeightChangesViewController: UIViewController {
         
         let attributedString = NSMutableAttributedString()
         
-        attributedString.append(NSAttributedString(string: "Think back to when\n you last worked on\n your weight. ", attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]))
-        attributedString.append(NSAttributedString(string: "Is \nanything different \nabout this time than \nlast time?", attributes: [.foregroundColor: R.color.onboardings.basicDark()]))
+        attributedString.append(NSAttributedString(
+            string: "Think back to when\n you last worked on\n your weight. ",
+            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]
+        ))
+        attributedString.append(NSAttributedString(
+            string: "Is \nanything different \nabout this time than \nlast time?",
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+        ))
         
         titleLabel.attributedText = attributedString
         titleLabel.textAlignment = .center
@@ -105,5 +110,7 @@ final class RecentWeightChangesViewController: UIViewController {
         presenter?.didTapRejectionCommonButton()
     }
 }
+
+// MARK: - RecentWeightChangesViewControllerInterface
 
 extension RecentWeightChangesViewController: RecentWeightChangesViewControllerInterface {}

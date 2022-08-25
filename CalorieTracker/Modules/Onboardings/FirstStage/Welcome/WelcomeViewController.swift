@@ -7,7 +7,8 @@
 
 import SnapKit
 import UIKit
-// swiftlint:disable all
+
+// swiftlint:disable line_length
 
 protocol WelcomeViewControllerInterface: AnyObject {}
 
@@ -190,5 +191,7 @@ final class WelcomeViewController: UIViewController {
         presenter?.didTapWelcomCommonButton()
     }
 }
+
+// MARK: - WelcomeViewControllerInterface
 
 extension WelcomeViewController: WelcomeViewControllerInterface {}

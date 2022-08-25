@@ -13,6 +13,9 @@ protocol QuestionAboutTheChangeInteractorInterface: AnyObject {
 }
 
 class QuestionAboutTheChangeInteractor {
+    
+    // MARK: - Public properties
+    
     weak var presenter: QuestionAboutTheChangePresenterInterface?
     
     // MARK: - Managers
@@ -25,6 +28,8 @@ class QuestionAboutTheChangeInteractor {
         self.onboardingManager = onboardingManager
     }
 }
+
+// MARK: - QuestionAboutTheChangeInteractorInterface
 
 extension QuestionAboutTheChangeInteractor: QuestionAboutTheChangeInteractorInterface {
     func getAllQuestionAboutTheChange() -> [QuestionAboutTheChange] {

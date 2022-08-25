@@ -14,8 +14,12 @@ protocol DescriptionOfExperienceRouterInterface: AnyObject {
 
 class DescriptionOfExperienceRouter: NSObject {
     
+    // MARK: - Public properties
+    
     weak var presenter: DescriptionOfExperiencePresenterInterface?
     weak var viewController: UIViewController?
+    
+    // MARK: - Static methods
     
     static func setupModule() -> DescriptionOfExperienceViewController {
         let vc = DescriptionOfExperienceViewController()
@@ -36,6 +40,8 @@ class DescriptionOfExperienceRouter: NSObject {
         return vc
     }
 }
+
+// MARK: - DescriptionOfExperienceRouterInterface
 
 extension DescriptionOfExperienceRouter: DescriptionOfExperienceRouterInterface {
     func openPurposeOfTheParish() {

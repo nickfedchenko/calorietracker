@@ -14,6 +14,8 @@ protocol PreviousApplicationRouterInterface: AnyObject {
 
 class PreviousApplicationRouter: NSObject {
     
+    // MARK: - Public properties
+
     weak var presenter: PreviousApplicationPresenterInterface?
     weak var viewController: UIViewController?
     
@@ -34,6 +36,8 @@ class PreviousApplicationRouter: NSObject {
         return vc
     }
 }
+
+// MARK: - LastCalorieCountRouterInterface
 
 extension PreviousApplicationRouter: PreviousApplicationRouterInterface {
     func openObsessingOverFood() {

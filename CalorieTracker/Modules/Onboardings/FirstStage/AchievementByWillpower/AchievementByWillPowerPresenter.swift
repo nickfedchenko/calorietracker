@@ -13,10 +13,14 @@ protocol AchievementByWillPowerPresenterInterface: AnyObject {
 
 class AchievementByWillPowerPresenter {
     
+    // MARK: - Public properties
+    
     unowned var view: AchievementByWillPowerViewControllerInterface
     let router: AchievementByWillPowerRouterInterface?
     let interactor: AchievementByWillPowerInteractorInterface?
 
+    // MARK: - Initialization
+    
     init(
         interactor: AchievementByWillPowerInteractorInterface,
         router: AchievementByWillPowerRouterInterface,
@@ -27,6 +31,8 @@ class AchievementByWillPowerPresenter {
         self.router = router
     }
 }
+
+// MARK: - AchievementByWillPowerPresenterInterface
 
 extension AchievementByWillPowerPresenter: AchievementByWillPowerPresenterInterface {
     func didTapNextCommonButton() {

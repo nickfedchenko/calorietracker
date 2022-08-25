@@ -14,10 +14,14 @@ protocol RecentWeightChangesPresenterInterface: AnyObject {
 
 class RecentWeightChangesPresenter {
     
+    // MARK: - Public properties
+    
     unowned var view: RecentWeightChangesViewControllerInterface
     let router: RecentWeightChangesRouterInterface?
     let interactor: RecentWeightChangesInteractorInterface?
 
+    // MARK: - Initialization
+    
     init(
         interactor: RecentWeightChangesInteractorInterface,
         router: RecentWeightChangesRouterInterface,
@@ -28,6 +32,8 @@ class RecentWeightChangesPresenter {
         self.router = router
     }
 }
+
+// MARK: - RecentWeightChangesPresenterInterface
 
 extension RecentWeightChangesPresenter: RecentWeightChangesPresenterInterface {
     func didTapApprovalCommonButton() {

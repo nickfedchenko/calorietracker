@@ -15,8 +15,12 @@ protocol PurposeOfTheParishRouterInterface: AnyObject {
 
 class PurposeOfTheParishRouter: NSObject {
     
+    // MARK: - Public properties
+    
     weak var presenter: PurposeOfTheParishPresenterInterface?
     weak var viewController: UIViewController?
+    
+    // MARK: - Static methods
     
     static func setupModule() -> PurposeOfTheParishViewController {
         let vc = PurposeOfTheParishViewController()
@@ -36,6 +40,8 @@ class PurposeOfTheParishRouter: NSObject {
         return vc
     }
 }
+
+// MARK: - PurposeOfTheParishRouterInterface
 
 extension PurposeOfTheParishRouter: PurposeOfTheParishRouterInterface {
     func openRecentWeightChanges() {

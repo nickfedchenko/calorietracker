@@ -16,13 +16,19 @@ protocol PreviousApplicationPresenterInterface: AnyObject {
 
 class PreviousApplicationPresenter {
     
+    // MARK: - Public properties
+
     unowned var view: PreviousApplicationViewControllerInterface
     let router: PreviousApplicationRouterInterface?
     let interactor: PreviousApplicationInteractorInterface?
 
+    // MARK: - Private properties
+
     private var previousApplication: [PreviousApplication] = []
     private var previousApplicationIndex: Int?
     
+    // MARK: - Initialization
+
     init(
         interactor: PreviousApplicationInteractorInterface,
         router: PreviousApplicationRouterInterface,
@@ -33,6 +39,8 @@ class PreviousApplicationPresenter {
         self.router = router
     }
 }
+
+// MARK: - PreviousApplicationPresenter
 
 extension PreviousApplicationPresenter: PreviousApplicationPresenterInterface {
     func viewDidLoad() {

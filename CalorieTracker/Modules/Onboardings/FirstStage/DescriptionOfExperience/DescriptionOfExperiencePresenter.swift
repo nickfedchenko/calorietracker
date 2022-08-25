@@ -16,13 +16,19 @@ protocol DescriptionOfExperiencePresenterInterface: AnyObject {
 
 class DescriptionOfExperiencePresenter {
     
+    // MARK: - Public properties
+    
     unowned var view: DescriptionOfExperienceViewControllerInterface
     let router: DescriptionOfExperienceRouterInterface?
     let interactor: DescriptionOfExperienceInteractorInterface?
     
+    // MARK: - Private properties
+    
     private var descriptionOfExperiences: [DescriptionOfExperience] = []
     private var descriptionOfExperienceIndex: Int?
 
+    // MARK: - Initialization
+    
     init(
         interactor: DescriptionOfExperienceInteractorInterface,
         router: DescriptionOfExperienceRouterInterface,
@@ -33,6 +39,8 @@ class DescriptionOfExperiencePresenter {
         self.router = router
     }
 }
+
+// MARK: - DescriptionOfExperiencePresenterInterface
 
 extension  DescriptionOfExperiencePresenter: DescriptionOfExperiencePresenterInterface {
     func viewDidLoad() {

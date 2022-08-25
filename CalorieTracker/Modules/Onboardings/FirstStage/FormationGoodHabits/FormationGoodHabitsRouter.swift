@@ -14,6 +14,8 @@ protocol FormationGoodHabitsRouterInterface: AnyObject {
 
 class FormationGoodHabitsRouter: NSObject {
     
+    // MARK: - Public properties
+
     weak var presenter: FormationGoodHabitsPresenterInterface?
     weak var viewController: UIViewController?
     
@@ -34,6 +36,8 @@ class FormationGoodHabitsRouter: NSObject {
         return vc
     }
 }
+
+// MARK: - FormationGoodHabitsRouterInterface
 
 extension FormationGoodHabitsRouter: FormationGoodHabitsRouterInterface {
     func openThanksForTheInformation() {

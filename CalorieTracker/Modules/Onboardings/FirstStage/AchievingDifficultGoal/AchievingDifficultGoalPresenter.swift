@@ -16,13 +16,19 @@ protocol AchievingDifficultGoalPresenterInterface: AnyObject {
 
 class AchievingDifficultGoalPresenter {
     
+    // MARK: - Public properties
+    
     unowned var view: AchievingDifficultGoalViewControllerInterface
     let router: AchievingDifficultGoalRouterInterface?
     let interactor: AchievingDifficultGoalInteractorInterface?
     
+    // MARK: - Private properties
+    
     private var achievingDifficultGoal: [AchievingDifficultGoal] = []
     private var achievingDifficultGoalIndex: Int?
 
+    // MARK: - Initialization
+    
     init(
         interactor: AchievingDifficultGoalInteractorInterface,
         router: AchievingDifficultGoalRouterInterface,
@@ -33,6 +39,8 @@ class AchievingDifficultGoalPresenter {
         self.router = router
     }
 }
+
+// MARK: - AchievingDifficultGoalPresenterInterface
 
 extension AchievingDifficultGoalPresenter: AchievingDifficultGoalPresenterInterface {
     func viewDidLoad() {

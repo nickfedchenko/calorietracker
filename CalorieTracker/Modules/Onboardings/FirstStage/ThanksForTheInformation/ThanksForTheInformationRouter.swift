@@ -14,6 +14,8 @@ protocol ThanksForTheInformationRouterInterface: AnyObject {
 
 class ThanksForTheInformationRouter: NSObject {
     
+    // MARK: - Public properties
+
     weak var presenter: ThanksForTheInformationPresenterInterface?
     weak var viewController: UIViewController?
     
@@ -34,6 +36,8 @@ class ThanksForTheInformationRouter: NSObject {
         return vc
     }
 }
+
+// MARK: - ThanksForTheInformationRouterInterface
 
 extension ThanksForTheInformationRouter: ThanksForTheInformationRouterInterface {
     func openFinalOfTheFirstStage() {

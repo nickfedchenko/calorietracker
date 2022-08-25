@@ -14,8 +14,12 @@ protocol AchievementByWillPowerRouterInterface: AnyObject {
 
 class AchievementByWillPowerRouter: NSObject {
     
+    // MARK: - Public properties
+    
     weak var presenter: AchievementByWillPowerPresenterInterface?
     weak var viewController: UIViewController?
+    
+    // MARK: - Static methods
     
     static func setupModule() -> AchievementByWillPowerViewController {
         let vc = AchievementByWillPowerViewController()
@@ -34,6 +38,8 @@ class AchievementByWillPowerRouter: NSObject {
         return vc
     }
 }
+
+// MARK: - AchievementByWillPowerRouterInterface
 
 extension AchievementByWillPowerRouter: AchievementByWillPowerRouterInterface {
     func openLastCalorieCount() {

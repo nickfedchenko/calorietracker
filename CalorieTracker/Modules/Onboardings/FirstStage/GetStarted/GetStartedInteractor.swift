@@ -10,7 +10,12 @@ import Foundation
 protocol GetStartedInteractorInterface: AnyObject {}
 
 class GetStartedInteractor {
+    
+    // MARK: - Public properties
+    
     weak var presenter: GetStartedPresenterInterface?
 }
+
+// MARK: - GetStartedInteractorInterface
 
 extension GetStartedInteractor: GetStartedInteractorInterface {}

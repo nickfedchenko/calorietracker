@@ -7,7 +7,8 @@
 
 import Foundation
 import UIKit
-// swiftlint:disable all
+
+// swiftlint:disable line_length
 
 protocol FinalOfTheFirstStageViewControllerInterface: AnyObject {}
 
@@ -50,8 +51,14 @@ final class FinalOfTheFirstStageViewController: UIViewController {
         
         let attributedString = NSMutableAttributedString()
 
-        attributedString.append(NSAttributedString(string: "1 down ", attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]))
-        attributedString.append(NSAttributedString(string: ", 3 to go!", attributes: [.foregroundColor: R.color.onboardings.basicDark()]))
+        attributedString.append(NSAttributedString(
+            string: "1 down ",
+            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]
+        ))
+        attributedString.append(NSAttributedString(
+            string: ", 3 to go!",
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+        ))
         
         titleLabel.attributedText = attributedString
         
@@ -197,5 +204,7 @@ final class FinalOfTheFirstStageViewController: UIViewController {
         print("didTapWelcomCommonButton")
     }
 }
+
+// MARK: - FinalOfTheFirstStageViewControllerInterface
 
 extension FinalOfTheFirstStageViewController: FinalOfTheFirstStageViewControllerInterface {}

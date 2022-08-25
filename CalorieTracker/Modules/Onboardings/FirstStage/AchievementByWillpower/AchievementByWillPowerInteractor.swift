@@ -10,7 +10,12 @@ import Foundation
 protocol AchievementByWillPowerInteractorInterface: AnyObject {}
 
 class AchievementByWillPowerInteractor {
+    
+    // MARK: - Public properties
+    
     weak var presenter: AchievementByWillPowerPresenterInterface?
 }
+
+// MARK: - AchievementByWillPowerInteractorInterface
 
 extension AchievementByWillPowerInteractor: AchievementByWillPowerInteractorInterface {}

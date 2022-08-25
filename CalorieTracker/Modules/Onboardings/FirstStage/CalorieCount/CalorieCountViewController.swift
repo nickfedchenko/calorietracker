@@ -7,7 +7,8 @@
 
 import SnapKit
 import UIKit
-// swiftlint:disable all
+
+// swiftlint:disable line_length
 
 protocol CalorieCountViewControllerInterface: AnyObject {}
 
@@ -44,9 +45,18 @@ final class CalorieCountViewController: UIViewController {
         
         let attributedString = NSMutableAttributedString()
         
-        attributedString.append(NSAttributedString(string: "Have you ", attributes: [.foregroundColor: R.color.onboardings.basicDark()]))
-        attributedString.append(NSAttributedString(string: "counted calories ", attributes: [.foregroundColor:  R.color.onboardings.radialGradientFirst()]))
-        attributedString.append(NSAttributedString(string: "before??", attributes: [.foregroundColor: R.color.onboardings.basicDark()]))
+        attributedString.append(NSAttributedString(
+            string: "Have you ",
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+        ))
+        attributedString.append(NSAttributedString(
+            string: "counted calories ",
+            attributes: [.foregroundColor:  R.color.onboardings.radialGradientFirst()]
+        ))
+        attributedString.append(NSAttributedString(
+            string: "before??",
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+        ))
         
         titleLabel.attributedText = attributedString
         titleLabel.textAlignment = .center
@@ -118,5 +128,7 @@ final class CalorieCountViewController: UIViewController {
         presenter?.didTapRejectionCommonButton()
     }
 }
+
+// MARK: - CalorieCountViewControllerInterface
 
 extension CalorieCountViewController: CalorieCountViewControllerInterface {}

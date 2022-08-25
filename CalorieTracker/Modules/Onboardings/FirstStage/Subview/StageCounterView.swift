@@ -8,7 +8,12 @@
 import UIKit
 
 final class StageCounterView: UIView {
+    
+    // MARK: - Public properties
+    
     override var intrinsicContentSize: CGSize { CGSize(width: 212, height: 30) }
+    
+    // MARK: - Initialization
     
     override init(frame: CGRect) {
         super.init(frame: frame)

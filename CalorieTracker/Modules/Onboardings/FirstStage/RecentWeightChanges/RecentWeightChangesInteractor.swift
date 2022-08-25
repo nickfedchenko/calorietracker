@@ -28,6 +28,8 @@ class RecentWeightChangesInteractor {
     }
 }
 
+// MARK: - RecentWeightChangesInteractorInterface
+
 extension RecentWeightChangesInteractor: RecentWeightChangesInteractorInterface {
     func set(recentWeightChanges: Bool) {
         onboardingManager.set(recentWeightChanges: recentWeightChanges)

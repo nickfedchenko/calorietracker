@@ -16,13 +16,19 @@ protocol TheEffectOfWeightPresenterInterface: AnyObject {
 
 class TheEffectOfWeightPresenter {
     
+    // MARK: - Public properties
+
     unowned var view: TheEffectOfWeightViewControllerInterface
     let router: TheEffectOfWeightRouterInterface?
     let interactor: TheEffectOfWeightInteractorInterface?
 
+    // MARK: - Private properties
+
     private var theEffectOfWeight: [TheEffectOfWeight] = []
     private var theEffectOfWeightIndex: Int?
     
+    // MARK: - Initialization
+
     init(
         interactor: TheEffectOfWeightInteractorInterface,
         router: TheEffectOfWeightRouterInterface,
@@ -33,6 +39,8 @@ class TheEffectOfWeightPresenter {
         self.router = router
     }
 }
+
+// MARK: - ObsessingOverFoodPresenterInterface
 
 extension TheEffectOfWeightPresenter: TheEffectOfWeightPresenterInterface {
     func viewDidLoad() {

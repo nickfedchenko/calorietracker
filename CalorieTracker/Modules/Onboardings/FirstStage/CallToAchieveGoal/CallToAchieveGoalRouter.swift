@@ -14,8 +14,12 @@ protocol CallToAchieveGoalRouterInterface: AnyObject {
 
 class CallToAchieveGoalRouter: NSObject {
     
+    // MARK: - Public properties
+    
     weak var presenter: CallToAchieveGoalPresenterInterface?
     weak var viewController: UIViewController?
+    
+    // MARK: - Static methods
     
     static func setupModule() -> CallToAchieveGoalViewController {
         let vc = CallToAchieveGoalViewController()
@@ -34,6 +38,8 @@ class CallToAchieveGoalRouter: NSObject {
         return vc
     }
 }
+
+// MARK: - CallToAchieveGoalRouterInterface
 
 extension CallToAchieveGoalRouter: CallToAchieveGoalRouterInterface {
     func openQuestionAboutTheChange() {

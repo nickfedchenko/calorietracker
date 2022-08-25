@@ -16,13 +16,19 @@ protocol PurposeOfTheParishPresenterInterface: AnyObject {
 
 class PurposeOfTheParishPresenter {
     
+    // MARK: - Public properties
+    
     unowned var view: PurposeOfTheParishViewControllerInterface
     let router: PurposeOfTheParishRouterInterface?
     let interactor: PurposeOfTheParishInteractorInterface?
     
+    // MARK: - Private properties
+    
     private var purposeOfTheParish: [PurposeOfTheParish] = []
     private var purposeOfTheParishIndex: Int?
 
+    // MARK: - Initialization
+    
     init(
         interactor: PurposeOfTheParishInteractorInterface,
         router: PurposeOfTheParishRouterInterface,
@@ -33,6 +39,8 @@ class PurposeOfTheParishPresenter {
         self.router = router
     }
 }
+
+// MARK: - PurposeOfTheParishPresenterInterface
 
 extension PurposeOfTheParishPresenter: PurposeOfTheParishPresenterInterface {
     func viewDidLoad() {

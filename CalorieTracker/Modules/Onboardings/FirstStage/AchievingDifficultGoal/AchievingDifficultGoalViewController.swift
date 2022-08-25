@@ -7,7 +7,8 @@
 
 import SnapKit
 import UIKit
-// swiftlint:disable all
+
+// swiftlint:disable line_length
 
 protocol AchievingDifficultGoalViewControllerInterface: AnyObject {
     func set(achievingDifficultGoal: [AchievingDifficultGoal])
@@ -55,8 +56,14 @@ final class AchievingDifficultGoalViewController: UIViewController {
         
         let attributedString = NSMutableAttributedString()
         
-        attributedString.append(NSAttributedString(string: "Think about someone \nin your life ", attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]))
-        attributedString.append(NSAttributedString(string: "who has \nachieved a difficult \ngoal.", attributes: [.foregroundColor: R.color.onboardings.basicDark()]))
+        attributedString.append(NSAttributedString(
+            string: "Think about someone \nin your life ",
+            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]
+        ))
+        attributedString.append(NSAttributedString(
+            string: "who has \nachieved a difficult \ngoal.",
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+        ))
         
         titleLabel.attributedText = attributedString
         titleLabel.textAlignment = .center
@@ -157,6 +164,8 @@ final class AchievingDifficultGoalViewController: UIViewController {
     }
 }
 
+// MARK: - AchievingDifficultGoalViewControllerInterface
+
 extension AchievingDifficultGoalViewController: AchievingDifficultGoalViewControllerInterface {
     func set(achievingDifficultGoal: [AchievingDifficultGoal]) {
         stackView.removeAllArrangedSubviews()
@@ -172,6 +181,8 @@ extension AchievingDifficultGoalViewController: AchievingDifficultGoalViewContro
         }
     }
 }
+
+// MARK: - AchievingDifficultGoal+description
 
 fileprivate extension AchievingDifficultGoal {
     var description: String {

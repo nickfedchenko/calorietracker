@@ -16,13 +16,19 @@ protocol FormationGoodHabitsPresenterInterface: AnyObject {
 
 class FormationGoodHabitsPresenter {
     
+    // MARK: - Public properties
+
     unowned var view: FormationGoodHabitsViewControllerInterface
     let router: FormationGoodHabitsRouterInterface?
     let interactor: FormationGoodHabitsInteractorInterface?
 
+    // MARK: - Private properties
+
     private var formationGoodHabits: [FormationGoodHabits] = []
     private var formationGoodHabitsIndex: Int?
     
+    // MARK: - Initialization
+
     init(
         interactor: FormationGoodHabitsInteractorInterface,
         router: FormationGoodHabitsRouterInterface,
@@ -33,6 +39,8 @@ class FormationGoodHabitsPresenter {
         self.router = router
     }
 }
+
+// MARK: - FormationGoodHabitsPresenterInterface
 
 extension FormationGoodHabitsPresenter: FormationGoodHabitsPresenterInterface {
     func viewDidLoad() {

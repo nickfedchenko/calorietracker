@@ -7,7 +7,8 @@
 
 import Foundation
 import UIKit
-// swiftlint:disable all
+
+// swiftlint:disable line_length
 
 protocol TheEffectOfWeightViewControllerInterface: AnyObject {
     func set(theEffectOfWeight: [TheEffectOfWeight])
@@ -52,8 +53,14 @@ final class TheEffectOfWeightViewController: UIViewController {
         
         let attributedString = NSMutableAttributedString()
         
-        attributedString.append(NSAttributedString(string: "Have you ever found yourself ", attributes: [.foregroundColor:  R.color.onboardings.radialGradientFirst()]))
-        attributedString.append(NSAttributedString(string: "obsessing over food?", attributes: [.foregroundColor: R.color.onboardings.basicDark()]))
+        attributedString.append(NSAttributedString(
+            string: "Have you ever found yourself ",
+            attributes: [.foregroundColor:  R.color.onboardings.radialGradientFirst()]
+        ))
+        attributedString.append(NSAttributedString(
+            string: "obsessing over food?",
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+        ))
         
         titleLabel.attributedText = attributedString
         titleLabel.textAlignment = .center
@@ -140,6 +147,8 @@ final class TheEffectOfWeightViewController: UIViewController {
     }
 }
 
+// MARK: - TheEffectOfWeightViewControllerInterface
+
 extension TheEffectOfWeightViewController: TheEffectOfWeightViewControllerInterface {
     func set(theEffectOfWeight: [TheEffectOfWeight]) {
         stackView.removeAllArrangedSubviews()
@@ -155,6 +164,8 @@ extension TheEffectOfWeightViewController: TheEffectOfWeightViewControllerInterf
         }
     }
 }
+
+// MARK: - TheEffectOfWeight + description
 
 fileprivate extension TheEffectOfWeight {
     var description: String {

@@ -16,13 +16,19 @@ protocol ObsessingOverFoodPresenterInterface: AnyObject {
 
 class ObsessingOverFoodPresenter {
     
+    // MARK: - Public properties
+
     unowned var view: ObsessingOverFoodViewControllerInterface
     let router: ObsessingOverFoodRouterInterface?
     let interactor: ObsessingOverFoodInterctorInterface?
 
+    // MARK: - Private properties
+
     private var obsessingOverFood: [ObsessingOverFood] = []
     private var obsessingOverFoodIndex: Int?
     
+    // MARK: - Initialization
+
     init(
         interactor: ObsessingOverFoodInterctorInterface,
         router: ObsessingOverFoodRouterInterface,
@@ -33,6 +39,8 @@ class ObsessingOverFoodPresenter {
         self.router = router
     }
 }
+
+// MARK: - ObsessingOverFoodPresenterInterface
 
 extension ObsessingOverFoodPresenter: ObsessingOverFoodPresenterInterface {
     func viewDidLoad() {

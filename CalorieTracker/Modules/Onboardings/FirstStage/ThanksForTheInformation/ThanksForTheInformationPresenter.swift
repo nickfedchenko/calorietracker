@@ -13,9 +13,13 @@ protocol ThanksForTheInformationPresenterInterface: AnyObject {
 
 class ThanksForTheInformationPresenter {
     
+    // MARK: - Public properties
+
     unowned var view: ThanksForTheInformationViewControllerInterface
     let router: ThanksForTheInformationRouterInterface?
     let interactor: ThanksForTheInformationInteractorInterface?
+
+    // MARK: - Initialization
 
     init(
         interactor: ThanksForTheInformationInteractorInterface,
@@ -27,6 +31,8 @@ class ThanksForTheInformationPresenter {
         self.router = router
     }
 }
+
+// MARK: - ThanksForTheInformationPresenterInterface
 
 extension ThanksForTheInformationPresenter: ThanksForTheInformationPresenterInterface {
     func didTapContinueCommonButton() {

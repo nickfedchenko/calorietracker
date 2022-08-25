@@ -11,9 +11,13 @@ protocol FinalOfTheFirstStagePresenterInterface: AnyObject {}
 
 class FinalOfTheFirstStagePresenter {
     
+    // MARK: - Public properties
+
     unowned var view: FinalOfTheFirstStageViewControllerInterface
     let router: FinalOfTheFirstStageRouterInterface?
     let interactor: FinalOfTheFirstStageInteractorInterface?
+
+    // MARK: - Initialization
 
     init(
         interactor: FinalOfTheFirstStageInteractorInterface,
@@ -25,5 +29,7 @@ class FinalOfTheFirstStagePresenter {
         self.router = router
     }
 }
+
+// MARK: - ThanksForTheInformationPresenterInterface
 
 extension FinalOfTheFirstStagePresenter: FinalOfTheFirstStagePresenterInterface {}

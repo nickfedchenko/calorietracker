@@ -13,6 +13,9 @@ protocol PreviousApplicationInteractorInterface: AnyObject {
 }
 
 class PreviousApplicationInteractor {
+    
+    // MARK: - Public properties
+
     weak var presenter: PreviousApplicationPresenterInterface?
     
     // MARK: - Managers
@@ -25,6 +28,8 @@ class PreviousApplicationInteractor {
         self.onboardingManager = onboardingManager
     }
 }
+
+// MARK: - PreviousApplicationInteractorInterface
 
 extension PreviousApplicationInteractor: PreviousApplicationInteractorInterface {
     func getAllPreviousApplication() -> [PreviousApplication] {

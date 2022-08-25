@@ -14,9 +14,13 @@ protocol CalorieCountPresenterInterface: AnyObject {
 
 class CalorieCountPresenter {
     
+    // MARK: - Public properties
+
     unowned var view: CalorieCountViewControllerInterface
     let router: CalorieCountRouterInterface?
     let interactor: CalorieCountInteractorInterface?
+
+    // MARK: - Initialization
 
     init(
         interactor: CalorieCountInteractorInterface,
@@ -28,6 +32,8 @@ class CalorieCountPresenter {
         self.router = router
     }
 }
+
+// MARK: - CalorieCountPresenterInterface
 
 extension CalorieCountPresenter: CalorieCountPresenterInterface {
     func didTapApprovalCommonButton() {

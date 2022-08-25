@@ -14,8 +14,12 @@ protocol AchievingDifficultGoalRouterInterface: AnyObject {
 
 class AchievingDifficultGoalRouter: NSObject {
     
+    // MARK: - Public properties
+    
     weak var presenter: AchievingDifficultGoalPresenterInterface?
     weak var viewController: UIViewController?
+    
+    // MARK: - Static methods
     
     static func setupModule() -> AchievingDifficultGoalViewController {
         let vc = AchievingDifficultGoalViewController()
@@ -35,6 +39,8 @@ class AchievingDifficultGoalRouter: NSObject {
         return vc
     }
 }
+
+// MARK: - AchievingDifficultGoalRouterInterface
 
 extension AchievingDifficultGoalRouter: AchievingDifficultGoalRouterInterface {
     func openAchievementByWillpower() {

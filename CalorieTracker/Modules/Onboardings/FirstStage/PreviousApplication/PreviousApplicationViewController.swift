@@ -7,7 +7,8 @@
 
 import Foundation
 import UIKit
-// swiftlint:disable all
+
+// swiftlint:disable line_length
 
 protocol PreviousApplicationViewControllerInterface: AnyObject {
     func set(previousApplication: [PreviousApplication])
@@ -153,6 +154,8 @@ final class PreviousApplicationViewController: UIViewController {
     }
 }
 
+// MARK: - PreviousApplicationViewController
+
 extension PreviousApplicationViewController: PreviousApplicationViewControllerInterface {
     func set(previousApplication: [PreviousApplication]) {
         stackView.removeAllArrangedSubviews()
@@ -168,6 +171,8 @@ extension PreviousApplicationViewController: PreviousApplicationViewControllerIn
         }
     }
 }
+
+// MARK: - PreviousApplication + description
 
 fileprivate extension PreviousApplication {
     var description: String {

@@ -13,6 +13,9 @@ protocol AchievingDifficultGoalInteractorInterface: AnyObject {
 }
 
 class AchievingDifficultGoalInteractor {
+    
+    // MARK: - Public properties
+    
     weak var presenter: AchievingDifficultGoalPresenterInterface?
     
     // MARK: - Managers
@@ -25,6 +28,8 @@ class AchievingDifficultGoalInteractor {
         self.onboardingManager = onboardingManager
     }
 }
+
+// MARK: - AchievingDifficultGoalInteractorInterface
 
 extension AchievingDifficultGoalInteractor: AchievingDifficultGoalInteractorInterface {
     func getAllAchievingDifficultGoal() -> [AchievingDifficultGoal] {

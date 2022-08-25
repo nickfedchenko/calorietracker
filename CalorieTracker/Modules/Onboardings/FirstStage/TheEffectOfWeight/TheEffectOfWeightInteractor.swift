@@ -13,6 +13,9 @@ protocol TheEffectOfWeightInteractorInterface: AnyObject {
 }
 
 class TheEffectOfWeightInteractor {
+    
+    // MARK: - Public properties
+
     weak var presenter: TheEffectOfWeightPresenterInterface?
     
     // MARK: - Managers
@@ -25,6 +28,8 @@ class TheEffectOfWeightInteractor {
         self.onboardingManager = onboardingManager
     }
 }
+
+// MARK: - ObsessingOverFoodInterctorInterface
 
 extension TheEffectOfWeightInteractor: TheEffectOfWeightInteractorInterface {
     func getAllTheEffectOfWeight() -> [TheEffectOfWeight] {

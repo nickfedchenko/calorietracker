@@ -10,7 +10,12 @@ import Foundation
 protocol WelcomeInterctorInterface: AnyObject {}
 
 class WelcomeInteractor {
+    
+    // MARK: - Public properties
+    
     weak var presenter: WelcomePresenterInterface?
 }
+
+// MARK: - WelcomeInterctorInterface
 
 extension WelcomeInteractor: WelcomeInterctorInterface {}

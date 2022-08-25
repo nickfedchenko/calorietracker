@@ -14,6 +14,8 @@ protocol TheEffectOfWeightRouterInterface: AnyObject {
 
 class TheEffectOfWeightRouter: NSObject {
     
+    // MARK: - Public properties
+
     weak var presenter: TheEffectOfWeightPresenterInterface?
     weak var viewController: UIViewController?
     
@@ -34,6 +36,8 @@ class TheEffectOfWeightRouter: NSObject {
         return vc
     }
 }
+
+// MARK: - ObsessingOverFoodRouterInterface
 
 extension TheEffectOfWeightRouter: TheEffectOfWeightRouterInterface {
     func openFormationGoodHabits() {

@@ -7,7 +7,6 @@
 
 import Foundation
 import UIKit
-// swiftlint:disable all
 
 protocol QuestionOfLosingWeightViewControllerInterface: AnyObject {}
 
@@ -43,8 +42,14 @@ final class QuestionOfLosingWeightViewController: UIViewController {
         
         let attributedString = NSMutableAttributedString()
         
-        attributedString.append(NSAttributedString(string: "Have you tried ", attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]))
-        attributedString.append(NSAttributedString(string: "to lose weight befor?", attributes: [.foregroundColor: R.color.onboardings.basicDark()]))
+        attributedString.append(NSAttributedString(
+            string: "Have you tried ",
+            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]
+        ))
+        attributedString.append(NSAttributedString(
+            string: "to lose weight befor?",
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+        ))
         
         titleLabel.attributedText = attributedString
         titleLabel.textAlignment = .center
@@ -105,5 +110,7 @@ final class QuestionOfLosingWeightViewController: UIViewController {
         presenter?.didTapRejectionCommonButton()
     }
 }
+
+// MARK: - QuestionOfLosingWeightViewControllerInterface
 
 extension QuestionOfLosingWeightViewController: QuestionOfLosingWeightViewControllerInterface {}

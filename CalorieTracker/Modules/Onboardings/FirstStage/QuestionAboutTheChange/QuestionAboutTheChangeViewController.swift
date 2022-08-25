@@ -7,7 +7,8 @@
 
 import SnapKit
 import UIKit
-// swiftlint:disable all
+
+// swiftlint:disable line_length
 
 protocol QuestionAboutTheChangeViewControllerInterface: AnyObject {
     func set(questionAboutTheChange: [QuestionAboutTheChange])
@@ -56,8 +57,14 @@ final class QuestionAboutTheChangeViewController: UIViewController {
         
         let attributedString = NSMutableAttributedString()
         
-        attributedString.append(NSAttributedString(string: "What’s defferent ", attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]))
-        attributedString.append(NSAttributedString(string: "from \nlast time?", attributes: [.foregroundColor: R.color.onboardings.basicDark()]))
+        attributedString.append(NSAttributedString(
+            string: "What’s defferent ",
+            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]
+        ))
+        attributedString.append(NSAttributedString(
+            string: "from \nlast time?",
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+        ))
         
         titleLabel.attributedText = attributedString
         titleLabel.textAlignment = .center
@@ -157,6 +164,8 @@ final class QuestionAboutTheChangeViewController: UIViewController {
     }
 }
 
+// MARK: - QuestionAboutTheChangeViewControllerInterface
+
 extension QuestionAboutTheChangeViewController: QuestionAboutTheChangeViewControllerInterface {
     func set(questionAboutTheChange: [QuestionAboutTheChange]) {
         stackView.removeAllArrangedSubviews()
@@ -172,6 +181,8 @@ extension QuestionAboutTheChangeViewController: QuestionAboutTheChangeViewContro
         }
     }
 }
+
+// MARK: - QuestionAboutTheChange+description
 
 fileprivate extension QuestionAboutTheChange {
     var description: String {

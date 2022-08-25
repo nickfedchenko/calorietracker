@@ -13,6 +13,8 @@ protocol FinalOfTheFirstStageRouterInterface: AnyObject {
 
 class FinalOfTheFirstStageRouter: NSObject {
     
+    // MARK: - Public properties
+
     weak var presenter: FinalOfTheFirstStagePresenterInterface?
     
     static func setupModule() -> FinalOfTheFirstStageViewController {
@@ -32,6 +34,6 @@ class FinalOfTheFirstStageRouter: NSObject {
     }
 }
 
-extension FinalOfTheFirstStageRouter: FinalOfTheFirstStageRouterInterface {
-    
-}
+// MARK: - FinalOfTheFirstStageRouterInterface
+
+extension FinalOfTheFirstStageRouter: FinalOfTheFirstStageRouterInterface {}

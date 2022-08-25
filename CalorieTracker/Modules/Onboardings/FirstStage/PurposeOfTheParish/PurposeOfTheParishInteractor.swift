@@ -13,6 +13,9 @@ protocol PurposeOfTheParishInteractorInterface: AnyObject {
 }
 
 class PurposeOfTheParishInteractor {
+    
+    // MARK: - Public properties
+    
     weak var presenter: PurposeOfTheParishPresenterInterface?
     
     // MARK: - Managers
@@ -25,6 +28,8 @@ class PurposeOfTheParishInteractor {
         self.onboardingManager = onboardingManager
     }
 }
+
+// MARK: - PurposeOfTheParishInteractorInterface
 
 extension PurposeOfTheParishInteractor: PurposeOfTheParishInteractorInterface {
     func getAllPurposeOfTheParish() -> [PurposeOfTheParish] {

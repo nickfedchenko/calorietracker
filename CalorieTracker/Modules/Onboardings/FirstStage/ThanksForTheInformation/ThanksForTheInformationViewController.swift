@@ -7,7 +7,8 @@
 
 import Foundation
 import UIKit
-// swiftlint:disable all
+
+// swiftlint:disable line_length
 
 protocol ThanksForTheInformationViewControllerInterface: AnyObject {}
 
@@ -42,8 +43,14 @@ final class ThanksForTheInformationViewController: UIViewController {
         
         let attributedString = NSMutableAttributedString()
 
-        attributedString.append(NSAttributedString(string: "Thanks ", attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]))
-        attributedString.append(NSAttributedString(string: "for the information!", attributes: [.foregroundColor: R.color.onboardings.basicDark()]))
+        attributedString.append(NSAttributedString(
+            string: "Thanks ",
+            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]
+        ))
+        attributedString.append(NSAttributedString(
+            string: "for the information!",
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+        ))
         
         titleLabel.attributedText = attributedString
         titleLabel.textAlignment = .center
@@ -110,5 +117,7 @@ final class ThanksForTheInformationViewController: UIViewController {
         presenter?.didTapContinueCommonButton()
     }
 }
+
+// MARK: - ThanksForTheInformationViewControllerInterface
 
 extension ThanksForTheInformationViewController: ThanksForTheInformationViewControllerInterface {}

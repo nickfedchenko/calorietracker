@@ -12,6 +12,9 @@ protocol CalorieCountInteractorInterface: AnyObject {
 }
 
 class CalorieCountInteractor {
+    
+    // MARK: - Public properties
+
     weak var presenter: CalorieCountPresenterInterface?
     
     // MARK: - Managers
@@ -25,6 +28,8 @@ class CalorieCountInteractor {
     }
 }
         
+// MARK: - CalorieCountInteractorInterface
+
 extension CalorieCountInteractor: CalorieCountInteractorInterface {
     func set(calorieCount: Bool) {
         onboardingManager.set(calorieCount: calorieCount)

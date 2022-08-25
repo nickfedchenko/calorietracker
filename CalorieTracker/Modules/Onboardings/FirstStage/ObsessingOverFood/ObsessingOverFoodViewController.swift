@@ -7,7 +7,8 @@
 
 import Foundation
 import UIKit
-// swiftlint:disable all
+
+// swiftlint:disable line_length
 
 protocol ObsessingOverFoodViewControllerInterface: AnyObject {
     func set(obsessingOverFood: [ObsessingOverFood])
@@ -52,8 +53,14 @@ final class ObsessingOverFoodViewController: UIViewController {
         
         let attributedString = NSMutableAttributedString()
         
-        attributedString.append(NSAttributedString(string: "Have you ever found yourself ", attributes: [.foregroundColor:  R.color.onboardings.radialGradientFirst()]))
-        attributedString.append(NSAttributedString(string: "obsessing over food?", attributes: [.foregroundColor: R.color.onboardings.basicDark()]))
+        attributedString.append(NSAttributedString(
+            string: "Have you ever found yourself ",
+            attributes: [.foregroundColor:  R.color.onboardings.radialGradientFirst()]
+        ))
+        attributedString.append(NSAttributedString(
+            string: "obsessing over food?",
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+        ))
         
         titleLabel.attributedText = attributedString
         titleLabel.textAlignment = .center
@@ -140,6 +147,8 @@ final class ObsessingOverFoodViewController: UIViewController {
     }
 }
 
+// MARK: - ObsessingOverFoodViewController
+
 extension ObsessingOverFoodViewController: ObsessingOverFoodViewControllerInterface {
     func set(obsessingOverFood: [ObsessingOverFood]) {
         stackView.removeAllArrangedSubviews()
@@ -156,6 +165,7 @@ extension ObsessingOverFoodViewController: ObsessingOverFoodViewControllerInterf
     }
 }
 
+// MARK: - ObsessingOverFood + description
 
 fileprivate extension ObsessingOverFood {
     var description: String {

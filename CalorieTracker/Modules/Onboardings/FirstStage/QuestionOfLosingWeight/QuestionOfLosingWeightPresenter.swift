@@ -14,10 +14,14 @@ protocol QuestionOfLosingWeightPresenterInterface: AnyObject {
 
 class  QuestionOfLosingWeightPresenter {
     
+    // MARK: - Public properties
+    
     unowned var view: QuestionOfLosingWeightViewControllerInterface
     let router: QuestionOfLosingWeightRouterInterface?
     let interactor: QuestionOfLosingWeightInteractorInterface?
 
+    // MARK: - Initialization
+    
     init(
         interactor: QuestionOfLosingWeightInteractorInterface,
         router: QuestionOfLosingWeightRouterInterface,
@@ -28,6 +32,8 @@ class  QuestionOfLosingWeightPresenter {
         self.router = router
     }
 }
+
+// MARK: - QuestionOfLosingWeightPresenterInterface
 
 extension  QuestionOfLosingWeightPresenter: QuestionOfLosingWeightPresenterInterface {
     func didTapApprovalCommonButton() {

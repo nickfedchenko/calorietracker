@@ -13,6 +13,9 @@ protocol FormationGoodHabitsInteractorInterface: AnyObject {
 }
 
 class FormationGoodHabitsInteractor {
+    
+    // MARK: - Public properties
+
     weak var presenter: FormationGoodHabitsPresenterInterface?
     
     // MARK: - Managers
@@ -25,6 +28,8 @@ class FormationGoodHabitsInteractor {
         self.onboardingManager = onboardingManager
     }
 }
+
+// MARK: - FormationGoodHabitsInteractorInterface
 
 extension FormationGoodHabitsInteractor: FormationGoodHabitsInteractorInterface {
     func getAllFormationGoodHabits() -> [FormationGoodHabits] {

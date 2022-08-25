@@ -7,7 +7,8 @@
 
 import Foundation
 import UIKit
-// swiftlint:disable all
+
+// swiftlint:disable line_length
 
 protocol AchievementByWillPowerViewControllerInterface: AnyObject {}
 
@@ -46,8 +47,14 @@ final class AchievementByWillPowerViewController: UIViewController {
         
         let attributedString = NSMutableAttributedString()
         
-        attributedString.append(NSAttributedString(string: "It doesn’t take \nunlimited willpower to ", attributes: [.foregroundColor: R.color.onboardings.basicDark()]))
-        attributedString.append(NSAttributedString(string: "achieve your goals.", attributes: [.foregroundColor:  R.color.onboardings.radialGradientFirst()]))
+        attributedString.append(NSAttributedString(
+            string: "It doesn’t take \nunlimited willpower to ",
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+        ))
+        attributedString.append(NSAttributedString(
+            string: "achieve your goals.",
+            attributes: [.foregroundColor:  R.color.onboardings.radialGradientFirst()]
+        ))
         
         titleLabel.attributedText = attributedString
         titleLabel.textAlignment = .center
@@ -62,6 +69,7 @@ final class AchievementByWillPowerViewController: UIViewController {
         
         letsDoItCommonButton.addTarget(self, action: #selector(didTapNextCommonButton), for: .touchUpInside)
     }
+    
     private func configureLayouts() {
         view.addSubview(plugView)
         
@@ -112,5 +120,7 @@ final class AchievementByWillPowerViewController: UIViewController {
         presenter?.didTapNextCommonButton()
     }
 }
+
+// MARK: - AchievementByWillPowerViewControllerInterface
 
 extension AchievementByWillPowerViewController: AchievementByWillPowerViewControllerInterface {}

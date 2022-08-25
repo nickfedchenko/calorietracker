@@ -10,7 +10,12 @@ import Foundation
 protocol FinalOfTheFirstStageInteractorInterface: AnyObject {}
 
 class FinalOfTheFirstStageInteractor {
+    
+    // MARK: - Public properties
+
     weak var presenter: FinalOfTheFirstStagePresenterInterface?
 }
+
+// MARK: - FinalOfTheFirstStageInteractorInterface
 
 extension FinalOfTheFirstStageInteractor: FinalOfTheFirstStageInteractorInterface {}

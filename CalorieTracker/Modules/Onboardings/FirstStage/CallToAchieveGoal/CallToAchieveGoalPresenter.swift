@@ -13,10 +13,14 @@ protocol CallToAchieveGoalPresenterInterface: AnyObject {
 
 class CallToAchieveGoalPresenter {
     
+    // MARK: - Public properties
+    
     unowned var view: CallToAchieveGoalViewControllerInterface
     let router: CallToAchieveGoalRouterInterface?
     let interactor: CallToAchieveGoalInteractorInterface?
 
+    // MARK: - Initialization
+    
     init(
         interactor: CallToAchieveGoalInteractorInterface,
         router: CallToAchieveGoalRouterInterface,
@@ -27,6 +31,8 @@ class CallToAchieveGoalPresenter {
         self.router = router
     }
 }
+
+// MARK: - CallToAchieveGoalPresenterInterface
 
 extension CallToAchieveGoalPresenter: CallToAchieveGoalPresenterInterface {
     func didTapContinueCommonButton() {

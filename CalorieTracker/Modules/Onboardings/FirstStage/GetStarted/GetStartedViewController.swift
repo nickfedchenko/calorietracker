@@ -123,4 +123,6 @@ final class GetStartedViewController: UIViewController {
     }
 }
 
+// MARK: - GetStartedViewControllerInterface
+
 extension GetStartedViewController: GetStartedViewControllerInterface {}

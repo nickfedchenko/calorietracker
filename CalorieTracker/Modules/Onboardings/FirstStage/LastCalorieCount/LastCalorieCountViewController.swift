@@ -7,7 +7,8 @@
 
 import SnapKit
 import UIKit
-// swiftlint:disable all
+
+// swiftlint:disable line_length
 
 protocol LastCalorieCountViewControllerInterface: AnyObject {
     func set(lastCalorieCount: [LastCalorieCount])
@@ -54,9 +55,18 @@ final class LastCalorieCountViewController: UIViewController {
         
         let attributedString = NSMutableAttributedString()
         
-        attributedString.append(NSAttributedString(string: "The last time you ", attributes: [.foregroundColor: R.color.onboardings.basicDark()]))
-        attributedString.append(NSAttributedString(string: "counted calories", attributes: [.foregroundColor:  R.color.onboardings.radialGradientFirst()]))
-        attributedString.append(NSAttributedString(string: ", how were you doing it?", attributes: [.foregroundColor: R.color.onboardings.basicDark()]))
+        attributedString.append(NSAttributedString(
+            string: "The last time you ",
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+        ))
+        attributedString.append(NSAttributedString(
+            string: "counted calories",
+            attributes: [.foregroundColor:  R.color.onboardings.radialGradientFirst()]
+        ))
+        attributedString.append(NSAttributedString(
+            string: ", how were you doing it?",
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+        ))
         
         titleLabel.attributedText = attributedString
         titleLabel.textAlignment = .center
@@ -143,6 +153,8 @@ final class LastCalorieCountViewController: UIViewController {
     }
 }
 
+// MARK: - LastCalorieCountViewController
+
 extension LastCalorieCountViewController: LastCalorieCountViewControllerInterface {
     func set(lastCalorieCount: [LastCalorieCount]) {
         stackView.removeAllArrangedSubviews()
@@ -158,6 +170,8 @@ extension LastCalorieCountViewController: LastCalorieCountViewControllerInterfac
         }
     }
 }
+
+// MARK: - LastCalorieCount + description
 
 fileprivate extension LastCalorieCount {
     var description: String {

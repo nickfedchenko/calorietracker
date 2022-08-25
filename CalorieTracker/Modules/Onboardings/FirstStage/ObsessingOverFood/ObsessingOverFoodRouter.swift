@@ -14,6 +14,8 @@ protocol ObsessingOverFoodRouterInterface: AnyObject {
 
 class ObsessingOverFoodRouter: NSObject {
     
+    // MARK: - Public properties
+
     weak var presenter: ObsessingOverFoodPresenterInterface?
     weak var viewController: UIViewController?
     
@@ -34,6 +36,8 @@ class ObsessingOverFoodRouter: NSObject {
         return vc
     }
 }
+
+// MARK: - ObsessingOverFoodRouterInterface
 
 extension ObsessingOverFoodRouter: ObsessingOverFoodRouterInterface {
     func openTheEffectOfWeight() {

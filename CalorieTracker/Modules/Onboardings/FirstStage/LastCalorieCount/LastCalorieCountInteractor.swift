@@ -13,6 +13,9 @@ protocol LastCalorieCountInteractorInterface: AnyObject {
 }
 
 class LastCalorieCountInteractor {
+    
+    // MARK: - Public properties
+
     weak var presenter: LastCalorieCountPresenterInterface?
     
     // MARK: - Managers
@@ -25,6 +28,8 @@ class LastCalorieCountInteractor {
         self.onboardingManager = onboardingManager
     }
 }
+
+// MARK: - LastCalorieCountInteractorInterface
 
 extension LastCalorieCountInteractor: LastCalorieCountInteractorInterface {
     func getAllLastCalorieCount() -> [LastCalorieCount] {

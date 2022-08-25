@@ -7,7 +7,8 @@
 
 import Foundation
 import UIKit
-// swiftlint:disable all
+
+// swiftlint:disable line_length
 
 protocol DescriptionOfExperienceViewControllerInterface: AnyObject {
     func set(descriptionOfExperiences: [DescriptionOfExperience])
@@ -54,8 +55,14 @@ final class DescriptionOfExperienceViewController: UIViewController {
 
         let attributedString = NSMutableAttributedString()
         
-        attributedString.append(NSAttributedString(string: "What best describes\n ", attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]))
-        attributedString.append(NSAttributedString(string: "your past experiences \nwith weight loss?", attributes: [.foregroundColor: R.color.onboardings.basicDark()]))
+        attributedString.append(NSAttributedString(
+            string: "What best describes\n ",
+            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]
+        ))
+        attributedString.append(NSAttributedString(
+            string: "your past experiences \nwith weight loss?",
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+        ))
         
         titleLabel.attributedText = attributedString
         titleLabel.textAlignment = .center
@@ -159,6 +166,8 @@ extension DescriptionOfExperienceViewController: DescriptionOfExperienceViewCont
         }
     }
 }
+
+// MARK: - DescriptionOfExperience+description
 
 fileprivate extension DescriptionOfExperience {
     var description: String {

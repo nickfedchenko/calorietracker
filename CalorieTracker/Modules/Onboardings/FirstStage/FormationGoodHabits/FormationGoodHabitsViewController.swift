@@ -7,7 +7,8 @@
 
 import Foundation
 import UIKit
-// swiftlint:disable all
+
+// swiftlint:disable line_length
 
 protocol FormationGoodHabitsViewControllerInterface: AnyObject {
     func set(formationGoodHabits: [FormationGoodHabits])
@@ -49,8 +50,14 @@ final class FormationGoodHabitsViewController: UIViewController {
         
         let attributedString = NSMutableAttributedString()
         
-        attributedString.append(NSAttributedString(string: "Building good habits takes a plan ", attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]))
-        attributedString.append(NSAttributedString(string: "and accountability.", attributes: [.foregroundColor: R.color.onboardings.basicDark()]))
+        attributedString.append(NSAttributedString(
+            string: "Building good habits takes a plan ",
+            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]
+        ))
+        attributedString.append(NSAttributedString(
+            string: "and accountability.",
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+        ))
         
         titleLabel.attributedText = attributedString
         titleLabel.textAlignment = .center
@@ -156,6 +163,8 @@ final class FormationGoodHabitsViewController: UIViewController {
     }
 }
 
+// MARK: - FormationGoodHabitsViewControllerInterface
+
 extension FormationGoodHabitsViewController: FormationGoodHabitsViewControllerInterface {
     func set(formationGoodHabits: [FormationGoodHabits]) {
         stackView.removeAllArrangedSubviews()
@@ -171,6 +180,8 @@ extension FormationGoodHabitsViewController: FormationGoodHabitsViewControllerIn
         }
     }
 }
+
+// MARK: - FormationGoodHabits + description
 
 fileprivate extension FormationGoodHabits {
     var description: String {

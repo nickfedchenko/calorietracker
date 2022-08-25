@@ -13,8 +13,12 @@ protocol WelcomeRouterInterface: AnyObject {
 
 class WelcomeRouter: NSObject {
     
+    // MARK: - Public properties
+    
     weak var presenter: WelcomePresenterInterface?
     weak var viewController: UIViewController?
+    
+    // MARK: - Static methods
     
     static func setupModule() -> WelcomeViewController {
         let vc = WelcomeViewController()
@@ -33,6 +37,8 @@ class WelcomeRouter: NSObject {
         return vc
     }
 }
+
+// MARK: - WelcomeRouterInterface
 
 extension WelcomeRouter: WelcomeRouterInterface {
     func openQuestionOfLosingWeight() {
