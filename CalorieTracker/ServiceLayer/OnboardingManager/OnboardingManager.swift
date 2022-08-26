@@ -38,6 +38,14 @@ protocol OnboardingManagerInterface {
     
     func getAllFormationGoodHabits() -> [FormationGoodHabits]
     func set(formationGoodHabits: FormationGoodHabits)
+    
+    func set(enterYourName: String)
+    
+    func getAllWhatsYourGender() -> [WhatsYourGender]
+    func set(whatsYourGender: WhatsYourGender)
+    
+    func getAllMeasurementSystem() -> [MeasurementSystem]
+    func set(measurementSystem: MeasurementSystem)
 }
 
 class OnboardingManager {
@@ -144,5 +152,25 @@ extension OnboardingManager: OnboardingManagerInterface {
     
     func set(formationGoodHabits: FormationGoodHabits) {
         onboardingInfo.formationGoodHabits = formationGoodHabits
+    }
+    
+    func set(enterYourName: String) {
+        onboardingInfo.enterYourName = enterYourName
+    }
+    
+    func getAllWhatsYourGender() -> [WhatsYourGender] {
+        return WhatsYourGender.allCases
+    }
+    
+    func set(whatsYourGender: WhatsYourGender) {
+        onboardingInfo.whatsYourGender = whatsYourGender
+    }
+    
+    func getAllMeasurementSystem() -> [MeasurementSystem] {
+        return MeasurementSystem.allCases
+    }
+    
+    func set(measurementSystem: MeasurementSystem) {
+        onboardingInfo.measurementSystem = measurementSystem
     }
 }

@@ -24,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     ) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
         
-        let getStartedViewController = GetStartedRouter.setupModule()
+        let getStartedViewController = EnterYourNameRouter.setupModule()
         let navigationController = UINavigationController(rootViewController: getStartedViewController)
         
         window?.rootViewController = navigationController

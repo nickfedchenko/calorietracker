@@ -45,7 +45,7 @@ final class WelcomeViewController: UIViewController {
     }
     
     private func configureViews() {
-        view.backgroundColor = .white
+        view.backgroundColor = R.color.mainBackground()
         
         welcomImageView.image = R.image.onboardings.welcom()
         

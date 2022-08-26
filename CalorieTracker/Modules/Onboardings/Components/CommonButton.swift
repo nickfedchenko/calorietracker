@@ -17,6 +17,12 @@ class CommonButton: UIButton {
         case bordered
     }
     
+    override var isEnabled: Bool {
+        didSet {
+            didChangedStyle()
+        }
+    }
+    
     // MARK: - Private properties
     
     private let style: Style
@@ -31,16 +37,19 @@ class CommonButton: UIButton {
         setTitle(text, for: .normal)
         
         configureViews()
+        didChangedStyle()
     }
     
     private func configureViews() {
         layer.cornerRadius = 16
         
         titleLabel?.font = .systemFont(ofSize: 22, weight: .bold)
-        
+    }
+    
+    private func didChangedStyle() {
         switch style {
         case .filled:
-            backgroundColor = R.color.onboardings.radialGradientFirst()
+            backgroundColor = isEnabled ? R.color.onboardings.radialGradientFirst() : R.color.onboardings.commonButton()
             setTitleColor(.white, for: .normal)
         case .bordered:
             backgroundColor = .clear

@@ -18,4 +18,7 @@ struct OnboardingInfo {
     var obsessingOverFood: ObsessingOverFood?
     var theEffectOfWeight: TheEffectOfWeight?
     var formationGoodHabits: FormationGoodHabits?
+    var enterYourName: String?
+    var whatsYourGender: WhatsYourGender?
+    var measurementSystem: MeasurementSystem?
 }
