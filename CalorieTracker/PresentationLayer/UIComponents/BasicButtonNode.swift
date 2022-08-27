@@ -6,6 +6,7 @@
 //
 
 import AsyncDisplayKit
+import CoreAudio
 // swiftlint:disable nesting
 final class BasicButtonNode: CTWidgetButtonNode {
     enum BasicButtonType {
@@ -113,17 +114,6 @@ final class BasicButtonNode: CTWidgetButtonNode {
         layer.cornerRadius = 16
         borderWidth = 1
         setupButton(isPress: false)
-        
-        addTarget(
-            self,
-            action: #selector(didNotSelectedButton),
-            forControlEvents: .touchUpInside
-        )
-        addTarget(
-            self,
-            action: #selector(didSelectedButton),
-            forControlEvents: .touchDown
-        )
     }
     
     private func didEnterInactive() {
@@ -188,14 +178,18 @@ final class BasicButtonNode: CTWidgetButtonNode {
         
         return attributedString
     }
-    
-    @objc private func didSelectedButton() {
-        guard active else { return }
+}
+
+// MARK: - Touch
+
+extension BasicButtonNode {
+    override func beginTracking(with touch: UITouch, with touchEvent: UIEvent?) -> Bool {
+        guard active else { return false }
         setupButton(isPress: true)
+        return true
     }
     
-    @objc private func didNotSelectedButton() {
-        guard active else { return }
+    override func endTracking(with touch: UITouch?, with touchEvent: UIEvent?) {
         setupButton(isPress: false)
     }
 }
