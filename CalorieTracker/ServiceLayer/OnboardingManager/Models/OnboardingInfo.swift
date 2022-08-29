@@ -21,4 +21,7 @@ struct OnboardingInfo {
     var enterYourName: String?
     var whatsYourGender: WhatsYourGender?
     var measurementSystem: MeasurementSystem?
+    var risksOfDiseases: RisksOfDiseases?
+    var presenceOfAllergies: PresenceOfAllergies?
+    var allergicRestrictions: AllergicRestrictions?
 }

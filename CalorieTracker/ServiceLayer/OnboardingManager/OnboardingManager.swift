@@ -46,6 +46,15 @@ protocol OnboardingManagerInterface {
     
     func getAllMeasurementSystem() -> [MeasurementSystem]
     func set(measurementSystem: MeasurementSystem)
+    
+    func getAllRisksOfDiseases() -> [RisksOfDiseases]
+    func set(risksOfDiseases: RisksOfDiseases)
+    
+    func getAllPresenceOfAllergies() -> [PresenceOfAllergies]
+    func set(presenceOfAllergies: PresenceOfAllergies)
+    
+    func getAllAllergicRestrictions() -> [AllergicRestrictions]
+    func set(allergicRestrictions: AllergicRestrictions)
 }
 
 class OnboardingManager {
@@ -172,5 +181,29 @@ extension OnboardingManager: OnboardingManagerInterface {
     
     func set(measurementSystem: MeasurementSystem) {
         onboardingInfo.measurementSystem = measurementSystem
+    }
+    
+    func getAllRisksOfDiseases() -> [RisksOfDiseases] {
+        return RisksOfDiseases.allCases
+    }
+    
+    func set(risksOfDiseases: RisksOfDiseases) {
+        onboardingInfo.risksOfDiseases = risksOfDiseases
+    }
+    
+    func getAllPresenceOfAllergies() -> [PresenceOfAllergies] {
+        return PresenceOfAllergies.allCases
+    }
+    
+    func set(presenceOfAllergies: PresenceOfAllergies) {
+        onboardingInfo.presenceOfAllergies = presenceOfAllergies
+    }
+    
+    func getAllAllergicRestrictions() -> [AllergicRestrictions] {
+        return AllergicRestrictions.allCases
+    }
+    
+    func set(allergicRestrictions: AllergicRestrictions) {
+        onboardingInfo.allergicRestrictions = allergicRestrictions
     }
 }

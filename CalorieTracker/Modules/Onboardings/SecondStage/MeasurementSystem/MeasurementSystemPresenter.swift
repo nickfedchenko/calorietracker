@@ -49,6 +49,7 @@ extension MeasurementSystemPresenter: MeasurementSystemPresenterInterface {
     
     func didTapContinueCommonButton() {
         interactor?.set(measurementSystem: .metricSystem)
+        router?.openDateOfBirth()
     }
     
     func didSelectMeasurementSystem(with index: Int) {

@@ -7,7 +7,9 @@
 
 import UIKit
 
-protocol MeasurementSystemRouterInterface: AnyObject {}
+protocol MeasurementSystemRouterInterface: AnyObject {
+    func openDateOfBirth()
+}
 
 class MeasurementSystemRouter {
     
@@ -36,4 +38,10 @@ class MeasurementSystemRouter {
     }
 }
 
-extension MeasurementSystemRouter: MeasurementSystemRouterInterface {}
+extension MeasurementSystemRouter: MeasurementSystemRouterInterface {
+    func openDateOfBirth() {
+        let dateOfBirthRouter = DateOfBirthRouter.setupModule()
+        
+        viewController?.navigationController?.pushViewController(dateOfBirthRouter, animated: true)
+    }
+}

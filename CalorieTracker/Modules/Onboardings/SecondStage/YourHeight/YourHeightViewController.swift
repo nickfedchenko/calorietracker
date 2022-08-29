@@ -1,20 +1,20 @@
 //
-//  DateOfBirthViewController.swift
+//  YourHeightViewController.swift
 //  CalorieTracker
 //
-//  Created by Алексей on 26.08.2022.
+//  Created by Алексей on 28.08.2022.
 //
 
 import Foundation
 import UIKit
 
-protocol DateOfBirthViewControllerInterface: AnyObject {}
+protocol YourHeightViewControllerInterface: AnyObject {}
 
-final class DateOfBirthViewController: UIViewController {
+final class YourHeightViewController: UIViewController {
     
     // MARK: - Public properties
     
-    var presenter: DateOfBirthPresenterInterface?
+    var presenter: YourHeightPresenterInterface?
     
     // MARK: - Views properties
     
@@ -22,8 +22,7 @@ final class DateOfBirthViewController: UIViewController {
     private let titleLabel: UILabel = .init()
     private let borderTextField: BorderTextField = .init()
     private let continueCommonButton: CommonButton = .init(style: .filled, text: "Continue")
-    private let datePicker: UIDatePicker = .init()
-
+    private let pickerView: UIPickerView = .init()
     
     // MARK: - Lifecycle methods
     
@@ -38,26 +37,21 @@ final class DateOfBirthViewController: UIViewController {
     private func configureViews() {
         view.backgroundColor = R.color.mainBackground()
         
-        titleLabel.text = "Your date of birth"
+        titleLabel.text = "Your height"
         titleLabel.textColor = R.color.onboardings.basicDark()
         titleLabel.textAlignment = .center
         titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .medium)
         
         borderTextField.isEnabled = false
-
-        datePicker.preferredDatePickerStyle = .wheels
-        datePicker.datePickerMode = .date
-        datePicker.addTarget(self, action: #selector(didChangedDatePicker), for: .valueChanged)
         
+        pickerView.dataSource = self
+        pickerView.delegate = self
+
         continueCommonButton.addTarget(self, action: #selector(didTapContinueCommonButton), for: .touchUpInside)
     }
     
-    @objc private func didChangedDatePicker(_ sender: UIDatePicker) {
-        let dateFormatter = DateFormatter()
-        
-        dateFormatter.dateFormat = "MM.dd.yyyy"
-        
-        borderTextField.text = dateFormatter.string(from: sender.date)
+    @objc private func didChangedDatePicker(_ sender: UIPickerView) {
+        borderTextField.text = pickerView(pickerView, titleForRow: 1, forComponent: 1)
     }
     
     @objc private func didTapContinueCommonButton() {
@@ -71,7 +65,7 @@ final class DateOfBirthViewController: UIViewController {
         
         view.addSubview(borderTextField)
         
-        view.addSubview(datePicker)
+        view.addSubview(pickerView)
         
         view.addSubview(continueCommonButton)
         
@@ -94,7 +88,7 @@ final class DateOfBirthViewController: UIViewController {
             $0.height.equalTo(74)
         }
         
-        datePicker.snp.makeConstraints {
+        pickerView.snp.makeConstraints {
             $0.top.equalTo(borderTextField.snp.bottom).offset(40)
             $0.left.equalTo(view.snp.left).offset(50)
             $0.right.equalTo(view.snp.right).offset(-50)
@@ -109,6 +103,37 @@ final class DateOfBirthViewController: UIViewController {
     }
 }
 
-extension DateOfBirthViewController: DateOfBirthViewControllerInterface {}
+extension YourHeightViewController: YourHeightViewControllerInterface {}
 
+extension YourHeightViewController: UIPickerViewDataSource {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 4
+    }
 
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        if component == 0 {
+            return 2
+        } else if component == 1 {
+            return 1
+        } else if component == 2 {
+            return 100
+        } else {
+            return 1
+        }
+    }
+}
+
+extension YourHeightViewController: UIPickerViewDelegate {
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        if component == 0 {
+            return "\(row + 1)"
+        } else if component == 1 {
+            return "м"
+        } else if component == 2 {
+            return "\(row * 1)"
+        } else if component == 3 {
+            return "см"
+        }
+        return nil
+    }
+}
