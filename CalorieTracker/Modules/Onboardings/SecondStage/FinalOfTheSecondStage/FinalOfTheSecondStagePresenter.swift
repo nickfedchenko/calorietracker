@@ -30,4 +30,6 @@ class FinalOfTheSecondStagePresenter {
     }
 }
 
+// MARK: - FinalOfTheSecondStagePresenterInterface
+
 extension FinalOfTheSecondStagePresenter: FinalOfTheSecondStagePresenterInterface {}

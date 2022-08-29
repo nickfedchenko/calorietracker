@@ -38,6 +38,8 @@ class PresenceOfAllergiesRouter {
     }
 }
 
+// MARK: - PresenceOfAllergiesRouterInterface
+
 extension PresenceOfAllergiesRouter: PresenceOfAllergiesRouterInterface {
     func openAllergicRestrictions() {
         let allergicRestrictionsRouter = AllergicRestrictionsRouter.setupModule()

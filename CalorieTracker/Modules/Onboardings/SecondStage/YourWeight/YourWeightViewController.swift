@@ -103,7 +103,11 @@ final class YourWeightViewController: UIViewController {
     }
 }
 
+// MARK: - YourWeightViewControllerInterface
+
 extension YourWeightViewController: YourWeightViewControllerInterface {}
+
+// MARK: - UIPickerViewDataSource
 
 extension YourWeightViewController: UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -122,6 +126,8 @@ extension YourWeightViewController: UIPickerViewDataSource {
         }
     }
 }
+
+// MARK: - UIPickerViewDelegate
 
 extension YourWeightViewController: UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {

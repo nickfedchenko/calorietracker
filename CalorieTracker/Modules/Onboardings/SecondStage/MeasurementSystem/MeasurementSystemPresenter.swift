@@ -40,6 +40,8 @@ class MeasurementSystemPresenter {
     }
 }
 
+// MARK: - MeasurementSystemPresenterInterface
+
 extension MeasurementSystemPresenter: MeasurementSystemPresenterInterface {
     func viewDidLoad() {
         measurementSystem = interactor?.getAllMeasurementSystem() ?? []

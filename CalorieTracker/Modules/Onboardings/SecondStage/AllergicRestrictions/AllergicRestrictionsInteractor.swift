@@ -29,6 +29,8 @@ class AllergicRestrictionsInteractor {
     }
 }
 
+// MARK: - AllergicRestrictionsInteractorInterface
+
 extension AllergicRestrictionsInteractor: AllergicRestrictionsInteractorInterface {
     func getAllAllergicRestrictions() -> [AllergicRestrictions] {
         return onboardingManager.getAllAllergicRestrictions()

@@ -40,6 +40,8 @@ class PresenceOfAllergiesPresenter {
     }
 }
 
+// MARK: - PresenceOfAllergiesPresenterInterface
+
 extension PresenceOfAllergiesPresenter: PresenceOfAllergiesPresenterInterface {
     func viewDidLoad() {
         presenceOfAllergies = interactor?.getAllPresenceOfAllergies() ?? []
@@ -48,6 +50,7 @@ extension PresenceOfAllergiesPresenter: PresenceOfAllergiesPresenterInterface {
     }
     
     func didTapContinueCommonButton() {
+        interactor?.set(presenceOfAllergies: .yes)
         router?.openAllergicRestrictions()
     }
     

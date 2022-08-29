@@ -32,6 +32,8 @@ class YourWeightPresenter {
     }
 }
 
+// MARK: - YourWeightPresenterInterface
+
 extension YourWeightPresenter: YourWeightPresenterInterface {
     func didTapContinueCommonButton() {
         router?.openRisksOfDiseases()

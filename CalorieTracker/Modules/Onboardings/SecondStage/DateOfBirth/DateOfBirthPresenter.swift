@@ -35,6 +35,8 @@ class DateOfBirthPresenter {
     }
 }
 
+// MARK: - DateOfBirthPresenterInterface
+
 extension DateOfBirthPresenter: DateOfBirthPresenterInterface {
     func didTapContinueCommonButton() {
         router?.openYourHeight()

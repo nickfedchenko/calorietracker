@@ -32,6 +32,8 @@ class YourHeightPresenter {
     }
 }
 
+// MARK: - YourHeightPresenterInterface
+
 extension YourHeightPresenter: YourHeightPresenterInterface {
     func didTapContinueCommonButton() {
         router?.openYourWeight()

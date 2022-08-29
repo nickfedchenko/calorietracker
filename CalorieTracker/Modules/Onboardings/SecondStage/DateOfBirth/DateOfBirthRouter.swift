@@ -38,6 +38,8 @@ class DateOfBirthRouter {
     }
 }
 
+// MARK: - DateOfBirthRouterInterface
+
 extension DateOfBirthRouter: DateOfBirthRouterInterface {
     func openYourHeight() {
         let yourHeightRouter = YourHeightRouter.setupModule()

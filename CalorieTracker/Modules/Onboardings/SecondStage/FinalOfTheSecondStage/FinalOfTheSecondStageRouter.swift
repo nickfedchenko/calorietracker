@@ -32,4 +32,6 @@ class FinalOfTheSecondStageRouter {
     }
 }
 
+// MARK: - FinalOfTheSecondStageRouterInterface
+
 extension FinalOfTheSecondStageRouter: FinalOfTheSecondStageRouterInterface {}

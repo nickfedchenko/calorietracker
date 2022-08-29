@@ -40,7 +40,7 @@ class WhatsYourGenderPresenter {
     }
 }
 
-// MARK: - WelcomePresenterInterface
+// MARK: - WhatsYourGenderPresenterInterface
 
 extension WhatsYourGenderPresenter: WhatsYourGenderPresenterInterface {
     func viewDidLoad() {

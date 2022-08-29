@@ -103,7 +103,11 @@ final class YourHeightViewController: UIViewController {
     }
 }
 
+// MARK: - YourHeightViewControllerInterface
+
 extension YourHeightViewController: YourHeightViewControllerInterface {}
+
+// MARK: - UIPickerViewDataSource
 
 extension YourHeightViewController: UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -122,6 +126,8 @@ extension YourHeightViewController: UIPickerViewDataSource {
         }
     }
 }
+
+// MARK: - UIPickerViewDelegate
 
 extension YourHeightViewController: UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {

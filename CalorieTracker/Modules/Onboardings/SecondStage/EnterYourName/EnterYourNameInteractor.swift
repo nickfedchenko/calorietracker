@@ -28,6 +28,8 @@ class EnterYourNameInteractor {
     }
 }
 
+// MARK: - EnterYourNameInteractorInterface
+
 extension EnterYourNameInteractor: EnterYourNameInteractorInterface {
     func set(enterYourName: String) {
         onboardingManager.set(enterYourName: enterYourName)

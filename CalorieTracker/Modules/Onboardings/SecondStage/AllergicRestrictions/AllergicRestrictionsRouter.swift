@@ -36,4 +36,6 @@ class AllergicRestrictionsRouter {
     }
 }
 
+// MARK: - AllergicRestrictionsRouterInterface
+
 extension AllergicRestrictionsRouter: AllergicRestrictionsRouterInterface {}

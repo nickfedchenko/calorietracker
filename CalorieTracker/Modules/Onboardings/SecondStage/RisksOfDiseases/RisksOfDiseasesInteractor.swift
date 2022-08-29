@@ -29,6 +29,8 @@ class RisksOfDiseasesInteractor {
     }
 }
 
+// MARK: - RisksOfDiseasesInteractorInterface
+
 extension RisksOfDiseasesInteractor: RisksOfDiseasesInteractorInterface {
     func getAllRisksOfDiseases() -> [RisksOfDiseases] {
         return onboardingManager.getAllRisksOfDiseases()

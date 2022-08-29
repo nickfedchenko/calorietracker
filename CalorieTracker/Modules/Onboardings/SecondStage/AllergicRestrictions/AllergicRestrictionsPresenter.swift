@@ -37,6 +37,8 @@ class AllergicRestrictionsPresenter {
     }
 }
 
+// MARK: - AllergicRestrictionsPresenterInterface
+
 extension AllergicRestrictionsPresenter: AllergicRestrictionsPresenterInterface {
     func viewDidLoad() {
         allergicRestrictions = interactor?.getAllAllergicRestrictions() ?? []
@@ -45,6 +47,7 @@ extension AllergicRestrictionsPresenter: AllergicRestrictionsPresenterInterface 
     }
     
     func didTapContinueCommonButton() {
-        
+        interactor?.set(allergicRestrictions: .dairy)
+
     }
 }

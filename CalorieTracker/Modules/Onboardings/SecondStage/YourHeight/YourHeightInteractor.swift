@@ -16,4 +16,6 @@ class YourHeightInteractor {
     weak var presenter: YourHeightPresenterInterface?
 }
 
+// MARK: - YourHeightInteractorInterface
+
 extension YourHeightInteractor: YourHeightInteractorInterface {}

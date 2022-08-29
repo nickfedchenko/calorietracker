@@ -38,6 +38,8 @@ class YourWeightRouter {
     }
 }
 
+// MARK: - YourWeightRouterInterface
+
 extension YourWeightRouter: YourWeightRouterInterface {
     func openRisksOfDiseases() {
         let risksOfDiseasesRouter = RisksOfDiseasesRouter.setupModule()

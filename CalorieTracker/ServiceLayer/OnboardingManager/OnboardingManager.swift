@@ -55,6 +55,20 @@ protocol OnboardingManagerInterface {
     
     func getAllAllergicRestrictions() -> [AllergicRestrictions]
     func set(allergicRestrictions: AllergicRestrictions)
+    
+    func getAllImportanceOfWeightLoss() -> [ImportanceOfWeightLoss]
+    func set(importanceOfWeightLoss: ImportanceOfWeightLoss)
+    
+    func getAllThoughtsAboutChangingFeelings() -> [ThoughtsAboutChangingFeelings]
+    func set(thoughtsAboutChangingFeelings: ThoughtsAboutChangingFeelings)
+    
+    func getAllLifeChangesAfterWeightLoss() -> [LifeChangesAfterWeightLoss]
+    func set(lifeChangesAfterWeightLoss: LifeChangesAfterWeightLoss)
+    
+    func getAllCurrentLifestile() -> [CurrentLifestile]
+    func set(currentLifestile: CurrentLifestile)
+    
+    func set(nutritionImprovement: Bool)
 }
 
 class OnboardingManager {
@@ -205,5 +219,41 @@ extension OnboardingManager: OnboardingManagerInterface {
     
     func set(allergicRestrictions: AllergicRestrictions) {
         onboardingInfo.allergicRestrictions = allergicRestrictions
+    }
+    
+    func getAllImportanceOfWeightLoss() -> [ImportanceOfWeightLoss] {
+        return ImportanceOfWeightLoss.allCases
+    }
+    
+    func set(importanceOfWeightLoss: ImportanceOfWeightLoss) {
+        onboardingInfo.importanceOfWeightLoss = importanceOfWeightLoss
+    }
+    
+    func getAllThoughtsAboutChangingFeelings() -> [ThoughtsAboutChangingFeelings] {
+        return ThoughtsAboutChangingFeelings.allCases
+    }
+    
+    func set(thoughtsAboutChangingFeelings: ThoughtsAboutChangingFeelings) {
+        onboardingInfo.thoughtsAboutChangingFeelings = thoughtsAboutChangingFeelings
+    }
+    
+    func getAllLifeChangesAfterWeightLoss() -> [LifeChangesAfterWeightLoss] {
+        return LifeChangesAfterWeightLoss.allCases
+    }
+    
+    func set(lifeChangesAfterWeightLoss: LifeChangesAfterWeightLoss) {
+        onboardingInfo.lifeChangesAfterWeightLoss = lifeChangesAfterWeightLoss
+    }
+    
+    func getAllCurrentLifestile() -> [CurrentLifestile] {
+        return CurrentLifestile.allCases
+    }
+    
+    func set(currentLifestile: CurrentLifestile) {
+        onboardingInfo.currentLifestile = currentLifestile
+    }
+    
+    func set(nutritionImprovement: Bool) {
+        onboardingInfo.nutritionImprovement = nutritionImprovement
     }
 }

@@ -16,4 +16,6 @@ class YourWeightInteractor {
     weak var presenter: YourWeightPresenterInterface?
 }
 
+// MARK: - YourWeightInteractorInterface
+
 extension YourWeightInteractor: YourWeightInteractorInterface {}

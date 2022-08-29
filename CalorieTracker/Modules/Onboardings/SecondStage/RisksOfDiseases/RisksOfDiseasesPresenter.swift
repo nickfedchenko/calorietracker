@@ -38,6 +38,8 @@ class RisksOfDiseasesPresenter {
     }
 }
 
+// MARK: - RisksOfDiseasesPresenterInterface
+
 extension RisksOfDiseasesPresenter: RisksOfDiseasesPresenterInterface {
     func viewDidLoad() {
         risksOfDiseases = interactor?.getAllRisksOfDiseases() ?? []
@@ -46,6 +48,7 @@ extension RisksOfDiseasesPresenter: RisksOfDiseasesPresenterInterface {
     }
     
     func didTapContinueCommonButton() {
+        interactor?.set(risksOfDiseases: .diabetes)
         router?.openPresenceOfAllergies()
     }
 }

@@ -28,6 +28,8 @@ class PresenceOfAllergiesInteractor {
     }
 }
 
+// MARK: - PresenceOfAllergiesInteractorInterface
+
 extension PresenceOfAllergiesInteractor: PresenceOfAllergiesInteractorInterface {
     func getAllPresenceOfAllergies() -> [PresenceOfAllergies] {
         return onboardingManager.getAllPresenceOfAllergies()

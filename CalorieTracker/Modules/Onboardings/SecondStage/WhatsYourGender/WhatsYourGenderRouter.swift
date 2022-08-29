@@ -38,7 +38,7 @@ class WhatsYourGenderRouter {
     }
 }
 
-// MARK: - WelcomeRouterInterface
+// MARK: - WhatsYourGenderRouterInterface
 
 extension WhatsYourGenderRouter: WhatsYourGenderRouterInterface {
     func openMeasurementSystem() {

@@ -38,6 +38,8 @@ class MeasurementSystemRouter {
     }
 }
 
+// MARK: - MeasurementSystemRouterInterface
+
 extension MeasurementSystemRouter: MeasurementSystemRouterInterface {
     func openDateOfBirth() {
         let dateOfBirthRouter = DateOfBirthRouter.setupModule()

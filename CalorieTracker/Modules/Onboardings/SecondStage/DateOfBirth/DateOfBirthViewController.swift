@@ -109,6 +109,6 @@ final class DateOfBirthViewController: UIViewController {
     }
 }
 
+// MARK: - DateOfBirthViewControllerInterface
+
 extension DateOfBirthViewController: DateOfBirthViewControllerInterface {}
-
-

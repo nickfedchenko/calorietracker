@@ -124,6 +124,8 @@ final class MeasurementSystemViewController: UIViewController {
     }
 }
 
+// MARK: - MeasurementSystemViewControllerInterface
+
 extension MeasurementSystemViewController: MeasurementSystemViewControllerInterface {
     func set(measurementSystem: [MeasurementSystem]) {
         stackView.removeAllArrangedSubviews()

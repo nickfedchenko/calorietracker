@@ -113,6 +113,6 @@ final class EnterYourNameViewController: UIViewController {
     }
 }
 
-// MARK: - WelcomeViewControllerInterface
+// MARK: - EnterYourNameViewControllerInterface
 
 extension EnterYourNameViewController: EnterYourNameViewControllerInterface {}

@@ -26,4 +26,6 @@ class DateOfBirthInteractor {
     }
 }
 
+// MARK: - DateOfBirthInteractorInterface
+
 extension DateOfBirthInteractor: DateOfBirthInteractorInterface {}

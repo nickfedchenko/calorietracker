@@ -38,6 +38,8 @@ class RisksOfDiseasesRouter {
     }
 }
 
+// MARK: - RisksOfDiseasesRouterInterface
+
 extension RisksOfDiseasesRouter: RisksOfDiseasesRouterInterface {
     func openPresenceOfAllergies() {
         let presenceOfAllergiesRouter = PresenceOfAllergiesRouter.setupModule()

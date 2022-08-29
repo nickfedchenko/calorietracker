@@ -24,4 +24,9 @@ struct OnboardingInfo {
     var risksOfDiseases: RisksOfDiseases?
     var presenceOfAllergies: PresenceOfAllergies?
     var allergicRestrictions: AllergicRestrictions?
+    var importanceOfWeightLoss: ImportanceOfWeightLoss?
+    var thoughtsAboutChangingFeelings: ThoughtsAboutChangingFeelings?
+    var lifeChangesAfterWeightLoss: LifeChangesAfterWeightLoss?
+    var currentLifestile: CurrentLifestile?
+    var nutritionImprovement: Bool?
 }

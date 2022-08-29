@@ -29,6 +29,8 @@ class MeasurementSystemInteractor {
     }
 }
 
+// MARK: - MeasurementSystemInteractorInterface
+
 extension MeasurementSystemInteractor: MeasurementSystemInteractorInterface {
     func getAllMeasurementSystem() -> [MeasurementSystem] {
         return onboardingManager.getAllMeasurementSystem()
