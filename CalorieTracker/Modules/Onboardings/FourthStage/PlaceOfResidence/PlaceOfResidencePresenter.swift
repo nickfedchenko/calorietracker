@@ -6,3 +6,48 @@
 //
 
 import Foundation
+
+protocol PlaceOfResidencePresenterInterface: AnyObject {
+    func viewDidLoad()
+    func didTapContinueCommonButton()
+}
+
+class PlaceOfResidencePresenter {
+    
+    // MARK: - Public properties
+
+    unowned var view: PlaceOfResidenceViewControllerInterface
+    let router: PlaceOfResidenceRouterInterface?
+    let interactor: PlaceOfResidenceInteractorInterface?
+    
+    // MARK: - Private properties
+
+    private var placeOfResidence: [PlaceOfResidence] = []
+
+    // MARK: - Initialization
+    
+    init(
+        interactor: PlaceOfResidenceInteractorInterface,
+        router: PlaceOfResidenceRouterInterface,
+        view: PlaceOfResidenceViewControllerInterface
+      ) {
+        self.view = view
+        self.interactor = interactor
+        self.router = router
+    }
+}
+
+// MARK: - PlaceOfResidencePresenterInterface
+
+extension PlaceOfResidencePresenter: PlaceOfResidencePresenterInterface {
+    func viewDidLoad() {
+        placeOfResidence = interactor?.getAllPlaceOfResidence() ?? []
+        
+        view.set(placeOfResidence: placeOfResidence)
+    }
+    
+    func didTapContinueCommonButton() {
+        interactor?.set(placeOfResidence: .inRuralArea)
+        router?.openEnvironmentInfluencesTheChoice()
+    }
+}

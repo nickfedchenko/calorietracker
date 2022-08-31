@@ -7,7 +7,9 @@
 
 import Foundation
 
-protocol StressAndEmotionsAreInevitablePresenterInterface: AnyObject {}
+protocol StressAndEmotionsAreInevitablePresenterInterface: AnyObject {
+    func didTapContinueCommonButton()
+}
 
 class StressAndEmotionsAreInevitablePresenter {
     
@@ -32,4 +34,8 @@ class StressAndEmotionsAreInevitablePresenter {
 
 // MARK: - StressAndEmotionsAreInevitablePresenterInterface
 
-extension StressAndEmotionsAreInevitablePresenter: StressAndEmotionsAreInevitablePresenterInterface {}
+extension StressAndEmotionsAreInevitablePresenter: StressAndEmotionsAreInevitablePresenterInterface {
+    func didTapContinueCommonButton() {
+        router?.openYoureNotAlone()
+    }
+}

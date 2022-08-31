@@ -6,3 +6,37 @@
 //
 
 import Foundation
+
+protocol DescriptionOfCulinarySkillsInteractorInterface: AnyObject {
+    func getAllDescriptionOfCulinarySkills() -> [DescriptionOfCulinarySkills]
+    func set(descriptionOfCulinarySkills: DescriptionOfCulinarySkills)
+}
+
+class DescriptionOfCulinarySkillsInteractor {
+    
+    // MARK: - Public properties
+    
+    weak var presenter: DescriptionOfCulinarySkillsPresenterInterface?
+    
+    // MARK: - Managers
+    
+    private let onboardingManager: OnboardingManagerInterface
+    
+    // MARK: - Initialization
+    
+    init(onboardingManager: OnboardingManagerInterface) {
+        self.onboardingManager = onboardingManager
+    }
+}
+
+// MARK: - DescriptionOfCulinarySkillsInteractorInterface
+
+extension DescriptionOfCulinarySkillsInteractor: DescriptionOfCulinarySkillsInteractorInterface {
+    func getAllDescriptionOfCulinarySkills() -> [DescriptionOfCulinarySkills] {
+        return onboardingManager.getAllDescriptionOfCulinarySkills()
+    }
+    
+    func set(descriptionOfCulinarySkills: DescriptionOfCulinarySkills) {
+        onboardingManager.set(descriptionOfCulinarySkills: descriptionOfCulinarySkills)
+    }
+}

@@ -37,6 +37,8 @@ class CurrentLifestilePresenter {
     }
 }
 
+// MARK: - CurrentLifestilePresenterInterface
+
 extension CurrentLifestilePresenter: CurrentLifestilePresenterInterface {
     func viewDidLoad() {
         currentLifestile = interactor?.getAllCurrentLifestile() ?? []

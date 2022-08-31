@@ -6,3 +6,14 @@
 //
 
 import Foundation
+
+protocol DifficultyOfMakingHealthyChoicesInteractorInterface: AnyObject {}
+
+class DifficultyOfMakingHealthyChoicesInteractor {
+    
+    // MARK: - Public properties
+    
+    weak var presenter: DifficultyOfMakingHealthyChoicesPresenterInterface?
+}
+
+extension DifficultyOfMakingHealthyChoicesInteractor: DifficultyOfMakingHealthyChoicesInteractorInterface {}

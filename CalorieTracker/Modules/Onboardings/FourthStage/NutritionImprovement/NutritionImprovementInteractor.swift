@@ -28,6 +28,8 @@ class NutritionImprovementInteractor {
     }
 }
 
+// MARK: - NutritionImprovementInteractorInterface
+
 extension NutritionImprovementInteractor: NutritionImprovementInteractorInterface {
     func set(nutritionImprovement: Bool) {
         onboardingManager.set(nutritionImprovement: nutritionImprovement)

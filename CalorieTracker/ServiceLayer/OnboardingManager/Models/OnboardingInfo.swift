@@ -29,4 +29,21 @@ struct OnboardingInfo {
     var lifeChangesAfterWeightLoss: LifeChangesAfterWeightLoss?
     var currentLifestile: CurrentLifestile?
     var nutritionImprovement: Bool?
+    var improvingNutrition: ImprovingNutrition?
+    var increasingYourActivityLevel: Bool?
+    var howImproveYourEfficiency: HowImproveYourEfficiency?
+    var representationOfIncreasedActivityLevels: Bool?
+    var sequenceOfHabitFormation: SequenceOfHabitFormation?
+    var descriptionOfCulinarySkills: DescriptionOfCulinarySkills?
+    var whatImportantToYou: Bool?
+    var thoughtsOnStressEating: Bool?
+    var difficultyChoosingLifestyle: Bool?
+    var interestInUsingTechnology: Bool?
+    var placeOfResidence: PlaceOfResidence?
+    var environmentInfluencesTheChoice: EnvironmentInfluencesTheChoice?
+    var bestDescriptionOfTheSituation: BestDescriptionOfTheSituation?
+    var timeForYourself: TimeForYourself?
+    var jointWeightLoss: JointWeightLoss?
+    var lifestyleOfOthers: LifestyleOfOthers?
+    var emotionalSupportSystem: EmotionalSupportSystem?
 }

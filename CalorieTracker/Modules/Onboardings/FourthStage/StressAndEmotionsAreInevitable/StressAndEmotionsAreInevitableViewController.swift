@@ -16,7 +16,7 @@ final class StressAndEmotionsAreInevitableViewController: UIViewController {
     
     // MARK: - Public properties
     
-    var presenter: SoundsGoodPresenterInterface?
+    var presenter: StressAndEmotionsAreInevitablePresenterInterface?
     
     // MARK: - Views properties
 
@@ -48,7 +48,7 @@ final class StressAndEmotionsAreInevitableViewController: UIViewController {
         stackView.axis = .vertical
         
         titleLabel.text = "Stress and emotions are inevitable."
-        titleLabel.textColor = R.color.onboardings.radialGradientFirst()
+        titleLabel.textColor = R.color.onboardings.basicDark()
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.systemFont(ofSize: 30, weight: .medium)

@@ -6,3 +6,14 @@
 //
 
 import Foundation
+
+protocol FinalOfTheFourthStageInteractorInterface: AnyObject {}
+
+class FinalOfTheFourthStageInteractor {
+    
+    // MARK: - Public properties
+    
+    weak var presenter: FinalOfTheFourthStagePresenterInterface?
+}
+
+extension FinalOfTheFourthStageInteractor: FinalOfTheFourthStageInteractorInterface {}

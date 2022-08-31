@@ -7,8 +7,36 @@
 
 import Foundation
 
-protocol ImprovingTutritionInteractorInterface: AnyObject {}
+protocol ImprovingNutritionInteractorInterface: AnyObject {
+    func getAllImprovingNutrition() -> [ImprovingNutrition]
+    func set(improvingNutrition: ImprovingNutrition)
+}
 
-class ImprovingTutritionInteractor {}
+class ImprovingNutritionInteractor {
+    
+    // MARK: - Public properties
+    
+    weak var presenter: ImprovingNutritionPresenterInterface?
+    
+    // MARK: - Managers
+    
+    private let onboardingManager: OnboardingManagerInterface
+    
+    // MARK: - Initialization
+    
+    init(onboardingManager: OnboardingManagerInterface) {
+        self.onboardingManager = onboardingManager
+    }
+}
 
-extension ImprovingTutritionInteractor: ImprovingTutritionInteractorInterface {}
+// MARK: - ImprovingNutritionInteractorInterface
+
+extension ImprovingNutritionInteractor: ImprovingNutritionInteractorInterface {
+    func getAllImprovingNutrition() -> [ImprovingNutrition] {
+        return onboardingManager.getAllImprovingNutrition()
+    }
+    
+    func set(improvingNutrition: ImprovingNutrition) {
+        onboardingManager.set(improvingNutrition: improvingNutrition)
+    }
+}

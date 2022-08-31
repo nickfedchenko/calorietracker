@@ -5,4 +5,8 @@
 //  Created by Алексей on 31.08.2022.
 //
 
-import Foundation
+enum PlaceOfResidence: CaseIterable {
+    case inRuralArea
+    case inSuburbanArea
+    case inCity
+}

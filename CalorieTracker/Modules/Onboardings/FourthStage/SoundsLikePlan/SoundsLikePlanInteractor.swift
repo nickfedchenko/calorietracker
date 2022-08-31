@@ -6,3 +6,16 @@
 //
 
 import Foundation
+
+protocol SoundsLikePlanInteractorInterface: AnyObject {}
+
+class SoundsLikePlanInteractor {
+    
+    // MARK: - Public properties
+    
+    weak var presenter: SoundsLikePlanPresenterInterface?
+}
+
+// MARK: - SoundsLikePlanInteractorInterface
+
+extension SoundsLikePlanInteractor: SoundsLikePlanInteractorInterface {}

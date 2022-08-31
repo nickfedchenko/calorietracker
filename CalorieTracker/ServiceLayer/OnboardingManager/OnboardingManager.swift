@@ -69,6 +69,51 @@ protocol OnboardingManagerInterface {
     func set(currentLifestile: CurrentLifestile)
     
     func set(nutritionImprovement: Bool)
+    
+    func getAllImprovingNutrition() -> [ImprovingNutrition]
+    func set(improvingNutrition: ImprovingNutrition)
+    
+    func set(increasingYourActivityLevel: Bool)
+    
+    func getAllHowImproveYourEfficiency() -> [HowImproveYourEfficiency]
+    func set(howImproveYourEfficiency: HowImproveYourEfficiency)
+    
+    func set(representationOfIncreasedActivityLevels: Bool)
+    
+    func getAllSequenceOfHabitFormation() -> [SequenceOfHabitFormation]
+    func set(sequenceOfHabitFormation: SequenceOfHabitFormation)
+    
+    func getAllDescriptionOfCulinarySkills() -> [DescriptionOfCulinarySkills]
+    func set(descriptionOfCulinarySkills: DescriptionOfCulinarySkills)
+    
+    func set(whatImportantToYou: Bool)
+    
+    func set(thoughtsOnStressEating: Bool)
+    
+    func set(difficultyChoosingLifestyle: Bool)
+    
+    func set(interestInUsingTechnology: Bool)
+    
+    func getAllPlaceOfResidence() -> [PlaceOfResidence]
+    func set(placeOfResidence: PlaceOfResidence)
+    
+    func getAllEnvironmentInfluencesTheChoice() -> [EnvironmentInfluencesTheChoice]
+    func set(environmentInfluencesTheChoice: EnvironmentInfluencesTheChoice)
+    
+    func getAllBestDescriptionOfTheSituation() -> [BestDescriptionOfTheSituation]
+    func set(bestDescriptionOfTheSituation: BestDescriptionOfTheSituation)
+    
+    func getAllTimeForYourself() -> [TimeForYourself]
+    func set(timeForYourself: TimeForYourself)
+    
+    func getAllJointWeightLoss() -> [JointWeightLoss]
+    func set(jointWeightLoss: JointWeightLoss)
+    
+    func getAllLifestyleOfOthers() -> [LifestyleOfOthers]
+    func set(lifestyleOfOthers: LifestyleOfOthers)
+    
+    func getAllEmotionalSupportSystem() -> [EmotionalSupportSystem]
+    func set(emotionalSupportSystem: EmotionalSupportSystem)
 }
 
 class OnboardingManager {
@@ -255,5 +300,117 @@ extension OnboardingManager: OnboardingManagerInterface {
     
     func set(nutritionImprovement: Bool) {
         onboardingInfo.nutritionImprovement = nutritionImprovement
+    }
+    
+    func getAllImprovingNutrition() -> [ImprovingNutrition] {
+        return ImprovingNutrition.allCases
+    }
+    
+    func set(improvingNutrition: ImprovingNutrition) {
+        onboardingInfo.improvingNutrition = improvingNutrition
+    }
+    
+    func set(increasingYourActivityLevel: Bool) {
+        onboardingInfo.increasingYourActivityLevel = increasingYourActivityLevel
+    }
+    
+    func getAllHowImproveYourEfficiency() -> [HowImproveYourEfficiency] {
+        return HowImproveYourEfficiency.allCases
+    }
+    
+    func set(howImproveYourEfficiency: HowImproveYourEfficiency) {
+        onboardingInfo.howImproveYourEfficiency = howImproveYourEfficiency
+    }
+    
+    func set(representationOfIncreasedActivityLevels: Bool) {
+        onboardingInfo.representationOfIncreasedActivityLevels = representationOfIncreasedActivityLevels
+    }
+
+    func getAllSequenceOfHabitFormation() -> [SequenceOfHabitFormation] {
+        return SequenceOfHabitFormation.allCases
+    }
+    
+    func set(sequenceOfHabitFormation: SequenceOfHabitFormation) {
+        onboardingInfo.sequenceOfHabitFormation = sequenceOfHabitFormation
+    }
+    
+    func getAllDescriptionOfCulinarySkills() -> [DescriptionOfCulinarySkills] {
+        return DescriptionOfCulinarySkills.allCases
+    }
+    
+    func set(descriptionOfCulinarySkills: DescriptionOfCulinarySkills) {
+        onboardingInfo.descriptionOfCulinarySkills = descriptionOfCulinarySkills
+    }
+    
+    func set(whatImportantToYou: Bool) {
+        onboardingInfo.whatImportantToYou = whatImportantToYou
+    }
+    
+    func set(thoughtsOnStressEating: Bool) {
+        onboardingInfo.thoughtsOnStressEating = thoughtsOnStressEating
+    }
+    
+    func set(difficultyChoosingLifestyle: Bool) {
+        onboardingInfo.difficultyChoosingLifestyle = difficultyChoosingLifestyle
+    }
+    
+    func set(interestInUsingTechnology: Bool) {
+        onboardingInfo.interestInUsingTechnology = interestInUsingTechnology
+    }
+    
+    func getAllPlaceOfResidence() -> [PlaceOfResidence] {
+        return PlaceOfResidence.allCases
+    }
+    
+    func set(placeOfResidence: PlaceOfResidence) {
+        onboardingInfo.placeOfResidence = placeOfResidence
+    }
+    
+    func getAllEnvironmentInfluencesTheChoice() -> [EnvironmentInfluencesTheChoice] {
+        return EnvironmentInfluencesTheChoice.allCases
+    }
+    
+    func set(environmentInfluencesTheChoice: EnvironmentInfluencesTheChoice) {
+        onboardingInfo.environmentInfluencesTheChoice = environmentInfluencesTheChoice
+    }
+    
+    func getAllBestDescriptionOfTheSituation() -> [BestDescriptionOfTheSituation] {
+        return BestDescriptionOfTheSituation.allCases
+    }
+    
+    func set(bestDescriptionOfTheSituation: BestDescriptionOfTheSituation) {
+        onboardingInfo.bestDescriptionOfTheSituation = bestDescriptionOfTheSituation
+    }
+    
+    func getAllTimeForYourself() -> [TimeForYourself] {
+        return TimeForYourself.allCases
+    }
+    
+    func set(timeForYourself: TimeForYourself) {
+        onboardingInfo.timeForYourself = timeForYourself
+    }
+    
+    func getAllJointWeightLoss() -> [JointWeightLoss] {
+        return JointWeightLoss.allCases
+    }
+    
+    func set(jointWeightLoss: JointWeightLoss) {
+        onboardingInfo.jointWeightLoss = jointWeightLoss
+    }
+    
+    func getAllLifestyleOfOthers() -> [LifestyleOfOthers] {
+        return LifestyleOfOthers.allCases
+    }
+    
+    func set(lifestyleOfOthers: LifestyleOfOthers) {
+        onboardingInfo.lifestyleOfOthers = lifestyleOfOthers
+    }
+    
+    func getAllEmotionalSupportSystem() -> [EmotionalSupportSystem] {
+        return EmotionalSupportSystem.allCases
+    }
+    
+    func set(emotionalSupportSystem: EmotionalSupportSystem) {
+        onboardingInfo.emotionalSupportSystem = emotionalSupportSystem
     }
 }

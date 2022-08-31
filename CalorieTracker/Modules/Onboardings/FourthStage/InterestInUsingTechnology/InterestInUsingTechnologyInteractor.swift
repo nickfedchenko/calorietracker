@@ -6,3 +6,31 @@
 //
 
 import Foundation
+
+protocol InterestInUsingTechnologyInteractorInterface: AnyObject {
+    func set(interestInUsingTechnology: Bool)
+}
+
+class InterestInUsingTechnologyInteractor {
+    
+    // MARK: - Public properties
+    
+    weak var presenter: InterestInUsingTechnologyPresenterInterface?
+    
+    // MARK: - Managers
+    
+    private let onboardingManager: OnboardingManagerInterface
+    
+    // MARK: - Initialization
+    
+    init(onboardingManager: OnboardingManagerInterface) {
+        self.onboardingManager = onboardingManager}
+}
+
+// MARK: - InterestInUsingTechnologyInteractorInterface
+
+extension InterestInUsingTechnologyInteractor: InterestInUsingTechnologyInteractorInterface {
+    func set(interestInUsingTechnology: Bool) {
+        onboardingManager.set(interestInUsingTechnology: interestInUsingTechnology)
+    }
+}

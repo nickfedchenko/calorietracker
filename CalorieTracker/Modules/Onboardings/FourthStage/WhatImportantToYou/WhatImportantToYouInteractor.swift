@@ -6,3 +6,30 @@
 //
 
 import Foundation
+
+protocol WhatImportantToYouInteractorInterface: AnyObject {
+    func set(whatImportantToYou: Bool)
+}
+
+class WhatImportantToYouInteractor {
+    
+    // MARK: - Public properties
+    
+    weak var presenter: WhatImportantToYouPresenterInterface?
+    
+    // MARK: - Managers
+    
+    private let onboardingManager: OnboardingManagerInterface
+    
+    // MARK: - Initialization
+    
+    init(onboardingManager: OnboardingManagerInterface) {
+        self.onboardingManager = onboardingManager
+    }
+}
+
+extension WhatImportantToYouInteractor: WhatImportantToYouInteractorInterface {
+    func set(whatImportantToYou: Bool) {
+        onboardingManager.set(whatImportantToYou: whatImportantToYou)
+    }
+}

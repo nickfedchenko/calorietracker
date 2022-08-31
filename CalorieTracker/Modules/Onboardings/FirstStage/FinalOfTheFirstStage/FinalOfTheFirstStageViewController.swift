@@ -45,8 +45,8 @@ final class FinalOfTheFirstStageViewController: UIViewController {
     }
     
     private func configureViews() {
-        view.backgroundColor = .white
-        
+        view.backgroundColor = R.color.mainBackground()
+
         passedImageView.image = R.image.onboardings.passed()
         
         let attributedString = NSMutableAttributedString()

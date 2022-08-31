@@ -6,3 +6,14 @@
 //
 
 import Foundation
+
+protocol YoureNotAloneInteractorInterface: AnyObject {}
+
+class YoureNotAloneInteractor {
+    
+    // MARK: - Public properties
+    
+    weak var presenter: YoureNotAlonePresenterInterface?
+}
+
+extension YoureNotAloneInteractor: YoureNotAloneInteractorInterface {}

@@ -6,3 +6,151 @@
 //
 
 import Foundation
+import UIKit
+
+// swiftlint:disable line_length
+
+protocol HealthAppViewControllerInterface: AnyObject {}
+
+class HealthAppViewController: UIViewController {
+    
+    // MARK: - Public properties
+    
+    var presenter: HealthAppPresenterInterface?
+    
+    // MARK: - Views properties
+    
+    private let titleLabel: UILabel = .init()
+    private let descriptionLabel: UILabel = .init()
+    private let healthAppView: UIView = .init()
+    private let healthAppImageView: UIImageView = .init()
+    private let healthAppTitleLabel: UILabel = .init()
+    private let healthAppDescriptionLabel: UILabel = .init()
+    private let arrowImageView: UIImageView = .init()
+    private let continueCommonButton: CommonButton = .init(style: .filled, text: "continue".uppercased())
+    
+    // MARK: - Initialization
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        configureBackBarButtonItem()
+        configureViews()
+        configureLayouts()
+    }
+    
+    private func configureViews() {
+        view.backgroundColor = R.color.mainBackground()
+
+        let attributedString = NSMutableAttributedString()
+
+        attributedString.append(NSAttributedString(
+            string: "Want to integrate ",
+            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]
+        ))
+        attributedString.append(NSAttributedString(
+            string: "the Health App?",
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+        ))
+        
+        titleLabel.attributedText = attributedString
+        titleLabel.numberOfLines = 0
+        titleLabel.textAlignment = .center
+        titleLabel.font = UIFont.systemFont(ofSize: 38, weight: .medium)
+        
+        descriptionLabel.text = "We’re happy to have you here. We’ll walk you through these steps to get you set up for weight loss success: "
+        descriptionLabel.numberOfLines = 0
+        descriptionLabel.textAlignment = .center
+        descriptionLabel.font = UIFont.systemFont(ofSize: 18, weight: .regular)
+        descriptionLabel.textColor = R.color.onboardings.basicDarkGray()
+        
+        healthAppView.backgroundColor = .white
+        
+        healthAppImageView.image = UIImage(named: R.image.onboardings.healthApp.name)
+        
+        healthAppTitleLabel.text = "Apple Health"
+        healthAppTitleLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        healthAppTitleLabel.textColor = R.color.onboardings.basicDark()
+        
+        healthAppDescriptionLabel.text = "Workout, Nutrition"
+        healthAppDescriptionLabel.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        healthAppDescriptionLabel.textColor = R.color.onboardings.basicDarkGray()
+        
+        arrowImageView.image = UIImage(named: R.image.onboardings.arrow.name)
+        
+        continueCommonButton.addTarget(self, action: #selector(didTapContinueCommonButton), for: .touchUpInside)
+    }
+    
+    private func configureLayouts() {
+        view.addSubview(titleLabel)
+        
+        view.addSubview(descriptionLabel)
+        
+        view.addSubview(healthAppView)
+        
+        healthAppView.addSubview(healthAppImageView)
+        healthAppView.addSubview(healthAppTitleLabel)
+        healthAppView.addSubview(healthAppDescriptionLabel)
+        healthAppView.addSubview(arrowImageView)
+        
+        view.addSubview(continueCommonButton)
+        
+        titleLabel.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
+            $0.left.equalTo(view.snp.left).offset(42)
+            $0.right.equalTo(view.snp.right).offset(-42)
+            $0.centerX.equalTo(view.snp.centerX)
+        }
+        
+        descriptionLabel.snp.makeConstraints {
+            $0.top.equalTo(titleLabel.snp.bottom).offset(60)
+            $0.left.equalTo(view.snp.left).offset(42)
+            $0.right.equalTo(view.snp.right).offset(-42)
+        }
+        
+        healthAppView.snp.makeConstraints {
+            $0.top.equalTo(descriptionLabel.snp.bottom).offset(45)
+            $0.left.equalTo(view.snp.left)
+            $0.right.equalTo(view.snp.right)
+        }
+        
+        healthAppImageView.snp.makeConstraints {
+            $0.top.equalTo(healthAppView.snp.top).offset(10)
+            $0.left.equalTo(healthAppView.snp.left).offset(10)
+            $0.bottom.equalTo(healthAppView.snp.bottom).offset(10)
+            $0.size.equalTo(70)
+        }
+        
+        healthAppTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(healthAppView.snp.top).offset(18)
+            $0.left.equalTo(healthAppImageView.snp.right).offset(10)
+        }
+        
+        healthAppDescriptionLabel.snp.makeConstraints {
+            $0.top.equalTo(healthAppTitleLabel.snp.bottom).offset(4)
+            $0.left.equalTo(healthAppImageView.snp.right).offset(10)
+        }
+        
+        arrowImageView.snp.makeConstraints {
+            $0.right.equalTo(healthAppView.snp.right).offset(-20)
+            $0.centerY.equalTo(healthAppView.snp.centerY)
+            $0.width.equalTo(15)
+            $0.height.equalTo(16)
+        }
+        
+        continueCommonButton.snp.makeConstraints {
+            $0.left.equalTo(view.snp.left).offset(40)
+            $0.right.equalTo(view.snp.right).offset(-40)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-35)
+            $0.height.equalTo(64)
+        }
+    }
+    
+    @objc func didTapContinueCommonButton() {
+        presenter?.didTapContinueCommonButton()
+    }
+}
+
+// MARK: - HealthAppViewControllerInterface
+
+extension HealthAppViewController: HealthAppViewControllerInterface {}

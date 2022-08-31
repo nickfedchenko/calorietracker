@@ -19,6 +19,7 @@ final class NutritionImprovementViewController: UIViewController {
     // MARK: - Views properties
 
     private let plugView: UIView = .init()
+    private let stackView: UIStackView = .init()
     private let imageView: UIImageView = .init()
     private let titleLabel: UILabel = .init()
     private let approvalCommonButton: CommonButton = .init(style: .bordered, text: "Yes".uppercased())
@@ -40,6 +41,10 @@ final class NutritionImprovementViewController: UIViewController {
         view.backgroundColor = R.color.mainBackground()
         
         plugView.backgroundColor = R.color.onboardings.radialGradientFirst()
+        
+        stackView.spacing = 24
+        stackView.alignment = .center
+        stackView.axis = .vertical
         
         imageView.image = UIImage(named: R.image.onboardings.burger.name)
         
@@ -70,9 +75,10 @@ final class NutritionImprovementViewController: UIViewController {
     private func configureLayouts() {
         view.addSubview(plugView)
         
-        view.addSubview(imageView)
+        view.addSubview(stackView)
         
-        view.addSubview(titleLabel)
+        stackView.addArrangedSubview(imageView)
+        stackView.addArrangedSubview(titleLabel)
         
         view.addSubview(approvalCommonButton)
         
@@ -86,16 +92,15 @@ final class NutritionImprovementViewController: UIViewController {
             $0.height.equalTo(30)
         }
         
-        imageView.snp.makeConstraints {
-            $0.centerY.equalTo(view.snp.centerY)
-            $0.centerX.equalTo(view.snp.centerX)
-            $0.size.equalTo(96)
-        }
-        
-        titleLabel.snp.makeConstraints {
-            $0.top.equalTo(imageView.snp.bottom).offset(24)
+        stackView.snp.makeConstraints {
             $0.left.equalTo(view.snp.left).offset(43)
             $0.right.equalTo(view.snp.right).offset(-43)
+            $0.centerY.equalTo(view.snp.centerY)
+            $0.centerX.equalTo(view.snp.centerX)
+        }
+        
+        imageView.snp.makeConstraints {
+            $0.size.equalTo(96)
         }
         
         approvalCommonButton.snp.makeConstraints {
@@ -121,5 +126,7 @@ final class NutritionImprovementViewController: UIViewController {
         presenter?.didTapRejectionCommonButton()
     }
 }
+
+// MARK: - NutritionImprovementViewControllerInterface
 
 extension NutritionImprovementViewController: NutritionImprovementViewControllerInterface {}

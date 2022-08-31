@@ -5,4 +5,9 @@
 //  Created by Алексей on 31.08.2022.
 //
 
-import Foundation
+enum TimeForYourself: CaseIterable {
+    case nearlyNone
+    case littleBitHereAndThere
+    case goodAmount
+    case asMuchAsWant
+}

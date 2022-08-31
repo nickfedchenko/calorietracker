@@ -29,6 +29,8 @@ class CurrentLifestileInteractor {
     }
 }
 
+// MARK: - CurrentLifestileInteractorInterface
+
 extension CurrentLifestileInteractor: CurrentLifestileInteractorInterface {
     func getAllCurrentLifestile() -> [CurrentLifestile] {
         return onboardingManager.getAllCurrentLifestile()

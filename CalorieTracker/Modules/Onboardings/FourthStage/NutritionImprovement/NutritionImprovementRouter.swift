@@ -7,7 +7,9 @@
 
 import UIKit
 
-protocol NutritionImprovementRouterInterface: AnyObject {}
+protocol NutritionImprovementRouterInterface: AnyObject {
+    func openImprovingNutrition()
+}
 
 class NutritionImprovementRouter {
     
@@ -38,4 +40,12 @@ class NutritionImprovementRouter {
     }
 }
 
-extension NutritionImprovementRouter: NutritionImprovementRouterInterface {}
+// MARK: - NutritionImprovementRouterInterface
+
+extension NutritionImprovementRouter: NutritionImprovementRouterInterface {
+    func openImprovingNutrition() {
+        let improvingNutritionRouter = ImprovingNutritionRouter.setupModule()
+        
+        viewController?.navigationController?.pushViewController(improvingNutritionRouter, animated: true)
+    }
+}

@@ -5,4 +5,10 @@
 //  Created by Алексей on 30.08.2022.
 //
 
-import Foundation
+enum SequenceOfHabitFormation: CaseIterable {
+    case logEachMealBeforeYouTakeTheFirstBite
+    case logImmediatelyAfterEachMeal
+    case logAllOfYoutMealsBeforeTheDayStarts
+    case logAllOfYourMealsAtTheEndOfTheDay
+    case imNotSureImStillFiguringOutWhatWillWorkForMe
+}

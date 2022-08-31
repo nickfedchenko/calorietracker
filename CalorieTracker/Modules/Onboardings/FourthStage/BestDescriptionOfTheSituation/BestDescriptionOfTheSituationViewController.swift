@@ -6,3 +6,169 @@
 //
 
 import Foundation
+import UIKit
+
+protocol BestDescriptionOfTheSituationViewControllerInterface: AnyObject {
+    func set(bestDescriptionOfTheSituation: [BestDescriptionOfTheSituation])
+}
+
+final class BestDescriptionOfTheSituationViewController: UIViewController {
+    
+    // MARK: - Public properties
+    
+    var presenter: BestDescriptionOfTheSituationPresenterInterface?
+    
+    // MARK: - Private properties
+    
+    var isHedden: Bool = false {
+        didSet { didChangeIsHeaden() }
+    }
+    
+    // MARK: - Views properties
+    
+    private let stageCounterView: StageCounterView = .init()
+    private let titleLabel: UILabel = .init()
+    private let stackView: UIStackView = .init()
+    private var answerOptions: [AnswerOption] = []
+    private let continueCommonButton: CommonButton = .init(style: .filled, text: "continue".uppercased())
+    
+    // MARK: - Lifecycle methods
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        presenter?.viewDidLoad()
+        
+        configureBackBarButtonItem()
+        configureViews()
+        configureLayouts()
+    }
+    
+    private func configureViews() {
+        title = "Habits"
+        
+        view.backgroundColor = R.color.mainBackground()
+        
+        titleLabel.text = "What best describes your living situation?"
+        titleLabel.textColor = R.color.onboardings.basicDark()
+        titleLabel.textAlignment = .center
+        titleLabel.numberOfLines = 0
+        titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .medium)
+        
+        stackView.axis = .vertical
+        stackView.spacing = 12
+        
+        continueCommonButton.isHidden = true
+        continueCommonButton.addTarget(self, action: #selector(didTapContinueCommonButton), for: .touchUpInside)
+    }
+    
+    private func configureLayouts() {
+        view.addSubview(stageCounterView)
+
+        view.addSubview(titleLabel)
+        
+        view.addSubview(stackView)
+        
+        view.addSubview(continueCommonButton)
+        
+        stageCounterView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
+            $0.left.equalTo(view.snp.left).offset(100)
+            $0.right.equalTo(view.snp.right).offset(-100)
+            $0.centerX.equalTo(view.snp.centerX)
+            $0.height.equalTo(30)
+        }
+        
+        titleLabel.snp.makeConstraints {
+            $0.top.equalTo(stageCounterView.snp.bottom).offset(40)
+            $0.left.equalTo(view.snp.left).offset(43)
+            $0.right.equalTo(view.snp.right).offset(-43)
+            $0.centerX.equalTo(view.snp.centerX)
+        }
+        
+        stackView.snp.makeConstraints {
+            $0.top.equalTo(titleLabel.snp.bottom).offset(40)
+            $0.left.equalTo(view.snp.left).offset(40)
+            $0.right.equalTo(view.snp.right).offset(-40)
+        }
+        
+        continueCommonButton.snp.makeConstraints {
+            $0.left.equalTo(view.snp.left).offset(40)
+            $0.right.equalTo(view.snp.right).offset(-40)
+            $0.bottom.equalTo(view.snp.bottom).offset(-35)
+            $0.height.equalTo(64)
+        }
+    }
+    
+    @objc func didTapAnswerOption(_ sender: AnswerOption) {
+        answerOptions.enumerated().forEach { index, answerOption in
+            if answerOption == sender {
+                let isSelected = !answerOption.isSelected
+                
+                answerOption.isSelected = isSelected
+                
+            } else {
+                answerOption.isSelected = false
+            }
+        }
+        
+        if answerOptions.contains(where: { $0.isSelected == true }) {
+            answerOptions.forEach { $0.isTransparent = !$0.isSelected }
+        } else {
+            answerOptions.forEach { $0.isTransparent = false }
+        }
+        
+        continueCommonButton.isHidden = !answerOptions.contains(where: { $0.isSelected == true })
+    }
+    
+    @objc func didTapContinueCommonButton() {
+        presenter?.didTapContinueCommonButton()
+    }
+    
+    private func didChangeIsHeaden() {
+        if isHedden {
+            continueCommonButton.isHidden = false
+        } else {
+            continueCommonButton.isHidden = true
+        }
+    }
+}
+
+// MARK: - PlaceOfResidenceViewControllerInterface
+
+extension BestDescriptionOfTheSituationViewController: BestDescriptionOfTheSituationViewControllerInterface {
+    func set(bestDescriptionOfTheSituation: [BestDescriptionOfTheSituation]) {
+        stackView.removeAllArrangedSubviews()
+        answerOptions = []
+        
+        for bestDescriptionOfTheSituation in bestDescriptionOfTheSituation {
+            let answerOption = AnswerOption(text: bestDescriptionOfTheSituation.description)
+            
+            answerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
+            
+            stackView.addArrangedSubview(answerOption)
+            answerOptions.append(answerOption)
+        }
+    }
+}
+
+// MARK: - BestDescriptionOfTheSituation + description
+
+fileprivate extension BestDescriptionOfTheSituation {
+    var description: String {
+        switch self {
+        case .liveOnMyOwn:
+            return "I live on my own"
+        case .liveWithMyFamily:
+            return "I live with my family"
+        case .liveWithPartner:
+            return "I live with a partner"
+        case .livewithRoommates:
+            return "I live with roommates"
+        case .liveInSharedHousing:
+            return "I live in shared housing"
+        case .somethingElse:
+            return "Something else"
+        }
+    }
+}

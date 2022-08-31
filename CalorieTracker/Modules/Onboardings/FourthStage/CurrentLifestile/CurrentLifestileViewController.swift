@@ -52,7 +52,7 @@ final class CurrentLifestileViewController: UIViewController {
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: "How would you ndescribe your current ",
+            string: "How would you describe your current ",
             attributes: [.foregroundColor: R.color.onboardings.basicDark()]
         ))
         

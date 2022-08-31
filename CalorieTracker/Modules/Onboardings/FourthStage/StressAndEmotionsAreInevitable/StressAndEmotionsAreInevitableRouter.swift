@@ -7,7 +7,9 @@
 
 import UIKit
 
-protocol StressAndEmotionsAreInevitableRouterInterface: AnyObject {}
+protocol StressAndEmotionsAreInevitableRouterInterface: AnyObject {
+    func openYoureNotAlone()
+}
 
 class StressAndEmotionsAreInevitableRouter {
     
@@ -38,4 +40,13 @@ class StressAndEmotionsAreInevitableRouter {
 
 // MARK: - StressAndEmotionsAreInevitableRouterInterface
 
-extension StressAndEmotionsAreInevitableRouter: StressAndEmotionsAreInevitableRouterInterface {}
+extension StressAndEmotionsAreInevitableRouter: StressAndEmotionsAreInevitableRouterInterface {
+    func openYoureNotAlone() {
+        let youreNotAloneRouter = YoureNotAloneRouter.setupModule()
+        
+        viewController?.navigationController?.pushViewController(
+            youreNotAloneRouter,
+            animated: true
+        )
+    }
+}

@@ -6,3 +6,43 @@
 //
 
 import Foundation
+
+protocol ThoughtsOnStressEatingPresenterInterface: AnyObject {
+    func didTapApprovalCommonButton()
+    func didTapRejectionCommonButton()
+}
+
+class ThoughtsOnStressEatingPresenter {
+    
+    // MARK: - Public properties
+    
+    unowned var view: ThoughtsOnStressEatingViewControllerInterface
+    let router: ThoughtsOnStressEatingRouterInterface?
+    let interactor: ThoughtsOnStressEatingInteractorInterface?
+
+    // MARK: - Initialization
+    
+    init(
+        interactor: ThoughtsOnStressEatingInteractorInterface,
+        router: ThoughtsOnStressEatingRouterInterface,
+        view: ThoughtsOnStressEatingViewControllerInterface
+      ) {
+        self.view = view
+        self.interactor = interactor
+        self.router = router
+    }
+}
+
+// MARK: - ThoughtsOnStressEatingPresenterInterface
+
+extension ThoughtsOnStressEatingPresenter: ThoughtsOnStressEatingPresenterInterface {
+    func didTapApprovalCommonButton() {
+        interactor?.set(thoughtsOnStressEating: true)
+        router?.openHelpingPeopleTrackCalories()
+    }
+    
+    func didTapRejectionCommonButton() {
+        interactor?.set(thoughtsOnStressEating: false)
+        router?.openHelpingPeopleTrackCalories()
+    }
+}

@@ -6,3 +6,14 @@
 //
 
 import Foundation
+
+protocol CalorieTrackingViaKcalcInteractorInterface: AnyObject {}
+
+class CalorieTrackingViaKcalcInteractor {
+    
+    // MARK: - Public properties
+    
+    weak var presenter: CalorieTrackingViaKcalcPresenterInterface?
+}
+
+extension CalorieTrackingViaKcalcInteractor: CalorieTrackingViaKcalcInteractorInterface {}

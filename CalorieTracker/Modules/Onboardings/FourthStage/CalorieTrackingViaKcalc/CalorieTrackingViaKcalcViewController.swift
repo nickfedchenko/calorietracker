@@ -6,3 +6,104 @@
 //
 
 import Foundation
+import UIKit
+
+protocol CalorieTrackingViaKcalcViewControllerInterface: AnyObject {}
+
+final class CalorieTrackingViaKcalcViewController: UIViewController {
+    
+    // MARK: - Public properties
+    
+    var presenter: CalorieTrackingViaKcalcPresenterInterface?
+    
+    // MARK: - Views properties
+    
+    private let topImage: UIImage = R.image.onboardings.topImages() ?? UIImage()
+    private let topImageView: UIImageView = .init()
+    private let titleLabel: UILabel = .init()
+    private let getStartedSignInAppleButton: SignInAppleButton = .init()
+    private let descriptionLabel: UILabel = .init()
+    
+    // MARK: - Lifecycle methods
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        configureViews()
+        configureLayouts()
+    }
+    
+    private func configureViews() {
+        view.backgroundColor = R.color.mainBackground()
+        
+        topImageView.image = topImage
+        
+        let attributedString = NSMutableAttributedString()
+
+        attributedString.append(NSAttributedString(
+            string: "Get the best calorie tracking recommendations and ",
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+        ))
+        attributedString.append(NSAttributedString(
+            string: "stay fit with Kcalc",
+            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]
+        ))
+        
+        titleLabel.attributedText = attributedString
+        titleLabel.numberOfLines = 0
+        titleLabel.textAlignment = .center
+        titleLabel.font = UIFont.systemFont(ofSize: 38, weight: .medium)
+        
+        getStartedSignInAppleButton.addTarget(self, action: #selector(didTapGetStartedSignInAppleButton),
+                                              for: .touchUpInside)
+        
+        descriptionLabel.text = "Сontinue without registration"
+        descriptionLabel.numberOfLines = 0
+        descriptionLabel.textAlignment = .center
+        descriptionLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        descriptionLabel.textColor = R.color.onboardings.basicDarkGray()
+    }
+    
+    private func configureLayouts() {
+        view.addSubview(topImageView)
+        
+        view.addSubview(titleLabel)
+        
+        view.addSubview(getStartedSignInAppleButton)
+        
+        view.addSubview(descriptionLabel)
+        
+        topImageView.snp.makeConstraints {
+            $0.top.equalTo(view.snp.top)
+            $0.left.equalTo(view.snp.left)
+            $0.right.equalTo(view.snp.right)
+            $0.width.equalTo(topImageView.snp.height).multipliedBy(topImage.size.width / topImage.size.height)
+        }
+        
+        titleLabel.snp.makeConstraints {
+            $0.left.equalTo(view.snp.left).offset(40)
+            $0.right.equalTo(view.snp.right).offset(-40)
+            $0.centerX.equalTo(view.snp.centerX)
+            $0.centerY.equalTo(view.snp.centerY)
+        }
+        
+        getStartedSignInAppleButton.snp.makeConstraints {
+            $0.left.equalTo(view.snp.left).offset(40)
+            $0.right.equalTo(view.snp.right).offset(-40)
+            $0.height.equalTo(64)
+        }
+        
+        descriptionLabel.snp.makeConstraints {
+            $0.top.equalTo(getStartedSignInAppleButton.snp.bottom).offset(30)
+            $0.left.equalTo(view.snp.left).offset(40)
+            $0.right.equalTo(view.snp.right).offset(-40)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-35)
+        }
+    }
+    
+    @objc private func didTapGetStartedSignInAppleButton() {
+        print("didTapGetStartedSignInAppleButton")
+    }
+}
+
+extension CalorieTrackingViaKcalcViewController: CalorieTrackingViaKcalcViewControllerInterface {}

@@ -38,6 +38,8 @@ class CurrentLifestileRouter {
     }
 }
 
+// MARK: - CurrentLifestileRouterInterface
+
 extension CurrentLifestileRouter: CurrentLifestileRouterInterface {
     func openNutritionImprovement() {
         let nutritionImprovementRouter = NutritionImprovementRouter.setupModule()

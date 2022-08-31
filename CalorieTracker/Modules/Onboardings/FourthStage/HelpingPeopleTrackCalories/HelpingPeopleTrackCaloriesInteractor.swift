@@ -6,3 +6,16 @@
 //
 
 import Foundation
+
+protocol HelpingPeopleTrackCaloriesInteractorInterface: AnyObject {}
+
+class HelpingPeopleTrackCaloriesInteractor {
+    
+    // MARK: - Public properties
+    
+    weak var presenter: HelpingPeopleTrackCaloriesPresenterInterface?
+}
+
+// MARK: - HelpingPeopleTrackCaloriesInteractorInterface
+
+extension HelpingPeopleTrackCaloriesInteractor: HelpingPeopleTrackCaloriesInteractorInterface {}

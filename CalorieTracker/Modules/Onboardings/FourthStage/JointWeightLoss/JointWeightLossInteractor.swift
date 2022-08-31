@@ -6,3 +6,37 @@
 //
 
 import Foundation
+
+protocol JointWeightLossInteractorInterface: AnyObject {
+    func getAllJointWeightLoss() -> [JointWeightLoss]
+    func set(jointWeightLoss: JointWeightLoss)
+}
+
+class JointWeightLossInteractor {
+    
+    // MARK: - Public properties
+    
+    weak var presenter: JointWeightLossPresenterInterface?
+    
+    // MARK: - Managers
+    
+    private let onboardingManager: OnboardingManagerInterface
+    
+    // MARK: - Initialization
+    
+    init(onboardingManager: OnboardingManagerInterface) {
+        self.onboardingManager = onboardingManager
+    }
+}
+
+// MARK: - JointWeightLossInteractorInterface
+
+extension JointWeightLossInteractor: JointWeightLossInteractorInterface {
+    func getAllJointWeightLoss() -> [JointWeightLoss] {
+        return onboardingManager.getAllJointWeightLoss()
+    }
+    
+    func set(jointWeightLoss: JointWeightLoss) {
+        onboardingManager.set(jointWeightLoss: jointWeightLoss)
+    }
+}

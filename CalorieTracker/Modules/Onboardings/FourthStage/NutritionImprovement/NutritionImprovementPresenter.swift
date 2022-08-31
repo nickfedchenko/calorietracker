@@ -33,11 +33,15 @@ class NutritionImprovementPresenter {
     }
 }
 
+// MARK: - NutritionImprovementPresenterInterface
+
 extension NutritionImprovementPresenter: NutritionImprovementPresenterInterface {
     func didTapApprovalCommonButton() {
         interactor?.set(nutritionImprovement: true)
+        router?.openImprovingNutrition()
     }
     func didTapRejectionCommonButton() {
         interactor?.set(nutritionImprovement: false)
+        router?.openImprovingNutrition()
     }
 }

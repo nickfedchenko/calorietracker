@@ -6,3 +6,37 @@
 //
 
 import Foundation
+
+protocol SequenceOfHabitFormationInteractorInterface: AnyObject {
+    func getAllSequenceOfHabitFormation() -> [SequenceOfHabitFormation]
+    func set(sequenceOfHabitFormation: SequenceOfHabitFormation)
+}
+
+class SequenceOfHabitFormationInteractor {
+    
+    // MARK: - Public properties
+    
+    weak var presenter: SequenceOfHabitFormationPresenterInterface?
+    
+    // MARK: - Managers
+    
+    private let onboardingManager: OnboardingManagerInterface
+    
+    // MARK: - Initialization
+    
+    init(onboardingManager: OnboardingManagerInterface) {
+        self.onboardingManager = onboardingManager
+    }
+}
+
+// MARK: - SequenceOfHabitFormationInteractorInterface
+
+extension SequenceOfHabitFormationInteractor: SequenceOfHabitFormationInteractorInterface {
+    func getAllSequenceOfHabitFormation() -> [SequenceOfHabitFormation] {
+        return onboardingManager.getAllSequenceOfHabitFormation()
+    }
+    
+    func set(sequenceOfHabitFormation: SequenceOfHabitFormation) {
+        onboardingManager.set(sequenceOfHabitFormation: sequenceOfHabitFormation)
+    }
+}

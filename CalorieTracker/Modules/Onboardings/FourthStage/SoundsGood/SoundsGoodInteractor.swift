@@ -6,3 +6,16 @@
 //
 
 import Foundation
+
+protocol SoundsGoodInteractorInterface: AnyObject {}
+
+class SoundsGoodInteractor {
+    
+    // MARK: - Public properties
+    
+    weak var presenter: SoundsGoodPresenterInterface?
+}
+
+// MARK: - SoundsGoodInteractorInterface
+
+extension SoundsGoodInteractor: SoundsGoodInteractorInterface {}
