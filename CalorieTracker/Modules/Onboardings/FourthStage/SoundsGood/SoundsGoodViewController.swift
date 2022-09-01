@@ -101,5 +101,6 @@ final class SoundsGoodViewController: UIViewController {
     }
 }
 
+// MARK: - SoundsGoodViewControllerInterface
 
 extension SoundsGoodViewController: SoundsGoodViewControllerInterface {}

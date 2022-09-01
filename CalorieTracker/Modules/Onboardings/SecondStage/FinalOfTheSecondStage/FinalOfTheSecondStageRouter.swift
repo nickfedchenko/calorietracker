@@ -5,15 +5,18 @@
 //  Created by Алексей on 28.08.2022.
 //
 
-import Foundation
+import UIKit
 
-protocol FinalOfTheSecondStageRouterInterface: AnyObject {}
+protocol FinalOfTheSecondStageRouterInterface: AnyObject {
+    func openImportanceOfWeightLoss()
+}
 
 class FinalOfTheSecondStageRouter {
     
     // MARK: - Public properties
 
     weak var presenter: FinalOfTheSecondStagePresenterInterface?
+    weak var viewController: UIViewController?
     
     static func setupModule() -> FinalOfTheSecondStageViewController {
         let vc = FinalOfTheSecondStageViewController()
@@ -27,6 +30,7 @@ class FinalOfTheSecondStageRouter {
 
         vc.presenter = presenter
         router.presenter = presenter
+        router.viewController = vc
         interactor.presenter = presenter
         return vc
     }
@@ -34,4 +38,10 @@ class FinalOfTheSecondStageRouter {
 
 // MARK: - FinalOfTheSecondStageRouterInterface
 
-extension FinalOfTheSecondStageRouter: FinalOfTheSecondStageRouterInterface {}
+extension FinalOfTheSecondStageRouter: FinalOfTheSecondStageRouterInterface {
+    func openImportanceOfWeightLoss() {
+        let importanceOfWeightLossRouter = ImportanceOfWeightLossRouter.setupModule()
+        
+        viewController?.navigationController?.pushViewController(importanceOfWeightLossRouter, animated: true)
+    }
+}

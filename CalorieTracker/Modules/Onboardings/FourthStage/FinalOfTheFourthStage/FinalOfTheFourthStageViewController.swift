@@ -194,4 +194,6 @@ final class FinalOfTheFourthStageViewController: UIViewController {
     }
 }
 
+// MARK: - FinalOfTheFourthStageViewControllerInterface
+
 extension FinalOfTheFourthStageViewController: FinalOfTheFourthStageViewControllerInterface {}

@@ -7,7 +7,9 @@
 
 import UIKit
 
-protocol FinalOfTheThirdStageRouterInterface: AnyObject {}
+protocol FinalOfTheThirdStageRouterInterface: AnyObject {
+    func openCurrentLifestile()
+}
 
 class FinalOfTheThirdStageRouter {
     
@@ -36,4 +38,12 @@ class FinalOfTheThirdStageRouter {
     }
 }
 
-extension FinalOfTheThirdStageRouter: FinalOfTheThirdStageRouterInterface {}
+// MARK: - FinalOfTheThirdStageRouterInterface
+
+extension FinalOfTheThirdStageRouter: FinalOfTheThirdStageRouterInterface {
+    func openCurrentLifestile() {
+        let currentLifestileRouter = CurrentLifestileRouter.setupModule()
+        
+        viewController?.navigationController?.pushViewController(currentLifestileRouter, animated: true)
+    }
+}

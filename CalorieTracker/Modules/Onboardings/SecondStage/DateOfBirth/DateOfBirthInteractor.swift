@@ -7,7 +7,10 @@
 
 import Foundation
 
-protocol DateOfBirthInteractorInterface: AnyObject {}
+protocol DateOfBirthInteractorInterface: AnyObject {
+    func set(dateOfBirth: String)
+    func getCurrentOnboardingStage() -> OnboardingStage
+}
 
 class DateOfBirthInteractor {
     
@@ -28,4 +31,12 @@ class DateOfBirthInteractor {
 
 // MARK: - DateOfBirthInteractorInterface
 
-extension DateOfBirthInteractor: DateOfBirthInteractorInterface {}
+extension DateOfBirthInteractor: DateOfBirthInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
+    func set(dateOfBirth: String) {
+        onboardingManager.set(dateOfBirth: dateOfBirth)
+    }
+}

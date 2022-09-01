@@ -36,4 +36,6 @@ class CalorieTrackingViaKcalcRouter {
     }
 }
 
+// MARK: - CalorieTrackingViaKcalcRouterInterface
+
 extension CalorieTrackingViaKcalcRouter: CalorieTrackingViaKcalcRouterInterface {}

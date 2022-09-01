@@ -38,6 +38,8 @@ class EmotionalSupportSystemRouter {
     }
 }
 
+// MARK: - EmotionalSupportSystemRouterInterface
+
 extension EmotionalSupportSystemRouter: EmotionalSupportSystemRouterInterface {
     func openHealthApp() {
         let healthAppRouter = HealthAppRouter.setupModule()

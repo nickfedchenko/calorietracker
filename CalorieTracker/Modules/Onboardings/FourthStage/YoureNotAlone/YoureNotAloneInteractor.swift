@@ -16,4 +16,6 @@ class YoureNotAloneInteractor {
     weak var presenter: YoureNotAlonePresenterInterface?
 }
 
+// MARK: - YoureNotAloneInteractorInterface
+
 extension YoureNotAloneInteractor: YoureNotAloneInteractorInterface {}

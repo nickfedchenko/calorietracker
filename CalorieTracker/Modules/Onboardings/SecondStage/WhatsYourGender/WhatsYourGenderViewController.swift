@@ -12,6 +12,7 @@ import UIKit
 
 protocol WhatsYourGenderViewControllerInterface: AnyObject {
     func set(whatsYourGender: [WhatsYourGender])
+    func set(currentOnboardingStage: OnboardingStage)
 }
 
 final class WhatsYourGenderViewController: UIViewController {
@@ -73,7 +74,6 @@ final class WhatsYourGenderViewController: UIViewController {
         stageCounterView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
             $0.centerX.equalTo(view.snp.centerX)
-            $0.height.equalTo(30)
         }
         
         titleLabel.snp.makeConstraints {
@@ -128,6 +128,10 @@ final class WhatsYourGenderViewController: UIViewController {
 // MARK: - WhatsYourGenderViewControllerInterface
 
 extension WhatsYourGenderViewController: WhatsYourGenderViewControllerInterface {
+    func set(currentOnboardingStage: OnboardingStage) {
+        stageCounterView.set(onboardingStage: currentOnboardingStage)
+    }
+    
     func set(whatsYourGender: [WhatsYourGender]) {
         stackView.removeAllArrangedSubviews()
         variabilityResponses = []

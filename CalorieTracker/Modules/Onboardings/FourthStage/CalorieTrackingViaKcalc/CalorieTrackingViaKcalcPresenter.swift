@@ -30,4 +30,6 @@ class CalorieTrackingViaKcalcPresenter {
     }
 }
 
+// MARK: - CalorieTrackingViaKcalcPresenterInterface
+
 extension CalorieTrackingViaKcalcPresenter: CalorieTrackingViaKcalcPresenterInterface {}

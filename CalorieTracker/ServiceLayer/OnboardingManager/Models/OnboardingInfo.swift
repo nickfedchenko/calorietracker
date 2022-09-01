@@ -21,12 +21,16 @@ struct OnboardingInfo {
     var enterYourName: String?
     var whatsYourGender: WhatsYourGender?
     var measurementSystem: MeasurementSystem?
+    var dateOfBirth: String?
+    var yourHeight: String?
+    var yourWeight: String?
     var risksOfDiseases: RisksOfDiseases?
     var presenceOfAllergies: PresenceOfAllergies?
     var allergicRestrictions: AllergicRestrictions?
     var importanceOfWeightLoss: ImportanceOfWeightLoss?
     var thoughtsAboutChangingFeelings: ThoughtsAboutChangingFeelings?
     var lifeChangesAfterWeightLoss: LifeChangesAfterWeightLoss?
+    var whatIsYourGoalWeight: String?
     var currentLifestile: CurrentLifestile?
     var nutritionImprovement: Bool?
     var improvingNutrition: ImprovingNutrition?
@@ -46,4 +50,90 @@ struct OnboardingInfo {
     var jointWeightLoss: JointWeightLoss?
     var lifestyleOfOthers: LifestyleOfOthers?
     var emotionalSupportSystem: EmotionalSupportSystem?
+    
+    private var firstStageData: [Any?] {
+        return [
+            isHaveYouTriedToLoseWeightBefor,
+            descriptionOfExperience,
+            purposeOfTheParish,
+            recentWeightChanges,
+            questionAboutTheChange,
+            achievingDifficultGoal,
+            lastCalorieCount,
+            calorieCount,
+            previousApplication,
+            obsessingOverFood,
+            theEffectOfWeight,
+            formationGoodHabits
+        ]
+    }
+    
+    private var secondStageData: [Any?] {
+        return [
+            enterYourName,
+            whatsYourGender,
+            measurementSystem,
+            dateOfBirth,
+            yourHeight,
+            yourWeight,
+            risksOfDiseases,
+            presenceOfAllergies,
+            allergicRestrictions
+        ]
+    }
+    
+    private var thirdStageData: [Any?] {
+        return [
+            importanceOfWeightLoss,
+            thoughtsAboutChangingFeelings,
+            lifeChangesAfterWeightLoss,
+            whatIsYourGoalWeight
+        ]
+    }
+    
+    private var fourthStageData: [Any?] {
+        return [
+            currentLifestile,
+            nutritionImprovement,
+            improvingNutrition,
+            increasingYourActivityLevel,
+            howImproveYourEfficiency,
+            representationOfIncreasedActivityLevels,
+            sequenceOfHabitFormation,
+            descriptionOfCulinarySkills,
+            whatImportantToYou,
+            thoughtsOnStressEating,
+            difficultyChoosingLifestyle,
+            interestInUsingTechnology,
+            placeOfResidence,
+            environmentInfluencesTheChoice,
+            bestDescriptionOfTheSituation,
+            timeForYourself,
+            jointWeightLoss,
+            lifestyleOfOthers,
+            emotionalSupportSystem
+        ]
+    }
+}
+
+// MARK: - Stages data
+
+extension OnboardingInfo {
+    var currentOnboardingStage: OnboardingStage {
+        let filledDataCount = firstStageData.filter { $0 != nil }.count
+        
+        return .first(progress: Double(filledDataCount) / Double(firstStageData.count))
+        
+        if firstStageData.contains(where: { $0 == nil }) {
+            let filledDataCount = firstStageData.filter { $0 != nil }.count
+
+            return .first(progress: Double(filledDataCount) / Double(firstStageData.count))
+//        } else if onboardingInfo.seconStageData.contains(where: { $0 == nil }) {
+//            return .second
+//        } else if onboardingInfo.thirdStageData.contains(where: { $0 == nil }) {
+//            return .third
+//        } else {
+//            return .fourth
+        }
+    }
 }

@@ -12,6 +12,7 @@ import UIKit
 
 protocol ObsessingOverFoodViewControllerInterface: AnyObject {
     func set(obsessingOverFood: [ObsessingOverFood])
+    func set(currentOnboardingStage: OnboardingStage)
 }
 
 final class ObsessingOverFoodViewController: UIViewController {
@@ -85,10 +86,7 @@ final class ObsessingOverFoodViewController: UIViewController {
         
         stageCounterView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
-            $0.left.equalTo(view.snp.left).offset(100)
-            $0.right.equalTo(view.snp.right).offset(-100)
             $0.centerX.equalTo(view.snp.centerX)
-            $0.height.equalTo(30)
         }
         
         titleLabel.snp.makeConstraints {
@@ -150,6 +148,10 @@ final class ObsessingOverFoodViewController: UIViewController {
 // MARK: - ObsessingOverFoodViewController
 
 extension ObsessingOverFoodViewController: ObsessingOverFoodViewControllerInterface {
+    func set(currentOnboardingStage: OnboardingStage) {
+        stageCounterView.set(onboardingStage: currentOnboardingStage)
+    }
+    
     func set(obsessingOverFood: [ObsessingOverFood]) {
         stackView.removeAllArrangedSubviews()
         answerOptions = []

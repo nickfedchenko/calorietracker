@@ -8,7 +8,9 @@
 import Foundation
 import UIKit
 
-protocol EnterYourNameViewControllerInterface: AnyObject {}
+protocol EnterYourNameViewControllerInterface: AnyObject {
+    func set(currentOnboardingStage: OnboardingStage)
+}
 
 final class EnterYourNameViewController: UIViewController {
     
@@ -82,7 +84,6 @@ final class EnterYourNameViewController: UIViewController {
         stageCounterView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
             $0.centerX.equalTo(view.snp.centerX)
-            $0.height.equalTo(30)
         }
         
         titleLabel.snp.makeConstraints {
@@ -115,4 +116,8 @@ final class EnterYourNameViewController: UIViewController {
 
 // MARK: - EnterYourNameViewControllerInterface
 
-extension EnterYourNameViewController: EnterYourNameViewControllerInterface {}
+extension EnterYourNameViewController: EnterYourNameViewControllerInterface {
+    func set(currentOnboardingStage: OnboardingStage) {
+        stageCounterView.set(onboardingStage: currentOnboardingStage)
+    }
+}

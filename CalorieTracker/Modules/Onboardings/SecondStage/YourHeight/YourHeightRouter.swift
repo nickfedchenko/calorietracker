@@ -22,7 +22,7 @@ class YourHeightRouter {
     
     static func setupModule() -> YourHeightViewController {
         let vc = YourHeightViewController()
-        let interactor = YourHeightInteractor()
+        let interactor = YourHeightInteractor(onboardingManager: OnboardingManager.shared)
         let router = YourHeightRouter()
         let presenter = YourHeightPresenter(
             interactor: interactor,

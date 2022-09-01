@@ -28,6 +28,8 @@ class WhatImportantToYouInteractor {
     }
 }
 
+// MARK: - WhatImportantToYouInteractorInterface
+
 extension WhatImportantToYouInteractor: WhatImportantToYouInteractorInterface {
     func set(whatImportantToYou: Bool) {
         onboardingManager.set(whatImportantToYou: whatImportantToYou)

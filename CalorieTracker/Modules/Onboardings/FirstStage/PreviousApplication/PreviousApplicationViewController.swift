@@ -12,6 +12,7 @@ import UIKit
 
 protocol PreviousApplicationViewControllerInterface: AnyObject {
     func set(previousApplication: [PreviousApplication])
+    func set(currentOnboardingStage: OnboardingStage)
 }
 
 final class PreviousApplicationViewController: UIViewController {
@@ -93,9 +94,8 @@ final class PreviousApplicationViewController: UIViewController {
         }
         
         stageCounterView.snp.makeConstraints {
-            $0.top.equalTo(contentView.snp.top).offset(30)
+            $0.top.equalTo(contentView.safeAreaLayoutGuide.snp.top).offset(30)
             $0.centerX.equalTo(contentView.snp.centerX)
-            $0.height.equalTo(30)
         }
         
         titleLabel.snp.makeConstraints {
@@ -157,6 +157,10 @@ final class PreviousApplicationViewController: UIViewController {
 // MARK: - PreviousApplicationViewController
 
 extension PreviousApplicationViewController: PreviousApplicationViewControllerInterface {
+    func set(currentOnboardingStage: OnboardingStage) {
+        stageCounterView.set(onboardingStage: currentOnboardingStage)
+    }
+    
     func set(previousApplication: [PreviousApplication]) {
         stackView.removeAllArrangedSubviews()
         answerOptions = []

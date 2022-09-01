@@ -47,6 +47,10 @@ extension WhatsYourGenderPresenter: WhatsYourGenderPresenterInterface {
         whatsYourGender = interactor?.getAllWhatsYourGender() ?? []
         
         view.set(whatsYourGender: whatsYourGender)
+        
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
     }
     
     func didTapContinueCommonButton() {

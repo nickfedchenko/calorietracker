@@ -47,6 +47,10 @@ extension AchievingDifficultGoalPresenter: AchievingDifficultGoalPresenterInterf
         achievingDifficultGoal = interactor?.getAllAchievingDifficultGoal() ?? []
         
         view.set(achievingDifficultGoal: achievingDifficultGoal)
+        
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
     }
     
     func didTapNextCommonButton() {

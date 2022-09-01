@@ -12,6 +12,7 @@ import UIKit
 
 protocol RisksOfDiseasesViewControllerInterface: AnyObject {
     func set(risksOfDiseases: [RisksOfDiseases])
+    func set(currentOnboardingStage: OnboardingStage)
 }
 
 final class RisksOfDiseasesViewController: UIViewController {
@@ -95,9 +96,8 @@ final class RisksOfDiseasesViewController: UIViewController {
         }
         
         stageCounterView.snp.makeConstraints {
-            $0.top.equalTo(contentView.snp.top).offset(30)
+            $0.top.equalTo(contentView.safeAreaLayoutGuide.snp.top).offset(30)
             $0.centerX.equalTo(contentView.snp.centerX)
-            $0.height.equalTo(30)
         }
         
         titleLabel.snp.makeConstraints {
@@ -141,6 +141,10 @@ final class RisksOfDiseasesViewController: UIViewController {
 // MARK: - RisksOfDiseasesViewControllerInterface
 
 extension RisksOfDiseasesViewController: RisksOfDiseasesViewControllerInterface {
+    func set(currentOnboardingStage: OnboardingStage) {
+        stageCounterView.set(onboardingStage: currentOnboardingStage)
+    }
+    
     func set(risksOfDiseases: [RisksOfDiseases]) {
         stackView.removeAllArrangedSubviews()
         variabilityResponses = []

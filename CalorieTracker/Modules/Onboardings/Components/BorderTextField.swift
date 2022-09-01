@@ -32,7 +32,7 @@ final class BorderTextField: UIView {
     
     // MARK: - Views properties
 
-    private let textField: UITextField = .init()
+    let textField: UITextField = .init()
     
     // MARK: - Initialization
     

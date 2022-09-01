@@ -47,6 +47,10 @@ extension PresenceOfAllergiesPresenter: PresenceOfAllergiesPresenterInterface {
         presenceOfAllergies = interactor?.getAllPresenceOfAllergies() ?? []
         
         view.set(presenceOfAllergies: presenceOfAllergies)
+        
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
     }
     
     func didTapContinueCommonButton() {

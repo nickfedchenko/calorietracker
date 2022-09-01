@@ -5,10 +5,10 @@
 //  Created by Алексей on 23.08.2022.
 //
 
-import Foundation
+import UIKit
 
 protocol FinalOfTheFirstStageRouterInterface: AnyObject {
-    
+    func openEnterYourName()
 }
 
 class FinalOfTheFirstStageRouter: NSObject {
@@ -16,6 +16,7 @@ class FinalOfTheFirstStageRouter: NSObject {
     // MARK: - Public properties
 
     weak var presenter: FinalOfTheFirstStagePresenterInterface?
+    weak var viewController: UIViewController?
     
     static func setupModule() -> FinalOfTheFirstStageViewController {
         let vc = FinalOfTheFirstStageViewController()
@@ -29,6 +30,7 @@ class FinalOfTheFirstStageRouter: NSObject {
 
         vc.presenter = presenter
         router.presenter = presenter
+        router.viewController = vc
         interactor.presenter = presenter
         return vc
     }
@@ -36,4 +38,10 @@ class FinalOfTheFirstStageRouter: NSObject {
 
 // MARK: - FinalOfTheFirstStageRouterInterface
 
-extension FinalOfTheFirstStageRouter: FinalOfTheFirstStageRouterInterface {}
+extension FinalOfTheFirstStageRouter: FinalOfTheFirstStageRouterInterface {
+    func openEnterYourName() {
+        let enterYourNameRouter = EnterYourNameRouter.setupModule()
+        
+        viewController?.navigationController?.pushViewController(enterYourNameRouter, animated: true)
+    }
+}

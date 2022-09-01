@@ -12,6 +12,7 @@ import UIKit
 
 protocol LifeChangesAfterWeightLossViewControllerInterface: AnyObject {
     func set(lifeChangesAfterWeightLoss: [LifeChangesAfterWeightLoss])
+    func set(currentOnboardingStage: OnboardingStage)
 }
 
 final class LifeChangesAfterWeightLossViewController: UIViewController {
@@ -98,9 +99,8 @@ final class LifeChangesAfterWeightLossViewController: UIViewController {
         }
         
         stageCounterView.snp.makeConstraints {
-            $0.top.equalTo(contentView.snp.top).offset(30)
+            $0.top.equalTo(contentView.safeAreaLayoutGuide.snp.top).offset(30)
             $0.centerX.equalTo(contentView.snp.centerX)
-            $0.height.equalTo(30)
         }
         
         titleLabel.snp.makeConstraints {
@@ -153,6 +153,10 @@ final class LifeChangesAfterWeightLossViewController: UIViewController {
 // MARK: - LifeChangesAfterWeightLossViewControllerInterface
 
 extension LifeChangesAfterWeightLossViewController: LifeChangesAfterWeightLossViewControllerInterface {
+    func set(currentOnboardingStage: OnboardingStage) {
+        stageCounterView.set(onboardingStage: currentOnboardingStage)
+    }
+    
     func set(lifeChangesAfterWeightLoss: [LifeChangesAfterWeightLoss]) {
         stackView.removeAllArrangedSubviews()
         answerOptions = []

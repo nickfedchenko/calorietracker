@@ -9,6 +9,7 @@ import Foundation
 
 protocol CalorieCountInteractorInterface: AnyObject {
     func set(calorieCount: Bool)
+    func getCurrentOnboardingStage() -> OnboardingStage
 }
 
 class CalorieCountInteractor {
@@ -31,6 +32,10 @@ class CalorieCountInteractor {
 // MARK: - CalorieCountInteractorInterface
 
 extension CalorieCountInteractor: CalorieCountInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
     func set(calorieCount: Bool) {
         onboardingManager.set(calorieCount: calorieCount)
     }

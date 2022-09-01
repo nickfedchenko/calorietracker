@@ -37,6 +37,8 @@ class EmotionalSupportSystemPresenter {
     }
 }
 
+// MARK: - EmotionalSupportSystemPresenterInterface
+
 extension EmotionalSupportSystemPresenter: EmotionalSupportSystemPresenterInterface {
     func viewDidLoad() {
         emotionalSupportSystem = interactor?.getAllEmotionalSupportSystem() ?? []

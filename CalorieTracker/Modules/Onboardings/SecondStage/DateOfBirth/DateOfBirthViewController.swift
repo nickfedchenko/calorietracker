@@ -8,7 +8,9 @@
 import Foundation
 import UIKit
 
-protocol DateOfBirthViewControllerInterface: AnyObject {}
+protocol DateOfBirthViewControllerInterface: AnyObject {
+    func set(currentOnboardingStage: OnboardingStage)
+}
 
 final class DateOfBirthViewController: UIViewController {
     
@@ -44,12 +46,19 @@ final class DateOfBirthViewController: UIViewController {
         titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .medium)
         
         borderTextField.isEnabled = false
-
+        borderTextField.textField.addTarget(self, action:  #selector(didTapContinueCommonButton), for: .touchUpInside)
+        
         datePicker.preferredDatePickerStyle = .wheels
         datePicker.datePickerMode = .date
         datePicker.addTarget(self, action: #selector(didChangedDatePicker), for: .valueChanged)
         
         continueCommonButton.addTarget(self, action: #selector(didTapContinueCommonButton), for: .touchUpInside)
+    }
+    
+    @objc private func didChangedTextField(_ sender: UITextField) {
+        let isTextFieldEmpty = sender.text?.isEmpty ?? false
+        
+        continueCommonButton.isEnabled = !isTextFieldEmpty
     }
     
     @objc private func didChangedDatePicker(_ sender: UIDatePicker) {
@@ -61,7 +70,9 @@ final class DateOfBirthViewController: UIViewController {
     }
     
     @objc private func didTapContinueCommonButton() {
-        presenter?.didTapContinueCommonButton()
+        guard let name = borderTextField.text, !name.isEmpty else { return }
+        
+        presenter?.didTapContinueCommonButton(with: name)
     }
     
     private func configureLayouts() {
@@ -78,7 +89,6 @@ final class DateOfBirthViewController: UIViewController {
         stageCounterView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
             $0.centerX.equalTo(view.snp.centerX)
-            $0.height.equalTo(30)
         }
         
         titleLabel.snp.makeConstraints {
@@ -111,4 +121,8 @@ final class DateOfBirthViewController: UIViewController {
 
 // MARK: - DateOfBirthViewControllerInterface
 
-extension DateOfBirthViewController: DateOfBirthViewControllerInterface {}
+extension DateOfBirthViewController: DateOfBirthViewControllerInterface {
+    func set(currentOnboardingStage: OnboardingStage) {
+        stageCounterView.set(onboardingStage: currentOnboardingStage)
+    }
+}

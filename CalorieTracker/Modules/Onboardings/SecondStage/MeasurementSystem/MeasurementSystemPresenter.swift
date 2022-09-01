@@ -47,6 +47,10 @@ extension MeasurementSystemPresenter: MeasurementSystemPresenterInterface {
         measurementSystem = interactor?.getAllMeasurementSystem() ?? []
         
         view.set(measurementSystem: measurementSystem)
+        
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
     }
     
     func didTapContinueCommonButton() {

@@ -16,4 +16,6 @@ class FinalOfTheFourthStageInteractor {
     weak var presenter: FinalOfTheFourthStagePresenterInterface?
 }
 
+// MARK: - FinalOfTheFourthStageInteractorInterface
+
 extension FinalOfTheFourthStageInteractor: FinalOfTheFourthStageInteractorInterface {}

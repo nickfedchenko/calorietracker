@@ -47,6 +47,10 @@ extension FormationGoodHabitsPresenter: FormationGoodHabitsPresenterInterface {
         formationGoodHabits = interactor?.getAllFormationGoodHabits() ?? []
         
         view.set(formationGoodHabits: formationGoodHabits)
+        
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
     }
     
     func didTapContinueCommonButton() {

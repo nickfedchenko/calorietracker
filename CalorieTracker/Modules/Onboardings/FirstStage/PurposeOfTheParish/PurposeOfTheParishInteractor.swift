@@ -8,6 +8,7 @@
 import Foundation
 
 protocol PurposeOfTheParishInteractorInterface: AnyObject {
+    func getCurrentOnboardingStage() -> OnboardingStage
     func getAllPurposeOfTheParish() -> [PurposeOfTheParish]
     func set(purposeOfTheParish: PurposeOfTheParish)
 }
@@ -32,6 +33,10 @@ class PurposeOfTheParishInteractor {
 // MARK: - PurposeOfTheParishInteractorInterface
 
 extension PurposeOfTheParishInteractor: PurposeOfTheParishInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
     func getAllPurposeOfTheParish() -> [PurposeOfTheParish] {
         return onboardingManager.getAllPurposeOfTheParish()
     }

@@ -10,6 +10,7 @@ import Foundation
 protocol FormationGoodHabitsInteractorInterface: AnyObject {
     func getAllFormationGoodHabits() -> [FormationGoodHabits]
     func set(formationGoodHabits: FormationGoodHabits)
+    func getCurrentOnboardingStage() -> OnboardingStage
 }
 
 class FormationGoodHabitsInteractor {
@@ -32,6 +33,10 @@ class FormationGoodHabitsInteractor {
 // MARK: - FormationGoodHabitsInteractorInterface
 
 extension FormationGoodHabitsInteractor: FormationGoodHabitsInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
     func getAllFormationGoodHabits() -> [FormationGoodHabits] {
         return onboardingManager.getAllFormationGoodHabits()
     }

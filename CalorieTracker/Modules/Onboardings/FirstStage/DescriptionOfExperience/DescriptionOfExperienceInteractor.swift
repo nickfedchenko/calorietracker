@@ -8,6 +8,7 @@
 import Foundation
 
 protocol DescriptionOfExperienceInteractorInterface: AnyObject {
+    func getCurrentOnboardingStage() -> OnboardingStage
     func getAllDescriptionOfExperience() -> [DescriptionOfExperience]
     func set(descriptionOfExperience: DescriptionOfExperience)
 }
@@ -32,6 +33,10 @@ class DescriptionOfExperienceInteractor {
 // MARK: - DescriptionOfExperienceInteractorInterface
 
 extension DescriptionOfExperienceInteractor: DescriptionOfExperienceInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
     func getAllDescriptionOfExperience() -> [DescriptionOfExperience] {
         return onboardingManager.getAllDescriptionOfExperience()
     }

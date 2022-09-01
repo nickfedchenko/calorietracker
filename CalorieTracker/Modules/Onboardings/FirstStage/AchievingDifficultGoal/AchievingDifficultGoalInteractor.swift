@@ -10,6 +10,7 @@ import Foundation
 protocol AchievingDifficultGoalInteractorInterface: AnyObject {
     func getAllAchievingDifficultGoal() -> [AchievingDifficultGoal]
     func set(achievingDifficultGoal: AchievingDifficultGoal)
+    func getCurrentOnboardingStage() -> OnboardingStage
 }
 
 class AchievingDifficultGoalInteractor {
@@ -32,6 +33,10 @@ class AchievingDifficultGoalInteractor {
 // MARK: - AchievingDifficultGoalInteractorInterface
 
 extension AchievingDifficultGoalInteractor: AchievingDifficultGoalInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
     func getAllAchievingDifficultGoal() -> [AchievingDifficultGoal] {
         return onboardingManager.getAllAchievingDifficultGoal()
     }

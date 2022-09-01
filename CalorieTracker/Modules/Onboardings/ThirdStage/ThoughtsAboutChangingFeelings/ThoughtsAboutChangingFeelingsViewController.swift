@@ -10,6 +10,7 @@ import UIKit
 
 protocol ThoughtsAboutChangingFeelingsViewControllerInterface: AnyObject {
     func set(thoughtsAboutChangingFeelings: [ThoughtsAboutChangingFeelings])
+    func set(currentOnboardingStage: OnboardingStage)
 }
 
 final class ThoughtsAboutChangingFeelingsViewController: UIViewController {
@@ -84,10 +85,7 @@ final class ThoughtsAboutChangingFeelingsViewController: UIViewController {
         
         stageCounterView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
-            $0.left.equalTo(view.snp.left).offset(100)
-            $0.right.equalTo(view.snp.right).offset(-100)
             $0.centerX.equalTo(view.snp.centerX)
-            $0.height.equalTo(30)
         }
         
         titleLabel.snp.makeConstraints {
@@ -148,6 +146,10 @@ final class ThoughtsAboutChangingFeelingsViewController: UIViewController {
 // MARK: - ThoughtsAboutChangingFeelingsViewControllerInterface
 
 extension ThoughtsAboutChangingFeelingsViewController: ThoughtsAboutChangingFeelingsViewControllerInterface {
+    func set(currentOnboardingStage: OnboardingStage) {
+        stageCounterView.set(onboardingStage: currentOnboardingStage)
+    }
+    
     func set(thoughtsAboutChangingFeelings: [ThoughtsAboutChangingFeelings]) {
         stackView.removeAllArrangedSubviews()
         answerOptions = []

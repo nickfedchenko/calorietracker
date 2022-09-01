@@ -47,6 +47,10 @@ extension PurposeOfTheParishPresenter: PurposeOfTheParishPresenterInterface {
         purposeOfTheParish = interactor?.getAllPurposeOfTheParish() ?? []
         
         view.set(purposeOfTheParish: purposeOfTheParish)
+        
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
     }
     
     func didTapNextCommonButton() {

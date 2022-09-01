@@ -7,7 +7,9 @@
 
 import UIKit
 
-protocol AllergicRestrictionsRouterInterface: AnyObject {}
+protocol AllergicRestrictionsRouterInterface: AnyObject {
+    func openFinalOfTheSecondStage()
+}
 
 class AllergicRestrictionsRouter {
     
@@ -38,4 +40,10 @@ class AllergicRestrictionsRouter {
 
 // MARK: - AllergicRestrictionsRouterInterface
 
-extension AllergicRestrictionsRouter: AllergicRestrictionsRouterInterface {}
+extension AllergicRestrictionsRouter: AllergicRestrictionsRouterInterface {
+    func openFinalOfTheSecondStage() {
+        let finalOfTheSecondStageRouter = FinalOfTheSecondStageRouter.setupModule()
+        
+        viewController?.navigationController?.pushViewController(finalOfTheSecondStageRouter, animated: true)
+    }
+}

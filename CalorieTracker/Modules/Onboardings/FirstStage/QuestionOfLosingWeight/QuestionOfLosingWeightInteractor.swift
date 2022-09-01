@@ -8,6 +8,7 @@
 import Foundation
 
 protocol QuestionOfLosingWeightInteractorInterface: AnyObject {
+    func getCurrentOnboardingStage() -> OnboardingStage
     func set(isHaveYouTriedToLoseWeightBefor: Bool)
 }
 
@@ -31,6 +32,10 @@ class QuestionOfLosingWeightInteractor {
 // MARK: - QuestionOfLosingWeightInteractorInterface
 
 extension QuestionOfLosingWeightInteractor: QuestionOfLosingWeightInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
     func set(isHaveYouTriedToLoseWeightBefor: Bool) {
         onboardingManager.set(isHaveYouTriedToLoseWeightBefor: isHaveYouTriedToLoseWeightBefor)
     }

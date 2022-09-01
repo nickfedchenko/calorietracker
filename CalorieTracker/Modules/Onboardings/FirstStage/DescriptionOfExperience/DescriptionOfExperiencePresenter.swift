@@ -47,6 +47,10 @@ extension  DescriptionOfExperiencePresenter: DescriptionOfExperiencePresenterInt
         descriptionOfExperiences = interactor?.getAllDescriptionOfExperience() ?? []
         
         view.set(descriptionOfExperiences: descriptionOfExperiences)
+        
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
     }
     
     func didTapNextCommonButton() {

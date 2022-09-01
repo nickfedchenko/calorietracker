@@ -47,6 +47,10 @@ extension QuestionAboutTheChangePresenter: QuestionAboutTheChangePresenterInterf
         questionAboutTheChange = interactor?.getAllQuestionAboutTheChange() ?? []
         
         view.set(questionAboutTheChange: questionAboutTheChange)
+        
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
     }
     
     func didTapNextCommonButton() {

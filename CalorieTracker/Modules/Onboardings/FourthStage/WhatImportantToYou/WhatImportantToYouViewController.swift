@@ -118,4 +118,6 @@ final class WhatImportantToYouViewController: UIViewController {
     }
 }
 
+// MARK: - WhatImportantToYouViewControllerInterface
+
 extension WhatImportantToYouViewController: WhatImportantToYouViewControllerInterface {}

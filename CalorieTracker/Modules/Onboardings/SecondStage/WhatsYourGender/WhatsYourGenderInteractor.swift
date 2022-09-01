@@ -10,6 +10,7 @@ import Foundation
 protocol WhatsYourGenderInteractorInterface: AnyObject {
     func getAllWhatsYourGender() -> [WhatsYourGender]
     func set(whatsYourGender: WhatsYourGender)
+    func getCurrentOnboardingStage() -> OnboardingStage
 }
 
 class WhatsYourGenderInteractor {
@@ -32,6 +33,10 @@ class WhatsYourGenderInteractor {
 // MARK: - WhatsYourGenderInteractorInterface
 
 extension WhatsYourGenderInteractor: WhatsYourGenderInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
     func getAllWhatsYourGender() -> [WhatsYourGender] {
         return onboardingManager.getAllWhatsYourGender()
     }

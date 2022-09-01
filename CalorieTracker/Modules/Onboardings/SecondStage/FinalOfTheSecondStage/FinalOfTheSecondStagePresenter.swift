@@ -7,7 +7,9 @@
 
 import Foundation
 
-protocol FinalOfTheSecondStagePresenterInterface: AnyObject {}
+protocol FinalOfTheSecondStagePresenterInterface: AnyObject {
+    func didTapContinueToMotivation()
+}
 
 class FinalOfTheSecondStagePresenter {
     
@@ -32,4 +34,8 @@ class FinalOfTheSecondStagePresenter {
 
 // MARK: - FinalOfTheSecondStagePresenterInterface
 
-extension FinalOfTheSecondStagePresenter: FinalOfTheSecondStagePresenterInterface {}
+extension FinalOfTheSecondStagePresenter: FinalOfTheSecondStagePresenterInterface {
+    func didTapContinueToMotivation() {
+        router?.openImportanceOfWeightLoss()
+    }
+}

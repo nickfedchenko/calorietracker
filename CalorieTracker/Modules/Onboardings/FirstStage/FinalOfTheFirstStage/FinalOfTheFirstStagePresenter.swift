@@ -7,7 +7,9 @@
 
 import Foundation
 
-protocol FinalOfTheFirstStagePresenterInterface: AnyObject {}
+protocol FinalOfTheFirstStagePresenterInterface: AnyObject {
+    func didTapKeepItCommonButton()
+}
 
 class FinalOfTheFirstStagePresenter {
     
@@ -32,4 +34,8 @@ class FinalOfTheFirstStagePresenter {
 
 // MARK: - ThanksForTheInformationPresenterInterface
 
-extension FinalOfTheFirstStagePresenter: FinalOfTheFirstStagePresenterInterface {}
+extension FinalOfTheFirstStagePresenter: FinalOfTheFirstStagePresenterInterface {
+    func didTapKeepItCommonButton() {
+        router?.openEnterYourName()
+    }
+}

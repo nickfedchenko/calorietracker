@@ -12,6 +12,7 @@ import UIKit
 
 protocol FormationGoodHabitsViewControllerInterface: AnyObject {
     func set(formationGoodHabits: [FormationGoodHabits])
+    func set(currentOnboardingStage: OnboardingStage)
 }
 
 final class FormationGoodHabitsViewController: UIViewController {
@@ -105,9 +106,8 @@ final class FormationGoodHabitsViewController: UIViewController {
         }
         
         stageCounterView.snp.makeConstraints {
-            $0.top.equalTo(contentView.snp.top).offset(30)
+            $0.top.equalTo(contentView.safeAreaLayoutGuide.snp.top).offset(30)
             $0.centerX.equalTo(contentView.snp.centerX)
-            $0.height.equalTo(30)
         }
         
         titleLabel.snp.makeConstraints {
@@ -166,6 +166,10 @@ final class FormationGoodHabitsViewController: UIViewController {
 // MARK: - FormationGoodHabitsViewControllerInterface
 
 extension FormationGoodHabitsViewController: FormationGoodHabitsViewControllerInterface {
+    func set(currentOnboardingStage: OnboardingStage) {
+        stageCounterView.set(onboardingStage: currentOnboardingStage)
+    }
+    
     func set(formationGoodHabits: [FormationGoodHabits]) {
         stackView.removeAllArrangedSubviews()
         answerOptions = []

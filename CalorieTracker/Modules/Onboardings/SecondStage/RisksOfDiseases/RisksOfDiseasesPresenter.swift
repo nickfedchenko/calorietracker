@@ -45,6 +45,10 @@ extension RisksOfDiseasesPresenter: RisksOfDiseasesPresenterInterface {
         risksOfDiseases = interactor?.getAllRisksOfDiseases() ?? []
         
         view.set(risksOfDiseases: risksOfDiseases)
+        
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
     }
     
     func didTapContinueCommonButton() {

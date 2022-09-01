@@ -10,6 +10,7 @@ import Foundation
 protocol LastCalorieCountInteractorInterface: AnyObject {
     func getAllLastCalorieCount() -> [LastCalorieCount]
     func set(lastCalorieCount: LastCalorieCount)
+    func getCurrentOnboardingStage() -> OnboardingStage
 }
 
 class LastCalorieCountInteractor {
@@ -32,6 +33,10 @@ class LastCalorieCountInteractor {
 // MARK: - LastCalorieCountInteractorInterface
 
 extension LastCalorieCountInteractor: LastCalorieCountInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
     func getAllLastCalorieCount() -> [LastCalorieCount] {
         return onboardingManager.getAllLastCalorieCount()
     }

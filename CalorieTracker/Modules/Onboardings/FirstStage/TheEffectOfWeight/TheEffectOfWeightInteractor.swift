@@ -10,6 +10,7 @@ import Foundation
 protocol TheEffectOfWeightInteractorInterface: AnyObject {
     func getAllTheEffectOfWeight() -> [TheEffectOfWeight]
     func set(theEffectOfWeight: TheEffectOfWeight)
+    func getCurrentOnboardingStage() -> OnboardingStage
 }
 
 class TheEffectOfWeightInteractor {
@@ -32,6 +33,10 @@ class TheEffectOfWeightInteractor {
 // MARK: - ObsessingOverFoodInterctorInterface
 
 extension TheEffectOfWeightInteractor: TheEffectOfWeightInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
     func getAllTheEffectOfWeight() -> [TheEffectOfWeight] {
         return onboardingManager.getAllTheEffectOfWeight()
     }

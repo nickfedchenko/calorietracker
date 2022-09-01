@@ -101,4 +101,6 @@ final class DifficultyChoosingLifestyleViewController: UIViewController {
     }
 }
 
+// MARK: - DifficultyChoosingLifestyleViewControllerInterface
+
 extension DifficultyChoosingLifestyleViewController: DifficultyChoosingLifestyleViewControllerInterface {}

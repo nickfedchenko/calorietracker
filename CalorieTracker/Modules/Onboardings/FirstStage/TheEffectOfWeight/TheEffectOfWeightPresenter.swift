@@ -47,6 +47,10 @@ extension TheEffectOfWeightPresenter: TheEffectOfWeightPresenterInterface {
         theEffectOfWeight = interactor?.getAllTheEffectOfWeight() ?? []
         
         view.set(theEffectOfWeight: theEffectOfWeight)
+        
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
     }
     
     func didTapNextCommonButton() {

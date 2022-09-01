@@ -45,6 +45,10 @@ extension ImportanceOfWeightLossPresenter: ImportanceOfWeightLossPresenterInterf
         importanceOfWeightLoss = interactor?.getAllImportanceOfWeightLoss() ?? []
         
         view.set(importanceOfWeightLoss: importanceOfWeightLoss)
+        
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
     }
     
     func didTapContinueCommonButton() {

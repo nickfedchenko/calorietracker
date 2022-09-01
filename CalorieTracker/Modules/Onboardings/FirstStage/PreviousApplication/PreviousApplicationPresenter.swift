@@ -47,6 +47,10 @@ extension PreviousApplicationPresenter: PreviousApplicationPresenterInterface {
         previousApplication = interactor?.getAllPreviousApplication() ?? []
         
         view.set(previousApplication: previousApplication)
+        
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
     }
     
     func didTapNextCommonButton() {

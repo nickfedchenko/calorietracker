@@ -32,6 +32,8 @@ class FinalOfTheFourthStagePresenter {
     }
 }
 
+// MARK: - FinalOfTheFourthStagePresenterInterface
+
 extension FinalOfTheFourthStagePresenter: FinalOfTheFourthStagePresenterInterface {
     func didTapContinueCommonButton() {
         router?.didTapCalorieTrackingViaKcalc()

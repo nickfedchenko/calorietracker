@@ -8,6 +8,7 @@
 import Foundation
 
 protocol RecentWeightChangesPresenterInterface: AnyObject {
+    func viewDidLoad()
     func didTapApprovalCommonButton()
     func didTapRejectionCommonButton()
 }
@@ -36,6 +37,12 @@ class RecentWeightChangesPresenter {
 // MARK: - RecentWeightChangesPresenterInterface
 
 extension RecentWeightChangesPresenter: RecentWeightChangesPresenterInterface {
+    func viewDidLoad() {
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
+    }
+    
     func didTapApprovalCommonButton() {
         interactor?.set(recentWeightChanges: true)
         router?.openCallToAchieveGoal()

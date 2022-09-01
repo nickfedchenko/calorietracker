@@ -12,6 +12,7 @@ import UIKit
 
 protocol LastCalorieCountViewControllerInterface: AnyObject {
     func set(lastCalorieCount: [LastCalorieCount])
+    func set(currentOnboardingStage: OnboardingStage)
 }
 
 final class LastCalorieCountViewController: UIViewController {
@@ -28,7 +29,7 @@ final class LastCalorieCountViewController: UIViewController {
     
     // MARK: - Views properties
     
-    private let plugView: UIView = .init()
+    private let stageCounterView: StageCounterView = .init()
     private let titleLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
     private var answerOptions: [AnswerOption] = []
@@ -50,8 +51,6 @@ final class LastCalorieCountViewController: UIViewController {
         title = "History"
         
         view.backgroundColor = R.color.mainBackground()
-        
-        plugView.backgroundColor = R.color.onboardings.radialGradientFirst()
         
         let attributedString = NSMutableAttributedString()
         
@@ -81,7 +80,7 @@ final class LastCalorieCountViewController: UIViewController {
     }
     
     private func configureLayouts() {
-        view.addSubview(plugView)
+        view.addSubview(stageCounterView)
         
         view.addSubview(titleLabel)
         
@@ -89,16 +88,13 @@ final class LastCalorieCountViewController: UIViewController {
         
         view.addSubview(nextCommonButton)
         
-        plugView.snp.makeConstraints {
+        stageCounterView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
-            $0.left.equalTo(view.snp.left).offset(100)
-            $0.right.equalTo(view.snp.right).offset(-100)
             $0.centerX.equalTo(view.snp.centerX)
-            $0.height.equalTo(30)
         }
         
         titleLabel.snp.makeConstraints {
-            $0.top.equalTo(plugView.snp.bottom).offset(40)
+            $0.top.equalTo(stageCounterView.snp.bottom).offset(40)
             $0.left.equalTo(view.snp.left).offset(43)
             $0.right.equalTo(view.snp.right).offset(-43)
             $0.centerX.equalTo(view.snp.centerX)
@@ -156,6 +152,10 @@ final class LastCalorieCountViewController: UIViewController {
 // MARK: - LastCalorieCountViewController
 
 extension LastCalorieCountViewController: LastCalorieCountViewControllerInterface {
+    func set(currentOnboardingStage: OnboardingStage) {
+        stageCounterView.set(onboardingStage: currentOnboardingStage)
+    }
+    
     func set(lastCalorieCount: [LastCalorieCount]) {
         stackView.removeAllArrangedSubviews()
         answerOptions = []

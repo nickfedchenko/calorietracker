@@ -199,10 +199,11 @@ final class FinalOfTheThirdStageViewController: UIViewController {
         }
     }
     
-    
     @objc private func didTapContinueToMotivation() {
-        print("didTapContinueToMotivation")
+        presenter?.didTapContinueToMotivation()
     }
 }
+
+// MARK: - FinalOfTheThirdStageViewControllerInterface
 
 extension FinalOfTheThirdStageViewController: FinalOfTheThirdStageViewControllerInterface {}

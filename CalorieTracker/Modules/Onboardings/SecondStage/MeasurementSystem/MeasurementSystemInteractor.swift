@@ -10,6 +10,7 @@ import Foundation
 protocol MeasurementSystemInteractorInterface: AnyObject {
     func getAllMeasurementSystem() -> [MeasurementSystem]
     func set(measurementSystem: MeasurementSystem)
+    func getCurrentOnboardingStage() -> OnboardingStage
 }
 
 class MeasurementSystemInteractor {
@@ -32,6 +33,10 @@ class MeasurementSystemInteractor {
 // MARK: - MeasurementSystemInteractorInterface
 
 extension MeasurementSystemInteractor: MeasurementSystemInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
     func getAllMeasurementSystem() -> [MeasurementSystem] {
         return onboardingManager.getAllMeasurementSystem()
     }

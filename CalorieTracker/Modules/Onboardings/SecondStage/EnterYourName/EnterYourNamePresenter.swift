@@ -8,6 +8,7 @@
 import Foundation
 
 protocol EnterYourNamePresenterInterface: AnyObject {
+    func viewDidLoad()
     func didTapContinueCommonButton(with name: String)
 }
 
@@ -35,6 +36,12 @@ class EnterYourNamePresenter {
 // MARK: - WelcomePresenterInterface
 
 extension EnterYourNamePresenter: EnterYourNamePresenterInterface {
+    func viewDidLoad() {
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
+    }
+    
     func didTapContinueCommonButton(with name: String) {
         interactor?.set(enterYourName: name)
         router?.openWhatsYourGender()

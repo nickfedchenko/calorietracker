@@ -6,6 +6,8 @@
 //
 
 protocol OnboardingManagerInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage
+    
     func set(isHaveYouTriedToLoseWeightBefor: Bool)
     
     func getAllDescriptionOfExperience() -> [DescriptionOfExperience]
@@ -47,6 +49,12 @@ protocol OnboardingManagerInterface {
     func getAllMeasurementSystem() -> [MeasurementSystem]
     func set(measurementSystem: MeasurementSystem)
     
+    func set(dateOfBirth: String)
+    
+    func set(yourHeight: String)
+    
+    func set(yourWeight: String)
+    
     func getAllRisksOfDiseases() -> [RisksOfDiseases]
     func set(risksOfDiseases: RisksOfDiseases)
     
@@ -64,6 +72,8 @@ protocol OnboardingManagerInterface {
     
     func getAllLifeChangesAfterWeightLoss() -> [LifeChangesAfterWeightLoss]
     func set(lifeChangesAfterWeightLoss: LifeChangesAfterWeightLoss)
+    
+    func set(whatIsYourGoalWeight: String)
     
     func getAllCurrentLifestile() -> [CurrentLifestile]
     func set(currentLifestile: CurrentLifestile)
@@ -138,6 +148,10 @@ class OnboardingManager {
 // MARK: - OnboardingManagerInterface
 
 extension OnboardingManager: OnboardingManagerInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingInfo.currentOnboardingStage
+    }
+    
     func set(isHaveYouTriedToLoseWeightBefor: Bool) {
         onboardingInfo.isHaveYouTriedToLoseWeightBefor = isHaveYouTriedToLoseWeightBefor
     }
@@ -242,6 +256,18 @@ extension OnboardingManager: OnboardingManagerInterface {
         onboardingInfo.measurementSystem = measurementSystem
     }
     
+    func set(dateOfBirth: String) {
+        onboardingInfo.dateOfBirth = dateOfBirth
+    }
+    
+    func set(yourHeight: String) {
+        onboardingInfo.yourHeight = yourHeight
+    }
+    
+    func set(yourWeight: String) {
+        onboardingInfo.yourWeight = yourWeight
+    }
+    
     func getAllRisksOfDiseases() -> [RisksOfDiseases] {
         return RisksOfDiseases.allCases
     }
@@ -288,6 +314,10 @@ extension OnboardingManager: OnboardingManagerInterface {
     
     func set(lifeChangesAfterWeightLoss: LifeChangesAfterWeightLoss) {
         onboardingInfo.lifeChangesAfterWeightLoss = lifeChangesAfterWeightLoss
+    }
+    
+    func set(whatIsYourGoalWeight: String) {
+        onboardingInfo.whatIsYourGoalWeight = whatIsYourGoalWeight
     }
     
     func getAllCurrentLifestile() -> [CurrentLifestile] {

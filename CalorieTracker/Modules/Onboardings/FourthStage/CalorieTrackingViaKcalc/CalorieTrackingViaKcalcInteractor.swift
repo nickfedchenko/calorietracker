@@ -16,4 +16,6 @@ class CalorieTrackingViaKcalcInteractor {
     weak var presenter: CalorieTrackingViaKcalcPresenterInterface?
 }
 
+// MARK: - CalorieTrackingViaKcalcInteractorInterface
+
 extension CalorieTrackingViaKcalcInteractor: CalorieTrackingViaKcalcInteractorInterface {}

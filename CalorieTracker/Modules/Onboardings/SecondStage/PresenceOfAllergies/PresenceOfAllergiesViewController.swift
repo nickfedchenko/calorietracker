@@ -10,6 +10,7 @@ import UIKit
 
 protocol PresenceOfAllergiesViewControllerInterface: AnyObject {
     func set(presenceOfAllergies: [PresenceOfAllergies])
+    func set(currentOnboardingStage: OnboardingStage)
 }
 
 final class PresenceOfAllergiesViewController: UIViewController {
@@ -86,7 +87,6 @@ final class PresenceOfAllergiesViewController: UIViewController {
         stageCounterView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
             $0.centerX.equalTo(view.snp.centerX)
-            $0.height.equalTo(30)
         }
         
         titleLabel.snp.makeConstraints {
@@ -142,6 +142,10 @@ final class PresenceOfAllergiesViewController: UIViewController {
 // MARK: - PresenceOfAllergiesViewControllerInterface
 
 extension PresenceOfAllergiesViewController: PresenceOfAllergiesViewControllerInterface {
+    func set(currentOnboardingStage: OnboardingStage) {
+        stageCounterView.set(onboardingStage: currentOnboardingStage)
+    }
+    
     func set(presenceOfAllergies: [PresenceOfAllergies]) {
         stackView.removeAllArrangedSubviews()
         variabilityResponses = []

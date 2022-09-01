@@ -10,6 +10,7 @@ import Foundation
 protocol PreviousApplicationInteractorInterface: AnyObject {
     func getAllPreviousApplication() -> [PreviousApplication]
     func set(previousApplication: PreviousApplication)
+    func getCurrentOnboardingStage() -> OnboardingStage
 }
 
 class PreviousApplicationInteractor {
@@ -32,6 +33,10 @@ class PreviousApplicationInteractor {
 // MARK: - PreviousApplicationInteractorInterface
 
 extension PreviousApplicationInteractor: PreviousApplicationInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
     func getAllPreviousApplication() -> [PreviousApplication] {
         return onboardingManager.getAllPreviousApplication()
     }

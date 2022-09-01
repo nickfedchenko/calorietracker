@@ -44,10 +44,14 @@ extension AllergicRestrictionsPresenter: AllergicRestrictionsPresenterInterface 
         allergicRestrictions = interactor?.getAllAllergicRestrictions() ?? []
         
         view.set(allergicRestrictions: allergicRestrictions)
+        
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
     }
     
     func didTapContinueCommonButton() {
         interactor?.set(allergicRestrictions: .dairy)
-
+        router?.openFinalOfTheSecondStage()
     }
 }

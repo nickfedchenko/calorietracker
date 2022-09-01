@@ -8,7 +8,9 @@
 import Foundation
 import UIKit
 
-protocol WhatIsYourGoalWeightViewControllerInterface: AnyObject {}
+protocol WhatIsYourGoalWeightViewControllerInterface: AnyObject {
+    func set(currentOnboardingStage: OnboardingStage)
+}
 
 final class WhatIsYourGoalWeightViewController: UIViewController {
     
@@ -86,7 +88,6 @@ final class WhatIsYourGoalWeightViewController: UIViewController {
         stageCounterView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
             $0.centerX.equalTo(view.snp.centerX)
-            $0.height.equalTo(30)
         }
         
         titleLabel.snp.makeConstraints {
@@ -120,7 +121,11 @@ final class WhatIsYourGoalWeightViewController: UIViewController {
 
 // MARK: - WhatIsYourGoalWeightViewControllerInterface
 
-extension WhatIsYourGoalWeightViewController: WhatIsYourGoalWeightViewControllerInterface {}
+extension WhatIsYourGoalWeightViewController: WhatIsYourGoalWeightViewControllerInterface {
+    func set(currentOnboardingStage: OnboardingStage) {
+        stageCounterView.set(onboardingStage: currentOnboardingStage)
+    }
+}
 
 // MARK: - UIPickerViewDataSource
 

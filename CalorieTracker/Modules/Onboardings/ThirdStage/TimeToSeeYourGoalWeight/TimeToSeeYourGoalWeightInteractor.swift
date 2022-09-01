@@ -16,4 +16,6 @@ class TimeToSeeYourGoalWeightInteractor {
     weak var presenter: TimeToSeeYourGoalWeightPresenterInterface?
 }
 
+// MARK: - TimeToSeeYourGoalWeightInteractorInterface
+
 extension TimeToSeeYourGoalWeightInteractor: TimeToSeeYourGoalWeightInteractorInterface {}

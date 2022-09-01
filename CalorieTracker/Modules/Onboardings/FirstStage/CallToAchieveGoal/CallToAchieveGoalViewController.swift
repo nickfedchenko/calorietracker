@@ -18,7 +18,7 @@ final class CallToAchieveGoalViewController: UIViewController {
     
     // MARK: - Views properties
     
-    private let plugView: UIView = .init()
+    private let stageCounterView: StageCounterView = .init()
     private let titleLabel: UILabel = .init()
     private let continueCommonButton: CommonButton = .init(style: .filled, text: "Continue".uppercased())
     
@@ -36,8 +36,6 @@ final class CallToAchieveGoalViewController: UIViewController {
         title = "History"
         
         view.backgroundColor = R.color.mainBackground()
-        
-        plugView.backgroundColor = R.color.onboardings.radialGradientFirst()
         
         let attributedString = NSMutableAttributedString()
         
@@ -60,18 +58,15 @@ final class CallToAchieveGoalViewController: UIViewController {
     }
     
     private func configureLayouts() {
-        view.addSubview(plugView)
+        view.addSubview(stageCounterView)
         
         view.addSubview(titleLabel)
         
         view.addSubview(continueCommonButton)
         
-        plugView.snp.makeConstraints {
+        stageCounterView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
-            $0.left.equalTo(view.snp.left).offset(100)
-            $0.right.equalTo(view.snp.right).offset(-100)
             $0.centerX.equalTo(view.snp.centerX)
-            $0.height.equalTo(30)
         }
         
         titleLabel.snp.makeConstraints {

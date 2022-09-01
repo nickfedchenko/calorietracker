@@ -101,4 +101,6 @@ final class StressAndEmotionsAreInevitableViewController: UIViewController {
     }
 }
 
+// MARK: - StressAndEmotionsAreInevitableViewControllerInterface
+
 extension StressAndEmotionsAreInevitableViewController: StressAndEmotionsAreInevitableViewControllerInterface {}

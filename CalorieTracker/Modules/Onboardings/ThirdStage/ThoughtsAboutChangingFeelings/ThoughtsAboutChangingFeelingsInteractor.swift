@@ -10,6 +10,7 @@ import Foundation
 protocol ThoughtsAboutChangingFeelingsInteractorInterface: AnyObject {
     func getAllThoughtsAboutChangingFeelings() -> [ThoughtsAboutChangingFeelings]
     func set(thoughtsAboutChangingFeelings: ThoughtsAboutChangingFeelings)
+    func getCurrentOnboardingStage() -> OnboardingStage
 }
 
 class ThoughtsAboutChangingFeelingsInteractor {
@@ -32,6 +33,10 @@ class ThoughtsAboutChangingFeelingsInteractor {
 // MARK: - ThoughtsAboutChangingFeelingsInteractorInterface
 
 extension ThoughtsAboutChangingFeelingsInteractor: ThoughtsAboutChangingFeelingsInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
     func getAllThoughtsAboutChangingFeelings() -> [ThoughtsAboutChangingFeelings] {
         return onboardingManager.getAllThoughtsAboutChangingFeelings()
     }

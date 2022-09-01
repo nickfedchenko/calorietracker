@@ -10,6 +10,7 @@ import Foundation
 protocol AllergicRestrictionsInteractorInterface: AnyObject {
     func getAllAllergicRestrictions() -> [AllergicRestrictions]
     func set(allergicRestrictions: AllergicRestrictions)
+    func getCurrentOnboardingStage() -> OnboardingStage
 }
 
 class AllergicRestrictionsInteractor {
@@ -32,6 +33,10 @@ class AllergicRestrictionsInteractor {
 // MARK: - AllergicRestrictionsInteractorInterface
 
 extension AllergicRestrictionsInteractor: AllergicRestrictionsInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
     func getAllAllergicRestrictions() -> [AllergicRestrictions] {
         return onboardingManager.getAllAllergicRestrictions()
     }

@@ -20,7 +20,7 @@ final class AchievementByWillPowerViewController: UIViewController {
     
     // MARK: - Views properties
     
-    private let plugView: UIView = .init()
+    private let stageCounterView: StageCounterView = .init()
     private let imageView: UIImageView = .init()
     private let titleLabel: UILabel = .init()
     private let descriptionLabel: UILabel = .init()
@@ -40,8 +40,6 @@ final class AchievementByWillPowerViewController: UIViewController {
         title = "History"
         
         view.backgroundColor = R.color.mainBackground()
-        
-        plugView.backgroundColor = R.color.onboardings.radialGradientFirst()
         
         imageView.image = R.image.onboardings.emojiBotan()
         
@@ -71,7 +69,7 @@ final class AchievementByWillPowerViewController: UIViewController {
     }
     
     private func configureLayouts() {
-        view.addSubview(plugView)
+        view.addSubview(stageCounterView)
         
         view.addSubview(imageView)
         
@@ -81,16 +79,13 @@ final class AchievementByWillPowerViewController: UIViewController {
         
         view.addSubview(letsDoItCommonButton)
         
-        plugView.snp.makeConstraints {
+        stageCounterView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
-            $0.left.equalTo(view.snp.left).offset(100)
-            $0.right.equalTo(view.snp.right).offset(-100)
             $0.centerX.equalTo(view.snp.centerX)
-            $0.height.equalTo(30)
         }
         
         imageView.snp.makeConstraints {
-            $0.top.equalTo(plugView.snp.bottom).offset(80)
+            $0.top.equalTo(stageCounterView.snp.bottom).offset(80)
             $0.centerX.equalTo(view.snp.centerX)
             $0.size.equalTo(48)
         }

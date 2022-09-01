@@ -8,6 +8,7 @@
 import Foundation
 
 protocol WhatIsYourGoalWeightPresenterInterface: AnyObject {
+    func viewDidLoad()
     func didTapContinueCommonButton()
 }
 
@@ -32,6 +33,16 @@ class WhatIsYourGoalWeightPresenter {
     }
 }
 
+// MARK: - WhatIsYourGoalWeightPresenterInterface
+
 extension WhatIsYourGoalWeightPresenter: WhatIsYourGoalWeightPresenterInterface {
-    func didTapContinueCommonButton() {}
+    func viewDidLoad() {
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
+    }
+    
+    func didTapContinueCommonButton() {
+        router?.openFinalOfTheThirdStage()
+    }
 }

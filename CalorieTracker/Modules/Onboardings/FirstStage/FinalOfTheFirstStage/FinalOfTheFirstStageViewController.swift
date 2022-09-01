@@ -32,7 +32,7 @@ final class FinalOfTheFirstStageViewController: UIViewController {
     private let habitsImageView: UIImageView = .init()
     private let habitsLabel: UILabel = .init()
     private let delimeterView: UIView = .init()
-    private let comingCommonButton: CommonButton = .init(style: .filled, text: "keep it coming!".uppercased())
+    private let keepItCommonButton: CommonButton = .init(style: .filled, text: "keep it coming!".uppercased())
     
     // MARK: - Initialization
     
@@ -97,7 +97,7 @@ final class FinalOfTheFirstStageViewController: UIViewController {
         
         delimeterView.backgroundColor = .black
         
-        comingCommonButton.addTarget(self, action: #selector(didTapWelcomCommonButton),
+        keepItCommonButton.addTarget(self, action: #selector(didTapKeepItCommonButton),
                                      for: .touchUpInside)
     }
     
@@ -122,7 +122,7 @@ final class FinalOfTheFirstStageViewController: UIViewController {
         view.addSubview(habitsImageView)
         view.addSubview(habitsLabel)
         
-        view.addSubview(comingCommonButton)
+        view.addSubview(keepItCommonButton)
         
         passedImageView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
@@ -191,7 +191,7 @@ final class FinalOfTheFirstStageViewController: UIViewController {
             $0.width.equalTo(1)
         }
     
-        comingCommonButton.snp.makeConstraints {
+        keepItCommonButton.snp.makeConstraints {
             $0.left.equalTo(view.snp.left).offset(40)
             $0.right.equalTo(view.snp.right).offset(-40)
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-35)
@@ -200,8 +200,8 @@ final class FinalOfTheFirstStageViewController: UIViewController {
     }
     
     
-    @objc private func didTapWelcomCommonButton() {
-        print("didTapWelcomCommonButton")
+    @objc private func didTapKeepItCommonButton() {
+        presenter?.didTapKeepItCommonButton()
     }
 }
 

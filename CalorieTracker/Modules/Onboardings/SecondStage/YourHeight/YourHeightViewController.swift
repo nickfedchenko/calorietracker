@@ -8,7 +8,9 @@
 import Foundation
 import UIKit
 
-protocol YourHeightViewControllerInterface: AnyObject {}
+protocol YourHeightViewControllerInterface: AnyObject {
+    func set(currentOnboardingStage: OnboardingStage)
+}
 
 final class YourHeightViewController: UIViewController {
     
@@ -43,6 +45,7 @@ final class YourHeightViewController: UIViewController {
         titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .medium)
         
         borderTextField.isEnabled = false
+        borderTextField.textField.addTarget(self, action:  #selector(didTapContinueCommonButton), for: .touchUpInside)
         
         pickerView.dataSource = self
         pickerView.delegate = self
@@ -50,11 +53,19 @@ final class YourHeightViewController: UIViewController {
         continueCommonButton.addTarget(self, action: #selector(didTapContinueCommonButton), for: .touchUpInside)
     }
     
+    @objc private func didChangedTextField(_ sender: UITextField) {
+//        let isTextFieldEmpty = sender.text?.isEmpty ?? false
+        
+//        continueCommonButton.isEnabled = !isTextFieldEmpty
+    }
+    
     @objc private func didChangedDatePicker(_ sender: UIPickerView) {
         borderTextField.text = pickerView(pickerView, titleForRow: 1, forComponent: 1)
     }
     
     @objc private func didTapContinueCommonButton() {
+//        guard let name = borderTextField.text, !name.isEmpty else { return }
+        
         presenter?.didTapContinueCommonButton()
     }
     
@@ -72,7 +83,6 @@ final class YourHeightViewController: UIViewController {
         stageCounterView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
             $0.centerX.equalTo(view.snp.centerX)
-            $0.height.equalTo(30)
         }
         
         titleLabel.snp.makeConstraints {
@@ -105,7 +115,11 @@ final class YourHeightViewController: UIViewController {
 
 // MARK: - YourHeightViewControllerInterface
 
-extension YourHeightViewController: YourHeightViewControllerInterface {}
+extension YourHeightViewController: YourHeightViewControllerInterface {
+    func set(currentOnboardingStage: OnboardingStage) {
+        stageCounterView.set(onboardingStage: currentOnboardingStage)
+    }
+}
 
 // MARK: - UIPickerViewDataSource
 

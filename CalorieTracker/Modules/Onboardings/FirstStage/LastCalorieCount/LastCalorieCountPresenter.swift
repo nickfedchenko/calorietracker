@@ -47,6 +47,10 @@ extension LastCalorieCountPresenter: LastCalorieCountPresenterInterface {
         lastCalorieCount = interactor?.getAllLastCalorieCount() ?? []
         
         view.set(lastCalorieCount: lastCalorieCount)
+        
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
     }
 
     func didTapNextCommonButton() {

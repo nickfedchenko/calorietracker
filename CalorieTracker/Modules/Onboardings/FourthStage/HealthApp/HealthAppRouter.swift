@@ -38,6 +38,8 @@ class HealthAppRouter {
     }
 }
 
+// MARK: - HealthAppRouterInterface
+
 extension HealthAppRouter: HealthAppRouterInterface {
     func openFinalOfTheFourthStage() {
         let finalOfTheFourthStageRouter = FinalOfTheFourthStageRouter.setupModule()

@@ -7,13 +7,36 @@
 
 import Foundation
 
-protocol WhatIsYourGoalWeightInteractorInterface: AnyObject {}
+protocol WhatIsYourGoalWeightInteractorInterface: AnyObject {
+    func set(whatIsYourGoalWeight: String)
+    func getCurrentOnboardingStage() -> OnboardingStage
+}
 
 class WhatIsYourGoalWeightInteractor {
     
     // MARK: - Public properties
     
     weak var presenter: WhatIsYourGoalWeightPresenterInterface?
+    
+    // MARK: - Managers
+    
+    private let onboardingManager: OnboardingManagerInterface
+    
+    // MARK: - Initialization
+    
+    init(onboardingManager: OnboardingManagerInterface) {
+        self.onboardingManager = onboardingManager
+    }
 }
 
-extension WhatIsYourGoalWeightInteractor: WhatIsYourGoalWeightInteractorInterface {}
+// MARK: - WhatIsYourGoalWeightInteractorInterface
+
+extension WhatIsYourGoalWeightInteractor: WhatIsYourGoalWeightInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
+    func set(whatIsYourGoalWeight: String) {
+        onboardingManager.set(whatIsYourGoalWeight: whatIsYourGoalWeight)
+    }
+}

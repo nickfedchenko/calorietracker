@@ -10,6 +10,7 @@ import UIKit
 
 protocol MeasurementSystemViewControllerInterface: AnyObject {
     func set(measurementSystem: [MeasurementSystem])
+    func set(currentOnboardingStage: OnboardingStage)
 }
 
 final class MeasurementSystemViewController: UIViewController {
@@ -71,7 +72,6 @@ final class MeasurementSystemViewController: UIViewController {
         stageCounterView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
             $0.centerX.equalTo(view.snp.centerX)
-            $0.height.equalTo(30)
         }
         
         titleLabel.snp.makeConstraints {
@@ -127,6 +127,10 @@ final class MeasurementSystemViewController: UIViewController {
 // MARK: - MeasurementSystemViewControllerInterface
 
 extension MeasurementSystemViewController: MeasurementSystemViewControllerInterface {
+    func set(currentOnboardingStage: OnboardingStage) {
+        stageCounterView.set(onboardingStage: currentOnboardingStage)
+    }
+    
     func set(measurementSystem: [MeasurementSystem]) {
         stackView.removeAllArrangedSubviews()
         variabilityResponses = []

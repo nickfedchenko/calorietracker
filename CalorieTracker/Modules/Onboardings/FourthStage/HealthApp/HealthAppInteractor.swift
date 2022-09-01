@@ -16,4 +16,6 @@ class HealthAppInteractor {
     weak var presenter: HealthAppPresenterInterface?
 }
 
+// MARK: - HealthAppInteractorInterface
+
 extension HealthAppInteractor: HealthAppInteractorInterface {}

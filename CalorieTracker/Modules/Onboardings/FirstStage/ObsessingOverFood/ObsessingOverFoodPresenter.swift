@@ -47,6 +47,10 @@ extension ObsessingOverFoodPresenter: ObsessingOverFoodPresenterInterface {
         obsessingOverFood = interactor?.getAllObsessingOverFood() ?? []
         
         view.set(obsessingOverFood: obsessingOverFood)
+        
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
     }
     
     func didTapNextCommonButton() {

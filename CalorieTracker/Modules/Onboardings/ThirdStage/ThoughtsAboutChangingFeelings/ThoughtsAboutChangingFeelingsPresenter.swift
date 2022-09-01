@@ -44,6 +44,10 @@ extension ThoughtsAboutChangingFeelingsPresenter: ThoughtsAboutChangingFeelingsP
         thoughtsAboutChangingFeelings = interactor?.getAllThoughtsAboutChangingFeelings() ?? []
         
         view.set(thoughtsAboutChangingFeelings: thoughtsAboutChangingFeelings)
+        
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
     }
     
     func didTapContinueCommonButton() {

@@ -16,4 +16,6 @@ class FinalOfTheThirdStageInteractor {
     weak var presenter: FinalOfTheThirdStagePresenterInterface?
 }
 
+// MARK: - FinalOfTheThirdStageInteractorInterface
+
 extension FinalOfTheThirdStageInteractor: FinalOfTheThirdStageInteractorInterface {}

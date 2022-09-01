@@ -8,6 +8,7 @@
 import Foundation
 
 protocol YourWeightPresenterInterface: AnyObject {
+    func viewDidLoad()
     func didTapContinueCommonButton()
 }
 
@@ -35,7 +36,14 @@ class YourWeightPresenter {
 // MARK: - YourWeightPresenterInterface
 
 extension YourWeightPresenter: YourWeightPresenterInterface {
+    func viewDidLoad() {
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
+    }
+    
     func didTapContinueCommonButton() {
+//        interactor?.set(yourWeight: name)
         router?.openRisksOfDiseases()
     }
 }

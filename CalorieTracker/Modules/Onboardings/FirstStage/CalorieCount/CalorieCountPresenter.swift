@@ -8,6 +8,7 @@
 import Foundation
 
 protocol CalorieCountPresenterInterface: AnyObject {
+    func viewDidLoad()
     func didTapApprovalCommonButton()
     func didTapRejectionCommonButton()
 }
@@ -36,6 +37,12 @@ class CalorieCountPresenter {
 // MARK: - CalorieCountPresenterInterface
 
 extension CalorieCountPresenter: CalorieCountPresenterInterface {
+    func viewDidLoad() {
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
+    }
+    
     func didTapApprovalCommonButton() {
         interactor?.set(calorieCount: true)
         router?.openPreviousApplication()

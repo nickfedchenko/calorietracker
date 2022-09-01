@@ -12,6 +12,7 @@ protocol FinalOfTheFourthStageRouterInterface: AnyObject {
 }
 
 class FinalOfTheFourthStageRouter {
+    
     // MARK: - Public properties
     
     weak var presenter: FinalOfTheFourthStagePresenterInterface?
@@ -36,6 +37,8 @@ class FinalOfTheFourthStageRouter {
         return vc
     }
 }
+
+// MARK: - Public properties
 
 extension FinalOfTheFourthStageRouter: FinalOfTheFourthStageRouterInterface {
     func didTapCalorieTrackingViaKcalc() {

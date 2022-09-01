@@ -12,6 +12,7 @@ import UIKit
 
 protocol TheEffectOfWeightViewControllerInterface: AnyObject {
     func set(theEffectOfWeight: [TheEffectOfWeight])
+    func set(currentOnboardingStage: OnboardingStage)
 }
 
 final class TheEffectOfWeightViewController: UIViewController {
@@ -73,7 +74,7 @@ final class TheEffectOfWeightViewController: UIViewController {
         nextCommonButton.isHidden = true
         nextCommonButton.addTarget(self, action: #selector(didTapNextCommonButton), for: .touchUpInside)
     }
-    
+
     private func configureLayouts() {
         view.addSubview(stageCounterView)
 
@@ -85,10 +86,7 @@ final class TheEffectOfWeightViewController: UIViewController {
         
         stageCounterView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
-            $0.left.equalTo(view.snp.left).offset(100)
-            $0.right.equalTo(view.snp.right).offset(-100)
             $0.centerX.equalTo(view.snp.centerX)
-            $0.height.equalTo(30)
         }
         
         titleLabel.snp.makeConstraints {
@@ -150,6 +148,10 @@ final class TheEffectOfWeightViewController: UIViewController {
 // MARK: - TheEffectOfWeightViewControllerInterface
 
 extension TheEffectOfWeightViewController: TheEffectOfWeightViewControllerInterface {
+    func set(currentOnboardingStage: OnboardingStage) {
+        stageCounterView.set(onboardingStage: currentOnboardingStage)
+    }
+    
     func set(theEffectOfWeight: [TheEffectOfWeight]) {
         stackView.removeAllArrangedSubviews()
         answerOptions = []

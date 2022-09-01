@@ -10,6 +10,7 @@ import UIKit
 
 protocol AllergicRestrictionsViewControllerInterface: AnyObject {
     func set(allergicRestrictions: [AllergicRestrictions])
+    func set(currentOnboardingStage: OnboardingStage)
 }
 
 final class AllergicRestrictionsViewController: UIViewController {
@@ -83,9 +84,8 @@ final class AllergicRestrictionsViewController: UIViewController {
         }
         
         stageCounterView.snp.makeConstraints {
-            $0.top.equalTo(contentView.snp.top).offset(30)
+            $0.top.equalTo(contentView.safeAreaLayoutGuide.snp.top).offset(30)
             $0.centerX.equalTo(contentView.snp.centerX)
-            $0.height.equalTo(30)
         }
         
         titleLabel.snp.makeConstraints {
@@ -129,6 +129,10 @@ final class AllergicRestrictionsViewController: UIViewController {
 // MARK: - AllergicRestrictionsViewControllerInterface
 
 extension AllergicRestrictionsViewController: AllergicRestrictionsViewControllerInterface {
+    func set(currentOnboardingStage: OnboardingStage) {
+        stageCounterView.set(onboardingStage: currentOnboardingStage)
+    }
+    
     func set(allergicRestrictions: [AllergicRestrictions]) {
         stackView.removeAllArrangedSubviews()
         variabilityResponses = []

@@ -7,7 +7,9 @@
 
 import Foundation
 
-protocol FinalOfTheThirdStagePresenterInterface: AnyObject {}
+protocol FinalOfTheThirdStagePresenterInterface: AnyObject {
+    func didTapContinueToMotivation()
+}
 
 class FinalOfTheThirdStagePresenter {
     
@@ -30,4 +32,10 @@ class FinalOfTheThirdStagePresenter {
     }
 }
 
-extension FinalOfTheThirdStagePresenter: FinalOfTheThirdStagePresenterInterface {}
+// MARK: - FinalOfTheThirdStagePresenterInterface
+
+extension FinalOfTheThirdStagePresenter: FinalOfTheThirdStagePresenterInterface {
+    func didTapContinueToMotivation() {
+        router?.openCurrentLifestile()
+    }
+}

@@ -32,6 +32,8 @@ class HealthAppPresenter {
     }
 }
 
+// MARK: - HealthAppPresenterInterface
+
 extension HealthAppPresenter: HealthAppPresenterInterface {
     func didTapContinueCommonButton() {
         router?.openFinalOfTheFourthStage()

@@ -101,4 +101,6 @@ final class YoureNotAloneViewController: UIViewController {
     }
 }
 
+// MARK: - YoureNotAloneViewControllerInterface
+
 extension YoureNotAloneViewController: YoureNotAloneViewControllerInterface {}

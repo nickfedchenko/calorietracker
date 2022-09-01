@@ -29,6 +29,8 @@ class EnvironmentInfluencesTheChoiceInteractor {
     }
 }
 
+// MARK: - EnvironmentInfluencesTheChoiceInteractorInterface
+
 extension EnvironmentInfluencesTheChoiceInteractor: EnvironmentInfluencesTheChoiceInteractorInterface {
     func getAllEnvironmentInfluencesTheChoice() -> [EnvironmentInfluencesTheChoice] {
         return onboardingManager.getAllEnvironmentInfluencesTheChoice()

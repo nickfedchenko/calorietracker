@@ -10,6 +10,7 @@ import Foundation
 protocol ImportanceOfWeightLossInteractorInterface: AnyObject {
     func getAllImportanceOfWeightLoss() -> [ImportanceOfWeightLoss]
     func set(importanceOfWeightLoss: ImportanceOfWeightLoss)
+    func getCurrentOnboardingStage() -> OnboardingStage
 }
 
 class ImportanceOfWeightLossInteractor {
@@ -32,6 +33,10 @@ class ImportanceOfWeightLossInteractor {
 // MARK: - ImportanceOfWeightLossInteractorInterface
 
 extension ImportanceOfWeightLossInteractor: ImportanceOfWeightLossInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
     func getAllImportanceOfWeightLoss() -> [ImportanceOfWeightLoss] {
         return onboardingManager.getAllImportanceOfWeightLoss()
     }
@@ -40,4 +45,3 @@ extension ImportanceOfWeightLossInteractor: ImportanceOfWeightLossInteractorInte
         onboardingManager.set(importanceOfWeightLoss: importanceOfWeightLoss)
     }
 }
-

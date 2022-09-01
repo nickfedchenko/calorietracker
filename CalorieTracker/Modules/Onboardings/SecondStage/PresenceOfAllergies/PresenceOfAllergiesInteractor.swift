@@ -10,6 +10,7 @@ import Foundation
 protocol PresenceOfAllergiesInteractorInterface: AnyObject {
     func getAllPresenceOfAllergies() -> [PresenceOfAllergies]
     func set(presenceOfAllergies: PresenceOfAllergies)
+    func getCurrentOnboardingStage() -> OnboardingStage
 }
 
 class PresenceOfAllergiesInteractor {
@@ -31,6 +32,10 @@ class PresenceOfAllergiesInteractor {
 // MARK: - PresenceOfAllergiesInteractorInterface
 
 extension PresenceOfAllergiesInteractor: PresenceOfAllergiesInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
     func getAllPresenceOfAllergies() -> [PresenceOfAllergies] {
         return onboardingManager.getAllPresenceOfAllergies()
     }

@@ -38,6 +38,8 @@ class TimeToSeeYourGoalWeightRouter {
     }
 }
 
+// MARK: - TimeToSeeYourGoalWeightRouterInterface
+
 extension TimeToSeeYourGoalWeightRouter: TimeToSeeYourGoalWeightRouterInterface {
     func openWhatIsYourGoalWeight() {
         let whatIsYourGoalWeightRouter = WhatIsYourGoalWeightRouter.setupModule()

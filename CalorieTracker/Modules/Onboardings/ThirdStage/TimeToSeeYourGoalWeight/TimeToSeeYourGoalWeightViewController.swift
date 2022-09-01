@@ -108,4 +108,6 @@ final class TimeToSeeYourGoalWeightViewController: UIViewController {
     }
 }
 
+// MARK: - TimeToSeeYourGoalWeightViewControllerInterface
+
 extension TimeToSeeYourGoalWeightViewController: TimeToSeeYourGoalWeightViewControllerInterface {}

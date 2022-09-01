@@ -111,4 +111,6 @@ final class ThoughtsOnStressEatingViewController: UIViewController {
     }
 }
 
+// MARK: - ThoughtsOnStressEatingViewControllerInterface
+
 extension ThoughtsOnStressEatingViewController: ThoughtsOnStressEatingViewControllerInterface {}

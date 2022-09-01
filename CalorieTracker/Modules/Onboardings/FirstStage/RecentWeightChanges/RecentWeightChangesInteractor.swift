@@ -8,6 +8,7 @@
 import Foundation
 
 protocol RecentWeightChangesInteractorInterface: AnyObject {
+    func getCurrentOnboardingStage() -> OnboardingStage
     func set(recentWeightChanges: Bool)
 }
 
@@ -31,6 +32,10 @@ class RecentWeightChangesInteractor {
 // MARK: - RecentWeightChangesInteractorInterface
 
 extension RecentWeightChangesInteractor: RecentWeightChangesInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
     func set(recentWeightChanges: Bool) {
         onboardingManager.set(recentWeightChanges: recentWeightChanges)
     }

@@ -44,6 +44,10 @@ extension LifeChangesAfterWeightLossPresenter: LifeChangesAfterWeightLossPresent
         lifeChangesAfterWeightLoss = interactor?.getAllLifeChangesAfterWeightLoss() ?? []
         
         view.set(lifeChangesAfterWeightLoss: lifeChangesAfterWeightLoss)
+        
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
     }
     
     func didTapContinueCommonButton() {

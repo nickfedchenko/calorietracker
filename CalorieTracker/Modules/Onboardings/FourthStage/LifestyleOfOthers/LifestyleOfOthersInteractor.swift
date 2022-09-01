@@ -29,6 +29,8 @@ class LifestyleOfOthersInteractor {
     }
 }
 
+// MARK: - LifestyleOfOthersInteractorInterface
+
 extension LifestyleOfOthersInteractor: LifestyleOfOthersInteractorInterface {
     func getAllLifestyleOfOthers() -> [LifestyleOfOthers] {
         return onboardingManager.getAllLifestyleOfOthers()

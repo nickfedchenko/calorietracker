@@ -10,6 +10,7 @@ import Foundation
 protocol RisksOfDiseasesInteractorInterface: AnyObject {
     func getAllRisksOfDiseases() -> [RisksOfDiseases]
     func set(risksOfDiseases: RisksOfDiseases)
+    func getCurrentOnboardingStage() -> OnboardingStage
 }
 
 class RisksOfDiseasesInteractor {
@@ -32,6 +33,10 @@ class RisksOfDiseasesInteractor {
 // MARK: - RisksOfDiseasesInteractorInterface
 
 extension RisksOfDiseasesInteractor: RisksOfDiseasesInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
     func getAllRisksOfDiseases() -> [RisksOfDiseases] {
         return onboardingManager.getAllRisksOfDiseases()
     }

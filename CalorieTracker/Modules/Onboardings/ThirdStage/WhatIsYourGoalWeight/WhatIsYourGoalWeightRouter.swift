@@ -7,7 +7,9 @@
 
 import UIKit
 
-protocol WhatIsYourGoalWeightRouterInterface: AnyObject {}
+protocol WhatIsYourGoalWeightRouterInterface: AnyObject {
+    func openFinalOfTheThirdStage()
+}
 
 class WhatIsYourGoalWeightRouter {
     
@@ -20,7 +22,7 @@ class WhatIsYourGoalWeightRouter {
     
     static func setupModule() -> WhatIsYourGoalWeightViewController {
         let vc = WhatIsYourGoalWeightViewController()
-        let interactor = WhatIsYourGoalWeightInteractor()
+        let interactor = WhatIsYourGoalWeightInteractor(onboardingManager: OnboardingManager.shared)
         let router = WhatIsYourGoalWeightRouter()
         let presenter = WhatIsYourGoalWeightPresenter(
             interactor: interactor,
@@ -36,4 +38,12 @@ class WhatIsYourGoalWeightRouter {
     }
 }
 
-extension WhatIsYourGoalWeightRouter: WhatIsYourGoalWeightRouterInterface {}
+// MARK: - WhatIsYourGoalWeightRouterInterface
+
+extension WhatIsYourGoalWeightRouter: WhatIsYourGoalWeightRouterInterface {
+    func openFinalOfTheThirdStage() {
+        let finalOfTheThirdStageRouter = FinalOfTheThirdStageRouter.setupModule()
+        
+        viewController?.navigationController?.pushViewController(finalOfTheThirdStageRouter, animated: true)
+    }
+}

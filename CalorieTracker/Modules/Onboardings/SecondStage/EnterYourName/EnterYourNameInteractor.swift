@@ -9,6 +9,7 @@ import Foundation
 
 protocol EnterYourNameInteractorInterface: AnyObject {
     func set(enterYourName: String)
+    func getCurrentOnboardingStage() -> OnboardingStage
 }
 
 class EnterYourNameInteractor {
@@ -31,6 +32,10 @@ class EnterYourNameInteractor {
 // MARK: - EnterYourNameInteractorInterface
 
 extension EnterYourNameInteractor: EnterYourNameInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
     func set(enterYourName: String) {
         onboardingManager.set(enterYourName: enterYourName)
     }

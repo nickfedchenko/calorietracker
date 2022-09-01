@@ -106,4 +106,6 @@ final class CalorieTrackingViaKcalcViewController: UIViewController {
     }
 }
 
+// MARK: - CalorieTrackingViaKcalcViewControllerInterface
+
 extension CalorieTrackingViaKcalcViewController: CalorieTrackingViaKcalcViewControllerInterface {}

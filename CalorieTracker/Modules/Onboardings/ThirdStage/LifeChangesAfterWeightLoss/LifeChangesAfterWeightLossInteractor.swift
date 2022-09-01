@@ -10,6 +10,7 @@ import Foundation
 protocol LifeChangesAfterWeightLossInteractorInterface: AnyObject {
     func getAllLifeChangesAfterWeightLoss() -> [LifeChangesAfterWeightLoss]
     func set(lifeChangesAfterWeightLoss: LifeChangesAfterWeightLoss)
+    func getCurrentOnboardingStage() -> OnboardingStage
 }
 
 class LifeChangesAfterWeightLossInteractor {
@@ -32,6 +33,10 @@ class LifeChangesAfterWeightLossInteractor {
 // MARK: - LifeChangesAfterWeightLossInteractorInterface
 
 extension LifeChangesAfterWeightLossInteractor: LifeChangesAfterWeightLossInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
     func getAllLifeChangesAfterWeightLoss() -> [LifeChangesAfterWeightLoss] {
         return onboardingManager.getAllLifeChangesAfterWeightLoss()
     }

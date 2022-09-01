@@ -8,6 +8,7 @@
 import Foundation
 
 protocol QuestionOfLosingWeightPresenterInterface: AnyObject {
+    func viewDidLoad()
     func didTapApprovalCommonButton()
     func didTapRejectionCommonButton()
 }
@@ -36,6 +37,12 @@ class  QuestionOfLosingWeightPresenter {
 // MARK: - QuestionOfLosingWeightPresenterInterface
 
 extension  QuestionOfLosingWeightPresenter: QuestionOfLosingWeightPresenterInterface {
+    func viewDidLoad() {
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
+    }
+    
     func didTapApprovalCommonButton() {
         interactor?.set(isHaveYouTriedToLoseWeightBefor: true)
         router?.openDescriptionOfExperience()

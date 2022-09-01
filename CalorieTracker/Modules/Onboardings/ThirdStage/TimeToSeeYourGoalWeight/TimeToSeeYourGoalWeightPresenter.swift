@@ -32,6 +32,8 @@ class TimeToSeeYourGoalWeightPresenter {
     }
 }
 
+// MARK: - TimeToSeeYourGoalWeightPresenterInterface
+
 extension TimeToSeeYourGoalWeightPresenter: TimeToSeeYourGoalWeightPresenterInterface {
     func didTapSetGoalWeightCommonButton() {
         router?.openWhatIsYourGoalWeight()

@@ -22,7 +22,7 @@ class YourWeightRouter {
     
     static func setupModule() -> YourWeightViewController {
         let vc = YourWeightViewController()
-        let interactor = YourWeightInteractor()
+        let interactor = YourWeightInteractor(onboardingManager: OnboardingManager.shared)
         let router = YourWeightRouter()
         let presenter = YourWeightPresenter(
             interactor: interactor,

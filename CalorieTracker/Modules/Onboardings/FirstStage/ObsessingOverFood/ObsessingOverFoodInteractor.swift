@@ -10,6 +10,7 @@ import Foundation
 protocol ObsessingOverFoodInterctorInterface: AnyObject {
     func getAllObsessingOverFood() -> [ObsessingOverFood]
     func set(obsessingOverFood: ObsessingOverFood)
+    func getCurrentOnboardingStage() -> OnboardingStage
 }
 
 class ObsessingOverFoodInteractor {
@@ -32,6 +33,10 @@ class ObsessingOverFoodInteractor {
 // MARK: - ObsessingOverFoodInterctorInterface
 
 extension ObsessingOverFoodInteractor: ObsessingOverFoodInterctorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
     func getAllObsessingOverFood() -> [ObsessingOverFood] {
         return onboardingManager.getAllObsessingOverFood()
     }
