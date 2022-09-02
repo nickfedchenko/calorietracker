@@ -22,7 +22,7 @@ class HelpingPeopleTrackCaloriesRouter {
     
     static func setupModule() -> HelpingPeopleTrackCaloriesViewController {
         let vc = HelpingPeopleTrackCaloriesViewController()
-        let interactor = HelpingPeopleTrackCaloriesInteractor()
+        let interactor = HelpingPeopleTrackCaloriesInteractor(onboardingManager: OnboardingManager.shared)
         let router = HelpingPeopleTrackCaloriesRouter()
         let presenter = HelpingPeopleTrackCaloriesPresenter(
             interactor: interactor,

@@ -10,6 +10,7 @@ import UIKit
 
 protocol EmotionalSupportSystemViewControllerInterface: AnyObject {
     func set(emotionalSupportSystem: [EmotionalSupportSystem])
+    func set(currentOnboardingStage: OnboardingStage)
 }
 
 final class EmotionalSupportSystemViewController: UIViewController {
@@ -73,10 +74,7 @@ final class EmotionalSupportSystemViewController: UIViewController {
         
         stageCounterView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
-            $0.left.equalTo(view.snp.left).offset(100)
-            $0.right.equalTo(view.snp.right).offset(-100)
             $0.centerX.equalTo(view.snp.centerX)
-            $0.height.equalTo(30)
         }
         
         titleLabel.snp.makeConstraints {
@@ -137,6 +135,10 @@ final class EmotionalSupportSystemViewController: UIViewController {
 // MARK: - EmotionalSupportSystemViewControllerInterface
 
 extension EmotionalSupportSystemViewController: EmotionalSupportSystemViewControllerInterface {
+    func set(currentOnboardingStage: OnboardingStage) {
+        stageCounterView.set(onboardingStage: currentOnboardingStage)
+    }
+    
     func set(emotionalSupportSystem: [EmotionalSupportSystem]) {
         stackView.removeAllArrangedSubviews()
         answerOptions = []

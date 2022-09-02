@@ -22,7 +22,7 @@ class DifficultyOfMakingHealthyChoicesRouter {
     
     static func setupModule() -> DifficultyOfMakingHealthyChoicesViewController {
         let vc = DifficultyOfMakingHealthyChoicesViewController()
-        let interactor = DifficultyOfMakingHealthyChoicesInteractor()
+        let interactor = DifficultyOfMakingHealthyChoicesInteractor(onboardingManager: OnboardingManager.shared)
         let router = DifficultyOfMakingHealthyChoicesRouter()
         let presenter = DifficultyOfMakingHealthyChoicesPresenter(
             interactor: interactor,

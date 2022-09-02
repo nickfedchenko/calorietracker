@@ -43,6 +43,7 @@ extension WhatIsYourGoalWeightPresenter: WhatIsYourGoalWeightPresenterInterface 
     }
     
     func didTapContinueCommonButton() {
+        interactor?.set(whatIsYourGoalWeight: "dasda")
         router?.openFinalOfTheThirdStage()
     }
 }

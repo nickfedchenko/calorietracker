@@ -10,6 +10,7 @@ import UIKit
 
 protocol DescriptionOfCulinarySkillsViewControllerInterface: AnyObject {
     func set(descriptionOfCulinarySkills: [DescriptionOfCulinarySkills])
+    func set(currentOnboardingStage: OnboardingStage)
 }
 
 final class DescriptionOfCulinarySkillsViewController: UIViewController {
@@ -108,9 +109,8 @@ final class DescriptionOfCulinarySkillsViewController: UIViewController {
         }
         
         stageCounterView.snp.makeConstraints {
-            $0.top.equalTo(contentView.snp.top).offset(30)
+            $0.top.equalTo(contentView.safeAreaLayoutGuide.snp.top).offset(30)
             $0.centerX.equalTo(contentView.snp.centerX)
-            $0.height.equalTo(30)
         }
         
         imageView.snp.makeConstraints {
@@ -177,6 +177,10 @@ final class DescriptionOfCulinarySkillsViewController: UIViewController {
 // MARK: - DescriptionOfCulinarySkillsViewControllerInterface
 
 extension DescriptionOfCulinarySkillsViewController: DescriptionOfCulinarySkillsViewControllerInterface {
+    func set(currentOnboardingStage: OnboardingStage) {
+        stageCounterView.set(onboardingStage: currentOnboardingStage)
+    }
+    
     func set(descriptionOfCulinarySkills: [DescriptionOfCulinarySkills]) {
         stackView.removeAllArrangedSubviews()
         answerOptions = []

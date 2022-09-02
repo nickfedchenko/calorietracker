@@ -8,6 +8,7 @@
 import Foundation
 
 protocol YoureNotAlonePresenterInterface: AnyObject {
+    func viewDidLoad()
     func didTapContinueCommonButton()
 }
 
@@ -35,6 +36,12 @@ class YoureNotAlonePresenter {
 // MARK: - YoureNotAlonePresenterInterface
 
 extension YoureNotAlonePresenter: YoureNotAlonePresenterInterface {
+    func viewDidLoad() {
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
+    }
+        
     func didTapContinueCommonButton() {
         router?.openDifficultyChoosingLifestyle()
     }

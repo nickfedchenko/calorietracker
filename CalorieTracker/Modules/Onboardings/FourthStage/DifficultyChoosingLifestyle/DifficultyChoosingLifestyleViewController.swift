@@ -8,7 +8,9 @@
 import Foundation
 import UIKit
 
-protocol DifficultyChoosingLifestyleViewControllerInterface: AnyObject {}
+protocol DifficultyChoosingLifestyleViewControllerInterface: AnyObject {
+    func set(currentOnboardingStage: OnboardingStage)
+}
 
 final class DifficultyChoosingLifestyleViewController: UIViewController {
     
@@ -18,7 +20,7 @@ final class DifficultyChoosingLifestyleViewController: UIViewController {
     
     // MARK: - Views properties
 
-    private let plugView: UIView = .init()
+    private let stageCounterView: StageCounterView = .init()
     private let titleLabel: UILabel = .init()
     private let approvalCommonButton: CommonButton = .init(style: .bordered, text: "Yes".uppercased())
     private let rejectionCommonButton: CommonButton = .init(style: .bordered, text: "No".uppercased())
@@ -27,6 +29,8 @@ final class DifficultyChoosingLifestyleViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        presenter?.viewDidLoad()
         
         configureBackBarButtonItem()
         configureViews()
@@ -37,8 +41,6 @@ final class DifficultyChoosingLifestyleViewController: UIViewController {
         title = "Habits"
         
         view.backgroundColor = R.color.mainBackground()
-        
-        plugView.backgroundColor = R.color.onboardings.radialGradientFirst()
         
         titleLabel.text = "Is it harder for you to make healthy choices on the weekend?"
         titleLabel.textColor = R.color.onboardings.basicDark()
@@ -54,7 +56,7 @@ final class DifficultyChoosingLifestyleViewController: UIViewController {
     }
     
     private func configureLayouts() {
-        view.addSubview(plugView)
+        view.addSubview(stageCounterView)
         
         view.addSubview(titleLabel)
         
@@ -62,12 +64,9 @@ final class DifficultyChoosingLifestyleViewController: UIViewController {
         
         view.addSubview(rejectionCommonButton)
         
-        plugView.snp.makeConstraints {
+        stageCounterView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
-            $0.left.equalTo(view.snp.left).offset(100)
-            $0.right.equalTo(view.snp.right).offset(-100)
             $0.centerX.equalTo(view.snp.centerX)
-            $0.height.equalTo(30)
         }
         
         titleLabel.snp.makeConstraints {
@@ -103,4 +102,8 @@ final class DifficultyChoosingLifestyleViewController: UIViewController {
 
 // MARK: - DifficultyChoosingLifestyleViewControllerInterface
 
-extension DifficultyChoosingLifestyleViewController: DifficultyChoosingLifestyleViewControllerInterface {}
+extension DifficultyChoosingLifestyleViewController: DifficultyChoosingLifestyleViewControllerInterface {
+    func set(currentOnboardingStage: OnboardingStage) {
+        stageCounterView.set(onboardingStage: currentOnboardingStage)
+    }
+}

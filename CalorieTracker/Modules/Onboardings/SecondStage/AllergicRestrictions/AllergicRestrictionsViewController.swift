@@ -36,6 +36,7 @@ final class AllergicRestrictionsViewController: UIViewController {
         
         presenter?.viewDidLoad()
         
+        configureBackBarButtonItem()
         configureViews()
         configureLayouts()
     }

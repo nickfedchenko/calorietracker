@@ -44,6 +44,10 @@ extension SequenceOfHabitFormationPresenter: SequenceOfHabitFormationPresenterIn
         sequenceOfHabitFormation = interactor?.getAllSequenceOfHabitFormation() ?? []
         
         view.set(sequenceOfHabitFormation: sequenceOfHabitFormation)
+        
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
     }
     func didTapContinueCommonButton() {
         interactor?.set(sequenceOfHabitFormation: .logAllOfYoutMealsBeforeTheDayStarts)

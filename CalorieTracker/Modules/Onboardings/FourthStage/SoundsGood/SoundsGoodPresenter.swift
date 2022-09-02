@@ -8,6 +8,7 @@
 import Foundation
 
 protocol SoundsGoodPresenterInterface: AnyObject {
+    func viewDidLoad()
     func didTapContinueCommonButton()
 }
 
@@ -35,6 +36,12 @@ class SoundsGoodPresenter {
 // MARK: - SoundsGoodPresenterInterface
 
 extension SoundsGoodPresenter: SoundsGoodPresenterInterface {
+    func viewDidLoad() {
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
+    }
+    
     func didTapContinueCommonButton() {
         router?.openDescriptionOfCulinarySkills()
     }

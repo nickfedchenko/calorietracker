@@ -10,6 +10,7 @@ import Foundation
 protocol HowImproveYourEfficiencyInteractorInterface: AnyObject {
     func getAllHowImproveYourEfficiency() -> [HowImproveYourEfficiency]
     func set(howImproveYourEfficiency: HowImproveYourEfficiency)
+    func getCurrentOnboardingStage() -> OnboardingStage
 }
 
 class HowImproveYourEfficiencyInteractor {
@@ -32,6 +33,10 @@ class HowImproveYourEfficiencyInteractor {
 // MARK: - HowImproveYourEfficiencyInteractorInterface
 
 extension HowImproveYourEfficiencyInteractor: HowImproveYourEfficiencyInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
     func getAllHowImproveYourEfficiency() -> [HowImproveYourEfficiency] {
         return onboardingManager.getAllHowImproveYourEfficiency()
     }

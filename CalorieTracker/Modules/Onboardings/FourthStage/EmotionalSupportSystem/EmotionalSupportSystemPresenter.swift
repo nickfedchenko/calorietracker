@@ -44,6 +44,10 @@ extension EmotionalSupportSystemPresenter: EmotionalSupportSystemPresenterInterf
         emotionalSupportSystem = interactor?.getAllEmotionalSupportSystem() ?? []
         
         view.set(emotionalSupportSystem: emotionalSupportSystem)
+        
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
     }
     
     func didTapContinueCommonButton() {

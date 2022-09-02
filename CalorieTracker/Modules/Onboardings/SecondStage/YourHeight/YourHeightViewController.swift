@@ -31,6 +31,8 @@ final class YourHeightViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        presenter?.viewDidLoad()
+        
         configureBackBarButtonItem()
         configureViews()
         configureLayouts()

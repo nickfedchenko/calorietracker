@@ -7,15 +7,31 @@
 
 import Foundation
 
-protocol SoundsGoodInteractorInterface: AnyObject {}
+protocol SoundsGoodInteractorInterface: AnyObject {
+    func getCurrentOnboardingStage() -> OnboardingStage
+}
 
 class SoundsGoodInteractor {
     
     // MARK: - Public properties
     
     weak var presenter: SoundsGoodPresenterInterface?
+    
+    // MARK: - Managers
+    
+    private let onboardingManager: OnboardingManagerInterface
+    
+    // MARK: - Initialization
+    
+    init(onboardingManager: OnboardingManagerInterface) {
+        self.onboardingManager = onboardingManager
+    }
 }
 
 // MARK: - SoundsGoodInteractorInterface
 
-extension SoundsGoodInteractor: SoundsGoodInteractorInterface {}
+extension SoundsGoodInteractor: SoundsGoodInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+}

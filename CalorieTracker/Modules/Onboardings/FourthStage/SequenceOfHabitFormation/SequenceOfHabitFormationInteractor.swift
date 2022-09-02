@@ -10,6 +10,7 @@ import Foundation
 protocol SequenceOfHabitFormationInteractorInterface: AnyObject {
     func getAllSequenceOfHabitFormation() -> [SequenceOfHabitFormation]
     func set(sequenceOfHabitFormation: SequenceOfHabitFormation)
+    func getCurrentOnboardingStage() -> OnboardingStage
 }
 
 class SequenceOfHabitFormationInteractor {
@@ -32,6 +33,10 @@ class SequenceOfHabitFormationInteractor {
 // MARK: - SequenceOfHabitFormationInteractorInterface
 
 extension SequenceOfHabitFormationInteractor: SequenceOfHabitFormationInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
     func getAllSequenceOfHabitFormation() -> [SequenceOfHabitFormation] {
         return onboardingManager.getAllSequenceOfHabitFormation()
     }

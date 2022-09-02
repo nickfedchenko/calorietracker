@@ -8,6 +8,7 @@
 import Foundation
 
 protocol AchievementByWillPowerPresenterInterface: AnyObject {
+    func viewDidLoad()
     func didTapNextCommonButton()
 }
 
@@ -35,6 +36,12 @@ class AchievementByWillPowerPresenter {
 // MARK: - AchievementByWillPowerPresenterInterface
 
 extension AchievementByWillPowerPresenter: AchievementByWillPowerPresenterInterface {
+    func viewDidLoad() {
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
+    }
+    
     func didTapNextCommonButton() {
         router?.openLastCalorieCount()
     }

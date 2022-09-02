@@ -43,7 +43,7 @@ extension YourWeightPresenter: YourWeightPresenterInterface {
     }
     
     func didTapContinueCommonButton() {
-//        interactor?.set(yourWeight: name)
+        interactor?.set(yourWeight: "name")
         router?.openRisksOfDiseases()
     }
 }

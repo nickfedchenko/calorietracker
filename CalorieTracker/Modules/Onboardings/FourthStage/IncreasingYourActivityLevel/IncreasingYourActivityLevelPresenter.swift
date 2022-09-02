@@ -8,6 +8,7 @@
 import Foundation
 
 protocol IncreasingYourActivityLevelPresenterInterface: AnyObject {
+    func viewDidLoad()
     func didTapApprovalCommonButton()
     func didTapRejectionCommonButton()
 }
@@ -36,6 +37,12 @@ class IncreasingYourActivityLevelPresenter {
 // MARK: - IncreasingYourActivityLevelPresenterInterface
 
 extension IncreasingYourActivityLevelPresenter: IncreasingYourActivityLevelPresenterInterface {
+    func viewDidLoad() {
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
+    }
+    
     func didTapApprovalCommonButton() {
         interactor?.set(increasingYourActivityLevel: true)
         router?.openHowImproveYourEfficiency()

@@ -8,6 +8,7 @@
 import Foundation
 
 protocol TimeToSeeYourGoalWeightPresenterInterface: AnyObject {
+    func viewDidLoad()
     func didTapSetGoalWeightCommonButton()
 }
 
@@ -35,6 +36,12 @@ class TimeToSeeYourGoalWeightPresenter {
 // MARK: - TimeToSeeYourGoalWeightPresenterInterface
 
 extension TimeToSeeYourGoalWeightPresenter: TimeToSeeYourGoalWeightPresenterInterface {
+    func viewDidLoad() {
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
+    }
+    
     func didTapSetGoalWeightCommonButton() {
         router?.openWhatIsYourGoalWeight()
     }

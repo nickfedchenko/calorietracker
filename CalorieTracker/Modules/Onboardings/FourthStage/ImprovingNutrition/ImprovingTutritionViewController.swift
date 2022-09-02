@@ -10,6 +10,7 @@ import UIKit
 
 protocol ImprovingNutritionViewControllerInterface: AnyObject {
     func set(improvingNutrition: [ImprovingNutrition])
+    func set(currentOnboardingStage: OnboardingStage)
 }
 
 final class ImprovingNutritionViewController: UIViewController {
@@ -96,9 +97,8 @@ final class ImprovingNutritionViewController: UIViewController {
         }
         
         stageCounterView.snp.makeConstraints {
-            $0.top.equalTo(contentView.snp.top).offset(30)
+            $0.top.equalTo(contentView.safeAreaLayoutGuide.snp.top).offset(30)
             $0.centerX.equalTo(contentView.snp.centerX)
-            $0.height.equalTo(30)
         }
         
         titleLabel.snp.makeConstraints {
@@ -151,6 +151,10 @@ final class ImprovingNutritionViewController: UIViewController {
 // MARK: - ImprovingNutritionViewControllerInterface
 
 extension ImprovingNutritionViewController: ImprovingNutritionViewControllerInterface {
+    func set(currentOnboardingStage: OnboardingStage) {
+        stageCounterView.set(onboardingStage: currentOnboardingStage)
+    }
+    
     func set(improvingNutrition: [ImprovingNutrition]) {
         stackView.removeAllArrangedSubviews()
         answerOptions = []

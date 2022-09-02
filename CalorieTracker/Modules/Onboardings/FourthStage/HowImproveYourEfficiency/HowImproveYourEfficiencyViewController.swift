@@ -10,6 +10,7 @@ import UIKit
 
 protocol HowImproveYourEfficiencyViewControllerInterface: AnyObject {
     func set(howImproveYourEfficiency: [HowImproveYourEfficiency])
+    func set(currentOnboardingStage: OnboardingStage)
 }
 
 final class HowImproveYourEfficiencyViewController: UIViewController {
@@ -96,9 +97,8 @@ final class HowImproveYourEfficiencyViewController: UIViewController {
         }
         
         stageCounterView.snp.makeConstraints {
-            $0.top.equalTo(contentView.snp.top).offset(30)
+            $0.top.equalTo(contentView.safeAreaLayoutGuide.snp.top).offset(30)
             $0.centerX.equalTo(contentView.snp.centerX)
-            $0.height.equalTo(30)
         }
         
         titleLabel.snp.makeConstraints {
@@ -151,6 +151,10 @@ final class HowImproveYourEfficiencyViewController: UIViewController {
 // MARK: - HowImproveYourEfficiencyViewControllerInterface
 
 extension HowImproveYourEfficiencyViewController: HowImproveYourEfficiencyViewControllerInterface {
+    func set(currentOnboardingStage: OnboardingStage) {
+        stageCounterView.set(onboardingStage: currentOnboardingStage)
+    }
+    
     func set(howImproveYourEfficiency: [HowImproveYourEfficiency]) {
         stackView.removeAllArrangedSubviews()
         answerOptions = []

@@ -23,7 +23,7 @@ class CallToAchieveGoalRouter: NSObject {
     
     static func setupModule() -> CallToAchieveGoalViewController {
         let vc = CallToAchieveGoalViewController()
-        let interactor = CallToAchieveGoalInteractor()
+        let interactor = CallToAchieveGoalInteractor(onboardingManager: OnboardingManager.shared)
         let router = CallToAchieveGoalRouter()
         let presenter = CallToAchieveGoalPresenter(
             interactor: interactor,

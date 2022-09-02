@@ -8,7 +8,9 @@
 import Foundation
 import UIKit
 
-protocol InterestInUsingTechnologyViewControllerInterface: AnyObject {}
+protocol InterestInUsingTechnologyViewControllerInterface: AnyObject {
+    func set(currentOnboardingStage: OnboardingStage)
+}
 
 final class InterestInUsingTechnologyViewController: UIViewController {
     
@@ -18,7 +20,7 @@ final class InterestInUsingTechnologyViewController: UIViewController {
     
     // MARK: - Views properties
 
-    private let plugView: UIView = .init()
+    private let stageCounterView: StageCounterView = .init()
     private let titleLabel: UILabel = .init()
     private let approvalCommonButton: CommonButton = .init(style: .bordered, text: "Yes".uppercased())
     private let rejectionCommonButton: CommonButton = .init(style: .bordered, text: "NO, not really".uppercased())
@@ -27,6 +29,8 @@ final class InterestInUsingTechnologyViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        presenter?.viewDidLoad()
         
         configureBackBarButtonItem()
         configureViews()
@@ -37,8 +41,6 @@ final class InterestInUsingTechnologyViewController: UIViewController {
         title = "Habits"
         
         view.backgroundColor = R.color.mainBackground()
-        
-        plugView.backgroundColor = R.color.onboardings.radialGradientFirst()
         
         let attributedString = NSMutableAttributedString()
         
@@ -65,7 +67,7 @@ final class InterestInUsingTechnologyViewController: UIViewController {
     }
     
     private func configureLayouts() {
-        view.addSubview(plugView)
+        view.addSubview(stageCounterView)
         
         view.addSubview(titleLabel)
         
@@ -73,12 +75,9 @@ final class InterestInUsingTechnologyViewController: UIViewController {
         
         view.addSubview(rejectionCommonButton)
         
-        plugView.snp.makeConstraints {
+        stageCounterView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
-            $0.left.equalTo(view.snp.left).offset(100)
-            $0.right.equalTo(view.snp.right).offset(-100)
             $0.centerX.equalTo(view.snp.centerX)
-            $0.height.equalTo(30)
         }
         
         titleLabel.snp.makeConstraints {
@@ -114,4 +113,8 @@ final class InterestInUsingTechnologyViewController: UIViewController {
 
 // MARK: - InterestInUsingTechnologyViewControllerInterface
 
-extension InterestInUsingTechnologyViewController: InterestInUsingTechnologyViewControllerInterface {}
+extension InterestInUsingTechnologyViewController: InterestInUsingTechnologyViewControllerInterface {
+    func set(currentOnboardingStage: OnboardingStage) {
+        stageCounterView.set(onboardingStage: currentOnboardingStage)
+    }
+}

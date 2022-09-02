@@ -43,7 +43,7 @@ extension YourHeightPresenter: YourHeightPresenterInterface {
     }
     
     func didTapContinueCommonButton() {
-//        interactor?.set(yourHeight: name)
+        interactor?.set(yourHeight: "name")
         router?.openYourWeight()
     }
 }

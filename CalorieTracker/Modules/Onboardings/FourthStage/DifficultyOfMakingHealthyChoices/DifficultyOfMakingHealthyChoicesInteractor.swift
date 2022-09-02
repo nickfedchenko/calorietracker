@@ -7,13 +7,29 @@
 
 import Foundation
 
-protocol DifficultyOfMakingHealthyChoicesInteractorInterface: AnyObject {}
+protocol DifficultyOfMakingHealthyChoicesInteractorInterface: AnyObject {
+    func getCurrentOnboardingStage() -> OnboardingStage
+}
 
 class DifficultyOfMakingHealthyChoicesInteractor {
     
     // MARK: - Public properties
     
     weak var presenter: DifficultyOfMakingHealthyChoicesPresenterInterface?
+    
+    // MARK: - Managers
+    
+    private let onboardingManager: OnboardingManagerInterface
+    
+    // MARK: - Initialization
+    
+    init(onboardingManager: OnboardingManagerInterface) {
+        self.onboardingManager = onboardingManager
+    }
 }
 
-extension DifficultyOfMakingHealthyChoicesInteractor: DifficultyOfMakingHealthyChoicesInteractorInterface {}
+extension DifficultyOfMakingHealthyChoicesInteractor: DifficultyOfMakingHealthyChoicesInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+}

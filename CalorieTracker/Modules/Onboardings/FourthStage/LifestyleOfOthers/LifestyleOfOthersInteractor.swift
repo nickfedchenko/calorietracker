@@ -10,6 +10,7 @@ import Foundation
 protocol LifestyleOfOthersInteractorInterface: AnyObject {
     func getAllLifestyleOfOthers() -> [LifestyleOfOthers]
     func set(lifestyleOfOthers: LifestyleOfOthers)
+    func getCurrentOnboardingStage() -> OnboardingStage
 }
 
 class LifestyleOfOthersInteractor {
@@ -32,6 +33,10 @@ class LifestyleOfOthersInteractor {
 // MARK: - LifestyleOfOthersInteractorInterface
 
 extension LifestyleOfOthersInteractor: LifestyleOfOthersInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
     func getAllLifestyleOfOthers() -> [LifestyleOfOthers] {
         return onboardingManager.getAllLifestyleOfOthers()
     }

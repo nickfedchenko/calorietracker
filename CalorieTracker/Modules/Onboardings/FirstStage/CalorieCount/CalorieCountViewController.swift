@@ -33,6 +33,8 @@ final class CalorieCountViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        presenter?.viewDidLoad()
+        
         configureBackBarButtonItem()
         configureViews()
         configureLayouts()

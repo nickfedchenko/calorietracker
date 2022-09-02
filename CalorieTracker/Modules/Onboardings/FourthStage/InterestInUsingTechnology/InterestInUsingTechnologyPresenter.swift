@@ -8,6 +8,7 @@
 import Foundation
 
 protocol InterestInUsingTechnologyPresenterInterface: AnyObject {
+    func viewDidLoad()
     func didTapApprovalCommonButton()
     func didTapRejectionCommonButton()
 }
@@ -36,6 +37,12 @@ class InterestInUsingTechnologyPresenter {
 // MARK: - InterestInUsingTechnologyPresenterInterface
 
 extension InterestInUsingTechnologyPresenter: InterestInUsingTechnologyPresenterInterface {
+    func viewDidLoad() {
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
+    }
+    
     func didTapApprovalCommonButton() {
         interactor?.set(interestInUsingTechnology: true)
         router?.openPlaceOfResidence()

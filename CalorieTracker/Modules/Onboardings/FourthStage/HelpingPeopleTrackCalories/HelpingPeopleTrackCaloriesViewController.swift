@@ -10,7 +10,9 @@ import UIKit
 
 // swiftlint:disable line_length
 
-protocol HelpingPeopleTrackCaloriesViewControllerInterface: AnyObject {}
+protocol HelpingPeopleTrackCaloriesViewControllerInterface: AnyObject {
+    func set(currentOnboardingStage: OnboardingStage)
+}
 
 final class HelpingPeopleTrackCaloriesViewController: UIViewController {
     
@@ -20,7 +22,7 @@ final class HelpingPeopleTrackCaloriesViewController: UIViewController {
     
     // MARK: - Views properties
 
-    private let plugView: UIView = .init()
+    private let stageCounterView: StageCounterView = .init()
     private let stackView: UIStackView = .init()
     private let imageView: UIImageView = .init()
     private let titleLabel: UILabel = .init()
@@ -31,6 +33,8 @@ final class HelpingPeopleTrackCaloriesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        presenter?.viewDidLoad()
+        
         configureBackBarButtonItem()
         configureViews()
         configureLayouts()
@@ -40,9 +44,7 @@ final class HelpingPeopleTrackCaloriesViewController: UIViewController {
         title = "Habits"
         
         view.backgroundColor = R.color.mainBackground()
-        
-        plugView.backgroundColor = R.color.onboardings.radialGradientFirst()
-        
+       
         stackView.spacing = 24
         stackView.alignment = .center
         stackView.axis = .vertical
@@ -60,7 +62,7 @@ final class HelpingPeopleTrackCaloriesViewController: UIViewController {
     }
     
     private func configureLayouts() {
-        view.addSubview(plugView)
+        view.addSubview(stageCounterView)
         
         view.addSubview(stackView)
         
@@ -69,12 +71,9 @@ final class HelpingPeopleTrackCaloriesViewController: UIViewController {
         
         view.addSubview(continueCommonButton)
         
-        plugView.snp.makeConstraints {
+        stageCounterView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
-            $0.left.equalTo(view.snp.left).offset(100)
-            $0.right.equalTo(view.snp.right).offset(-100)
             $0.centerX.equalTo(view.snp.centerX)
-            $0.height.equalTo(30)
         }
         
         stackView.snp.makeConstraints {
@@ -103,4 +102,8 @@ final class HelpingPeopleTrackCaloriesViewController: UIViewController {
 
 // MARK: - HelpingPeopleTrackCaloriesViewControllerInterface
 
-extension HelpingPeopleTrackCaloriesViewController: HelpingPeopleTrackCaloriesViewControllerInterface {}
+extension HelpingPeopleTrackCaloriesViewController: HelpingPeopleTrackCaloriesViewControllerInterface {
+    func set(currentOnboardingStage: OnboardingStage) {
+        stageCounterView.set(onboardingStage: currentOnboardingStage)
+    }
+}

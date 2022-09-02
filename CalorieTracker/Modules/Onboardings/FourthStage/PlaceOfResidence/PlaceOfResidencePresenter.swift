@@ -44,6 +44,10 @@ extension PlaceOfResidencePresenter: PlaceOfResidencePresenterInterface {
         placeOfResidence = interactor?.getAllPlaceOfResidence() ?? []
         
         view.set(placeOfResidence: placeOfResidence)
+        
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
     }
     
     func didTapContinueCommonButton() {

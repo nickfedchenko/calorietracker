@@ -46,6 +46,7 @@ final class PreviousApplicationViewController: UIViewController {
         
         configureViews()
         configureLayouts()
+        configureBackBarButtonItem()
     }
     
     private func configureViews() {

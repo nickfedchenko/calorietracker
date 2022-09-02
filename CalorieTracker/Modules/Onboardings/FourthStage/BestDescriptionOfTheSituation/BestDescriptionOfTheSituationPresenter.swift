@@ -44,6 +44,10 @@ extension BestDescriptionOfTheSituationPresenter: BestDescriptionOfTheSituationP
         bestDescriptionOfTheSituation = interactor?.getAllBestDescriptionOfTheSituation() ?? []
         
         view.set(bestDescriptionOfTheSituation: bestDescriptionOfTheSituation)
+        
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
     }
     
     func didTapContinueCommonButton() {

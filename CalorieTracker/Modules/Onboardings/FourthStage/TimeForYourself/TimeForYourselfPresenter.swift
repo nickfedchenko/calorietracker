@@ -44,6 +44,10 @@ extension TimeForYourselfPresenter: TimeForYourselfPresenterInterface {
         timeForYourself = interactor?.getAllTimeForYourself() ?? []
         
         view.set(timeForYourself: timeForYourself)
+        
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
     }
     
     func didTapContinueCommonButton() {

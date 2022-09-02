@@ -10,7 +10,9 @@ import UIKit
 
 // swiftlint:disable line_length
 
-protocol DifficultyOfMakingHealthyChoicesViewControllerInterface: AnyObject {}
+protocol DifficultyOfMakingHealthyChoicesViewControllerInterface: AnyObject {
+    func set(currentOnboardingStage: OnboardingStage)
+}
 
 final class DifficultyOfMakingHealthyChoicesViewController: UIViewController {
     
@@ -31,6 +33,8 @@ final class DifficultyOfMakingHealthyChoicesViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        presenter?.viewDidLoad()
         
         configureBackBarButtonItem()
         configureViews()
@@ -80,7 +84,6 @@ final class DifficultyOfMakingHealthyChoicesViewController: UIViewController {
         stageCounterView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
             $0.centerX.equalTo(view.snp.centerX)
-            $0.height.equalTo(30)
         }
         
         stackView.snp.makeConstraints {
@@ -107,4 +110,8 @@ final class DifficultyOfMakingHealthyChoicesViewController: UIViewController {
 
 // MARK: - DifficultyOfMakingHealthyChoicesViewControllerInterface
 
-extension DifficultyOfMakingHealthyChoicesViewController: DifficultyOfMakingHealthyChoicesViewControllerInterface {}
+extension DifficultyOfMakingHealthyChoicesViewController: DifficultyOfMakingHealthyChoicesViewControllerInterface {
+    func set(currentOnboardingStage: OnboardingStage) {
+        stageCounterView.set(onboardingStage: currentOnboardingStage)
+    }
+}

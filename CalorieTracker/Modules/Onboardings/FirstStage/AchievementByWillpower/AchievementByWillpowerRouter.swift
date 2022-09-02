@@ -23,7 +23,7 @@ class AchievementByWillPowerRouter: NSObject {
     
     static func setupModule() -> AchievementByWillPowerViewController {
         let vc = AchievementByWillPowerViewController()
-        let interactor = AchievementByWillPowerInteractor()
+        let interactor = AchievementByWillPowerInteractor(onboardingManager: OnboardingManager.shared)
         let router = AchievementByWillPowerRouter()
         let presenter = AchievementByWillPowerPresenter(
             interactor: interactor,

@@ -10,6 +10,7 @@ import Foundation
 protocol ImprovingNutritionInteractorInterface: AnyObject {
     func getAllImprovingNutrition() -> [ImprovingNutrition]
     func set(improvingNutrition: ImprovingNutrition)
+    func getCurrentOnboardingStage() -> OnboardingStage
 }
 
 class ImprovingNutritionInteractor {
@@ -32,6 +33,10 @@ class ImprovingNutritionInteractor {
 // MARK: - ImprovingNutritionInteractorInterface
 
 extension ImprovingNutritionInteractor: ImprovingNutritionInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
     func getAllImprovingNutrition() -> [ImprovingNutrition] {
         return onboardingManager.getAllImprovingNutrition()
     }

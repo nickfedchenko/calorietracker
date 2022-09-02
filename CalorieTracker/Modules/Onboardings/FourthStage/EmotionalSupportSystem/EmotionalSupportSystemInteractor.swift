@@ -10,6 +10,7 @@ import Foundation
 protocol EmotionalSupportSystemInteractorInterface: AnyObject {
     func getAllEmotionalSupportSystem() -> [EmotionalSupportSystem]
     func set(emotionalSupportSystem: EmotionalSupportSystem)
+    func getCurrentOnboardingStage() -> OnboardingStage
 }
 
 class EmotionalSupportSystemInteractor {
@@ -32,6 +33,10 @@ class EmotionalSupportSystemInteractor {
 // MARK: - EmotionalSupportSystemInteractorInterface
 
 extension EmotionalSupportSystemInteractor: EmotionalSupportSystemInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
     func getAllEmotionalSupportSystem() -> [EmotionalSupportSystem] {
         return onboardingManager.getAllEmotionalSupportSystem()
     }

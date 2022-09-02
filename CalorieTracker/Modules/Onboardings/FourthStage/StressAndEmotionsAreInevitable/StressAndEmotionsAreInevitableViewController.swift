@@ -10,7 +10,9 @@ import UIKit
 
 // swiftlint:disable line_length
 
-protocol StressAndEmotionsAreInevitableViewControllerInterface: AnyObject {}
+protocol StressAndEmotionsAreInevitableViewControllerInterface: AnyObject {
+    func set(currentOnboardingStage: OnboardingStage)
+}
 
 final class StressAndEmotionsAreInevitableViewController: UIViewController {
     
@@ -20,7 +22,7 @@ final class StressAndEmotionsAreInevitableViewController: UIViewController {
     
     // MARK: - Views properties
 
-    private let plugView: UIView = .init()
+    private let stageCounterView: StageCounterView = .init()
     private let stackView: UIStackView = .init()
     private let titleLabel: UILabel = .init()
     private let descriptionLabel: UILabel = .init()
@@ -30,6 +32,8 @@ final class StressAndEmotionsAreInevitableViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        presenter?.viewDidLoad()
         
         configureBackBarButtonItem()
         configureViews()
@@ -41,7 +45,6 @@ final class StressAndEmotionsAreInevitableViewController: UIViewController {
         
         view.backgroundColor = R.color.mainBackground()
         
-        plugView.backgroundColor = R.color.onboardings.radialGradientFirst()
         
         stackView.spacing = 24
         stackView.alignment = .center
@@ -64,7 +67,7 @@ final class StressAndEmotionsAreInevitableViewController: UIViewController {
     }
     
     private func configureLayouts() {
-        view.addSubview(plugView)
+        view.addSubview(stageCounterView)
         
         view.addSubview(stackView)
         
@@ -73,12 +76,9 @@ final class StressAndEmotionsAreInevitableViewController: UIViewController {
         
         view.addSubview(continueCommonButton)
         
-        plugView.snp.makeConstraints {
+        stageCounterView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
-            $0.left.equalTo(view.snp.left).offset(100)
-            $0.right.equalTo(view.snp.right).offset(-100)
             $0.centerX.equalTo(view.snp.centerX)
-            $0.height.equalTo(30)
         }
         
         stackView.snp.makeConstraints {
@@ -103,4 +103,8 @@ final class StressAndEmotionsAreInevitableViewController: UIViewController {
 
 // MARK: - StressAndEmotionsAreInevitableViewControllerInterface
 
-extension StressAndEmotionsAreInevitableViewController: StressAndEmotionsAreInevitableViewControllerInterface {}
+extension StressAndEmotionsAreInevitableViewController: StressAndEmotionsAreInevitableViewControllerInterface {
+    func set(currentOnboardingStage: OnboardingStage) {
+        stageCounterView.set(onboardingStage: currentOnboardingStage)
+    }
+}

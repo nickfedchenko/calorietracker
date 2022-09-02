@@ -8,6 +8,7 @@
 import Foundation
 
 protocol SoundsLikePlanPresenterInterface: AnyObject {
+    func viewDidLoad()
     func didTapContinueCommonButton()
 }
 
@@ -35,6 +36,12 @@ class SoundsLikePlanPresenter {
 // MARK: - SoundsLikePlanPresenterInterface
 
 extension SoundsLikePlanPresenter: SoundsLikePlanPresenterInterface {
+    func viewDidLoad() {
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
+    }
+    
     func didTapContinueCommonButton() {
         router?.openIncreasingYourActivityLevel()
     }

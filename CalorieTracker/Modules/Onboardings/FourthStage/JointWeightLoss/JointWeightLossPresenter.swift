@@ -44,6 +44,10 @@ extension JointWeightLossPresenter: JointWeightLossPresenterInterface {
         jointWeightLoss = interactor?.getAllJointWeightLoss() ?? []
         
         view.set(jointWeightLoss: jointWeightLoss)
+        
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
     }
     
     func didTapContinueCommonButton() {

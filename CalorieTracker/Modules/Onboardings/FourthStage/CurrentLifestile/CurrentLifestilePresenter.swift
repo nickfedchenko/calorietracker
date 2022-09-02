@@ -44,6 +44,10 @@ extension CurrentLifestilePresenter: CurrentLifestilePresenterInterface {
         currentLifestile = interactor?.getAllCurrentLifestile() ?? []
         
         view.set(currentLifestile: currentLifestile)
+        
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
     }
     
     func didTapContinueCommonButton() {

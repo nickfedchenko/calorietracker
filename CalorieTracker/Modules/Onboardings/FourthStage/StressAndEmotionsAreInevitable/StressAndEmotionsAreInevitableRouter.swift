@@ -22,7 +22,7 @@ class StressAndEmotionsAreInevitableRouter {
     
     static func setupModule() -> StressAndEmotionsAreInevitableViewController {
         let vc = StressAndEmotionsAreInevitableViewController()
-        let interactor = StressAndEmotionsAreInevitableInteractor()
+        let interactor = StressAndEmotionsAreInevitableInteractor(onboardingManager: OnboardingManager.shared)
         let router = StressAndEmotionsAreInevitableRouter()
         let presenter = StressAndEmotionsAreInevitablePresenter(
             interactor: interactor,

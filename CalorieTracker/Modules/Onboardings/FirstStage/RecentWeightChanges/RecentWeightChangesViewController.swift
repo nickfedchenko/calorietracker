@@ -30,6 +30,8 @@ final class RecentWeightChangesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        presenter?.viewDidLoad()
+        
         configureBackBarButtonItem()
         configureViews()
         configureLayouts()

@@ -10,6 +10,7 @@ import Foundation
 protocol JointWeightLossInteractorInterface: AnyObject {
     func getAllJointWeightLoss() -> [JointWeightLoss]
     func set(jointWeightLoss: JointWeightLoss)
+    func getCurrentOnboardingStage() -> OnboardingStage
 }
 
 class JointWeightLossInteractor {
@@ -32,6 +33,10 @@ class JointWeightLossInteractor {
 // MARK: - JointWeightLossInteractorInterface
 
 extension JointWeightLossInteractor: JointWeightLossInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
     func getAllJointWeightLoss() -> [JointWeightLoss] {
         return onboardingManager.getAllJointWeightLoss()
     }

@@ -44,6 +44,10 @@ extension DescriptionOfCulinarySkillsPresenter: DescriptionOfCulinarySkillsPrese
         descriptionOfCulinarySkills = interactor?.getAllDescriptionOfCulinarySkills() ?? []
         
         view.set(descriptionOfCulinarySkills: descriptionOfCulinarySkills)
+        
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
     }
     
     func didTapContinueCommonButton() {

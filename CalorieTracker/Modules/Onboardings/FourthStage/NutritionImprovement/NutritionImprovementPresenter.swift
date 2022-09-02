@@ -8,6 +8,7 @@
 import Foundation
 
 protocol NutritionImprovementPresenterInterface: AnyObject {
+    func viewDidLoad()
     func didTapApprovalCommonButton()
     func didTapRejectionCommonButton()
 }
@@ -36,6 +37,12 @@ class NutritionImprovementPresenter {
 // MARK: - NutritionImprovementPresenterInterface
 
 extension NutritionImprovementPresenter: NutritionImprovementPresenterInterface {
+    func viewDidLoad() {
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
+    }
+    
     func didTapApprovalCommonButton() {
         interactor?.set(nutritionImprovement: true)
         router?.openImprovingNutrition()

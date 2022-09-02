@@ -10,6 +10,7 @@ import Foundation
 protocol DescriptionOfCulinarySkillsInteractorInterface: AnyObject {
     func getAllDescriptionOfCulinarySkills() -> [DescriptionOfCulinarySkills]
     func set(descriptionOfCulinarySkills: DescriptionOfCulinarySkills)
+    func getCurrentOnboardingStage() -> OnboardingStage
 }
 
 class DescriptionOfCulinarySkillsInteractor {
@@ -32,6 +33,10 @@ class DescriptionOfCulinarySkillsInteractor {
 // MARK: - DescriptionOfCulinarySkillsInteractorInterface
 
 extension DescriptionOfCulinarySkillsInteractor: DescriptionOfCulinarySkillsInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
     func getAllDescriptionOfCulinarySkills() -> [DescriptionOfCulinarySkills] {
         return onboardingManager.getAllDescriptionOfCulinarySkills()
     }

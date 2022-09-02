@@ -10,6 +10,7 @@ import Foundation
 protocol BestDescriptionOfTheSituationInteractorInterface: AnyObject {
     func getAllBestDescriptionOfTheSituation() -> [BestDescriptionOfTheSituation]
     func set(bestDescriptionOfTheSituation: BestDescriptionOfTheSituation)
+    func getCurrentOnboardingStage() -> OnboardingStage
 }
 
 class BestDescriptionOfTheSituationInteractor {
@@ -32,6 +33,10 @@ class BestDescriptionOfTheSituationInteractor {
 // MARK: - BestDescriptionOfTheSituationInteractorInterface
 
 extension BestDescriptionOfTheSituationInteractor: BestDescriptionOfTheSituationInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
     func getAllBestDescriptionOfTheSituation() -> [BestDescriptionOfTheSituation] {
         return onboardingManager.getAllBestDescriptionOfTheSituation()
     }

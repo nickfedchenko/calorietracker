@@ -10,7 +10,9 @@ import UIKit
 
 // swiftlint:disable line_length
 
-protocol ThanksForTheInformationViewControllerInterface: AnyObject {}
+protocol ThanksForTheInformationViewControllerInterface: AnyObject {
+    func set(currentOnboardingStage: OnboardingStage)
+}
 
 final class ThanksForTheInformationViewController: UIViewController {
     
@@ -30,6 +32,8 @@ final class ThanksForTheInformationViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        presenter?.viewDidLoad()
         
         configureBackBarButtonItem()
         configureViews()
@@ -82,7 +86,6 @@ final class ThanksForTheInformationViewController: UIViewController {
         stageCounterView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
             $0.centerX.equalTo(view.snp.centerX)
-            $0.height.equalTo(30)
         }
         
         titleLabel.snp.makeConstraints {
@@ -120,4 +123,8 @@ final class ThanksForTheInformationViewController: UIViewController {
 
 // MARK: - ThanksForTheInformationViewControllerInterface
 
-extension ThanksForTheInformationViewController: ThanksForTheInformationViewControllerInterface {}
+extension ThanksForTheInformationViewController: ThanksForTheInformationViewControllerInterface {
+    func set(currentOnboardingStage: OnboardingStage) {
+        stageCounterView.set(onboardingStage: currentOnboardingStage)
+    }
+}

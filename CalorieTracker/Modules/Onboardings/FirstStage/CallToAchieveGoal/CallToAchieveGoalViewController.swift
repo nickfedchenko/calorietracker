@@ -8,7 +8,9 @@
 import SnapKit
 import UIKit
 
-protocol CallToAchieveGoalViewControllerInterface: AnyObject {}
+protocol CallToAchieveGoalViewControllerInterface: AnyObject {
+    func set(currentOnboardingStage: OnboardingStage)
+}
 
 final class CallToAchieveGoalViewController: UIViewController {
     
@@ -26,6 +28,8 @@ final class CallToAchieveGoalViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        presenter?.viewDidLoad()
         
         configureBackBarButtonItem()
         configureViews()
@@ -91,4 +95,8 @@ final class CallToAchieveGoalViewController: UIViewController {
 
 // MARK: - CallToAchieveGoalViewControllerInterface
 
-extension CallToAchieveGoalViewController: CallToAchieveGoalViewControllerInterface {}
+extension CallToAchieveGoalViewController: CallToAchieveGoalViewControllerInterface {
+    func set(currentOnboardingStage: OnboardingStage) {
+        stageCounterView.set(onboardingStage: currentOnboardingStage)
+    }
+}

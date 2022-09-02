@@ -8,7 +8,9 @@
 import Foundation
 import UIKit
 
-protocol NutritionImprovementViewControllerInterface: AnyObject {}
+protocol NutritionImprovementViewControllerInterface: AnyObject {
+    func set(currentOnboardingStage: OnboardingStage)
+}
 
 final class NutritionImprovementViewController: UIViewController {
     
@@ -18,7 +20,7 @@ final class NutritionImprovementViewController: UIViewController {
     
     // MARK: - Views properties
 
-    private let plugView: UIView = .init()
+    private let stageCounterView: StageCounterView = .init()
     private let stackView: UIStackView = .init()
     private let imageView: UIImageView = .init()
     private let titleLabel: UILabel = .init()
@@ -30,6 +32,8 @@ final class NutritionImprovementViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        presenter?.viewDidLoad()
+        
         configureBackBarButtonItem()
         configureViews()
         configureLayouts()
@@ -39,8 +43,6 @@ final class NutritionImprovementViewController: UIViewController {
         title = "Habits"
         
         view.backgroundColor = R.color.mainBackground()
-        
-        plugView.backgroundColor = R.color.onboardings.radialGradientFirst()
         
         stackView.spacing = 24
         stackView.alignment = .center
@@ -73,7 +75,7 @@ final class NutritionImprovementViewController: UIViewController {
     }
     
     private func configureLayouts() {
-        view.addSubview(plugView)
+        view.addSubview(stageCounterView)
         
         view.addSubview(stackView)
         
@@ -84,12 +86,9 @@ final class NutritionImprovementViewController: UIViewController {
         
         view.addSubview(rejectionCommonButton)
         
-        plugView.snp.makeConstraints {
+        stageCounterView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
-            $0.left.equalTo(view.snp.left).offset(100)
-            $0.right.equalTo(view.snp.right).offset(-100)
             $0.centerX.equalTo(view.snp.centerX)
-            $0.height.equalTo(30)
         }
         
         stackView.snp.makeConstraints {
@@ -129,4 +128,8 @@ final class NutritionImprovementViewController: UIViewController {
 
 // MARK: - NutritionImprovementViewControllerInterface
 
-extension NutritionImprovementViewController: NutritionImprovementViewControllerInterface {}
+extension NutritionImprovementViewController: NutritionImprovementViewControllerInterface {
+    func set(currentOnboardingStage: OnboardingStage) {
+        stageCounterView.set(onboardingStage: currentOnboardingStage)
+    }
+}

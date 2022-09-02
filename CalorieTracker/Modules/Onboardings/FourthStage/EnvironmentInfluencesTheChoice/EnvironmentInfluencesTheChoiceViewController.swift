@@ -12,6 +12,7 @@ import UIKit
 
 protocol EnvironmentInfluencesTheChoiceViewControllerInterface: AnyObject {
     func set(environmentInfluencesTheChoice: [EnvironmentInfluencesTheChoice])
+    func set(currentOnboardingStage: OnboardingStage)
 }
 
 final class EnvironmentInfluencesTheChoiceViewController: UIViewController {
@@ -114,9 +115,8 @@ final class EnvironmentInfluencesTheChoiceViewController: UIViewController {
         }
         
         stageCounterView.snp.makeConstraints {
-            $0.top.equalTo(contentView.snp.top).offset(30)
+            $0.top.equalTo(contentView.safeAreaLayoutGuide.snp.top).offset(30)
             $0.centerX.equalTo(contentView.snp.centerX)
-            $0.height.equalTo(30)
         }
         
         titleLabel.snp.makeConstraints {
@@ -184,6 +184,10 @@ final class EnvironmentInfluencesTheChoiceViewController: UIViewController {
 // MARK: - EnvironmentInfluencesTheChoiceViewControllerInterface
 
 extension EnvironmentInfluencesTheChoiceViewController: EnvironmentInfluencesTheChoiceViewControllerInterface {
+    func set(currentOnboardingStage: OnboardingStage) {
+        stageCounterView.set(onboardingStage: currentOnboardingStage)
+    }
+    
     func set(environmentInfluencesTheChoice: [EnvironmentInfluencesTheChoice]) {
         stackView.removeAllArrangedSubviews()
         answerOptions = []

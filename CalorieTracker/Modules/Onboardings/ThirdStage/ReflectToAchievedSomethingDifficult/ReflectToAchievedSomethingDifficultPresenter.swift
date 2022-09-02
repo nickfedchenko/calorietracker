@@ -8,6 +8,7 @@
 import Foundation
 
 protocol ReflectToAchievedSomethingDifficultPresenterInterface: AnyObject {
+    func viewDidLoad()
     func didTapContinueCommonButton()
 }
 
@@ -35,6 +36,12 @@ class ReflectToAchievedSomethingDifficultPresenter {
 // MARK: - ReflectToAchievedSomethingDifficultPresenterInterface
 
 extension ReflectToAchievedSomethingDifficultPresenter: ReflectToAchievedSomethingDifficultPresenterInterface {
+    func viewDidLoad() {
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
+    }
+    
     func didTapContinueCommonButton() {
         router?.openTimeToSeeYourGoalWeight()
     }

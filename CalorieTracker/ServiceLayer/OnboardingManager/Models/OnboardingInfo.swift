@@ -120,20 +120,22 @@ struct OnboardingInfo {
 
 extension OnboardingInfo {
     var currentOnboardingStage: OnboardingStage {
-        let filledDataCount = firstStageData.filter { $0 != nil }.count
-        
-        return .first(progress: Double(filledDataCount) / Double(firstStageData.count))
-        
         if firstStageData.contains(where: { $0 == nil }) {
             let filledDataCount = firstStageData.filter { $0 != nil }.count
 
             return .first(progress: Double(filledDataCount) / Double(firstStageData.count))
-//        } else if onboardingInfo.seconStageData.contains(where: { $0 == nil }) {
-//            return .second
-//        } else if onboardingInfo.thirdStageData.contains(where: { $0 == nil }) {
-//            return .third
-//        } else {
-//            return .fourth
+        } else if secondStageData.contains(where: { $0 == nil }) {
+            let filledDataCount = secondStageData.filter { $0 != nil }.count
+            
+            return .second(progress: Double(filledDataCount) / Double(secondStageData.count))
+        } else if thirdStageData.contains(where: { $0 == nil }) {
+            let filledDataCount = thirdStageData.filter { $0 != nil }.count
+            
+            return .third(progress: Double(filledDataCount) / Double(thirdStageData.count))
+        } else {
+            let filledDataCount = fourthStageData.filter { $0 != nil }.count
+            
+            return .fourth(progress: Double(filledDataCount) / Double(fourthStageData.count))
         }
     }
 }

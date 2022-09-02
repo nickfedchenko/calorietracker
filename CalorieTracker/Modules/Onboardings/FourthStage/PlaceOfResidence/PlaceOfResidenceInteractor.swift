@@ -10,6 +10,7 @@ import Foundation
 protocol PlaceOfResidenceInteractorInterface: AnyObject {
     func getAllPlaceOfResidence() -> [PlaceOfResidence]
     func set(placeOfResidence: PlaceOfResidence)
+    func getCurrentOnboardingStage() -> OnboardingStage
 }
 
 class PlaceOfResidenceInteractor {
@@ -32,6 +33,10 @@ class PlaceOfResidenceInteractor {
 // MARK: - PlaceOfResidenceInteractorInterface
 
 extension PlaceOfResidenceInteractor: PlaceOfResidenceInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
     func getAllPlaceOfResidence() -> [PlaceOfResidence] {
         return onboardingManager.getAllPlaceOfResidence()
     }

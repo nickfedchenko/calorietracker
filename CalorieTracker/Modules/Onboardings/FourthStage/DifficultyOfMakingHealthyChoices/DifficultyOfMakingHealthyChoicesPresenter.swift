@@ -8,6 +8,7 @@
 import Foundation
 
 protocol DifficultyOfMakingHealthyChoicesPresenterInterface: AnyObject {
+    func viewDidLoad()
     func didTapContinueCommonButton()
 }
 
@@ -33,6 +34,12 @@ class DifficultyOfMakingHealthyChoicesPresenter {
 }
 
 extension DifficultyOfMakingHealthyChoicesPresenter: DifficultyOfMakingHealthyChoicesPresenterInterface {
+    func viewDidLoad() {
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
+    }
+    
     func didTapContinueCommonButton() {
         router?.openLifestyleOfOthers()
     }

@@ -10,6 +10,7 @@ import Foundation
 protocol CurrentLifestileInteractorInterface: AnyObject {
     func getAllCurrentLifestile() -> [CurrentLifestile]
     func set(currentLifestile: CurrentLifestile)
+    func getCurrentOnboardingStage() -> OnboardingStage
 }
 
 class CurrentLifestileInteractor {
@@ -32,6 +33,10 @@ class CurrentLifestileInteractor {
 // MARK: - CurrentLifestileInteractorInterface
 
 extension CurrentLifestileInteractor: CurrentLifestileInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
     func getAllCurrentLifestile() -> [CurrentLifestile] {
         return onboardingManager.getAllCurrentLifestile()
     }

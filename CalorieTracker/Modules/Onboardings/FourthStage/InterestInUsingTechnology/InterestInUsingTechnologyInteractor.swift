@@ -9,6 +9,7 @@ import Foundation
 
 protocol InterestInUsingTechnologyInteractorInterface: AnyObject {
     func set(interestInUsingTechnology: Bool)
+    func getCurrentOnboardingStage() -> OnboardingStage
 }
 
 class InterestInUsingTechnologyInteractor {
@@ -30,6 +31,10 @@ class InterestInUsingTechnologyInteractor {
 // MARK: - InterestInUsingTechnologyInteractorInterface
 
 extension InterestInUsingTechnologyInteractor: InterestInUsingTechnologyInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
     func set(interestInUsingTechnology: Bool) {
         onboardingManager.set(interestInUsingTechnology: interestInUsingTechnology)
     }

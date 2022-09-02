@@ -8,6 +8,7 @@
 import Foundation
 
 protocol StressAndEmotionsAreInevitablePresenterInterface: AnyObject {
+    func viewDidLoad()
     func didTapContinueCommonButton()
 }
 
@@ -35,6 +36,12 @@ class StressAndEmotionsAreInevitablePresenter {
 // MARK: - StressAndEmotionsAreInevitablePresenterInterface
 
 extension StressAndEmotionsAreInevitablePresenter: StressAndEmotionsAreInevitablePresenterInterface {
+    func viewDidLoad() {
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
+    }
+    
     func didTapContinueCommonButton() {
         router?.openYoureNotAlone()
     }

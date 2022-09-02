@@ -12,6 +12,7 @@ import UIKit
 
 protocol SequenceOfHabitFormationViewControllerInterface: AnyObject {
     func set(sequenceOfHabitFormation: [SequenceOfHabitFormation])
+    func set(currentOnboardingStage: OnboardingStage)
 }
 
 final class SequenceOfHabitFormationViewController: UIViewController {
@@ -107,9 +108,8 @@ final class SequenceOfHabitFormationViewController: UIViewController {
         }
         
         stageCounterView.snp.makeConstraints {
-            $0.top.equalTo(contentView.snp.top).offset(30)
+            $0.top.equalTo(contentView.safeAreaLayoutGuide.snp.top).offset(30)
             $0.centerX.equalTo(contentView.snp.centerX)
-            $0.height.equalTo(30)
         }
         
         titleLabel.snp.makeConstraints {
@@ -168,6 +168,10 @@ final class SequenceOfHabitFormationViewController: UIViewController {
 // MARK: - SequenceOfHabitFormationViewControllerInterface
 
 extension SequenceOfHabitFormationViewController: SequenceOfHabitFormationViewControllerInterface {
+    func set(currentOnboardingStage: OnboardingStage) {
+        stageCounterView.set(onboardingStage: currentOnboardingStage)
+    }
+    
     func set(sequenceOfHabitFormation: [SequenceOfHabitFormation]) {
         stackView.removeAllArrangedSubviews()
         answerOptions = []

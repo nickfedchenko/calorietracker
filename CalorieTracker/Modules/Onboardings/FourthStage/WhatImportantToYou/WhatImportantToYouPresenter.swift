@@ -8,6 +8,7 @@
 import Foundation
 
 protocol WhatImportantToYouPresenterInterface: AnyObject {
+    func viewDidLoad()
     func didTapCaloriesInMyFoodCommonButton()
     func didTapNutritionOfMyFoodCommonButton()
 }
@@ -36,6 +37,12 @@ class WhatImportantToYouPresenter {
 // MARK: - WhatImportantToYouPresenterInterface
 
 extension WhatImportantToYouPresenter: WhatImportantToYouPresenterInterface {
+    func viewDidLoad() {
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
+    }
+    
     func didTapCaloriesInMyFoodCommonButton() {
         interactor?.set(whatImportantToYou: true)
         router?.openThoughtsOnStressEating()

@@ -10,6 +10,7 @@ import UIKit
 
 protocol BestDescriptionOfTheSituationViewControllerInterface: AnyObject {
     func set(bestDescriptionOfTheSituation: [BestDescriptionOfTheSituation])
+    func set(currentOnboardingStage: OnboardingStage)
 }
 
 final class BestDescriptionOfTheSituationViewController: UIViewController {
@@ -73,10 +74,7 @@ final class BestDescriptionOfTheSituationViewController: UIViewController {
         
         stageCounterView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
-            $0.left.equalTo(view.snp.left).offset(100)
-            $0.right.equalTo(view.snp.right).offset(-100)
             $0.centerX.equalTo(view.snp.centerX)
-            $0.height.equalTo(30)
         }
         
         titleLabel.snp.makeConstraints {
@@ -137,6 +135,10 @@ final class BestDescriptionOfTheSituationViewController: UIViewController {
 // MARK: - PlaceOfResidenceViewControllerInterface
 
 extension BestDescriptionOfTheSituationViewController: BestDescriptionOfTheSituationViewControllerInterface {
+    func set(currentOnboardingStage: OnboardingStage) {
+        stageCounterView.set(onboardingStage: currentOnboardingStage)
+    }
+    
     func set(bestDescriptionOfTheSituation: [BestDescriptionOfTheSituation]) {
         stackView.removeAllArrangedSubviews()
         answerOptions = []

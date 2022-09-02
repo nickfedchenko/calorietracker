@@ -21,7 +21,7 @@ class ThanksForTheInformationRouter: NSObject {
     
     static func setupModule() -> ThanksForTheInformationViewController {
         let vc = ThanksForTheInformationViewController()
-        let interactor = ThanksForTheInformationInteractor()
+        let interactor = ThanksForTheInformationInteractor(onboardingManager: OnboardingManager.shared)
         let router = ThanksForTheInformationRouter()
         let presenter = ThanksForTheInformationPresenter(
             interactor: interactor,

@@ -9,9 +9,9 @@ import Foundation
 
 // swiftlint:disable line_length
 
-
 protocol RepresentationOfIncreasedActivityLevelsInteractorInterface: AnyObject {
     func set(representationOfIncreasedActivityLevels: Bool)
+    func getCurrentOnboardingStage() -> OnboardingStage
 }
 
 class RepresentationOfIncreasedActivityLevelsInteractor {
@@ -34,6 +34,10 @@ class RepresentationOfIncreasedActivityLevelsInteractor {
 // MARK: - RepresentationOfIncreasedActivityLevelsInteractorInterface
 
 extension RepresentationOfIncreasedActivityLevelsInteractor: RepresentationOfIncreasedActivityLevelsInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
     func set(representationOfIncreasedActivityLevels: Bool) {
         onboardingManager.set(representationOfIncreasedActivityLevels: representationOfIncreasedActivityLevels)
     }

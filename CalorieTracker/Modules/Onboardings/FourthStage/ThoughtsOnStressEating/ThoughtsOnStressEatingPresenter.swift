@@ -8,6 +8,7 @@
 import Foundation
 
 protocol ThoughtsOnStressEatingPresenterInterface: AnyObject {
+    func viewDidLoad()
     func didTapApprovalCommonButton()
     func didTapRejectionCommonButton()
 }
@@ -35,7 +36,13 @@ class ThoughtsOnStressEatingPresenter {
 
 // MARK: - ThoughtsOnStressEatingPresenterInterface
 
-extension ThoughtsOnStressEatingPresenter: ThoughtsOnStressEatingPresenterInterface {
+extension ThoughtsOnStressEatingPresenter: ThoughtsOnStressEatingPresenterInterface {    
+    func viewDidLoad() {
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
+    }
+    
     func didTapApprovalCommonButton() {
         interactor?.set(thoughtsOnStressEating: true)
         router?.openHelpingPeopleTrackCalories()

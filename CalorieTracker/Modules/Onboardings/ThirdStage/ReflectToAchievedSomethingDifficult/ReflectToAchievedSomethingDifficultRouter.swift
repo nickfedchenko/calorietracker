@@ -22,7 +22,7 @@ class ReflectToAchievedSomethingDifficultRouter {
     
     static func setupModule() -> ReflectToAchievedSomethingDifficultViewController {
         let vc = ReflectToAchievedSomethingDifficultViewController()
-        let interactor = ReflectToAchievedSomethingDifficultInteractor()
+        let interactor = ReflectToAchievedSomethingDifficultInteractor(onboardingManager: OnboardingManager.shared)
         let router = ReflectToAchievedSomethingDifficultRouter()
         let presenter = ReflectToAchievedSomethingDifficultPresenter(
             interactor: interactor,

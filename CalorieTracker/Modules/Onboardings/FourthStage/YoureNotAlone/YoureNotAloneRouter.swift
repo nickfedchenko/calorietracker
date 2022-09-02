@@ -22,7 +22,7 @@ class YoureNotAloneRouter {
     
     static func setupModule() -> YoureNotAloneViewController {
         let vc = YoureNotAloneViewController()
-        let interactor = YoureNotAloneInteractor()
+        let interactor = YoureNotAloneInteractor(onboardingManager: OnboardingManager.shared)
         let router = YoureNotAloneRouter()
         let presenter = YoureNotAlonePresenter(
             interactor: interactor,

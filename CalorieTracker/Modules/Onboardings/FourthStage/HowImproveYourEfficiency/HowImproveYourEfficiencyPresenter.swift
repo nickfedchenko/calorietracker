@@ -44,6 +44,10 @@ extension HowImproveYourEfficiencyPresenter: HowImproveYourEfficiencyPresenterIn
         howImproveYourEfficiency = interactor?.getAllHowImproveYourEfficiency() ?? []
         
         view.set(howImproveYourEfficiency: howImproveYourEfficiency)
+        
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
     }
     
     func didTapContinueCommonButton() {

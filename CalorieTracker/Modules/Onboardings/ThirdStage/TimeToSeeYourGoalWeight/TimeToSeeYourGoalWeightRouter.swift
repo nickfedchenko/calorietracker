@@ -22,7 +22,7 @@ class TimeToSeeYourGoalWeightRouter {
     
     static func setupModule() -> TimeToSeeYourGoalWeightViewController {
         let vc = TimeToSeeYourGoalWeightViewController()
-        let interactor = TimeToSeeYourGoalWeightInteractor()
+        let interactor = TimeToSeeYourGoalWeightInteractor(onboardingManager: OnboardingManager.shared)
         let router = TimeToSeeYourGoalWeightRouter()
         let presenter = TimeToSeeYourGoalWeightPresenter(
             interactor: interactor,

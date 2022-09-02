@@ -8,6 +8,7 @@
 import Foundation
 
 protocol DifficultyChoosingLifestylePresenterInterface: AnyObject {
+    func viewDidLoad()
     func didTapApprovalCommonButton()
     func didTapRejectionCommonButton()
 }
@@ -36,6 +37,12 @@ class DifficultyChoosingLifestylePresenter {
 // MARK: - DifficultyChoosingLifestylePresenterInterface
 
 extension DifficultyChoosingLifestylePresenter: DifficultyChoosingLifestylePresenterInterface {
+    func viewDidLoad() {
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
+    }
+    
     func didTapApprovalCommonButton() {
         interactor?.set(difficultyChoosingLifestyle: true)
         router?.openInterestInUsingTechnology()

@@ -10,6 +10,7 @@ import UIKit
 
 protocol PlaceOfResidenceViewControllerInterface: AnyObject {
     func set(placeOfResidence: [PlaceOfResidence])
+    func set(currentOnboardingStage: OnboardingStage)
 }
 
 final class PlaceOfResidenceViewController: UIViewController {
@@ -78,10 +79,7 @@ final class PlaceOfResidenceViewController: UIViewController {
         
         stageCounterView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
-            $0.left.equalTo(view.snp.left).offset(100)
-            $0.right.equalTo(view.snp.right).offset(-100)
             $0.centerX.equalTo(view.snp.centerX)
-            $0.height.equalTo(30)
         }
         
         imageView.snp.makeConstraints {
@@ -148,6 +146,10 @@ final class PlaceOfResidenceViewController: UIViewController {
 // MARK: - PlaceOfResidenceViewControllerInterface
 
 extension PlaceOfResidenceViewController: PlaceOfResidenceViewControllerInterface {
+    func set(currentOnboardingStage: OnboardingStage) {
+        stageCounterView.set(onboardingStage: currentOnboardingStage)
+    }
+    
     func set(placeOfResidence: [PlaceOfResidence]) {
         stackView.removeAllArrangedSubviews()
         answerOptions = []

@@ -22,7 +22,7 @@ class SoundsLikePlanRouter {
     
     static func setupModule() -> SoundsLikePlanViewController {
         let vc = SoundsLikePlanViewController()
-        let interactor = SoundsLikePlanInteractor()
+        let interactor = SoundsLikePlanInteractor(onboardingManager: OnboardingManager.shared)
         let router = SoundsLikePlanRouter()
         let presenter = SoundsLikePlanPresenter(
             interactor: interactor,

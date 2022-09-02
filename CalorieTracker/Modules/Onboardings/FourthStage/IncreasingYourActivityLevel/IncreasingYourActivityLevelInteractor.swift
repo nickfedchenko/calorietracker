@@ -9,6 +9,7 @@ import Foundation
 
 protocol IncreasingYourActivityLevelInteractorInterface: AnyObject {
     func set(increasingYourActivityLevel: Bool)
+    func getCurrentOnboardingStage() -> OnboardingStage
 }
 
 class IncreasingYourActivityLevelInteractor {
@@ -31,6 +32,10 @@ class IncreasingYourActivityLevelInteractor {
 // MARK: - IncreasingYourActivityLevelInteractorInterface
 
 extension IncreasingYourActivityLevelInteractor: IncreasingYourActivityLevelInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
     func set(increasingYourActivityLevel: Bool) {
         onboardingManager.set(increasingYourActivityLevel: increasingYourActivityLevel)
     }

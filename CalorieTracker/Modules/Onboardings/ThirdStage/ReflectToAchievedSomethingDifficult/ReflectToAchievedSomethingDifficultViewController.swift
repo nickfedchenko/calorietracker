@@ -11,7 +11,9 @@ import UIKit
 // swiftlint:disable line_length
 
 
-protocol ReflectToAchievedSomethingDifficultViewControllerInterface: AnyObject {}
+protocol ReflectToAchievedSomethingDifficultViewControllerInterface: AnyObject {
+    func set(currentOnboardingStage: OnboardingStage)
+}
 
 final class ReflectToAchievedSomethingDifficultViewController: UIViewController {
     
@@ -32,6 +34,8 @@ final class ReflectToAchievedSomethingDifficultViewController: UIViewController 
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        presenter?.viewDidLoad()
         
         configureBackBarButtonItem()
         configureViews()
@@ -81,7 +85,6 @@ final class ReflectToAchievedSomethingDifficultViewController: UIViewController 
         stageCounterView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
             $0.centerX.equalTo(view.snp.centerX)
-            $0.height.equalTo(30)
         }
         
         stackView.snp.makeConstraints {
@@ -108,4 +111,8 @@ final class ReflectToAchievedSomethingDifficultViewController: UIViewController 
 
 // MARK: - ReflectToAchievedSomethingDifficultViewControllerInterface
 
-extension ReflectToAchievedSomethingDifficultViewController: ReflectToAchievedSomethingDifficultViewControllerInterface {}
+extension ReflectToAchievedSomethingDifficultViewController: ReflectToAchievedSomethingDifficultViewControllerInterface {
+    func set(currentOnboardingStage: OnboardingStage) {
+        stageCounterView.set(onboardingStage: currentOnboardingStage)
+    }
+}

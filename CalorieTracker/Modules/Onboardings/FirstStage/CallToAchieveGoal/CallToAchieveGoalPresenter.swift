@@ -8,6 +8,7 @@
 import Foundation
 
 protocol CallToAchieveGoalPresenterInterface: AnyObject {
+    func viewDidLoad()
     func didTapContinueCommonButton()
 }
 
@@ -35,6 +36,12 @@ class CallToAchieveGoalPresenter {
 // MARK: - CallToAchieveGoalPresenterInterface
 
 extension CallToAchieveGoalPresenter: CallToAchieveGoalPresenterInterface {
+    func viewDidLoad() {
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
+    }
+    
     func didTapContinueCommonButton() {
         router?.openQuestionAboutTheChange()
     }

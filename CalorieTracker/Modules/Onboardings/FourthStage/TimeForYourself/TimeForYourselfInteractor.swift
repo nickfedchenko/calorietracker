@@ -10,6 +10,7 @@ import Foundation
 protocol TimeForYourselfInteractorInterface: AnyObject {
     func getAllTimeForYourself() -> [TimeForYourself]
     func set(timeForYourself: TimeForYourself)
+    func getCurrentOnboardingStage() -> OnboardingStage
 }
 
 class TimeForYourselfInteractor {
@@ -32,6 +33,10 @@ class TimeForYourselfInteractor {
 // MARK: - TimeForYourselfInteractorInterface
 
 extension TimeForYourselfInteractor: TimeForYourselfInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
     func getAllTimeForYourself() -> [TimeForYourself] {
         return onboardingManager.getAllTimeForYourself()
     }

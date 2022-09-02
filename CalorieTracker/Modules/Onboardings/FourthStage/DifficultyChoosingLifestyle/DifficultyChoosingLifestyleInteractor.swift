@@ -8,6 +8,7 @@
 import Foundation
 
 protocol DifficultyChoosingLifestyleInteractorInterface: AnyObject {
+    func getCurrentOnboardingStage() -> OnboardingStage
     func set(difficultyChoosingLifestyle: Bool)
 }
 
@@ -30,6 +31,10 @@ class DifficultyChoosingLifestyleInteractor {
 // MARK: - DifficultyChoosingLifestyleInteractorInterface
 
 extension DifficultyChoosingLifestyleInteractor: DifficultyChoosingLifestyleInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
     func set(difficultyChoosingLifestyle: Bool) {
         onboardingManager.set(difficultyChoosingLifestyle: difficultyChoosingLifestyle)
     }

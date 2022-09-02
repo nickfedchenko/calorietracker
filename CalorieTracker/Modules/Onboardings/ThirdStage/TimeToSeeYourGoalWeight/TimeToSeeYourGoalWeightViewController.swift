@@ -10,7 +10,9 @@ import UIKit
 
 // swiftlint:disable line_length
 
-protocol TimeToSeeYourGoalWeightViewControllerInterface: AnyObject {}
+protocol TimeToSeeYourGoalWeightViewControllerInterface: AnyObject {
+    func set(currentOnboardingStage: OnboardingStage)
+}
 
 final class TimeToSeeYourGoalWeightViewController: UIViewController {
     
@@ -30,6 +32,8 @@ final class TimeToSeeYourGoalWeightViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        presenter?.viewDidLoad()
         
         configureBackBarButtonItem()
         configureViews()
@@ -83,7 +87,6 @@ final class TimeToSeeYourGoalWeightViewController: UIViewController {
         stageCounterView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
             $0.centerX.equalTo(view.snp.centerX)
-            $0.height.equalTo(30)
         }
         
         stackView.snp.makeConstraints {
@@ -110,4 +113,8 @@ final class TimeToSeeYourGoalWeightViewController: UIViewController {
 
 // MARK: - TimeToSeeYourGoalWeightViewControllerInterface
 
-extension TimeToSeeYourGoalWeightViewController: TimeToSeeYourGoalWeightViewControllerInterface {}
+extension TimeToSeeYourGoalWeightViewController: TimeToSeeYourGoalWeightViewControllerInterface {
+    func set(currentOnboardingStage: OnboardingStage) {
+        stageCounterView.set(onboardingStage: currentOnboardingStage)
+    }
+}

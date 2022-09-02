@@ -44,6 +44,10 @@ extension LifestyleOfOthersPresenter: LifestyleOfOthersPresenterInterface {
         lifestyleOfOthers = interactor?.getAllLifestyleOfOthers() ?? []
         
         view.set(lifestyleOfOthers: lifestyleOfOthers)
+        
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
     }
     
     func didTapContinueCommonButton() {

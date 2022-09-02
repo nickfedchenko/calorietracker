@@ -8,6 +8,7 @@
 import Foundation
 
 protocol ThanksForTheInformationPresenterInterface: AnyObject {
+    func viewDidLoad()
     func didTapContinueCommonButton()
 }
 
@@ -35,6 +36,12 @@ class ThanksForTheInformationPresenter {
 // MARK: - ThanksForTheInformationPresenterInterface
 
 extension ThanksForTheInformationPresenter: ThanksForTheInformationPresenterInterface {
+    func viewDidLoad() {
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
+    }
+    
     func didTapContinueCommonButton() {
         router?.openFinalOfTheFirstStage()
     }

@@ -9,6 +9,7 @@ import Foundation
 
 protocol WhatImportantToYouInteractorInterface: AnyObject {
     func set(whatImportantToYou: Bool)
+    func getCurrentOnboardingStage() -> OnboardingStage
 }
 
 class WhatImportantToYouInteractor {
@@ -31,6 +32,10 @@ class WhatImportantToYouInteractor {
 // MARK: - WhatImportantToYouInteractorInterface
 
 extension WhatImportantToYouInteractor: WhatImportantToYouInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
     func set(whatImportantToYou: Bool) {
         onboardingManager.set(whatImportantToYou: whatImportantToYou)
     }

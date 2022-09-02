@@ -8,6 +8,7 @@
 import Foundation
 
 protocol HelpingPeopleTrackCaloriesPresenterInterface: AnyObject {
+    func viewDidLoad()
     func didTapContinueCommonButton()
 }
 
@@ -35,6 +36,12 @@ class HelpingPeopleTrackCaloriesPresenter {
 // MARK: - HelpingPeopleTrackCaloriesPresenterInterface
 
 extension HelpingPeopleTrackCaloriesPresenter: HelpingPeopleTrackCaloriesPresenterInterface {
+    func viewDidLoad() {
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
+    }
+        
     func didTapContinueCommonButton() {
         router?.openStressAndEmotionsAreInevitable()
     }

@@ -31,6 +31,8 @@ final class EnterYourNameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        presenter?.viewDidLoad()
+        
         configureBackBarButtonItem()
         configureViews()
         configureLayouts()
@@ -118,6 +120,7 @@ final class EnterYourNameViewController: UIViewController {
 
 extension EnterYourNameViewController: EnterYourNameViewControllerInterface {
     func set(currentOnboardingStage: OnboardingStage) {
+        print(currentOnboardingStage)
         stageCounterView.set(onboardingStage: currentOnboardingStage)
     }
 }

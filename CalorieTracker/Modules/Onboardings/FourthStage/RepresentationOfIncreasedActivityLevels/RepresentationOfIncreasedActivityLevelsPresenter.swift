@@ -8,6 +8,7 @@
 import Foundation
 
 protocol RepresentationOfIncreasedActivityLevelsPresenterInterface: AnyObject {
+    func viewDidLoad()
     func didTapApprovalCommonButton()
     func didTapRejectionCommonButton()
 }
@@ -36,6 +37,12 @@ class RepresentationOfIncreasedActivityLevelsPresenter {
 // MARK: - RepresentationOfIncreasedActivityLevelsPresenterInterface
 
 extension RepresentationOfIncreasedActivityLevelsPresenter: RepresentationOfIncreasedActivityLevelsPresenterInterface {
+    func viewDidLoad() {
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
+    }
+    
     func didTapApprovalCommonButton() {
         interactor?.set(representationOfIncreasedActivityLevels: true)
         router?.openSequenceOfHabitFormation()

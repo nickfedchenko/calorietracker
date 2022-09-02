@@ -44,6 +44,10 @@ extension EnvironmentInfluencesTheChoicePresenter: EnvironmentInfluencesTheChoic
         environmentInfluencesTheChoice = interactor?.getAllEnvironmentInfluencesTheChoice() ?? []
         
         view.set(environmentInfluencesTheChoice: environmentInfluencesTheChoice)
+        
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
     }
     
     func didTapContinueCommonButton() {

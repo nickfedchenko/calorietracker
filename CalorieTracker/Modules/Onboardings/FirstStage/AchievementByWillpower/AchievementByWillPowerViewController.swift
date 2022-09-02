@@ -10,7 +10,9 @@ import UIKit
 
 // swiftlint:disable line_length
 
-protocol AchievementByWillPowerViewControllerInterface: AnyObject {}
+protocol AchievementByWillPowerViewControllerInterface: AnyObject {
+    func set(currentOnboardingStage: OnboardingStage)
+}
 
 final class AchievementByWillPowerViewController: UIViewController {
     
@@ -30,6 +32,8 @@ final class AchievementByWillPowerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        presenter?.viewDidLoad()
         
         configureBackBarButtonItem()
         configureViews()
@@ -118,4 +122,8 @@ final class AchievementByWillPowerViewController: UIViewController {
 
 // MARK: - AchievementByWillPowerViewControllerInterface
 
-extension AchievementByWillPowerViewController: AchievementByWillPowerViewControllerInterface {}
+extension AchievementByWillPowerViewController: AchievementByWillPowerViewControllerInterface {
+    func set(currentOnboardingStage: OnboardingStage) {
+        stageCounterView.set(onboardingStage: currentOnboardingStage)
+    }
+}

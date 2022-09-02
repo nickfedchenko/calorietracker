@@ -58,17 +58,9 @@ final class StageCounterView: UIView {
             $0.bottom.equalTo(snp.bottom)
         }
         
-        firstStageView.snp.makeConstraints {
-            $0.size.equalTo(30)
-        }
-        
         firstStageProgressBar.snp.makeConstraints {
             $0.height.equalTo(2)
             $0.width.equalTo(32)
-        }
-        
-        secondStageView.snp.makeConstraints {
-            $0.size.equalTo(30)
         }
         
         secondStageProgressBar.snp.makeConstraints {
@@ -76,17 +68,9 @@ final class StageCounterView: UIView {
             $0.width.equalTo(32)
         }
         
-        thirdStageView.snp.makeConstraints {
-            $0.size.equalTo(30)
-        }
-        
         thirdStageProgressBar.snp.makeConstraints {
             $0.height.equalTo(2)
             $0.width.equalTo(32)
-        }
-        
-        fourhtStageView.snp.makeConstraints {
-            $0.size.equalTo(30)
         }
     }
     

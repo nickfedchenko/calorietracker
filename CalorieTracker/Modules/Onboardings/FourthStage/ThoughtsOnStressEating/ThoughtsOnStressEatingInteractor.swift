@@ -9,6 +9,7 @@ import Foundation
 
 protocol ThoughtsOnStressEatingInteractorInterface: AnyObject {
     func set(thoughtsOnStressEating: Bool)
+    func getCurrentOnboardingStage() -> OnboardingStage
 }
 
 class ThoughtsOnStressEatingInteractor {
@@ -24,12 +25,18 @@ class ThoughtsOnStressEatingInteractor {
     // MARK: - Initialization
     
     init(onboardingManager: OnboardingManagerInterface) {
-        self.onboardingManager = onboardingManager}
+        self.onboardingManager = onboardingManager
+        
+    }
 }
 
 // MARK: - ThoughtsOnStressEatingInteractorInterface
 
 extension ThoughtsOnStressEatingInteractor: ThoughtsOnStressEatingInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+    
     func set(thoughtsOnStressEating: Bool) {
         onboardingManager.set(thoughtsOnStressEating: thoughtsOnStressEating)
     }

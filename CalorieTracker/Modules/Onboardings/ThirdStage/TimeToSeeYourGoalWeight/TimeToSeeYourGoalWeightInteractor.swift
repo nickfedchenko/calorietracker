@@ -7,15 +7,31 @@
 
 import Foundation
 
-protocol TimeToSeeYourGoalWeightInteractorInterface: AnyObject {}
+protocol TimeToSeeYourGoalWeightInteractorInterface: AnyObject {
+    func getCurrentOnboardingStage() -> OnboardingStage
+}
 
 class TimeToSeeYourGoalWeightInteractor {
     
     // MARK: - Public properties
     
     weak var presenter: TimeToSeeYourGoalWeightPresenterInterface?
+    
+    // MARK: - Managers
+    
+    private let onboardingManager: OnboardingManagerInterface
+    
+    // MARK: - Initialization
+    
+    init(onboardingManager: OnboardingManagerInterface) {
+        self.onboardingManager = onboardingManager
+    }
 }
 
 // MARK: - TimeToSeeYourGoalWeightInteractorInterface
 
-extension TimeToSeeYourGoalWeightInteractor: TimeToSeeYourGoalWeightInteractorInterface {}
+extension TimeToSeeYourGoalWeightInteractor: TimeToSeeYourGoalWeightInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+}

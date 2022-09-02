@@ -44,6 +44,10 @@ extension ImprovingNutritionPresenter: ImprovingNutritionPresenterInterface {
         improvingNutrition = interactor?.getAllImprovingNutrition() ?? []
         
         view.set(improvingNutrition: improvingNutrition)
+        
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
     }
     
     func didTapContinueCommonButton() {

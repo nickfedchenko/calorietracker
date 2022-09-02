@@ -22,7 +22,7 @@ class SoundsGoodRouter {
     
     static func setupModule() -> SoundsGoodViewController {
         let vc = SoundsGoodViewController()
-        let interactor = SoundsGoodInteractor()
+        let interactor = SoundsGoodInteractor(onboardingManager: OnboardingManager.shared)
         let router = SoundsGoodRouter()
         let presenter = SoundsGoodPresenter(
             interactor: interactor,

@@ -7,15 +7,31 @@
 
 import Foundation
 
-protocol CallToAchieveGoalInteractorInterface: AnyObject {}
+protocol CallToAchieveGoalInteractorInterface: AnyObject {
+    func getCurrentOnboardingStage() -> OnboardingStage
+}
 
 class CallToAchieveGoalInteractor {
     
     // MARK: - Public properties
     
     weak var presenter: CallToAchieveGoalPresenterInterface?
+    
+    // MARK: - Managers
+    
+    private let onboardingManager: OnboardingManagerInterface
+    
+    // MARK: - Initialization
+    
+    init(onboardingManager: OnboardingManagerInterface) {
+        self.onboardingManager = onboardingManager
+    }
 }
 
 // MARK: - CallToAchieveGoalInteractorInterface
 
-extension CallToAchieveGoalInteractor: CallToAchieveGoalInteractorInterface {}
+extension CallToAchieveGoalInteractor: CallToAchieveGoalInteractorInterface {
+    func getCurrentOnboardingStage() -> OnboardingStage {
+        return onboardingManager.getCurrentOnboardingStage()
+    }
+}
