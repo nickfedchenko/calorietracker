@@ -23,6 +23,7 @@ final class YourHeightViewController: UIViewController {
     private let stageCounterView: StageCounterView = .init()
     private let titleLabel: UILabel = .init()
     private let borderTextField: BorderTextField = .init()
+    private let containerPickerView: UIView = .init()
     private let continueCommonButton: CommonButton = .init(style: .filled, text: "Continue")
     private let pickerView: UIPickerView = .init()
     
@@ -46,8 +47,17 @@ final class YourHeightViewController: UIViewController {
         titleLabel.textAlignment = .center
         titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .medium)
         
+        borderTextField.text = "100 cm"
         borderTextField.isEnabled = false
         borderTextField.textField.addTarget(self, action:  #selector(didTapContinueCommonButton), for: .touchUpInside)
+        
+        containerPickerView.backgroundColor = .white
+        containerPickerView.layer.cornerRadius = 12
+        containerPickerView.layer.masksToBounds = false
+        containerPickerView.layer.shadowColor = UIColor.black.cgColor
+        containerPickerView.layer.shadowOpacity = 0.25
+        containerPickerView.layer.shadowOffset = CGSize(width: 10, height: 10)
+        containerPickerView.layer.shadowRadius = 8
         
         pickerView.dataSource = self
         pickerView.delegate = self
@@ -56,9 +66,9 @@ final class YourHeightViewController: UIViewController {
     }
     
     @objc private func didChangedTextField(_ sender: UITextField) {
-//        let isTextFieldEmpty = sender.text?.isEmpty ?? false
+        let isTextFieldEmpty = sender.text?.isEmpty ?? false
         
-//        continueCommonButton.isEnabled = !isTextFieldEmpty
+        continueCommonButton.isEnabled = !isTextFieldEmpty
     }
     
     @objc private func didChangedDatePicker(_ sender: UIPickerView) {
@@ -66,7 +76,7 @@ final class YourHeightViewController: UIViewController {
     }
     
     @objc private func didTapContinueCommonButton() {
-//        guard let name = borderTextField.text, !name.isEmpty else { return }
+        guard let name = borderTextField.text, !name.isEmpty else { return }
         
         presenter?.didTapContinueCommonButton()
     }
@@ -78,9 +88,11 @@ final class YourHeightViewController: UIViewController {
         
         view.addSubview(borderTextField)
         
-        view.addSubview(pickerView)
+        view.addSubview(containerPickerView)
         
-        view.addSubview(continueCommonButton)
+        containerPickerView.addSubview(pickerView)
+        
+        containerPickerView.addSubview(continueCommonButton)
         
         stageCounterView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
@@ -100,16 +112,23 @@ final class YourHeightViewController: UIViewController {
             $0.height.equalTo(74)
         }
         
+        containerPickerView.snp.makeConstraints {
+            $0.left.equalTo(view.snp.left)
+            $0.right.equalTo(view.snp.right)
+            $0.bottom.equalTo(view.snp.bottom)
+        }
+        
         pickerView.snp.makeConstraints {
-            $0.top.equalTo(borderTextField.snp.bottom).offset(40)
-            $0.left.equalTo(view.snp.left).offset(50)
-            $0.right.equalTo(view.snp.right).offset(-50)
+            $0.top.equalTo(containerPickerView.snp.top).offset(26)
+            $0.left.equalTo(view.snp.left).offset(32)
+            $0.right.equalTo(view.snp.right).offset(-32)
         }
         
         continueCommonButton.snp.makeConstraints {
-            $0.left.equalTo(view.snp.left).offset(40)
-            $0.right.equalTo(view.snp.right).offset(-40)
-            $0.bottom.equalTo(view.snp.bottom).offset(-35)
+            $0.top.equalTo(pickerView.snp.bottom).offset(24)
+            $0.left.equalTo(containerPickerView.snp.left).offset(40)
+            $0.right.equalTo(containerPickerView.snp.right).offset(-40)
+            $0.bottom.equalTo(containerPickerView.snp.bottom).offset(-35)
             $0.height.equalTo(64)
         }
     }
@@ -146,6 +165,13 @@ extension YourHeightViewController: UIPickerViewDataSource {
 // MARK: - UIPickerViewDelegate
 
 extension YourHeightViewController: UIPickerViewDelegate {
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        let meters = String(pickerView.selectedRow(inComponent: 0) + 1)
+        let centimeters = String(format: "%02d", pickerView.selectedRow(inComponent: 2))
+        
+        borderTextField.text = meters + centimeters + " " + "cm"
+    }
+    
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         if component == 0 {
             return "\(row + 1)"

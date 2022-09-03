@@ -23,9 +23,9 @@ final class DateOfBirthViewController: UIViewController {
     private let stageCounterView: StageCounterView = .init()
     private let titleLabel: UILabel = .init()
     private let borderTextField: BorderTextField = .init()
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "Continue")
+    private let containerdatePickerView: UIView = .init()
     private let datePicker: UIDatePicker = .init()
-
+    private let continueCommonButton: CommonButton = .init(style: .filled, text: "Continue")
     
     // MARK: - Lifecycle methods
     
@@ -49,6 +49,9 @@ final class DateOfBirthViewController: UIViewController {
         
         borderTextField.isEnabled = false
         borderTextField.textField.addTarget(self, action:  #selector(didTapContinueCommonButton), for: .touchUpInside)
+        
+        containerdatePickerView.backgroundColor = .white
+        containerdatePickerView.layer.cornerRadius = 12
         
         datePicker.preferredDatePickerStyle = .wheels
         datePicker.datePickerMode = .date
@@ -84,9 +87,11 @@ final class DateOfBirthViewController: UIViewController {
         
         view.addSubview(borderTextField)
         
-        view.addSubview(datePicker)
+        view.addSubview(containerdatePickerView)
         
-        view.addSubview(continueCommonButton)
+        containerdatePickerView.addSubview(datePicker)
+        
+        containerdatePickerView.addSubview(continueCommonButton)
         
         stageCounterView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
@@ -106,16 +111,23 @@ final class DateOfBirthViewController: UIViewController {
             $0.height.equalTo(74)
         }
         
+        containerdatePickerView.snp.makeConstraints {
+            $0.left.equalTo(view.snp.left)
+            $0.right.equalTo(view.snp.right)
+            $0.bottom.equalTo(view.snp.bottom)
+        }
+        
         datePicker.snp.makeConstraints {
-            $0.top.equalTo(borderTextField.snp.bottom).offset(40)
-            $0.left.equalTo(view.snp.left).offset(50)
-            $0.right.equalTo(view.snp.right).offset(-50)
+            $0.top.equalTo(containerdatePickerView.snp.top).offset(26)
+            $0.left.equalTo(view.snp.left).offset(32)
+            $0.right.equalTo(view.snp.right).offset(-32)
         }
         
         continueCommonButton.snp.makeConstraints {
-            $0.left.equalTo(view.snp.left).offset(40)
-            $0.right.equalTo(view.snp.right).offset(-40)
-            $0.bottom.equalTo(view.snp.bottom).offset(-35)
+            $0.top.equalTo(datePicker.snp.bottom).offset(24)
+            $0.left.equalTo(containerdatePickerView.snp.left).offset(40)
+            $0.right.equalTo(containerdatePickerView.snp.right).offset(-40)
+            $0.bottom.equalTo(containerdatePickerView.snp.bottom).offset(-35)
             $0.height.equalTo(64)
         }
     }
