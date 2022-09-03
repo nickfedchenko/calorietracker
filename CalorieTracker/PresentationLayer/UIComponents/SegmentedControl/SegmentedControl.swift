@@ -16,6 +16,8 @@ final class SegmentedControl<ID>: UIView {
         didSet {
             UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut) {
                 self.selectorView.frame = self.selectedButton?.superview?.frame ?? CGRect.zero
+            } completion: { _ in
+                self.selectorView.frame = self.selectedButton?.superview?.frame ?? CGRect.zero
             }
         }
     }
