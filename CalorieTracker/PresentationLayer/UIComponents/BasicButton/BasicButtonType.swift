@@ -18,9 +18,12 @@ struct CustomType {
     let image: Image?
     let title: Title?
     let backgroundColorInactive: UIColor?
-    let gradientColors: [UIColor?]
+    let backgroundColorDefault: UIColor?
+    let backgroundColorPress: UIColor?
+    let gradientColors: [UIColor?]?
     let borderColorInactive: UIColor?
     let borderColorDefault: UIColor?
+    let borderColorPress: UIColor?
     
     struct Image {
         let isPressImage: UIImage?
@@ -29,8 +32,6 @@ struct CustomType {
     }
     
     struct Title {
-        let isPressTitle: String
-        let defaultTitle: String
         let isPressTitleColor: UIColor?
         let defaultTitleColor: UIColor?
     }
