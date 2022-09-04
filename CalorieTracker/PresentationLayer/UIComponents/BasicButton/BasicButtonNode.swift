@@ -103,7 +103,7 @@ final class BasicButtonNode: CTWidgetButtonNode {
         automaticallyManagesSubnodes = true
         layer.cornerCurve = .continuous
         layer.cornerRadius = 16
-        borderWidth = 1
+        borderWidth = 2
         setupButton(isPress: false)
     }
     

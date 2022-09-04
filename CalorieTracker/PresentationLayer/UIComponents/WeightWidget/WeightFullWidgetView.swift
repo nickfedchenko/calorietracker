@@ -82,7 +82,7 @@ final class WeightFullWidgetView: UIView {
     }()
     
     private lazy var addButton: BasicButtonView = {
-        BasicButtonView(
+        let button = BasicButtonView(
             type: .custom(
                 CustomType(
                     image: CustomType.Image(
@@ -91,18 +91,24 @@ final class WeightFullWidgetView: UIView {
                         inactiveImage: nil
                     ),
                     title: CustomType.Title(
-                        isPressTitle: " ADD WEIGHING",
-                        defaultTitle: " ADD WEIGHING",
                         isPressTitleColor: R.color.weightWidget.backgroundLabelColor(),
                         defaultTitleColor: .white
                     ),
                     backgroundColorInactive: nil,
-                    gradientColors: [R.color.weightWidget.weightTextColor(), R.color.weightWidget.weightTextColor()],
+                    backgroundColorDefault: R.color.weightWidget.weightTextColor(),
+                    backgroundColorPress: R.color.weightWidget.weightTextColor(),
+                    gradientColors: nil,
                     borderColorInactive: nil,
-                    borderColorDefault: R.color.weightWidget.backgroundLabelColor()
+                    borderColorDefault: R.color.weightWidget.backgroundLabelColor(),
+                    borderColorPress: R.color.weightWidget.backgroundLabelColor()
                 )
             )
         )
+        
+        button.isPressTitle = " ADD WEIGHING"
+        button.defaultTitle = " ADD WEIGHING"
+        
+        return button
     }()
     
     private lazy var closeButton: UIButton = {
