@@ -17,7 +17,7 @@ final class LineProgressView: UIView {
             gradientLayer.frame = CGRect(
                 origin: .zero,
                 size: CGSize(
-                    width: bounds.width * newProgress + bounds.height / 2.0,
+                    width: bounds.width * newProgress + bounds.height,
                     height: bounds.height
                 )
             )
@@ -33,6 +33,10 @@ final class LineProgressView: UIView {
                 imageView.image = nil
             }
         }
+    }
+    var isHiddenFlag: Bool {
+        get { imageView.isHidden }
+        set { imageView.isHidden = newValue }
     }
     
     private var shape: CAShapeLayer?
