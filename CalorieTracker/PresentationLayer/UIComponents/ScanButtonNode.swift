@@ -11,6 +11,7 @@ final class ScanButtonNode: CTWidgetButtonNode {
     private lazy var scanImageNode: ASImageNode = {
         let node = ASImageNode()
         node.image = R.image.scanButton.buttonNotPressed()
+        node.isUserInteractionEnabled = false
         return node
     }()
     
@@ -39,27 +40,22 @@ final class ScanButtonNode: CTWidgetButtonNode {
     
     private func setupView() {
         automaticallyManagesSubnodes = true
+        isUserInteractionEnabled = true
         backgroundColor = .white
         layer.cornerRadius = 16
         layer.cornerCurve = .continuous
-        
-        addTarget(
-            self,
-            action: #selector(didNotSelectedButton),
-            forControlEvents: .touchUpInside
-        )
-        addTarget(
-            self,
-            action: #selector(didSelectedButton),
-            forControlEvents: .touchDown
-        )
     }
-    
-    @objc private func didSelectedButton() {
+}
+
+// MARK: - Touch
+
+extension ScanButtonNode {
+    override func beginTracking(with touch: UITouch, with touchEvent: UIEvent?) -> Bool {
         scanImageNode.image = R.image.scanButton.buttonPressed()
+        return true
     }
     
-    @objc private func didNotSelectedButton() {
+    override func endTracking(with touch: UITouch?, with touchEvent: UIEvent?) {
         scanImageNode.image = R.image.scanButton.buttonNotPressed()
     }
 }

@@ -7,42 +7,13 @@
 
 import AsyncDisplayKit
 import CoreAudio
-// swiftlint:disable nesting
-final class BasicButtonNode: CTWidgetButtonNode {
-    enum BasicButtonType {
-        case add
-        case save
-        case apply
-        case custom(CustomType)
-    }
-    
-    struct CustomType {
-        let image: Image?
-        let title: Title?
-        let backgroundColorInactive: UIColor
-        let gradientColors: [UIColor]
-        let borderColorInactive: UIColor
-        let borderColorDefault: UIColor
-        
-        struct Image {
-            let isPressImage: UIImage
-            let defaultImage: UIImage
-            let inactiveImage: UIImage
-        }
-        
-        struct Title {
-            let isPressTitle: String
-            let defaultTitle: String
-            let isPressTitleColor: UIColor
-            let defaultTitleColor: UIColor
-        }
-    }
-    
+
+final class BasicButtonNode: CTWidgetButtonNode {    
     private lazy var gradientLayer: CAGradientLayer = {
         let layer = CAGradientLayer()
         switch type {
         case .custom(let model):
-            layer.colors = model.gradientColors.map { $0.cgColor }
+            layer.colors = model.gradientColors.map { ($0 ?? .white).cgColor }
         case .add, .apply, .save:
             layer.colors = Color.gradientColors.compactMap { $0?.cgColor }
         }
@@ -154,7 +125,7 @@ final class BasicButtonNode: CTWidgetButtonNode {
                 color: isPress ? Color.borderColor : UIColor.white
             )
         case .custom(let model):
-            borderColor = model.borderColorDefault.cgColor
+            borderColor = model.borderColorDefault?.cgColor
             
             iconNode.image = isPress ? model.image?.isPressImage : model.image?.defaultImage
             if let text = model.title {
