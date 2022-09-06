@@ -78,7 +78,7 @@ final class YourHeightViewController: UIViewController {
     @objc private func didTapContinueCommonButton() {
         guard let name = borderTextField.text, !name.isEmpty else { return }
         
-        presenter?.didTapContinueCommonButton()
+        presenter?.didTapContinueCommonButton(with: name)
     }
     
     private func configureLayouts() {

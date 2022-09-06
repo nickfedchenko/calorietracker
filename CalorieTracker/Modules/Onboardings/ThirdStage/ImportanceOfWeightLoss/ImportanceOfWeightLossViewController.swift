@@ -19,6 +19,7 @@ final class ImportanceOfWeightLossViewController: UIViewController {
     
     var presenter: ImportanceOfWeightLossPresenterInterface?
     
+    
     // MARK: - Private properties
     
     var isHedden: Bool = false {

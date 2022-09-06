@@ -117,7 +117,7 @@ class HealthAppViewController: UIViewController {
         healthAppImageView.snp.makeConstraints {
             $0.top.equalTo(healthAppView.snp.top).offset(10)
             $0.left.equalTo(healthAppView.snp.left).offset(10)
-            $0.bottom.equalTo(healthAppView.snp.bottom).offset(10)
+            $0.bottom.equalTo(healthAppView.snp.bottom).offset(-10)
             $0.size.equalTo(70)
         }
         

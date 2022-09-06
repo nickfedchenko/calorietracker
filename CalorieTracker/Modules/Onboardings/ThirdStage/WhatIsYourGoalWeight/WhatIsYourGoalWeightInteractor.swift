@@ -8,7 +8,7 @@
 import Foundation
 
 protocol WhatIsYourGoalWeightInteractorInterface: AnyObject {
-    func set(whatIsYourGoalWeight: String)
+    func set(whatIsYourGoalWeight: Double)
     func getCurrentOnboardingStage() -> OnboardingStage
 }
 
@@ -36,7 +36,7 @@ extension WhatIsYourGoalWeightInteractor: WhatIsYourGoalWeightInteractorInterfac
         return onboardingManager.getCurrentOnboardingStage()
     }
     
-    func set(whatIsYourGoalWeight: String) {
+    func set(whatIsYourGoalWeight: Double) {
         onboardingManager.set(whatIsYourGoalWeight: whatIsYourGoalWeight)
     }
 }

@@ -8,7 +8,7 @@
 import UIKit
 
 protocol AllergicRestrictionsRouterInterface: AnyObject {
-    func openFinalOfTheSecondStage()
+    func openThanksForTheInformation()
 }
 
 class AllergicRestrictionsRouter {
@@ -41,9 +41,9 @@ class AllergicRestrictionsRouter {
 // MARK: - AllergicRestrictionsRouterInterface
 
 extension AllergicRestrictionsRouter: AllergicRestrictionsRouterInterface {
-    func openFinalOfTheSecondStage() {
-        let finalOfTheSecondStageRouter = FinalOfTheSecondStageRouter.setupModule()
+    func openThanksForTheInformation() {
+        let thanksForTheInformationRouter = ThanksForTheInformationRouter.setupModule()
         
-        viewController?.navigationController?.pushViewController(finalOfTheSecondStageRouter, animated: true)
+        viewController?.navigationController?.pushViewController(thanksForTheInformationRouter, animated: true)
     }
 }

@@ -18,6 +18,10 @@ final class WhatIsYourGoalWeightViewController: UIViewController {
     
     var presenter: WhatIsYourGoalWeightPresenterInterface?
     
+    // MARK: - Private properties
+    
+    private var weightDesired: Double = 0.0
+    
     // MARK: - Views properties
     
     private let stageCounterView: StageCounterView = .init()
@@ -60,7 +64,9 @@ final class WhatIsYourGoalWeightViewController: UIViewController {
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .medium)
         
+        borderTextField.text = "0.0 kg"
         borderTextField.isEnabled = false
+        borderTextField.textField.addTarget(self, action: #selector(didTapContinueCommonButton), for: .touchUpInside)
         
         pickerView.dataSource = self
         pickerView.delegate = self
@@ -68,12 +74,14 @@ final class WhatIsYourGoalWeightViewController: UIViewController {
         continueCommonButton.addTarget(self, action: #selector(didTapContinueCommonButton), for: .touchUpInside)
     }
     
-    @objc private func didChangedDatePicker(_ sender: UIDatePicker) {
-        borderTextField.text = pickerView(pickerView, titleForRow: 1, forComponent: 1)
+    @objc private func didChangedTextField(_ sender: UITextField) {
+        let isTextFieldEmpty = sender.text?.isEmpty ?? false
+        
+        continueCommonButton.isEnabled = !isTextFieldEmpty
     }
     
     @objc private func didTapContinueCommonButton() {
-        presenter?.didTapContinueCommonButton()
+        presenter?.didTapContinueCommonButton(with: weightDesired)
     }
     
     private func configureLayouts() {
@@ -138,11 +146,11 @@ extension WhatIsYourGoalWeightViewController: UIPickerViewDataSource {
 
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         if component == 0 {
-            return 200
+            return 301
         } else if component == 1 {
             return 1
         } else if component == 2 {
-            return 1000
+            return 10
         } else {
             return 1
         }
@@ -152,13 +160,22 @@ extension WhatIsYourGoalWeightViewController: UIPickerViewDataSource {
 // MARK: - UIPickerViewDelegate
 
 extension WhatIsYourGoalWeightViewController: UIPickerViewDelegate {
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        let kilograms = pickerView.selectedRow(inComponent: 0)
+        let grams = pickerView.selectedRow(inComponent: 2)
+        
+        weightDesired = Double(kilograms) + Double(grams) / 10
+        
+        borderTextField.text = "\(kilograms).\(grams) kg"
+    }
+    
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         if component == 0 {
-            return "\(row + 1)"
+            return "\(row)"
         } else if component == 1 {
             return "."
         } else if component == 2 {
-            return "\(row * 1)"
+            return "\(row)"
         } else if component == 3 {
             return "кг"
         }

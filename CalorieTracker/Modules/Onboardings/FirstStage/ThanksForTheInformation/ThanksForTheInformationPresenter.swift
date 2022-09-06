@@ -43,6 +43,16 @@ extension ThanksForTheInformationPresenter: ThanksForTheInformationPresenterInte
     }
     
     func didTapContinueCommonButton() {
-        router?.openFinalOfTheFirstStage()
+        guard let currentOnboardingStage = interactor?.getCurrentOnboardingStage() else { return }
+        switch currentOnboardingStage {
+        case .first:
+            break
+        case .second:
+            router?.openFinalOfTheFirstStage()
+        case .third:
+            router?.openFinalOfTheSecondStage()
+        case .fourth:
+            router?.openFinalOfTheThirdStage()
+        }
     }
 }

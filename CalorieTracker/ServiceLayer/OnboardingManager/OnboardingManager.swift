@@ -53,7 +53,8 @@ protocol OnboardingManagerInterface {
     
     func set(yourHeight: String)
     
-    func set(yourWeight: String)
+    func set(yourWeight: Double)
+    func getYourWeight() -> Double?
     
     func getAllRisksOfDiseases() -> [RisksOfDiseases]
     func set(risksOfDiseases: RisksOfDiseases)
@@ -73,7 +74,8 @@ protocol OnboardingManagerInterface {
     func getAllLifeChangesAfterWeightLoss() -> [LifeChangesAfterWeightLoss]
     func set(lifeChangesAfterWeightLoss: LifeChangesAfterWeightLoss)
     
-    func set(whatIsYourGoalWeight: String)
+    func set(whatIsYourGoalWeight: Double)
+    func getYourGoalWeight() -> Double?
     
     func getAllCurrentLifestile() -> [CurrentLifestile]
     func set(currentLifestile: CurrentLifestile)
@@ -134,11 +136,7 @@ class OnboardingManager {
     
     // MARK: - Private properties
     
-    private var onboardingInfo: OnboardingInfo = .init() {
-        didSet {
-            print(onboardingInfo)
-        }
-    }
+    private var onboardingInfo: OnboardingInfo = .init()
     
     // MARK: - Initialization
     
@@ -264,8 +262,12 @@ extension OnboardingManager: OnboardingManagerInterface {
         onboardingInfo.yourHeight = yourHeight
     }
     
-    func set(yourWeight: String) {
+    func set(yourWeight: Double) {
         onboardingInfo.yourWeight = yourWeight
+    }
+    
+    func getYourWeight() -> Double? {
+        return onboardingInfo.yourWeight
     }
     
     func getAllRisksOfDiseases() -> [RisksOfDiseases] {
@@ -316,8 +318,12 @@ extension OnboardingManager: OnboardingManagerInterface {
         onboardingInfo.lifeChangesAfterWeightLoss = lifeChangesAfterWeightLoss
     }
     
-    func set(whatIsYourGoalWeight: String) {
+    func set(whatIsYourGoalWeight: Double) {
         onboardingInfo.whatIsYourGoalWeight = whatIsYourGoalWeight
+    }
+    
+    func getYourGoalWeight() -> Double? {
+        return onboardingInfo.whatIsYourGoalWeight
     }
     
     func getAllCurrentLifestile() -> [CurrentLifestile] {

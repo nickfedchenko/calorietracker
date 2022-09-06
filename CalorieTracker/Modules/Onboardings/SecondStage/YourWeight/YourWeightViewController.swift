@@ -18,6 +18,10 @@ final class YourWeightViewController: UIViewController {
     
     var presenter: YourWeightPresenterInterface?
     
+    // MARK: - Private properties
+    
+    private var weight: Double = 0.0
+    
     // MARK: - Views properties
     
     private let stageCounterView: StageCounterView = .init()
@@ -47,7 +51,7 @@ final class YourWeightViewController: UIViewController {
         titleLabel.textAlignment = .center
         titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .medium)
         
-        borderTextField.text = "100 kg"
+        borderTextField.text = "0.0 kg"
         borderTextField.isEnabled = false
         borderTextField.textField.addTarget(self, action:  #selector(didTapContinueCommonButton), for: .touchUpInside)
         
@@ -71,9 +75,7 @@ final class YourWeightViewController: UIViewController {
     }
     
     @objc private func didTapContinueCommonButton() {
-        guard let name = borderTextField.text, !name.isEmpty else { return }
-        
-        presenter?.didTapContinueCommonButton()
+        presenter?.didTapContinueCommonButton(with: weight)
     }
     
     private func configureLayouts() {
@@ -161,19 +163,21 @@ extension YourWeightViewController: UIPickerViewDataSource {
 
 extension YourWeightViewController: UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        let kilograms = String(pickerView.selectedRow(inComponent: 0) + 1)
-        let grams = String(pickerView.selectedRow(inComponent: 2))
+        let kilograms = pickerView.selectedRow(inComponent: 0)
+        let grams = pickerView.selectedRow(inComponent: 2)
         
-        borderTextField.text = kilograms + "." + grams + " " + "kg"
+        weight = Double(kilograms) + Double(grams) / 10
+        
+        borderTextField.text = "\(kilograms).\(grams) kg"
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         if component == 0 {
-            return "\(row + 1)"
+            return "\(row)"
         } else if component == 1 {
             return "."
         } else if component == 2 {
-            return "\(row * 1)"
+            return "\(row)"
         } else if component == 3 {
             return "кг"
         }

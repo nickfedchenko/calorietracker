@@ -10,6 +10,8 @@ import UIKit
 
 protocol ThanksForTheInformationRouterInterface: AnyObject {
     func openFinalOfTheFirstStage()
+    func openFinalOfTheSecondStage()
+    func openFinalOfTheThirdStage()
 }
 
 class ThanksForTheInformationRouter: NSObject {
@@ -44,5 +46,17 @@ extension ThanksForTheInformationRouter: ThanksForTheInformationRouterInterface 
         let finalOfTheFirstStageRouter = FinalOfTheFirstStageRouter.setupModule()
         
         viewController?.navigationController?.pushViewController(finalOfTheFirstStageRouter, animated: true)
+    }
+    
+    func openFinalOfTheSecondStage() {
+        let finalOfTheSecondStageRouter = FinalOfTheSecondStageRouter.setupModule()
+        
+        viewController?.navigationController?.pushViewController(finalOfTheSecondStageRouter, animated: true)
+    }
+    
+    func openFinalOfTheThirdStage() {
+        let finalOfTheThirdStageRouter = FinalOfTheThirdStageRouter.setupModule()
+        
+        viewController?.navigationController?.pushViewController(finalOfTheThirdStageRouter, animated: true)
     }
 }

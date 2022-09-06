@@ -8,7 +8,7 @@
 import Foundation
 
 protocol YourWeightInteractorInterface: AnyObject {
-    func set(yourWeight: String)
+    func set(yourWeight: Double)
     func getCurrentOnboardingStage() -> OnboardingStage
 }
 
@@ -32,11 +32,11 @@ class YourWeightInteractor {
 // MARK: - YourWeightInteractorInterface
 
 extension YourWeightInteractor: YourWeightInteractorInterface {
-    func getCurrentOnboardingStage() -> OnboardingStage {
+    func getCurrentOnboardingStage() -> OnboardingStage {        
         return onboardingManager.getCurrentOnboardingStage()
     }
     
-    func set(yourWeight: String) {
+    func set(yourWeight: Double) {
         onboardingManager.set(yourWeight: yourWeight)
     }
 }

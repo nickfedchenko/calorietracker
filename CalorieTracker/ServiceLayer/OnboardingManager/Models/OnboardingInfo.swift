@@ -23,14 +23,14 @@ struct OnboardingInfo {
     var measurementSystem: MeasurementSystem?
     var dateOfBirth: String?
     var yourHeight: String?
-    var yourWeight: String?
+    var yourWeight: Double?
     var risksOfDiseases: RisksOfDiseases?
     var presenceOfAllergies: PresenceOfAllergies?
     var allergicRestrictions: AllergicRestrictions?
     var importanceOfWeightLoss: ImportanceOfWeightLoss?
     var thoughtsAboutChangingFeelings: ThoughtsAboutChangingFeelings?
     var lifeChangesAfterWeightLoss: LifeChangesAfterWeightLoss?
-    var whatIsYourGoalWeight: String?
+    var whatIsYourGoalWeight: Double?
     var currentLifestile: CurrentLifestile?
     var nutritionImprovement: Bool?
     var improvingNutrition: ImprovingNutrition?

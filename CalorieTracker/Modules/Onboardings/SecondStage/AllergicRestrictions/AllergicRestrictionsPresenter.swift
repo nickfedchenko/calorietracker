@@ -52,6 +52,6 @@ extension AllergicRestrictionsPresenter: AllergicRestrictionsPresenterInterface 
     
     func didTapContinueCommonButton() {
         interactor?.set(allergicRestrictions: .dairy)
-        router?.openFinalOfTheSecondStage()
+        router?.openThanksForTheInformation()
     }
 }

@@ -9,7 +9,7 @@ import Foundation
 
 protocol WhatIsYourGoalWeightPresenterInterface: AnyObject {
     func viewDidLoad()
-    func didTapContinueCommonButton()
+    func didTapContinueCommonButton(with weightDesired: Double)
 }
 
 class WhatIsYourGoalWeightPresenter {
@@ -42,8 +42,8 @@ extension WhatIsYourGoalWeightPresenter: WhatIsYourGoalWeightPresenterInterface 
         }
     }
     
-    func didTapContinueCommonButton() {
-        interactor?.set(whatIsYourGoalWeight: "dasda")
-        router?.openFinalOfTheThirdStage()
+    func didTapContinueCommonButton(with weightDesired: Double) {
+        interactor?.set(whatIsYourGoalWeight: weightDesired)
+        router?.openDeficitAndSurplusCalorie()
     }
 }
