@@ -12,4 +12,3 @@ enum DescriptionOfExperience: CaseIterable {
     case iLostWeightAndHaveMoreLose
     case iLostWeightAndAmMaintainingIt
 }
-

@@ -24,6 +24,8 @@ final class YourWeightViewController: UIViewController {
     
     // MARK: - Views properties
     
+    private let scrolView: UIScrollView = .init()
+    private let contentView: UIView = .init()
     private let stageCounterView: StageCounterView = .init()
     private let titleLabel: UILabel = .init()
     private let borderTextField: BorderTextField = .init()
@@ -46,6 +48,8 @@ final class YourWeightViewController: UIViewController {
     private func configureViews() {
         view.backgroundColor = R.color.mainBackground()
         
+        scrolView.showsVerticalScrollIndicator = false
+        
         titleLabel.text = "Your weight"
         titleLabel.textColor = R.color.onboardings.basicDark()
         titleLabel.textAlignment = .center
@@ -53,10 +57,19 @@ final class YourWeightViewController: UIViewController {
         
         borderTextField.text = "0.0 kg"
         borderTextField.isEnabled = false
-        borderTextField.textField.addTarget(self, action:  #selector(didTapContinueCommonButton), for: .touchUpInside)
+        borderTextField.textField.addTarget(
+            self,
+            action: #selector(didTapContinueCommonButton),
+            for: .touchUpInside
+        )
         
         containerPickerView.backgroundColor = .white
         containerPickerView.layer.cornerRadius = 12
+        containerPickerView.layer.masksToBounds = false
+        containerPickerView.layer.shadowColor = UIColor.black.cgColor
+        containerPickerView.layer.shadowOpacity = 0.25
+        containerPickerView.layer.shadowOffset = CGSize(width: 10, height: 10)
+        containerPickerView.layer.shadowRadius = 8
         
         pickerView.dataSource = self
         pickerView.delegate = self
@@ -78,47 +91,68 @@ final class YourWeightViewController: UIViewController {
         presenter?.didTapContinueCommonButton(with: weight)
     }
     
+    // swiftlint:disable:next function_body_length
     private func configureLayouts() {
-        view.addSubview(stageCounterView)
+        view.addSubview(scrolView)
         
-        view.addSubview(titleLabel)
+        scrolView.addSubview(contentView)
         
-        view.addSubview(borderTextField)
+        contentView.addSubview(stageCounterView)
         
-        view.addSubview(containerPickerView)
+        contentView.addSubview(titleLabel)
+        
+        contentView.addSubview(borderTextField)
+        
+        contentView.addSubview(containerPickerView)
         
         containerPickerView.addSubview(pickerView)
         
         containerPickerView.addSubview(continueCommonButton)
         
+        scrolView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.left.equalTo(view.snp.left)
+            $0.right.equalTo(view.snp.right)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+        }
+        
+        contentView.snp.makeConstraints {
+            $0.top.equalTo(scrolView.snp.top)
+            $0.left.equalTo(view.snp.left)
+            $0.right.equalTo(view.snp.right)
+            $0.bottom.equalTo(scrolView.snp.bottom)
+            $0.height.greaterThanOrEqualTo(scrolView.snp.height)
+        }
+        
         stageCounterView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
-            $0.centerX.equalTo(view.snp.centerX)
+            $0.top.equalTo(contentView.safeAreaLayoutGuide.snp.top).offset(30)
+            $0.centerX.equalTo(contentView.snp.centerX)
         }
         
         titleLabel.snp.makeConstraints {
             $0.top.equalTo(stageCounterView.snp.bottom).offset(40)
-            $0.left.equalTo(view.snp.left).offset(43)
-            $0.right.equalTo(view.snp.right).offset(-43)
+            $0.left.equalTo(contentView.snp.left).offset(43)
+            $0.right.equalTo(contentView.snp.right).offset(-43)
         }
         
         borderTextField.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(40)
-            $0.left.equalTo(view.snp.left).offset(50)
-            $0.right.equalTo(view.snp.right).offset(-50)
+            $0.left.equalTo(contentView.snp.left).offset(50)
+            $0.right.equalTo(contentView.snp.right).offset(-50)
             $0.height.equalTo(74)
         }
         
         containerPickerView.snp.makeConstraints {
-            $0.left.equalTo(view.snp.left)
-            $0.right.equalTo(view.snp.right)
-            $0.bottom.equalTo(view.snp.bottom)
+            $0.top.greaterThanOrEqualTo(borderTextField.snp.bottom).offset(40)
+            $0.left.equalTo(contentView.snp.left)
+            $0.right.equalTo(contentView.snp.right)
+            $0.bottom.equalTo(contentView.snp.bottom)
         }
         
         pickerView.snp.makeConstraints {
             $0.top.equalTo(containerPickerView.snp.top).offset(26)
-            $0.left.equalTo(view.snp.left).offset(32)
-            $0.right.equalTo(view.snp.right).offset(-32)
+            $0.left.equalTo(contentView.snp.left).offset(32)
+            $0.right.equalTo(contentView.snp.right).offset(-32)
         }
         
         continueCommonButton.snp.makeConstraints {

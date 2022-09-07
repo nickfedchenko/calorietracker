@@ -8,8 +8,6 @@
 import Foundation
 import UIKit
 
-// swiftlint:disable line_length
-
 protocol TimeToSeeYourGoalWeightViewControllerInterface: AnyObject {
     func set(currentOnboardingStage: OnboardingStage)
 }
@@ -62,7 +60,8 @@ final class TimeToSeeYourGoalWeightViewController: UIViewController {
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .medium)
         
-        descriptionLabel.text = "Some people prefer to start with a smaller goal, while others prefer to keep the focus on their long term goal. \nDo whichever feels best to you!"
+        // swiftlint:disable:next line_length
+        descriptionLabel.text = "Some people prefer to start with a smaller goal, while others prefer to keep the focus on their long term goal. Do whichever feels best to you!"
         descriptionLabel.textAlignment = .center
         descriptionLabel.numberOfLines = 0
         descriptionLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
@@ -71,7 +70,11 @@ final class TimeToSeeYourGoalWeightViewController: UIViewController {
         stackView.axis = .vertical
         stackView.spacing = 24
         
-        setGoalWeightCommonButton.addTarget(self, action: #selector(didTapSetGoalWeightCommonButton), for: .touchUpInside)
+        setGoalWeightCommonButton.addTarget(
+            self,
+            action: #selector(didTapSetGoalWeightCommonButton),
+            for: .touchUpInside
+        )
     }
     
     private func configureLayouts() {

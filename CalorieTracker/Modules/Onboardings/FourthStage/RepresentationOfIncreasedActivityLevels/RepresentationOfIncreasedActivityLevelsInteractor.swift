@@ -7,8 +7,6 @@
 
 import Foundation
 
-// swiftlint:disable line_length
-
 protocol RepresentationOfIncreasedActivityLevelsInteractorInterface: AnyObject {
     func set(representationOfIncreasedActivityLevels: Bool)
     func getCurrentOnboardingStage() -> OnboardingStage
@@ -33,6 +31,7 @@ class RepresentationOfIncreasedActivityLevelsInteractor {
 
 // MARK: - RepresentationOfIncreasedActivityLevelsInteractorInterface
 
+// swiftlint:disable:next line_length
 extension RepresentationOfIncreasedActivityLevelsInteractor: RepresentationOfIncreasedActivityLevelsInteractorInterface {
     func getCurrentOnboardingStage() -> OnboardingStage {
         return onboardingManager.getCurrentOnboardingStage()

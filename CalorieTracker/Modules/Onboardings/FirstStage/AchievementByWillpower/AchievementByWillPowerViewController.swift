@@ -8,8 +8,6 @@
 import Foundation
 import UIKit
 
-// swiftlint:disable line_length
-
 protocol AchievementByWillPowerViewControllerInterface: AnyObject {
     func set(currentOnboardingStage: OnboardingStage)
 }
@@ -22,6 +20,8 @@ final class AchievementByWillPowerViewController: UIViewController {
     
     // MARK: - Views properties
     
+    private let scrolView: UIScrollView = .init()
+    private let contentView: UIView = .init()
     private let stageCounterView: StageCounterView = .init()
     private let imageView: UIImageView = .init()
     private let titleLabel: UILabel = .init()
@@ -47,12 +47,15 @@ final class AchievementByWillPowerViewController: UIViewController {
         
         imageView.image = R.image.onboardings.emojiBotan()
         
+        scrolView.showsVerticalScrollIndicator = false
+        
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: "It doesn’t take \nunlimited willpower to ",
+            string: "It doesn’t take unlimited willpower to ",
             attributes: [.foregroundColor: R.color.onboardings.basicDark()]
         ))
+        
         attributedString.append(NSAttributedString(
             string: "achieve your goals.",
             attributes: [.foregroundColor:  R.color.onboardings.radialGradientFirst()]
@@ -63,7 +66,8 @@ final class AchievementByWillPowerViewController: UIViewController {
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .medium)
         
-        descriptionLabel.text = "Learning and implementing some new habits can go a long way in getting you \nthere. Are you ready to take the first steps towards building your own strong habits?"
+        // swiftlint:disable:next line_length
+        descriptionLabel.text = "Learning and implementing some new habits can go a long way in getting you there. Are you ready to take the first steps towards building your own strong habits?"
         descriptionLabel.textAlignment = .center
         descriptionLabel.numberOfLines = 0
         descriptionLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
@@ -73,44 +77,64 @@ final class AchievementByWillPowerViewController: UIViewController {
     }
     
     private func configureLayouts() {
-        view.addSubview(stageCounterView)
+        view.addSubview(scrolView)
         
-        view.addSubview(imageView)
+        scrolView.addSubview(contentView)
         
-        view.addSubview(titleLabel)
+        contentView.addSubview(stageCounterView)
         
-        view.addSubview(descriptionLabel)
+        contentView.addSubview(imageView)
         
-        view.addSubview(letsDoItCommonButton)
+        contentView.addSubview(titleLabel)
+        
+        contentView.addSubview(descriptionLabel)
+        
+        contentView.addSubview(letsDoItCommonButton)
+        
+        scrolView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.left.equalTo(view.snp.left)
+            $0.right.equalTo(view.snp.right)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+        }
+        
+        contentView.snp.makeConstraints {
+            $0.top.equalTo(scrolView.snp.top)
+            $0.left.equalTo(view.snp.left)
+            $0.right.equalTo(view.snp.right)
+            $0.bottom.equalTo(scrolView.snp.bottom)
+            $0.height.greaterThanOrEqualTo(scrolView.snp.height)
+        }
         
         stageCounterView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
-            $0.centerX.equalTo(view.snp.centerX)
+            $0.top.equalTo(contentView.safeAreaLayoutGuide.snp.top).offset(30)
+            $0.centerX.equalTo(contentView.snp.centerX)
         }
         
         imageView.snp.makeConstraints {
             $0.top.equalTo(stageCounterView.snp.bottom).offset(80)
-            $0.centerX.equalTo(view.snp.centerX)
+            $0.centerX.equalTo(contentView.snp.centerX)
             $0.size.equalTo(48)
         }
         
         titleLabel.snp.makeConstraints {
             $0.top.equalTo(imageView.snp.bottom).offset(26)
-            $0.left.equalTo(view.snp.left).offset(43)
-            $0.right.equalTo(view.snp.right).offset(-43)
-            $0.centerX.equalTo(view.snp.centerX)
+            $0.left.equalTo(contentView.snp.left).offset(43)
+            $0.right.equalTo(contentView.snp.right).offset(-43)
+            $0.centerX.equalTo(contentView.snp.centerX)
         }
         
         descriptionLabel.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(16)
-            $0.left.equalTo(view.snp.left).offset(43)
-            $0.right.equalTo(view.snp.right).offset(-43)
+            $0.left.equalTo(contentView.snp.left).offset(43)
+            $0.right.equalTo(contentView.snp.right).offset(-43)
         }
         
         letsDoItCommonButton.snp.makeConstraints {
-            $0.left.equalTo(view.snp.left).offset(40)
-            $0.right.equalTo(view.snp.right).offset(-40)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-35)
+            $0.top.greaterThanOrEqualTo(descriptionLabel.snp.bottom).offset(40)
+            $0.left.equalTo(contentView.snp.left).offset(40)
+            $0.right.equalTo(contentView.snp.right).offset(-40)
+            $0.bottom.equalTo(contentView.safeAreaLayoutGuide.snp.bottom).offset(-35)
             $0.height.equalTo(64)
         }
     }

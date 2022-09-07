@@ -8,8 +8,6 @@
 import Foundation
 import UIKit
 
-// swiftlint:disable line_length
-
 protocol FormationGoodHabitsViewControllerInterface: AnyObject {
     func set(formationGoodHabits: [FormationGoodHabits])
     func set(currentOnboardingStage: OnboardingStage)
@@ -103,6 +101,7 @@ final class FormationGoodHabitsViewController: UIViewController {
             $0.left.equalTo(view.snp.left)
             $0.right.equalTo(view.snp.right)
             $0.bottom.equalTo(scrolView.snp.bottom)
+            $0.height.greaterThanOrEqualTo(scrolView.snp.height)
         }
         
         stageCounterView.snp.makeConstraints {
@@ -143,7 +142,11 @@ final class FormationGoodHabitsViewController: UIViewController {
                 
                 answerOption.isSelected = isSelected
                 
-                isSelected ? presenter?.didSelectFormationGoodHabits(with: index) : presenter?.didDeselectFormationGoodHabits()
+                if isSelected {
+                    presenter?.didSelectFormationGoodHabits(with: index)
+                } else {
+                    presenter?.didDeselectFormationGoodHabits()
+                }
             } else {
                 answerOption.isSelected = false
             }
@@ -193,15 +196,15 @@ fileprivate extension FormationGoodHabits {
         case .logEveryMealBefore:
             return "Log every meal before I eat it"
         case .logOnDaysEvenWhenKnow:
-            return "Log on days even when I know I’m \ngoing over budget"
+            return "Log on days even when I know I’m going over budget"
         case .stayOnTrackWithAnAccountabilityBuddy:
-            return "Stay on track with an accountability\n buddy"
+            return "Stay on track with an accountability buddy"
         case .planOutMyMealsInAdvance:
             return "Plan out my meals in advance"
         case .seeHowLongOfTrackingStreak:
-            return "See how long of a tracking streak I can\n keep up"
+            return "See how long of a tracking streak I can keep up"
         case .planOutDaysWhereKnow:
-            return "Plan out days where I know I’ll be\n eating indulgent foods"
+            return "Plan out days where I know I’ll be eating indulgent foods"
         }
     }
 }

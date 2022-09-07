@@ -8,8 +8,6 @@
 import Foundation
 import UIKit
 
-// swiftlint:disable line_length
-
 protocol WhatsYourGenderViewControllerInterface: AnyObject {
     func set(whatsYourGender: [WhatsYourGender])
     func set(currentOnboardingStage: OnboardingStage)
@@ -103,7 +101,11 @@ final class WhatsYourGenderViewController: UIViewController {
                 
                 variabilityResponses.isSelected = isSelected
                 
-                isSelected ? presenter?.didSelectWhatsYourGender(with: index) : presenter?.didDeselectWhatsYourGender()
+                if isSelected {
+                    presenter?.didSelectWhatsYourGender(with: index)
+                } else {
+                    presenter?.didDeselectWhatsYourGender()
+                }
             } else {
                 variabilityResponses.isSelected = false
             }

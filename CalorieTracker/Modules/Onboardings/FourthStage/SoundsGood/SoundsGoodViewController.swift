@@ -8,8 +8,6 @@
 import Foundation
 import UIKit
 
-// swiftlint:disable line_length
-
 protocol SoundsGoodViewControllerInterface: AnyObject {
     func set(currentOnboardingStage: OnboardingStage)
 }
@@ -55,6 +53,7 @@ final class SoundsGoodViewController: UIViewController {
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.systemFont(ofSize: 30, weight: .medium)
         
+        // swiftlint:disable:next line_length
         descriptionLabel.text = "Setting this plan for logging, at least to start, can help you maintain motivation and progree towards your goals."
         descriptionLabel.textColor = R.color.onboardings.basicGray()
         descriptionLabel.textAlignment = .center

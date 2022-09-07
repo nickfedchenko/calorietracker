@@ -8,8 +8,6 @@
 import Foundation
 import UIKit
 
-// swiftlint:disable line_length
-
 protocol SequenceOfHabitFormationViewControllerInterface: AnyObject {
     func set(sequenceOfHabitFormation: [SequenceOfHabitFormation])
     func set(currentOnboardingStage: OnboardingStage)
@@ -66,6 +64,7 @@ final class SequenceOfHabitFormationViewController: UIViewController {
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .medium)
         
+        // swiftlint:disable:next line_length
         descriptionLabel.text = "The first step is to track, and the second is to make it meaningful. For your first few days, which do you think will work best for you?"
         descriptionLabel.textColor = R.color.onboardings.basicGray()
         descriptionLabel.textAlignment = .center
@@ -105,6 +104,7 @@ final class SequenceOfHabitFormationViewController: UIViewController {
             $0.left.equalTo(view.snp.left)
             $0.right.equalTo(view.snp.right)
             $0.bottom.equalTo(scrolView.snp.bottom)
+            $0.height.greaterThanOrEqualTo(scrolView.snp.height)
         }
         
         stageCounterView.snp.makeConstraints {
@@ -140,7 +140,7 @@ final class SequenceOfHabitFormationViewController: UIViewController {
     }
     
     @objc func didTapAnswerOption(_ sender: AnswerOption) {
-        answerOptions.enumerated().forEach { index, answerOption in
+        answerOptions.forEach { answerOption in
             if answerOption == sender {
                 let isSelected = !answerOption.isSelected
                 

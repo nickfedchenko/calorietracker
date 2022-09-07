@@ -8,8 +8,6 @@
 import Foundation
 import UIKit
 
-// swiftlint:disable line_length
-
 protocol RisksOfDiseasesViewControllerInterface: AnyObject {
     func set(risksOfDiseases: [RisksOfDiseases])
     func set(currentOnboardingStage: OnboardingStage)
@@ -93,6 +91,7 @@ final class RisksOfDiseasesViewController: UIViewController {
             $0.left.equalTo(view.snp.left)
             $0.right.equalTo(view.snp.right)
             $0.bottom.equalTo(scrolView.snp.bottom)
+            $0.height.greaterThanOrEqualTo(scrolView.snp.height)
         }
         
         stageCounterView.snp.makeConstraints {
@@ -122,7 +121,7 @@ final class RisksOfDiseasesViewController: UIViewController {
     }
     
     @objc func didTapVariabilityResponse(_ sender: VariabilityResponse) {
-        variabilityResponses.enumerated().forEach { index, variabilityResponses in
+        variabilityResponses.forEach { variabilityResponses in
             if variabilityResponses == sender {
                 let isSelected = !variabilityResponses.isSelected
                 

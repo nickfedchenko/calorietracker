@@ -8,8 +8,6 @@
 import Foundation
 import UIKit
 
-// swiftlint:disable line_length
-
 protocol EnvironmentInfluencesTheChoiceViewControllerInterface: AnyObject {
     func set(environmentInfluencesTheChoice: [EnvironmentInfluencesTheChoice])
     func set(currentOnboardingStage: OnboardingStage)
@@ -72,6 +70,7 @@ final class EnvironmentInfluencesTheChoiceViewController: UIViewController {
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .medium)
         
+        // swiftlint:disable:next line_length
         descriptionLabel.text = "Sometimes we want something simply because we see it! What are some ways you can change your space to inspire healthy choices?"
         descriptionLabel.textColor = R.color.onboardings.basicGray()
         descriptionLabel.textAlignment = .center
@@ -112,6 +111,7 @@ final class EnvironmentInfluencesTheChoiceViewController: UIViewController {
             $0.left.equalTo(view.snp.left)
             $0.right.equalTo(view.snp.right)
             $0.bottom.equalTo(scrolView.snp.bottom)
+            $0.height.greaterThanOrEqualTo(scrolView.snp.height)
         }
         
         stageCounterView.snp.makeConstraints {
@@ -148,7 +148,7 @@ final class EnvironmentInfluencesTheChoiceViewController: UIViewController {
     }
     
     @objc func didTapAnswerOption(_ sender: AnswerOption) {
-        answerOptions.enumerated().forEach { index, answerOption in
+        answerOptions.forEach { answerOption in
             if answerOption == sender {
                 let isSelected = !answerOption.isSelected
                 
@@ -219,7 +219,7 @@ fileprivate extension EnvironmentInfluencesTheChoice {
         case .keepDistractionsAwayWhileEating:
             return "Keep distractions away while eating"
         case .displayMyMealPlanOrCalendarOnTheFridge:
-            return "Display my meal plan or calendar on \nthe fridge"
+            return "Display my meal plan or calendar on the fridge"
         }
     }
 }

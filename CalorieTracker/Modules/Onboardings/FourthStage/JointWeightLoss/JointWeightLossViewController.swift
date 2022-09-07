@@ -99,7 +99,7 @@ final class JointWeightLossViewController: UIViewController {
     }
     
     @objc func didTapAnswerOption(_ sender: AnswerOption) {
-        answerOptions.enumerated().forEach { index, answerOption in
+        answerOptions.forEach { answerOption in
             if answerOption == sender {
                 let isSelected = !answerOption.isSelected
                 

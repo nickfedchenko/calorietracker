@@ -44,6 +44,7 @@ class AnswerOption: UIButton {
         
         titleLabel1.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         titleLabel1.numberOfLines = 0
+        titleLabel1.textAlignment = .left
     }
     
     private func configureLayouts() {
@@ -58,8 +59,10 @@ class AnswerOption: UIButton {
         }
         
         checkMarkImageView.snp.makeConstraints {
+            $0.left.equalTo(titleLabel1.snp.right).offset(5)
             $0.right.equalTo(snp.right).offset(-20)
             $0.centerY.equalTo(titleLabel1.snp.centerY)
+            $0.size.equalTo(24)
         }
     }
     

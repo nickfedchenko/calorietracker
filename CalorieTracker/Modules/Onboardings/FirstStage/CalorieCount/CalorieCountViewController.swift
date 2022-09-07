@@ -8,8 +8,6 @@
 import SnapKit
 import UIKit
 
-// swiftlint:disable line_length
-
 protocol CalorieCountViewControllerInterface: AnyObject {
     func set(currentOnboardingStage: OnboardingStage)
 }
@@ -22,6 +20,8 @@ final class CalorieCountViewController: UIViewController {
     
     // MARK: - Views properties
     
+    private let scrolView: UIScrollView = .init()
+    private let contentView: UIView = .init()
     private let stageCounterView: StageCounterView = .init()
     private let titleLabel: UILabel = .init()
     private let imagView: UIImageView = .init()
@@ -44,6 +44,8 @@ final class CalorieCountViewController: UIViewController {
         title = "History"
         
         view.backgroundColor = R.color.mainBackground()
+        
+        scrolView.showsVerticalScrollIndicator = false
         
         let attributedString = NSMutableAttributedString()
         
@@ -74,7 +76,12 @@ final class CalorieCountViewController: UIViewController {
                                         for: .touchUpInside)
     }
     
+    // swiftlint:disable:next function_body_length
     private func configureLayouts() {
+        view.addSubview(scrolView)
+        
+        scrolView.addSubview(contentView)
+        
         view.addSubview(stageCounterView)
         
         view.addSubview(titleLabel)
@@ -84,6 +91,21 @@ final class CalorieCountViewController: UIViewController {
         view.addSubview(approvalCommonButton)
         
         view.addSubview(rejectionCommonButton)
+        
+        scrolView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.left.equalTo(view.snp.left)
+            $0.right.equalTo(view.snp.right)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+        }
+        
+        contentView.snp.makeConstraints {
+            $0.top.equalTo(scrolView.snp.top)
+            $0.left.equalTo(view.snp.left)
+            $0.right.equalTo(view.snp.right)
+            $0.bottom.equalTo(scrolView.snp.bottom)
+            $0.height.greaterThanOrEqualTo(scrolView.snp.height)
+        }
         
         stageCounterView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
@@ -105,6 +127,7 @@ final class CalorieCountViewController: UIViewController {
         }
         
         approvalCommonButton.snp.makeConstraints {
+            $0.top.greaterThanOrEqualTo(imagView.snp.bottom).offset(40)
             $0.left.equalTo(view.snp.left).offset(40)
             $0.right.equalTo(view.snp.right).offset(-40)
             $0.height.equalTo(64)

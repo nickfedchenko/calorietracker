@@ -8,8 +8,6 @@
 import SnapKit
 import UIKit
 
-// swiftlint:disable line_length
-
 protocol QuestionAboutTheChangeViewControllerInterface: AnyObject {
     func set(questionAboutTheChange: [QuestionAboutTheChange])
     func set(currentOnboardingStage: OnboardingStage)
@@ -29,6 +27,8 @@ final class QuestionAboutTheChangeViewController: UIViewController {
     
     // MARK: - Views properties
     
+    private let scrolView: UIScrollView = .init()
+    private let contentView: UIView = .init()
     private let stageCounterView: StageCounterView = .init()
     private let titleLabel: UILabel = .init()
     private let descriptionLabel: UILabel = .init()
@@ -54,14 +54,17 @@ final class QuestionAboutTheChangeViewController: UIViewController {
         
         view.backgroundColor = R.color.mainBackground()
         
+        scrolView.showsVerticalScrollIndicator = false
+        
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
             string: "What’s defferent ",
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]
         ))
+        
         attributedString.append(NSAttributedString(
-            string: "from \nlast time?",
+            string: "from last time?",
             attributes: [.foregroundColor: R.color.onboardings.basicDark()]
         ))
         
@@ -83,44 +86,64 @@ final class QuestionAboutTheChangeViewController: UIViewController {
     }
     
     private func configureLayouts() {
-        view.addSubview(stageCounterView)
+        view.addSubview(scrolView)
         
-        view.addSubview(titleLabel)
+        scrolView.addSubview(contentView)
         
-        view.addSubview(descriptionLabel)
+        contentView.addSubview(stageCounterView)
         
-        view.addSubview(stackView)
+        contentView.addSubview(titleLabel)
         
-        view.addSubview(nextCommonButton)
+        contentView.addSubview(descriptionLabel)
+        
+        contentView.addSubview(stackView)
+        
+        contentView.addSubview(nextCommonButton)
+        
+        scrolView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.left.equalTo(view.snp.left)
+            $0.right.equalTo(view.snp.right)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+        }
+        
+        contentView.snp.makeConstraints {
+            $0.top.equalTo(scrolView.snp.top)
+            $0.left.equalTo(view.snp.left)
+            $0.right.equalTo(view.snp.right)
+            $0.bottom.equalTo(scrolView.snp.bottom)
+            $0.height.greaterThanOrEqualTo(scrolView.snp.height)
+        }
         
         stageCounterView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
-            $0.centerX.equalTo(view.snp.centerX)
+            $0.top.equalTo(contentView.safeAreaLayoutGuide.snp.top).offset(30)
+            $0.centerX.equalTo(contentView.snp.centerX)
         }
         
         titleLabel.snp.makeConstraints {
             $0.top.equalTo(stageCounterView.snp.bottom).offset(32)
-            $0.left.equalTo(view.snp.left).offset(43)
-            $0.right.equalTo(view.snp.right).offset(-43)
-            $0.centerX.equalTo(view.snp.centerX)
+            $0.left.equalTo(contentView.snp.left).offset(43)
+            $0.right.equalTo(contentView.snp.right).offset(-43)
+            $0.centerX.equalTo(contentView.snp.centerX)
         }
         
         descriptionLabel.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(16)
-            $0.left.equalTo(view.snp.left).offset(43)
-            $0.right.equalTo(view.snp.right).offset(-43)
+            $0.left.equalTo(contentView.snp.left).offset(43)
+            $0.right.equalTo(contentView.snp.right).offset(-43)
         }
         
         stackView.snp.makeConstraints {
             $0.top.equalTo(descriptionLabel.snp.bottom).offset(32)
-            $0.left.equalTo(view.snp.left).offset(40)
-            $0.right.equalTo(view.snp.right).offset(-40)
+            $0.left.equalTo(contentView.snp.left).offset(40)
+            $0.right.equalTo(contentView.snp.right).offset(-40)
         }
         
         nextCommonButton.snp.makeConstraints {
-            $0.left.equalTo(view.snp.left).offset(40)
-            $0.right.equalTo(view.snp.right).offset(-40)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-35)
+            $0.top.greaterThanOrEqualTo(stackView.snp.bottom).offset(40)
+            $0.left.equalTo(contentView.snp.left).offset(40)
+            $0.right.equalTo(contentView.snp.right).offset(-40)
+            $0.bottom.equalTo(contentView.safeAreaLayoutGuide.snp.bottom).offset(-35)
             $0.height.equalTo(64)
         }
     }
@@ -132,7 +155,11 @@ final class QuestionAboutTheChangeViewController: UIViewController {
                 
                 answerOption.isSelected = isSelected
                 
-                isSelected ? presenter?.didSelectQuestionAboutTheChange(with: index) : presenter?.didDeselectQuestionAboutTheChange()
+                if isSelected {
+                    presenter?.didSelectQuestionAboutTheChange(with: index)
+                } else {
+                    presenter?.didDeselectQuestionAboutTheChange()
+                }
             } else {
                 answerOption.isSelected = false
             }

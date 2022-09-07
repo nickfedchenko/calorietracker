@@ -8,8 +8,6 @@
 import Foundation
 import UIKit
 
-// swiftlint:disable line_length
-
 protocol HelpingPeopleTrackCaloriesViewControllerInterface: AnyObject {
     func set(currentOnboardingStage: OnboardingStage)
 }

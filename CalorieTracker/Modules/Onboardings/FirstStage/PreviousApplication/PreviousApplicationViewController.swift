@@ -8,8 +8,6 @@
 import Foundation
 import UIKit
 
-// swiftlint:disable line_length
-
 protocol PreviousApplicationViewControllerInterface: AnyObject {
     func set(previousApplication: [PreviousApplication])
     func set(currentOnboardingStage: OnboardingStage)
@@ -92,6 +90,7 @@ final class PreviousApplicationViewController: UIViewController {
             $0.left.equalTo(view.snp.left)
             $0.right.equalTo(view.snp.right)
             $0.bottom.equalTo(scrolView.snp.bottom)
+            $0.height.greaterThanOrEqualTo(scrolView.snp.height)
         }
         
         stageCounterView.snp.makeConstraints {
@@ -127,7 +126,11 @@ final class PreviousApplicationViewController: UIViewController {
                 
                 answerOption.isSelected = isSelected
                 
-                isSelected ? presenter?.didSelectPreviousApplication(with: index) : presenter?.didDeselectPreviousApplication()
+                if isSelected {
+                    presenter?.didSelectPreviousApplication(with: index)
+                } else {
+                    presenter?.didDeselectPreviousApplication()
+                }
             } else {
                 answerOption.isSelected = false
             }

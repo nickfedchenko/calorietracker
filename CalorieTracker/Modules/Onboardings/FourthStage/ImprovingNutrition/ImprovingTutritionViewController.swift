@@ -94,6 +94,7 @@ final class ImprovingNutritionViewController: UIViewController {
             $0.left.equalTo(view.snp.left)
             $0.right.equalTo(view.snp.right)
             $0.bottom.equalTo(scrolView.snp.bottom)
+            $0.height.greaterThanOrEqualTo(scrolView.snp.height)
         }
         
         stageCounterView.snp.makeConstraints {
@@ -123,7 +124,7 @@ final class ImprovingNutritionViewController: UIViewController {
     }
     
     @objc func didTapAnswerOption(_ sender: AnswerOption) {
-        answerOptions.enumerated().forEach { index, answerOption in
+        answerOptions.forEach { answerOption in
             if answerOption == sender {
                 let isSelected = !answerOption.isSelected
                 

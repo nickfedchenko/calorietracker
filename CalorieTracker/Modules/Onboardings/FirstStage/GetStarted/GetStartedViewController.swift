@@ -18,6 +18,8 @@ final class GetStartedViewController: UIViewController {
     
     // MARK: - Views properties
     
+    private let scrolView: UIScrollView = .init()
+    private let contentView: UIView = .init()
     private let topImage: UIImage = R.image.onboardings.topImages() ?? UIImage()
     private let topImageView: UIImageView = .init()
     private let stackView: UIStackView = .init()
@@ -34,12 +36,16 @@ final class GetStartedViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        configureBackBarButtonItem()
         configureViews()
         configureLayouts()
     }
     
     private func configureViews() {
         view.backgroundColor = R.color.mainBackground()
+        
+        scrolView.contentInsetAdjustmentBehavior = .never
+        scrolView.showsVerticalScrollIndicator = false
         
         stackView.axis = .vertical
         stackView.alignment = .center
@@ -57,10 +63,15 @@ final class GetStartedViewController: UIViewController {
                                               for: .touchUpInside)
     }
     
+    // swiftlint:disable:next function_body_length
     private func configureLayouts() {
-        view.addSubview(topImageView)
+        view.addSubview(scrolView)
         
-        view.addSubview(stackView)
+        scrolView.addSubview(contentView)
+        
+        contentView.addSubview(topImageView)
+        
+        contentView.addSubview(stackView)
         
         stackView.addArrangedSubview(logoImageView)
         stackView.setCustomSpacing(12, after: logoImageView)
@@ -76,19 +87,34 @@ final class GetStartedViewController: UIViewController {
 
         stackView.addArrangedSubview(reachCheckMarkDescriptionView)
         
-        view.addSubview(getStartedCommonButton)
-        view.addSubview(getStartedSignInAppleButton)
-                
-        topImageView.snp.makeConstraints {
+        contentView.addSubview(getStartedCommonButton)
+        contentView.addSubview(getStartedSignInAppleButton)
+        
+        scrolView.snp.makeConstraints {
             $0.top.equalTo(view.snp.top)
             $0.left.equalTo(view.snp.left)
             $0.right.equalTo(view.snp.right)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+        }
+        
+        contentView.snp.makeConstraints {
+            $0.top.equalTo(scrolView.snp.top)
+            $0.left.equalTo(view.snp.left)
+            $0.right.equalTo(view.snp.right)
+            $0.bottom.equalTo(scrolView.snp.bottom)
+            $0.height.greaterThanOrEqualTo(scrolView.snp.height)
+        }
+                
+        topImageView.snp.makeConstraints {
+            $0.top.equalTo(contentView.snp.top)
+            $0.left.equalTo(contentView.snp.left)
+            $0.right.equalTo(contentView.snp.right)
             $0.width.equalTo(topImageView.snp.height).multipliedBy(topImage.size.width / topImage.size.height)
         }
         
         stackView.snp.makeConstraints {
-            $0.centerX.equalTo(view.snp.centerX)
-            $0.centerY.equalTo(view.snp.centerY)
+            $0.centerX.equalTo(contentView.snp.centerX)
+            $0.centerY.equalTo(contentView.snp.centerY)
         }
         
         trackCheckMarkDescriptionView.snp.makeConstraints {
@@ -100,16 +126,17 @@ final class GetStartedViewController: UIViewController {
         }
         
         getStartedCommonButton.snp.makeConstraints {
-            $0.left.equalTo(view.snp.left).offset(40)
-            $0.right.equalTo(view.snp.right).offset(-40)
+            $0.top.greaterThanOrEqualTo(followCheckMarkDescriptionView.snp.bottom).offset(40)
+            $0.left.equalTo(contentView.snp.left).offset(40)
+            $0.right.equalTo(contentView.snp.right).offset(-40)
             $0.height.equalTo(64)
         }
         
         getStartedSignInAppleButton.snp.makeConstraints {
             $0.top.equalTo(getStartedCommonButton.snp.bottom).offset(16)
-            $0.left.equalTo(view.snp.left).offset(40)
-            $0.right.equalTo(view.snp.right).offset(-40)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-35)
+            $0.left.equalTo(contentView.snp.left).offset(40)
+            $0.right.equalTo(contentView.snp.right).offset(-40)
+            $0.bottom.equalTo(contentView.snp.bottom).offset(-35)
             $0.height.equalTo(64)
         }
     }
@@ -120,6 +147,16 @@ final class GetStartedViewController: UIViewController {
     
     @objc private func didTapGetStartedSignInAppleButton() {
         print("didTapGetStartedSignInAppleButton")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: animated)
     }
 }
 

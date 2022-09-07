@@ -20,6 +20,8 @@ final class RecentWeightChangesViewController: UIViewController {
 
     // MARK: - Views properties
     
+    private let scrolView: UIScrollView = .init()
+    private let contentView: UIView = .init()
     private let stageCounterView: StageCounterView = .init()
     private let titleLabel: UILabel = .init()
     private let approvalCommonButton: CommonButton = .init(style: .bordered, text: "Yes".uppercased())
@@ -42,14 +44,16 @@ final class RecentWeightChangesViewController: UIViewController {
         
         view.backgroundColor = R.color.mainBackground()
         
+        scrolView.showsVerticalScrollIndicator = false
+        
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: "Think back to when\n you last worked on\n your weight. ",
+            string: "Think back to when you last worked on your weight. ",
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]
         ))
         attributedString.append(NSAttributedString(
-            string: "Is \nanything different \nabout this time than \nlast time?",
+            string: "Is anything different about this time than last time?",
             attributes: [.foregroundColor: R.color.onboardings.basicDark()]
         ))
         
@@ -66,37 +70,57 @@ final class RecentWeightChangesViewController: UIViewController {
     }
     
     private func configureLayouts() {
-        view.addSubview(stageCounterView)
+        view.addSubview(scrolView)
         
-        view.addSubview(titleLabel)
+        scrolView.addSubview(contentView)
         
-        view.addSubview(approvalCommonButton)
+        contentView.addSubview(stageCounterView)
         
-        view.addSubview(rejectionCommonButton)
+        contentView.addSubview(titleLabel)
+        
+        contentView.addSubview(approvalCommonButton)
+        
+        contentView.addSubview(rejectionCommonButton)
+        
+        scrolView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.left.equalTo(view.snp.left)
+            $0.right.equalTo(view.snp.right)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+        }
+        
+        contentView.snp.makeConstraints {
+            $0.top.equalTo(scrolView.snp.top)
+            $0.left.equalTo(view.snp.left)
+            $0.right.equalTo(view.snp.right)
+            $0.bottom.equalTo(scrolView.snp.bottom)
+            $0.height.greaterThanOrEqualTo(scrolView.snp.height)
+        }
         
         stageCounterView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
-            $0.centerX.equalTo(view.snp.centerX)
+            $0.top.equalTo(contentView.safeAreaLayoutGuide.snp.top).offset(30)
+            $0.centerX.equalTo(contentView.snp.centerX)
         }
         
         titleLabel.snp.makeConstraints {
-            $0.left.equalTo(view.snp.left).offset(43)
-            $0.right.equalTo(view.snp.right).offset(-43)
-            $0.centerX.equalTo(view.snp.centerX)
-            $0.centerY.equalTo(view.snp.centerY)
+            $0.left.equalTo(contentView.snp.left).offset(43)
+            $0.right.equalTo(contentView.snp.right).offset(-43)
+            $0.centerX.equalTo(contentView.snp.centerX)
+            $0.centerY.equalTo(contentView.snp.centerY)
         }
         
         approvalCommonButton.snp.makeConstraints {
-            $0.left.equalTo(view.snp.left).offset(40)
-            $0.right.equalTo(view.snp.right).offset(-40)
+            $0.top.greaterThanOrEqualTo(titleLabel.snp.bottom).offset(40)
+            $0.left.equalTo(contentView.snp.left).offset(40)
+            $0.right.equalTo(contentView.snp.right).offset(-40)
             $0.height.equalTo(64)
         }
         
         rejectionCommonButton.snp.makeConstraints {
             $0.top.equalTo(approvalCommonButton.snp.bottom).offset(16)
-            $0.left.equalTo(view.snp.left).offset(40)
-            $0.right.equalTo(view.snp.right).offset(-40)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-35)
+            $0.left.equalTo(contentView.snp.left).offset(40)
+            $0.right.equalTo(contentView.snp.right).offset(-40)
+            $0.bottom.equalTo(contentView.snp.bottom).offset(-35)
             $0.height.equalTo(64)
         }
     }

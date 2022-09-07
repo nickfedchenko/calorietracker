@@ -20,6 +20,8 @@ final class DateOfBirthViewController: UIViewController {
     
     // MARK: - Views properties
     
+    private let scrolView: UIScrollView = .init()
+    private let contentView: UIView = .init()
     private let stageCounterView: StageCounterView = .init()
     private let titleLabel: UILabel = .init()
     private let borderTextField: BorderTextField = .init()
@@ -42,16 +44,27 @@ final class DateOfBirthViewController: UIViewController {
     private func configureViews() {
         view.backgroundColor = R.color.mainBackground()
         
+        scrolView.showsVerticalScrollIndicator = false
+        
         titleLabel.text = "Your date of birth"
         titleLabel.textColor = R.color.onboardings.basicDark()
         titleLabel.textAlignment = .center
         titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .medium)
         
         borderTextField.isEnabled = false
-        borderTextField.textField.addTarget(self, action:  #selector(didTapContinueCommonButton), for: .touchUpInside)
+        borderTextField.textField.addTarget(
+            self,
+            action: #selector(didTapContinueCommonButton),
+            for: .touchUpInside
+        )
         
         containerdatePickerView.backgroundColor = .white
         containerdatePickerView.layer.cornerRadius = 12
+        containerdatePickerView.layer.masksToBounds = false
+        containerdatePickerView.layer.shadowColor = UIColor.black.cgColor
+        containerdatePickerView.layer.shadowOpacity = 0.10
+        containerdatePickerView.layer.shadowOffset = CGSize(width: 10, height: 10)
+        containerdatePickerView.layer.shadowRadius = 8
         
         datePicker.preferredDatePickerStyle = .wheels
         datePicker.datePickerMode = .date
@@ -80,47 +93,68 @@ final class DateOfBirthViewController: UIViewController {
         presenter?.didTapContinueCommonButton(with: name)
     }
     
+    // swiftlint:disable:next function_body_length
     private func configureLayouts() {
-        view.addSubview(stageCounterView)
+        view.addSubview(scrolView)
         
-        view.addSubview(titleLabel)
+        scrolView.addSubview(contentView)
         
-        view.addSubview(borderTextField)
+        contentView.addSubview(stageCounterView)
         
-        view.addSubview(containerdatePickerView)
+        contentView.addSubview(titleLabel)
+        
+        contentView.addSubview(borderTextField)
+        
+        contentView.addSubview(containerdatePickerView)
         
         containerdatePickerView.addSubview(datePicker)
         
         containerdatePickerView.addSubview(continueCommonButton)
         
+        scrolView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.left.equalTo(view.snp.left)
+            $0.right.equalTo(view.snp.right)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+        }
+        
+        contentView.snp.makeConstraints {
+            $0.top.equalTo(scrolView.snp.top)
+            $0.left.equalTo(view.snp.left)
+            $0.right.equalTo(view.snp.right)
+            $0.bottom.equalTo(scrolView.snp.bottom)
+            $0.height.greaterThanOrEqualTo(scrolView.snp.height)
+        }
+        
         stageCounterView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
-            $0.centerX.equalTo(view.snp.centerX)
+            $0.top.equalTo(contentView.safeAreaLayoutGuide.snp.top).offset(30)
+            $0.centerX.equalTo(contentView.snp.centerX)
         }
         
         titleLabel.snp.makeConstraints {
             $0.top.equalTo(stageCounterView.snp.bottom).offset(40)
-            $0.left.equalTo(view.snp.left).offset(43)
-            $0.right.equalTo(view.snp.right).offset(-43)
+            $0.left.equalTo(contentView.snp.left).offset(43)
+            $0.right.equalTo(contentView.snp.right).offset(-43)
         }
         
         borderTextField.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(40)
-            $0.left.equalTo(view.snp.left).offset(50)
-            $0.right.equalTo(view.snp.right).offset(-50)
+            $0.left.equalTo(contentView.snp.left).offset(50)
+            $0.right.equalTo(contentView.snp.right).offset(-50)
             $0.height.equalTo(74)
         }
         
         containerdatePickerView.snp.makeConstraints {
-            $0.left.equalTo(view.snp.left)
-            $0.right.equalTo(view.snp.right)
-            $0.bottom.equalTo(view.snp.bottom)
+            $0.top.greaterThanOrEqualTo(borderTextField.snp.bottom).offset(40)
+            $0.left.equalTo(contentView.snp.left)
+            $0.right.equalTo(contentView.snp.right)
+            $0.bottom.equalTo(contentView.snp.bottom)
         }
         
         datePicker.snp.makeConstraints {
             $0.top.equalTo(containerdatePickerView.snp.top).offset(26)
-            $0.left.equalTo(view.snp.left).offset(32)
-            $0.right.equalTo(view.snp.right).offset(-32)
+            $0.left.equalTo(contentView.snp.left).offset(32)
+            $0.right.equalTo(contentView.snp.right).offset(-32)
         }
         
         continueCommonButton.snp.makeConstraints {

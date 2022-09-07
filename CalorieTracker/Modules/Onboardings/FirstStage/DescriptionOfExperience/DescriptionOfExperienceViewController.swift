@@ -8,8 +8,6 @@
 import Foundation
 import UIKit
 
-// swiftlint:disable line_length
-
 protocol DescriptionOfExperienceViewControllerInterface: AnyObject {
     func set(descriptionOfExperiences: [DescriptionOfExperience])
     func set(currentOnboardingStage: OnboardingStage)
@@ -29,6 +27,8 @@ final class DescriptionOfExperienceViewController: UIViewController {
     
     // MARK: - Views properties
     
+    private let scrolView: UIScrollView = .init()
+    private let contentView: UIView = .init()
     private let stageCounterView: StageCounterView = .init()
     private let titleLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
@@ -51,15 +51,18 @@ final class DescriptionOfExperienceViewController: UIViewController {
         title = "History"
         
         view.backgroundColor = R.color.mainBackground()
+        
+        scrolView.showsVerticalScrollIndicator = false
 
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: "What best describes\n ",
+            string: "What best describes ",
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]
         ))
+        
         attributedString.append(NSAttributedString(
-            string: "your past experiences \nwith weight loss?",
+            string: "your past experiences with weight loss?",
             attributes: [.foregroundColor: R.color.onboardings.basicDark()]
         ))
         
@@ -76,36 +79,56 @@ final class DescriptionOfExperienceViewController: UIViewController {
     }
     
     private func configureLayouts() {
-        view.addSubview(stageCounterView)
+        view.addSubview(scrolView)
         
-        view.addSubview(titleLabel)
+        scrolView.addSubview(contentView)
         
-        view.addSubview(stackView)
+        contentView.addSubview(stageCounterView)
         
-        view.addSubview(nextCommonButton)
+        contentView.addSubview(titleLabel)
+        
+        contentView.addSubview(stackView)
+        
+        contentView.addSubview(nextCommonButton)
+        
+        scrolView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.left.equalTo(view.snp.left)
+            $0.right.equalTo(view.snp.right)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+        }
+        
+        contentView.snp.makeConstraints {
+            $0.top.equalTo(scrolView.snp.top)
+            $0.left.equalTo(view.snp.left)
+            $0.right.equalTo(view.snp.right)
+            $0.bottom.equalTo(scrolView.snp.bottom)
+            $0.height.greaterThanOrEqualTo(scrolView.snp.height)
+        }
         
         stageCounterView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
-            $0.centerX.equalTo(view.snp.centerX)
+            $0.top.equalTo(contentView.safeAreaLayoutGuide.snp.top).offset(30)
+            $0.centerX.equalTo(contentView.snp.centerX)
         }
         
         titleLabel.snp.makeConstraints {
             $0.top.equalTo(stageCounterView.snp.bottom).offset(32)
-            $0.left.equalTo(view.snp.left).offset(43)
-            $0.right.equalTo(view.snp.right).offset(-43)
-            $0.centerX.equalTo(view.snp.centerX)
+            $0.left.equalTo(contentView.snp.left).offset(43)
+            $0.right.equalTo(contentView.snp.right).offset(-43)
+            $0.centerX.equalTo(contentView.snp.centerX)
         }
         
         stackView.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(32)
-            $0.left.equalTo(view.snp.left).offset(40)
-            $0.right.equalTo(view.snp.right).offset(-40)
+            $0.left.equalTo(contentView.snp.left).offset(40)
+            $0.right.equalTo(contentView.snp.right).offset(-40)
         }
         
         nextCommonButton.snp.makeConstraints {
-            $0.left.equalTo(view.snp.left).offset(40)
-            $0.right.equalTo(view.snp.right).offset(-40)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-35)
+            $0.top.greaterThanOrEqualTo(stackView.snp.bottom).offset(40)
+            $0.left.equalTo(contentView.snp.left).offset(40)
+            $0.right.equalTo(contentView.snp.right).offset(-40)
+            $0.bottom.equalTo(contentView.safeAreaLayoutGuide.snp.bottom).offset(-35)
             $0.height.equalTo(64)
         }
     }
@@ -117,7 +140,11 @@ final class DescriptionOfExperienceViewController: UIViewController {
                 
                 answerOption.isSelected = isSelected
                 
-                isSelected ? presenter?.didSelectDescriptionOfExperience(with: index) : presenter?.didDeselectDescriptionOfExperience()
+                if isSelected {
+                    presenter?.didSelectDescriptionOfExperience(with: index)
+                } else {
+                    presenter?.didDeselectDescriptionOfExperience()
+                }
             } else {
                 answerOption.isSelected = false
             }

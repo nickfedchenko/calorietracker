@@ -54,10 +54,12 @@ final class PresenceOfAllergiesViewController: UIViewController {
             string: "Do you have any ",
             attributes: [.foregroundColor: R.color.onboardings.basicDark()]
         ))
+        
         attributedString.append(NSAttributedString(
             string: "allergic ",
             attributes: [.foregroundColor:  R.color.onboardings.radialGradientFirst()]
         ))
+        
         attributedString.append(NSAttributedString(
             string: "restrictions?",
             attributes: [.foregroundColor: R.color.onboardings.basicDark()]
@@ -116,8 +118,11 @@ final class PresenceOfAllergiesViewController: UIViewController {
                 
                 variabilityResponses.isSelected = isSelected
                 
-                isSelected ?
-                presenter?.didSelectPresenceOfAllergies(with: index) : presenter?.didDeselectPresenceOfAllergies()
+                if isSelected {
+                    presenter?.didSelectPresenceOfAllergies(with: index)
+                } else {
+                    presenter?.didDeselectPresenceOfAllergies()
+                }
             } else {
                 variabilityResponses.isSelected = false
             }

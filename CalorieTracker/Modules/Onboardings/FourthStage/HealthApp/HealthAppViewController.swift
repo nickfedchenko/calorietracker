@@ -8,8 +8,6 @@
 import Foundation
 import UIKit
 
-// swiftlint:disable line_length
-
 protocol HealthAppViewControllerInterface: AnyObject {}
 
 class HealthAppViewController: UIViewController {
@@ -20,6 +18,8 @@ class HealthAppViewController: UIViewController {
     
     // MARK: - Views properties
     
+    private let scrolView: UIScrollView = .init()
+    private let contentView: UIView = .init()
     private let titleLabel: UILabel = .init()
     private let descriptionLabel: UILabel = .init()
     private let healthAppView: UIView = .init()
@@ -43,6 +43,8 @@ class HealthAppViewController: UIViewController {
         view.backgroundColor = R.color.mainBackground()
 
         let attributedString = NSMutableAttributedString()
+        
+        scrolView.showsVerticalScrollIndicator = false
 
         attributedString.append(NSAttributedString(
             string: "Want to integrate ",
@@ -58,6 +60,7 @@ class HealthAppViewController: UIViewController {
         titleLabel.textAlignment = .center
         titleLabel.font = UIFont.systemFont(ofSize: 38, weight: .medium)
         
+        // swiftlint:disable:next line_length
         descriptionLabel.text = "We’re happy to have you here. We’ll walk you through these steps to get you set up for weight loss success: "
         descriptionLabel.numberOfLines = 0
         descriptionLabel.textAlignment = .center
@@ -81,37 +84,57 @@ class HealthAppViewController: UIViewController {
         continueCommonButton.addTarget(self, action: #selector(didTapContinueCommonButton), for: .touchUpInside)
     }
     
+    // swiftlint:disable:next function_body_length
     private func configureLayouts() {
-        view.addSubview(titleLabel)
+        view.addSubview(scrolView)
         
-        view.addSubview(descriptionLabel)
+        scrolView.addSubview(contentView)
         
-        view.addSubview(healthAppView)
+        contentView.addSubview(titleLabel)
+        
+        contentView.addSubview(descriptionLabel)
+        
+        contentView.addSubview(healthAppView)
         
         healthAppView.addSubview(healthAppImageView)
         healthAppView.addSubview(healthAppTitleLabel)
         healthAppView.addSubview(healthAppDescriptionLabel)
         healthAppView.addSubview(arrowImageView)
         
-        view.addSubview(continueCommonButton)
+        contentView.addSubview(continueCommonButton)
+        
+        scrolView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.left.equalTo(view.snp.left)
+            $0.right.equalTo(view.snp.right)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+        }
+        
+        contentView.snp.makeConstraints {
+            $0.top.equalTo(scrolView.snp.top)
+            $0.left.equalTo(view.snp.left)
+            $0.right.equalTo(view.snp.right)
+            $0.bottom.equalTo(scrolView.snp.bottom)
+            $0.height.greaterThanOrEqualTo(scrolView.snp.height)
+        }
         
         titleLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
-            $0.left.equalTo(view.snp.left).offset(42)
-            $0.right.equalTo(view.snp.right).offset(-42)
-            $0.centerX.equalTo(view.snp.centerX)
+            $0.top.equalTo(contentView.snp.top).offset(30)
+            $0.left.equalTo(contentView.snp.left).offset(42)
+            $0.right.equalTo(contentView.snp.right).offset(-42)
+            $0.centerX.equalTo(contentView.snp.centerX)
         }
         
         descriptionLabel.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(60)
-            $0.left.equalTo(view.snp.left).offset(42)
-            $0.right.equalTo(view.snp.right).offset(-42)
+            $0.left.equalTo(contentView.snp.left).offset(42)
+            $0.right.equalTo(contentView.snp.right).offset(-42)
         }
         
         healthAppView.snp.makeConstraints {
             $0.top.equalTo(descriptionLabel.snp.bottom).offset(45)
-            $0.left.equalTo(view.snp.left)
-            $0.right.equalTo(view.snp.right)
+            $0.left.equalTo(contentView.snp.left)
+            $0.right.equalTo(contentView.snp.right)
         }
         
         healthAppImageView.snp.makeConstraints {
@@ -139,9 +162,10 @@ class HealthAppViewController: UIViewController {
         }
         
         continueCommonButton.snp.makeConstraints {
-            $0.left.equalTo(view.snp.left).offset(40)
-            $0.right.equalTo(view.snp.right).offset(-40)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-35)
+            $0.top.greaterThanOrEqualTo(healthAppView.snp.bottom).offset(40)
+            $0.left.equalTo(contentView.snp.left).offset(40)
+            $0.right.equalTo(contentView.snp.right).offset(-40)
+            $0.bottom.equalTo(contentView.snp.bottom).offset(-35)
             $0.height.equalTo(64)
         }
     }

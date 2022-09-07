@@ -8,8 +8,6 @@
 import Foundation
 import UIKit
 
-// swiftlint:disable line_length
-
 protocol DifficultyOfMakingHealthyChoicesViewControllerInterface: AnyObject {
     func set(currentOnboardingStage: OnboardingStage)
 }
@@ -22,6 +20,8 @@ final class DifficultyOfMakingHealthyChoicesViewController: UIViewController {
     
     // MARK: - Views properties
     
+    private let scrolView: UIScrollView = .init()
+    private let contentView: UIView = .init()
     private let stageCounterView: StageCounterView = .init()
     private let stackView: UIStackView = .init()
     private let titleLabel: UILabel = .init()
@@ -46,12 +46,15 @@ final class DifficultyOfMakingHealthyChoicesViewController: UIViewController {
         
         view.backgroundColor = R.color.mainBackground()
         
+        scrolView.showsVerticalScrollIndicator = false
+        
         titleLabel.text = "It is hard to make healthy choices when the people around you are not."
         titleLabel.textColor = R.color.onboardings.basicDark()
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .medium)
         
+        // swiftlint:disable:next line_length
         firstDescriptionLabel.text = "Try to be aware of these moments, and break the mold of mirroring the behavior of other people. you are in charge of your own behavior."
         firstDescriptionLabel.textAlignment = .center
         firstDescriptionLabel.numberOfLines = 0
@@ -71,34 +74,53 @@ final class DifficultyOfMakingHealthyChoicesViewController: UIViewController {
     }
     
     private func configureLayouts() {
-        view.addSubview(stageCounterView)
+        view.addSubview(scrolView)
         
-        view.addSubview(stackView)
+        scrolView.addSubview(contentView)
+        
+        contentView.addSubview(stageCounterView)
+        
+        contentView.addSubview(stackView)
         
         stackView.addArrangedSubview(titleLabel)
         stackView.addArrangedSubview(firstDescriptionLabel)
         stackView.addArrangedSubview(secondDescriptionLabel)
         
-        view.addSubview(continueCommonButton)
+        contentView.addSubview(continueCommonButton)
+        
+        scrolView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.left.equalTo(view.snp.left)
+            $0.right.equalTo(view.snp.right)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+        }
+        
+        contentView.snp.makeConstraints {
+            $0.top.equalTo(scrolView.snp.top)
+            $0.left.equalTo(view.snp.left)
+            $0.right.equalTo(view.snp.right)
+            $0.bottom.equalTo(scrolView.snp.bottom)
+            $0.height.greaterThanOrEqualTo(scrolView.snp.height)
+        }
         
         stageCounterView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
-            $0.centerX.equalTo(view.snp.centerX)
+            $0.top.equalTo(contentView.safeAreaLayoutGuide.snp.top).offset(30)
+            $0.centerX.equalTo(contentView.snp.centerX)
         }
         
         stackView.snp.makeConstraints {
-            $0.left.equalTo(view.snp.left).offset(32)
-            $0.right.equalTo(view.snp.right).offset(-32)
-            $0.centerX.equalTo(view.snp.centerX)
-            $0.centerY.equalTo(view.snp.centerY)
+            $0.left.equalTo(contentView.snp.left).offset(32)
+            $0.right.equalTo(contentView.snp.right).offset(-32)
+            $0.centerX.equalTo(contentView.snp.centerX)
+            $0.centerY.equalTo(contentView.snp.centerY)
 
         }
         
         continueCommonButton.snp.makeConstraints {
             $0.top.greaterThanOrEqualTo(stackView.snp.bottom).offset(40)
-            $0.left.equalTo(view.snp.left).offset(40)
-            $0.right.equalTo(view.snp.right).offset(-40)
-            $0.bottom.equalTo(view.snp.bottom).offset(-35)
+            $0.left.equalTo(contentView.snp.left).offset(40)
+            $0.right.equalTo(contentView.snp.right).offset(-40)
+            $0.bottom.equalTo(contentView.snp.bottom).offset(-35)
             $0.height.equalTo(64)
         }
     }

@@ -101,8 +101,11 @@ final class MeasurementSystemViewController: UIViewController {
                 
                 variabilityResponses.isSelected = isSelected
                 
-                isSelected ?
-                presenter?.didSelectMeasurementSystem(with: index) : presenter?.didDeselectMeasurementSystem()
+                if isSelected {
+                    presenter?.didSelectMeasurementSystem(with: index)
+                } else {
+                    presenter?.didDeselectMeasurementSystem()
+                }
             } else {
                 variabilityResponses.isSelected = false
             }

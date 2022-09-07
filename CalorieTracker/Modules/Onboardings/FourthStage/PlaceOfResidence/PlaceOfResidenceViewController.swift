@@ -27,6 +27,8 @@ final class PlaceOfResidenceViewController: UIViewController {
     
     // MARK: - Views properties
     
+    private let scrolView: UIScrollView = .init()
+    private let contentView: UIView = .init()
     private let stageCounterView: StageCounterView = .init()
     private let imageView: UIImageView = .init()
     private let titleLabel: UILabel = .init()
@@ -51,6 +53,8 @@ final class PlaceOfResidenceViewController: UIViewController {
         
         view.backgroundColor = R.color.mainBackground()
         
+        scrolView.showsVerticalScrollIndicator = false
+        
         imageView.image = R.image.onboardings.house()
         
         titleLabel.text = "Your environment can influence your weight loss a lot. So where do you live?"
@@ -67,50 +71,70 @@ final class PlaceOfResidenceViewController: UIViewController {
     }
     
     private func configureLayouts() {
-        view.addSubview(stageCounterView)
+        view.addSubview(scrolView)
         
-        view.addSubview(imageView)
+        scrolView.addSubview(contentView)
+        
+        contentView.addSubview(stageCounterView)
+        
+        contentView.addSubview(imageView)
 
-        view.addSubview(titleLabel)
+        contentView.addSubview(titleLabel)
         
-        view.addSubview(stackView)
+        contentView.addSubview(stackView)
         
-        view.addSubview(continueCommonButton)
+        contentView.addSubview(continueCommonButton)
+        
+        scrolView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.left.equalTo(view.snp.left)
+            $0.right.equalTo(view.snp.right)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+        }
+        
+        contentView.snp.makeConstraints {
+            $0.top.equalTo(scrolView.snp.top)
+            $0.left.equalTo(view.snp.left)
+            $0.right.equalTo(view.snp.right)
+            $0.bottom.equalTo(scrolView.snp.bottom)
+            $0.height.greaterThanOrEqualTo(scrolView.snp.height)
+        }
         
         stageCounterView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
-            $0.centerX.equalTo(view.snp.centerX)
+            $0.top.equalTo(contentView.safeAreaLayoutGuide.snp.top).offset(30)
+            $0.centerX.equalTo(contentView.snp.centerX)
         }
         
         imageView.snp.makeConstraints {
             $0.top.equalTo(stageCounterView.snp.bottom).offset(40)
-            $0.centerX.equalTo(view.snp.centerX)
+            $0.centerX.equalTo(contentView.snp.centerX)
             $0.size.equalTo(96)
         }
         
         titleLabel.snp.makeConstraints {
             $0.top.equalTo(imageView.snp.bottom).offset(24)
-            $0.left.equalTo(view.snp.left).offset(43)
-            $0.right.equalTo(view.snp.right).offset(-43)
-            $0.centerX.equalTo(view.snp.centerX)
+            $0.left.equalTo(contentView.snp.left).offset(43)
+            $0.right.equalTo(contentView.snp.right).offset(-43)
+            $0.centerX.equalTo(contentView.snp.centerX)
         }
         
         stackView.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(40)
-            $0.left.equalTo(view.snp.left).offset(40)
-            $0.right.equalTo(view.snp.right).offset(-40)
+            $0.left.equalTo(contentView.snp.left).offset(40)
+            $0.right.equalTo(contentView.snp.right).offset(-40)
         }
         
         continueCommonButton.snp.makeConstraints {
-            $0.left.equalTo(view.snp.left).offset(40)
-            $0.right.equalTo(view.snp.right).offset(-40)
-            $0.bottom.equalTo(view.snp.bottom).offset(-35)
+            $0.top.greaterThanOrEqualTo(stackView.snp.bottom).offset(40)
+            $0.left.equalTo(contentView.snp.left).offset(40)
+            $0.right.equalTo(contentView.snp.right).offset(-40)
+            $0.bottom.equalTo(contentView.snp.bottom).offset(-35)
             $0.height.equalTo(64)
         }
     }
     
     @objc func didTapAnswerOption(_ sender: AnswerOption) {
-        answerOptions.enumerated().forEach { index, answerOption in
+        answerOptions.forEach { answerOption in
             if answerOption == sender {
                 let isSelected = !answerOption.isSelected
                 

@@ -45,7 +45,7 @@ final class AllergicRestrictionsViewController: UIViewController {
         view.backgroundColor = R.color.mainBackground()
         
         titleLabel.text = "Allergic restrictions"
-        titleLabel.textColor =  R.color.onboardings.basicDark()
+        titleLabel.textColor = R.color.onboardings.basicDark()
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .medium)
@@ -82,6 +82,7 @@ final class AllergicRestrictionsViewController: UIViewController {
             $0.left.equalTo(view.snp.left)
             $0.right.equalTo(view.snp.right)
             $0.bottom.equalTo(scrolView.snp.bottom)
+            $0.height.greaterThanOrEqualTo(scrolView.snp.height)
         }
         
         stageCounterView.snp.makeConstraints {
@@ -111,7 +112,7 @@ final class AllergicRestrictionsViewController: UIViewController {
     }
     
     @objc func didTapVariabilityResponse(_ sender: VariabilityResponse) {
-        variabilityResponses.enumerated().forEach { index, variabilityResponses in
+        variabilityResponses.forEach { variabilityResponses in
             if variabilityResponses == sender {
                 let isSelected = !variabilityResponses.isSelected
                 

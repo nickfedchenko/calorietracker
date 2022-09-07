@@ -48,7 +48,7 @@ final class CallToAchieveGoalViewController: UIViewController {
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]
         ))
         attributedString.append(NSAttributedString(
-            string: "Kcalс will \nhelp you build the \nhabits you need to \nreach your goals.",
+            string: "Kcalс will help you build the habits you need to reach your goals.",
             attributes: [.foregroundColor: R.color.onboardings.basicDark()]
         ))
         

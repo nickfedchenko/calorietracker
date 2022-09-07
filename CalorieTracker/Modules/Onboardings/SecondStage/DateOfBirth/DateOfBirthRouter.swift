@@ -15,7 +15,7 @@ class DateOfBirthRouter {
     
     // MARK: - Public properties
     
-    weak var presenter:  DateOfBirthPresenterInterface?
+    weak var presenter: DateOfBirthPresenterInterface?
     weak var viewController: UIViewController?
     
     // MARK: - Static methods

@@ -8,8 +8,6 @@
 import Foundation
 import UIKit
 
-// swiftlint:disable line_length
-
 protocol WhatImportantToYouViewControllerInterface: AnyObject {
     func set(currentOnboardingStage: OnboardingStage)
 }
@@ -26,8 +24,14 @@ final class WhatImportantToYouViewController: UIViewController {
     private let stackView: UIStackView = .init()
     private let imageView: UIImageView = .init()
     private let titleLabel: UILabel = .init()
-    private let caloriesInMyFoodCommonButton: CommonButton = .init(style: .bordered, text: "The calories in my food".uppercased())
-    private let nutritionOfMyFoodCommonButton: CommonButton = .init(style: .bordered, text: "The nutrition of my food".uppercased())
+    private let caloriesInMyFoodCommonButton = CommonButton(
+        style: .bordered,
+        text: "The calories in my food".uppercased()
+    )
+    private let nutritionOfMyFoodCommonButton = CommonButton(
+        style: .bordered,
+        text: "The nutrition of my food".uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -58,11 +62,17 @@ final class WhatImportantToYouViewController: UIViewController {
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.systemFont(ofSize: 30, weight: .medium)
         
-        caloriesInMyFoodCommonButton.addTarget(self, action: #selector(didTapCaloriesInMyFoodCommonButton),
-                                       for: .touchUpInside)
+        caloriesInMyFoodCommonButton.addTarget(
+            self,
+            action: #selector(didTapCaloriesInMyFoodCommonButton),
+            for: .touchUpInside
+        )
         
-        nutritionOfMyFoodCommonButton.addTarget(self, action: #selector(didTapNutritionOfMyFoodCommonButton),
-                                        for: .touchUpInside)
+        nutritionOfMyFoodCommonButton.addTarget(
+            self,
+            action: #selector(didTapNutritionOfMyFoodCommonButton),
+            for: .touchUpInside
+        )
     }
     
     private func configureLayouts() {

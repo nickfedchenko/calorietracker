@@ -8,8 +8,6 @@
 import Foundation
 import UIKit
 
-// swiftlint:disable line_length
-
 protocol FinalOfTheFourthStageViewControllerInterface: AnyObject {}
 
 final class FinalOfTheFourthStageViewController: UIViewController {
@@ -20,6 +18,8 @@ final class FinalOfTheFourthStageViewController: UIViewController {
     
     // MARK: - Views properties
     
+    private let scrolView: UIScrollView = .init()
+    private let contentView: UIView = .init()
     private let passedImageView: UIImageView = .init()
     private let titleLabel: UILabel = .init()
     private let descriptionLabel: UILabel = .init()
@@ -47,6 +47,8 @@ final class FinalOfTheFourthStageViewController: UIViewController {
     private func configureViews() {
         view.backgroundColor = .white
         
+        scrolView.showsVerticalScrollIndicator = false
+        
         passedImageView.image = R.image.onboardings.passed()
         
         titleLabel.text = "Magnificently!"
@@ -54,6 +56,7 @@ final class FinalOfTheFourthStageViewController: UIViewController {
         titleLabel.textAlignment = .center
         titleLabel.font = UIFont.systemFont(ofSize: 38, weight: .medium)
         
+        // swiftlint:disable:next line_length
         descriptionLabel.text = "We’re happy to have you here. We’ll walk you through these steps to get you set up for weight loss success:"
         descriptionLabel.numberOfLines = 0
         descriptionLabel.textAlignment = .center
@@ -86,53 +89,76 @@ final class FinalOfTheFourthStageViewController: UIViewController {
         
         delimeterView.backgroundColor = .black
         
-        continueCommonButton.addTarget(self, action: #selector(didTapContinueCommonButton),
-                                     for: .touchUpInside)
+        continueCommonButton.addTarget(
+            self,
+            action: #selector(didTapContinueCommonButton),
+            for: .touchUpInside
+        )
     }
     
+    // swiftlint:disable:next function_body_length
     private func configureLayouts() {
-        view.addSubview(passedImageView)
+        view.addSubview(scrolView)
         
-        view.addSubview(titleLabel)
+        scrolView.addSubview(contentView)
         
-        view.addSubview(descriptionLabel)
+        contentView.addSubview(passedImageView)
         
-        view.addSubview(delimeterView)
+        contentView.addSubview(titleLabel)
         
-        view.addSubview(historyDotImageView)
-        view.addSubview(historyLabel)
+        contentView.addSubview(descriptionLabel)
         
-        view.addSubview(userDataDotImageView)
-        view.addSubview(userDataLabel)
+        contentView.addSubview(delimeterView)
         
-        view.addSubview(motivationImageView)
-        view.addSubview(motivationLabel)
+        contentView.addSubview(historyDotImageView)
+        contentView.addSubview(historyLabel)
         
-        view.addSubview(habitsImageView)
-        view.addSubview(habitsLabel)
+        contentView.addSubview(userDataDotImageView)
+        contentView.addSubview(userDataLabel)
         
-        view.addSubview(continueCommonButton)
+        contentView.addSubview(motivationImageView)
+        contentView.addSubview(motivationLabel)
+        
+        contentView.addSubview(habitsImageView)
+        contentView.addSubview(habitsLabel)
+        
+        contentView.addSubview(continueCommonButton)
+        
+        scrolView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.left.equalTo(view.snp.left)
+            $0.right.equalTo(view.snp.right)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+        }
+        
+        contentView.snp.makeConstraints {
+            $0.top.equalTo(scrolView.snp.top)
+            $0.left.equalTo(view.snp.left)
+            $0.right.equalTo(view.snp.right)
+            $0.bottom.equalTo(scrolView.snp.bottom)
+            $0.height.greaterThanOrEqualTo(scrolView.snp.height)
+        }
         
         passedImageView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
-            $0.centerX.equalTo(view.snp.centerX)
+            $0.top.equalTo(contentView.safeAreaLayoutGuide.snp.top).offset(30)
+            $0.centerX.equalTo(contentView.snp.centerX)
             $0.size.equalTo(48)
         }
         
         titleLabel.snp.makeConstraints {
             $0.top.equalTo(passedImageView.snp.bottom).offset(4)
-            $0.centerX.equalTo(view.snp.centerX)
+            $0.centerX.equalTo(contentView.snp.centerX)
         }
         
         descriptionLabel.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(60)
-            $0.left.equalTo(view.snp.left).offset(42)
-            $0.right.equalTo(view.snp.right).offset(-42)
+            $0.left.equalTo(contentView.snp.left).offset(42)
+            $0.right.equalTo(contentView.snp.right).offset(-42)
         }
     
         historyDotImageView.snp.makeConstraints {
             $0.top.equalTo(descriptionLabel.snp.bottom).offset(50)
-            $0.left.equalTo(view.snp.left).offset(100)
+            $0.left.equalTo(contentView.snp.left).offset(100)
         }
         
         historyLabel.snp.makeConstraints {
@@ -181,13 +207,13 @@ final class FinalOfTheFourthStageViewController: UIViewController {
         }
     
         continueCommonButton.snp.makeConstraints {
-            $0.left.equalTo(view.snp.left).offset(40)
-            $0.right.equalTo(view.snp.right).offset(-40)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-35)
+            $0.top.greaterThanOrEqualTo(delimeterView.snp.bottom).offset(40)
+            $0.left.equalTo(contentView.snp.left).offset(40)
+            $0.right.equalTo(contentView.snp.right).offset(-40)
+            $0.bottom.equalTo(contentView.safeAreaLayoutGuide.snp.bottom).offset(-35)
             $0.height.equalTo(64)
         }
     }
-    
     
     @objc private func didTapContinueCommonButton() {
         presenter?.didTapContinueCommonButton()

@@ -8,8 +8,6 @@
 import Foundation
 import UIKit
 
-// swiftlint:disable line_length
-
 protocol LifeChangesAfterWeightLossViewControllerInterface: AnyObject {
     func set(lifeChangesAfterWeightLoss: [LifeChangesAfterWeightLoss])
     func set(currentOnboardingStage: OnboardingStage)
@@ -96,6 +94,7 @@ final class LifeChangesAfterWeightLossViewController: UIViewController {
             $0.left.equalTo(view.snp.left)
             $0.right.equalTo(view.snp.right)
             $0.bottom.equalTo(scrolView.snp.bottom)
+            $0.height.greaterThanOrEqualTo(scrolView.snp.height)
         }
         
         stageCounterView.snp.makeConstraints {
@@ -125,7 +124,7 @@ final class LifeChangesAfterWeightLossViewController: UIViewController {
     }
     
     @objc func didTapAnswerOption(_ sender: AnswerOption) {
-        answerOptions.enumerated().forEach { index, answerOption in
+        answerOptions.forEach { answerOption in
             if answerOption == sender {
                 let isSelected = !answerOption.isSelected
                 

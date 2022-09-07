@@ -8,8 +8,6 @@
 import Foundation
 import UIKit
 
-// swiftlint:disable line_length
-
 protocol YoureNotAloneViewControllerInterface: AnyObject {
     func set(currentOnboardingStage: OnboardingStage)
 }
@@ -55,6 +53,7 @@ final class YoureNotAloneViewController: UIViewController {
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.systemFont(ofSize: 30, weight: .medium)
         
+        // swiftlint:disable:next line_length
         descriptionLabel.text = "A lot of people save calories during the week so that they have some wiggle room on the weekends."
         descriptionLabel.textColor = R.color.onboardings.basicGray()
         descriptionLabel.textAlignment = .center

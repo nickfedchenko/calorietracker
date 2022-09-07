@@ -20,6 +20,8 @@ final class NutritionImprovementViewController: UIViewController {
     
     // MARK: - Views properties
 
+    private let scrolView: UIScrollView = .init()
+    private let contentView: UIView = .init()
     private let stageCounterView: StageCounterView = .init()
     private let stackView: UIStackView = .init()
     private let imageView: UIImageView = .init()
@@ -43,6 +45,8 @@ final class NutritionImprovementViewController: UIViewController {
         title = "Habits"
         
         view.backgroundColor = R.color.mainBackground()
+        
+        scrolView.showsVerticalScrollIndicator = false
         
         stackView.spacing = 24
         stackView.alignment = .center
@@ -75,27 +79,46 @@ final class NutritionImprovementViewController: UIViewController {
     }
     
     private func configureLayouts() {
-        view.addSubview(stageCounterView)
+        view.addSubview(scrolView)
         
-        view.addSubview(stackView)
+        scrolView.addSubview(contentView)
+        
+        contentView.addSubview(stageCounterView)
+        
+        contentView.addSubview(stackView)
         
         stackView.addArrangedSubview(imageView)
         stackView.addArrangedSubview(titleLabel)
         
-        view.addSubview(approvalCommonButton)
+        contentView.addSubview(approvalCommonButton)
         
-        view.addSubview(rejectionCommonButton)
+        contentView.addSubview(rejectionCommonButton)
+        
+        scrolView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.left.equalTo(view.snp.left)
+            $0.right.equalTo(view.snp.right)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+        }
+        
+        contentView.snp.makeConstraints {
+            $0.top.equalTo(scrolView.snp.top)
+            $0.left.equalTo(view.snp.left)
+            $0.right.equalTo(view.snp.right)
+            $0.bottom.equalTo(scrolView.snp.bottom)
+            $0.height.greaterThanOrEqualTo(scrolView.snp.height)
+        }
         
         stageCounterView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
-            $0.centerX.equalTo(view.snp.centerX)
+            $0.top.equalTo(contentView.safeAreaLayoutGuide.snp.top).offset(30)
+            $0.centerX.equalTo(contentView.snp.centerX)
         }
         
         stackView.snp.makeConstraints {
-            $0.left.equalTo(view.snp.left).offset(43)
-            $0.right.equalTo(view.snp.right).offset(-43)
-            $0.centerY.equalTo(view.snp.centerY)
-            $0.centerX.equalTo(view.snp.centerX)
+            $0.left.equalTo(contentView.snp.left).offset(43)
+            $0.right.equalTo(contentView.snp.right).offset(-43)
+            $0.centerY.equalTo(contentView.snp.centerY)
+            $0.centerX.equalTo(contentView.snp.centerX)
         }
         
         imageView.snp.makeConstraints {
@@ -103,16 +126,17 @@ final class NutritionImprovementViewController: UIViewController {
         }
         
         approvalCommonButton.snp.makeConstraints {
-            $0.left.equalTo(view.snp.left).offset(40)
-            $0.right.equalTo(view.snp.right).offset(-40)
+            $0.top.greaterThanOrEqualTo(stackView.snp.bottom).offset(40)
+            $0.left.equalTo(contentView.snp.left).offset(40)
+            $0.right.equalTo(contentView.snp.right).offset(-40)
             $0.height.equalTo(64)
         }
         
         rejectionCommonButton.snp.makeConstraints {
             $0.top.equalTo(approvalCommonButton.snp.bottom).offset(16)
-            $0.left.equalTo(view.snp.left).offset(40)
-            $0.right.equalTo(view.snp.right).offset(-40)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-35)
+            $0.left.equalTo(contentView.snp.left).offset(40)
+            $0.right.equalTo(contentView.snp.right).offset(-40)
+            $0.bottom.equalTo(contentView.snp.bottom).offset(-35)
             $0.height.equalTo(64)
         }
     }

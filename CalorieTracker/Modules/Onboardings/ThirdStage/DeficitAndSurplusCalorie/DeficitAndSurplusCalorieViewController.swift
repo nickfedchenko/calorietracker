@@ -58,6 +58,7 @@ final class DeficitAndSurplusCalorieViewController: UIViewController {
         configureLayouts()
     }
     
+    // swiftlint:disable:next function_body_length
     private func configureViews() {
         title = "Motivation/Goal"
 
@@ -124,6 +125,7 @@ final class DeficitAndSurplusCalorieViewController: UIViewController {
         presenter?.didTapContinueCommonButton()
     }
     
+    // swiftlint:disable:next function_body_length
     private func configureLayouts() {
         view.addSubview(scrolView)
         
@@ -174,6 +176,7 @@ final class DeficitAndSurplusCalorieViewController: UIViewController {
             $0.left.equalTo(view.snp.left)
             $0.right.equalTo(view.snp.right)
             $0.bottom.equalTo(scrolView.snp.bottom)
+            $0.height.greaterThanOrEqualTo(scrolView.snp.height)
         }
         
         stageCounterView.snp.makeConstraints {
@@ -206,6 +209,7 @@ final class DeficitAndSurplusCalorieViewController: UIViewController {
         
         resultLabel.snp.makeConstraints {
             $0.top.equalTo(scheduleImageView.snp.bottom).offset(35)
+            $0.left.equalTo(rateLabel.snp.right).offset(10)
             $0.right.equalTo(sliderBackground.snp.right).offset(10)
         }
         

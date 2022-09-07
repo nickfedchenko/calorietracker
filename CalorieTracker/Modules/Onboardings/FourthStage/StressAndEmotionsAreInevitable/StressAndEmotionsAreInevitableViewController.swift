@@ -8,8 +8,6 @@
 import Foundation
 import UIKit
 
-// swiftlint:disable line_length
-
 protocol StressAndEmotionsAreInevitableViewControllerInterface: AnyObject {
     func set(currentOnboardingStage: OnboardingStage)
 }
@@ -45,7 +43,6 @@ final class StressAndEmotionsAreInevitableViewController: UIViewController {
         
         view.backgroundColor = R.color.mainBackground()
         
-        
         stackView.spacing = 24
         stackView.alignment = .center
         stackView.axis = .vertical
@@ -56,6 +53,7 @@ final class StressAndEmotionsAreInevitableViewController: UIViewController {
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.systemFont(ofSize: 30, weight: .medium)
         
+        // swiftlint:disable:next line_length
         descriptionLabel.text = "If you end up going your calorie limit, that’s okay! Don’t let one slip up define you. Tracking everything you eat is more important early on in your health journey than staying under budget."
         descriptionLabel.textColor = R.color.onboardings.basicGray()
         descriptionLabel.textAlignment = .center
