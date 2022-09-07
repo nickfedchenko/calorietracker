@@ -6,7 +6,6 @@
 //
 
 import AsyncDisplayKit
-import Foundation
 
 final class BurnedKcalSwitchNode: ASButtonNode {
     

@@ -6,7 +6,6 @@
 //
 
 import AsyncDisplayKit
-import CoreGraphics
 
 protocol CircleActivityNodeDataSource: AnyObject {
     func circleActivityNode(_ node: CircleActivityNode, strokeColor index: Int) -> UIColor
