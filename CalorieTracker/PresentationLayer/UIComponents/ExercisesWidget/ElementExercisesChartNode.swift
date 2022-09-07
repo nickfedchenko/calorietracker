@@ -6,7 +6,6 @@
 //
 
 import AsyncDisplayKit
-import UIKit
 
 final class ElementExercisesChartNode: ASDisplayNode {
     struct Exercise {
