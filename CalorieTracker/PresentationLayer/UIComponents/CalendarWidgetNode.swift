@@ -175,6 +175,6 @@ final class CalendarWidgetNode: CTWidgetNode {
 extension CalendarWidgetNode {
     struct Text {
         static let today = "TODAY"
-        static let streak = " days\nlog streak"
+        static let streak = " days log streak"
     }
 }
