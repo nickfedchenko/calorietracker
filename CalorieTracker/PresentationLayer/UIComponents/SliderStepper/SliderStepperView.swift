@@ -20,6 +20,8 @@ final class SliderStepperView: UIControl {
     var sliderTrackColor: UIColor? = .blue
     var innerShadowColor: UIColor? = .black
     var circleColor: UIColor? = .blue
+    var beginTracking: (() -> Void)?
+    var endTracking: ((Int) -> Void)?
     
     var sliderBackgroundColor: UIColor? {
         didSet {
@@ -30,6 +32,11 @@ final class SliderStepperView: UIControl {
         didSet {
             if step != oldValue {
                 didChangeStep?(oldValue, step)
+            }
+            if step == 0 {
+                lineShape.isHidden = true
+                positionCircle = .zero
+                updateLayerFrames()
             }
         }
     }
@@ -158,6 +165,7 @@ final class SliderStepperView: UIControl {
 
 extension SliderStepperView {    
     override func beginTracking(_ touch: UITouch, with touchEvent: UIEvent?) -> Bool {
+        self.beginTracking?()
         let location = touch.location(in: self)
         let radius = shapeContainer.bounds.height / 2.0
         let position = CGPoint(
@@ -205,5 +213,6 @@ extension SliderStepperView {
         positionCircle = position
         updateLayerFrames()
         self.step = Int(round(position.x) / round(step))
+        self.endTracking?(Int(round(position.x) / round(step)))
     }
 }

@@ -10,6 +10,15 @@ import AsyncDisplayKit
 final class BasicButtonView: UIControl {
     private let buttonNode: BasicButtonNode
     
+    var isPressTitle: String? {
+        get { buttonNode.isPressTitle }
+        set { buttonNode.isPressTitle = newValue }
+    }
+    var defaultTitle: String? {
+        get { buttonNode.defaultTitle }
+        set { buttonNode.defaultTitle = newValue }
+    }
+    
     init(type: BasicButtonType) {
         buttonNode = BasicButtonNode(
             type: type,
