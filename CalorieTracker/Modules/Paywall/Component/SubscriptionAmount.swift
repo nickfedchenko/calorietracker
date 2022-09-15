@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class SubscriptionAmount: UIButton {
+final class SubscriptionAmount: UIButton {
     
     // MARK: - Public properties
     

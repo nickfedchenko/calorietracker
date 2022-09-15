@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class PrivacyPolicy: UIButton {
+final class PrivacyPolicy: UIButton {
     
     // MARK: - Views properties
     

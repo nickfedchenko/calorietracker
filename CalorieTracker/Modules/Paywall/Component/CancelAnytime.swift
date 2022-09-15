@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class CancelAnytime: UIButton {
+final class CancelAnytime: UIButton {
     
     // MARK: - Views properties
     

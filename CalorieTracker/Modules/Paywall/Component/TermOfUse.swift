@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class TermOfUse: UIButton {
+final class TermOfUse: UIButton {
     
     // MARK: - Views properties
     
