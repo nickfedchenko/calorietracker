@@ -1,4 +1,5 @@
 PODS:
+  - ApphudSDK (2.8.8)
   - PINCache (3.0.3):
     - PINCache/Arc-exception-safe (= 3.0.3)
     - PINCache/Core (= 3.0.3)
@@ -40,12 +41,14 @@ PODS:
     - Texture/Core
 
 DEPENDENCIES:
+  - ApphudSDK
   - R.swift
   - SwiftLint
   - Texture
 
 SPEC REPOS:
   trunk:
+    - ApphudSDK
     - PINCache
     - PINOperation
     - PINRemoteImage
@@ -55,6 +58,7 @@ SPEC REPOS:
     - Texture
 
 SPEC CHECKSUMS:
+  ApphudSDK: ef62166ff111404f1fa01a4cd4552d266b778565
   PINCache: 7a8fc1a691173d21dbddbf86cd515de6efa55086
   PINOperation: 00c935935f1e8cf0d1e2d6b542e75b88fc3e5e20
   PINRemoteImage: f1295b29f8c5e640e25335a1b2bd9d805171bd01
@@ -63,6 +67,6 @@ SPEC CHECKSUMS:
   SwiftLint: 284cea64b6187c5d6bd83e9a548a64104d546447
   Texture: 2e8ab2519452515f7f5a520f5a8f7e0a413abfa3
 
-PODFILE CHECKSUM: 69d948f3b74cdb7bf820003abebcc48d900be959
+PODFILE CHECKSUM: c2eaf4b7f833ad13a1f1e28d825d33685d5e8f5c
 
 COCOAPODS: 1.11.2

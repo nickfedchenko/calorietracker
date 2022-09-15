@@ -67,7 +67,7 @@ final class YourWeightViewController: UIViewController {
         containerPickerView.layer.cornerRadius = 12
         containerPickerView.layer.masksToBounds = false
         containerPickerView.layer.shadowColor = UIColor.black.cgColor
-        containerPickerView.layer.shadowOpacity = 0.25
+        containerPickerView.layer.shadowOpacity = 0.20
         containerPickerView.layer.shadowOffset = CGSize(width: 10, height: 10)
         containerPickerView.layer.shadowRadius = 8
         
