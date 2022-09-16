@@ -10,6 +10,7 @@ import UIKit
 struct ChartData {
     let data: [Int: CGFloat]
     let step: Int
+    let goal: Int?
 }
 
 protocol DiagramChartViewPresenterInterface: AnyObject {
@@ -20,42 +21,56 @@ protocol DiagramChartViewPresenterInterface: AnyObject {
 class DiagramChartViewPresenter {
     unowned var view: DiagramChartViewInterface
     
-    let data = [
-        (date: Date(), value: 1200),
-        (date: Date() - 84000 * 1, value: 2100),
-        (date: Date() - 84000 * 2, value: 890),
-        (date: Date() - 84000 * 3, value: 1450),
-        (date: Date() - 84000 * 5, value: 1010),
-        (date: Date() - 84000 * 6, value: 1201),
-        (date: Date() - 84000 * 7, value: 2340),
-        (date: Date() - 84000 * 9, value: 789),
-        (date: Date() - 84000 * 10, value: 350),
-        (date: Date() - 84000 * 11, value: 820),
-        (date: Date() - 84000 * 12, value: 2040),
-        (date: Date() - 84000 * 14, value: 250),
-        (date: Date() - 84000 * 16, value: 2100),
-        (date: Date() - 84000 * 17, value: 2100),
-        (date: Date() - 84000 * 18, value: 2100),
-        (date: Date() - 84000 * 20, value: 2100),
-        (date: Date() - 84000 * 21, value: 2100),
-        (date: Date() - 84000 * 22, value: 1904),
-        (date: Date() - 84000 * 25, value: 2100),
-        (date: Date() - 84000 * 27, value: 2100),
-        (date: Date() - 84000 * 32, value: 2100),
-        (date: Date() - 84000 * 33, value: 1460),
-        (date: Date() - 84000 * 35, value: 2100),
-        (date: Date() - 84000 * 40, value: 2100),
-        (date: Date() - 84000 * 48, value: 2100),
-        (date: Date() - 84000 * 64, value: 3100),
-        (date: Date() - 84000 * 70, value: 3200)
-    ]
+    var data: [(date: Date, value: Int)] {
+        var data: [WidgetData]
+        switch view.getChartType() {
+        case .calories:
+            data = UDM.calories
+        case .carb:
+            data = UDM.carb
+        case .steps:
+            data = UDM.steps
+        case .water:
+            data = UDM.water
+        case .activity:
+            data = UDM.active
+        }
+        return data.map { (date: $0.date, value: Int($0.value)) }
+    }
+    
+    var goal: Int? {
+        var goal: Double?
+        switch view.getChartType() {
+        case .calories:
+            goal = UDM.caloriesGoal
+        case .carb:
+            goal = UDM.carbGoal
+        case .steps:
+            goal = UDM.stepsGoal
+        case .water:
+            goal = UDM.waterGoal
+        case .activity:
+            goal = UDM.activeGoal
+        }
+        guard let goal = goal else { return nil }
+        return Int(goal)
+    }
     
     init(view: DiagramChartViewInterface) {
         self.view = view
     }
     
     private func getDataForPeriod(_ period: ChartFormat) -> [(date: Date, value: Int)]? {
-        guard let startDate = getDate(period) else { return nil }
+        guard let startDate = getDate(period),
+              let dateMin = data.map({ $0.date }).min() else { return nil }
+        switch period {
+        case .daily:
+            break
+        case .weekly:
+            guard abs(Date().weeks(to: dateMin) ?? 0) >= 1 else { return nil }
+        case .monthly:
+            guard abs(Date().months(to: dateMin) ?? 0) >= 1 else { return nil }
+        }
         return data.filter { $0.date > startDate }
     }
     
@@ -89,7 +104,7 @@ extension DiagramChartViewPresenter: DiagramChartViewPresenterInterface {
     
     func getData(_ period: ChartFormat) -> ChartData? {
         guard let data = getDataForPeriod(period) else { return nil }
-        let maxValue = max(3000, (getMaxValue(data) / 1000 + 1) * 1000)
+        let maxValue = max(3000, (getMaxValue(data) / 1000 + 1) * 1000, ((goal ?? 0) / 1000 + 1) * 1000)
         
         var newData: [Int: CGFloat] = [:]
         var indexData: [Int: Int] = [:]
@@ -123,7 +138,8 @@ extension DiagramChartViewPresenter: DiagramChartViewPresenterInterface {
         
         return ChartData(
             data: newData,
-            step: maxValue / view.getCountHorizontalLines()
+            step: maxValue / view.getCountHorizontalLines(),
+            goal: goal
         )
     }
 }

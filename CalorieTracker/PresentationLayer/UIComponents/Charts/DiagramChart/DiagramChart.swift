@@ -13,10 +13,12 @@ final class DiagramChart: UIView {
     var verticalStep: Int = 750
     var goalValue: CGFloat?
     var startDate: Date?
+    var moreGoal: Bool = false
     
     var backgroundLinesColor: UIColor? = R.color.diagramChart.backgroundLines()
     var goalLineColor: UIColor? = R.color.diagramChart.goal()
     var columnColor: UIColor? = R.color.diagramChart.column()
+    var defaultColumnColor: UIColor?
     
     var data: [Int: CGFloat]? {
         didSet {
@@ -61,7 +63,7 @@ final class DiagramChart: UIView {
                 column = getColumnShape(
                     value: goalValue - 2 / bounds.height,
                     pointX: bounds.width - layoutColumn.width / 2.0 - CGFloat(index) * spasing,
-                    color: backgroundLinesColor
+                    color: defaultColumnColor
                 )
             }
             layer.addSublayer(column ?? CAShapeLayer())
@@ -113,7 +115,7 @@ final class DiagramChart: UIView {
         shape.lineWidth = 2
         shape.strokeColor = UIColor.white.cgColor
         
-        if let goalValue = goalValue, value > goalValue {
+        if let goalValue = goalValue, value > goalValue, moreGoal {
             let gradientLayer = CAGradientLayer()
             gradientLayer.frame = rect
             gradientLayer.colors = [
