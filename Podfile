@@ -9,4 +9,5 @@ target 'CalorieTracker' do
   pod 'R.swift'
   pod 'SwiftLint'
   pod 'Texture'
+  pod 'ApphudSDK'
 end
