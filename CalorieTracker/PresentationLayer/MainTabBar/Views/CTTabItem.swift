@@ -48,7 +48,7 @@ final class CTTabItem: UIView {
             case .myDay:
                 return MainScreenViewController()
             case .progress:
-                return MainScreenViewController()
+                return ProgressRouter.setupModule()
             case .food:
                 return MainScreenViewController()
             }
@@ -123,7 +123,7 @@ final class CTTabItem: UIView {
         
         iconView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.width.height.equalTo(64)
+            make.width.height.equalTo(CTTabBar.Constants.itemHeight)
             make.top.equalToSuperview()
         }
         

@@ -17,6 +17,8 @@ final class CTTabBar: UIView {
     // MARK: - Constants
     enum Constants {
         static let tabSpacing: CGFloat = (UIScreen.main.bounds.width - 40 - CGFloat(3 * 64)) / CGFloat(3 + 1)
+        static let itemHeight: CGFloat = 64
+        static let tabBarHeight: CGFloat = CTTabBarController.Constants.bottomInset + itemHeight
     }
     
     // MARK: - Public properties
