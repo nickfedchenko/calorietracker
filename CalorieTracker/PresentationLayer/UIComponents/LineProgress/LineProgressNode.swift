@@ -8,8 +8,8 @@
 import AsyncDisplayKit
 
 final class LineProgressNode: ASDisplayNode {
-    var colors: [UIColor]? = [.red, .blue]
-    var backgroundLineColor: UIColor = .white
+    var colors: [UIColor?]? = [.red, .blue]
+    var backgroundLineColor: UIColor? = .white
     var progress: CGFloat = 0.5 {
         didSet {
             UIView.animate(withDuration: 10, delay: 0, options: .curveEaseInOut) { [weak self] in
@@ -24,7 +24,7 @@ final class LineProgressNode: ASDisplayNode {
     
     private lazy var gradientLayer: CAGradientLayer = {
         let layer = CAGradientLayer()
-        layer.colors = colors?.compactMap { $0.cgColor }
+        layer.colors = colors?.compactMap { $0?.cgColor }
         layer.startPoint = CGPoint(x: 0, y: 0)
         layer.endPoint = CGPoint(x: 1, y: 0)
         return layer
@@ -39,7 +39,7 @@ final class LineProgressNode: ASDisplayNode {
         layer.addSublayer(gradientLayer)
     }
     
-    private func createShapeLine(size: CGSize, color: UIColor) -> CAShapeLayer {
+    private func createShapeLine(size: CGSize, color: UIColor?) -> CAShapeLayer {
         let linePath: UIBezierPath = {
             let path = UIBezierPath()
             path.move(to: CGPoint(x: size.height / 2.0, y: size.height / 2.0))
@@ -50,7 +50,7 @@ final class LineProgressNode: ASDisplayNode {
         let lineShape: CAShapeLayer = {
             let shape = CAShapeLayer()
             shape.path = linePath.cgPath
-            shape.strokeColor = color.cgColor
+            shape.strokeColor = color?.cgColor
             shape.lineWidth = size.height
             shape.lineCap = .round
             return shape

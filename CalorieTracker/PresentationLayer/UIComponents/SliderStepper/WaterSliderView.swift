@@ -7,7 +7,14 @@
 
 import UIKit
 
+protocol WaterSliderViewDelegate: AnyObject {
+    func beginTracking()
+    func endTracking(_ value: Int)
+}
+
 final class WaterSliderView: UIView {
+    weak var delegate: WaterSliderViewDelegate?
+    
     private lazy var slider: SliderStepperView = {
         let view = SliderStepperView()
         view.sliderTrackColor = R.color.waterSlider.background()
@@ -27,14 +34,28 @@ final class WaterSliderView: UIView {
     var minMl: Int = 0
     var stepMl: Int = 50
     
+    var step: Int {
+        get { slider.step }
+        set { slider.step = newValue }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         slider.didChangeStep = { oldStep, step in
+            guard !self.circleLayers.isEmpty else { return }
             self.circleLayers[step].fillColor = R.color.waterSlider.shadow()?.cgColor
             self.circleLayers[oldStep].fillColor = R.color.waterSlider.circles()?.cgColor
             self.textLabels[oldStep].isHidden = true
             self.textLabels[step].isHidden = false
+        }
+        
+        slider.beginTracking = {
+            self.delegate?.beginTracking()
+        }
+        
+        slider.endTracking = { step in
+            self.delegate?.endTracking(step)
         }
         
         setupView()

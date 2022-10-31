@@ -22,6 +22,8 @@ class WeightLineChartPresenter {
 
 extension WeightLineChartPresenter: WeightLineChartPresenterInterface {
     func getPoints() -> [CGPoint] {
+        let dateNow = Date().resetDate ?? Date()
+        
         guard let model = view.getModel() else { return [] }
         
         let sortedData = model.data.sorted(by: { $0.date < $1.date })
@@ -29,14 +31,19 @@ extension WeightLineChartPresenter: WeightLineChartPresenterInterface {
         guard let weightInt = view.getWeight() else { return [] }
         
         let dateStart = model.dateStart.timeIntervalSinceReferenceDate
-        let dateEnd = Date().timeIntervalSinceReferenceDate
+        let dateEnd = dateNow.timeIntervalSinceReferenceDate
         let dateDifferent = CGFloat(dateEnd - dateStart)
         let weightDifferent = CGFloat(weightInt.max - weightInt.min)
-        
+        let chartSpasing = 1 / CGFloat(abs(dateNow.days(to: model.dateStart) ?? 1))
         let points = sortedData.map {
             return CGPoint(
                 x: CGFloat($0.date.timeIntervalSinceReferenceDate - dateStart) / dateDifferent,
                 y: ($0.weight - CGFloat(weightInt.min)) / weightDifferent
+            )
+        }.map {
+            CGPoint(
+                x: round($0.x / chartSpasing) * chartSpasing,
+                y: $0.y
             )
         }
         

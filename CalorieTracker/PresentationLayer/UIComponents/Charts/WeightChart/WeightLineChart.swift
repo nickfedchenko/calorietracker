@@ -10,6 +10,7 @@ import UIKit
 protocol WeightLineChartInterface: AnyObject {
     func getModel() -> WeightLineChart.Model?
     func getWeight() -> (min: Int, max: Int)?
+    func getSize() -> CGSize
 }
 
 final class WeightLineChart: UIView {
@@ -339,5 +340,9 @@ extension WeightLineChart: WeightLineChartInterface {
     
     func getModel() -> Model? {
         return model
+    }
+    
+    func getSize() -> CGSize {
+        return frame.size
     }
 }
