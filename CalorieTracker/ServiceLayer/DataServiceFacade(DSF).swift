@@ -19,23 +19,63 @@ protocol DataServiceFacadeInterface {
     /// Возвращает все блюда сохраненные в локальной ДБ
     /// - Returns: массив Dish
     func getAllStoredDishes() -> [Dish]
+    /// Возвращает все данные о еде сохраненные в локальной ДБ
+    /// - Returns: массив FoodData
+    func getAllStoredFoodData() -> [FoodData]
     /// Метода поиска продуктов, по умолчанию локальный
     /// - Parameters:
     ///   - phrase: search query
     ///   - userNetwork: флаг отвечающий за поиск через бэк
     ///   - completion: результат приходит сюда.
     func searchProducts(by phrase: String, useNetwork: Bool, completion: @escaping ([Product]) -> Void)
+    /// Связывает модель FoodData с Dish
+    /// - Parameters:
+    ///   - foodDataId: id модели FoodData
+    ///   - dishID: id модели Dish
+    func setChildFoodData(foodDataId: Int, dishID: Int)
+    /// Связывает модель FoodData с Product
+    /// - Parameters:
+    ///   - foodDataId: id модели FoodData
+    ///   - productID: id модели Product
+    func setChildFoodData(foodDataId: Int, productID: Int)
+    /// Возвращает недавно использованные продукты
+    /// - Parameters:
+    ///   - count: количество результатов
+    /// - Returns: массив Product
+    //func getRecentProducts(_ count: Int) -> [Product]
+    /// Возвращает недавно использованные блюда
+    /// - Parameters:
+    ///   - count: количество результатов
+    /// - Returns: массив Dish
+    //func getRecentDishes(_ count: Int) -> [Dish]
 }
 
 final class DSF {
+    static let shared: DataServiceFacadeInterface = DSF()
+    
     private let networkService: NetworkEngineInterface = NetworkEngine()
     private let localPersistentStore: LocalDomainServiceInterface = LocalDomainService()
+    
     private init() {}
     
-    static let shared: DataServiceFacadeInterface = DSF()
+    private func getFoodData() -> [FoodData] {
+        localPersistentStore.fetchFoodData()
+    }
 }
 
 extension DSF: DataServiceFacadeInterface {
+//    func getRecentProducts(_ count: Int) -> [Product] {
+//        self.getFoodData().sorted(by: { $0.dateLastUse <= $1.dateLastUse })
+//    }
+    
+    func setChildFoodData(foodDataId: Int, dishID: Int) {
+        localPersistentStore.setChildFoodData(foodDataId: foodDataId, dishID: dishID)
+    }
+    
+    func setChildFoodData(foodDataId: Int, productID: Int) {
+        localPersistentStore.setChildFoodData(foodDataId: foodDataId, productID: productID)
+    }
+    
     func updateStoredProducts() {
         networkService.fetchProducts { [weak self] result in
             switch result {
@@ -66,6 +106,10 @@ extension DSF: DataServiceFacadeInterface {
     func getAllStoredDishes() -> [Dish] {
         let dishes = localPersistentStore.fetchDishes()
         return dishes
+    }
+    
+    func getAllStoredFoodData() -> [FoodData] {
+        self.getFoodData()
     }
     
     func searchProducts(by phrase: String, useNetwork: Bool = false, completion: @escaping ([Product]) -> Void) {

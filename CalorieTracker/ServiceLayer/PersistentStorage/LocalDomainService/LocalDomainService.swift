@@ -11,9 +11,13 @@ import UIKit
 protocol LocalDomainServiceInterface {
     func fetchProducts() -> [Product]
     func fetchDishes() -> [Dish]
+    func fetchFoodData() -> [FoodData]
     func saveProducts(products: [Product])
     func saveDishes(dishes: [Dish])
+    func saveFoodData(foods: [FoodData])
     func searchProducts(by phrase: String) -> [Product]
+    func setChildFoodData(foodDataId: Int, dishID: Int)
+    func setChildFoodData(foodDataId: Int, productID: Int)
 }
 
 final class LocalDomainService {
@@ -106,16 +110,63 @@ extension LocalDomainService: LocalDomainServiceInterface {
         return domainDishes.compactMap { Dish(from: $0) }
     }
     
+    func fetchFoodData() -> [FoodData] {
+        guard let domainFoodData = fetchData(for: DomainFoodData.self) else { return [] }
+        return domainFoodData.compactMap { FoodData(from: $0) }
+    }
+    
     func saveProducts(products: [Product]) {
         let _: [DomainProduct] = products
             .map { DomainProduct.prepare(fromPlainModel: $0, context: context) }
-        save()
+        //save()
+        try? context.save()
     }
     
     func saveDishes(dishes: [Dish]) {
         let _: [DomainDish] = dishes
             .map { DomainDish.prepare(fromPlainModel: $0, context: context) }
-        save()
+        //save()
+        try? context.save()
+    }
+    
+    func setChildFoodData(foodDataId: Int, dishID: Int) {
+        let format = "id == %ld"
+        let dishRequest = NSFetchRequest<DomainDish>(entityName: "DomainDish")
+        let foodDataRequest = NSFetchRequest<DomainFoodData>(entityName: "DomainFoodData")
+        
+        dishRequest.predicate = NSPredicate(format: format, dishID)
+        foodDataRequest.predicate = NSPredicate(format: format, foodDataId)
+        
+        guard let dish = try? context.fetch(dishRequest).first,
+              let foodData = try? context.fetch(foodDataRequest).first else { return }
+        
+        foodData.dish = dish
+        foodData.product = nil
+        
+        try? context.save()
+    }
+    
+    func setChildFoodData(foodDataId: Int, productID: Int) {
+        let format = "id == %ld"
+        let productRequest = NSFetchRequest<DomainProduct>(entityName: "DomainProduct")
+        let foodDataRequest = NSFetchRequest<DomainFoodData>(entityName: "DomainFoodData")
+
+        productRequest.predicate = NSPredicate(format: format, productID)
+        foodDataRequest.predicate = NSPredicate(format: format, foodDataId)
+        
+        guard let product = try? context.fetch(productRequest).first,
+              let foodData = try? context.fetch(foodDataRequest).first else { return }
+        
+        foodData.product = product
+        foodData.dish = nil
+        
+        try? context.save()
+    }
+    
+    func saveFoodData(foods: [FoodData]) {
+        let _: [DomainFoodData] = foods
+            .map { DomainFoodData.prepare(fromPlainModel: $0, context: context) }
+        try? context.save()
     }
     
     func searchProducts(by phrase: String) -> [Product] {
