@@ -17,6 +17,16 @@ protocol FoodDataServiceInterface {
     /// Возвращает все приемы пищи
     /// - Returns: массив Meal
     func getAllMeals() -> [Meal]
+    /// Возвращает недавно использованные продукты
+    /// - Parameters:
+    ///   - count: количество результатов
+    /// - Returns: массив Product
+    func getRecentProducts(_ count: Int) -> [Product]
+    /// Возвращает недавно использованные блюда
+    /// - Parameters:
+    ///   - count: количество результатов
+    /// - Returns: массив Dish
+    func getRecentDishes(_ count: Int) -> [Dish]
 }
 
 final class FDS {
@@ -34,5 +44,39 @@ extension FDS: FoodDataServiceInterface {
         let meal = Meal(mealTime: mealTime)
         localPersistentStore.saveMeals(meals: [meal])
         meal.setChild(dishes: dishes, products: products)
+    }
+    
+    func getRecentProducts(_ count: Int) -> [Product] {
+        let allFoodData = localPersistentStore.fetchFoodData()
+            .sorted(by: { $0.dateLastUse <= $1.dateLastUse })
+        let foodData = allFoodData.count >= count
+            ? Array(allFoodData[0..<count])
+            : allFoodData
+        
+        return foodData.compactMap {
+            switch $0.food {
+            case .product(let product):
+                return product
+            default:
+                return nil
+            }
+        }
+    }
+    
+    func getRecentDishes(_ count: Int) -> [Dish] {
+        let allFoodData = localPersistentStore.fetchFoodData()
+            .sorted(by: { $0.dateLastUse <= $1.dateLastUse })
+        let foodData = allFoodData.count >= count
+            ? Array(allFoodData[0..<count])
+            : allFoodData
+        
+        return foodData.compactMap {
+            switch $0.food {
+            case .dishes(let dish):
+                return dish
+            default:
+                return nil
+            }
+        }
     }
 }

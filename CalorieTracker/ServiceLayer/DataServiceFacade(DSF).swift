@@ -44,16 +44,6 @@ protocol DataServiceFacadeInterface {
     ///   - dishesID: массив id Dish
     ///   - productsID: массив id Product
     func setChildMeal(mealId: String, dishesID: [Int], productsID: [Int])
-    /// Возвращает недавно использованные продукты
-    /// - Parameters:
-    ///   - count: количество результатов
-    /// - Returns: массив Product
-    func getRecentProducts(_ count: Int) -> [Product]
-    /// Возвращает недавно использованные блюда
-    /// - Parameters:
-    ///   - count: количество результатов
-    /// - Returns: массив Dish
-    func getRecentDishes(_ count: Int) -> [Dish]
 }
 
 final class DSF {
@@ -70,37 +60,6 @@ final class DSF {
 }
 
 extension DSF: DataServiceFacadeInterface {
-    func getRecentProducts(_ count: Int) -> [Product] {
-        let allFoodData = self.getFoodData().sorted(by: { $0.dateLastUse <= $1.dateLastUse })
-        let foodData = allFoodData.count >= count
-            ? Array(allFoodData[0..<count])
-            : allFoodData
-        
-        return foodData.compactMap {
-            switch $0.food {
-            case .product(let product):
-                return product
-            default:
-                return nil
-            }
-        }
-    }
-    
-    func getRecentDishes(_ count: Int) -> [Dish] {
-        let allFoodData = self.getFoodData().sorted(by: { $0.dateLastUse <= $1.dateLastUse })
-        let foodData = allFoodData.count >= count
-            ? Array(allFoodData[0..<count])
-            : allFoodData
-        
-        return foodData.compactMap {
-            switch $0.food {
-            case .dishes(let dish):
-                return dish
-            default:
-                return nil
-            }
-        }
-    }
     
     func setChildFoodData(foodDataId: String, dishID: Int) {
         localPersistentStore.setChildFoodData(foodDataId: foodDataId, dishID: dishID)
