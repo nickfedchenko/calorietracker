@@ -27,6 +27,10 @@ protocol FoodDataServiceInterface {
     ///   - count: количество результатов
     /// - Returns: массив Dish
     func getRecentDishes(_ count: Int) -> [Dish]
+    /// Записывает в UDM поисковой запрос
+    /// - Parameters:
+    ///   - query: поисковой запрос
+    func rememberSearchQuery(_ query: String)
 }
 
 final class FDS {
@@ -78,5 +82,16 @@ extension FDS: FoodDataServiceInterface {
                 return nil
             }
         }
+    }
+    
+    func rememberSearchQuery(_ query: String) {
+        let countSearchQuery = 10
+        
+        var searchHistory = UDM.searchHistory
+        searchHistory.insert(query, at: 0)
+        
+        UDM.searchHistory = searchHistory.count >= countSearchQuery
+            ? Array(searchHistory[0..<countSearchQuery])
+            : searchHistory
     }
 }

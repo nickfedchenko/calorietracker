@@ -11,6 +11,7 @@ final class UDM {
     enum UDMKeys: String {
         case globalIsMetric, weightIsMetric, lengthIsMetric, energyIsMetric
         case liquidCapacityIsMetric, servingWeightIsMetric
+        case searchHistory
     }
     
     static var isGloballyMetric: Bool {
@@ -106,6 +107,22 @@ final class UDM {
         }
     }
     
+    static var searchHistory: [String] {
+        get {
+            guard let data: Data = getValue(for: .searchHistory),
+                  let value = try? JSONDecoder().decode([String].self, from: data) else {
+                return []
+            }
+            return value
+        }
+        set {
+            let data = try? JSONEncoder().encode(newValue)
+            setValue(value: data, for: .searchHistory)
+        }
+    }
+}
+
+extension UDM {
     private static func setValue<T>(value: T, for key: UDMKeys) {
         UserDefaults.standard.set(value, forKey: key.rawValue)
     }
