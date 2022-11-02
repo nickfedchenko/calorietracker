@@ -11,7 +11,7 @@ import CoreData
 public class DomainFoodData: NSManagedObject {
     static func prepare(fromPlainModel model: FoodData, context: NSManagedObjectContext) -> DomainFoodData {
         let foodData = DomainFoodData(context: context)
-        foodData.id = Int32(model.id)
+        foodData.id = model.id
         foodData.numberUses = Int32(model.numberUses)
         foodData.favorites = model.favorites
         foodData.dateLastUse = model.dateLastUse

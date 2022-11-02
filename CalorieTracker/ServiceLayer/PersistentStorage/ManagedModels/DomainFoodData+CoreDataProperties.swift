@@ -14,7 +14,7 @@ extension DomainFoodData {
 
     @NSManaged public var dateLastUse: Date
     @NSManaged public var favorites: Bool
-    @NSManaged public var id: Int32
+    @NSManaged public var id: String
     @NSManaged public var numberUses: Int32
     
     @NSManaged public var dish: DomainDish?

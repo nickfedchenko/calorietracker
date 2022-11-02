@@ -10,14 +10,14 @@ import Foundation
 typealias FoodDataResult = (Result<[FoodData], ErrorDomain>) -> Void
 
 struct FoodData {
-    let id: Int
+    let id: String
     let dateLastUse: Date
     let favorites: Bool
     let numberUses: Int
     let food: Food?
     
     init?(from managedModel: DomainFoodData) {
-        id = Int(managedModel.id)
+        id = managedModel.id
         dateLastUse = managedModel.dateLastUse
         favorites = managedModel.favorites
         numberUses = Int(managedModel.numberUses)
@@ -31,8 +31,8 @@ struct FoodData {
         }
     }
     
-    init(id: Int, dateLastUse: Date, favorites: Bool, numberUses: Int) {
-        self.id = id
+    init(dateLastUse: Date, favorites: Bool, numberUses: Int) {
+        self.id = UUID().uuidString
         self.dateLastUse = dateLastUse
         self.favorites = favorites
         self.numberUses = numberUses

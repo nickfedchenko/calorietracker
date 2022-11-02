@@ -32,22 +32,28 @@ protocol DataServiceFacadeInterface {
     /// - Parameters:
     ///   - foodDataId: id модели FoodData
     ///   - dishID: id модели Dish
-    func setChildFoodData(foodDataId: Int, dishID: Int)
+    func setChildFoodData(foodDataId: String, dishID: Int)
     /// Связывает модель FoodData с Product
     /// - Parameters:
     ///   - foodDataId: id модели FoodData
     ///   - productID: id модели Product
-    func setChildFoodData(foodDataId: Int, productID: Int)
+    func setChildFoodData(foodDataId: String, productID: Int)
+    /// Связывает модель Meal с Product и Dish
+    /// - Parameters:
+    ///   - mealId: id модели FoodData
+    ///   - dishesID: массив id Dish
+    ///   - productsID: массив id Product
+    func setChildMeal(mealId: String, dishesID: [Int], productsID: [Int])
     /// Возвращает недавно использованные продукты
     /// - Parameters:
     ///   - count: количество результатов
     /// - Returns: массив Product
-    //func getRecentProducts(_ count: Int) -> [Product]
+    func getRecentProducts(_ count: Int) -> [Product]
     /// Возвращает недавно использованные блюда
     /// - Parameters:
     ///   - count: количество результатов
     /// - Returns: массив Dish
-    //func getRecentDishes(_ count: Int) -> [Dish]
+    func getRecentDishes(_ count: Int) -> [Dish]
 }
 
 final class DSF {
@@ -64,16 +70,48 @@ final class DSF {
 }
 
 extension DSF: DataServiceFacadeInterface {
-//    func getRecentProducts(_ count: Int) -> [Product] {
-//        self.getFoodData().sorted(by: { $0.dateLastUse <= $1.dateLastUse })
-//    }
+    func getRecentProducts(_ count: Int) -> [Product] {
+        let allFoodData = self.getFoodData().sorted(by: { $0.dateLastUse <= $1.dateLastUse })
+        let foodData = allFoodData.count >= count
+            ? Array(allFoodData[0..<count])
+            : allFoodData
+        
+        return foodData.compactMap {
+            switch $0.food {
+            case .product(let product):
+                return product
+            default:
+                return nil
+            }
+        }
+    }
     
-    func setChildFoodData(foodDataId: Int, dishID: Int) {
+    func getRecentDishes(_ count: Int) -> [Dish] {
+        let allFoodData = self.getFoodData().sorted(by: { $0.dateLastUse <= $1.dateLastUse })
+        let foodData = allFoodData.count >= count
+            ? Array(allFoodData[0..<count])
+            : allFoodData
+        
+        return foodData.compactMap {
+            switch $0.food {
+            case .dishes(let dish):
+                return dish
+            default:
+                return nil
+            }
+        }
+    }
+    
+    func setChildFoodData(foodDataId: String, dishID: Int) {
         localPersistentStore.setChildFoodData(foodDataId: foodDataId, dishID: dishID)
     }
     
-    func setChildFoodData(foodDataId: Int, productID: Int) {
+    func setChildFoodData(foodDataId: String, productID: Int) {
         localPersistentStore.setChildFoodData(foodDataId: foodDataId, productID: productID)
+    }
+    
+    func setChildMeal(mealId: String, dishesID: [Int], productsID: [Int]) {
+        localPersistentStore.setChildMeal(mealId: mealId, dishesID: dishesID, productsID: productsID)
     }
     
     func updateStoredProducts() {

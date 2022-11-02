@@ -31,5 +31,6 @@ extension DomainDish {
     @NSManaged public var methods: Data?
     @NSManaged public var tags: Data?
     @NSManaged public var photos: Data?
-
+    
+    @NSManaged public var foodData: DomainFoodData?
 }
