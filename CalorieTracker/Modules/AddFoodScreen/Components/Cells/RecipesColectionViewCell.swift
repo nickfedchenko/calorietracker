@@ -73,7 +73,7 @@ final class RecipesColectionViewCell: UICollectionViewCell {
         layer.cornerRadius = 8
         layer.borderWidth = 1
         layer.borderColor = UIColor.white.cgColor
-        backgroundColor = .white
+        contentView.backgroundColor = .white
         containerView.clipsToBounds = true
         containerView.layer.cornerRadius = 8
         
@@ -90,6 +90,10 @@ final class RecipesColectionViewCell: UICollectionViewCell {
     }
     
     private func setupConstraints() {
+        containerView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
         recipeImageView.snp.makeConstraints { make in
             make.leading.top.bottom.equalToSuperview()
             make.width.equalToSuperview().multipliedBy(0.26)
@@ -123,12 +127,12 @@ final class RecipesColectionViewCell: UICollectionViewCell {
         layer.addShadow(
             shadow: MenuView.ShadowConst.firstShadow,
             rect: bounds,
-            cornerRadius: layer.cornerRadius
+            cornerRadius: 8
         )
         layer.addShadow(
             shadow: MenuView.ShadowConst.secondShadow,
             rect: bounds,
-            cornerRadius: layer.cornerRadius
+            cornerRadius: 8
         )
     }
 }
