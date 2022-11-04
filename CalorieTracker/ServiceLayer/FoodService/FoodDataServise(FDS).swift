@@ -31,15 +31,92 @@ protocol FoodDataServiceInterface {
     /// - Parameters:
     ///   - query: поисковой запрос
     func rememberSearchQuery(_ query: String)
+    /// Возвращает любимые блюда
+    /// - Returns: массив Dish
+    func getFavoriteDishes() -> [Dish]
+    /// Возвращает любимые продукты
+    /// - Returns: массив Product
+    func getFavoriteProducts() -> [Product]
+    /// Возвращает часто используемые блюда
+    /// - Parameters:
+    ///   - count: количество результатов
+    /// - Returns: массив Dish
+    func getFrequentDishes(_ count: Int) -> [Dish]
+    /// Возвращает часто используемые продукты
+    /// - Parameters:
+    ///   - count: количество результатов
+    /// - Returns: массив Product
+    func getFrequentProducts(_ count: Int) -> [Product]
 }
 
 final class FDS {
     static let shared: FoodDataServiceInterface = FDS()
     
     private let localPersistentStore: LocalDomainServiceInterface = LocalDomainService()
+    
+    private func getFavoriteFoods() -> [FoodData] {
+        DSF.shared.getAllStoredFoodData().filter { $0.favorites }
+    }
+    
+    private func getFrequentFood(_ count: Int) -> [FoodData] {
+        let allFoods = DSF.shared.getAllStoredFoodData()
+        return Array(allFoods.sorted(by: { $0.numberUses > $1.numberUses }).prefix(count))
+    }
 }
 
 extension FDS: FoodDataServiceInterface {
+    func getFavoriteDishes() -> [Dish] {
+        let dishes: [Dish] = getFavoriteFoods().compactMap { food in
+            switch food.food {
+            case .dishes(let dish):
+                return dish
+            default:
+                return nil
+            }
+        }
+        
+        return dishes
+    }
+    
+    func getFavoriteProducts() -> [Product] {
+        let products: [Product] = getFavoriteFoods().compactMap { food in
+            switch food.food {
+            case .product(let product):
+                return product
+            default:
+                return nil
+            }
+        }
+        
+        return products
+    }
+    
+    func getFrequentDishes(_ count: Int) -> [Dish] {
+        let dishes: [Dish] = getFrequentFood(count).compactMap { food in
+            switch food.food {
+            case .dishes(let dish):
+                return dish
+            default:
+                return nil
+            }
+        }
+        
+        return dishes
+    }
+    
+    func getFrequentProducts(_ count: Int) -> [Product] {
+        let products: [Product] = getFrequentFood(count).compactMap { food in
+            switch food.food {
+            case .product(let product):
+                return product
+            default:
+                return nil
+            }
+        }
+        
+        return products
+    }
+    
     func getAllMeals() -> [Meal] {
         localPersistentStore.fetchMeals()
     }
