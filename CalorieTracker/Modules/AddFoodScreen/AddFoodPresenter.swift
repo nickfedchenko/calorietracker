@@ -10,6 +10,7 @@ import Foundation
 
 protocol AddFoodPresenterInterface: AnyObject {
     func setFoodType(_ type: AddFood)
+    func getSearchHistory() -> [String]
 }
 
 final class AddFoodPresenter {
@@ -78,5 +79,9 @@ final class AddFoodPresenter {
 extension AddFoodPresenter: AddFoodPresenterInterface {
     func setFoodType(_ type: AddFood) {
         self.foodType = type
+    }
+    
+    func getSearchHistory() -> [String] {
+        UDM.searchHistory
     }
 }
