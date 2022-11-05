@@ -21,6 +21,7 @@ final class AddFoodViewController: UIViewController {
     private let menuView = MenuView(Const.menuModels)
     private let menuTypeSecondView = ContextMenuTypeSecondView(Const.menuTypeSecondModels)
     private let menuButton = MenuButton()
+    private let searshTextField = SearchTextField()
     
     private lazy var segmentedControl: SegmentedControl<AddFood> = {
         let view = SegmentedControl<AddFood>(Const.segmentedModels)
@@ -69,6 +70,17 @@ final class AddFoodViewController: UIViewController {
         return button
     }()
     
+    private lazy var keyboardHeaderView: UIView = {
+        let view = UIView()
+        view.layer.maskedCorners = .topCorners
+        view.backgroundColor = .gray
+        view.layer.cornerRadius = 32
+        return view
+    }()
+    
+    private var contentViewBottomAnchor: NSLayoutConstraint?
+    private var searchTextFieldBottomAnchor: NSLayoutConstraint?
+    
     private var isSelectedType: AddFood = .recent {
         didSet {
             presenter?.setFoodType(isSelectedType)
@@ -81,6 +93,25 @@ final class AddFoodViewController: UIViewController {
         setupView()
         addSubviews()
         setupConstraints()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow),
+                                               name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide),
+                                               name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        NotificationCenter.default.removeObserver(self,
+                                                  name: UIResponder.keyboardWillShowNotification,
+                                                  object: nil)
+        NotificationCenter.default.removeObserver(self,
+                                                  name: UIResponder.keyboardWillHideNotification,
+                                                  object: nil)
     }
     
     private func setupView() {
@@ -102,6 +133,10 @@ final class AddFoodViewController: UIViewController {
         segmentedControl.onSegmentChanged = { model in
             self.isSelectedType = model.id
         }
+        
+        let hideKeyboardGR = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        hideKeyboardGR.cancelsTouchesInView = false
+        view.addGestureRecognizer(hideKeyboardGR)
     }
     
     private func registerCells() {
@@ -116,6 +151,8 @@ final class AddFoodViewController: UIViewController {
         view.addSubviews(
             tabBarStackView,
             collectionView,
+            keyboardHeaderView,
+            searshTextField,
             menuButton,
             segmentedScrollView,
             menuView,
@@ -124,6 +161,17 @@ final class AddFoodViewController: UIViewController {
     }
     
     private func setupConstraints() {
+        searchTextFieldBottomAnchor = searshTextField.bottomAnchor.constraint(
+            equalTo: tabBarStackView.topAnchor,
+            constant: -12
+        )
+        contentViewBottomAnchor = keyboardHeaderView.bottomAnchor.constraint(
+            equalTo: view.bottomAnchor,
+            constant: 200
+        )
+        
+        contentViewBottomAnchor?.isActive = true
+        
         menuButton.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(20)
             make.top.equalTo(view.safeAreaLayoutGuide).offset(2)
@@ -166,6 +214,52 @@ final class AddFoodViewController: UIViewController {
             make.top.equalTo(segmentedScrollView.snp.bottom).offset(4)
             make.bottom.equalTo(tabBarStackView.snp.top)
         }
+        
+        searshTextField.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(20)
+            make.height.equalToSuperview().multipliedBy(0.07)
+            make.width.equalTo(searshTextField.snp.height).multipliedBy(4.66)
+            make.bottom.lessThanOrEqualTo(keyboardHeaderView.snp.bottom).offset(-20)
+            make.bottom.equalTo(tabBarStackView.snp.top).offset(-12).priority(.low)
+        }
+        
+        keyboardHeaderView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(searshTextField).offset(40)
+        }
+    }
+    
+    @objc private func keyboardWillShow(notification: NSNotification) {
+        guard let userInfo = notification.userInfo,
+              let keyboardNotification = KeyboardNotification(userInfo)
+        else { return }
+        
+        contentViewBottomAnchor?.constant = -keyboardNotification.endFrame.height
+        UIView.animate(
+            withDuration: keyboardNotification.animationDuration,
+            delay: 0,
+            options: keyboardNotification.animateCurve
+        ) {
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    @objc private func keyboardWillHide(notification: NSNotification) {
+        guard let userInfo = notification.userInfo,
+              let keyboardNotification = KeyboardNotification(userInfo)
+        else { return }
+        contentViewBottomAnchor?.constant = keyboardHeaderView.frame.height
+        UIView.animate(
+            withDuration: keyboardNotification.animationDuration,
+            delay: 0,
+            options: keyboardNotification.animateCurve
+        ) {
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    @objc private func hideKeyboard() {
+        view.endEditing(true)
     }
 }
 
