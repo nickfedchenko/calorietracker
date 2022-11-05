@@ -78,6 +78,22 @@ final class AddFoodViewController: UIViewController {
         return view
     }()
     
+    private lazy var hideKeyboardButton: UIButton = {
+        let button = UIButton()
+        button.setImage(R.image.addFood.hideKeyboard(), for: .normal)
+        button.layer.cornerRadius = 16
+        button.backgroundColor = R.color.addFood.white()
+        button.addAction(
+            UIAction(
+                handler: { _ in
+                    self.hideKeyboard()
+                }
+            ),
+            for: .touchUpInside
+        )
+        return button
+    }()
+    
     private var contentViewBottomAnchor: NSLayoutConstraint?
     private var searchTextFieldBottomAnchor: NSLayoutConstraint?
     
@@ -95,23 +111,38 @@ final class AddFoodViewController: UIViewController {
         setupConstraints()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        setupShadow()
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow),
-                                               name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide),
-                                               name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillShow),
+            name: UIResponder.keyboardWillShowNotification, object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillHide),
+            name: UIResponder.keyboardWillHideNotification, object: nil
+        )
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        NotificationCenter.default.removeObserver(self,
-                                                  name: UIResponder.keyboardWillShowNotification,
-                                                  object: nil)
-        NotificationCenter.default.removeObserver(self,
-                                                  name: UIResponder.keyboardWillHideNotification,
-                                                  object: nil)
+        NotificationCenter.default.removeObserver(
+            self,
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
+        NotificationCenter.default.removeObserver(
+            self,
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil
+        )
     }
     
     private func setupView() {
@@ -147,6 +178,7 @@ final class AddFoodViewController: UIViewController {
     private func addSubviews() {
         tabBarStackView.addArrangedSubview(createButton)
         tabBarStackView.addArrangedSubview(backButton)
+        keyboardHeaderView.addSubview(hideKeyboardButton)
         segmentedScrollView.addSubview(segmentedControl)
         view.addSubviews(
             tabBarStackView,
@@ -227,6 +259,20 @@ final class AddFoodViewController: UIViewController {
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(searshTextField).offset(40)
         }
+        
+        hideKeyboardButton.aspectRatio()
+        hideKeyboardButton.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().offset(-20)
+            make.top.bottom.equalToSuperview().inset(20)
+        }
+    }
+    
+    private func setupShadow() {
+        hideKeyboardButton.layer.addShadow(
+            shadow: Const.hideKeyboardShadow,
+            rect: hideKeyboardButton.bounds,
+            cornerRadius: hideKeyboardButton.layer.cornerRadius
+        )
     }
     
     @objc private func keyboardWillShow(notification: NSNotification) {
@@ -333,90 +379,5 @@ extension AddFoodViewController: AddFoodViewControllerInterface {
     
     func setMeals(_ meals: [Meal]) {
         
-    }
-}
-
-// MARK: - Const
-
-extension AddFoodViewController {
-    private struct Const {
-        static let menuModels: [MenuView.MenuCellViewModel] = [
-            .init(title: "BREAKFAST", image: R.image.addFood.menu.breakfast()),
-            .init(title: "LUNCH", image: R.image.addFood.menu.lunch()),
-            .init(title: "DINNER", image: R.image.addFood.menu.dinner()),
-            .init(title: "SNACK", image: R.image.addFood.menu.snack())
-        ]
-        
-        static let menuTypeSecondModels: [ContextMenuTypeSecondView.MenuCellViewModel] = [
-            .init(title: "Off", color: .yellow),
-            .init(title: "Carbohydrates", color: .green),
-            .init(title: "Protein", color: .blue),
-            .init(title: "Fat", color: .cyan)
-        ]
-        
-        static let segmentedModels: [SegmentedButton<AddFood>.Model] = [
-            .init(
-                title: AddFood.frequent.getTitle(),
-                normalColor: R.color.addFood.menu.isNotSelectedText(),
-                selectedColor: R.color.addFood.menu.isSelectedText(),
-                id: .frequent
-            ),
-            .init(
-                title: AddFood.recent.getTitle(),
-                normalColor: R.color.addFood.menu.isNotSelectedText(),
-                selectedColor: R.color.addFood.menu.isSelectedText(),
-                id: .recent
-            ),
-            .init(
-                title: AddFood.favorites.getTitle(),
-                normalColor: R.color.addFood.menu.isNotSelectedText(),
-                selectedColor: R.color.addFood.menu.isSelectedText(),
-                id: .favorites
-            ),
-            .init(
-                title: AddFood.myMeals.getTitle(),
-                normalColor: R.color.addFood.menu.isNotSelectedText(),
-                selectedColor: R.color.addFood.menu.isSelectedText(),
-                id: .myMeals
-            ),
-            .init(
-                title: AddFood.myRecipes.getTitle(),
-                normalColor: R.color.addFood.menu.isNotSelectedText(),
-                selectedColor: R.color.addFood.menu.isSelectedText(),
-                id: .myRecipes
-            ),
-            .init(
-                title: AddFood.myFood.getTitle(),
-                normalColor: R.color.addFood.menu.isNotSelectedText(),
-                selectedColor: R.color.addFood.menu.isSelectedText(),
-                id: .myFood
-            )
-        ]
-    }
-}
-
-enum AddFood {
-    case frequent
-    case recent
-    case favorites
-    case myMeals
-    case myRecipes
-    case myFood
-    
-    func getTitle() -> String {
-        switch self {
-        case .frequent:
-            return "Frequent"
-        case .recent:
-            return "Recent"
-        case .favorites:
-            return "Favorites"
-        case .myMeals:
-            return "My Meals"
-        case .myRecipes:
-            return "My Recipes"
-        case .myFood:
-            return "My Food"
-        }
     }
 }
