@@ -11,6 +11,8 @@ import Foundation
 protocol AddFoodPresenterInterface: AnyObject {
     func setFoodType(_ type: AddFood)
     func getSearchHistory() -> [String]
+    func getFoodViewModel(_ model: Product) -> FoodCellView.FoodViewModel
+    func getFoodViewModel(_ model: Dish) -> FoodCellView.FoodViewModel 
 }
 
 final class AddFoodPresenter {
@@ -83,5 +85,35 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
     
     func getSearchHistory() -> [String] {
         UDM.searchHistory
+    }
+    
+    func getFoodViewModel(_ model: Dish) -> FoodCellView.FoodViewModel {
+        FoodCellView.FoodViewModel(
+            id: model.id,
+            title: model.title,
+            description: model.info ?? "",
+            tag: model.tags.first?.tag ?? "",
+            kcal: model.kсal,
+            flag: false,
+            image: nil,
+            subInfo: nil,
+            color: nil
+        )
+    }
+    
+    func getFoodViewModel(_ model: Product) -> FoodCellView.FoodViewModel {
+        FoodCellView.FoodViewModel(
+            id: model.id,
+            title: model.title,
+            description: model.servings?
+                .compactMap { $0.title }
+                .joined(separator: ", ") ?? "",
+            tag: model.brand ?? "",
+            kcal: model.kcal,
+            flag: false,
+            image: nil,
+            subInfo: nil,
+            color: nil
+        )
     }
 }

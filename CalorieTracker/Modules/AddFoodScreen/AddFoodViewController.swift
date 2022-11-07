@@ -16,7 +16,6 @@ protocol AddFoodViewControllerInterface: AnyObject {
 
 final class AddFoodViewController: UIViewController {
     var presenter: AddFoodPresenterInterface?
-    var flag = false
     
     private let menuView = MenuView(Const.menuModels)
     private let menuTypeSecondView = ContextMenuTypeSecondView(Const.menuTypeSecondModels)
@@ -38,6 +37,7 @@ final class AddFoodViewController: UIViewController {
     
     private lazy var collectionView: UICollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: collectionViewFlowLayout)
+        view.showsVerticalScrollIndicator = false
         view.backgroundColor = .clear
         return view
     }()
@@ -94,8 +94,15 @@ final class AddFoodViewController: UIViewController {
         return button
     }()
     
+    private let bottomGradientView = UIView()
+    
     private var contentViewBottomAnchor: NSLayoutConstraint?
     private var searchTextFieldBottomAnchor: NSLayoutConstraint?
+    private var firstDraw = true
+    
+    private var dishes: [Dish] = []
+    private var products: [Product] = []
+    private var meals: [Meal] = []
     
     private var isSelectedType: AddFood = .recent {
         didSet {
@@ -113,7 +120,9 @@ final class AddFoodViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        guard firstDraw else { return }
         setupShadow()
+        firstDraw = false
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -150,6 +159,8 @@ final class AddFoodViewController: UIViewController {
         navigationController?.setToolbarHidden(true, animated: false)
         navigationController?.isNavigationBarHidden = true
         
+        presenter?.setFoodType(.frequent)
+        
         collectionView.delegate = self
         collectionView.dataSource = self
         
@@ -172,6 +183,7 @@ final class AddFoodViewController: UIViewController {
     
     private func registerCells() {
         collectionView.register(RecipesColectionViewCell.self)
+        collectionView.register(FoodCollectionViewCell.self)
         collectionView.register(UICollectionViewCell.self)
     }
     
@@ -183,6 +195,7 @@ final class AddFoodViewController: UIViewController {
         view.addSubviews(
             tabBarStackView,
             collectionView,
+            bottomGradientView,
             keyboardHeaderView,
             searshTextField,
             menuButton,
@@ -265,6 +278,12 @@ final class AddFoodViewController: UIViewController {
             make.trailing.equalToSuperview().offset(-20)
             make.top.bottom.equalToSuperview().inset(20)
         }
+        
+        bottomGradientView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalTo(tabBarStackView.snp.top)
+            make.height.equalTo(searshTextField).offset(50)
+        }
     }
     
     private func setupShadow() {
@@ -273,6 +292,49 @@ final class AddFoodViewController: UIViewController {
             rect: hideKeyboardButton.bounds,
             cornerRadius: hideKeyboardButton.layer.cornerRadius
         )
+        
+        bottomGradientView.layer.addSublayer(
+            GradientLayer(
+                .init(
+                    bounds: bottomGradientView.bounds,
+                    colors: [.white, .white.withAlphaComponent(0)],
+                    axis: .vertical(.bottom),
+                    locations: [0.7, 1]
+                )
+            )
+        )
+    }
+    
+    private func getCell(collectionView: UICollectionView,
+                         indexPath: IndexPath) -> UICollectionViewCell {
+        switch isSelectedType {
+        case .frequent, .recent, .favorites:
+            let cell: FoodCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
+            cell.cellType = .table
+            
+            switch indexPath.section {
+            case 0:
+                let model = products[indexPath.row]
+                cell.configure(presenter?.getFoodViewModel(model))
+            case 1:
+                let model = dishes[indexPath.row]
+                cell.configure(presenter?.getFoodViewModel(model))
+            default:
+                break
+            }
+            
+            return cell
+        case .myMeals:
+            let cell: RecipesColectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
+            return cell
+        case .myRecipes:
+            let cell: RecipesColectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
+            return cell
+        case .myFood:
+            let cell: FoodCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
+            cell.cellType = .withShadow
+            return cell
+        }
     }
     
     @objc private func keyboardWillShow(notification: NSNotification) {
@@ -318,32 +380,37 @@ extension AddFoodViewController: UICollectionViewDelegate {
 // MARK: - CollectionView DataSource
 
 extension AddFoodViewController: UICollectionViewDataSource {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        switch isSelectedType {
+        case .frequent, .recent, .favorites:
+            return 2
+        case .myMeals:
+            return 1
+        case .myRecipes:
+            return 0
+        case .myFood:
+            return 0
+        }
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        switch isSelectedType {
+        case .frequent, .recent, .favorites:
+            return section == 0
+                ? products.count
+                : dishes.count
+        case .myMeals:
+            return meals.count
+        case .myRecipes:
+            return 0
+        case .myFood:
+            return 0
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        switch isSelectedType {
-        case .frequent:
-            let cell: UICollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
-            return cell
-        case .recent:
-            let cell: UICollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
-            return cell
-        case .favorites:
-            let cell: UICollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
-            return cell
-        case .myMeals:
-            let cell: UICollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
-            return cell
-        case .myRecipes:
-            let cell: RecipesColectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
-            return cell
-        case .myFood:
-            let cell: UICollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
-            return cell
-        }
+        return getCell(collectionView: collectionView, indexPath: indexPath)
     }
 }
 
@@ -358,7 +425,7 @@ extension AddFoodViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
-                        minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         switch isSelectedType {
         case .frequent, .recent, .favorites:
             return 0
@@ -370,14 +437,17 @@ extension AddFoodViewController: UICollectionViewDelegateFlowLayout {
 
 extension AddFoodViewController: AddFoodViewControllerInterface {
     func setDishes(_ dishes: [Dish]) {
-        
+        self.dishes = dishes
+        self.collectionView.reloadData()
     }
     
     func setProducts(_ products: [Product]) {
-        
+        self.products = products
+        self.collectionView.reloadData()
     }
     
     func setMeals(_ meals: [Meal]) {
-        
+        self.meals = meals
+        self.collectionView.reloadData()
     }
 }
