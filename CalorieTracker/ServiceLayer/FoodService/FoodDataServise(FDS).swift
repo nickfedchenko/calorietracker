@@ -60,7 +60,9 @@ final class FDS {
     
     private func getFrequentFood(_ count: Int) -> [FoodData] {
         let allFoods = DSF.shared.getAllStoredFoodData()
-        return Array(allFoods.sorted(by: { $0.numberUses > $1.numberUses }).prefix(count))
+        return Array(allFoods.sorted(by: { $0.numberUses > $1.numberUses })
+            .filter { $0.food != nil }
+            .prefix(count))
     }
 }
 
@@ -130,6 +132,7 @@ extension FDS: FoodDataServiceInterface {
     func getRecentProducts(_ count: Int) -> [Product] {
         let allFoodData = localPersistentStore.fetchFoodData()
             .sorted(by: { $0.dateLastUse <= $1.dateLastUse })
+            .filter { $0.food != nil }
         let foodData = allFoodData.count >= count
             ? Array(allFoodData[0..<count])
             : allFoodData
@@ -147,6 +150,7 @@ extension FDS: FoodDataServiceInterface {
     func getRecentDishes(_ count: Int) -> [Dish] {
         let allFoodData = localPersistentStore.fetchFoodData()
             .sorted(by: { $0.dateLastUse <= $1.dateLastUse })
+            .filter { $0.food != nil }
         let foodData = allFoodData.count >= count
             ? Array(allFoodData[0..<count])
             : allFoodData
