@@ -76,6 +76,36 @@ final class AddFoodPresenter {
             break
         }
     }
+    
+    private func getSubInfo(_ model: Dish, type: FoodInfoCases) -> Int? {
+        switch type {
+        case .carb:
+            return Int(model.carbs)
+        case .fat:
+            return Int(model.fat)
+        case .kcal:
+            return Int(model.kсal)
+        case .off:
+            return nil
+        case .protein:
+            return Int(model.protein)
+        }
+    }
+    
+    private func getSubInfo(_ model: Product, type: FoodInfoCases) -> Int? {
+        switch type {
+        case .carb:
+            return Int(model.carbs)
+        case .fat:
+            return Int(model.fat)
+        case .kcal:
+            return model.kcal
+        case .off:
+            return nil
+        case .protein:
+            return Int(model.protein)
+        }
+    }
 }
 
 extension AddFoodPresenter: AddFoodPresenterInterface {
@@ -96,8 +126,8 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
             kcal: model.kсal,
             flag: false,
             image: nil,
-            subInfo: nil,
-            color: nil
+            subInfo: getSubInfo(model, type: view.getFoodInfoType()),
+            color: view.getFoodInfoType().getColor()
         )
     }
     
@@ -112,8 +142,8 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
             kcal: model.kcal,
             flag: false,
             image: nil,
-            subInfo: nil,
-            color: nil
+            subInfo: getSubInfo(model, type: view.getFoodInfoType()),
+            color: view.getFoodInfoType().getColor()
         )
     }
 }

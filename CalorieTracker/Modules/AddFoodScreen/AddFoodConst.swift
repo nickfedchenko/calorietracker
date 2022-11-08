@@ -25,11 +25,11 @@ extension AddFoodViewController {
             .init(title: "SNACK", image: R.image.addFood.menu.snack())
         ]
         
-        static let menuTypeSecondModels: [ContextMenuTypeSecondView.MenuCellViewModel] = [
-            .init(title: "Off", color: .yellow),
-            .init(title: "Carbohydrates", color: .green),
-            .init(title: "Protein", color: .blue),
-            .init(title: "Fat", color: .cyan)
+        static let menuTypeSecondModels: [FoodInfoCases] = [
+            .off,
+            .carb,
+            .protein,
+            .fat
         ]
         
         static let segmentedModels: [SegmentedButton<AddFood>.Model] = [

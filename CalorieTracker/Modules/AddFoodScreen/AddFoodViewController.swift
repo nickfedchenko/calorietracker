@@ -12,13 +12,14 @@ protocol AddFoodViewControllerInterface: AnyObject {
     func setDishes(_ dishes: [Dish])
     func setProducts(_ products: [Product])
     func setMeals(_ meals: [Meal])
+    func getFoodInfoType() -> FoodInfoCases
 }
 
 final class AddFoodViewController: UIViewController {
     var presenter: AddFoodPresenterInterface?
     
     private let menuView = MenuView(Const.menuModels)
-    private let menuTypeSecondView = ContextMenuTypeSecondView(Const.menuTypeSecondModels)
+    private let menuTypeSecondView = ContextMenuTypeSecondView<FoodInfoCases>(Const.menuTypeSecondModels)
     private let menuButton = MenuButton()
     private let searshTextField = SearchTextField()
     
@@ -70,6 +71,15 @@ final class AddFoodViewController: UIViewController {
         return button
     }()
     
+    private lazy var infoButtonsView: InfoButtonsView<FoodInfoCases> = {
+        let view = InfoButtonsView<FoodInfoCases>([
+            .settings,
+            .immutable(.kcal)
+        ])
+
+        return view
+    }()
+    
     private lazy var keyboardHeaderView: UIView = {
         let view = UIView()
         view.layer.maskedCorners = .topCorners
@@ -110,6 +120,12 @@ final class AddFoodViewController: UIViewController {
         }
     }
     
+    private var selectedFoodInfo: FoodInfoCases = .off {
+        didSet {
+            collectionView.reloadData()
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         registerCells()
@@ -127,6 +143,9 @@ final class AddFoodViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
+        menuView.closeNotAnimate()
+        menuTypeSecondView.closeNotAnimate()
         
         NotificationCenter.default.addObserver(
             self,
@@ -172,6 +191,19 @@ final class AddFoodViewController: UIViewController {
             }
         }
         
+        infoButtonsView.completion = { complition in
+            self.menuTypeSecondView.showAndCloseView(true)
+            self.menuTypeSecondView.complition = { model in
+                switch model {
+                case .carb, .fat, .kcal, .protein:
+                    complition(.configurable(model))
+                case .off:
+                    complition(.settings)
+                }
+                self.selectedFoodInfo = model
+            }
+        }
+        
         segmentedControl.onSegmentChanged = { model in
             self.isSelectedType = model.id
         }
@@ -199,6 +231,7 @@ final class AddFoodViewController: UIViewController {
             keyboardHeaderView,
             searshTextField,
             menuButton,
+            infoButtonsView,
             segmentedScrollView,
             menuView,
             menuTypeSecondView
@@ -232,8 +265,8 @@ final class AddFoodViewController: UIViewController {
         
         menuTypeSecondView.snp.makeConstraints { make in
             make.width.equalTo(187)
-            make.top.equalTo(menuButton.snp.top)
-            make.leading.equalTo(menuButton.snp.leading)
+            make.top.equalTo(infoButtonsView.snp.top)
+            make.trailing.equalTo(infoButtonsView.snp.trailing)
         }
         
         segmentedScrollView.snp.makeConstraints { make in
@@ -256,8 +289,13 @@ final class AddFoodViewController: UIViewController {
         
         collectionView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            make.top.equalTo(segmentedScrollView.snp.bottom).offset(4)
+            make.top.equalTo(infoButtonsView.snp.bottom).offset(4)
             make.bottom.equalTo(tabBarStackView.snp.top)
+        }
+        
+        infoButtonsView.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().offset(-20)
+            make.top.equalTo(segmentedScrollView.snp.bottom).offset(16)
         }
         
         searshTextField.snp.makeConstraints { make in
@@ -449,5 +487,9 @@ extension AddFoodViewController: AddFoodViewControllerInterface {
     func setMeals(_ meals: [Meal]) {
         self.meals = meals
         self.collectionView.reloadData()
+    }
+    
+    func getFoodInfoType() -> FoodInfoCases {
+        self.selectedFoodInfo
     }
 }

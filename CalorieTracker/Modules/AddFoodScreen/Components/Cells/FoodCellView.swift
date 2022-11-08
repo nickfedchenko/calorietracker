@@ -104,6 +104,8 @@ final class FoodCellView: UIView {
         infoLabel.textColor = model.color
         if let info = model.subInfo {
             infoLabel.text = "\(info)"
+        } else {
+            infoLabel.text = nil
         }
     }
     
@@ -179,6 +181,8 @@ final class FoodCellView: UIView {
             make.centerY.equalTo(titleLabel)
         }
         
+        infoLabel.setContentCompressionResistancePriority(.init(1000), for: .horizontal)
+        infoLabel.setContentHuggingPriority(.init(1000), for: .horizontal)
         infoLabel.snp.makeConstraints { make in
             make.trailing.equalTo(kalorieLabel.snp.leading).offset(-8)
             make.leading.greaterThanOrEqualTo(titleLabel.snp.trailing).offset(6)
