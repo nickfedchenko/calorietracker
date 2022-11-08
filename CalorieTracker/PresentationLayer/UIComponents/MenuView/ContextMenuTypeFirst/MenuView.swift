@@ -29,14 +29,6 @@ final class MenuView: UIView {
     
     let model: [MenuCellViewModel]
     
-    override var bounds: CGRect {
-        didSet {
-            shadowLayer.sublayers?.forEach {
-                $0.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: 22).cgPath
-            }
-        }
-    }
-    
     init(_ model: [MenuCellViewModel]) {
         self.model = model
         super.init(frame: .zero)

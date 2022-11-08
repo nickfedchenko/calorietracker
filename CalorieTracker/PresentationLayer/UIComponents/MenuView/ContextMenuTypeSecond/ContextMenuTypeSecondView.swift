@@ -7,13 +7,9 @@
 
 import UIKit
 
-final class ContextMenuTypeSecondView: UIView {
-    struct MenuCellViewModel {
-        let title: String
-        let color: UIColor?
-    }
-    
-    var complition: ((MenuCellViewModel) -> Void)?
+final class ContextMenuTypeSecondView<ID: WithGetDataProtocol>: UIView {
+  
+    var complition: ((ID) -> Void)?
     
     private lazy var stackView: UIStackView = {
         let stack = UIStackView()
@@ -27,9 +23,9 @@ final class ContextMenuTypeSecondView: UIView {
     private var zeroHeightAnchors: [NSLayoutConstraint] = []
     private var shadowLayer = CALayer()
     
-    let model: [MenuCellViewModel]
+    let model: [ID]
     
-    init(_ model: [MenuCellViewModel]) {
+    init(_ model: [ID]) {
         self.model = model
         super.init(frame: .zero)
         setupView()
@@ -148,9 +144,9 @@ final class ContextMenuTypeSecondView: UIView {
     }
     
     @objc private func didSelectedCell(_ sender: UIControl) {
-        guard let view = sender as? MenuCellTypeSecondView else { return }
+        guard let view = sender as? MenuCellTypeSecondView<ID> else { return }
         stackView.arrangedSubviews.forEach {
-            ($0 as? MenuCellTypeSecondView)?.isSelectedCell = false
+            ($0 as? MenuCellTypeSecondView<ID>)?.isSelectedCell = false
         }
         view.isSelectedCell = true
         complition?(view.model)
@@ -158,19 +154,17 @@ final class ContextMenuTypeSecondView: UIView {
     }
 }
 
-extension ContextMenuTypeSecondView {
-    struct ShadowConst {
-        static let firstShadow = Shadow(
-            color: R.color.addFood.menu.firstShadow() ?? .black,
-            opacity: 0.2,
-            offset: CGSize(width: 0, height: 4),
-            radius: 10
-        )
-        static let secondShadow = Shadow(
-            color: R.color.addFood.menu.secondShadow() ?? .black,
-            opacity: 0.25,
-            offset: CGSize(width: 0, height: 0.5),
-            radius: 2
-        )
-    }
+private struct ShadowConst {
+    static let firstShadow = Shadow(
+        color: R.color.addFood.menu.firstShadow() ?? .black,
+        opacity: 0.2,
+        offset: CGSize(width: 0, height: 4),
+        radius: 10
+    )
+    static let secondShadow = Shadow(
+        color: R.color.addFood.menu.secondShadow() ?? .black,
+        opacity: 0.25,
+        offset: CGSize(width: 0, height: 0.5),
+        radius: 2
+    )
 }

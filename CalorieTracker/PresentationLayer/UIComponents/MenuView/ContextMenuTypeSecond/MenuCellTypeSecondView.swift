@@ -7,8 +7,7 @@
 
 import UIKit
 
-final class MenuCellTypeSecondView: UIControl {
-    typealias CellModel = ContextMenuTypeSecondView.MenuCellViewModel
+final class MenuCellTypeSecondView<ID: WithGetDataProtocol>: UIControl {
     
     private lazy var imageView: RoundedImageView = {
         let view = RoundedImageView(frame: .zero)
@@ -28,7 +27,7 @@ final class MenuCellTypeSecondView: UIControl {
     
     private var firstDraw = true
     
-    let model: CellModel
+    let model: ID
     
     private let isSelectedTextColor: UIColor? = R.color.addFood.menu.background()
     private var isNotSelectedTextColor: UIColor?
@@ -39,11 +38,11 @@ final class MenuCellTypeSecondView: UIControl {
         }
     }
     
-    init(_ model: CellModel) {
+    init(_ model: ID) {
         self.model = model
         super.init(frame: .zero)
-        titleLabel.text = model.title
-        isNotSelectedTextColor = model.color
+        titleLabel.text = model.getTitle(.long)
+        isNotSelectedTextColor = model.getColor()
         setupView()
         addSubviews()
         setupConstraints()
