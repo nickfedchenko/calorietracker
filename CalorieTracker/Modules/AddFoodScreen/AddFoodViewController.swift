@@ -39,6 +39,8 @@ final class AddFoodViewController: UIViewController {
     
     private var contentViewBottomAnchor: NSLayoutConstraint?
     private var searchTextFieldBottomAnchor: NSLayoutConstraint?
+    private var collectionViewTopFirstAnchor: NSLayoutConstraint?
+    private var collectionViewTopSecondAnchor: NSLayoutConstraint?
     private var firstDraw = true
     
     private var dishes: [Dish] = []
@@ -110,7 +112,7 @@ final class AddFoodViewController: UIViewController {
         navigationController?.isNavigationBarHidden = true
         
         presenter?.setFoodType(.frequent)
-        
+        searshTextField.delegate = self
         foodCollectionViewController.delegate = self
         self.addChild(foodCollectionViewController)
         
@@ -159,12 +161,12 @@ final class AddFoodViewController: UIViewController {
         view.addSubviews(
             tabBarStackView,
             foodCollectionViewController.view,
-            bottomGradientView,
-            keyboardHeaderView,
-            searshTextField,
             menuButton,
             infoButtonsView,
             segmentedScrollView,
+            bottomGradientView,
+            keyboardHeaderView,
+            searshTextField,
             overlayView,
             menuView,
             menuTypeSecondView
@@ -220,10 +222,16 @@ final class AddFoodViewController: UIViewController {
             make.height.equalTo(tabBarStackView.snp.width).multipliedBy(0.155)
         }
         
+        collectionViewTopSecondAnchor = foodCollectionViewController
+            .view
+            .topAnchor
+            .constraint(
+                equalTo: view.safeAreaLayoutGuide.topAnchor
+            )
         foodCollectionViewController.view.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            make.top.equalTo(infoButtonsView.snp.bottom).offset(4)
-            make.bottom.equalTo(tabBarStackView.snp.top)
+            make.top.equalTo(infoButtonsView.snp.bottom).offset(4).priority(.low)
+            make.bottom.equalTo(tabBarStackView.snp.top).offset(-64)
         }
         
         infoButtonsView.snp.makeConstraints { make in
@@ -375,6 +383,28 @@ extension AddFoodViewController: FoodCollectionViewControllerDelegate {
     
     func cell(collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell {
         getCell(collectionView: collectionView, indexPath: indexPath)
+    }
+}
+
+extension AddFoodViewController: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        self.collectionViewTopSecondAnchor?.isActive = true
+        foodCollectionViewController.view.layer.zPosition = 7
+        bottomGradientView.layer.zPosition = 8
+        searshTextField.layer.zPosition = 10
+        keyboardHeaderView.layer.zPosition = 9
+        foodCollectionViewController.view.backgroundColor = .white
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        guard let text = textField.text, !text.isEmpty else {
+            self.collectionViewTopSecondAnchor?.isActive = false
+            foodCollectionViewController.view.layer.zPosition = 0
+            bottomGradientView.layer.zPosition = 0
+            searshTextField.layer.zPosition = 0
+            keyboardHeaderView.layer.zPosition = 0
+            return
+        }
     }
 }
 
