@@ -21,8 +21,6 @@ final class AddFoodViewController: UIViewController {
     private lazy var overlayView: UIView = getOverlayView()
     private lazy var segmentedControl: SegmentedControl<AddFood> = getSegmentedControl()
     private lazy var segmentedScrollView: UIScrollView = getSegmentedScrollView()
-    private lazy var collectionView: UICollectionView = getCollectionView()
-    private lazy var collectionViewFlowLayout: UICollectionViewFlowLayout = getCollectionViewFlowLayout()
     private lazy var tabBarStackView: UIStackView = getTabBarStackView()
     private lazy var backButton: UIButton = getBackButton()
     private lazy var createButton: VerticalButton = getCreateButton()
@@ -37,6 +35,7 @@ final class AddFoodViewController: UIViewController {
     private lazy var menuTypeSecondView = ContextMenuTypeSecondView(Const.menuTypeSecondModels)
     private lazy var menuButton = MenuButton()
     private lazy var searshTextField = SearchTextField()
+    private lazy var foodCollectionViewController = FoodCollectionViewController()
     
     private var contentViewBottomAnchor: NSLayoutConstraint?
     private var searchTextFieldBottomAnchor: NSLayoutConstraint?
@@ -48,19 +47,19 @@ final class AddFoodViewController: UIViewController {
     
     private var isSelectedType: AddFood = .recent {
         didSet {
+            self.foodCollectionViewController.isSelectedType = self.isSelectedType
             presenter?.setFoodType(isSelectedType)
         }
     }
     
     private var selectedFoodInfo: FoodInfoCases = .off {
         didSet {
-            collectionView.reloadData()
+            foodCollectionViewController.reloadData()
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        registerCells()
         setupView()
         addSubviews()
         setupConstraints()
@@ -112,8 +111,8 @@ final class AddFoodViewController: UIViewController {
         
         presenter?.setFoodType(.frequent)
         
-        collectionView.delegate = self
-        collectionView.dataSource = self
+        foodCollectionViewController.delegate = self
+        self.addChild(foodCollectionViewController)
         
         menuButton.configure(Const.menuModels.first)
         menuButton.completion = { [weak self] complition in
@@ -149,12 +148,6 @@ final class AddFoodViewController: UIViewController {
         view.addGestureRecognizer(hideKeyboardGR)
     }
     
-    private func registerCells() {
-        collectionView.register(RecipesColectionViewCell.self)
-        collectionView.register(FoodCollectionViewCell.self)
-        collectionView.register(UICollectionViewCell.self)
-    }
-    
     private func addSubviews() {
         tabBarStackView.addArrangedSubview(backButton)
         tabBarStackView.addArrangedSubview(createButton)
@@ -165,7 +158,7 @@ final class AddFoodViewController: UIViewController {
         segmentedScrollView.addSubview(segmentedControl)
         view.addSubviews(
             tabBarStackView,
-            collectionView,
+            foodCollectionViewController.view,
             bottomGradientView,
             keyboardHeaderView,
             searshTextField,
@@ -227,7 +220,7 @@ final class AddFoodViewController: UIViewController {
             make.height.equalTo(tabBarStackView.snp.width).multipliedBy(0.155)
         }
         
-        collectionView.snp.makeConstraints { make in
+        foodCollectionViewController.view.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.top.equalTo(infoButtonsView.snp.bottom).offset(4)
             make.bottom.equalTo(tabBarStackView.snp.top)
@@ -367,84 +360,38 @@ final class AddFoodViewController: UIViewController {
     }
 }
 
-// MARK: - CollectionView Delegate
-
-extension AddFoodViewController: UICollectionViewDelegate {
-    
-}
-
-// MARK: - CollectionView DataSource
-
-extension AddFoodViewController: UICollectionViewDataSource {
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        switch isSelectedType {
-        case .frequent, .recent, .favorites:
-            return 2
-        case .myMeals:
-            return 1
-        case .myRecipes:
-            return 0
-        case .myFood:
-            return 0
-        }
+extension AddFoodViewController: FoodCollectionViewControllerDelegate {
+    func productsCount() -> Int {
+        self.products.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        switch isSelectedType {
-        case .frequent, .recent, .favorites:
-            return section == 0
-                ? products.count
-                : dishes.count
-        case .myMeals:
-            return meals.count
-        case .myRecipes:
-            return 0
-        case .myFood:
-            return 0
-        }
+    func dishesCount() -> Int {
+        self.dishes.count
     }
     
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return getCell(collectionView: collectionView, indexPath: indexPath)
-    }
-}
-
-extension AddFoodViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = view.frame.width - 40
-        let height: CGFloat = 64
-        return CGSize(width: width, height: height)
+    func mealsCount() -> Int {
+        self.meals.count
     }
     
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        switch isSelectedType {
-        case .frequent, .recent, .favorites:
-            return 0
-        case .myMeals, .myRecipes, .myFood:
-            return 8
-        }
+    func cell(collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell {
+        getCell(collectionView: collectionView, indexPath: indexPath)
     }
 }
 
 extension AddFoodViewController: AddFoodViewControllerInterface {
     func setDishes(_ dishes: [Dish]) {
         self.dishes = dishes
-        self.collectionView.reloadData()
+        self.foodCollectionViewController.reloadData()
     }
     
     func setProducts(_ products: [Product]) {
         self.products = products
-        self.collectionView.reloadData()
+        self.foodCollectionViewController.reloadData()
     }
     
     func setMeals(_ meals: [Meal]) {
         self.meals = meals
-        self.collectionView.reloadData()
+        self.foodCollectionViewController.reloadData()
     }
     
     func getFoodInfoType() -> FoodInfoCases {
@@ -475,19 +422,6 @@ private extension AddFoodViewController {
         view.showsVerticalScrollIndicator = false
         view.contentInset = .zero
         return view
-    }
-    
-    func getCollectionView() -> UICollectionView {
-        let view = UICollectionView(frame: .zero, collectionViewLayout: collectionViewFlowLayout)
-        view.showsVerticalScrollIndicator = false
-        view.backgroundColor = .clear
-        return view
-    }
-    
-    func getCollectionViewFlowLayout() -> UICollectionViewFlowLayout {
-        let layout = UICollectionViewFlowLayout()
-        
-        return layout
     }
     
     func getTabBarStackView() -> UIStackView {
