@@ -18,119 +18,25 @@ protocol AddFoodViewControllerInterface: AnyObject {
 final class AddFoodViewController: UIViewController {
     var presenter: AddFoodPresenterInterface?
     
-    private let menuView = MenuView(Const.menuModels)
-    private let menuTypeSecondView = ContextMenuTypeSecondView(Const.menuTypeSecondModels)
-    private let menuButton = MenuButton()
-    private let searshTextField = SearchTextField()
+    private lazy var overlayView: UIView = getOverlayView()
+    private lazy var segmentedControl: SegmentedControl<AddFood> = getSegmentedControl()
+    private lazy var segmentedScrollView: UIScrollView = getSegmentedScrollView()
+    private lazy var collectionView: UICollectionView = getCollectionView()
+    private lazy var collectionViewFlowLayout: UICollectionViewFlowLayout = getCollectionViewFlowLayout()
+    private lazy var tabBarStackView: UIStackView = getTabBarStackView()
+    private lazy var backButton: UIButton = getBackButton()
+    private lazy var createButton: VerticalButton = getCreateButton()
+    private lazy var scanButton: VerticalButton = getScanButton()
+    private lazy var caloriesButton: VerticalButton = getCaloriesButton()
+    private lazy var infoButtonsView: InfoButtonsView<FoodInfoCases> = getInfoButtonsView()
+    private lazy var keyboardHeaderView: UIView = getKeyboardHeaderView()
+    private lazy var hideKeyboardButton: UIButton = getHideKeyboardButton()
     
-    private lazy var segmentedControl: SegmentedControl<AddFood> = {
-        let view = SegmentedControl<AddFood>(Const.segmentedModels)
-        view.backgroundColor = R.color.addFood.menu.background()
-        return view
-    }()
-    
-    private lazy var segmentedScrollView: UIScrollView = {
-        let view = UIScrollView()
-        view.showsHorizontalScrollIndicator = false
-        view.showsVerticalScrollIndicator = false
-        return view
-    }()
-    
-    private lazy var collectionView: UICollectionView = {
-        let view = UICollectionView(frame: .zero, collectionViewLayout: collectionViewFlowLayout)
-        view.showsVerticalScrollIndicator = false
-        view.backgroundColor = .clear
-        return view
-    }()
-    
-    private lazy var collectionViewFlowLayout: UICollectionViewFlowLayout = {
-        let layout = UICollectionViewFlowLayout()
-        
-        return layout
-    }()
-    
-    private lazy var tabBarStackView: UIStackView = {
-        let stack = UIStackView()
-        stack.axis = .horizontal
-        stack.distribution = .equalSpacing
-        return stack
-    }()
-    
-    private lazy var backButton: UIButton = {
-        let button = UIButton()
-        button.setImage(R.image.addFood.tabBar.chevronLeft(), for: .normal)
-        button.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
-        button.aspectRatio()
-        return button
-    }()
-    
-    private lazy var createButton: VerticalButton = {
-        let button = VerticalButton()
-        button.setImage(R.image.addFood.tabBar.pencil(), .normal)
-        button.setTitle("CREATE", .normal)
-        button.setTitleColor(R.color.addFood.recipesCell.basicGray(), .normal)
-        button.titleLabel.font = R.font.sfProDisplaySemibold(size: 9)
-        button.titleLabel.textAlignment = .center
-        button.aspectRatio()
-        return button
-    }()
-    
-    private lazy var scanButton: VerticalButton = {
-        let button = VerticalButton()
-        button.setImage(R.image.addFood.tabBar.scan(), .normal)
-        button.setTitle("SCAN", .normal)
-        button.setTitleColor(R.color.addFood.recipesCell.basicGray(), .normal)
-        button.titleLabel.font = R.font.sfProDisplaySemibold(size: 9)
-        button.titleLabel.textAlignment = .center
-        button.aspectRatio()
-        return button
-    }()
-    
-    private lazy var caloriesButton: VerticalButton = {
-        let button = VerticalButton()
-        button.setImage(R.image.addFood.tabBar.calories(), .normal)
-        button.setTitle("CALORIES", .normal)
-        button.setTitleColor(R.color.addFood.recipesCell.basicGray(), .normal)
-        button.titleLabel.font = R.font.sfProDisplaySemibold(size: 9)
-        button.titleLabel.textAlignment = .center
-        button.aspectRatio()
-        return button
-    }()
-    
-    private lazy var infoButtonsView: InfoButtonsView<FoodInfoCases> = {
-        let view = InfoButtonsView<FoodInfoCases>([
-            .settings,
-            .immutable(.kcal)
-        ])
-
-        return view
-    }()
-    
-    private lazy var keyboardHeaderView: UIView = {
-        let view = UIView()
-        view.layer.maskedCorners = .topCorners
-        view.backgroundColor = .gray
-        view.layer.cornerRadius = 32
-        return view
-    }()
-    
-    private lazy var hideKeyboardButton: UIButton = {
-        let button = UIButton()
-        button.setImage(R.image.addFood.hideKeyboard(), for: .normal)
-        button.layer.cornerRadius = 16
-        button.backgroundColor = R.color.addFood.white()
-        button.addAction(
-            UIAction(
-                handler: { _ in
-                    self.hideKeyboard()
-                }
-            ),
-            for: .touchUpInside
-        )
-        return button
-    }()
-    
-    private let bottomGradientView = UIView()
+    private lazy var bottomGradientView = UIView()
+    private lazy var menuView = MenuView(Const.menuModels)
+    private lazy var menuTypeSecondView = ContextMenuTypeSecondView(Const.menuTypeSecondModels)
+    private lazy var menuButton = MenuButton()
+    private lazy var searshTextField = SearchTextField()
     
     private var contentViewBottomAnchor: NSLayoutConstraint?
     private var searchTextFieldBottomAnchor: NSLayoutConstraint?
@@ -524,5 +430,123 @@ extension AddFoodViewController: AddFoodViewControllerInterface {
     
     func getFoodInfoType() -> FoodInfoCases {
         self.selectedFoodInfo
+    }
+}
+
+// MARK: - Factory
+
+private extension AddFoodViewController {
+    func getOverlayView() -> UIView {
+        let view = UIView()
+        
+        return view
+    }
+    
+    func getSegmentedControl() -> SegmentedControl<AddFood> {
+        let view = SegmentedControl<AddFood>(Const.segmentedModels)
+        view.backgroundColor = R.color.addFood.menu.background()
+        return view
+    }
+    
+    func getSegmentedScrollView() -> UIScrollView {
+        let view = UIScrollView()
+        view.showsHorizontalScrollIndicator = false
+        view.showsVerticalScrollIndicator = false
+        view.contentInset = .zero
+        return view
+    }
+    
+    func getCollectionView() -> UICollectionView {
+        let view = UICollectionView(frame: .zero, collectionViewLayout: collectionViewFlowLayout)
+        view.showsVerticalScrollIndicator = false
+        view.backgroundColor = .clear
+        return view
+    }
+    
+    func getCollectionViewFlowLayout() -> UICollectionViewFlowLayout {
+        let layout = UICollectionViewFlowLayout()
+        
+        return layout
+    }
+    
+    func getTabBarStackView() -> UIStackView {
+        let stack = UIStackView()
+        stack.axis = .horizontal
+        stack.distribution = .equalSpacing
+        return stack
+    }
+    
+    func getBackButton() -> UIButton {
+        let button = UIButton()
+        button.setImage(R.image.addFood.tabBar.chevronLeft(), for: .normal)
+        button.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
+        button.aspectRatio()
+        return button
+    }
+    
+    func getCreateButton() -> VerticalButton {
+        let button = VerticalButton()
+        button.setImage(R.image.addFood.tabBar.pencil(), .normal)
+        button.setTitle("CREATE", .normal)
+        button.setTitleColor(R.color.addFood.recipesCell.basicGray(), .normal)
+        button.titleLabel.font = R.font.sfProDisplaySemibold(size: 9)
+        button.titleLabel.textAlignment = .center
+        button.aspectRatio()
+        return button
+    }
+    
+    func getScanButton() -> VerticalButton {
+        let button = VerticalButton()
+        button.setImage(R.image.addFood.tabBar.scan(), .normal)
+        button.setTitle("SCAN", .normal)
+        button.setTitleColor(R.color.addFood.recipesCell.basicGray(), .normal)
+        button.titleLabel.font = R.font.sfProDisplaySemibold(size: 9)
+        button.titleLabel.textAlignment = .center
+        button.aspectRatio()
+        return button
+    }
+    
+    func getCaloriesButton() -> VerticalButton {
+        let button = VerticalButton()
+        button.setImage(R.image.addFood.tabBar.calories(), .normal)
+        button.setTitle("CALORIES", .normal)
+        button.setTitleColor(R.color.addFood.recipesCell.basicGray(), .normal)
+        button.titleLabel.font = R.font.sfProDisplaySemibold(size: 9)
+        button.titleLabel.textAlignment = .center
+        button.aspectRatio()
+        return button
+    }
+    
+    func getInfoButtonsView() -> InfoButtonsView<FoodInfoCases> {
+        let view = InfoButtonsView<FoodInfoCases>([
+            .settings,
+            .immutable(.kcal)
+        ])
+        
+        return view
+    }
+    
+    func getKeyboardHeaderView() -> UIView {
+        let view = UIView()
+        view.layer.maskedCorners = .topCorners
+        view.backgroundColor = .gray
+        view.layer.cornerRadius = 32
+        return view
+    }
+    
+    func getHideKeyboardButton() -> UIButton {
+        let button = UIButton()
+        button.setImage(R.image.addFood.hideKeyboard(), for: .normal)
+        button.layer.cornerRadius = 16
+        button.backgroundColor = R.color.addFood.white()
+        button.addAction(
+            UIAction(
+                handler: { _ in
+                    self.hideKeyboard()
+                }
+            ),
+            for: .touchUpInside
+        )
+        return button
     }
 }
