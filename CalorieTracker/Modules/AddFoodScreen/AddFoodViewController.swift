@@ -116,23 +116,27 @@ final class AddFoodViewController: UIViewController {
         collectionView.dataSource = self
         
         menuButton.configure(Const.menuModels.first)
-        menuButton.completion = { complition in
-            self.menuView.showAndCloseView(true)
-            self.menuView.complition = { model in
+        menuButton.completion = { [weak self] complition in
+            self?.showOverlay(true)
+            self?.menuView.showAndCloseView(true)
+            self?.menuView.complition = { model in
+                self?.showOverlay(false)
                 complition(model)
             }
         }
         
-        infoButtonsView.completion = { complition in
-            self.menuTypeSecondView.showAndCloseView(true)
-            self.menuTypeSecondView.complition = { model in
+        infoButtonsView.completion = { [weak self] complition in
+            self?.showOverlay(true)
+            self?.menuTypeSecondView.showAndCloseView(true)
+            self?.menuTypeSecondView.complition = { model in
+                self?.showOverlay(false)
                 switch model {
                 case .carb, .fat, .kcal, .protein:
                     complition(.configurable(model))
                 case .off:
                     complition(.settings)
                 }
-                self.selectedFoodInfo = model
+                self?.selectedFoodInfo = model
             }
         }
         
@@ -168,6 +172,7 @@ final class AddFoodViewController: UIViewController {
             menuButton,
             infoButtonsView,
             segmentedScrollView,
+            overlayView,
             menuView,
             menuTypeSecondView
         )
@@ -257,6 +262,10 @@ final class AddFoodViewController: UIViewController {
             make.bottom.equalTo(tabBarStackView.snp.top)
             make.height.equalTo(searshTextField).offset(50)
         }
+        
+        overlayView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
     }
     
     private func setupShadow() {
@@ -276,6 +285,16 @@ final class AddFoodViewController: UIViewController {
                 )
             )
         )
+    }
+    
+    private func showOverlay(_ flag: Bool) {
+        overlayView.isHidden = false
+        
+        UIView.animate(withDuration: 0.2) {
+            self.overlayView.layer.opacity = flag ? 1 : 0
+        } completion: { _ in
+            self.overlayView.isHidden = !flag
+        }
     }
     
     private func getCell(collectionView: UICollectionView,
@@ -438,7 +457,9 @@ extension AddFoodViewController: AddFoodViewControllerInterface {
 private extension AddFoodViewController {
     func getOverlayView() -> UIView {
         let view = UIView()
-        
+        view.backgroundColor = R.color.addFood.overlay()
+        view.isHidden = true
+        view.layer.opacity = 0
         return view
     }
     
