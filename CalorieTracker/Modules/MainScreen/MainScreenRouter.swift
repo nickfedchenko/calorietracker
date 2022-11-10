@@ -10,12 +10,13 @@ import Foundation
 import UIKit
 
 protocol MainScreenRouterInterface: AnyObject {
-
+    func openAddFoodVC()
 }
 
 class MainScreenRouter: NSObject {
 
     weak var presenter: MainScreenPresenterInterface?
+    weak var viewController: UIViewController?
 
     static func setupModule() -> MainScreenViewController {
         let vc = MainScreenViewController()
@@ -25,11 +26,15 @@ class MainScreenRouter: NSObject {
 
         vc.presenter = presenter
         router.presenter = presenter
+        router.viewController = vc
         interactor.presenter = presenter
         return vc
     }
 }
 
 extension MainScreenRouter: MainScreenRouterInterface {
-
+    func openAddFoodVC() {
+        let vc = AddFoodRouter.setupModule()
+        viewController?.navigationController?.pushViewController(vc, animated: true)
+    }
 }

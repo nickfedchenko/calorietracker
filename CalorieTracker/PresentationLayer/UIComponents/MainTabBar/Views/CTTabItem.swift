@@ -46,7 +46,7 @@ final class CTTabItem: UIView {
         var viewControler: UIViewController {
             switch self {
             case .myDay:
-                return MainScreenViewController()
+                return MainScreenRouter.setupModule()
             case .progress:
                 return MainScreenViewController()
             case .food:

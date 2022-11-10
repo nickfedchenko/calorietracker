@@ -12,7 +12,8 @@ protocol AddFoodPresenterInterface: AnyObject {
     func setFoodType(_ type: AddFood)
     func getSearchHistory() -> [String]
     func getFoodViewModel(_ model: Product) -> FoodCellView.FoodViewModel
-    func getFoodViewModel(_ model: Dish) -> FoodCellView.FoodViewModel 
+    func getFoodViewModel(_ model: Dish) -> FoodCellView.FoodViewModel
+    func didTapBackButton()
 }
 
 final class AddFoodPresenter {
@@ -145,5 +146,9 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
             subInfo: getSubInfo(model, type: view.getFoodInfoType()),
             color: view.getFoodInfoType().getColor()
         )
+    }
+    
+    func didTapBackButton() {
+        router?.closeViewController()
     }
 }

@@ -19,7 +19,7 @@ final class AddFoodViewController: UIViewController {
     var presenter: AddFoodPresenterInterface?
     
     private let menuView = MenuView(Const.menuModels)
-    private let menuTypeSecondView = ContextMenuTypeSecondView<FoodInfoCases>(Const.menuTypeSecondModels)
+    private let menuTypeSecondView = ContextMenuTypeSecondView(Const.menuTypeSecondModels)
     private let menuButton = MenuButton()
     private let searshTextField = SearchTextField()
     
@@ -59,14 +59,40 @@ final class AddFoodViewController: UIViewController {
     private lazy var backButton: UIButton = {
         let button = UIButton()
         button.setImage(R.image.addFood.tabBar.chevronLeft(), for: .normal)
+        button.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
         button.aspectRatio()
         return button
     }()
     
-    private lazy var createButton: UIButton = {
-        let button = UIButton()
-        button.setImage(R.image.addFood.tabBar.pencil(), for: .normal)
-        button.setTitle("CREATE", for: .normal)
+    private lazy var createButton: VerticalButton = {
+        let button = VerticalButton()
+        button.setImage(R.image.addFood.tabBar.pencil(), .normal)
+        button.setTitle("CREATE", .normal)
+        button.setTitleColor(R.color.addFood.recipesCell.basicGray(), .normal)
+        button.titleLabel.font = R.font.sfProDisplaySemibold(size: 9)
+        button.titleLabel.textAlignment = .center
+        button.aspectRatio()
+        return button
+    }()
+    
+    private lazy var scanButton: VerticalButton = {
+        let button = VerticalButton()
+        button.setImage(R.image.addFood.tabBar.scan(), .normal)
+        button.setTitle("SCAN", .normal)
+        button.setTitleColor(R.color.addFood.recipesCell.basicGray(), .normal)
+        button.titleLabel.font = R.font.sfProDisplaySemibold(size: 9)
+        button.titleLabel.textAlignment = .center
+        button.aspectRatio()
+        return button
+    }()
+    
+    private lazy var caloriesButton: VerticalButton = {
+        let button = VerticalButton()
+        button.setImage(R.image.addFood.tabBar.calories(), .normal)
+        button.setTitle("CALORIES", .normal)
+        button.setTitleColor(R.color.addFood.recipesCell.basicGray(), .normal)
+        button.titleLabel.font = R.font.sfProDisplaySemibold(size: 9)
+        button.titleLabel.textAlignment = .center
         button.aspectRatio()
         return button
     }()
@@ -220,8 +246,11 @@ final class AddFoodViewController: UIViewController {
     }
     
     private func addSubviews() {
-        tabBarStackView.addArrangedSubview(createButton)
         tabBarStackView.addArrangedSubview(backButton)
+        tabBarStackView.addArrangedSubview(createButton)
+        tabBarStackView.addArrangedSubview(caloriesButton)
+        tabBarStackView.addArrangedSubview(scanButton)
+        
         keyboardHeaderView.addSubview(hideKeyboardButton)
         segmentedScrollView.addSubview(segmentedControl)
         view.addSubviews(
@@ -406,6 +435,10 @@ final class AddFoodViewController: UIViewController {
     
     @objc private func hideKeyboard() {
         view.endEditing(true)
+    }
+    
+    @objc private func didTapBackButton() {
+        presenter?.didTapBackButton()
     }
 }
 

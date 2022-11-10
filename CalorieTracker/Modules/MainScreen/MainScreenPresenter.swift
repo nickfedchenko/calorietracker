@@ -9,7 +9,7 @@
 import Foundation
 
 protocol MainScreenPresenterInterface: AnyObject {
-
+    func didTapAddButton()
 }
 
 class MainScreenPresenter {
@@ -22,7 +22,7 @@ class MainScreenPresenter {
         interactor: MainScreenInteractorInterface,
         router: MainScreenRouterInterface,
         view: MainScreenViewControllerInterface
-      ) {
+    ) {
         self.view = view
         self.interactor = interactor
         self.router = router
@@ -30,5 +30,7 @@ class MainScreenPresenter {
 }
 
 extension MainScreenPresenter: MainScreenPresenterInterface {
-
+    func didTapAddButton() {
+        router?.openAddFoodVC()
+    }
 }

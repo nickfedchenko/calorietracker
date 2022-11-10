@@ -173,7 +173,7 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
     }()
     
     @objc private func didTapButton() {
-        stepsWidget.progress += 0.05
+        presenter?.didTapAddButton()
     }
     
     private let barCodeScannerButton: ScanButtonNode = {
@@ -246,6 +246,12 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setToolbarHidden(true, animated: true)
+        navigationController?.navigationBar.isHidden = true
     }
     
     // MARK: - Private methods
