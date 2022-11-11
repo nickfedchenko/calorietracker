@@ -18,6 +18,8 @@ protocol AddFoodViewControllerInterface: AnyObject {
 final class AddFoodViewController: UIViewController {
     var presenter: AddFoodPresenterInterface?
     
+    // MARK: - Private Propertys
+    
     private lazy var overlayView: UIView = getOverlayView()
     private lazy var segmentedControl: SegmentedControl<AddFood> = getSegmentedControl()
     private lazy var segmentedScrollView: UIScrollView = getSegmentedScrollView()
@@ -36,6 +38,7 @@ final class AddFoodViewController: UIViewController {
     private lazy var menuButton = MenuButton()
     private lazy var searshTextField = SearchTextField()
     private lazy var foodCollectionViewController = FoodCollectionViewController()
+    private lazy var searchHistoryViewController = SearchHistoryViewController()
     
     private var contentViewBottomAnchor: NSLayoutConstraint?
     private var searchTextFieldBottomAnchor: NSLayoutConstraint?
@@ -59,6 +62,8 @@ final class AddFoodViewController: UIViewController {
             foodCollectionViewController.reloadData()
         }
     }
+    
+    // MARK: - Override
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -106,6 +111,8 @@ final class AddFoodViewController: UIViewController {
         )
     }
     
+    // MARK: - Private functions
+    
     private func setupView() {
         view.backgroundColor = .white
         navigationController?.setToolbarHidden(true, animated: false)
@@ -115,6 +122,7 @@ final class AddFoodViewController: UIViewController {
         searshTextField.delegate = self
         foodCollectionViewController.delegate = self
         self.addChild(foodCollectionViewController)
+        self.addChild(searchHistoryViewController)
         
         menuButton.configure(Const.menuModels.first)
         menuButton.completion = { [weak self] complition in
@@ -145,6 +153,12 @@ final class AddFoodViewController: UIViewController {
             self.isSelectedType = model.id
         }
         
+        searchHistoryViewController.view.isHidden = true
+        searchHistoryViewController.complition = { [weak self] search in
+            self?.searchHistoryViewController.view.isHidden = true
+            self?.searshTextField.text = search
+        }
+        
         let hideKeyboardGR = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         hideKeyboardGR.cancelsTouchesInView = false
         view.addGestureRecognizer(hideKeyboardGR)
@@ -169,7 +183,8 @@ final class AddFoodViewController: UIViewController {
             searshTextField,
             overlayView,
             menuView,
-            menuTypeSecondView
+            menuTypeSecondView,
+            searchHistoryViewController.view
         )
     }
     
@@ -232,6 +247,10 @@ final class AddFoodViewController: UIViewController {
             make.leading.trailing.equalToSuperview()
             make.top.equalTo(infoButtonsView.snp.bottom).offset(4).priority(.low)
             make.bottom.equalTo(tabBarStackView.snp.top).offset(-64)
+        }
+        
+        searchHistoryViewController.view.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
         
         infoButtonsView.snp.makeConstraints { make in
@@ -368,6 +387,8 @@ final class AddFoodViewController: UIViewController {
     }
 }
 
+// MARK: - FoodCollectionViewController Delegate
+
 extension AddFoodViewController: FoodCollectionViewControllerDelegate {
     func productsCount() -> Int {
         self.products.count
@@ -386,17 +407,30 @@ extension AddFoodViewController: FoodCollectionViewControllerDelegate {
     }
 }
 
+// MARK: - SearchTextField Delegate
+
 extension AddFoodViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        self.collectionViewTopSecondAnchor?.isActive = true
-        foodCollectionViewController.view.layer.zPosition = 7
+        collectionViewTopSecondAnchor?.isActive = true
+        searchHistoryViewController.view.isHidden = false
+        searchHistoryViewController.view.layer.zPosition = 7
+        foodCollectionViewController.view.layer.zPosition = 6
         bottomGradientView.layer.zPosition = 8
         searshTextField.layer.zPosition = 10
         keyboardHeaderView.layer.zPosition = 9
         foodCollectionViewController.view.backgroundColor = .white
     }
     
+    func textField(_ textField: UITextField,
+                   shouldChangeCharactersIn range: NSRange,
+                   replacementString string: String) -> Bool {
+        self.searchHistoryViewController.view.isHidden = true
+        
+        return true
+    }
+    
     func textFieldDidEndEditing(_ textField: UITextField) {
+        self.searchHistoryViewController.view.isHidden = true
         guard let text = textField.text, !text.isEmpty else {
             self.collectionViewTopSecondAnchor?.isActive = false
             foodCollectionViewController.view.layer.zPosition = 0
@@ -405,8 +439,12 @@ extension AddFoodViewController: UITextFieldDelegate {
             keyboardHeaderView.layer.zPosition = 0
             return
         }
+        
+        FDS.shared.rememberSearchQuery(text)
     }
 }
+
+// MARK: - AddFoodViewController Interface
 
 extension AddFoodViewController: AddFoodViewControllerInterface {
     func setDishes(_ dishes: [Dish]) {

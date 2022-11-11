@@ -171,8 +171,10 @@ extension FDS: FoodDataServiceInterface {
         var searchHistory = UDM.searchHistory
         searchHistory.insert(query, at: 0)
         
-        UDM.searchHistory = searchHistory.count >= countSearchQuery
+        UDM.searchHistory = Array(Set(
+            searchHistory.count >= countSearchQuery
             ? Array(searchHistory[0..<countSearchQuery])
             : searchHistory
+        ))
     }
 }
