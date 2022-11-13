@@ -38,12 +38,14 @@ final class SearchTextField: UITextField {
         layer.cornerCurve = .continuous
         clipsToBounds = true
         
-        leftViewMode = .always
+        leftViewMode = .whileEditing
         tintColor = R.color.burnedKcalTextField.separator()
         textColor = R.color.burnedKcalTextField.text()
+        textAlignment = .center
         backgroundColor = .white
         font = R.font.sfProDisplaySemibold(size: 18)
-        placeholder = "SEARCH EXERCISSE"
+
+        placeholder = "SEARCH FOOD"
         
         let view = UIView()
         view.addSubview(imageView)
@@ -81,5 +83,14 @@ final class SearchTextField: UITextField {
         path.append(innerPart)
         
         return path
+    }
+    
+    private func getPlaceholder(_ text: String) -> NSAttributedString {
+        let image = R.image.searchTextField.search()!
+        let imageStr = image.asAttributedString
+        let attributedString = NSMutableAttributedString(attributedString: imageStr)
+        attributedString.append(NSAttributedString(string: " \(text)"))
+        
+        return attributedString
     }
 }

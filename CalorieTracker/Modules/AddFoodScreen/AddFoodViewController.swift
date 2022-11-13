@@ -44,6 +44,7 @@ final class AddFoodViewController: UIViewController {
     private var searchTextFieldBottomAnchor: NSLayoutConstraint?
     private var collectionViewTopFirstAnchor: NSLayoutConstraint?
     private var collectionViewTopSecondAnchor: NSLayoutConstraint?
+    
     private var firstDraw = true
     
     private var dishes: [Dish] = []
@@ -63,6 +64,12 @@ final class AddFoodViewController: UIViewController {
         }
     }
     
+    private var state: AddFoodVCState = .default {
+        didSet {
+            didChangeState()
+        }
+    }
+    
     // MARK: - Override
     
     override func viewDidLoad() {
@@ -70,6 +77,7 @@ final class AddFoodViewController: UIViewController {
         setupView()
         addSubviews()
         setupConstraints()
+        didChangeState()
     }
     
     override func viewDidLayoutSubviews() {
@@ -77,6 +85,13 @@ final class AddFoodViewController: UIViewController {
         guard firstDraw else { return }
         setupShadow()
         firstDraw = false
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        navigationController?.setToolbarHidden(true, animated: false)
+        navigationController?.isNavigationBarHidden = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -114,13 +129,17 @@ final class AddFoodViewController: UIViewController {
     // MARK: - Private functions
     
     private func setupView() {
-        view.backgroundColor = .white
-        navigationController?.setToolbarHidden(true, animated: false)
-        navigationController?.isNavigationBarHidden = true
-        
         presenter?.setFoodType(.frequent)
+        
+        view.backgroundColor = .white
+        foodCollectionViewController.view.backgroundColor = .white
+        
+        menuView.isHidden = true
+        menuTypeSecondView.isHidden = true
+        
         searshTextField.delegate = self
         foodCollectionViewController.delegate = self
+        
         self.addChild(foodCollectionViewController)
         self.addChild(searchHistoryViewController)
         
@@ -153,10 +172,9 @@ final class AddFoodViewController: UIViewController {
             self.isSelectedType = model.id
         }
         
-        searchHistoryViewController.view.isHidden = true
         searchHistoryViewController.complition = { [weak self] search in
-            self?.searchHistoryViewController.view.isHidden = true
             self?.searshTextField.text = search
+            self?.state = .search(.foundResults)
         }
         
         let hideKeyboardGR = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
@@ -349,6 +367,49 @@ final class AddFoodViewController: UIViewController {
         }
     }
     
+    private func didChangeState() {
+        setupDefaultState()
+        switch self.state {
+        case .search(let state):
+            switch state {
+            case .recent:
+                setupSearchRecentState()
+            case .noResults:
+                break
+            case .foundResults:
+                setupSearchFoundResultsState()
+            }
+        case .default:
+            setupDefaultState()
+        }
+    }
+    
+    private func setupDefaultState() {
+        collectionViewTopSecondAnchor?.isActive = false
+        searchHistoryViewController.view.isHidden = true
+        searchHistoryViewController.view.layer.zPosition = 0
+        foodCollectionViewController.view.layer.zPosition = 0
+        bottomGradientView.layer.zPosition = 0
+        searshTextField.layer.zPosition = 0
+        keyboardHeaderView.layer.zPosition = 0
+    }
+    
+    private func setupSearchRecentState() {
+        searchHistoryViewController.view.isHidden = false
+        searchHistoryViewController.view.layer.zPosition = 7
+        bottomGradientView.layer.zPosition = 8
+        searshTextField.layer.zPosition = 10
+        keyboardHeaderView.layer.zPosition = 9
+    }
+    
+    private func setupSearchFoundResultsState() {
+        collectionViewTopSecondAnchor?.isActive = true
+        foodCollectionViewController.view.layer.zPosition = 7
+        bottomGradientView.layer.zPosition = 8
+        searshTextField.layer.zPosition = 10
+        keyboardHeaderView.layer.zPosition = 9
+    }
+    
     @objc private func keyboardWillShow(notification: NSNotification) {
         guard let userInfo = notification.userInfo,
               let keyboardNotification = KeyboardNotification(userInfo)
@@ -411,32 +472,30 @@ extension AddFoodViewController: FoodCollectionViewControllerDelegate {
 
 extension AddFoodViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        collectionViewTopSecondAnchor?.isActive = true
-        searchHistoryViewController.view.isHidden = false
-        searchHistoryViewController.view.layer.zPosition = 7
-        foodCollectionViewController.view.layer.zPosition = 6
-        bottomGradientView.layer.zPosition = 8
-        searshTextField.layer.zPosition = 10
-        keyboardHeaderView.layer.zPosition = 9
-        foodCollectionViewController.view.backgroundColor = .white
+        guard let text = textField.text, !text.isEmpty else {
+            state = .search(.recent)
+            return
+        }
+        state = .search(.foundResults)
     }
     
     func textField(_ textField: UITextField,
                    shouldChangeCharactersIn range: NSRange,
                    replacementString string: String) -> Bool {
-        self.searchHistoryViewController.view.isHidden = true
+        let replace = -1 * (range.length * 2 - 1)
+        guard let text = textField.text, text.count + replace > 0 else {
+            state = .search(.recent)
+            return true
+        }
+        
+        state = .search(.foundResults)
         
         return true
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        self.searchHistoryViewController.view.isHidden = true
         guard let text = textField.text, !text.isEmpty else {
-            self.collectionViewTopSecondAnchor?.isActive = false
-            foodCollectionViewController.view.layer.zPosition = 0
-            bottomGradientView.layer.zPosition = 0
-            searshTextField.layer.zPosition = 0
-            keyboardHeaderView.layer.zPosition = 0
+            state = .default
             return
         }
         
