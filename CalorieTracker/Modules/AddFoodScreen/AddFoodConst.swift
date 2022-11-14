@@ -25,6 +25,12 @@ extension AddFoodViewController {
             .init(title: "SNACK", image: R.image.addFood.menu.snack())
         ]
         
+        static let menuCreateModels: [MenuView.MenuCellViewModel] = [
+            .init(title: "Food", image: nil),
+            .init(title: "Recipe", image: nil),
+            .init(title: "Meal", image: nil)
+        ]
+        
         static let menuTypeSecondModels: [FoodInfoCases] = [
             .off,
             .carb,

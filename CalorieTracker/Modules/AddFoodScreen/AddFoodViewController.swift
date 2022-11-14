@@ -31,6 +31,7 @@ final class AddFoodViewController: UIViewController {
     private lazy var infoButtonsView: InfoButtonsView<FoodInfoCases> = getInfoButtonsView()
     private lazy var keyboardHeaderView: UIView = getKeyboardHeaderView()
     private lazy var hideKeyboardButton: UIButton = getHideKeyboardButton()
+    private lazy var menuCreateView: MenuView = getMenuCreateView()
     
     private lazy var bottomGradientView = UIView()
     private lazy var menuView = MenuView(Const.menuModels)
@@ -99,6 +100,7 @@ final class AddFoodViewController: UIViewController {
         
         menuView.closeNotAnimate()
         menuTypeSecondView.closeNotAnimate()
+        menuCreateView.closeNotAnimate()
         
         NotificationCenter.default.addObserver(
             self,
@@ -136,6 +138,7 @@ final class AddFoodViewController: UIViewController {
         
         menuView.isHidden = true
         menuTypeSecondView.isHidden = true
+        menuCreateView.isHidden = true
         
         searshTextField.delegate = self
         foodCollectionViewController.delegate = self
@@ -177,6 +180,10 @@ final class AddFoodViewController: UIViewController {
             self?.state = .search(.foundResults)
         }
         
+        menuCreateView.complition = { _ in
+            self.showOverlay(false)
+        }
+        
         let hideKeyboardGR = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         hideKeyboardGR.cancelsTouchesInView = false
         view.addGestureRecognizer(hideKeyboardGR)
@@ -202,7 +209,8 @@ final class AddFoodViewController: UIViewController {
             searshTextField,
             overlayView,
             menuView,
-            menuTypeSecondView
+            menuTypeSecondView,
+            menuCreateView
         )
     }
     
@@ -235,6 +243,12 @@ final class AddFoodViewController: UIViewController {
             make.width.equalTo(187)
             make.top.equalTo(infoButtonsView.snp.top)
             make.trailing.equalTo(infoButtonsView.snp.trailing)
+        }
+        
+        menuCreateView.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-20)
+            make.width.equalToSuperview().multipliedBy(0.69)
         }
         
         segmentedScrollView.snp.makeConstraints { make in
@@ -447,6 +461,15 @@ final class AddFoodViewController: UIViewController {
     @objc private func didTapBackButton() {
         presenter?.didTapBackButton()
     }
+    
+    @objc private func didTapCreateButton() {
+        showOverlay(true)
+        menuCreateView.showAndCloseView(true)
+    }
+    
+    @objc private func didTapCalorieButton() {}
+    
+    @objc private func didTapScanButton() {}
 }
 
 // MARK: - FoodCollectionViewController Delegate
@@ -572,6 +595,7 @@ private extension AddFoodViewController {
     
     func getCreateButton() -> VerticalButton {
         let button = VerticalButton()
+        button.addTarget(self, action: #selector(didTapCreateButton), for: .touchUpInside)
         button.setImage(R.image.addFood.tabBar.pencil(), .normal)
         button.setTitle("CREATE", .normal)
         button.setTitleColor(R.color.addFood.recipesCell.basicGray(), .normal)
@@ -583,6 +607,7 @@ private extension AddFoodViewController {
     
     func getScanButton() -> VerticalButton {
         let button = VerticalButton()
+        button.addTarget(self, action: #selector(didTapScanButton), for: .touchUpInside)
         button.setImage(R.image.addFood.tabBar.scan(), .normal)
         button.setTitle("SCAN", .normal)
         button.setTitleColor(R.color.addFood.recipesCell.basicGray(), .normal)
@@ -594,6 +619,7 @@ private extension AddFoodViewController {
     
     func getCaloriesButton() -> VerticalButton {
         let button = VerticalButton()
+        button.addTarget(self, action: #selector(didTapCalorieButton), for: .touchUpInside)
         button.setImage(R.image.addFood.tabBar.calories(), .normal)
         button.setTitle("CALORIES", .normal)
         button.setTitleColor(R.color.addFood.recipesCell.basicGray(), .normal)
@@ -601,6 +627,12 @@ private extension AddFoodViewController {
         button.titleLabel.textAlignment = .center
         button.aspectRatio()
         return button
+    }
+    
+    func getMenuCreateView() -> MenuView {
+        let menuView = MenuView(Const.menuCreateModels)
+        menuView.backgroundColor = .white
+        return menuView
     }
     
     func getInfoButtonsView() -> InfoButtonsView<FoodInfoCases> {
