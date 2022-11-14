@@ -42,6 +42,7 @@ final class FoodCellView: UIView {
         let label = UILabel()
         label.font = R.font.sfProTextMedium(size: 15)
         label.textColor = .black
+        label.numberOfLines = 0
         return label
     }()
     

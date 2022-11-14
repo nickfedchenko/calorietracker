@@ -31,6 +31,8 @@ final class FoodCollectionViewController: UIViewController {
     
     private lazy var collectionViewFlowLayout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
+        layout.itemSize = UICollectionViewFlowLayout.automaticSize
+        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         return layout
     }()
     

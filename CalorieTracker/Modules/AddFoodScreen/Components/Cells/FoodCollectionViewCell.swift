@@ -47,6 +47,18 @@ final class FoodCollectionViewCell: UICollectionViewCell {
         firstDraw = false
     }
     
+    override func preferredLayoutAttributesFitting(
+        _ layoutAttributes: UICollectionViewLayoutAttributes
+    ) -> UICollectionViewLayoutAttributes {
+        let targetSize = CGSize(width: layoutAttributes.frame.width, height: 0)
+        layoutAttributes.frame.size = contentView.systemLayoutSizeFitting(
+            targetSize,
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        )
+        return layoutAttributes
+    }
+    
     func configure(_ model: FoodCellView.FoodViewModel?) {
         guard let model = model else { return }
         foodView.configure(model)
