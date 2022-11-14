@@ -246,6 +246,7 @@ final class AddFoodViewController: UIViewController {
         segmentedControl.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
             make.leading.trailing.equalToSuperview().inset(20)
+            make.height.equalTo(40)
         }
         
         tabBarStackView.snp.makeConstraints { make in
@@ -396,7 +397,7 @@ final class AddFoodViewController: UIViewController {
     
     private func setupSearchRecentState() {
         searchHistoryViewController.view.isHidden = false
-        searchHistoryViewController.view.layer.zPosition = 7
+        searchHistoryViewController.view.layer.zPosition = 5
         bottomGradientView.layer.zPosition = 8
         searshTextField.layer.zPosition = 10
         keyboardHeaderView.layer.zPosition = 9
@@ -472,6 +473,7 @@ extension AddFoodViewController: FoodCollectionViewControllerDelegate {
 
 extension AddFoodViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
+        searshTextField.textAlignment = .left
         guard let text = textField.text, !text.isEmpty else {
             state = .search(.recent)
             return
@@ -495,6 +497,7 @@ extension AddFoodViewController: UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         guard let text = textField.text, !text.isEmpty else {
+            searshTextField.textAlignment = .center
             state = .default
             return
         }
@@ -548,6 +551,7 @@ private extension AddFoodViewController {
         view.showsHorizontalScrollIndicator = false
         view.showsVerticalScrollIndicator = false
         view.contentInset = .zero
+        view.clipsToBounds = false
         return view
     }
     
