@@ -32,6 +32,7 @@ final class AddFoodViewController: UIViewController {
     private lazy var keyboardHeaderView: UIView = getKeyboardHeaderView()
     private lazy var hideKeyboardButton: UIButton = getHideKeyboardButton()
     private lazy var menuCreateView: MenuView = getMenuCreateView()
+    private lazy var microphoneButton: UIButton = getMicrophoneButton()
     
     private lazy var bottomGradientView = UIView()
     private lazy var menuView = MenuView(Const.menuModels)
@@ -205,6 +206,7 @@ final class AddFoodViewController: UIViewController {
             infoButtonsView,
             segmentedScrollView,
             bottomGradientView,
+            microphoneButton,
             keyboardHeaderView,
             searshTextField,
             overlayView,
@@ -297,6 +299,13 @@ final class AddFoodViewController: UIViewController {
             make.width.equalTo(searshTextField.snp.height).multipliedBy(4.66)
             make.bottom.lessThanOrEqualTo(keyboardHeaderView.snp.bottom).offset(-20)
             make.bottom.equalTo(tabBarStackView.snp.top).offset(-12).priority(.low)
+        }
+        
+        microphoneButton.aspectRatio()
+        microphoneButton.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().offset(-20)
+            make.leading.equalTo(searshTextField.snp.trailing).offset(12)
+            make.bottom.equalTo(tabBarStackView.snp.top).offset(-12)
         }
         
         keyboardHeaderView.snp.makeConstraints { make in
@@ -470,6 +479,8 @@ final class AddFoodViewController: UIViewController {
     @objc private func didTapCalorieButton() {}
     
     @objc private func didTapScanButton() {}
+    
+    @objc private func didTapMicrophoneButton() {}
 }
 
 // MARK: - FoodCollectionViewController Delegate
@@ -665,6 +676,18 @@ private extension AddFoodViewController {
             ),
             for: .touchUpInside
         )
+        return button
+    }
+    
+    func getMicrophoneButton() -> UIButton {
+        let button = UIButton()
+        button.addTarget(self, action: #selector(didTapMicrophoneButton), for: .touchUpInside)
+        button.setImage(R.image.addFood.menu.micro(), for: .normal)
+        button.backgroundColor = R.color.addFood.menu.isNotSelectedBorder()
+        button.imageView?.tintColor = R.color.addFood.menu.isSelectedBorder()
+        button.layer.cornerRadius = 16
+        button.layer.borderWidth = 1
+        button.layer.borderColor = R.color.addFood.menu.isSelectedBorder()?.cgColor
         return button
     }
 }
