@@ -193,6 +193,7 @@ final class AddFoodViewController: UIViewController {
         view.addSubviews(
             tabBarStackView,
             foodCollectionViewController.view,
+            searchHistoryViewController.view,
             menuButton,
             infoButtonsView,
             segmentedScrollView,
@@ -201,8 +202,7 @@ final class AddFoodViewController: UIViewController {
             searshTextField,
             overlayView,
             menuView,
-            menuTypeSecondView,
-            searchHistoryViewController.view
+            menuTypeSecondView
         )
     }
     
@@ -265,7 +265,7 @@ final class AddFoodViewController: UIViewController {
         foodCollectionViewController.view.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.top.equalTo(infoButtonsView.snp.bottom).offset(4).priority(.low)
-            make.bottom.equalTo(tabBarStackView.snp.top).offset(-64)
+            make.bottom.equalTo(searshTextField.snp.top)
         }
         
         searchHistoryViewController.view.snp.makeConstraints { make in
