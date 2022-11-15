@@ -12,7 +12,7 @@ final class BasicButtonNode: CTWidgetButtonNode {
         let layer = CAGradientLayer()
         switch type {
         case .custom(let model):
-            layer.colors = model.gradientColors.map { ($0 ?? .white).cgColor }
+            layer.colors = model.gradientColors?.map { ($0 ?? .white).cgColor }
         case .add, .apply, .save:
             layer.colors = Color.gradientColors.compactMap { $0?.cgColor }
         }
@@ -29,6 +29,17 @@ final class BasicButtonNode: CTWidgetButtonNode {
     var active: Bool = true {
         didSet {
             if !active { didEnterInactive() }
+        }
+    }
+    
+    var isPressTitle: String? {
+        didSet {
+            setupButton(isPress: false)
+        }
+    }
+    var defaultTitle: String? {
+        didSet {
+            setupButton(isPress: false)
         }
     }
     
@@ -75,14 +86,23 @@ final class BasicButtonNode: CTWidgetButtonNode {
     override func layoutDidFinish() {
         super.layoutDidFinish()
         gradientLayer.frame = frame
-        if active { backgroundColor = gradientLayer.gradientColor() }
+        if active {
+            switch type {
+            case .add, .save, .apply:
+                backgroundColor = gradientLayer.gradientColor()
+            case .custom(let model):
+                if model.gradientColors != nil {
+                    backgroundColor = gradientLayer.gradientColor()
+                }
+            }
+        }
     }
     
     private func setupView() {
         automaticallyManagesSubnodes = true
         layer.cornerCurve = .continuous
         layer.cornerRadius = 16
-        borderWidth = 1
+        borderWidth = 2
         setupButton(isPress: false)
     }
     
@@ -100,9 +120,7 @@ final class BasicButtonNode: CTWidgetButtonNode {
             textNode.attributedText = getAttributedString(string: Text.apply, color: .white)
         case .custom(let model):
             iconNode.image = model.image?.inactiveImage
-            if let text = model.title {
-                textNode.attributedText = getAttributedString(string: text.defaultTitle, color: .white)
-            }
+            textNode.attributedText = getAttributedString(string: defaultTitle ?? "", color: .white)
         }
     }
     
@@ -124,12 +142,18 @@ final class BasicButtonNode: CTWidgetButtonNode {
                 color: isPress ? Color.borderColor : UIColor.white
             )
         case .custom(let model):
-            borderColor = model.borderColorDefault?.cgColor
+            borderColor = isPress
+            ? model.borderColorPress?.cgColor
+            : model.borderColorDefault?.cgColor
+            
+            backgroundColor = isPress
+            ? model.backgroundColorPress
+            : model.backgroundColorDefault
             
             iconNode.image = isPress ? model.image?.isPressImage : model.image?.defaultImage
             if let text = model.title {
                 textNode.attributedText = getAttributedString(
-                    string: isPress ? text.isPressTitle : text.defaultTitle,
+                    string: (isPress ? isPressTitle : defaultTitle) ?? "",
                     color: isPress ? text.isPressTitleColor : text.defaultTitleColor
                 )
             }

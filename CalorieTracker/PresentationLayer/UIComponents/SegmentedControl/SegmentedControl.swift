@@ -13,7 +13,7 @@ final class SegmentedControl<ID>: UIView {
     private let buttons: [Button]
     private var firstDraw = true
     
-    private var selectedButton: Button? {
+    var selectedButton: Button? {
         didSet {
             UIView.animate(withDuration: 0.15, delay: 0, options: .curveEaseOut) {
                 self.selectorView.frame = self.selectedButton?.superview?.frame ?? CGRect.zero
@@ -36,6 +36,8 @@ final class SegmentedControl<ID>: UIView {
         return stack
     }()
     
+    private var flag = true
+    
     var onSegmentChanged: ((Button.Model) -> Void)?
     var textNormalColor: UIColor? = .black
     var textSelectedColor: UIColor? = .green
@@ -45,6 +47,26 @@ final class SegmentedControl<ID>: UIView {
                 button.font = font
             }
         }
+    }
+    var insets: UIEdgeInsets? {
+        didSet {
+            guard let insets = insets else { return }
+            stack.snp.remakeConstraints { make in
+                make.top.equalToSuperview().offset(insets.top)
+                make.bottom.equalToSuperview().offset(-insets.bottom)
+                make.leading.equalToSuperview().offset(insets.left)
+                make.trailing.equalToSuperview().offset(-insets.right)
+            }
+        }
+    }
+    
+    var distribution: UIStackView.Distribution {
+        get { stack.distribution }
+        set { stack.distribution = newValue }
+    }
+    var selectorRadius: CGFloat {
+        get { selectorView.layer.cornerRadius }
+        set { selectorView.layer.cornerRadius = newValue }
     }
     
     init(_ buttons: [Button.Model]) {
@@ -72,6 +94,7 @@ final class SegmentedControl<ID>: UIView {
         layer.cornerCurve = .circular
   
         selectedButton = buttons.first
+
         buttons.first?.isSelected = true
         buttons.forEach { button in
             let view = UIView()
@@ -93,7 +116,11 @@ final class SegmentedControl<ID>: UIView {
         addSubviews([selectorView, stack])
         
         stack.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.bottom.left.right.equalToSuperview()
+        }
+        
+        selectorView.snp.makeConstraints { make in
+            make.edges.equalTo(stack.arrangedSubviews.first ?? stack)
         }
     }
     

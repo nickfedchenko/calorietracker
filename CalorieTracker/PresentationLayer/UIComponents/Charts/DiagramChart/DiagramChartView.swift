@@ -7,11 +7,69 @@
 
 import UIKit
 
+protocol WidgetChart: UIView {
+    func setChartFormat(_ format: ChartFormat)
+}
+
 protocol DiagramChartViewInterface: AnyObject {
     func getCountHorizontalLines() -> Int
+    func getChartType() -> DiagramChartView.DiagramChartType
 }
 
 final class DiagramChartView: UIView {
+    enum DiagramChartType {
+        case calories
+        case carb
+        case steps
+        case water
+        case activity
+        
+        func getTitle() -> String {
+            switch self {
+            case .calories:
+                return "CALORIES"
+            case .carb:
+                return "CARBOHYDRATES"
+            case .steps:
+                return "STEPS"
+            case .water:
+                return "WATER"
+            case .activity:
+                return "ACTIVITY ENERGY"
+            }
+        }
+        
+        func getPostfix() -> String {
+            switch self {
+            case .calories:
+                return "Cal"
+            case .carb:
+                return "g"
+            case .steps:
+                return ""
+            case .water:
+                return "ml"
+            case .activity:
+                return "Kcal"
+            }
+        }
+        
+        func getColor() -> UIColor? {
+            switch self {
+            case .calories:
+                return R.color.progressScreen.calories()
+            case .carb:
+                return R.color.progressScreen.carb()
+            case .steps:
+                return R.color.progressScreen.steps()
+            case .water:
+                return R.color.progressScreen.water()
+            case .activity:
+                return R.color.progressScreen.active()
+            }
+        }
+    }
+    
     private var presenter: DiagramChartViewPresenterInterface?
     
     private let diagramChart = DiagramChart()
@@ -86,6 +144,15 @@ final class DiagramChartView: UIView {
         return stack
     }()
     
+    private lazy var messageLabel: UILabel = {
+        let label = UILabel()
+        label.font = R.font.sfProDisplaySemibold(size: 22)
+        label.textColor = R.color.diagramChart.message()
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        return label
+    }()
+    
     var backgroundLinesColor: UIColor? {
         get { diagramChart.backgroundLinesColor }
         set { diagramChart.backgroundLinesColor = newValue }
@@ -118,14 +185,15 @@ final class DiagramChartView: UIView {
     }
     
     var data: ChartData?
+    let chartType: DiagramChartType
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(_ type: DiagramChartType) {
+        self.chartType = type
+        super.init(frame: .zero)
         presenter = DiagramChartViewPresenter(view: self)
         setupView()
+        setupConstraints()
         setupData()
-        
-        goalValue = 2500
     }
     
     required init?(coder: NSCoder) {
@@ -133,15 +201,42 @@ final class DiagramChartView: UIView {
     }
     
     private func setupData() {
-        guard let chartData = presenter?.getData(chartFormat) else { return }
+        guard let chartData = presenter?.getData(chartFormat), !chartData.data.isEmpty else {
+            diagramChart.isHidden = true
+            leftBottomLabel.layer.opacity = 0
+            rightTopLabel.isHidden = true
+            leftBottomDateLabel.isHidden = true
+            rightBottomDateLabel.isHidden = true
+            middleBottomDateLabel.isHidden = true
+            messageLabel.isHidden = false
+            messageLabel.text = "There are no measurements. Your first \(chartFormat.rawValue) has not yet passed"
+            return
+        }
+        leftBottomLabel.layer.opacity = 1
+        rightBottomLabel.isHidden = false
+        leftBottomDateLabel.isHidden = false
+        rightBottomDateLabel.isHidden = false
+        middleBottomDateLabel.isHidden = false
+        messageLabel.isHidden = true
+        diagramChart.isHidden = false
+        
         self.data = chartData
-        diagramChart.data = chartData.data
+        diagramChart.defaultColumnColor = chartType == .calories
+        ? R.color.diagramChart.backgroundLines()
+        : chartType.getColor()?.withAlphaComponent(0.5)
         diagramChart.verticalStep = chartData.step
+        diagramChart.moreGoal = chartType == .calories
+        goalValue = chartData.goal
         diagramChart.countColumns = max(
             (chartData.data.keys.max() ?? 0) + 1,
             chartFormat == .daily ? 7 : chartFormat == .weekly ? 8 : 6
         )
+        diagramChart.data = chartData.data
         
+        configureLabels(chartData: chartData)
+    }
+    
+    private func configureLabels(chartData: ChartData) {
         switch chartFormat {
         case .daily:
             leftBottomLabel.text = "Last \((chartData.data.keys.max() ?? 0 ) + 1) Days"
@@ -152,7 +247,8 @@ final class DiagramChartView: UIView {
         }
         
         let maxValue = CGFloat(getCountHorizontalLines() * chartData.step)
-        rightTopLabel.text = "\(Int(chartData.data.values.sum() / CGFloat(chartData.data.count) * maxValue)) Cal"
+        let text = "\(Int(chartData.data.values.sum() / CGFloat(chartData.data.count) * maxValue)) "
+        rightTopLabel.text = text + chartType.getPostfix()
     
         if let startDate = presenter?.getStartDate(chartFormat) {
             let calendar = Calendar.current
@@ -167,11 +263,13 @@ final class DiagramChartView: UIView {
             )
         }
         rightBottomDateLabel.text = stringForDate(Date())
-        
     }
     
     private func setupView() {
-        leftTopLabel.text = "CALORIES"
+        diagramChart.columnColor = chartType.getColor()
+        rightTopLabel.textColor = chartType.getColor()
+        leftTopLabel.text = chartType.getTitle()
+        leftTopLabel.textColor = chartType.getColor()
         rightBottomLabel.text = "Daily Average"
         
         backgroundColor = .white
@@ -189,9 +287,12 @@ final class DiagramChartView: UIView {
             diagramChart,
             leftBottomDateLabel,
             middleBottomDateLabel,
-            rightBottomDateLabel
+            rightBottomDateLabel,
+            messageLabel
         ])
-        
+    }
+    
+    private func setupConstraints() {
         leftStack.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(14)
             make.leading.equalToSuperview().offset(16)
@@ -222,6 +323,11 @@ final class DiagramChartView: UIView {
         rightBottomDateLabel.snp.makeConstraints { make in
             make.top.equalTo(diagramChart.snp.bottom).offset(7)
             make.trailing.equalTo(diagramChart.snp.trailing)
+        }
+        
+        messageLabel.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(16)
         }
     }
     
@@ -262,7 +368,17 @@ final class DiagramChartView: UIView {
     }
 }
 
+extension DiagramChartView: WidgetChart {
+    func setChartFormat(_ format: ChartFormat) {
+        chartFormat = format
+    }
+}
+
 extension DiagramChartView: DiagramChartViewInterface {
+    func getChartType() -> DiagramChartType {
+        self.chartType
+    }
+    
     func getCountHorizontalLines() -> Int {
         diagramChart.countHorizontalLines
     }

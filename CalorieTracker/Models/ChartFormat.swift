@@ -7,8 +7,8 @@
 
 import Foundation
 
-enum ChartFormat {
-    case daily
-    case weekly
-    case monthly
+enum ChartFormat: String {
+    case daily = "day"
+    case weekly = "week"
+    case monthly = "month"
 }
