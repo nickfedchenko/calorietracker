@@ -18,6 +18,31 @@
         <attribute name="updatedAt" attributeType="String"/>
         <attribute name="videoURL" optional="YES" attributeType="URI"/>
         <attribute name="weight" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="foodData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainFoodData" inverseName="dish" inverseEntity="DomainFoodData"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="DomainFoodData" representedClassName="DomainFoodData" syncable="YES">
+        <attribute name="dateLastUse" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="favorites" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="id" attributeType="String"/>
+        <attribute name="numberUses" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="dish" optional="YES" maxCount="1" deletionRule="No Action" destinationEntity="DomainDish" inverseName="foodData" inverseEntity="DomainDish"/>
+        <relationship name="product" optional="YES" maxCount="1" deletionRule="No Action" destinationEntity="DomainProduct" inverseName="foodData" inverseEntity="DomainProduct"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="DomainMeal" representedClassName="DomainMeal" syncable="YES">
+        <attribute name="id" attributeType="String"/>
+        <attribute name="mealTime" attributeType="String"/>
+        <relationship name="dishes" optional="YES" toMany="YES" deletionRule="No Action" destinationEntity="DomainDish"/>
+        <relationship name="products" optional="YES" toMany="YES" deletionRule="No Action" destinationEntity="DomainProduct"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="id"/>
@@ -39,6 +64,7 @@
         <attribute name="protein" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="servings" optional="YES" attributeType="Binary"/>
         <attribute name="title" attributeType="String"/>
+        <relationship name="foodData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainFoodData" inverseName="product" inverseEntity="DomainFoodData"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="id"/>
@@ -46,7 +72,9 @@
         </uniquenessConstraints>
     </entity>
     <elements>
-        <element name="DomainDish" positionX="-54" positionY="108" width="128" height="284"/>
-        <element name="DomainProduct" positionX="-63" positionY="-9" width="128" height="239"/>
+        <element name="DomainDish" positionX="-54" positionY="108" width="128" height="299"/>
+        <element name="DomainFoodData" positionX="-54" positionY="153" width="128" height="119"/>
+        <element name="DomainMeal" positionX="-36" positionY="162" width="128" height="89"/>
+        <element name="DomainProduct" positionX="-63" positionY="-9" width="128" height="254"/>
     </elements>
 </model>

@@ -25,6 +25,10 @@
 	</dict>
 	<key>UIAppFonts</key>
 	<array>
+		<string>SF-Pro-Display-Bold.otf</string>
+		<string>SF-Pro-Text-Medium.otf</string>
+		<string>SF-Pro-Text-MediumItalic.otf</string>
+		<string>SFProText-Regular.otf</string>
 		<string>SFProDisplay-Semibold.ttf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>

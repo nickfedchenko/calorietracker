@@ -11,17 +11,12 @@ final class SegmentedControl<ID>: UIView {
     typealias Button = SegmentedButton<ID>
     
     private let buttons: [Button]
+    private var firstDraw = true
     
     var selectedButton: Button? {
         didSet {
-            let rect = self.selectedButton?.superview?.frame ?? CGRect.zero
-            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut) {
-                self.selectorView.frame = CGRect(
-                    x: (self.insets?.left ?? 0) + rect.origin.x,
-                    y: (self.insets?.top ?? 0) + rect.origin.y,
-                    width: rect.width,
-                    height: rect.height
-                )
+            UIView.animate(withDuration: 0.15, delay: 0, options: .curveEaseOut) {
+                self.selectorView.frame = self.selectedButton?.superview?.frame ?? CGRect.zero
             }
         }
     }
@@ -31,17 +26,13 @@ final class SegmentedControl<ID>: UIView {
         view.backgroundColor = .white
         view.layer.cornerRadius = 8
         view.layer.cornerCurve = .circular
-        view.layer.shadowRadius = 18
-        view.layer.shadowColor = UIColor.black.cgColor
-        view.layer.shadowOpacity = 0.1
-        view.layer.shadowOffset = .init(width: 0, height: 4)
-        
         return view
     }()
     
     private lazy var stack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
+        stack.distribution = .fill
         return stack
     }()
     
@@ -88,18 +79,29 @@ final class SegmentedControl<ID>: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        setupShadow()
+        guard firstDraw, let button = buttons.first, button.frame != .zero else { return }
+        selectedButton = buttons.first
+        setupShadow()
+        firstDraw = false
+    }
 
     private func setupViews() {
         layer.cornerRadius = 8
         layer.cornerCurve = .circular
-        
+  
+        selectedButton = buttons.first
+
         buttons.first?.isSelected = true
         buttons.forEach { button in
             let view = UIView()
             view.addSubview(button)
             button.snp.makeConstraints { make in
                 make.top.bottom.equalToSuperview()
-                make.leading.trailing.equalToSuperview().inset(10.5)
+                make.leading.trailing.equalToSuperview().inset(25.5)
             }
             stack.addArrangedSubview(view)
             button.addTarget(
@@ -116,10 +118,20 @@ final class SegmentedControl<ID>: UIView {
         stack.snp.makeConstraints { make in
             make.top.bottom.left.right.equalToSuperview()
         }
-        
-        selectorView.snp.makeConstraints { make in
-            make.edges.equalTo(stack.arrangedSubviews.first ?? stack)
-        }
+    }
+    
+    private func setupShadow() {
+        selectorView.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
+        selectorView.layer.addShadow(
+            shadow: ShadowConst.firstShadow,
+            rect: selectorView.bounds,
+            cornerRadius: 8
+        )
+        selectorView.layer.addShadow(
+            shadow: ShadowConst.secondShadow,
+            rect: selectorView.bounds,
+            cornerRadius: 8
+        )
     }
     
     @objc private func didTapSegmentedButton(_ sender: UIButton) {
@@ -130,6 +142,21 @@ final class SegmentedControl<ID>: UIView {
         selectedButton = button
         onSegmentChanged?(button.model)
     }
+}
+
+private struct ShadowConst {
+    static let firstShadow = Shadow(
+        color: R.color.addFood.menu.firstShadow() ?? .black,
+        opacity: 0.2,
+        offset: CGSize(width: 0, height: 4),
+        radius: 10
+    )
+    static let secondShadow = Shadow(
+        color: R.color.addFood.menu.secondShadow() ?? .black,
+        opacity: 0.25,
+        offset: CGSize(width: 0, height: 0.5),
+        radius: 2
+    )
 }
 
 enum HistoryHeaderButtonType {

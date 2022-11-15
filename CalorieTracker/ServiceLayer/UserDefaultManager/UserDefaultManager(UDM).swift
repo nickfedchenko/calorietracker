@@ -11,6 +11,7 @@ final class UDM {
     enum UDMKeys: String {
         case globalIsMetric, weightIsMetric, lengthIsMetric, energyIsMetric
         case liquidCapacityIsMetric, servingWeightIsMetric
+        case searchHistory
         case weight, calories, bmi, water, carb, dietary, protein, steps, exercises, active
         case weightGoal, caloriesGoal, bmiGoal, waterGoal, carbGoal, stepsGoal, exercisesGoal, activeGoal
         case widgetSettings
@@ -106,6 +107,20 @@ final class UDM {
                 UDM.isGloballyMetric = false
             }
             setValue(value: newValue, for: .servingWeightIsMetric)
+        }
+    }
+    
+    static var searchHistory: [String] {
+        get {
+            guard let data: Data = getValue(for: .searchHistory),
+                  let value = try? JSONDecoder().decode([String].self, from: data) else {
+                return []
+            }
+            return value
+        }
+        set {
+            let data = try? JSONEncoder().encode(newValue)
+            setValue(value: data, for: .searchHistory)
         }
     }
     
@@ -370,7 +385,9 @@ final class UDM {
             setValue(value: data, for: .widgetSettings)
         }
     }
-    
+}
+
+extension UDM {
     private static func setValue<T>(value: T, for key: UDMKeys) {
         UserDefaults.standard.set(value, forKey: key.rawValue)
     }

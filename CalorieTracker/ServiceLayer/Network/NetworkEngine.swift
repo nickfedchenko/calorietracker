@@ -129,6 +129,8 @@ enum RequestGenerator {
 
 final class NetworkEngine {
     
+    static let shared: NetworkEngineInterface = NetworkEngine()
+    
     /// Core method
     /// - Parameters:
     ///   - request: прокидываем сюда значение enum RequestGenerator, который собирает request  c нужными параметрами
