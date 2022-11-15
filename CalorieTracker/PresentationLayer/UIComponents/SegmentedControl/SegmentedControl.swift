@@ -118,10 +118,6 @@ final class SegmentedControl<ID>: UIView {
         stack.snp.makeConstraints { make in
             make.top.bottom.left.right.equalToSuperview()
         }
-        
-        selectorView.snp.makeConstraints { make in
-            make.edges.equalTo(stack.arrangedSubviews.first ?? stack)
-        }
     }
     
     private func setupShadow() {
