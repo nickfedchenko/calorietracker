@@ -108,7 +108,7 @@ struct Product: Codable {
 }
 
 struct Composition: Codable {
-    private var vitaminA, vitaminD, vitaminC, vitaminK, vitaminB1, calcium, sugar, salt,
+    private(set) var vitaminA, vitaminD, vitaminC, vitaminK, vitaminB1, calcium, sugar, salt,
                 fiber, saturatedFat, unsaturatedFat, transFat, sodium, cholesterol, potassium,
                 sugarAlc, iron, magnesium, phosphorus, zinc, copper, manganese,
                 selenium, fluoride, vitB2, vitB3, vitB5, vitB6, vitB7, vitB9, vitB12,

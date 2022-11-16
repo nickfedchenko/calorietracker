@@ -33,6 +33,7 @@ final class FoodViewingViewController: UIViewController {
     }()
     
     private lazy var headerImageView = HeaderImageView()
+    private lazy var nutritionFactsView = NutritionFactsView()
     
     // MARK: - Override
     
@@ -41,6 +42,9 @@ final class FoodViewingViewController: UIViewController {
         setupView()
         addSubviews()
         setupConstraints()
+        
+        guard let product = DSF.shared.getAllStoredProducts().first else { return }
+        nutritionFactsView.viewModel = .init(product)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -59,7 +63,11 @@ final class FoodViewingViewController: UIViewController {
     }
     
     private func addSubviews() {
-        mainScrollView.addSubviews(titleLabel, headerImageView)
+        mainScrollView.addSubviews(
+            titleLabel,
+            headerImageView,
+            nutritionFactsView
+        )
         
         view.addSubviews(mainScrollView)
     }
@@ -78,6 +86,11 @@ final class FoodViewingViewController: UIViewController {
             make.leading.trailing.equalTo(view).inset(20)
             make.top.equalTo(titleLabel.snp.bottom).offset(16)
             make.height.equalTo(headerImageView.snp.width).multipliedBy(0.65)
+        }
+        
+        nutritionFactsView.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(view).inset(20)
+            make.top.equalTo(headerImageView.snp.bottom).offset(16)
             make.bottom.equalToSuperview()
         }
     }
