@@ -34,6 +34,7 @@ final class FoodViewingViewController: UIViewController {
     
     private lazy var headerImageView = HeaderImageView()
     private lazy var nutritionFactsView = NutritionFactsView()
+    private lazy var dailyFoodIntakeView = DailyFoodIntakeView()
     
     // MARK: - Override
     
@@ -66,7 +67,8 @@ final class FoodViewingViewController: UIViewController {
         mainScrollView.addSubviews(
             titleLabel,
             headerImageView,
-            nutritionFactsView
+            nutritionFactsView,
+            dailyFoodIntakeView
         )
         
         view.addSubviews(mainScrollView)
@@ -88,9 +90,15 @@ final class FoodViewingViewController: UIViewController {
             make.height.equalTo(headerImageView.snp.width).multipliedBy(0.65)
         }
         
-        nutritionFactsView.snp.makeConstraints { make in
+        dailyFoodIntakeView.aspectRatio(0.45)
+        dailyFoodIntakeView.snp.makeConstraints { make in
             make.leading.trailing.equalTo(view).inset(20)
             make.top.equalTo(headerImageView.snp.bottom).offset(16)
+        }
+        
+        nutritionFactsView.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(view).inset(20)
+            make.top.equalTo(dailyFoodIntakeView.snp.bottom).offset(16)
             make.bottom.equalToSuperview()
         }
     }

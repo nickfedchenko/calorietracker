@@ -66,12 +66,8 @@ final class StatisticsCircleView: UIView {
         return label
     }()
     
-    init(from: CGFloat, to: CGFloat) {
-        super.init(frame: .zero)
-        firstShape.strokeStart = 0
-        firstShape.strokeEnd = from
-        secondShape.strokeStart = from
-        secondShape.strokeEnd = from + to
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         setupView()
     }
     
@@ -102,6 +98,13 @@ final class StatisticsCircleView: UIView {
             $0.frame = bounds
             $0.path = parh?.cgPath
         }
+    }
+    
+    func configure(from: CGFloat, to: CGFloat) {
+        firstShape.strokeStart = 0
+        firstShape.strokeEnd = from
+        secondShape.strokeStart = from
+        secondShape.strokeEnd = from + to
     }
     
     private func setupView() {
