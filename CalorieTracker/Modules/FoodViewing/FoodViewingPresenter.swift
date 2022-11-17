@@ -9,7 +9,8 @@
 import Foundation
 
 protocol FoodViewingPresenterInterface: AnyObject {
-
+    func getDailyFoodIntake() -> DailyFoodIntake
+    func didTapCloseButton()
 }
 
 class FoodViewingPresenter {
@@ -30,5 +31,11 @@ class FoodViewingPresenter {
 }
 
 extension FoodViewingPresenter: FoodViewingPresenterInterface {
+    func getDailyFoodIntake() -> DailyFoodIntake {
+        return .init(fat: 100, protein: 100, kcal: 100, carb: 100)
+    }
     
+    func didTapCloseButton() {
+        router?.closeViewController()
+    }
 }

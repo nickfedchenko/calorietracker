@@ -6,16 +6,16 @@
 //  Copyright © 2022 Mov4D. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
 protocol FoodViewingRouterInterface: AnyObject {
-
+    func closeViewController()
 }
 
 class FoodViewingRouter: NSObject {
 
     weak var presenter: FoodViewingPresenterInterface?
+    weak var viewController: UIViewController?
 
     static func setupModule() -> FoodViewingViewController {
         let vc = FoodViewingViewController()
@@ -25,11 +25,14 @@ class FoodViewingRouter: NSObject {
 
         vc.presenter = presenter
         router.presenter = presenter
+        router.viewController = vc
         interactor.presenter = presenter
         return vc
     }
 }
 
 extension FoodViewingRouter: FoodViewingRouterInterface {
-
+    func closeViewController() {
+        viewController?.dismiss(animated: true)
+    }
 }
