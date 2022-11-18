@@ -13,7 +13,7 @@ final class VerticalButton: UIControl {
         return label
     }()
     
-    private let imageView: UIImageView = {
+    let imageView: UIImageView = {
         let view = UIImageView()
         return view
     }()
@@ -72,8 +72,8 @@ final class VerticalButton: UIControl {
 extension VerticalButton {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
-        imageView.image = imageAndStates[.highlighted] ?? imageAndStates.first?.value ?? nil
-        titleLabel.text = titleAndStates[.highlighted] ?? titleAndStates.first?.value ?? nil
+        imageView.image = imageAndStates[.highlighted] ?? imageAndStates.first?.value
+        titleLabel.text = titleAndStates[.highlighted] ?? titleAndStates.first?.value
         titleLabel.textColor = titleColorAndStates[.highlighted]
             ?? titleColorAndStates.first?.value
             ?? .black
@@ -89,8 +89,8 @@ extension VerticalButton {
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
-        imageView.image = imageAndStates[.normal] ?? imageAndStates.first?.value ?? nil
-        titleLabel.text = titleAndStates[.normal] ?? titleAndStates.first?.value ?? nil
+        imageView.image = imageAndStates[.normal] ?? imageAndStates.first?.value
+        titleLabel.text = titleAndStates[.normal] ?? titleAndStates.first?.value
         titleLabel.textColor = titleColorAndStates[.normal]
             ?? titleColorAndStates.first?.value
             ?? .black
