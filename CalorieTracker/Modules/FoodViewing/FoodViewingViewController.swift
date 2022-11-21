@@ -21,11 +21,16 @@ final class FoodViewingViewController: UIViewController {
     private lazy var titleLabel: UILabel = getTitleLabel()
     private lazy var bottomCloseButton: UIButton = getBottomCloseButton()
     private lazy var keyboardHeaderView: UIView = getKeyboardHeaderView()
+    private lazy var valueTextField: InnerShadowTextField = getValueTextField()
+    private lazy var addButton: BasicButtonView = getAddButton()
     
     private lazy var bottomBackgroundView: UIView = UIView()
     private lazy var headerImageView = HeaderImageView()
     private lazy var nutritionFactsView = NutritionFactsView()
     private lazy var dailyFoodIntakeView = DailyFoodIntakeView()
+    
+    private let speechRecognitionManager: SpeechRecognitionManager = .init()
+    private var speechRecognitionTask: Task<Void, Error>?
     
     private var contentViewBottomAnchor: NSLayoutConstraint?
     private var firstDraw = true
@@ -88,6 +93,7 @@ final class FoodViewingViewController: UIViewController {
     
     private func setupView() {
         view.backgroundColor = R.color.foodViewing.background()
+        nutritionFactsView.layer.opacity = 0.5
         
         headerImageView.didTapLike = { value in
             print(value)
@@ -105,14 +111,16 @@ final class FoodViewingViewController: UIViewController {
         view.addSubviews(
             mainScrollView,
             bottomBackgroundView,
-            bottomCloseButton
+            bottomCloseButton,
+            addButton,
+            valueTextField
         )
     }
     
     private func setupConstraints() {
         mainScrollView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
-            make.bottom.equalTo(bottomBackgroundView.snp.centerY)
+            make.bottom.equalTo(valueTextField.snp.top)
         }
         
         titleLabel.snp.makeConstraints { make in
@@ -140,13 +148,26 @@ final class FoodViewingViewController: UIViewController {
         
         bottomBackgroundView.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
-            make.height.equalToSuperview().multipliedBy(0.33)
+            make.height.equalToSuperview().multipliedBy(0.35)
         }
         
         bottomCloseButton.snp.makeConstraints { make in
             make.bottom.equalToSuperview().offset(-24)
             make.centerX.equalToSuperview()
             make.width.equalToSuperview().multipliedBy(0.155)
+        }
+        
+        addButton.aspectRatio(0.17)
+        addButton.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(20)
+            make.bottom.equalTo(bottomCloseButton.snp.top).offset(-20)
+        }
+        
+        valueTextField.aspectRatio(0.73)
+        valueTextField.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(20)
+            make.bottom.equalTo(addButton.snp.top).offset(-12)
+            make.height.equalTo(addButton)
         }
     }
     
@@ -163,7 +184,7 @@ final class FoodViewingViewController: UIViewController {
                 R.color.foodViewing.background()?.withAlphaComponent(0)
             ],
             axis: .vertical(.bottom),
-            locations: [0.6, 1.0]
+            locations: [0.85, 1.0]
         ))
         
         bottomBackgroundView.layer.addSublayer(gradientLayer)
@@ -214,6 +235,18 @@ extension FoodViewingViewController: FoodViewingViewControllerInterface {
 
 }
 
+// MARK: - ScrollView Delegate
+
+extension FoodViewingViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.y > headerImageView.frame.maxY / 2.0 {
+            nutritionFactsView.animate(.opacity(1), 0.5)
+        } else {
+            nutritionFactsView.animate(.opacity(0.5), 0.5)
+        }
+    }
+}
+
 // MARK: - Factory
 
 extension FoodViewingViewController {
@@ -239,6 +272,8 @@ extension FoodViewingViewController {
         view.bounces = true
         view.showsVerticalScrollIndicator = false
         view.showsHorizontalScrollIndicator = false
+        view.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 30, right: 0)
+        view.delegate = self
         return view
     }
     
@@ -249,5 +284,24 @@ extension FoodViewingViewController {
         label.numberOfLines = 0
         label.text = "Apple"
         return label
+    }
+    
+    func getValueTextField() -> InnerShadowTextField {
+        let textField = InnerShadowTextField()
+        textField.innerShadowColor = R.color.foodViewing.basicSecondaryDark()
+        textField.layer.borderWidth = 1
+        textField.layer.borderColor = R.color.foodViewing.basicSecondaryDark()?.cgColor
+        textField.layer.cornerCurve = .continuous
+        textField.layer.cornerRadius = 16
+        textField.layer.masksToBounds = true
+        textField.backgroundColor = .white
+        textField.textAlignment = .center
+        return textField
+    }
+    
+    func getAddButton() -> BasicButtonView {
+        let button = BasicButtonView(type: .add)
+        
+        return button
     }
 }
