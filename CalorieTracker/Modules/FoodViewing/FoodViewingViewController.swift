@@ -23,6 +23,7 @@ final class FoodViewingViewController: UIViewController {
     private lazy var keyboardHeaderView: UIView = getKeyboardHeaderView()
     private lazy var valueTextField: InnerShadowTextField = getValueTextField()
     private lazy var addButton: BasicButtonView = getAddButton()
+    private lazy var selectView: SelectView = getSelectView()
     
     private lazy var bottomBackgroundView: UIView = UIView()
     private lazy var headerImageView = HeaderImageView()
@@ -113,7 +114,8 @@ final class FoodViewingViewController: UIViewController {
             bottomBackgroundView,
             bottomCloseButton,
             addButton,
-            valueTextField
+            valueTextField,
+            selectView
         )
     }
     
@@ -168,6 +170,12 @@ final class FoodViewingViewController: UIViewController {
             make.leading.equalToSuperview().offset(20)
             make.bottom.equalTo(addButton.snp.top).offset(-12)
             make.height.equalTo(addButton)
+        }
+        
+        selectView.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().offset(-14)
+            make.leading.equalTo(valueTextField.snp.trailing).offset(6)
+            make.centerY.equalTo(valueTextField)
         }
     }
     
@@ -303,5 +311,9 @@ extension FoodViewingViewController {
         let button = BasicButtonView(type: .add)
         
         return button
+    }
+    
+    func getSelectView() -> SelectView<FoodViewingWeightType> {
+        SelectView(FoodViewingWeightType.allCases)
     }
 }
