@@ -32,6 +32,7 @@
         <attribute name="numberUses" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="dish" optional="YES" maxCount="1" deletionRule="No Action" destinationEntity="DomainDish" inverseName="foodData" inverseEntity="DomainDish"/>
         <relationship name="product" optional="YES" maxCount="1" deletionRule="No Action" destinationEntity="DomainProduct" inverseName="foodData" inverseEntity="DomainProduct"/>
+        <relationship name="userProduct" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainUserProduct" inverseName="foodData" inverseEntity="DomainUserProduct"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="id"/>
@@ -71,10 +72,20 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
+    <entity name="DomainUserProduct" representedClassName="DomainUserProduct" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <relationship name="foodData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainFoodData" inverseName="userProduct" inverseEntity="DomainFoodData"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
     <elements>
         <element name="DomainDish" positionX="-54" positionY="108" width="128" height="299"/>
-        <element name="DomainFoodData" positionX="-54" positionY="153" width="128" height="119"/>
+        <element name="DomainFoodData" positionX="-54" positionY="153" width="128" height="134"/>
         <element name="DomainMeal" positionX="-36" positionY="162" width="128" height="89"/>
         <element name="DomainProduct" positionX="-63" positionY="-9" width="128" height="254"/>
+        <element name="DomainUserProduct" positionX="-54" positionY="153" width="128" height="59"/>
     </elements>
 </model>

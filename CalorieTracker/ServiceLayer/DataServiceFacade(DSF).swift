@@ -38,6 +38,11 @@ protocol DataServiceFacadeInterface {
     ///   - foodDataId: id модели FoodData
     ///   - productID: id модели Product
     func setChildFoodData(foodDataId: String, productID: Int)
+    /// Связывает модель FoodData с UserProduct
+    /// - Parameters:
+    ///   - foodDataId: id модели FoodData
+    ///   - userProductID: id модели UserProduct
+    func setChildFoodData(foodDataId: String, userProductID: String)
     /// Связывает модель Meal с Product и Dish
     /// - Parameters:
     ///   - mealId: id модели FoodData
@@ -67,6 +72,10 @@ extension DSF: DataServiceFacadeInterface {
     
     func setChildFoodData(foodDataId: String, productID: Int) {
         localPersistentStore.setChildFoodData(foodDataId: foodDataId, productID: productID)
+    }
+    
+    func setChildFoodData(foodDataId: String, userProductID: String) {
+        localPersistentStore.setChildFoodData(foodDataId: foodDataId, userProductID: userProductID)
     }
     
     func setChildMeal(mealId: String, dishesID: [Int], productsID: [Int]) {

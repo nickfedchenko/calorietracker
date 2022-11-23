@@ -20,6 +20,7 @@ protocol LocalDomainServiceInterface {
     func searchProducts(by phrase: String) -> [Product]
     func setChildFoodData(foodDataId: String, dishID: Int)
     func setChildFoodData(foodDataId: String, productID: Int)
+    func setChildFoodData(foodDataId: String, userProductID: String)
     func setChildMeal(mealId: String, dishesID: [Int], productsID: [Int])
 }
 
@@ -175,6 +176,24 @@ extension LocalDomainService: LocalDomainServiceInterface {
         
         foodData.product = product
         foodData.dish = nil
+        
+        try? context.save()
+    }
+    
+    func setChildFoodData(foodDataId: String, userProductID: String) {
+        let formatStrId = "id == %@"
+        let productRequest = NSFetchRequest<DomainUserProduct>(entityName: "DomainUserProduct")
+        let foodDataRequest = NSFetchRequest<DomainFoodData>(entityName: "DomainFoodData")
+
+        productRequest.predicate = NSPredicate(format: formatStrId, userProductID)
+        foodDataRequest.predicate = NSPredicate(format: formatStrId, foodDataId)
+        
+        guard let product = try? context.fetch(productRequest).first,
+              let foodData = try? context.fetch(foodDataRequest).first else { return }
+        
+        foodData.userProduct = product
+        foodData.dish = nil
+        foodData.product = nil
         
         try? context.save()
     }

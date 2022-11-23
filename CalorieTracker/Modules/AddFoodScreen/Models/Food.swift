@@ -10,4 +10,5 @@ import Foundation
 enum Food {
     case product(Product)
     case dishes(Dish)
+    case userProduct(UserProduct)
 }
