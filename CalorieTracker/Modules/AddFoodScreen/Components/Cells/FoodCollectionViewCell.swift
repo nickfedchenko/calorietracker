@@ -7,7 +7,9 @@
 
 import UIKit
 
-final class FoodCollectionViewCell: UICollectionViewCell {
+final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
+    var foodType: Food?
+    
     enum CellType {
         case table
         case withShadow

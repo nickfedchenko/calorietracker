@@ -14,6 +14,7 @@ protocol AddFoodPresenterInterface: AnyObject {
     func getFoodViewModel(_ model: Product) -> FoodCellView.FoodViewModel
     func getFoodViewModel(_ model: Dish) -> FoodCellView.FoodViewModel
     func didTapBackButton()
+    func didTapCell(_ type: Food)
 }
 
 final class AddFoodPresenter {
@@ -150,5 +151,16 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
     
     func didTapBackButton() {
         router?.closeViewController()
+    }
+    
+    func didTapCell(_ type: Food) {
+        switch type {
+        case .product(let product):
+            router?.openProductViewController(product)
+        case .dishes:
+            return
+        case .userProduct:
+            return
+        }
     }
 }

@@ -10,6 +10,7 @@ import UIKit
 
 protocol AddFoodRouterInterface: AnyObject {
     func closeViewController()
+    func openProductViewController(_ product: Product)
 }
 
 class AddFoodRouter: NSObject {
@@ -34,5 +35,11 @@ class AddFoodRouter: NSObject {
 extension AddFoodRouter: AddFoodRouterInterface {
     func closeViewController() {
         viewController?.navigationController?.popViewController(animated: true)
+    }
+    
+    func openProductViewController(_ product: Product) {
+        let productVC = ProductRouter.setupModule(product)
+        productVC.modalPresentationStyle = .fullScreen
+        viewController?.present(productVC, animated: true)
     }
 }

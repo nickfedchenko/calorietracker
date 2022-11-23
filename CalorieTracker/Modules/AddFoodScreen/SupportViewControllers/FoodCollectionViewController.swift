@@ -7,14 +7,19 @@
 
 import UIKit
 
-protocol FoodCollectionViewControllerDelegate: AnyObject {
+protocol FoodCollectionViewControllerDataSource: AnyObject {
     func cell(collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell
     func productsCount() -> Int
     func dishesCount() -> Int
     func mealsCount() -> Int
 }
 
+protocol FoodCollectionViewControllerDelegate: AnyObject {
+    func didSelectCell(_ type: Food)
+}
+
 final class FoodCollectionViewController: UIViewController {
+    weak var dataSource: FoodCollectionViewControllerDataSource?
     weak var delegate: FoodCollectionViewControllerDelegate?
     
     var isSelectedType: AddFood = .recent
@@ -76,7 +81,12 @@ final class FoodCollectionViewController: UIViewController {
 // MARK: - CollectionView Delegate
 
 extension FoodCollectionViewController: UICollectionViewDelegate {
-    
+    func collectionView(_ collectionView: UICollectionView,
+                        didSelectItemAt indexPath: IndexPath) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? FoodCellProtocol,
+               let type = cell.foodType else { return }
+        delegate?.didSelectCell(type)
+    }
 }
 
 extension FoodCollectionViewController: UICollectionViewDelegateFlowLayout {
@@ -120,10 +130,10 @@ extension FoodCollectionViewController: UICollectionViewDataSource {
         switch isSelectedType {
         case .frequent, .recent, .favorites:
             return section == 0
-                ? delegate?.productsCount() ?? 0
-                : delegate?.dishesCount() ?? 0
+                ? dataSource?.productsCount() ?? 0
+                : dataSource?.dishesCount() ?? 0
         case .myMeals:
-            return delegate?.mealsCount() ?? 0
+            return dataSource?.mealsCount() ?? 0
         case .myRecipes:
             return 0
         case .myFood:
@@ -133,7 +143,7 @@ extension FoodCollectionViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = delegate?.cell(
+        guard let cell = dataSource?.cell(
             collectionView: collectionView,
             indexPath: indexPath
         ) else {

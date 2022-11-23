@@ -142,6 +142,7 @@ final class AddFoodViewController: UIViewController {
         menuCreateView.isHidden = true
         
         searshTextField.delegate = self
+        foodCollectionViewController.dataSource = self
         foodCollectionViewController.delegate = self
         
         self.addChild(foodCollectionViewController)
@@ -370,9 +371,11 @@ final class AddFoodViewController: UIViewController {
             case 0:
                 let model = products[indexPath.row]
                 cell.configure(presenter?.getFoodViewModel(model))
+                cell.foodType = .product(model)
             case 1:
                 let model = dishes[indexPath.row]
                 cell.configure(presenter?.getFoodViewModel(model))
+                cell.foodType = .dishes(model)
             default:
                 break
             }
@@ -486,6 +489,14 @@ final class AddFoodViewController: UIViewController {
 // MARK: - FoodCollectionViewController Delegate
 
 extension AddFoodViewController: FoodCollectionViewControllerDelegate {
+    func didSelectCell(_ type: Food) {
+        presenter?.didTapCell(type)
+    }
+}
+
+// MARK: - FoodCollectionViewController DataSource
+
+extension AddFoodViewController: FoodCollectionViewControllerDataSource {
     func productsCount() -> Int {
         self.products.count
     }

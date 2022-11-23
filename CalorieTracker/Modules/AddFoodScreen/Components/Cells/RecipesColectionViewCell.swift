@@ -7,7 +7,9 @@
 
 import UIKit
 
-final class RecipesColectionViewCell: UICollectionViewCell {
+final class RecipesColectionViewCell: UICollectionViewCell, FoodCellProtocol {
+    var foodType: Food?
+    
     struct RecipeViewModel {
         let image: UIImage?
         let title: String
