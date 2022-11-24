@@ -9,13 +9,30 @@ import UIKit
 
 final class SelectView<ID: WithGetTitleProtocol>: UIView {
     var selectedCellType: ID? { getSelectedCell()?.id }
-    var didTapButton: ((ID) -> Void)?
+    var didSelectedCell: ((ID, Bool) -> Void)?
+    
+    var height: CGFloat? {
+        didSet {
+            configureHeightConstraint()
+        }
+    }
     
     private lazy var stackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
         stack.spacing = 8
         return stack
+    }()
+    
+    private lazy var backgroundView: ViewWithShadow = {
+        let view = ViewWithShadow([
+            ShadowConst.firstShadow,
+            ShadowConst.secondShadow
+        ])
+        view.backgroundColor = .white.withAlphaComponent(0.9)
+        view.layer.cornerCurve = .continuous
+        view.layer.cornerRadius = 22
+        return view
     }()
     
     private var isCollapsed = false
@@ -37,14 +54,18 @@ final class SelectView<ID: WithGetTitleProtocol>: UIView {
     private func setupView() {
         layer.cornerCurve = .continuous
         layer.cornerRadius = 22
-        
+        isUserInteractionEnabled = true
     }
     
     private func setupConstraints() {
-        addSubview(stackView)
+        addSubviews(backgroundView, stackView)
+        
+        backgroundView.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(-6)
+        }
         
         stackView.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(6)
+            make.edges.equalToSuperview()
         }
     }
     
@@ -56,14 +77,25 @@ final class SelectView<ID: WithGetTitleProtocol>: UIView {
         }
     }
     
+    private func configureHeightConstraint() {
+        guard let height = height else { return }
+        stackView.arrangedSubviews.forEach {
+            $0.snp.remakeConstraints { make in
+                make.height.equalTo(height)
+            }
+        }
+    }
+    
     private func close(_ index: Int) {
         isCollapsed = true
+        backgroundView.clipsToBounds = true
         if index == -1 {
+            backgroundView.isHidden = true
             return
         } else if let selectedIndex = getSelectedCellIndex(), index == selectedIndex {
             self.close(index - 1)
         } else {
-            UIView.animate(withDuration: 0.08, delay: 0, options: .curveEaseInOut) {
+            UIView.animate(withDuration: 0.1, delay: 0, options: .curveEaseInOut) {
                 self.stackView.arrangedSubviews[safe: index]?.layer.opacity = 0
                 self.stackView.arrangedSubviews[safe: index]?.isHidden = true
             } completion: { _ in
@@ -74,12 +106,14 @@ final class SelectView<ID: WithGetTitleProtocol>: UIView {
     
     private func show(_ index: Int) {
         isCollapsed = false
+        backgroundView.isHidden = false
         if index == models.count {
+            backgroundView.clipsToBounds = false
             return
         } else if let selectedIndex = getSelectedCellIndex(), index == selectedIndex {
             self.show(index + 1)
         } else {
-            UIView.animate(withDuration: 0.08, delay: 0, options: .curveEaseInOut) {
+            UIView.animate(withDuration: 0.1, delay: 0, options: .curveEaseInOut) {
                 self.stackView.arrangedSubviews[safe: index]?.layer.opacity = 1
                 self.stackView.arrangedSubviews[safe: index]?.isHidden = false
             } completion: { _ in
@@ -90,8 +124,8 @@ final class SelectView<ID: WithGetTitleProtocol>: UIView {
     
     private func getSelectedCell() -> SelectViewCell<ID>? {
         stackView.arrangedSubviews
-            .first(where: { ($0 as? SelectViewCell<ID>)?.isSelectedCell ?? false })
-        as? SelectViewCell<ID>
+            .compactMap { $0 as? SelectViewCell<ID> }
+            .first(where: { $0.isSelectedCell })
     }
     
     private func getSelectedCellIndex() -> Int? {
@@ -103,17 +137,36 @@ final class SelectView<ID: WithGetTitleProtocol>: UIView {
     
     @objc private func didTapCell(_ sender: UIControl) {
         guard !isCollapsed else {
+            if let type = selectedCellType {
+                didSelectedCell?(type, true)
+            }
             show(0)
             return
         }
         guard let selectedCell = sender as? SelectViewCell<ID> else { return }
+
         stackView.arrangedSubviews.forEach {
             if let anyCell = $0 as? SelectViewCell<ID> {
                 anyCell.isSelectedCell = anyCell.id.getTitle(.long) == selectedCell.id.getTitle(.long)
             }
         }
         
-        didTapButton?(selectedCell.id)
+        didSelectedCell?(selectedCell.id, false)
         close(models.count)
     }
+}
+
+private struct ShadowConst {
+    static let firstShadow = Shadow(
+        color: R.color.addFood.menu.firstShadow() ?? .black,
+        opacity: 0.1,
+        offset: CGSize(width: 0, height: 4),
+        radius: 10
+    )
+    static let secondShadow = Shadow(
+        color: R.color.addFood.menu.secondShadow() ?? .black,
+        opacity: 0.15,
+        offset: CGSize(width: 0, height: 0.5),
+        radius: 2
+    )
 }

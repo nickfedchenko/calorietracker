@@ -8,10 +8,14 @@
 import UIKit
 
 extension CALayer {
-    func addShadow(shadow: Shadow, rect: CGRect, cornerRadius: CGFloat) {
+    func addShadow(shadow: Shadow,
+                   rect: CGRect,
+                   cornerRadius: CGFloat,
+                   corner: UIRectCorner = .allCorners) {
         let path = UIBezierPath(
             roundedRect: rect,
-            cornerRadius: cornerRadius
+            byRoundingCorners: corner,
+            cornerRadii: CGSize(width: cornerRadius, height: cornerRadius)
         )
        
         let shadowLayer = CALayer()

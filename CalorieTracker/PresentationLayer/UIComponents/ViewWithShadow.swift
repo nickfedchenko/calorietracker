@@ -16,6 +16,7 @@ final class ViewWithShadow: UIView {
     init(_ shadows: [Shadow]) {
         self.shadows = shadows
         super.init(frame: .zero)
+        layer.zPosition = -1
     }
     
     required init?(coder: NSCoder) {
@@ -24,12 +25,13 @@ final class ViewWithShadow: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        guard firstDraw else { return }
+        guard firstDraw, bounds != .zero else { return }
         shadows.forEach { shadow in
             layer.addShadow(
                 shadow: shadow,
                 rect: bounds,
-                cornerRadius: layer.cornerRadius
+                cornerRadius: layer.cornerRadius,
+                corner: layer.maskedCorners.rectCorners
             )
         }
         firstDraw = false

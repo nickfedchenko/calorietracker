@@ -17,7 +17,6 @@ final class SelectViewCell<ID: WithGetTitleProtocol>: UIControl {
     let id: ID
     
     private var shadowLayer = CALayer()
-    private var firstDraw = true
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -39,9 +38,7 @@ final class SelectViewCell<ID: WithGetTitleProtocol>: UIControl {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        guard firstDraw else { return }
         setupShadow()
-        firstDraw = false
     }
     
     private func setupView() {
@@ -78,6 +75,7 @@ final class SelectViewCell<ID: WithGetTitleProtocol>: UIControl {
     
     private func setupShadow() {
         shadowLayer.frame = bounds
+        shadowLayer.sublayers?.forEach { $0.removeFromSuperlayer() }
         shadowLayer.addShadow(
             shadow: MenuView.ShadowConst.firstShadow,
             rect: bounds,

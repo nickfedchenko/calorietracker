@@ -46,4 +46,25 @@ extension CACornerMask {
     public static var bottomRight: CACornerMask {
         return .layerMaxXMaxYCorner
     }
+    
+    var rectCorners: UIRectCorner {
+        switch self {
+        case .allCorners:
+            return [.allCorners]
+        case .topCorners:
+            return [.topLeft, .topRight]
+        case .bottomCorners:
+            return [.bottomLeft, .bottomRight]
+        case .bottomLeft:
+            return [.bottomLeft]
+        case .bottomRight:
+            return [.bottomRight]
+        case .topLeft:
+            return [.topLeft]
+        case .topRight:
+            return [.topRight]
+        default:
+            return []
+        }
+    }
 }
