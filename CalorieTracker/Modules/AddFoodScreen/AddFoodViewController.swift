@@ -42,12 +42,16 @@ final class AddFoodViewController: UIViewController {
     private lazy var foodCollectionViewController = FoodCollectionViewController()
     private lazy var searchHistoryViewController = SearchHistoryViewController()
     
+    private let speechRecognitionManager: SpeechRecognitionManager = .init()
+    private var speechRecognitionTask: Task<Void, Error>?
+    
     private var contentViewBottomAnchor: NSLayoutConstraint?
     private var searchTextFieldBottomAnchor: NSLayoutConstraint?
     private var collectionViewTopFirstAnchor: NSLayoutConstraint?
     private var collectionViewTopSecondAnchor: NSLayoutConstraint?
     
     private var firstDraw = true
+    private var microphoneButtonSelected = false
     
     private var dishes: [Dish] = []
     private var products: [Product] = []
@@ -115,20 +119,6 @@ final class AddFoodViewController: UIViewController {
         )
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        NotificationCenter.default.removeObserver(
-            self,
-            name: UIResponder.keyboardWillShowNotification,
-            object: nil
-        )
-        NotificationCenter.default.removeObserver(
-            self,
-            name: UIResponder.keyboardWillHideNotification,
-            object: nil
-        )
-    }
-    
     // MARK: - Private functions
     
     private func setupView() {
@@ -141,6 +131,8 @@ final class AddFoodViewController: UIViewController {
         menuTypeSecondView.isHidden = true
         menuCreateView.isHidden = true
         
+        searshTextField.keyboardAppearance = .light
+        searshTextField.keyboardType = .webSearch
         searshTextField.delegate = self
         foodCollectionViewController.dataSource = self
         foodCollectionViewController.delegate = self
@@ -483,7 +475,33 @@ final class AddFoodViewController: UIViewController {
     
     @objc private func didTapScanButton() {}
     
-    @objc private func didTapMicrophoneButton() {}
+    @objc private func didTapMicrophoneButton() {
+        microphoneButtonSelected = !microphoneButtonSelected
+        
+        switch microphoneButtonSelected {
+        case true:
+            speechRecognitionTask?.cancel()
+            speechRecognitionTask = Task {
+                let result = await SpeechRecognitionManager.requestAuthorization()
+                switch result {
+                case .notDetermined, .denied, .restricted:
+                    // TODO: - Обработать исключения
+                    break
+                case .authorized:
+                    let request = SpeechAudioBufferRecognitionRequest()
+                    for try await result in await speechRecognitionManager.start(request: request) {
+                        await MainActor.run {
+                            searshTextField.text = result.bestTranscription.formattedString
+                        }
+                    }
+                }
+            }
+        case false:
+            Task {
+                await speechRecognitionManager.finish()
+            }
+        }
+    }
 }
 
 // MARK: - FoodCollectionViewController Delegate
@@ -669,7 +687,7 @@ private extension AddFoodViewController {
     func getKeyboardHeaderView() -> UIView {
         let view = UIView()
         view.layer.maskedCorners = .topCorners
-        view.backgroundColor = .gray
+        view.backgroundColor = R.color.keyboardLightColor()
         view.layer.cornerRadius = 32
         return view
     }

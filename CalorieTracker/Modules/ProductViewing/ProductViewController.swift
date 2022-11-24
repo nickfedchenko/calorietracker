@@ -32,9 +32,6 @@ final class ProductViewController: UIViewController {
     private lazy var nutritionFactsView = NutritionFactsView()
     private lazy var dailyFoodIntakeView = DailyFoodIntakeView()
     
-    private let speechRecognitionManager: SpeechRecognitionManager = .init()
-    private var speechRecognitionTask: Task<Void, Error>?
-    
     private var contentViewBottomAnchor: NSLayoutConstraint?
     private var firstDraw = true
     
