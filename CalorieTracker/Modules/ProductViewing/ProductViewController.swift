@@ -20,12 +20,14 @@ final class ProductViewController: UIViewController {
     private lazy var mainScrollView: UIScrollView = getMainScrollView()
     private lazy var titleLabel: UILabel = getTitleLabel()
     private lazy var bottomCloseButton: UIButton = getBottomCloseButton()
-    private lazy var keyboardHeaderView: UIView = getKeyboardHeaderView()
     private lazy var valueTextField: InnerShadowTextField = getValueTextField()
     private lazy var addButton: BasicButtonView = getAddButton()
     private lazy var selectView: SelectView = getSelectView()
+    private lazy var overlayView: UIView = getOverlayView()
+    private lazy var headerKeyboardView: UIView = getHeaderKeyboardView()
     
-    private lazy var bottomBackgroundView: UIView = UIView()
+    private lazy var bottomGradientView: UIView = UIView()
+    private lazy var bottomContainerView: UIView = UIView()
     private lazy var headerImageView = HeaderImageView()
     private lazy var nutritionFactsView = NutritionFactsView()
     private lazy var dailyFoodIntakeView = DailyFoodIntakeView()
@@ -48,8 +50,11 @@ final class ProductViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        guard firstDraw, bottomBackgroundView.frame != .zero else { return }
+        guard firstDraw,
+                bottomGradientView.frame != .zero,
+                valueTextField.frame != .zero else { return }
         addGradientForBottomView()
+        selectView.height = valueTextField.frame.height
         firstDraw = false
     }
     
@@ -83,6 +88,10 @@ final class ProductViewController: UIViewController {
             print(value)
         }
         
+        selectView.didSelectedCell = { id, isColapsed in
+            self.showOverlayView(isColapsed)
+        }
+        
         guard let product = presenter?.getProduct() else { return }
         nutritionFactsView.viewModel = .init(product)
         titleLabel.text = product.title
@@ -101,12 +110,18 @@ final class ProductViewController: UIViewController {
             dailyFoodIntakeView
         )
         
-        view.addSubviews(
-            mainScrollView,
-            bottomBackgroundView,
-            bottomCloseButton,
+        bottomContainerView.addSubviews(
             addButton,
-            valueTextField,
+            valueTextField
+        )
+        
+        view.addSubviews(
+            overlayView,
+            mainScrollView,
+            bottomGradientView,
+            bottomCloseButton,
+            headerKeyboardView,
+            bottomContainerView,
             selectView
         )
     }
@@ -140,9 +155,15 @@ final class ProductViewController: UIViewController {
             make.bottom.equalToSuperview()
         }
         
-        bottomBackgroundView.snp.makeConstraints { make in
+        bottomGradientView.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
             make.height.equalToSuperview().multipliedBy(0.35)
+        }
+        
+        bottomContainerView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.bottom.lessThanOrEqualTo(headerKeyboardView.snp.bottom).offset(-20)
+            make.bottom.equalTo(bottomCloseButton.snp.top).offset(-20).priority(.low)
         }
         
         bottomCloseButton.snp.makeConstraints { make in
@@ -154,7 +175,7 @@ final class ProductViewController: UIViewController {
         addButton.aspectRatio(0.17)
         addButton.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(20)
-            make.bottom.equalTo(bottomCloseButton.snp.top).offset(-20)
+            make.bottom.equalToSuperview()
         }
         
         valueTextField.aspectRatio(0.73)
@@ -162,12 +183,28 @@ final class ProductViewController: UIViewController {
             make.leading.equalToSuperview().offset(20)
             make.bottom.equalTo(addButton.snp.top).offset(-12)
             make.height.equalTo(addButton)
+            make.top.equalToSuperview()
         }
         
         selectView.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().offset(-14)
-            make.leading.equalTo(valueTextField.snp.trailing).offset(6)
-            make.centerY.equalTo(valueTextField)
+            make.trailing.equalToSuperview().offset(-20)
+            make.leading.equalTo(valueTextField.snp.trailing).offset(12)
+            make.bottom.equalTo(valueTextField.snp.bottom)
+        }
+        
+        overlayView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        contentViewBottomAnchor = headerKeyboardView.bottomAnchor.constraint(
+            equalTo: view.bottomAnchor,
+            constant: 200
+        )
+        contentViewBottomAnchor?.isActive = true
+        
+        headerKeyboardView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(bottomContainerView).offset(40)
         }
     }
     
@@ -176,9 +213,21 @@ final class ProductViewController: UIViewController {
         navigationController?.navigationBar.isHidden = true
     }
     
+    private func showOverlayView(_ flag: Bool) {
+        overlayView.layer.zPosition = flag ? 1 : 0
+        headerKeyboardView.layer.zPosition = flag ? 2 : 0
+        bottomContainerView.layer.zPosition = flag ? 3 : 0
+        selectView.layer.zPosition = flag ? 4 : 0
+        
+        UIView.animate(withDuration: 0.1) {
+            self.overlayView.layer.opacity = flag ? 1 : 0
+            self.overlayView.isHidden = !flag
+        }
+    }
+    
     private func addGradientForBottomView() {
         let gradientLayer = GradientLayer(.init(
-            bounds: bottomBackgroundView.bounds,
+            bounds: bottomGradientView.bounds,
             colors: [
                 R.color.foodViewing.background(),
                 R.color.foodViewing.background()?.withAlphaComponent(0)
@@ -187,7 +236,7 @@ final class ProductViewController: UIViewController {
             locations: [0.85, 1.0]
         ))
         
-        bottomBackgroundView.layer.addSublayer(gradientLayer)
+        bottomGradientView.layer.addSublayer(gradientLayer)
     }
     
     @objc private func keyboardWillShow(notification: NSNotification) {
@@ -210,7 +259,7 @@ final class ProductViewController: UIViewController {
               let keyboardNotification = KeyboardNotification(userInfo)
         else { return }
         
-        contentViewBottomAnchor?.constant = keyboardHeaderView.frame.height
+        contentViewBottomAnchor?.constant = headerKeyboardView.frame.height
         UIView.animate(
             withDuration: keyboardNotification.animationDuration,
             delay: 0,
@@ -250,14 +299,6 @@ extension ProductViewController: UIScrollViewDelegate {
 // MARK: - Factory
 
 extension ProductViewController {
-    func getKeyboardHeaderView() -> UIView {
-        let view = UIView()
-        view.layer.maskedCorners = .topCorners
-        view.backgroundColor = .gray
-        view.layer.cornerRadius = 32
-        return view
-    }
-    
     func getBottomCloseButton() -> UIButton {
         let button = UIButton()
         button.setImage(R.image.foodViewing.topChevron(), for: .normal)
@@ -296,6 +337,8 @@ extension ProductViewController {
         textField.layer.masksToBounds = true
         textField.backgroundColor = .white
         textField.textAlignment = .center
+        textField.keyboardType = .decimalPad
+        textField.keyboardAppearance = .light
         return textField
     }
     
@@ -307,5 +350,42 @@ extension ProductViewController {
     
     func getSelectView() -> SelectView<FoodViewingWeightType> {
         SelectView(FoodViewingWeightType.allCases)
+    }
+    
+    func getOverlayView() -> UIView {
+        let view = UIView()
+        view.isHidden = true
+        view.layer.opacity = 0
+        view.backgroundColor = R.color.foodViewing.basicPrimary()?
+            .withAlphaComponent(0.25)
+        return view
+    }
+    
+    func getHeaderKeyboardView() -> ViewWithShadow {
+        let view = ViewWithShadow(Const.shadowsForKeyboard)
+        view.layer.cornerCurve = .continuous
+        view.layer.maskedCorners = .topCorners
+        view.layer.cornerRadius = 36
+        view.backgroundColor = R.color.keyboardLightColor()
+        return view
+    }
+}
+
+extension ProductViewController {
+    struct Const {
+        static let shadowsForKeyboard: [Shadow] = [
+            .init(
+                color: R.color.foodViewing.basicSecondaryDark()!,
+                opacity: 0.2,
+                offset: CGSize(width: 0, height: -2),
+                radius: 10
+            ),
+            .init(
+                color: R.color.foodViewing.basicPrimary()!,
+                opacity: 0.7,
+                offset: CGSize(width: 0, height: -0.5),
+                radius: 2
+            )
+        ]
     }
 }

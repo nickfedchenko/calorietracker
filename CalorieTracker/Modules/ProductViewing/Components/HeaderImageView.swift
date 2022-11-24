@@ -16,7 +16,7 @@ final class HeaderImageView: UIView {
     
     private lazy var imageView: UIImageView = {
         let view = UIImageView()
-        view.contentMode = .scaleAspectFill
+        view.contentMode = .scaleAspectFit
         view.clipsToBounds = true
         view.layer.cornerCurve = .continuous
         return view
