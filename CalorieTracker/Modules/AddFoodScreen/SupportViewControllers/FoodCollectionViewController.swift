@@ -9,9 +9,7 @@ import UIKit
 
 protocol FoodCollectionViewControllerDataSource: AnyObject {
     func cell(collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell
-    func productsCount() -> Int
-    func dishesCount() -> Int
-    func mealsCount() -> Int
+    func foodsCount() -> Int
 }
 
 protocol FoodCollectionViewControllerDelegate: AnyObject {
@@ -19,16 +17,37 @@ protocol FoodCollectionViewControllerDelegate: AnyObject {
 }
 
 final class FoodCollectionViewController: UIViewController {
+    enum CollectionViewLayout {
+        case contentFitting
+        case `default`
+    }
+    
     weak var dataSource: FoodCollectionViewControllerDataSource?
     weak var delegate: FoodCollectionViewControllerDelegate?
     
     var isSelectedType: AddFood = .recent
     
+    var isScrollEnabled: Bool {
+        get { collectionView.isScrollEnabled }
+        set { collectionView.isScrollEnabled = newValue }
+    }
+    
     private lazy var collectionView: UICollectionView = {
-        let view = UICollectionView(
-            frame: .zero,
-            collectionViewLayout: collectionViewFlowLayout
-        )
+        let view: UICollectionView = {
+            switch collectionViewLayput {
+            case .contentFitting:
+                return ContentFittingCollectionView(
+                    frame: .zero,
+                    collectionViewLayout: collectionViewFlowLayout
+                )
+            case .default:
+                return UICollectionView(
+                    frame: .zero,
+                    collectionViewLayout: collectionViewFlowLayout
+                )
+            }
+        }()
+        
         view.showsVerticalScrollIndicator = false
         view.backgroundColor = .clear
         view.contentInset = .init(top: 0, left: 0, bottom: 20, right: 0)
@@ -41,6 +60,17 @@ final class FoodCollectionViewController: UIViewController {
         layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         return layout
     }()
+    
+    private let collectionViewLayput: CollectionViewLayout
+    
+    init(_ layout: CollectionViewLayout = .default) {
+        self.collectionViewLayput = layout
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -102,7 +132,7 @@ extension FoodCollectionViewController: UICollectionViewDelegateFlowLayout {
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         switch isSelectedType {
-        case .frequent, .recent, .favorites:
+        case .frequent, .recent, .favorites, .search:
             return 0
         case .myMeals, .myRecipes, .myFood:
             return 8
@@ -113,32 +143,8 @@ extension FoodCollectionViewController: UICollectionViewDelegateFlowLayout {
 // MARK: - CollectionView DataSource
 
 extension FoodCollectionViewController: UICollectionViewDataSource {
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        switch isSelectedType {
-        case .frequent, .recent, .favorites:
-            return 2
-        case .myMeals:
-            return 1
-        case .myRecipes:
-            return 0
-        case .myFood:
-            return 0
-        }
-    }
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        switch isSelectedType {
-        case .frequent, .recent, .favorites:
-            return section == 0
-                ? dataSource?.productsCount() ?? 0
-                : dataSource?.dishesCount() ?? 0
-        case .myMeals:
-            return dataSource?.mealsCount() ?? 0
-        case .myRecipes:
-            return 0
-        case .myFood:
-            return 0
-        }
+        dataSource?.foodsCount() ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView,

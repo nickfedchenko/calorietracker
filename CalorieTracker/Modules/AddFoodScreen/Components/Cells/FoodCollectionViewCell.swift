@@ -8,7 +8,11 @@
 import UIKit
 
 final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
-    var foodType: Food?
+    var foodType: Food? {
+        didSet {
+            self.configure()
+        }
+    }
     
     enum CellType {
         case table
@@ -18,6 +22,18 @@ final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
     var cellType: CellType = .table {
         didSet {
             didChangeCellType()
+        }
+    }
+    
+    var colorSubInfo: UIColor? {
+        didSet {
+            foodView.color = colorSubInfo
+        }
+    }
+    
+    var subInfo: Int? {
+        didSet {
+            foodView.subInfo = subInfo
         }
     }
     
@@ -61,9 +77,10 @@ final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
         return layoutAttributes
     }
     
-    func configure(_ model: FoodCellView.FoodViewModel?) {
-        guard let model = model else { return }
-        foodView.configure(model)
+    private func configure() {
+        guard let foodType = foodType else { return }
+        
+        foodView.configure(.init(foodType))
     }
     
     private func setupView() {

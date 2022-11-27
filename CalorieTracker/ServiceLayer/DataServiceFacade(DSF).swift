@@ -28,6 +28,16 @@ protocol DataServiceFacadeInterface {
     ///   - userNetwork: флаг отвечающий за поиск через бэк
     ///   - completion: результат приходит сюда.
     func searchProducts(by phrase: String, useNetwork: Bool, completion: @escaping ([Product]) -> Void)
+    /// Метода поиска продуктов
+    /// - Parameters:
+    ///   - phrase: search query
+    /// - Returns: массив Product
+    func searchProducts(by phrase: String) -> [Product]
+    /// Метода поиска блюд
+    /// - Parameters:
+    ///   - phrase: search query
+    /// - Returns: массив Dish
+    func searchDishes(by phrase: String) -> [Dish]
     /// Связывает модель FoodData с Dish
     /// - Parameters:
     ///   - foodDataId: id модели FoodData
@@ -134,7 +144,13 @@ extension DSF: DataServiceFacadeInterface {
                 completion(products.sorted { $0.title.count < $1.title.count })
             }
         }
-        
     }
-        
+    
+    func searchProducts(by phrase: String) -> [Product] {
+        localPersistentStore.searchProducts(by: phrase)
+    }
+    
+    func searchDishes(by phrase: String) -> [Dish] {
+        localPersistentStore.searchDishes(by: phrase)
+    }
 }

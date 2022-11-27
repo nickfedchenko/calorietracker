@@ -11,4 +11,30 @@ enum Food {
     case product(Product)
     case dishes(Dish)
     case userProduct(UserProduct)
+    case meal(Meal)
+}
+
+extension Food {
+    var foodInfo: [FoodInfoCases: Int] {
+        switch self {
+        case .product(let product):
+            return [
+                .kcal: product.kcal,
+                .carb: Int(product.carbs),
+                .fat: Int(product.fat),
+                .protein: Int(product.protein)
+            ]
+        case .dishes(let dish):
+            return [
+                .kcal: dish.kсal,
+                .carb: Int(dish.carbs),
+                .fat: Int(dish.fat),
+                .protein: Int(dish.protein)
+            ]
+        case .userProduct:
+            return [:]
+        case .meal:
+            return [:]
+        }
+    }
 }

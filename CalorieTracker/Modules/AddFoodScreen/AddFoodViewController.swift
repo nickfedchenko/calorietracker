@@ -9,8 +9,7 @@
 import UIKit
 
 protocol AddFoodViewControllerInterface: AnyObject {
-    func setDishes(_ dishes: [Dish])
-    func setProducts(_ products: [Product])
+    func setFoods(_ foods: [Food])
     func setMeals(_ meals: [Meal])
     func getFoodInfoType() -> FoodInfoCases
 }
@@ -45,6 +44,8 @@ final class AddFoodViewController: UIViewController {
     private let speechRecognitionManager: SpeechRecognitionManager = .init()
     private var speechRecognitionTask: Task<Void, Error>?
     
+    private var timer: Timer?
+    
     private var contentViewBottomAnchor: NSLayoutConstraint?
     private var searchTextFieldBottomAnchor: NSLayoutConstraint?
     private var collectionViewTopFirstAnchor: NSLayoutConstraint?
@@ -53,8 +54,7 @@ final class AddFoodViewController: UIViewController {
     private var firstDraw = true
     private var microphoneButtonSelected = false
     
-    private var dishes: [Dish] = []
-    private var products: [Product] = []
+    private var foods: [Food] = []
     private var meals: [Meal] = []
     
     private var isSelectedType: AddFood = .recent {
@@ -355,23 +355,13 @@ final class AddFoodViewController: UIViewController {
     private func getCell(collectionView: UICollectionView,
                          indexPath: IndexPath) -> UICollectionViewCell {
         switch isSelectedType {
-        case .frequent, .recent, .favorites:
+        case .frequent, .recent, .favorites, .search:
             let cell: FoodCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
+            let food = foods[safe: indexPath.row]
             cell.cellType = .table
-            
-            switch indexPath.section {
-            case 0:
-                let model = products[indexPath.row]
-                cell.configure(presenter?.getFoodViewModel(model))
-                cell.foodType = .product(model)
-            case 1:
-                let model = dishes[indexPath.row]
-                cell.configure(presenter?.getFoodViewModel(model))
-                cell.foodType = .dishes(model)
-            default:
-                break
-            }
-            
+            cell.foodType = food
+            cell.colorSubInfo = selectedFoodInfo.getColor()
+            cell.subInfo = presenter?.getSubInfo(food, selectedFoodInfo)
             return cell
         case .myMeals:
             let cell: RecipesColectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
@@ -429,6 +419,17 @@ final class AddFoodViewController: UIViewController {
         keyboardHeaderView.layer.zPosition = 9
     }
     
+    private func createTimer() {
+        timer?.invalidate()
+        timer = Timer.scheduledTimer(
+            timeInterval: 2.0,
+            target: self,
+            selector: #selector(didEndTimer),
+            userInfo: nil,
+            repeats: false
+        )
+    }
+    
     @objc private func keyboardWillShow(notification: NSNotification) {
         guard let userInfo = notification.userInfo,
               let keyboardNotification = KeyboardNotification(userInfo)
@@ -471,9 +472,17 @@ final class AddFoodViewController: UIViewController {
         menuCreateView.showAndCloseView(true)
     }
     
-    @objc private func didTapCalorieButton() {}
+    @objc private func didTapCalorieButton() {
+        let foods = Array(DSF.shared.getAllStoredProducts()[0...4]).foods
+        presenter?.didTapSelectedButton(foods)
+    }
     
     @objc private func didTapScanButton() {}
+    
+    @objc private func didEndTimer() {
+        guard let searchText = searshTextField.text, !searchText.isEmpty else { return }
+        presenter?.search(searchText)
+    }
     
     @objc private func didTapMicrophoneButton() {
         microphoneButtonSelected = !microphoneButtonSelected
@@ -491,7 +500,9 @@ final class AddFoodViewController: UIViewController {
                     let request = SpeechAudioBufferRecognitionRequest()
                     for try await result in await speechRecognitionManager.start(request: request) {
                         await MainActor.run {
-                            searshTextField.text = result.bestTranscription.formattedString
+                            let text = result.bestTranscription.formattedString
+                            searshTextField.text = text
+                            presenter?.search(text)
                         }
                     }
                 }
@@ -515,16 +526,8 @@ extension AddFoodViewController: FoodCollectionViewControllerDelegate {
 // MARK: - FoodCollectionViewController DataSource
 
 extension AddFoodViewController: FoodCollectionViewControllerDataSource {
-    func productsCount() -> Int {
-        self.products.count
-    }
-    
-    func dishesCount() -> Int {
-        self.dishes.count
-    }
-    
-    func mealsCount() -> Int {
-        self.meals.count
+    func foodsCount() -> Int {
+        self.foods.count
     }
     
     func cell(collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell {
@@ -536,6 +539,9 @@ extension AddFoodViewController: FoodCollectionViewControllerDataSource {
 
 extension AddFoodViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
+        isSelectedType = .search
+        createTimer()
+
         searshTextField.textAlignment = .left
         guard let text = textField.text, !text.isEmpty else {
             state = .search(.recent)
@@ -547,6 +553,7 @@ extension AddFoodViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField,
                    shouldChangeCharactersIn range: NSRange,
                    replacementString string: String) -> Bool {
+        createTimer()
         let replace = -1 * (range.length * 2 - 1)
         guard let text = textField.text, text.count + replace > 0 else {
             state = .search(.recent)
@@ -561,6 +568,7 @@ extension AddFoodViewController: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         guard let text = textField.text, !text.isEmpty else {
             searshTextField.textAlignment = .center
+            isSelectedType = .frequent
             state = .default
             return
         }
@@ -572,13 +580,8 @@ extension AddFoodViewController: UITextFieldDelegate {
 // MARK: - AddFoodViewController Interface
 
 extension AddFoodViewController: AddFoodViewControllerInterface {
-    func setDishes(_ dishes: [Dish]) {
-        self.dishes = dishes
-        self.foodCollectionViewController.reloadData()
-    }
-    
-    func setProducts(_ products: [Product]) {
-        self.products = products
+    func setFoods(_ foods: [Food]) {
+        self.foods = foods
         self.foodCollectionViewController.reloadData()
     }
     
@@ -641,6 +644,7 @@ private extension AddFoodViewController {
         button.setTitleColor(R.color.addFood.recipesCell.basicGray(), .normal)
         button.titleLabel.font = R.font.sfProDisplaySemibold(size: 9)
         button.titleLabel.textAlignment = .center
+        button.imageView.tintColor = R.color.foodViewing.basicGrey()
         button.aspectRatio()
         return button
     }

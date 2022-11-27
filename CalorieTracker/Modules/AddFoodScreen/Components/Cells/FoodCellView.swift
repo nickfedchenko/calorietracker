@@ -5,6 +5,7 @@
 //  Created by Vadim Aleshin on 07.11.2022.
 //
 
+import Kingfisher
 import UIKit
 
 final class FoodCellView: UIView {
@@ -14,10 +15,23 @@ final class FoodCellView: UIView {
         let description: String
         let tag: String
         let kcal: Int
-        let flag: Bool
-        let image: UIImage?
-        let subInfo: Int?
-        let color: UIColor?
+        let image: URL?
+    }
+    
+    var color: UIColor? {
+        didSet {
+            infoLabel.textColor = color
+        }
+    }
+    
+    var subInfo: Int? {
+        didSet {
+            if let info = subInfo {
+                infoLabel.text = "\(info)"
+            } else {
+                infoLabel.text = nil
+            }
+        }
     }
     
     private lazy var imageView: UIImageView = {
@@ -95,18 +109,24 @@ final class FoodCellView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(_ model: FoodViewModel) {
+    func configure(_ model: FoodViewModel?) {
+        guard let model = model else { return }
         titleLabel.text = model.title
         descriptionLabel.text = model.description
         tagLabel.text = model.tag
         kalorieLabel.text = "\(model.kcal)"
-        imageView.image = model.image
+        //infoLabel.textColor = model.color
         
-        infoLabel.textColor = model.color
-        if let info = model.subInfo {
-            infoLabel.text = "\(info)"
-        } else {
-            infoLabel.text = nil
+        if let imageUrl = model.image {
+            imageView.kf.setImage(
+                with: imageUrl,
+                placeholder: UIImage(),
+                options: [
+                    .processor(DownsamplingImageProcessor(
+                        size: CGSize(width: 64, height: 64)
+                    ))
+                ]
+            )
         }
     }
     
@@ -188,6 +208,39 @@ final class FoodCellView: UIView {
             make.trailing.equalTo(kalorieLabel.snp.leading).offset(-8)
             make.leading.greaterThanOrEqualTo(titleLabel.snp.trailing).offset(6)
             make.centerY.equalTo(titleLabel)
+        }
+    }
+}
+
+extension FoodCellView.FoodViewModel {
+    private init(_ product: Product) {
+        self.id = product.id
+        self.title = product.title
+        self.description = product.servings?
+            .compactMap { $0.title }
+            .joined(separator: ", ") ?? ""
+        self.tag = product.brand ?? ""
+        self.kcal = product.kcal
+        self.image = nil
+    }
+    
+    private init(_ dish: Dish) {
+        self.id = dish.id
+        self.title = dish.title
+        self.description = dish.info ?? ""
+        self.tag = dish.tags.first?.tag ?? ""
+        self.kcal = dish.kсal
+        self.image = nil
+    }
+    
+    init?(_ food: Food) {
+        switch food {
+        case .product(let product):
+            self.init(product)
+        case .dishes(let dish):
+            self.init(dish)
+        default:
+            return nil
         }
     }
 }

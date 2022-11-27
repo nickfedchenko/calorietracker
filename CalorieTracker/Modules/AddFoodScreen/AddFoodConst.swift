@@ -86,6 +86,7 @@ enum AddFood {
     case myMeals
     case myRecipes
     case myFood
+    case search
     
     func getTitle() -> String {
         switch self {
@@ -101,6 +102,8 @@ enum AddFood {
             return "My Recipes"
         case .myFood:
             return "My Food"
+        default:
+            return ""
         }
     }
 }
