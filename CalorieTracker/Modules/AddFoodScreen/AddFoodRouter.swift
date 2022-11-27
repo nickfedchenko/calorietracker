@@ -11,6 +11,7 @@ import UIKit
 protocol AddFoodRouterInterface: AnyObject {
     func closeViewController()
     func openProductViewController(_ product: Product)
+    func openSelectedFoodCellsVC(_ foods: [Food])
 }
 
 class AddFoodRouter: NSObject {
@@ -41,5 +42,11 @@ extension AddFoodRouter: AddFoodRouterInterface {
         let productVC = ProductRouter.setupModule(product)
         productVC.modalPresentationStyle = .fullScreen
         viewController?.present(productVC, animated: true)
+    }
+    
+    func openSelectedFoodCellsVC(_ foods: [Food]) {
+        let vc = SelectedFoodCellsRouter.setupModule(foods)
+        vc.modalPresentationStyle = .overFullScreen
+        viewController?.present(vc, animated: true)
     }
 }
