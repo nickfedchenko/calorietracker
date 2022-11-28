@@ -16,6 +16,7 @@ protocol AddFoodPresenterInterface: AnyObject {
     func search(_ request: String)
     func getSubInfo(_ food: Food?, _ type: FoodInfoCases) -> Int?
     func didTapSelectedButton(_ foods: [Food])
+    func didTapScannerButton()
 }
 
 final class AddFoodPresenter {
@@ -147,6 +148,10 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
     
     func didTapSelectedButton(_ foods: [Food]) {
         router?.openSelectedFoodCellsVC(foods)
+    }
+    
+    func didTapScannerButton() {
+        router?.openScanner()
     }
     
     func search(_ request: String) {
