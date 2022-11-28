@@ -477,7 +477,9 @@ final class AddFoodViewController: UIViewController {
         presenter?.didTapSelectedButton(foods)
     }
     
-    @objc private func didTapScanButton() {}
+    @objc private func didTapScanButton() {
+        presenter?.didTapScannerButton()
+    }
     
     @objc private func didEndTimer() {
         guard let searchText = searshTextField.text, !searchText.isEmpty else { return }

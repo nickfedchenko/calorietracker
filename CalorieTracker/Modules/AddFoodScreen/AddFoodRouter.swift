@@ -12,6 +12,7 @@ protocol AddFoodRouterInterface: AnyObject {
     func closeViewController()
     func openProductViewController(_ product: Product)
     func openSelectedFoodCellsVC(_ foods: [Food])
+    func openScanner()
 }
 
 class AddFoodRouter: NSObject {
@@ -47,6 +48,12 @@ extension AddFoodRouter: AddFoodRouterInterface {
     func openSelectedFoodCellsVC(_ foods: [Food]) {
         let vc = SelectedFoodCellsRouter.setupModule(foods)
         vc.modalPresentationStyle = .overFullScreen
+        viewController?.present(vc, animated: true)
+    }
+    
+    func openScanner() {
+        let vc = ScannerRouter.setupModule()
+        vc.modalPresentationStyle = .fullScreen
         viewController?.present(vc, animated: true)
     }
 }
