@@ -18,6 +18,7 @@ protocol LocalDomainServiceInterface {
     func saveFoodData(foods: [FoodData])
     func saveMeals(meals: [Meal])
     func searchProducts(by phrase: String) -> [Product]
+    func searchProducts(barcode: String) -> [Product]
     func searchDishes(by phrase: String) -> [Dish]
     func setChildFoodData(foodDataId: String, dishID: Int)
     func setChildFoodData(foodDataId: String, productID: Int)
@@ -242,6 +243,19 @@ extension LocalDomainService: LocalDomainServiceInterface {
         let titlePredicate = NSPredicate(format: "title CONTAINS[cd] %@", phrase)
         let brandPredicate = NSPredicate(format: "brand CONTAINS[cd] %@", phrase)
         let compoundPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [titlePredicate, brandPredicate])
+     
+        guard let products = fetchData(
+            for: DomainProduct.self,
+            withPredicate: compoundPredicate
+        ) else {
+            return []
+        }
+        return products.compactMap { Product(from: $0) }.sorted { $0.title.count < $1.title.count }
+    }
+    
+    func searchProducts(barcode: String) -> [Product] {
+        let barcodePredicate = NSPredicate(format: "barcode CONTAINS[cd] %@", barcode)
+        let compoundPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [barcodePredicate])
      
         guard let products = fetchData(
             for: DomainProduct.self,

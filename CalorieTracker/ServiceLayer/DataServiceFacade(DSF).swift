@@ -33,6 +33,11 @@ protocol DataServiceFacadeInterface {
     ///   - phrase: search query
     /// - Returns: массив Product
     func searchProducts(by phrase: String) -> [Product]
+    /// Метода поиска продуктов
+    /// - Parameters:
+    ///   - barcode: barcode
+    /// - Returns: массив Product
+    func searchProducts(barcode: String) -> [Product]
     /// Метода поиска блюд
     /// - Parameters:
     ///   - phrase: search query
@@ -148,6 +153,10 @@ extension DSF: DataServiceFacadeInterface {
     
     func searchProducts(by phrase: String) -> [Product] {
         localPersistentStore.searchProducts(by: phrase)
+    }
+    
+    func searchProducts(barcode: String) -> [Product] {
+        localPersistentStore.searchProducts(barcode: barcode)
     }
     
     func searchDishes(by phrase: String) -> [Dish] {
