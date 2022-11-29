@@ -38,3 +38,16 @@ extension Food {
         }
     }
 }
+
+extension Food: Equatable {
+    static func == (lhs: Food, rhs: Food) -> Bool {
+        switch (lhs, rhs) {
+        case let (.product(productLhs), .product(productRhs)):
+            return productLhs == productRhs
+        case let (.dishes(dishLhs), .dishes(dishRhs)):
+            return dishLhs == dishRhs
+        default:
+            return false
+        }
+    }
+}
