@@ -40,6 +40,7 @@ final class AddFoodViewController: UIViewController {
     private lazy var searshTextField = SearchTextField()
     private lazy var foodCollectionViewController = FoodCollectionViewController()
     private lazy var searchHistoryViewController = SearchHistoryViewController()
+    private lazy var counterKcalControl = CounterKcalControl()
     
     private let speechRecognitionManager: SpeechRecognitionManager = .init()
     private var speechRecognitionTask: Task<Void, Error>?
@@ -56,6 +57,12 @@ final class AddFoodViewController: UIViewController {
     
     private var foods: [Food] = []
     private var meals: [Meal] = []
+    
+    private var selectedFood: [Food]? {
+        didSet {
+            didChangeSelectedFood()
+        }
+    }
     
     private var isSelectedType: AddFood = .recent {
         didSet {
@@ -178,6 +185,13 @@ final class AddFoodViewController: UIViewController {
             self.showOverlay(false)
         }
         
+        counterKcalControl.isHidden = true
+        counterKcalControl.addTarget(
+            self,
+            action: #selector(didTapCounterControl),
+            for: .touchUpInside
+        )
+        
         let hideKeyboardGR = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         hideKeyboardGR.cancelsTouchesInView = false
         view.addGestureRecognizer(hideKeyboardGR)
@@ -198,6 +212,7 @@ final class AddFoodViewController: UIViewController {
             menuButton,
             infoButtonsView,
             segmentedScrollView,
+            counterKcalControl,
             bottomGradientView,
             microphoneButton,
             keyboardHeaderView,
@@ -268,9 +283,7 @@ final class AddFoodViewController: UIViewController {
         collectionViewTopSecondAnchor = foodCollectionViewController
             .view
             .topAnchor
-            .constraint(
-                equalTo: view.safeAreaLayoutGuide.topAnchor
-            )
+            .constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
         foodCollectionViewController.view.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.top.equalTo(infoButtonsView.snp.bottom).offset(4).priority(.low)
@@ -321,6 +334,12 @@ final class AddFoodViewController: UIViewController {
         overlayView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        
+        counterKcalControl.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().offset(-20)
+            make.height.equalTo(40)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+        }
     }
     
     private func setupShadow() {
@@ -362,6 +381,9 @@ final class AddFoodViewController: UIViewController {
             cell.foodType = food
             cell.colorSubInfo = selectedFoodInfo.getColor()
             cell.subInfo = presenter?.getSubInfo(food, selectedFoodInfo)
+            cell.didTapButton = { food in
+                self.selectedFood = (self.selectedFood ?? []) + [food]
+            }
             return cell
         case .myMeals:
             let cell: RecipesColectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
@@ -374,6 +396,19 @@ final class AddFoodViewController: UIViewController {
             cell.cellType = .withShadow
             return cell
         }
+    }
+    
+    private func didChangeSelectedFood() {
+        guard let selectedFood = selectedFood, !selectedFood.isEmpty else {
+            counterKcalControl.isHidden = true
+            return
+        }
+        let sumKcal = selectedFood.compactMap { $0.foodInfo[.kcal] }.sum()
+        counterKcalControl.isHidden = false
+        counterKcalControl.configure(.init(
+            kcal: sumKcal,
+            count: selectedFood.count
+        ))
     }
     
     private func didChangeState() {
@@ -472,10 +507,7 @@ final class AddFoodViewController: UIViewController {
         menuCreateView.showAndCloseView(true)
     }
     
-    @objc private func didTapCalorieButton() {
-        let foods = Array(DSF.shared.getAllStoredProducts()[0...4]).foods
-        presenter?.didTapSelectedButton(foods)
-    }
+    @objc private func didTapCalorieButton() {}
     
     @objc private func didTapScanButton() {
         presenter?.didTapScannerButton()
@@ -484,6 +516,13 @@ final class AddFoodViewController: UIViewController {
     @objc private func didEndTimer() {
         guard let searchText = searshTextField.text, !searchText.isEmpty else { return }
         presenter?.search(searchText)
+    }
+    
+    @objc private func didTapCounterControl() {
+        guard let selectedFood = selectedFood, !selectedFood.isEmpty else { return }
+        presenter?.didTapCountControl(selectedFood, complition: { newFoods in
+            self.selectedFood = newFoods
+        })
     }
     
     @objc private func didTapMicrophoneButton() {

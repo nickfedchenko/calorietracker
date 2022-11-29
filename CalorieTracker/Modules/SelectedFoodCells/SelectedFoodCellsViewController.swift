@@ -9,6 +9,7 @@ import UIKit
 
 final class SelectedFoodCellsViewController: UIViewController {
     var router: SelectedFoodCellsRouterInterface?
+    var didChangeSeletedFoods: (([Food]) -> Void)?
     
     private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
@@ -36,7 +37,13 @@ final class SelectedFoodCellsViewController: UIViewController {
     
     private let foodCollectionViewController = FoodCollectionViewController(.contentFitting)
     
-    private var foods: [Food]
+    private var foods: [Food] {
+        didSet {
+            if foods.isEmpty {
+                closeVC()
+            }
+        }
+    }
     
     init(_ foods: [Food]) {
         self.foods = foods
@@ -104,8 +111,13 @@ final class SelectedFoodCellsViewController: UIViewController {
         }
     }
     
-    @objc private func didTapCloseButton() {
+    private func closeVC() {
+        didChangeSeletedFoods?(foods)
         router?.close()
+    }
+    
+    @objc private func didTapCloseButton() {
+        closeVC()
     }
 }
 
@@ -129,6 +141,14 @@ extension SelectedFoodCellsViewController: FoodCollectionViewControllerDataSourc
         let cell: FoodCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
         cell.cellType = .table
         cell.foodType = foods[safe: indexPath.row]
+        cell.cellButtonType = .delete
+        cell.didTapButton = { food in
+            guard let index = self.foods.firstIndex(where: { $0 == food }) else { return }
+            self.foods.remove(at: index)
+            self.foodCollectionViewController.collectionView
+                .deleteItems(at: [IndexPath(row: index, section: 0)])
+        }
+        
         return cell
     }
     

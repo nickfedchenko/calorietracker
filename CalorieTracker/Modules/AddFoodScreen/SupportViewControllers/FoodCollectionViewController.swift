@@ -32,7 +32,7 @@ final class FoodCollectionViewController: UIViewController {
         set { collectionView.isScrollEnabled = newValue }
     }
     
-    private lazy var collectionView: UICollectionView = {
+    private(set) lazy var collectionView: UICollectionView = {
         let view: UICollectionView = {
             switch collectionViewLayput {
             case .contentFitting:

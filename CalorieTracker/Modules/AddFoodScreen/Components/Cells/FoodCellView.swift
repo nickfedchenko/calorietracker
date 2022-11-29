@@ -18,9 +18,17 @@ final class FoodCellView: UIView {
         let image: URL?
     }
     
+    var didTapButton: (() -> Void)?
+    
     var color: UIColor? {
         didSet {
             infoLabel.textColor = color
+        }
+    }
+    
+    var cellButtonType: FoodCollectionViewCell.CellButtonType = .add {
+        didSet {
+            didChangeButtonType()
         }
     }
     
@@ -40,10 +48,10 @@ final class FoodCellView: UIView {
         return view
     }()
     
-    private lazy var addImageView: UIImageView = {
-        let view = UIImageView()
-        view.image = R.image.addFood.recipesCell.add()
-        return view
+    private lazy var selectButton: UIButton = {
+        let button = UIButton()
+        button.addTarget(self, action: #selector(didTapSelectButton), for: .touchUpInside)
+        return button
     }()
     
     private lazy var checkImageView: UIImageView = {
@@ -100,9 +108,9 @@ final class FoodCellView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupView()
         addSubviews()
         setupConstraints()
+        didChangeButtonType()
     }
     
     required init?(coder: NSCoder) {
@@ -115,7 +123,6 @@ final class FoodCellView: UIView {
         descriptionLabel.text = model.description
         tagLabel.text = model.tag
         kalorieLabel.text = "\(model.kcal)"
-        //infoLabel.textColor = model.color
         
         if let imageUrl = model.image {
             imageView.kf.setImage(
@@ -130,16 +137,12 @@ final class FoodCellView: UIView {
         }
     }
     
-    private func setupView() {
-        
-    }
-    
     private func addSubviews() {
         tagBackgroundView.addSubview(tagLabel)
         
         addSubviews(
             imageView,
-            addImageView,
+            selectButton,
             checkImageView,
             titleLabel,
             descriptionLabel,
@@ -182,8 +185,8 @@ final class FoodCellView: UIView {
             make.height.equalTo(tagBackgroundView)
         }
         
-        addImageView.aspectRatio()
-        addImageView.snp.makeConstraints { make in
+        selectButton.aspectRatio()
+        selectButton.snp.makeConstraints { make in
             make.centerY.equalTo(tagBackgroundView)
             make.trailing.equalToSuperview()
             make.height.equalTo(tagBackgroundView)
@@ -192,7 +195,7 @@ final class FoodCellView: UIView {
         descriptionLabel.snp.makeConstraints { make in
             make.centerY.equalTo(tagBackgroundView)
             make.leading.equalTo(checkImageView.snp.trailing).offset(6)
-            make.trailing.lessThanOrEqualTo(addImageView.snp.leading).offset(-6)
+            make.trailing.lessThanOrEqualTo(selectButton.snp.leading).offset(-6)
         }
         
         kalorieLabel.setContentCompressionResistancePriority(.init(1000), for: .horizontal)
@@ -209,6 +212,19 @@ final class FoodCellView: UIView {
             make.leading.greaterThanOrEqualTo(titleLabel.snp.trailing).offset(6)
             make.centerY.equalTo(titleLabel)
         }
+    }
+    
+    private func didChangeButtonType() {
+        switch cellButtonType {
+        case .delete:
+            selectButton.setImage(R.image.addFood.recipesCell.delete(), for: .normal)
+        case .add:
+            selectButton.setImage(R.image.addFood.recipesCell.add(), for: .normal)
+        }
+    }
+    
+    @objc private func didTapSelectButton() {
+        didTapButton?()
     }
 }
 

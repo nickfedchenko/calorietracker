@@ -19,9 +19,20 @@ final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
         case withShadow
     }
     
+    enum CellButtonType {
+        case delete
+        case add
+    }
+    
     var cellType: CellType = .table {
         didSet {
             didChangeCellType()
+        }
+    }
+    
+    var cellButtonType: CellButtonType = .add {
+        didSet {
+            foodView.cellButtonType = cellButtonType
         }
     }
     
@@ -37,6 +48,8 @@ final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
         }
     }
     
+    var didTapButton: ((Food) -> Void)?
+    
     private lazy var bottomLineView: UIView = {
         let view = UIView()
         view.backgroundColor = R.color.addFood.recipesCell.line()
@@ -50,6 +63,7 @@ final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        setupView()
         addSubviews()
         setupConstraints()
     }
@@ -84,7 +98,10 @@ final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
     }
     
     private func setupView() {
-        
+        foodView.didTapButton = {
+            guard let foodType = self.foodType else { return }
+            self.didTapButton?(foodType)
+        }
     }
     
     private func addSubviews() {

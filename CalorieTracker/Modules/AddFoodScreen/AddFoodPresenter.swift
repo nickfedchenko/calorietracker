@@ -15,7 +15,7 @@ protocol AddFoodPresenterInterface: AnyObject {
     func didTapCell(_ type: Food)
     func search(_ request: String)
     func getSubInfo(_ food: Food?, _ type: FoodInfoCases) -> Int?
-    func didTapSelectedButton(_ foods: [Food])
+    func didTapCountControl(_ foods: [Food], complition: @escaping ([Food]) -> Void )
     func didTapScannerButton()
 }
 
@@ -146,8 +146,10 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
         }
     }
     
-    func didTapSelectedButton(_ foods: [Food]) {
-        router?.openSelectedFoodCellsVC(foods)
+    func didTapCountControl(_ foods: [Food], complition: @escaping ([Food]) -> Void ) {
+        router?.openSelectedFoodCellsVC(foods, complition: { newFoods in
+            complition(newFoods)
+        })
     }
     
     func didTapScannerButton() {

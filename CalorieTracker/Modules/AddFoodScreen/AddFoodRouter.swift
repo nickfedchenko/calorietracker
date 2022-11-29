@@ -11,7 +11,7 @@ import UIKit
 protocol AddFoodRouterInterface: AnyObject {
     func closeViewController()
     func openProductViewController(_ product: Product)
-    func openSelectedFoodCellsVC(_ foods: [Food])
+    func openSelectedFoodCellsVC(_ foods: [Food], complition: @escaping ([Food]) -> Void )
     func openScanner()
 }
 
@@ -45,9 +45,16 @@ extension AddFoodRouter: AddFoodRouterInterface {
         viewController?.present(productVC, animated: true)
     }
     
-    func openSelectedFoodCellsVC(_ foods: [Food]) {
+    func openSelectedFoodCellsVC(
+        _ foods: [Food],
+        complition: @escaping ([Food]) -> Void )
+    {
         let vc = SelectedFoodCellsRouter.setupModule(foods)
         vc.modalPresentationStyle = .overFullScreen
+        vc.didChangeSeletedFoods = { newFoods in
+            complition(newFoods)
+        }
+        
         viewController?.present(vc, animated: true)
     }
     
