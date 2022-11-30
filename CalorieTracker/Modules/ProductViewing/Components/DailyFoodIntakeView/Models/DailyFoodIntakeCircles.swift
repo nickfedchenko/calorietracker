@@ -47,4 +47,17 @@ enum DailyFoodIntakeCircles {
             )
         }
     }
+    
+    func getTitles() -> String {
+        switch self {
+        case .fat:
+            return "Fat"
+        case .protein:
+            return "Protein"
+        case .carb:
+            return "Carbs"
+        case .kcal:
+            return "Kcal"
+        }
+    }
 }

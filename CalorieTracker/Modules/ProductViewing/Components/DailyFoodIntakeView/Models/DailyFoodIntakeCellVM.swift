@@ -9,4 +9,7 @@ import Foundation
 
 struct DailyFoodIntakeCellVM {
     let percent: String
+    let value: String
+    let now: Double
+    let add: Double
 }

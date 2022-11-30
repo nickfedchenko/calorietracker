@@ -13,6 +13,7 @@ final class DailyFoodIntakeView: UIView {
         let label = UILabel()
         label.font = R.font.sfProDisplaySemibold(size: 17)
         label.textColor = R.color.foodViewing.basicDark()
+        label.clipsToBounds = false
         label.textAlignment = .center
         label.text = "Percent of daily goal"
         return label
@@ -20,7 +21,7 @@ final class DailyFoodIntakeView: UIView {
     
     private lazy var separatorLineView: UIView = {
         let view = UIView()
-        view.backgroundColor = R.color.foodViewing.basicPrimary()?.withAlphaComponent(0.7)
+        view.backgroundColor = R.color.foodViewing.basicSecondaryDark()
         return view
     }()
     
@@ -44,6 +45,33 @@ final class DailyFoodIntakeView: UIView {
         setupConstraints()
     }
     
+    func configure(from: DailyNutrition, to: DailyNutrition, goal: DailyNutrition) {
+        fatCircleView.configure(.init(
+            percent: String(format: "%.1f", (from.fat + to.fat) / goal.fat * 100) + "%",
+            value: String(format: "%.1f g", from.fat + to.fat),
+            now: from.fat / goal.fat,
+            add: to.fat / goal.fat
+        ))
+        carbCircleView.configure(.init(
+            percent: String(format: "%.1f", (from.carbs + to.carbs) / goal.carbs * 100) + "%",
+            value: String(format: "%.1f g", from.carbs + to.carbs),
+            now: from.carbs / goal.carbs,
+            add: to.carbs / goal.carbs
+        ))
+        kcalCircleView.configure(.init(
+            percent: String(format: "%.1f", (from.kcal + to.kcal) / goal.kcal * 100) + "%",
+            value: String(Int(from.kcal + to.kcal)),
+            now: from.kcal / goal.kcal,
+            add: to.kcal / goal.kcal
+        ))
+        proteinCircleView.configure(.init(
+            percent: String(format: "%.1f", (from.protein + to.protein) / goal.protein * 100) + "%",
+            value: String(format: "%.1f g", from.protein + to.protein),
+            now: from.protein / goal.protein,
+            add: to.protein / goal.protein
+        ))
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -53,9 +81,7 @@ final class DailyFoodIntakeView: UIView {
         layer.cornerCurve = .circular
         layer.cornerRadius = 12
         layer.borderWidth = 1
-        layer.borderColor = R.color.foodViewing.basicPrimary()?
-            .withAlphaComponent(0.7)
-            .cgColor
+        layer.borderColor = R.color.foodViewing.basicSecondaryDark()?.cgColor
     }
     
     private func addSubviews() {

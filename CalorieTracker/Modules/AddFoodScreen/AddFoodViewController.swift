@@ -430,6 +430,7 @@ final class AddFoodViewController: UIViewController {
         setupDefaultState()
         switch self.state {
         case .search(let state):
+            showDoneButton(false)
             switch state {
             case .recent:
                 setupSearchRecentState()
@@ -439,6 +440,9 @@ final class AddFoodViewController: UIViewController {
                 setupSearchFoundResultsState()
             }
         case .default:
+            if let selectedFood = selectedFood, !selectedFood.isEmpty {
+                showDoneButton(true)
+            }
             setupDefaultState()
         }
     }
@@ -470,7 +474,6 @@ final class AddFoodViewController: UIViewController {
     }
     
     private func showDoneButton(_ flag: Bool) {
-        guard state == .default else { return }
         microphoneButton.isHidden = true
         doneButton.isHidden = false
         doneButtonWidthAnchor?.isActive = flag

@@ -9,9 +9,11 @@
 import Foundation
 
 protocol ProductPresenterInterface: AnyObject {
-    func getDailyFoodIntake() -> DailyFoodIntake
+    func getNutritionDailyGoal() -> DailyNutrition?
+    func getNutritionDaily() -> DailyNutrition?
     func didTapCloseButton()
     func getProduct() -> Product
+    func saveNutritionDaily(_ value: DailyNutrition)
 }
 
 class ProductPresenter {
@@ -35,8 +37,12 @@ class ProductPresenter {
 }
 
 extension ProductPresenter: ProductPresenterInterface {
-    func getDailyFoodIntake() -> DailyFoodIntake {
-        return .init(fat: 100, protein: 100, kcal: 100, carb: 100)
+    func getNutritionDaily() -> DailyNutrition? {
+        return UDM.nutritionDaily
+    }
+    
+    func getNutritionDailyGoal() -> DailyNutrition? {
+        return UDM.nutritionDailyGoal
     }
     
     func didTapCloseButton() {
@@ -45,5 +51,9 @@ extension ProductPresenter: ProductPresenterInterface {
     
     func getProduct() -> Product {
         return self.product
+    }
+    
+    func saveNutritionDaily(_ value: DailyNutrition) {
+        UDM.nutritionDaily = (UDM.nutritionDaily ?? .zero) + value
     }
 }

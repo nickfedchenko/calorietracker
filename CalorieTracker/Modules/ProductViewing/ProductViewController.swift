@@ -35,6 +35,18 @@ final class ProductViewController: UIViewController {
     private var contentViewBottomAnchor: NSLayoutConstraint?
     private var firstDraw = true
     
+    private var addNutrition: DailyNutrition = .zero {
+        didSet {
+            didChangeAddNutrition()
+        }
+    }
+    
+    private var selectedWeightType: FoodViewingWeightType = .gram {
+        didSet {
+            didChangeWeight()
+        }
+    }
+    
     // MARK: - Override
     
     override func viewDidLoad() {
@@ -81,12 +93,19 @@ final class ProductViewController: UIViewController {
         view.backgroundColor = R.color.foodViewing.background()
         nutritionFactsView.layer.opacity = 0.5
         
+        dailyFoodIntakeView.configure(
+            from: presenter?.getNutritionDaily() ?? .zero,
+            to: addNutrition,
+            goal: presenter?.getNutritionDailyGoal() ?? .zero
+        )
+        
         headerImageView.didTapLike = { value in
             print(value)
         }
         
-        selectView.didSelectedCell = { id, isColapsed in
+        selectView.didSelectedCell = { type, isColapsed in
             self.showOverlayView(isColapsed)
+            self.selectedWeightType = type
         }
         
         guard let product = presenter?.getProduct() else { return }
@@ -140,7 +159,6 @@ final class ProductViewController: UIViewController {
             make.height.equalTo(headerImageView.snp.width).multipliedBy(0.65)
         }
         
-        dailyFoodIntakeView.aspectRatio(0.45)
         dailyFoodIntakeView.snp.makeConstraints { make in
             make.leading.trailing.equalTo(view).inset(20)
             make.top.equalTo(headerImageView.snp.bottom).offset(16)
@@ -236,6 +254,45 @@ final class ProductViewController: UIViewController {
         bottomGradientView.layer.addSublayer(gradientLayer)
     }
     
+    private func didChangeWeight() {
+        guard let textValue = valueTextField.text,
+               let product = presenter?.getProduct() else { return }
+        let value = Double(textValue) ?? 0
+        
+        switch selectedWeightType {
+        case .ounce:
+            addNutrition = .init(
+                kcal: Double(product.kcal) / 100.0 * 29.8 * value,
+                carbs: product.carbs / 100.0 * 29.8 * value,
+                protein: product.protein / 100.0 * 29.8 * value,
+                fat: product.fat / 100.0 * 29.8 * value
+            )
+        case .gram:
+            addNutrition = .init(
+                kcal: Double(product.kcal) / 100.0 * value,
+                carbs: product.carbs / 100.0 * value,
+                protein: product.protein / 100.0 * value,
+                fat: product.fat / 100.0 * value
+            )
+        case .piece:
+            let weight = product.servings?.first?.weight ?? 0
+            addNutrition = .init(
+                kcal: Double(product.kcal) / 100.0 * weight * value,
+                carbs: product.carbs / 100.0 * weight * value,
+                protein: product.protein / 100.0 * weight * value,
+                fat: product.fat / 100.0 * weight * value
+            )
+        }
+    }
+    
+    private func didChangeAddNutrition() {
+        dailyFoodIntakeView.configure(
+            from: presenter?.getNutritionDaily() ?? .zero,
+            to: addNutrition,
+            goal: presenter?.getNutritionDailyGoal() ?? .zero
+        )
+    }
+    
     @objc private func keyboardWillShow(notification: NSNotification) {
         guard let userInfo = notification.userInfo,
               let keyboardNotification = KeyboardNotification(userInfo)
@@ -272,6 +329,14 @@ final class ProductViewController: UIViewController {
     
     @objc private func didTapCloseButton() {
         presenter?.didTapCloseButton()
+    }
+    
+    @objc private func didChangeTextFieldValue() {
+        didChangeWeight()
+    }
+    
+    @objc private func didTapSaveButton() {
+        presenter?.saveNutritionDaily(addNutrition)
     }
 }
 
@@ -336,6 +401,11 @@ extension ProductViewController {
         textField.textAlignment = .center
         textField.keyboardType = .decimalPad
         textField.keyboardAppearance = .light
+        textField.addTarget(
+            self,
+            action: #selector(didChangeTextFieldValue),
+            for: .editingChanged
+        )
         return textField
     }
     

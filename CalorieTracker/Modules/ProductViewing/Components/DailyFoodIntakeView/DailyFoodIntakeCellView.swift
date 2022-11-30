@@ -17,9 +17,10 @@ final class DailyFoodIntakeCellView: UIView {
         return label
     }()
     
-    private let circleView = StatisticsCircleView()
+    private let circleView: StatisticsCircleView
     
     init(_ type: DailyFoodIntakeCircles) {
+        self.circleView = .init(type.getTitles())
         super.init(frame: .zero)
         setupConstraints()
         
@@ -34,6 +35,11 @@ final class DailyFoodIntakeCellView: UIView {
     
     func configure(_ model: DailyFoodIntakeCellVM) {
         titleLabel.text = model.percent
+        circleView.configure(
+            from: CGFloat(model.now),
+            to: CGFloat(model.add),
+            text: model.value
+        )
     }
     
     private func setupConstraints() {

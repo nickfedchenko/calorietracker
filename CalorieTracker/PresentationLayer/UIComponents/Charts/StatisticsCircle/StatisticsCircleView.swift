@@ -21,7 +21,10 @@ final class StatisticsCircleView: UIView {
     
     var secondCircleColor: UIColor? {
         get { UIColor(cgColor: secondShape.strokeColor ?? UIColor.white.cgColor) }
-        set { secondShape.strokeColor = newValue?.cgColor }
+        set {
+            secondShape.strokeColor = newValue?.cgColor
+            volLabel.textColor = newValue
+        }
     }
     
     private var parh: UIBezierPath?
@@ -50,24 +53,32 @@ final class StatisticsCircleView: UIView {
         return shape
     }()
     
+    private lazy var secondBackgroundShape: CAShapeLayer = {
+        let shape = CAShapeLayer()
+        shape.lineCap = .round
+        shape.lineWidth = 10
+        shape.fillColor = UIColor.clear.cgColor
+        shape.strokeColor = UIColor.white.cgColor
+        return shape
+    }()
+    
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.contentMode = .bottom
-        label.text = "Carb"
+        label.font = R.font.sfProTextMedium(size: 15)
+        label.textColor = R.color.foodViewing.basicDarkGrey()
         return label
     }()
     
     private lazy var volLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.contentMode = .top
-        label.text = "38 g"
         return label
     }()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(_ title: String) {
+        super.init(frame: .zero)
+        titleLabel.text = title
         setupView()
     }
     
@@ -81,7 +92,8 @@ final class StatisticsCircleView: UIView {
         let shapes = [
             backgroundShape,
             firstShape,
-            secondShape
+            secondShape,
+            secondBackgroundShape
         ]
         
         layer.cornerRadius = frame.height / 2.0
@@ -100,11 +112,14 @@ final class StatisticsCircleView: UIView {
         }
     }
     
-    func configure(from: CGFloat, to: CGFloat) {
+    func configure(from: CGFloat, to: CGFloat, text: String) {
         firstShape.strokeStart = 0
         firstShape.strokeEnd = from
         secondShape.strokeStart = from
         secondShape.strokeEnd = from + to
+        secondBackgroundShape.strokeStart = from
+        secondBackgroundShape.strokeEnd = from + to
+        volLabel.text = text
     }
     
     private func setupView() {
@@ -113,17 +128,20 @@ final class StatisticsCircleView: UIView {
         
         layer.addSublayer(backgroundShape)
         layer.addSublayer(firstShape)
+        layer.addSublayer(secondBackgroundShape)
         layer.addSublayer(secondShape)
         
         addSubviews(titleLabel, volLabel)
         
         titleLabel.snp.makeConstraints { make in
-            make.leading.trailing.top.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
+            make.top.greaterThanOrEqualToSuperview()
             make.bottom.equalTo(self.snp.centerY)
         }
         
         volLabel.snp.makeConstraints { make in
-            make.leading.trailing.bottom.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
+            make.bottom.lessThanOrEqualToSuperview()
             make.top.equalTo(self.snp.centerY)
         }
     }

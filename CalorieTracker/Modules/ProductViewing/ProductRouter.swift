@@ -22,9 +22,9 @@ class ProductRouter: NSObject {
         let interactor = ProductInteractor()
         let router = ProductRouter()
         let presenter = ProductPresenter(interactor: interactor,
-                                             router: router,
-                                             view: vc,
-                                             product: product)
+                                         router: router,
+                                         view: vc,
+                                         product: product)
 
         vc.presenter = presenter
         router.presenter = presenter
