@@ -9,6 +9,55 @@ import UIKit
 
 // MARK: - Const
 
+extension MealTime: WithGetImageProtocol, WithGetTitleProtocol {
+    func getImage() -> UIImage? {
+        switch self {
+        case .breakfast:
+            return R.image.addFood.menu.breakfast()
+        case .launch:
+            return R.image.addFood.menu.lunch()
+        case .dinner:
+            return R.image.addFood.menu.dinner()
+        case .snack:
+            return R.image.addFood.menu.snack()
+        }
+    }
+    
+    func getTitle(_ lenght: Lenght) -> String {
+        switch self {
+        case .breakfast:
+            return "BREAKFAST"
+        case .launch:
+            return "LUNCH"
+        case .dinner:
+            return "DINNER"
+        case .snack:
+            return "SNACK"
+        }
+    }
+}
+
+enum FoodCreate: WithGetTitleProtocol, WithGetImageProtocol {
+    case food
+    case recipe
+    case meal
+    
+    func getTitle(_ lenght: Lenght) -> String {
+        switch self {
+        case .food:
+            return "Food"
+        case .recipe:
+            return "Recipe"
+        case .meal:
+            return "Meal"
+        }
+    }
+    
+    func getImage() -> UIImage? {
+        return nil
+    }
+}
+
 extension AddFoodViewController {
     struct Const {
         static let hideKeyboardShadow: Shadow = .init(
@@ -18,17 +67,17 @@ extension AddFoodViewController {
             radius: 0
         )
         
-        static let menuModels: [MenuView.MenuCellViewModel] = [
-            .init(title: "BREAKFAST", image: R.image.addFood.menu.breakfast()),
-            .init(title: "LUNCH", image: R.image.addFood.menu.lunch()),
-            .init(title: "DINNER", image: R.image.addFood.menu.dinner()),
-            .init(title: "SNACK", image: R.image.addFood.menu.snack())
+        static let menuModels: [MealTime] = [
+            .breakfast,
+            .launch,
+            .dinner,
+            .snack
         ]
         
-        static let menuCreateModels: [MenuView.MenuCellViewModel] = [
-            .init(title: "Food", image: nil),
-            .init(title: "Recipe", image: nil),
-            .init(title: "Meal", image: nil)
+        static let menuCreateModels: [FoodCreate] = [
+            .food,
+            .recipe,
+            .meal
         ]
         
         static let menuTypeSecondModels: [FoodInfoCases] = [

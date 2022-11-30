@@ -24,3 +24,27 @@ extension Array where Element == Meal {
         self.map { .meal($0) }
     }
 }
+
+extension Array where Element == Food {
+    var products: [Product] {
+        self.compactMap { food in
+            switch food {
+            case .product(let product):
+                return product
+            default:
+                return nil
+            }
+        }
+    }
+    
+    var dishes: [Dish] {
+        self.compactMap { food in
+            switch food {
+            case .dishes(let dish):
+                return dish
+            default:
+                return nil
+            }
+        }
+    }
+}

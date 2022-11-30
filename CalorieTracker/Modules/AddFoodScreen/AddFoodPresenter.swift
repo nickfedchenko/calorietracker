@@ -17,6 +17,7 @@ protocol AddFoodPresenterInterface: AnyObject {
     func getSubInfo(_ food: Food?, _ type: FoodInfoCases) -> Int?
     func didTapCountControl(_ foods: [Food], complition: @escaping ([Food]) -> Void )
     func didTapScannerButton()
+    func saveMeal(_ mealTime: MealTime, foods: [Food]) 
 }
 
 final class AddFoodPresenter {
@@ -168,5 +169,13 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
     
     func getSubInfo(_ food: Food?, _ type: FoodInfoCases) -> Int? {
         return food?.foodInfo[type]
+    }
+    
+    func saveMeal(_ mealTime: MealTime, foods: [Food]) {
+        FDS.shared.createMeal(
+            mealTime: mealTime,
+            dishes: foods.dishes,
+            products: foods.products
+        )
     }
 }

@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class MenuCellView: UIControl {
+final class MenuCellView<ID: WithGetTitleProtocol & WithGetImageProtocol>: UIControl {
     private lazy var stackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
@@ -33,7 +33,7 @@ final class MenuCellView: UIControl {
     private var firstDraw = true
     private var shadowLayer = CALayer()
     
-    let model: MenuView.MenuCellViewModel
+    let model: ID
     
     var isSelectedBackgroundColor: UIColor? = .white
     var isNotSelectedBackgroundColor: UIColor? = R.color.addFood.menu.background()
@@ -48,11 +48,11 @@ final class MenuCellView: UIControl {
         }
     }
     
-    init(_ model: MenuView.MenuCellViewModel) {
+    init(_ model: ID) {
         self.model = model
         super.init(frame: .zero)
-        titleLabel.text = model.title
-        imageView.image = model.image
+        titleLabel.text = model.getTitle(.long)
+        imageView.image = model.getImage()
         
         setupView()
         addSubviews()
@@ -110,14 +110,29 @@ final class MenuCellView: UIControl {
     private func setupShadow() {
         shadowLayer.frame = bounds
         shadowLayer.addShadow(
-            shadow: MenuView.ShadowConst.firstShadow,
+            shadow: ShadowConst.firstShadow,
             rect: bounds,
             cornerRadius: layer.cornerRadius
         )
         shadowLayer.addShadow(
-            shadow: MenuView.ShadowConst.secondShadow,
+            shadow: ShadowConst.secondShadow,
             rect: bounds,
             cornerRadius: layer.cornerRadius
         )
     }
+}
+
+private struct ShadowConst {
+    static let firstShadow = Shadow(
+        color: R.color.addFood.menu.firstShadow() ?? .black,
+        opacity: 0.2,
+        offset: CGSize(width: 0, height: 4),
+        radius: 10
+    )
+    static let secondShadow = Shadow(
+        color: R.color.addFood.menu.secondShadow() ?? .black,
+        opacity: 0.25,
+        offset: CGSize(width: 0, height: 0.5),
+        radius: 2
+    )
 }

@@ -133,12 +133,12 @@ final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
     private func setupShadow() {
         shadowLayer.frame = bounds
         shadowLayer.addShadow(
-            shadow: MenuView.ShadowConst.firstShadow,
+            shadow: ShadowConst.firstShadow,
             rect: bounds,
             cornerRadius: 8
         )
         shadowLayer.addShadow(
-            shadow: MenuView.ShadowConst.secondShadow,
+            shadow: ShadowConst.secondShadow,
             rect: bounds,
             cornerRadius: 8
         )
