@@ -13,7 +13,7 @@ protocol AddFoodPresenterInterface: AnyObject {
     func getSearchHistory() -> [String]
     func didTapBackButton()
     func didTapCell(_ type: Food)
-    func search(_ request: String)
+    func search(_ request: String, complition: ((Bool) -> Void)?)
     func getSubInfo(_ food: Food?, _ type: FoodInfoCases) -> Int?
     func didTapCountControl(_ foods: [Food], complition: @escaping ([Food]) -> Void )
     func didTapScannerButton()
@@ -157,14 +157,17 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
         router?.openScanner()
     }
     
-    func search(_ request: String) {
+    func search(_ request: String, complition: ((Bool) -> Void)?) {
         let frequents = searchAmongFrequent(request)
         let favorites = searchAmongFavorites(request)
         let recents = searchAmongRecent(request)
         let basicDishes = DSF.shared.searchDishes(by: request).foods
         let basicProducts = DSF.shared.searchProducts(by: request).foods
+        let foods = frequents + recents + favorites + basicDishes + basicProducts
         
-        self.foods = frequents + recents + favorites + basicDishes + basicProducts
+        self.foods = foods
+        
+        complition?(!foods.isEmpty)
     }
     
     func getSubInfo(_ food: Food?, _ type: FoodInfoCases) -> Int? {

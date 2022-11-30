@@ -9,9 +9,25 @@ import UIKit
 
 class InnerShadowTextField: UITextField {
     
-    var innerShadowColor: UIColor?
+    var innerShadowColor: UIColor? {
+        get { UIColor(cgColor: innerShadowLayer.shadowColor ?? UIColor.clear.cgColor) }
+        set { innerShadowLayer.shadowColor = newValue?.cgColor }
+    }
     
+    private let innerShadowLayer = CALayer()
     private var isFirstDraw = true
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        innerShadowLayer.shadowOpacity = 1
+        innerShadowLayer.shadowRadius = 2
+        innerShadowLayer.masksToBounds = true
+        layer.addSublayer(innerShadowLayer)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -21,15 +37,10 @@ class InnerShadowTextField: UITextField {
     }
     
     private func textFieldInnerShadow() {
-        let innerShadowLayer = CALayer()
         innerShadowLayer.frame = bounds
         innerShadowLayer.shadowPath = getShadowPath(rect: bounds).cgPath
-        innerShadowLayer.masksToBounds = true
         innerShadowLayer.shadowOffset = CGSize(width: 0, height: 0.5)
         innerShadowLayer.shadowColor = innerShadowColor?.cgColor
-        innerShadowLayer.shadowOpacity = 1
-        innerShadowLayer.shadowRadius = 2
-        layer.addSublayer(innerShadowLayer)
     }
     
     private func getShadowPath(rect: CGRect) -> UIBezierPath {

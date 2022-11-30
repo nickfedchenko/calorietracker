@@ -37,7 +37,7 @@ final class AddFoodViewController: UIViewController {
     private lazy var menuView = MenuView(Const.menuModels)
     private lazy var menuTypeSecondView = ContextMenuTypeSecondView(Const.menuTypeSecondModels)
     private lazy var menuButton = MenuButton<MealTime>()
-    private lazy var searshTextField = SearchTextField()
+    private lazy var searshTextField = SearchView()
     private lazy var foodCollectionViewController = FoodCollectionViewController()
     private lazy var searchHistoryViewController = SearchHistoryViewController()
     private lazy var counterKcalControl = CounterKcalControl()
@@ -139,14 +139,42 @@ final class AddFoodViewController: UIViewController {
         menuTypeSecondView.isHidden = true
         menuCreateView.isHidden = true
         
-        searshTextField.keyboardAppearance = .light
-        searshTextField.keyboardType = .webSearch
-        searshTextField.delegate = self
+        searshTextField.textField.keyboardAppearance = .light
+        searshTextField.textField.keyboardType = .webSearch
+    
         foodCollectionViewController.dataSource = self
         foodCollectionViewController.delegate = self
         
         self.addChild(foodCollectionViewController)
         self.addChild(searchHistoryViewController)
+        
+        searshTextField.didBeginEditing = { text in
+            self.isSelectedType = .search
+            self.createTimer()
+            
+            guard !text.isEmpty else {
+                self.state = .search(.recent)
+                return
+            }
+        }
+        
+        searshTextField.didChangeValue = { text in
+            self.createTimer()
+            guard !text.isEmpty else {
+                self.state = .search(.recent)
+                return
+            }
+        }
+        
+        searshTextField.didEndEditing = { text in
+            guard !text.isEmpty else {
+                self.isSelectedType = .frequent
+                self.state = .default
+                return
+            }
+            
+            FDS.shared.rememberSearchQuery(text)
+        }
         
         menuButton.configure(Const.menuModels.first)
         menuButton.completion = { [weak self] complition in
@@ -179,7 +207,7 @@ final class AddFoodViewController: UIViewController {
         
         searchHistoryViewController.complition = { [weak self] search in
             self?.searshTextField.text = search
-            self?.state = .search(.foundResults)
+            self?.didEndTimer()
         }
         
         menuCreateView.complition = { _ in
@@ -192,10 +220,6 @@ final class AddFoodViewController: UIViewController {
             action: #selector(didTapCounterControl),
             for: .touchUpInside
         )
-        
-        let hideKeyboardGR = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
-        hideKeyboardGR.cancelsTouchesInView = false
-        view.addGestureRecognizer(hideKeyboardGR)
     }
     
     private func addSubviews() {
@@ -424,10 +448,10 @@ final class AddFoodViewController: UIViewController {
             count: selectedFood.count
         ))
         showDoneButton(true)
+        searshTextField.state = .smallNotEdit
     }
     
     private func didChangeState() {
-        setupDefaultState()
         switch self.state {
         case .search(let state):
             showDoneButton(false)
@@ -442,6 +466,7 @@ final class AddFoodViewController: UIViewController {
         case .default:
             if let selectedFood = selectedFood, !selectedFood.isEmpty {
                 showDoneButton(true)
+                searshTextField.state = .smallNotEdit
             }
             setupDefaultState()
         }
@@ -466,6 +491,7 @@ final class AddFoodViewController: UIViewController {
     }
     
     private func setupSearchFoundResultsState() {
+        searchHistoryViewController.view.isHidden = true
         collectionViewTopSecondAnchor?.isActive = true
         foodCollectionViewController.view.layer.zPosition = 7
         bottomGradientView.layer.zPosition = 8
@@ -488,7 +514,7 @@ final class AddFoodViewController: UIViewController {
     private func createTimer() {
         timer?.invalidate()
         timer = Timer.scheduledTimer(
-            timeInterval: 2.0,
+            timeInterval: 0.5,
             target: self,
             selector: #selector(didEndTimer),
             userInfo: nil,
@@ -546,7 +572,9 @@ final class AddFoodViewController: UIViewController {
     
     @objc private func didEndTimer() {
         guard let searchText = searshTextField.text, !searchText.isEmpty else { return }
-        presenter?.search(searchText)
+        presenter?.search(searchText, complition: { flag in
+            self.state = flag ? .search(.foundResults) : .search(.noResults)
+        })
     }
     
     @objc private func didTapCounterControl() {
@@ -579,7 +607,7 @@ final class AddFoodViewController: UIViewController {
                         await MainActor.run {
                             let text = result.bestTranscription.formattedString
                             searshTextField.text = text
-                            presenter?.search(text)
+                            presenter?.search(text, complition: nil)
                         }
                     }
                 }
@@ -609,48 +637,6 @@ extension AddFoodViewController: FoodCollectionViewControllerDataSource {
     
     func cell(collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell {
         getCell(collectionView: collectionView, indexPath: indexPath)
-    }
-}
-
-// MARK: - SearchTextField Delegate
-
-extension AddFoodViewController: UITextFieldDelegate {
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        isSelectedType = .search
-        createTimer()
-
-        searshTextField.textAlignment = .left
-        guard let text = textField.text, !text.isEmpty else {
-            state = .search(.recent)
-            return
-        }
-        state = .search(.foundResults)
-    }
-    
-    func textField(_ textField: UITextField,
-                   shouldChangeCharactersIn range: NSRange,
-                   replacementString string: String) -> Bool {
-        createTimer()
-        let replace = -1 * (range.length * 2 - 1)
-        guard let text = textField.text, text.count + replace > 0 else {
-            state = .search(.recent)
-            return true
-        }
-        
-        state = .search(.foundResults)
-        
-        return true
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        guard let text = textField.text, !text.isEmpty else {
-            searshTextField.textAlignment = .center
-            isSelectedType = .frequent
-            state = .default
-            return
-        }
-        
-        FDS.shared.rememberSearchQuery(text)
     }
 }
 
