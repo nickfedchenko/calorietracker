@@ -22,6 +22,9 @@ protocol DataServiceFacadeInterface {
     /// Возвращает все данные о еде сохраненные в локальной ДБ
     /// - Returns: массив FoodData
     func getAllStoredFoodData() -> [FoodData]
+    /// Возвращает все данные о воде сохраненные в локальной ДБ
+    /// - Returns: массив DailyData
+    func getAllStoredWater() -> [DailyData]
     /// Метода поиска продуктов, по умолчанию локальный
     /// - Parameters:
     ///   - phrase: search query
@@ -131,6 +134,10 @@ extension DSF: DataServiceFacadeInterface {
     
     func getAllStoredFoodData() -> [FoodData] {
         self.getFoodData()
+    }
+    
+    func getAllStoredWater() -> [DailyData] {
+        return localPersistentStore.fetchWater()
     }
     
     func searchProducts(by phrase: String, useNetwork: Bool = false, completion: @escaping ([Product]) -> Void) {

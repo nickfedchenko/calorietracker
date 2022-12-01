@@ -58,6 +58,7 @@ final class WidgetContainerViewController: UIViewController {
     let widgetType: WidgetType
     
     private let widgetView: UIView
+    private lazy var backgroundView = UIView()
     
     init(_ type: WidgetType) {
         self.widgetType = type
@@ -77,11 +78,15 @@ final class WidgetContainerViewController: UIViewController {
     }
     
     private func setupView() {
-        view.backgroundColor = R.color.foodViewing.basicPrimary()?.withAlphaComponent(0.25)
+        backgroundView.backgroundColor = R.color.foodViewing.basicPrimary()?.withAlphaComponent(0.25)
     }
     
     private func setupConstraints() {
-        view.addSubview(widgetView)
+        view.addSubviews(backgroundView, widgetView)
+        
+        backgroundView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         
         widgetView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(widgetInsets.top)
@@ -96,7 +101,8 @@ final class WidgetContainerViewController: UIViewController {
             target: self,
             action: #selector(didTapView)
         )
-        view.addGestureRecognizer(tapGestureRecognizer)
+        tapGestureRecognizer.cancelsTouchesInView = true
+        backgroundView.addGestureRecognizer(tapGestureRecognizer)
     }
     
     private func getWeightWidgetInsets() -> UIEdgeInsets {

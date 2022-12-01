@@ -16,6 +16,7 @@ final class UDM {
         case weightGoal, caloriesGoal, bmiGoal, waterGoal, carbGoal, stepsGoal, exercisesGoal, activeGoal
         case widgetSettings
         case nutritionDailyGoal, nutritionDaily
+        case dailyWaterGoal, dailyStepsGoal
     }
     
     static var isGloballyMetric: Bool {
@@ -414,6 +415,32 @@ final class UDM {
         set {
             let data = try? JSONEncoder().encode(newValue)
             setValue(value: data, for: .nutritionDailyGoal)
+        }
+    }
+    
+    static var dailyWaterGoal: Double? {
+        get {
+            guard let value: Double = getValue(for: .dailyWaterGoal) else {
+                return nil
+            }
+            return value
+        }
+        
+        set {
+            setValue(value: newValue, for: .dailyWaterGoal)
+        }
+    }
+    
+    static var dailyStepsGoal: Double? {
+        get {
+            guard let value: Double = getValue(for: .dailyStepsGoal) else {
+                return nil
+            }
+            return value
+        }
+        
+        set {
+            setValue(value: newValue, for: .dailyStepsGoal)
         }
     }
 }
