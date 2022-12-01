@@ -132,12 +132,12 @@ final class ContextMenuTypeSecondView<ID: WithGetDataProtocol>: UIView {
     private func setupShadow() {
         shadowLayer.frame = bounds
         shadowLayer.addShadow(
-            shadow: MenuView.ShadowConst.firstShadow,
+            shadow: ShadowConst.firstShadow,
             rect: bounds,
             cornerRadius: layer.cornerRadius
         )
         shadowLayer.addShadow(
-            shadow: MenuView.ShadowConst.secondShadow,
+            shadow: ShadowConst.secondShadow,
             rect: bounds,
             cornerRadius: layer.cornerRadius
         )

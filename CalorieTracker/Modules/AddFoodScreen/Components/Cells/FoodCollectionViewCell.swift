@@ -7,10 +7,21 @@
 
 import UIKit
 
-final class FoodCollectionViewCell: UICollectionViewCell {
+final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
+    var foodType: Food? {
+        didSet {
+            self.configure()
+        }
+    }
+    
     enum CellType {
         case table
         case withShadow
+    }
+    
+    enum CellButtonType {
+        case delete
+        case add
     }
     
     var cellType: CellType = .table {
@@ -18,6 +29,26 @@ final class FoodCollectionViewCell: UICollectionViewCell {
             didChangeCellType()
         }
     }
+    
+    var cellButtonType: CellButtonType = .add {
+        didSet {
+            foodView.cellButtonType = cellButtonType
+        }
+    }
+    
+    var colorSubInfo: UIColor? {
+        didSet {
+            foodView.color = colorSubInfo
+        }
+    }
+    
+    var subInfo: Int? {
+        didSet {
+            foodView.subInfo = subInfo
+        }
+    }
+    
+    var didTapButton: ((Food) -> Void)?
     
     private lazy var bottomLineView: UIView = {
         let view = UIView()
@@ -32,6 +63,7 @@ final class FoodCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        setupView()
         addSubviews()
         setupConstraints()
     }
@@ -59,13 +91,17 @@ final class FoodCollectionViewCell: UICollectionViewCell {
         return layoutAttributes
     }
     
-    func configure(_ model: FoodCellView.FoodViewModel?) {
-        guard let model = model else { return }
-        foodView.configure(model)
+    private func configure() {
+        guard let foodType = foodType else { return }
+        
+        foodView.configure(.init(foodType))
     }
     
     private func setupView() {
-        
+        foodView.didTapButton = {
+            guard let foodType = self.foodType else { return }
+            self.didTapButton?(foodType)
+        }
     }
     
     private func addSubviews() {
@@ -97,12 +133,12 @@ final class FoodCollectionViewCell: UICollectionViewCell {
     private func setupShadow() {
         shadowLayer.frame = bounds
         shadowLayer.addShadow(
-            shadow: MenuView.ShadowConst.firstShadow,
+            shadow: ShadowConst.firstShadow,
             rect: bounds,
             cornerRadius: 8
         )
         shadowLayer.addShadow(
-            shadow: MenuView.ShadowConst.secondShadow,
+            shadow: ShadowConst.secondShadow,
             rect: bounds,
             cornerRadius: 8
         )

@@ -10,6 +10,9 @@ import UIKit
 
 protocol AddFoodRouterInterface: AnyObject {
     func closeViewController()
+    func openProductViewController(_ product: Product)
+    func openSelectedFoodCellsVC(_ foods: [Food], complition: @escaping ([Food]) -> Void )
+    func openScanner()
 }
 
 class AddFoodRouter: NSObject {
@@ -34,5 +37,30 @@ class AddFoodRouter: NSObject {
 extension AddFoodRouter: AddFoodRouterInterface {
     func closeViewController() {
         viewController?.navigationController?.popViewController(animated: true)
+    }
+    
+    func openProductViewController(_ product: Product) {
+        let productVC = ProductRouter.setupModule(product)
+        productVC.modalPresentationStyle = .fullScreen
+        viewController?.present(productVC, animated: true)
+    }
+    
+    func openSelectedFoodCellsVC(
+        _ foods: [Food],
+        complition: @escaping ([Food]) -> Void )
+    {
+        let vc = SelectedFoodCellsRouter.setupModule(foods)
+        vc.modalPresentationStyle = .overFullScreen
+        vc.didChangeSeletedFoods = { newFoods in
+            complition(newFoods)
+        }
+        
+        viewController?.present(vc, animated: true)
+    }
+    
+    func openScanner() {
+        let vc = ScannerRouter.setupModule()
+        vc.modalPresentationStyle = .fullScreen
+        viewController?.present(vc, animated: true)
     }
 }

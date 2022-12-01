@@ -93,6 +93,12 @@ struct Dish: Codable {
     }
 }
 
+extension Dish: Equatable {
+    static func == (lhs: Dish, rhs: Dish) -> Bool {
+        return lhs.id == rhs.id
+    }
+}
+
 struct Method: Codable {
     let content: String?
     let timer: Int?

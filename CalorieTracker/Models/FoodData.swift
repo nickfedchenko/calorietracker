@@ -26,6 +26,9 @@ struct FoodData {
             food = .dishes(dish)
         } else if let domainProduct = managedModel.product, let product = Product(from: domainProduct) {
             food = .product(product)
+        } else if let domainUserProduct = managedModel.userProduct,
+                    let userProduct = UserProduct(from: domainUserProduct) {
+            food = .userProduct(userProduct)
         } else {
             food = nil
         }
@@ -49,6 +52,9 @@ extension FoodData {
         case is Dish:
             guard let child = child as? Dish else { return }
             DSF.shared.setChildFoodData(foodDataId: self.id, dishID: child.id)
+        case is UserProduct:
+            guard let child = child as? UserProduct else { return }
+            DSF.shared.setChildFoodData(foodDataId: self.id, userProductID: child.id)
         default:
             return
         }

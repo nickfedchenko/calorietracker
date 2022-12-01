@@ -7,13 +7,8 @@
 
 import UIKit
 
-final class MenuView: UIView {
-    struct MenuCellViewModel {
-        let title: String
-        let image: UIImage?
-    }
-    
-    var complition: ((MenuView.MenuCellViewModel) -> Void)?
+final class MenuView<ID: WithGetTitleProtocol & WithGetImageProtocol>: UIView {    
+    var complition: ((ID) -> Void)?
     
     private lazy var stackView: UIStackView = {
         let stack = UIStackView()
@@ -27,9 +22,9 @@ final class MenuView: UIView {
     private var zeroHeightAnchors: [NSLayoutConstraint] = []
     private var shadowLayer = CALayer()
     
-    let model: [MenuCellViewModel]
+    let model: [ID]
     
-    init(_ model: [MenuCellViewModel]) {
+    init(_ model: [ID]) {
         self.model = model
         super.init(frame: .zero)
         setupView()
@@ -123,7 +118,11 @@ final class MenuView: UIView {
     private func configureStack() {
         model.forEach {
             let menuCellView = MenuCellView($0)
-            menuCellView.addTarget(self, action: #selector(didSelectedCell), for: .touchUpInside)
+            menuCellView.addTarget(
+                self,
+                action: #selector(didSelectedCell),
+                for: .touchUpInside
+            )
             menuCellView.snp.makeConstraints { make in
                 make.height.equalTo(64)
             }
@@ -136,21 +135,21 @@ final class MenuView: UIView {
     private func setupShadow() {
         shadowLayer.frame = bounds
         shadowLayer.addShadow(
-            shadow: MenuView.ShadowConst.firstShadow,
+            shadow: ShadowConst.firstShadow,
             rect: bounds,
             cornerRadius: layer.cornerRadius
         )
         shadowLayer.addShadow(
-            shadow: MenuView.ShadowConst.secondShadow,
+            shadow: ShadowConst.secondShadow,
             rect: bounds,
             cornerRadius: layer.cornerRadius
         )
     }
     
     @objc private func didSelectedCell(_ sender: UIControl) {
-        guard let view = sender as? MenuCellView else { return }
+        guard let view = sender as? MenuCellView<ID> else { return }
         stackView.arrangedSubviews.forEach {
-            ($0 as? MenuCellView)?.isSelectedCell = false
+            ($0 as? MenuCellView<ID>)?.isSelectedCell = false
         }
         view.isSelectedCell = true
         complition?(view.model)
@@ -158,19 +157,17 @@ final class MenuView: UIView {
     }
 }
 
-extension MenuView {
-    struct ShadowConst {
-        static let firstShadow = Shadow(
-            color: R.color.addFood.menu.firstShadow() ?? .black,
-            opacity: 0.2,
-            offset: CGSize(width: 0, height: 4),
-            radius: 10
-        )
-        static let secondShadow = Shadow(
-            color: R.color.addFood.menu.secondShadow() ?? .black,
-            opacity: 0.25,
-            offset: CGSize(width: 0, height: 0.5),
-            radius: 2
-        )
-    }
+private struct ShadowConst {
+    static let firstShadow = Shadow(
+        color: R.color.addFood.menu.firstShadow() ?? .black,
+        opacity: 0.2,
+        offset: CGSize(width: 0, height: 4),
+        radius: 10
+    )
+    static let secondShadow = Shadow(
+        color: R.color.addFood.menu.secondShadow() ?? .black,
+        opacity: 0.25,
+        offset: CGSize(width: 0, height: 0.5),
+        radius: 2
+    )
 }

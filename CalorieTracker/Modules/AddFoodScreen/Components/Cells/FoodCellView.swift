@@ -5,6 +5,7 @@
 //  Created by Vadim Aleshin on 07.11.2022.
 //
 
+import Kingfisher
 import UIKit
 
 final class FoodCellView: UIView {
@@ -14,10 +15,31 @@ final class FoodCellView: UIView {
         let description: String
         let tag: String
         let kcal: Int
-        let flag: Bool
-        let image: UIImage?
-        let subInfo: Int?
-        let color: UIColor?
+        let image: URL?
+    }
+    
+    var didTapButton: (() -> Void)?
+    
+    var color: UIColor? {
+        didSet {
+            infoLabel.textColor = color
+        }
+    }
+    
+    var cellButtonType: FoodCollectionViewCell.CellButtonType = .add {
+        didSet {
+            didChangeButtonType()
+        }
+    }
+    
+    var subInfo: Int? {
+        didSet {
+            if let info = subInfo {
+                infoLabel.text = "\(info)"
+            } else {
+                infoLabel.text = nil
+            }
+        }
     }
     
     private lazy var imageView: UIImageView = {
@@ -26,10 +48,10 @@ final class FoodCellView: UIView {
         return view
     }()
     
-    private lazy var addImageView: UIImageView = {
-        let view = UIImageView()
-        view.image = R.image.addFood.recipesCell.add()
-        return view
+    private lazy var selectButton: UIButton = {
+        let button = UIButton()
+        button.addTarget(self, action: #selector(didTapSelectButton), for: .touchUpInside)
+        return button
     }()
     
     private lazy var checkImageView: UIImageView = {
@@ -86,32 +108,33 @@ final class FoodCellView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupView()
         addSubviews()
         setupConstraints()
+        didChangeButtonType()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(_ model: FoodViewModel) {
+    func configure(_ model: FoodViewModel?) {
+        guard let model = model else { return }
         titleLabel.text = model.title
         descriptionLabel.text = model.description
         tagLabel.text = model.tag
         kalorieLabel.text = "\(model.kcal)"
-        imageView.image = model.image
         
-        infoLabel.textColor = model.color
-        if let info = model.subInfo {
-            infoLabel.text = "\(info)"
-        } else {
-            infoLabel.text = nil
+        if let imageUrl = model.image {
+            imageView.kf.setImage(
+                with: imageUrl,
+                placeholder: UIImage(),
+                options: [
+                    .processor(DownsamplingImageProcessor(
+                        size: CGSize(width: 64, height: 64)
+                    ))
+                ]
+            )
         }
-    }
-    
-    private func setupView() {
-        
     }
     
     private func addSubviews() {
@@ -119,7 +142,7 @@ final class FoodCellView: UIView {
         
         addSubviews(
             imageView,
-            addImageView,
+            selectButton,
             checkImageView,
             titleLabel,
             descriptionLabel,
@@ -162,8 +185,8 @@ final class FoodCellView: UIView {
             make.height.equalTo(tagBackgroundView)
         }
         
-        addImageView.aspectRatio()
-        addImageView.snp.makeConstraints { make in
+        selectButton.aspectRatio()
+        selectButton.snp.makeConstraints { make in
             make.centerY.equalTo(tagBackgroundView)
             make.trailing.equalToSuperview()
             make.height.equalTo(tagBackgroundView)
@@ -172,7 +195,7 @@ final class FoodCellView: UIView {
         descriptionLabel.snp.makeConstraints { make in
             make.centerY.equalTo(tagBackgroundView)
             make.leading.equalTo(checkImageView.snp.trailing).offset(6)
-            make.trailing.lessThanOrEqualTo(addImageView.snp.leading).offset(-6)
+            make.trailing.lessThanOrEqualTo(selectButton.snp.leading).offset(-6)
         }
         
         kalorieLabel.setContentCompressionResistancePriority(.init(1000), for: .horizontal)
@@ -188,6 +211,52 @@ final class FoodCellView: UIView {
             make.trailing.equalTo(kalorieLabel.snp.leading).offset(-8)
             make.leading.greaterThanOrEqualTo(titleLabel.snp.trailing).offset(6)
             make.centerY.equalTo(titleLabel)
+        }
+    }
+    
+    private func didChangeButtonType() {
+        switch cellButtonType {
+        case .delete:
+            selectButton.setImage(R.image.addFood.recipesCell.delete(), for: .normal)
+        case .add:
+            selectButton.setImage(R.image.addFood.recipesCell.add(), for: .normal)
+        }
+    }
+    
+    @objc private func didTapSelectButton() {
+        didTapButton?()
+    }
+}
+
+extension FoodCellView.FoodViewModel {
+    private init(_ product: Product) {
+        self.id = product.id
+        self.title = product.title
+        self.description = product.servings?
+            .compactMap { $0.title }
+            .joined(separator: ", ") ?? ""
+        self.tag = product.brand ?? ""
+        self.kcal = product.kcal
+        self.image = nil
+    }
+    
+    private init(_ dish: Dish) {
+        self.id = dish.id
+        self.title = dish.title
+        self.description = dish.info ?? ""
+        self.tag = dish.tags.first?.tag ?? ""
+        self.kcal = dish.kсal
+        self.image = nil
+    }
+    
+    init?(_ food: Food) {
+        switch food {
+        case .product(let product):
+            self.init(product)
+        case .dishes(let dish):
+            self.init(dish)
+        default:
+            return nil
         }
     }
 }

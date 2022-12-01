@@ -28,6 +28,21 @@ protocol DataServiceFacadeInterface {
     ///   - userNetwork: флаг отвечающий за поиск через бэк
     ///   - completion: результат приходит сюда.
     func searchProducts(by phrase: String, useNetwork: Bool, completion: @escaping ([Product]) -> Void)
+    /// Метода поиска продуктов
+    /// - Parameters:
+    ///   - phrase: search query
+    /// - Returns: массив Product
+    func searchProducts(by phrase: String) -> [Product]
+    /// Метода поиска продуктов
+    /// - Parameters:
+    ///   - barcode: barcode
+    /// - Returns: массив Product
+    func searchProducts(barcode: String) -> [Product]
+    /// Метода поиска блюд
+    /// - Parameters:
+    ///   - phrase: search query
+    /// - Returns: массив Dish
+    func searchDishes(by phrase: String) -> [Dish]
     /// Связывает модель FoodData с Dish
     /// - Parameters:
     ///   - foodDataId: id модели FoodData
@@ -38,6 +53,11 @@ protocol DataServiceFacadeInterface {
     ///   - foodDataId: id модели FoodData
     ///   - productID: id модели Product
     func setChildFoodData(foodDataId: String, productID: Int)
+    /// Связывает модель FoodData с UserProduct
+    /// - Parameters:
+    ///   - foodDataId: id модели FoodData
+    ///   - userProductID: id модели UserProduct
+    func setChildFoodData(foodDataId: String, userProductID: String)
     /// Связывает модель Meal с Product и Dish
     /// - Parameters:
     ///   - mealId: id модели FoodData
@@ -67,6 +87,10 @@ extension DSF: DataServiceFacadeInterface {
     
     func setChildFoodData(foodDataId: String, productID: Int) {
         localPersistentStore.setChildFoodData(foodDataId: foodDataId, productID: productID)
+    }
+    
+    func setChildFoodData(foodDataId: String, userProductID: String) {
+        localPersistentStore.setChildFoodData(foodDataId: foodDataId, userProductID: userProductID)
     }
     
     func setChildMeal(mealId: String, dishesID: [Int], productsID: [Int]) {
@@ -125,7 +149,17 @@ extension DSF: DataServiceFacadeInterface {
                 completion(products.sorted { $0.title.count < $1.title.count })
             }
         }
-        
     }
-        
+    
+    func searchProducts(by phrase: String) -> [Product] {
+        localPersistentStore.searchProducts(by: phrase)
+    }
+    
+    func searchProducts(barcode: String) -> [Product] {
+        localPersistentStore.searchProducts(barcode: barcode)
+    }
+    
+    func searchDishes(by phrase: String) -> [Dish] {
+        localPersistentStore.searchDishes(by: phrase)
+    }
 }

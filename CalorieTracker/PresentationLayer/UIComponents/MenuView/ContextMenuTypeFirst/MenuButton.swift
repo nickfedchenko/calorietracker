@@ -7,9 +7,10 @@
 
 import UIKit
 
-final class MenuButton: UIControl {
+final class MenuButton<ID: WithGetTitleProtocol & WithGetImageProtocol>: UIControl {
     
-    var completion: ((@escaping (MenuView.MenuCellViewModel) -> Void) -> Void)?
+    var completion: ((@escaping (ID) -> Void) -> Void)?
+    var model: ID?
     
     private lazy var leftImageView: UIImageView = {
         let view = UIImageView()
@@ -43,9 +44,10 @@ final class MenuButton: UIControl {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(_ model: MenuView.MenuCellViewModel?) {
-        titleLabel.text = model?.title ?? ""
-        leftImageView.image = model?.image
+    func configure(_ model: ID?) {
+        self.model = model
+        titleLabel.text = model?.getTitle(.long) ?? ""
+        leftImageView.image = model?.getImage()
     }
     
     private func setupView() {
@@ -76,8 +78,8 @@ final class MenuButton: UIControl {
     
     @objc private func didTapButton() {
         completion? { data in
-            self.titleLabel.text = data.title
-            self.leftImageView.image = data.image
+            self.titleLabel.text = data.getTitle(.long)
+            self.leftImageView.image = data.getImage()
         }
     }
 }

@@ -9,9 +9,7 @@
 import UIKit
 
 protocol AddFoodViewControllerInterface: AnyObject {
-    func setDishes(_ dishes: [Dish])
-    func setProducts(_ products: [Product])
-    func setMeals(_ meals: [Meal])
+    func setFoods(_ foods: [Food])
     func getFoodInfoType() -> FoodInfoCases
 }
 
@@ -33,25 +31,38 @@ final class AddFoodViewController: UIViewController {
     private lazy var hideKeyboardButton: UIButton = getHideKeyboardButton()
     private lazy var menuCreateView: MenuView = getMenuCreateView()
     private lazy var microphoneButton: UIButton = getMicrophoneButton()
+    private lazy var doneButton: UIButton = getDoneButton()
     
     private lazy var bottomGradientView = UIView()
     private lazy var menuView = MenuView(Const.menuModels)
     private lazy var menuTypeSecondView = ContextMenuTypeSecondView(Const.menuTypeSecondModels)
-    private lazy var menuButton = MenuButton()
-    private lazy var searshTextField = SearchTextField()
+    private lazy var menuButton = MenuButton<MealTime>()
+    private lazy var searshTextField = SearchView()
     private lazy var foodCollectionViewController = FoodCollectionViewController()
     private lazy var searchHistoryViewController = SearchHistoryViewController()
+    private lazy var counterKcalControl = CounterKcalControl()
+    
+    private let speechRecognitionManager: SpeechRecognitionManager = .init()
+    private var speechRecognitionTask: Task<Void, Error>?
+    
+    private var timer: Timer?
     
     private var contentViewBottomAnchor: NSLayoutConstraint?
     private var searchTextFieldBottomAnchor: NSLayoutConstraint?
     private var collectionViewTopFirstAnchor: NSLayoutConstraint?
     private var collectionViewTopSecondAnchor: NSLayoutConstraint?
+    private var doneButtonWidthAnchor: NSLayoutConstraint?
     
     private var firstDraw = true
+    private var microphoneButtonSelected = false
     
-    private var dishes: [Dish] = []
-    private var products: [Product] = []
-    private var meals: [Meal] = []
+    private var foods: [Food] = []
+    
+    private var selectedFood: [Food]? {
+        didSet {
+            didChangeSelectedFood()
+        }
+    }
     
     private var isSelectedType: AddFood = .recent {
         didSet {
@@ -115,22 +126,9 @@ final class AddFoodViewController: UIViewController {
         )
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        NotificationCenter.default.removeObserver(
-            self,
-            name: UIResponder.keyboardWillShowNotification,
-            object: nil
-        )
-        NotificationCenter.default.removeObserver(
-            self,
-            name: UIResponder.keyboardWillHideNotification,
-            object: nil
-        )
-    }
-    
     // MARK: - Private functions
     
+    // swiftlint:disable:next function_body_length
     private func setupView() {
         presenter?.setFoodType(.frequent)
         
@@ -141,11 +139,42 @@ final class AddFoodViewController: UIViewController {
         menuTypeSecondView.isHidden = true
         menuCreateView.isHidden = true
         
-        searshTextField.delegate = self
+        searshTextField.textField.keyboardAppearance = .light
+        searshTextField.textField.keyboardType = .webSearch
+    
+        foodCollectionViewController.dataSource = self
         foodCollectionViewController.delegate = self
         
         self.addChild(foodCollectionViewController)
         self.addChild(searchHistoryViewController)
+        
+        searshTextField.didBeginEditing = { text in
+            self.isSelectedType = .search
+            self.createTimer()
+            
+            guard !text.isEmpty else {
+                self.state = .search(.recent)
+                return
+            }
+        }
+        
+        searshTextField.didChangeValue = { text in
+            self.createTimer()
+            guard !text.isEmpty else {
+                self.state = .search(.recent)
+                return
+            }
+        }
+        
+        searshTextField.didEndEditing = { text in
+            guard !text.isEmpty else {
+                self.isSelectedType = .frequent
+                self.state = .default
+                return
+            }
+            
+            FDS.shared.rememberSearchQuery(text)
+        }
         
         menuButton.configure(Const.menuModels.first)
         menuButton.completion = { [weak self] complition in
@@ -178,16 +207,19 @@ final class AddFoodViewController: UIViewController {
         
         searchHistoryViewController.complition = { [weak self] search in
             self?.searshTextField.text = search
-            self?.state = .search(.foundResults)
+            self?.didEndTimer()
         }
         
         menuCreateView.complition = { _ in
             self.showOverlay(false)
         }
         
-        let hideKeyboardGR = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
-        hideKeyboardGR.cancelsTouchesInView = false
-        view.addGestureRecognizer(hideKeyboardGR)
+        counterKcalControl.isHidden = true
+        counterKcalControl.addTarget(
+            self,
+            action: #selector(didTapCounterControl),
+            for: .touchUpInside
+        )
     }
     
     private func addSubviews() {
@@ -205,10 +237,12 @@ final class AddFoodViewController: UIViewController {
             menuButton,
             infoButtonsView,
             segmentedScrollView,
+            counterKcalControl,
             bottomGradientView,
             microphoneButton,
             keyboardHeaderView,
             searshTextField,
+            doneButton,
             overlayView,
             menuView,
             menuTypeSecondView,
@@ -216,6 +250,7 @@ final class AddFoodViewController: UIViewController {
         )
     }
     
+    // swiftlint:disable:next function_body_length
     private func setupConstraints() {
         searchTextFieldBottomAnchor = searshTextField.bottomAnchor.constraint(
             equalTo: tabBarStackView.topAnchor,
@@ -275,9 +310,7 @@ final class AddFoodViewController: UIViewController {
         collectionViewTopSecondAnchor = foodCollectionViewController
             .view
             .topAnchor
-            .constraint(
-                equalTo: view.safeAreaLayoutGuide.topAnchor
-            )
+            .constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
         foodCollectionViewController.view.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.top.equalTo(infoButtonsView.snp.bottom).offset(4).priority(.low)
@@ -304,7 +337,7 @@ final class AddFoodViewController: UIViewController {
         microphoneButton.aspectRatio()
         microphoneButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().offset(-20)
-            make.leading.equalTo(searshTextField.snp.trailing).offset(12)
+            make.leading.greaterThanOrEqualTo(searshTextField.snp.trailing).offset(12)
             make.bottom.equalTo(tabBarStackView.snp.top).offset(-12)
         }
         
@@ -327,6 +360,22 @@ final class AddFoodViewController: UIViewController {
         
         overlayView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+        }
+        
+        counterKcalControl.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().offset(-20)
+            make.height.equalTo(40)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+        }
+        
+        doneButtonWidthAnchor = doneButton
+            .widthAnchor
+            .constraint(equalTo: view.widthAnchor, multiplier: 0.71)
+        doneButton.snp.makeConstraints { make in
+            make.trailing.equalTo(microphoneButton)
+            make.bottom.top.equalTo(searshTextField)
+            make.leading.greaterThanOrEqualTo(searshTextField.snp.trailing).offset(12)
+            make.width.equalTo(0).priority(.low)
         }
     }
     
@@ -362,21 +411,16 @@ final class AddFoodViewController: UIViewController {
     private func getCell(collectionView: UICollectionView,
                          indexPath: IndexPath) -> UICollectionViewCell {
         switch isSelectedType {
-        case .frequent, .recent, .favorites:
+        case .frequent, .recent, .favorites, .search:
             let cell: FoodCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
+            let food = foods[safe: indexPath.row]
             cell.cellType = .table
-            
-            switch indexPath.section {
-            case 0:
-                let model = products[indexPath.row]
-                cell.configure(presenter?.getFoodViewModel(model))
-            case 1:
-                let model = dishes[indexPath.row]
-                cell.configure(presenter?.getFoodViewModel(model))
-            default:
-                break
+            cell.foodType = food
+            cell.colorSubInfo = selectedFoodInfo.getColor()
+            cell.subInfo = presenter?.getSubInfo(food, selectedFoodInfo)
+            cell.didTapButton = { food in
+                self.selectedFood = (self.selectedFood ?? []) + [food]
             }
-            
             return cell
         case .myMeals:
             let cell: RecipesColectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
@@ -391,10 +435,26 @@ final class AddFoodViewController: UIViewController {
         }
     }
     
+    private func didChangeSelectedFood() {
+        guard let selectedFood = selectedFood, !selectedFood.isEmpty else {
+            counterKcalControl.isHidden = true
+            showDoneButton(false)
+            return
+        }
+        let sumKcal = selectedFood.compactMap { $0.foodInfo[.kcal] }.sum()
+        counterKcalControl.isHidden = false
+        counterKcalControl.configure(.init(
+            kcal: sumKcal,
+            count: selectedFood.count
+        ))
+        showDoneButton(true)
+        searshTextField.state = .smallNotEdit
+    }
+    
     private func didChangeState() {
-        setupDefaultState()
         switch self.state {
         case .search(let state):
+            showDoneButton(false)
             switch state {
             case .recent:
                 setupSearchRecentState()
@@ -404,6 +464,10 @@ final class AddFoodViewController: UIViewController {
                 setupSearchFoundResultsState()
             }
         case .default:
+            if let selectedFood = selectedFood, !selectedFood.isEmpty {
+                showDoneButton(true)
+                searshTextField.state = .smallNotEdit
+            }
             setupDefaultState()
         }
     }
@@ -427,11 +491,35 @@ final class AddFoodViewController: UIViewController {
     }
     
     private func setupSearchFoundResultsState() {
+        searchHistoryViewController.view.isHidden = true
         collectionViewTopSecondAnchor?.isActive = true
         foodCollectionViewController.view.layer.zPosition = 7
         bottomGradientView.layer.zPosition = 8
         searshTextField.layer.zPosition = 10
         keyboardHeaderView.layer.zPosition = 9
+    }
+    
+    private func showDoneButton(_ flag: Bool) {
+        microphoneButton.isHidden = true
+        doneButton.isHidden = false
+        doneButtonWidthAnchor?.isActive = flag
+        UIView.animate(withDuration: 0.2) {
+            self.view.layoutIfNeeded()
+        } completion: { _ in
+            self.doneButton.isHidden = !flag
+            self.microphoneButton.isHidden = flag
+        }
+    }
+    
+    private func createTimer() {
+        timer?.invalidate()
+        timer = Timer.scheduledTimer(
+            timeInterval: 0.5,
+            target: self,
+            selector: #selector(didEndTimer),
+            userInfo: nil,
+            repeats: false
+        )
     }
     
     @objc private func keyboardWillShow(notification: NSNotification) {
@@ -478,24 +566,73 @@ final class AddFoodViewController: UIViewController {
     
     @objc private func didTapCalorieButton() {}
     
-    @objc private func didTapScanButton() {}
+    @objc private func didTapScanButton() {
+        presenter?.didTapScannerButton()
+    }
     
-    @objc private func didTapMicrophoneButton() {}
+    @objc private func didEndTimer() {
+        guard let searchText = searshTextField.text, !searchText.isEmpty else { return }
+        presenter?.search(searchText, complition: { flag in
+            self.state = flag ? .search(.foundResults) : .search(.noResults)
+        })
+    }
+    
+    @objc private func didTapCounterControl() {
+        guard let selectedFood = selectedFood, !selectedFood.isEmpty else { return }
+        presenter?.didTapCountControl(selectedFood, complition: { newFoods in
+            self.selectedFood = newFoods
+        })
+    }
+    
+    @objc private func didTapDoneButton() {
+        guard let mealTime = menuButton.model else { return }
+        presenter?.saveMeal(mealTime, foods: selectedFood ?? [])
+    }
+    
+    @objc private func didTapMicrophoneButton() {
+        microphoneButtonSelected = !microphoneButtonSelected
+        
+        switch microphoneButtonSelected {
+        case true:
+            speechRecognitionTask?.cancel()
+            speechRecognitionTask = Task {
+                let result = await SpeechRecognitionManager.requestAuthorization()
+                switch result {
+                case .notDetermined, .denied, .restricted:
+                    // TODO: - Обработать исключения
+                    break
+                case .authorized:
+                    let request = SpeechAudioBufferRecognitionRequest()
+                    for try await result in await speechRecognitionManager.start(request: request) {
+                        await MainActor.run {
+                            let text = result.bestTranscription.formattedString
+                            searshTextField.text = text
+                            presenter?.search(text, complition: nil)
+                        }
+                    }
+                }
+            }
+        case false:
+            Task {
+                await speechRecognitionManager.finish()
+            }
+        }
+    }
 }
 
 // MARK: - FoodCollectionViewController Delegate
 
 extension AddFoodViewController: FoodCollectionViewControllerDelegate {
-    func productsCount() -> Int {
-        self.products.count
+    func didSelectCell(_ type: Food) {
+        presenter?.didTapCell(type)
     }
-    
-    func dishesCount() -> Int {
-        self.dishes.count
-    }
-    
-    func mealsCount() -> Int {
-        self.meals.count
+}
+
+// MARK: - FoodCollectionViewController DataSource
+
+extension AddFoodViewController: FoodCollectionViewControllerDataSource {
+    func foodsCount() -> Int {
+        self.foods.count
     }
     
     func cell(collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell {
@@ -503,58 +640,11 @@ extension AddFoodViewController: FoodCollectionViewControllerDelegate {
     }
 }
 
-// MARK: - SearchTextField Delegate
-
-extension AddFoodViewController: UITextFieldDelegate {
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        searshTextField.textAlignment = .left
-        guard let text = textField.text, !text.isEmpty else {
-            state = .search(.recent)
-            return
-        }
-        state = .search(.foundResults)
-    }
-    
-    func textField(_ textField: UITextField,
-                   shouldChangeCharactersIn range: NSRange,
-                   replacementString string: String) -> Bool {
-        let replace = -1 * (range.length * 2 - 1)
-        guard let text = textField.text, text.count + replace > 0 else {
-            state = .search(.recent)
-            return true
-        }
-        
-        state = .search(.foundResults)
-        
-        return true
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        guard let text = textField.text, !text.isEmpty else {
-            searshTextField.textAlignment = .center
-            state = .default
-            return
-        }
-        
-        FDS.shared.rememberSearchQuery(text)
-    }
-}
-
 // MARK: - AddFoodViewController Interface
 
 extension AddFoodViewController: AddFoodViewControllerInterface {
-    func setDishes(_ dishes: [Dish]) {
-        self.dishes = dishes
-        self.foodCollectionViewController.reloadData()
-    }
-    
-    func setProducts(_ products: [Product]) {
-        self.products = products
-        self.foodCollectionViewController.reloadData()
-    }
-    
-    func setMeals(_ meals: [Meal]) {
-        self.meals = meals
+    func setFoods(_ foods: [Food]) {
+        self.foods = foods
         self.foodCollectionViewController.reloadData()
     }
     
@@ -612,6 +702,7 @@ private extension AddFoodViewController {
         button.setTitleColor(R.color.addFood.recipesCell.basicGray(), .normal)
         button.titleLabel.font = R.font.sfProDisplaySemibold(size: 9)
         button.titleLabel.textAlignment = .center
+        button.imageView.tintColor = R.color.foodViewing.basicGrey()
         button.aspectRatio()
         return button
     }
@@ -640,7 +731,7 @@ private extension AddFoodViewController {
         return button
     }
     
-    func getMenuCreateView() -> MenuView {
+    func getMenuCreateView() -> MenuView<FoodCreate> {
         let menuView = MenuView(Const.menuCreateModels)
         menuView.backgroundColor = .white
         return menuView
@@ -658,7 +749,7 @@ private extension AddFoodViewController {
     func getKeyboardHeaderView() -> UIView {
         let view = UIView()
         view.layer.maskedCorners = .topCorners
-        view.backgroundColor = .gray
+        view.backgroundColor = R.color.keyboardLightColor()
         view.layer.cornerRadius = 32
         return view
     }
@@ -688,6 +779,21 @@ private extension AddFoodViewController {
         button.layer.cornerRadius = 16
         button.layer.borderWidth = 1
         button.layer.borderColor = R.color.addFood.menu.isSelectedBorder()?.cgColor
+        return button
+    }
+    
+    func getDoneButton() -> UIButton {
+        let button = UIButton()
+        button.isHidden = true
+        button.contentMode = .right
+        button.layer.cornerCurve = .continuous
+        button.layer.cornerRadius = 16
+        button.layer.borderWidth = 1
+        button.layer.borderColor = R.color.foodViewing.basicSecondaryDark()?.cgColor
+        button.backgroundColor = R.color.foodViewing.basicPrimary()
+        button.addTarget(self, action: #selector(didTapDoneButton), for: .touchUpInside)
+        button.setTitle("DONE", for: .normal)
+        button.titleLabel?.font = R.font.sfProDisplaySemibold(size: 18)
         return button
     }
 }

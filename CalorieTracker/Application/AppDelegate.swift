@@ -24,15 +24,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     ) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
         
-        let getStartedViewController = GetStartedRouter.setupModule()
+        let getStartedViewController = CTTabBarController()
         let navigationController = UINavigationController(rootViewController: getStartedViewController)
         
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
-//        DSF.shared.updateStoredDishes()
-//        DSF.shared.updateStoredProducts()
+        
+        DSF.shared.updateStoredDishes()
+        DSF.shared.updateStoredProducts()
+        
+        //generateFakeUserData()
         
         return true
+    }
+    
+    
+    // Создает данные юзера (Рандомно) позже удалить
+    private func generateFakeUserData() {
+        let products = Array(DSF.shared.getAllStoredProducts()[10...30])
+
+        products.forEach {
+            let foodData = FoodData(
+                dateLastUse: Date(),
+                favorites: Bool.random(),
+                numberUses: Int.random(in: 0...5)
+            )
+
+            LocalDomainService().saveFoodData(foods: [foodData])
+
+            foodData.setChild($0)
+        }
     }
     
 }

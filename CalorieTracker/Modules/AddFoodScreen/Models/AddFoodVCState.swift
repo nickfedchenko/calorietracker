@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum AddFoodVCState {
+enum AddFoodVCState: Equatable {
     case search(AddFoodVCSearchState)
     case `default`
 }
