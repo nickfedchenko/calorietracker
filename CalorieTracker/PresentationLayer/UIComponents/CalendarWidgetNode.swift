@@ -43,6 +43,8 @@ final class CalendarWidgetNode: CTWidgetNode {
         }
     }
     
+    override var widgetType: WidgetContainerViewController.WidgetType { .calendar }
+    
     override init(with configuration: CTWidgetNodeConfiguration) {
         super.init(with: configuration)
         backgroundColor = .white

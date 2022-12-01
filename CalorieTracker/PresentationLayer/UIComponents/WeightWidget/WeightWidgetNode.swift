@@ -48,6 +48,8 @@ final class WeightWidgetNode: CTWidgetNode {
         }
     }
     
+    override var widgetType: WidgetContainerViewController.WidgetType { .weight }
+    
     override init(with configuration: CTWidgetNodeConfiguration) {
         super.init(with: configuration)
         setupView()

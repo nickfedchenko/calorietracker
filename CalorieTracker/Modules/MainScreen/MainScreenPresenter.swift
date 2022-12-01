@@ -10,6 +10,7 @@ import Foundation
 
 protocol MainScreenPresenterInterface: AnyObject {
     func didTapAddButton()
+    func didTapWidget(_ type: WidgetContainerViewController.WidgetType)
 }
 
 class MainScreenPresenter {
@@ -32,5 +33,9 @@ class MainScreenPresenter {
 extension MainScreenPresenter: MainScreenPresenterInterface {
     func didTapAddButton() {
         router?.openAddFoodVC()
+    }
+    
+    func didTapWidget(_ type: WidgetContainerViewController.WidgetType) {
+        router?.openWidget(type)
     }
 }

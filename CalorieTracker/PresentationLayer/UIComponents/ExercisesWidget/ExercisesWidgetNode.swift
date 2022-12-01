@@ -62,6 +62,8 @@ final class ExercisesWidgetNode: CTWidgetNode {
         }
     }
     
+    override var widgetType: WidgetContainerViewController.WidgetType { .exercises }
+    
     init(_ model: Model, with configuration: CTWidgetNodeConfiguration) {
         self.model = model
         super.init(with: configuration)

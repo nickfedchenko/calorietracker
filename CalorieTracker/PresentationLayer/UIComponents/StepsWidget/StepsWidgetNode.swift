@@ -55,6 +55,8 @@ final class StepsWidgetNode: CTWidgetNode {
         }
     }
     
+    override var widgetType: WidgetContainerViewController.WidgetType { .steps }
+    
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         let stack = ASStackLayoutSpec.vertical()
         stack.justifyContent = .spaceBetween

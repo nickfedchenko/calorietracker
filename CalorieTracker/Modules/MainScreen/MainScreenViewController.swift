@@ -248,6 +248,11 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        addTapGestureRecognizer()
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setToolbarHidden(true, animated: true)
@@ -324,6 +329,46 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         )
         
         return stackInset
+    }
+    
+    private func addTapGestureRecognizer() {
+        calendarWidget.addTarget(
+            self,
+            action: #selector(didTapWidget),
+            forControlEvents: .touchUpInside
+        )
+        waterBalanceWidget.addTarget(
+            self,
+            action: #selector(didTapWidget),
+            forControlEvents: .touchUpInside
+        )
+        weightMeasureWidget.addTarget(
+            self,
+            action: #selector(didTapWidget),
+            forControlEvents: .touchUpInside
+        )
+        notesWidget.addTarget(
+            self,
+            action: #selector(didTapWidget),
+            forControlEvents: .touchUpInside
+        )
+        stepsWidget.addTarget(
+            self,
+            action: #selector(didTapWidget),
+            forControlEvents: .touchUpInside
+        )
+        exercisesWidget.addTarget(
+            self,
+            action: #selector(didTapWidget),
+            forControlEvents: .touchUpInside
+        )
+    }
+    
+    @objc private func didTapWidget(_ sender: ASControlNode) {
+        guard let widget = sender as? CTWidgetProtocol else {
+            return
+        }
+        presenter?.didTapWidget(widget.widgetType)
     }
 }
 
