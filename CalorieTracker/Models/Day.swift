@@ -8,7 +8,7 @@
 import Foundation
 
 struct Day: Hashable {
-    private let date: Date
+    private let date: Date?
     
     let day: Int
     let month: Int
@@ -22,6 +22,20 @@ struct Day: Hashable {
         self.year = calendar.component(.year, from: date)
     }
     
+    init(day: Int, month: Int, year: Int) {
+        let calendar = Calendar.current
+        self.day = day
+        self.month = month
+        self.year = year
+        self.date = calendar.date(from: .init(
+            calendar: calendar,
+            timeZone: .current,
+            year: year,
+            month: month,
+            day: day
+        ))
+    }
+    
     func hash(into hasher: inout Hasher) {
         hasher.combine("\(year)\(month)\(day)")
     }
@@ -31,6 +45,7 @@ struct Day: Hashable {
     }
     
     static func - (lhs: Day, rhs: Int) -> Day {
-        return Day(lhs.date - Double(rhs * 24 * 60 * 60))
+        guard let date = lhs.date else { return lhs }
+        return Day(date - Double(rhs * 24 * 60 * 60))
     }
 }

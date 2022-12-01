@@ -72,6 +72,19 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
+    <entity name="DomainSteps" representedClassName="DomainSteps" syncable="YES">
+        <attribute name="day" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="month" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="value" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="year" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="day"/>
+                <constraint value="month"/>
+                <constraint value="year"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
     <entity name="DomainUserProduct" representedClassName="DomainUserProduct" syncable="YES">
         <attribute name="id" optional="YES" attributeType="String"/>
         <relationship name="foodData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainFoodData" inverseName="userProduct" inverseEntity="DomainFoodData"/>
@@ -81,11 +94,26 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
+    <entity name="DomainWater" representedClassName="DomainWater" syncable="YES">
+        <attribute name="day" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="month" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="value" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="year" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="day"/>
+                <constraint value="month"/>
+                <constraint value="year"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
     <elements>
         <element name="DomainDish" positionX="-54" positionY="108" width="128" height="299"/>
         <element name="DomainFoodData" positionX="-54" positionY="153" width="128" height="134"/>
         <element name="DomainMeal" positionX="-36" positionY="162" width="128" height="89"/>
         <element name="DomainProduct" positionX="-63" positionY="-9" width="128" height="254"/>
         <element name="DomainUserProduct" positionX="-54" positionY="153" width="128" height="59"/>
+        <element name="DomainWater" positionX="-54" positionY="153" width="128" height="89"/>
+        <element name="DomainSteps" positionX="-45" positionY="162" width="128" height="89"/>
     </elements>
 </model>
