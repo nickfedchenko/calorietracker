@@ -15,12 +15,14 @@ protocol LocalDomainServiceInterface {
     func fetchMeals() -> [Meal]
     func fetchWater() -> [DailyData]
     func fetchSteps() -> [DailyData]
+    func fetchWeight() -> [DailyData]
     func saveProducts(products: [Product])
     func saveDishes(dishes: [Dish])
     func saveFoodData(foods: [FoodData])
     func saveMeals(meals: [Meal])
     func saveWater(data: [DailyData])
     func saveSteps(data: [DailyData])
+    func saveWeight(data: [DailyData])
     func searchProducts(by phrase: String) -> [Product]
     func searchProducts(barcode: String) -> [Product]
     func searchDishes(by phrase: String) -> [Dish]
@@ -57,7 +59,11 @@ final class LocalDomainService {
         return container
     }()
     
-    private lazy var context = container.viewContext
+    private lazy var context: NSManagedObjectContext = {
+        let context = container.viewContext
+        context.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
+        return context
+    }()
     
 //    private lazy var taskContext: NSManagedObjectContext = {
 //        let context = container.newBackgroundContext()
@@ -140,6 +146,11 @@ extension LocalDomainService: LocalDomainServiceInterface {
         return domainSteps.compactMap { DailyData(from: $0) }
     }
     
+    func fetchWeight() -> [DailyData] {
+        guard let domainWeight = fetchData(for: DomainWeight.self) else { return [] }
+        return domainWeight.compactMap { DailyData(from: $0) }
+    }
+    
     func saveProducts(products: [Product]) {
         let _: [DomainProduct] = products
             .map { DomainProduct.prepare(fromPlainModel: $0, context: context) }
@@ -169,6 +180,12 @@ extension LocalDomainService: LocalDomainServiceInterface {
     func saveSteps(data: [DailyData]) {
         let _: [DomainSteps] = data
             .map { DomainSteps.prepare(fromPlainModel: $0, context: context) }
+        try? context.save()
+    }
+    
+    func saveWeight(data: [DailyData]) {
+        let _: [DomainWeight] = data
+            .map { DomainWeight.prepare(fromPlainModel: $0, context: context) }
         try? context.save()
     }
     

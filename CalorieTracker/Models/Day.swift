@@ -7,8 +7,9 @@
 
 import Foundation
 
-struct Day: Hashable {
-    private let date: Date?
+struct Day: Hashable, Comparable {
+    
+    let date: Date?
     
     let day: Int
     let month: Int
@@ -42,6 +43,13 @@ struct Day: Hashable {
     
     static func == (lhs: Day, rhs: Day) -> Bool {
         return lhs.year == rhs.year && lhs.month == rhs.month && lhs.day == rhs.day
+    }
+    
+    static func < (lhs: Day, rhs: Day) -> Bool {
+        guard let lhsDate = lhs.date, let rhsDate = rhs.date else {
+            return false
+        }
+        return lhsDate < rhsDate
     }
     
     static func - (lhs: Day, rhs: Int) -> Day {
