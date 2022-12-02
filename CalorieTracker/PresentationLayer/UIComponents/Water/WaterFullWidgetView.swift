@@ -11,7 +11,9 @@ protocol WaterFullWidgetInterface: AnyObject {
     
 }
 
-final class WaterFullWidgetView: UIView {
+final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
+    var didTapCloseButton: (() -> Void)?
+    
     private lazy var waterTitleLabel: UILabel = {
         let label = UILabel()
         label.font = R.font.sfProDisplaySemibold(size: 22)
@@ -153,10 +155,8 @@ final class WaterFullWidgetView: UIView {
         configureView()
         
         quickAddStack.didTapQuickAdd = { value in
-            if let oldValue = self.presenter?.getValueNow() {
-                self.presenter?.changeValue(oldValue + value)
-                self.configureView()
-            }
+            self.presenter?.addWater(value)
+            self.configureView()
         }
         
         if let viewsType = presenter?.getQuickAddTypes() {
@@ -175,9 +175,18 @@ final class WaterFullWidgetView: UIView {
         layer.cornerRadius = 16
         layer.cornerCurve = .continuous
         
-        settingsButton.addTarget(self, action: #selector(didTapSettingsButton), for: .touchUpInside)
-        trackButton.addTarget(self, action: #selector(didTapTrackButton), for: .touchUpInside)
-        goalButton.addTarget(self, action: #selector(didTapGoalButton), for: .touchUpInside)
+        settingsButton.addTarget(self,
+                                 action: #selector(didTapSettingsButton),
+                                 for: .touchUpInside)
+        trackButton.addTarget(self,
+                              action: #selector(didTapTrackButton),
+                              for: .touchUpInside)
+        goalButton.addTarget(self,
+                             action: #selector(didTapGoalButton),
+                             for: .touchUpInside)
+        closeButton.addTarget(self,
+                              action: #selector(didTapBottomCloseButton),
+                              for: .touchUpInside)
         slider.delegate = self
         
         addSubviews([
@@ -230,27 +239,16 @@ final class WaterFullWidgetView: UIView {
         mainStack.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(20)
             make.top.equalTo(waterValueLabel.snp.bottom).offset(17)
-            make.bottom.equalTo(closeButton.snp.top).offset(-35)
+            make.bottom.lessThanOrEqualTo(closeButton.snp.top).offset(-10)
         }
         
-        goalButton.snp.makeConstraints { make in
-            make.height.equalTo(64)
-        }
-        
-        trackButton.snp.makeConstraints { make in
-            make.height.equalTo(64)
-        }
+        goalButton.aspectRatio(0.187)
+        slider.aspectRatio(0.24)
+        trackButton.aspectRatio(0.187)
+        quickAddStack.aspectRatio(0.187)
         
         progressView.snp.makeConstraints { make in
             make.height.equalTo(12)
-        }
-        
-        slider.snp.makeConstraints { make in
-            make.height.equalTo(82)
-        }
-        
-        quickAddStack.snp.makeConstraints { make in
-            make.height.equalTo(64)
         }
     }
     
@@ -371,10 +369,12 @@ final class WaterFullWidgetView: UIView {
     }
     
     @objc private func didTapTrackButton(_ sender: UIButton) {
-        if let oldValue = presenter?.getValueNow() {
-            presenter?.changeValue(oldValue + slider.stepMl * slider.step)
-        }
+        presenter?.addWater(slider.stepMl * slider.step)
         configureView()
+    }
+    
+    @objc private func didTapBottomCloseButton() {
+        didTapCloseButton?()
     }
 }
 

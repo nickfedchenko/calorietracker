@@ -7,11 +7,13 @@
 
 import UIKit
 
-final class StepsFullWidgetView: UIView {
+final class StepsFullWidgetView: UIView, CTWidgetFullProtocol {
     struct Model {
         let nowSteps: Int
         let goalSteps: Int?
     }
+    
+    var didTapCloseButton: (() -> Void)?
     
     private lazy var topLabel: UILabel = {
         let label = UILabel()
@@ -75,8 +77,12 @@ final class StepsFullWidgetView: UIView {
             configureLabel(value: model.nowSteps, goal: model.goalSteps)
             lineProgressView.progress = CGFloat(model.nowSteps) / CGFloat(model.goalSteps ?? 1)
             lineProgressView.isHidden = model.goalSteps == nil
-            mainButton.defaultTitle = model.goalSteps == nil ? " SET DAILY GOAL" :" CHANGE DAILY GOAL"
-            mainButton.isPressTitle = model.goalSteps == nil ? " SET DAILY GOAL" :" CHANGE DAILY GOAL"
+            mainButton.defaultTitle = model.goalSteps == nil
+                ? " SET DAILY GOAL"
+                : " CHANGE DAILY GOAL"
+            mainButton.isPressTitle = model.goalSteps == nil
+                ? " SET DAILY GOAL"
+                : " CHANGE DAILY GOAL"
         }
     }
     
@@ -97,7 +103,7 @@ final class StepsFullWidgetView: UIView {
     }
     
     private func setupView() {
-        closeButton.addTarget(self, action: #selector(didTapCloseButton), for: .touchUpInside)
+        closeButton.addTarget(self, action: #selector(didTapBottomCloseButton), for: .touchUpInside)
         mainButton.addTarget(self, action: #selector(didTapMainButton), for: .touchUpInside)
         backgroundColor = .white
         layer.cornerRadius = 16
@@ -121,16 +127,11 @@ final class StepsFullWidgetView: UIView {
             make.height.equalTo(12)
         }
         
-        mainButton.snp.makeConstraints { make in
-            make.height.equalTo(64)
-        }
+        mainButton.aspectRatio(0.182)
+        connectAHView.aspectRatio(0.182)
         
         closeButton.snp.makeConstraints { make in
             make.height.width.equalTo(40)
-        }
-        
-        connectAHView.snp.makeConstraints { make in
-            make.height.equalTo(64)
         }
     }
     
@@ -213,8 +214,8 @@ final class StepsFullWidgetView: UIView {
         return attributedString
     }
     
-    @objc private func didTapCloseButton(_ sender: UIButton) {
-        
+    @objc private func didTapBottomCloseButton(_ sender: UIButton) {
+        didTapCloseButton?()
     }
     
     @objc private func didTapMainButton(_ sender: UIButton) {

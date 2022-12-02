@@ -8,15 +8,12 @@
 import AsyncDisplayKit
 
 final class WaterWidgetNode: CTWidgetNode {
-    
     struct Model {
         let progress: CGFloat
         let waterMl: NSAttributedString
-        let waterPercent: String
     }
     
     private let bottomTitleLabel = ASTextNode()
-    private let waterPercentLabel = ASTextNode()
     
     private lazy var topTitleLabel: ASTextNode = {
         let node = ASTextNode()
@@ -70,14 +67,6 @@ final class WaterWidgetNode: CTWidgetNode {
             bottomTitleLabel
         ]
         
-        iconNode.addSubnode(waterPercentLabel)
-        iconNode.layoutSpecBlock = { _, _ in
-            return ASInsetLayoutSpec(
-                insets: UIEdgeInsets(top: 26, left: 19, bottom: 12, right: 9),
-                child: self.waterPercentLabel
-            )
-        }
-        
         let secondStack = ASStackLayoutSpec.horizontal()
         secondStack.justifyContent = .spaceBetween
         secondStack.children = [
@@ -116,18 +105,12 @@ final class WaterWidgetNode: CTWidgetNode {
         backgroundColor = .white
         layer.cornerRadius = 16
         layer.cornerCurve = .continuous
-        waterPercentLabel.style.preferredSize = CGSize(width: 32, height: 29)
     }
     
     private func didChangeModel() {
         guard let model = model else { return }
 
         bottomTitleLabel.attributedText = model.waterMl
-        waterPercentLabel.attributedText = getAttributedString(
-            string: model.waterPercent,
-            size: 24,
-            color: .white
-        )
         progressNode.progress = model.progress
     }
     
