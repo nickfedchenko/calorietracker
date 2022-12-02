@@ -79,6 +79,11 @@ final class WidgetContainerViewController: UIViewController {
     
     private func setupView() {
         backgroundView.backgroundColor = R.color.foodViewing.basicPrimary()?.withAlphaComponent(0.25)
+        
+        var widgetFull = widgetView as? CTWidgetFullProtocol
+        widgetFull?.didTapCloseButton = {
+            self.router?.closeViewController()
+        }
     }
     
     private func setupConstraints() {
@@ -109,7 +114,7 @@ final class WidgetContainerViewController: UIViewController {
         return .init(
             top: minTopInset,
             left: self.suggestedSideInset,
-            bottom: minBottomInset,
+            bottom: 0,
             right: self.suggestedSideInset
         )
     }
@@ -164,7 +169,12 @@ extension WidgetContainerViewController.WidgetType {
         case .water:
             return WaterFullWidgetView()
         case .steps:
-            return StepsFullWidgetView()
+            let vc = StepsFullWidgetView()
+            vc.model = .init(
+                nowSteps: Int(StepsWidgetService.shared.getStepsNow()),
+                goalSteps: StepsWidgetService.shared.getDailyStepsGoal()
+            )
+            return vc
         case .calendar:
             return CalendarView(baseDate: Date()) { _ in
                 

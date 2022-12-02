@@ -6,11 +6,14 @@
 //  Copyright © 2022 FedmanCassad. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 protocol MainScreenPresenterInterface: AnyObject {
     func didTapAddButton()
     func didTapWidget(_ type: WidgetContainerViewController.WidgetType)
+    func updateWaterWidgetModel()
+    func updateStepsWidget()
+    func updateWeightWidget()
 }
 
 class MainScreenPresenter {
@@ -37,5 +40,32 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
     
     func didTapWidget(_ type: WidgetContainerViewController.WidgetType) {
         router?.openWidget(type)
+    }
+    
+    func updateWaterWidgetModel() {
+        let goal = WaterWidgetService.shared.getDailyWaterGoal()
+        let waterNow = WaterWidgetService.shared.getWaterNow()
+        
+        let model = WaterWidgetNode.Model(
+            progress: CGFloat(waterNow / goal),
+            waterMl: NSAttributedString(string: "\(Int(waterNow)) / \(Int(goal)) ml")
+        )
+        
+        view.setWaterWidgetModel(model)
+    }
+    
+    func updateStepsWidget() {
+        let goal = StepsWidgetService.shared.getDailyStepsGoal()
+        let now = StepsWidgetService.shared.getStepsNow()
+        
+        view.setStepsWidget(now: Int(now), goal: goal)
+    }
+    
+    func updateWeightWidget() {
+        guard let weightNow = WeightWidgetService.shared.getWeightNow() else {
+            view.setWeightWidget(weight: nil)
+            return
+        }
+        view.setWeightWidget(weight: CGFloat(weightNow))
     }
 }

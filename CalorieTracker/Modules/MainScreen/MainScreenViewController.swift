@@ -10,7 +10,9 @@ import AsyncDisplayKit
 import AuthenticationServices
 
 protocol MainScreenViewControllerInterface: AnyObject {
-    
+    func setWaterWidgetModel(_ model: WaterWidgetNode.Model)
+    func setStepsWidget(now: Int, goal: Int?)
+    func setWeightWidget(weight: CGFloat?)
 }
 //
 class MainScreenViewController: ASDKViewController<ASDisplayNode> {
@@ -98,7 +100,6 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
             width: 260,
             height: node.constants.height
         )
-        node.model = .init(progress: 0.7, waterMl: NSAttributedString(string: "1600 / 2400 ml"), waterPercent: "60")
         node.style.flexShrink = 0.75
         return node
     }()
@@ -257,6 +258,9 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         super.viewWillAppear(animated)
         navigationController?.setToolbarHidden(true, animated: true)
         navigationController?.navigationBar.isHidden = true
+        presenter?.updateWaterWidgetModel()
+        presenter?.updateStepsWidget()
+        presenter?.updateWeightWidget()
     }
     
     // MARK: - Private methods
@@ -373,5 +377,16 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
 }
 
 extension MainScreenViewController: MainScreenViewControllerInterface {
+    func setWaterWidgetModel(_ model: WaterWidgetNode.Model) {
+        self.waterBalanceWidget.model = model
+    }
     
+    func setStepsWidget(now: Int, goal: Int?) {
+        self.stepsWidget.steps = now
+        self.stepsWidget.progress = Double(now) / Double(goal ?? 1)
+    }
+    
+    func setWeightWidget(weight: CGFloat?) {
+        self.weightMeasureWidget.weight = weight
+    }
 }

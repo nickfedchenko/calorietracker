@@ -11,6 +11,7 @@ protocol WaterWidgetServiceInterface {
     func getDailyWaterGoal() -> Double
     func addDailyWater(_ value: Double)
     func setDailyWaterGoal(_ value: Double)
+    func getWaterNow() -> Double
 }
 
 final class WaterWidgetService {
@@ -22,6 +23,14 @@ final class WaterWidgetService {
 extension WaterWidgetService: WaterWidgetServiceInterface {
     func getDailyWaterGoal() -> Double {
         UDM.dailyWaterGoal ?? 0
+    }
+    
+    func getWaterNow() -> Double {
+        let dayNow = Day(Date())
+        let waterData = localDomainService.fetchWater()
+        let waterNow = waterData.first(where: { dayNow == $0.day })
+        
+        return waterNow?.value ?? 0
     }
     
     func addDailyWater(_ value: Double) {
