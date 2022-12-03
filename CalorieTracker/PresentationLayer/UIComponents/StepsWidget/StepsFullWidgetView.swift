@@ -141,77 +141,31 @@ final class StepsFullWidgetView: UIView, CTWidgetFullProtocol {
     }
     
     private func configureLabel(value: Int, goal: Int?) {
-        let stepString = getAttributedStringWithImage(
-            image: R.image.stepsWidget.foot(),
-            attributedString: getAttributedString(
-                string: "  STEPS  ",
-                size: 22,
-                weight: .bold,
-                color: R.color.stepsWidget.secondGradientColor()
+        let leftColor = R.color.stepsWidget.secondGradientColor()
+        let rightColor = R.color.stepsWidget.ringColor()
+        let font = R.font.sfProDisplayBold(size: 22.fontScale())
+        let image = R.image.stepsWidget.foot()
+        let leftAtributes: [StringSettings] = [.font(font), .color(leftColor)]
+        let rightAtributes: [StringSettings] = [.font(font), .color(rightColor)]
+        
+        let string = goal != nil
+            ? "STEPS \(value) / \(goal ?? 0)"
+            : "STEPS \(value)"
+        
+        if goal == nil {
+            topLabel.attributedText = string.attributedSring(
+                [.init(worldIndex: [0, 1], attributes: leftAtributes)],
+                image: .init(image: image, font: font, position: .left)
             )
-        )
-        
-        let valueString = getAttributedString(
-            string: "\(value)",
-            size: 22,
-            weight: .heavy,
-            color: R.color.stepsWidget.secondGradientColor()
-        )
-        
-        var goalString: NSAttributedString?
-        
-        if let goal = goal {
-            goalString = getAttributedString(
-                string: " / \(goal)",
-                size: 22,
-                weight: .bold,
-                color: R.color.stepsWidget.ringColor()
+        } else {
+            topLabel.attributedText = string.attributedSring(
+                [
+                    .init(worldIndex: [0, 1], attributes: leftAtributes),
+                    .init(worldIndex: [3, 4], attributes: rightAtributes)
+                ],
+                image: .init(image: image, font: font, position: .left)
             )
         }
-        
-        let fullString = NSMutableAttributedString(attributedString: stepString)
-        fullString.append(valueString)
-        fullString.append(goalString ?? NSAttributedString())
-        
-        topLabel.attributedText = fullString
-    }
-    
-    private func getAttributedStringWithImage(image: UIImage?,
-                                              attributedString: NSAttributedString) -> NSAttributedString {
-        guard let image = image else { return NSMutableAttributedString() }
-        
-        let imageAttachment = NSTextAttachment()
-        imageAttachment.image = image
-        imageAttachment.bounds = CGRect(
-            x: 0,
-            y: (UIFont.roundedFont(
-                ofSize: 22,
-                weight: .bold
-            ).capHeight - image.size.height).rounded() / 2,
-            width: image.size.width,
-            height: image.size.height
-        )
-        let imageString = NSAttributedString(attachment: imageAttachment)
-        let fullString = NSMutableAttributedString(attributedString: imageString)
-        fullString.append(attributedString)
-        
-        return fullString
-    }
-    
-    private func getAttributedString(string: String,
-                                     size: CGFloat,
-                                     weight: UIFont.Weight,
-                                     color: UIColor?) -> NSMutableAttributedString {
-        let attributedString = NSMutableAttributedString(string: string)
-        attributedString.addAttributes(
-            [
-                .foregroundColor: color ?? .black,
-                .font: UIFont.roundedFont(ofSize: size, weight: weight)
-            ],
-            range: NSRange(location: 0, length: string.count)
-        )
-        
-        return attributedString
     }
     
     @objc private func didTapBottomCloseButton(_ sender: UIButton) {

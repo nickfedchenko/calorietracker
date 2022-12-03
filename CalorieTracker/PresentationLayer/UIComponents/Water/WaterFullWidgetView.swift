@@ -16,7 +16,7 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
     
     private lazy var waterTitleLabel: UILabel = {
         let label = UILabel()
-        label.font = R.font.sfProDisplaySemibold(size: 22)
+        label.font = R.font.sfProDisplaySemibold(size: 22.fontScale())
         label.textColor = R.color.waterWidget.firstGradientColor()
         label.text = "WATER"
         return label
@@ -24,7 +24,7 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
     
     private lazy var quickAddTitleLabel: UILabel = {
         let label = UILabel()
-        label.font = R.font.sfProDisplaySemibold(size: 18)
+        label.font = R.font.sfProDisplaySemibold(size: 18.fontScale())
         label.textColor = R.color.waterWidget.firstGradientColor()
         label.text = "Set up quick add"
         return label
@@ -32,7 +32,7 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
     
     private lazy var waterValueLabel: UILabel = {
         let view = UILabel()
-        view.font = R.font.sfProDisplaySemibold(size: 22)
+        view.font = R.font.sfProDisplaySemibold(size: 22.fontScale())
         return view
     }()
     
@@ -289,49 +289,33 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
     // MARK: - setup String
     
     private func configureLabel(value: Int, goal: Int?) {
-        let mlString = getAttributedString(
-            string: " ML ",
-            size: 22,
-            color: R.color.waterWidget.firstGradientColor()
-        )
+        let string = goal == nil
+            ? "TODAY \(value) ML"
+            : "\(value) / \(goal ?? 0) ML"
+        let colorLeft = R.color.waterWidget.secondGradientColor()
+        let colorRight = R.color.waterWidget.firstGradientColor()
+        let font = R.font.sfProDisplaySemibold(size: 22.fontScale())
+        let leftAttributes: [StringSettings] = [.color(colorLeft), .font(font)]
+        let rightAttributes: [StringSettings] = [.color(colorRight), .font(font)]
         
-        let valueString = getAttributedString(
-            string: goal == nil ? "TODAY \(value)" : "\(value)",
-            size: 22,
-            color: R.color.waterWidget.secondGradientColor()
-        )
-        
-        let fullString = NSMutableAttributedString(attributedString: valueString)
-        
-        if let goal = goal {
-            let goalString = getAttributedString(
-                string: " / \(goal)",
-                size: 22,
-                color: R.color.waterWidget.firstGradientColor()
-            )
-            fullString.append(goalString)
-            fullString.append(mlString)
+        if goal != nil {
+            waterValueLabel.attributedText = string.attributedSring([
+                .init(worldIndex: [0], attributes: leftAttributes),
+                .init(worldIndex: [1, 2, 3], attributes: rightAttributes)
+            ])
         } else {
-            fullString.append(mlString)
-            fullString.append(getAttributedStringImage(image: R.image.waterWidget.editText()))
+            waterValueLabel.attributedText = string.attributedSring(
+                [
+                    .init(worldIndex: [0, 1], attributes: leftAttributes),
+                    .init(worldIndex: [2], attributes: rightAttributes)
+                ],
+                image: .init(
+                    image: R.image.waterWidget.editText(),
+                    font: font,
+                    position: .right
+                )
+            )
         }
-        
-        waterValueLabel.attributedText = fullString
-    }
-    
-    private func getAttributedString(string: String,
-                                     size: CGFloat,
-                                     color: UIColor?) -> NSMutableAttributedString {
-        let attributedString = NSMutableAttributedString(string: string)
-        attributedString.addAttributes(
-            [
-                .foregroundColor: color ?? .black,
-                .font: R.font.sfProDisplaySemibold(size: size)!
-            ],
-            range: NSRange(location: 0, length: string.count)
-        )
-        
-        return attributedString
     }
     
     private func getAttributedStringImage(image: UIImage?) -> NSAttributedString {

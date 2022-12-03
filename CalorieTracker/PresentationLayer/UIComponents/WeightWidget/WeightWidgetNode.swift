@@ -10,11 +10,15 @@ import AsyncDisplayKit
 final class WeightWidgetNode: CTWidgetNode {
     private lazy var titleLabel: ASTextNode = {
         let node = ASTextNode()
-        node.attributedText = getAttributedString(
-            string: "WEIGHT",
-            size: 18,
-            color: R.color.weightWidget.weightTextColor()
-        )
+        node.attributedText = "WEIGHT".attributedSring([
+            .init(
+                worldIndex: [0],
+                attributes: [
+                    .color(R.color.weightWidget.weightTextColor()),
+                    .font(R.font.sfProDisplaySemibold(size: 18.fontScale()))
+                ]
+            )
+        ])
         return node
     }()
     
@@ -40,11 +44,15 @@ final class WeightWidgetNode: CTWidgetNode {
     var weight: CGFloat? {
         didSet {
             guard let weight = weight else { return }
-            valueLabel.attributedText = getAttributedString(
-                string: String(format: "%.1f", weight),
-                size: 18,
-                color: R.color.weightWidget.textColor()
-            )
+            valueLabel.attributedText = String(format: "%.1f", weight).attributedSring([
+                .init(
+                    worldIndex: [0],
+                    attributes: [
+                        .color(R.color.weightWidget.textColor()),
+                        .font(R.font.sfProDisplaySemibold(size: 18.fontScale()))
+                    ]
+                )
+            ])
         }
     }
     
@@ -99,18 +107,5 @@ final class WeightWidgetNode: CTWidgetNode {
         layer.cornerRadius = 16
         layer.cornerCurve = .continuous
         weight = 0
-    }
-    
-    private func getAttributedString(string: String, size: CGFloat, color: UIColor?) -> NSMutableAttributedString {
-        let attributedString = NSMutableAttributedString(string: string)
-        attributedString.addAttributes(
-            [
-                .foregroundColor: color ?? .black,
-                .font: UIFont.roundedFont(ofSize: size, weight: .semibold)
-            ],
-            range: NSRange(location: 0, length: string.count)
-        )
-
-        return attributedString
     }
 }

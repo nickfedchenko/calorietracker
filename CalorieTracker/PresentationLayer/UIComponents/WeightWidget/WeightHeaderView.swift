@@ -23,7 +23,7 @@ final class WeightHeaderView: UIView {
     private lazy var leftLabel: UILabel = {
         let label = UILabel()
         label.textColor = R.color.weightWidget.backgroundLines()
-        label.font = R.font.sfProDisplaySemibold(size: 22)
+        label.font = R.font.sfProDisplaySemibold(size: 22.fontScale())
         label.textAlignment = .center
         return label
     }()
@@ -31,7 +31,7 @@ final class WeightHeaderView: UIView {
     private lazy var rightLabel: UILabel = {
         let label = UILabel()
         label.textColor = R.color.weightWidget.weightTextColor()
-        label.font = R.font.sfProDisplaySemibold(size: 22)
+        label.font = R.font.sfProDisplaySemibold(size: 22.fontScale())
         label.textAlignment = .center
         return label
     }()
@@ -39,7 +39,7 @@ final class WeightHeaderView: UIView {
     private lazy var middleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = R.font.sfProDisplaySemibold(size: 22)
+        label.font = R.font.sfProDisplaySemibold(size: 22.fontScale())
         label.textAlignment = .center
         return label
     }()

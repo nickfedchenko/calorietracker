@@ -6,6 +6,7 @@
 //
 
 import AsyncDisplayKit
+import CoreGraphics
 
 final class WaterWidgetNode: CTWidgetNode {
     struct Model {
@@ -19,7 +20,7 @@ final class WaterWidgetNode: CTWidgetNode {
         let node = ASTextNode()
         node.attributedText = getAttributedString(
             string: "Water",
-            size: 18,
+            size: 18.fontScale(),
             color: R.color.waterWidget.firstGradientColor()
         )
         return node
@@ -112,7 +113,7 @@ final class WaterWidgetNode: CTWidgetNode {
 
         progressNode.progress = model.progress
         
-        let font = R.font.sfProDisplaySemibold(size: 18)
+        let font = R.font.sfProDisplaySemibold(size: 18.fontScale())
         let leftColor = R.color.waterWidget.secondGradientColor()
         let rightColor = R.color.waterWidget.firstGradientColor()
         

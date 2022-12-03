@@ -17,7 +17,7 @@ final class WeightFullWidgetView: UIView, CTWidgetFullProtocol {
     private lazy var topTitleLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.font = R.font.sfProDisplaySemibold(size: 22)
+        label.font = R.font.sfProDisplaySemibold(size: 22.fontScale())
         label.textColor = R.color.weightWidget.weightTextColor()
         label.text = "WEIGHT"
         return label

@@ -24,11 +24,15 @@ final class ExercisesWidgetNode: CTWidgetNode {
     
     private lazy var exercisesTextNode: ASTextNode = {
         let node = ASTextNode()
-        node.attributedText = getAttributedString(
-            string: "EXERCISES",
-            size: 16,
-            color: R.color.exercisesWidget.secondGradientColor()
-        )
+        node.attributedText = "EXERCISES".attributedSring([
+            .init(
+                worldIndex: [0],
+                attributes: [
+                    .color(R.color.exercisesWidget.secondGradientColor()),
+                    .font(R.font.sfProDisplaySemibold(size: 16.fontScale()))
+                ]
+            )
+        ])
         return node
     }()
     
@@ -147,21 +151,23 @@ final class ExercisesWidgetNode: CTWidgetNode {
     }
     
     private func didChangeModel() {
+        let leftColor = R.color.exercisesWidget.secondGradientColor()
+        let rightColor = R.color.exercisesWidget.backgroundLine()
+        let font = R.font.sfProDisplaySemibold(size: 16.fontScale())
+        let leftAttributes: [StringSettings] = [.font(font), .color(leftColor)]
+        let rightAttributes: [StringSettings] = [.font(font), .color(rightColor)]
+        let string = model.goalBurnedKcal == nil
+            ? "\(model.burnedKcal)"
+            : "\(model.burnedKcal) / \(model.goalBurnedKcal ?? 0)"
         
-        let burnedKcal: NSMutableAttributedString = getAttributedString(
-            string: String(model.burnedKcal),
-            size: 16, color: R.color.exercisesWidget.secondGradientColor()
-        )
         if let goalBurnedKcal = model.goalBurnedKcal {
             progressBar.progress = CGFloat(model.burnedKcal) / CGFloat(goalBurnedKcal)
-            burnedKcal.append(getAttributedString(
-                string: " / \(goalBurnedKcal)",
-                size: 16,
-                color: R.color.exercisesWidget.backgroundLine()
-            ))
         }
         
-        burnedTextNode.attributedText = burnedKcal
+        burnedTextNode.attributedText = string.attributedSring([
+            .init(worldIndex: [0], attributes: leftAttributes),
+            .init(worldIndex: [1, 2], attributes: rightAttributes)
+        ])
         
         transitionLayout(withAnimation: true, shouldMeasureAsync: false)
     }
@@ -292,21 +298,6 @@ final class ExercisesWidgetNode: CTWidgetNode {
         default:
             return ElementChart.spacerFlex
         }
-    }
-    
-    private func getAttributedString(string: String,
-                                     size: CGFloat,
-                                     color: UIColor?) -> NSMutableAttributedString {
-        let attributedString = NSMutableAttributedString(string: string)
-        attributedString.addAttributes(
-            [
-                .foregroundColor: color ?? .black,
-                .font: UIFont.roundedFont(ofSize: size, weight: .bold)
-            ],
-            range: NSRange(location: 0, length: string.count)
-        )
-
-        return attributedString
     }
     
     // MARK: - Selector metods

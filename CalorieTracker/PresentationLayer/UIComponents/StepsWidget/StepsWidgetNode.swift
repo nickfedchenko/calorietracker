@@ -11,27 +11,29 @@ final class StepsWidgetNode: CTWidgetNode {
     
     private lazy var topTextNode: ASTextNode = {
         let node = ASTextNode()
-        let string = getAttributedString(
-            string: Text.steps,
-            size: 16,
-            color: R.color.stepsWidget.secondGradientColor()
+        let string = Text.steps
+        let font = R.font.sfProDisplaySemibold(size: 16.fontScale())
+        let color = R.color.stepsWidget.secondGradientColor()
+        let image = R.image.stepsWidget.foot()
+        
+        node.attributedText = string.attributedSring(
+            [.init(
+                worldIndex: [0],
+                attributes: [.color(color), .font(font)]
+            )],
+            image: .init(
+                image: image,
+                font: font,
+                position: .left
+            )
         )
         
-        node.attributedText = getAttributedStringWithImage(
-            image: R.image.stepsWidget.foot(),
-            attributedString: string
-        )
         return node
     }()
     
     private lazy var bottomTextNode: ASTextNode = {
         let node = ASTextNode()
         node.style.alignSelf = .center
-        node.attributedText = getAttributedString(
-            string: String(steps),
-            size: 16,
-            color: R.color.stepsWidget.secondGradientColor()
-        )
         return node
     }()
     
@@ -92,11 +94,15 @@ final class StepsWidgetNode: CTWidgetNode {
     }
     
     private func didChangeSteps() {
-        bottomTextNode.attributedText = getAttributedString(
-            string: String(steps),
-            size: 16,
-            color: R.color.stepsWidget.secondGradientColor()
-        )
+        bottomTextNode.attributedText = String(steps).attributedSring([
+            .init(
+                worldIndex: [0],
+                attributes: [
+                    .color(R.color.stepsWidget.secondGradientColor()),
+                    .font(R.font.sfProDisplaySemibold(size: 16.fontScale()))
+                ]
+            )
+        ])
     }
     
     private func didChangeProgress() {
@@ -257,40 +263,6 @@ final class StepsWidgetNode: CTWidgetNode {
         ))
         
         return path
-    }
-    
-    private func getAttributedStringWithImage(image: UIImage?,
-                                              attributedString: NSAttributedString) -> NSAttributedString {
-        guard let image = image else { return NSMutableAttributedString() }
-        
-        let imageAttachment = NSTextAttachment()
-        imageAttachment.image = image
-        imageAttachment.bounds = CGRect(
-            x: 0,
-            y: (UIFont.roundedFont(ofSize: 16, weight: .semibold).capHeight - image.size.height).rounded() / 2,
-            width: image.size.width,
-            height: image.size.height
-        )
-        let imageString = NSAttributedString(attachment: imageAttachment)
-        let fullString = NSMutableAttributedString(attributedString: imageString)
-        fullString.append(attributedString)
-        
-        return fullString
-    }
-    
-    private func getAttributedString(string: String,
-                                     size: CGFloat,
-                                     color: UIColor?) -> NSMutableAttributedString {
-        let attributedString = NSMutableAttributedString(string: string)
-        attributedString.addAttributes(
-            [
-                .foregroundColor: color ?? .black,
-                .font: UIFont.roundedFont(ofSize: size, weight: .semibold)
-            ],
-            range: NSRange(location: 0, length: string.count)
-        )
-
-        return attributedString
     }
 }
 

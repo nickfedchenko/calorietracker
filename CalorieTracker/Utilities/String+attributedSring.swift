@@ -17,12 +17,25 @@ struct StringSettingsModel {
     let attributes: [StringSettings]
 }
 
+struct StringImageModel {
+    let image: UIImage?
+    let font: UIFont?
+    let position: ImagePosition
+    
+    enum ImagePosition {
+        case left
+        case right
+    }
+}
+
 extension String {
-    func attributedSring(_ settings: [StringSettingsModel], separator: String.Element = " ") -> NSAttributedString {
+    func attributedSring(_ settings: [StringSettingsModel],
+                         separator: String.Element = " ",
+                         image: StringImageModel? = nil) -> NSAttributedString {
         let finalAttributedString = NSMutableAttributedString()
         let worlds = self.split(separator: separator).map { String($0) }
         
-        let attributedStrings: [NSMutableAttributedString] = worlds.enumerated().map { world in
+        var attributedStrings: [NSMutableAttributedString] = worlds.enumerated().map { world in
             let attributedString = NSMutableAttributedString(string: world.element)
             let attributes = settings[worldIndex: world.offset]
             
@@ -46,6 +59,21 @@ extension String {
             return attributedString
         }
         
+        if let imageData = image {
+            let imageAttributed = getAttributedStringImage(imageData: imageData)
+            attributedStrings.insert(
+                NSMutableAttributedString(attributedString: imageAttributed),
+                at: {
+                    switch imageData.position {
+                    case .left:
+                        return 0
+                    case .right:
+                        return attributedStrings.count
+                    }
+                }()
+            )
+        }
+        
         attributedStrings.enumerated().forEach {
             finalAttributedString.append($0.element)
             if $0.offset != attributedStrings.count - 1 {
@@ -54,6 +82,23 @@ extension String {
         }
         
         return finalAttributedString
+    }
+    
+    private func getAttributedStringImage(imageData: StringImageModel) -> NSAttributedString {
+        guard let image = imageData.image, let font = imageData.font else {
+            return NSAttributedString()
+        }
+        
+        let imageAttachment = NSTextAttachment()
+        imageAttachment.image = image
+        imageAttachment.bounds = CGRect(
+            x: 0,
+            y: (font.capHeight - image.size.height).rounded() / 2,
+            width: image.size.width,
+            height: image.size.height
+        )
+
+        return NSAttributedString(attachment: imageAttachment)
     }
 }
 
