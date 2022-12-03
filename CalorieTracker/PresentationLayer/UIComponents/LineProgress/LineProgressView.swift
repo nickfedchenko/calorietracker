@@ -12,6 +12,11 @@ final class LineProgressView: UIView {
     var backgroundLineColor: UIColor? = .white
     var progress: CGFloat = 0.5 {
         didSet {
+            guard progress.isNormal else {
+                progress = 0
+                return
+            }
+            
             let newProgress = CGFloat(Int(progress * 1000) % 1000) / 1000.0
             shape?.strokeEnd = newProgress
             gradientLayer.frame = CGRect(
@@ -21,7 +26,6 @@ final class LineProgressView: UIView {
                     height: bounds.height
                 )
             )
-            
             switch progress {
             case 0..<1:
                 imageView.image = R.image.stepsWidget.flaG()

@@ -10,7 +10,7 @@ import AsyncDisplayKit
 final class WaterWidgetNode: CTWidgetNode {
     struct Model {
         let progress: CGFloat
-        let waterMl: NSAttributedString
+        let waterMl: String
     }
     
     private let bottomTitleLabel = ASTextNode()
@@ -27,7 +27,7 @@ final class WaterWidgetNode: CTWidgetNode {
     
     private lazy var iconNode: ASImageNode = {
         let node = ASImageNode()
-        node.image = R.image.waterWidget.water()
+        node.image = R.image.waterWidget.waterLogo()
         node.contentMode = UIView.ContentMode.scaleAspectFit
         return node
     }()
@@ -110,8 +110,26 @@ final class WaterWidgetNode: CTWidgetNode {
     private func didChangeModel() {
         guard let model = model else { return }
 
-        bottomTitleLabel.attributedText = model.waterMl
         progressNode.progress = model.progress
+        
+        let font = R.font.sfProDisplaySemibold(size: 18)
+        let leftColor = R.color.waterWidget.secondGradientColor()
+        let rightColor = R.color.waterWidget.firstGradientColor()
+        
+        let leftAttributes: [StringSettings] = [
+            .color(leftColor),
+            .font(font)
+        ]
+        
+        let rightAttributes: [StringSettings] = [
+            .color(rightColor),
+            .font(font)
+        ]
+        
+        bottomTitleLabel.attributedText = model.waterMl.attributedSring([
+            .init(worldIndex: [0], attributes: leftAttributes),
+            .init(worldIndex: [1, 2, 3], attributes: rightAttributes)
+        ])
     }
     
     private func getAttributedString(string: String, size: CGFloat, color: UIColor?) -> NSMutableAttributedString {

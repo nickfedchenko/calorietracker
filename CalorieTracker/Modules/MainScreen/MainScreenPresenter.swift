@@ -48,7 +48,7 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
         
         let model = WaterWidgetNode.Model(
             progress: CGFloat(waterNow / goal),
-            waterMl: NSAttributedString(string: "\(Int(waterNow)) / \(Int(goal)) ml")
+            waterMl: "\(Int(waterNow)) / \(Int(goal)) ml"
         )
         
         view.setWaterWidgetModel(model)
