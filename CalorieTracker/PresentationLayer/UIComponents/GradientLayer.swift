@@ -8,6 +8,7 @@
 import UIKit
 
 final class GradientLayer: CAGradientLayer {
+    // swiftlint:disable: nesting
     struct Gradient {
         let bounds: CGRect
         let colors: [UIColor?]

@@ -50,12 +50,12 @@ final class LifeChangesAfterWeightLossViewController: UIViewController {
         
         attributedString.append(NSAttributedString(
             string: "Think about how your life will be different once you’ve lost the weight. ",
-            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         attributedString.append(NSAttributedString(
             string: "What are you most excited about?",
-            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]
+            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
         titleLabel.attributedText = attributedString

@@ -50,12 +50,12 @@ final class ImprovingNutritionViewController: UIViewController {
         
         attributedString.append(NSAttributedString(
             string: "What would you consider trying when it comes to improving the way ",
-            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         attributedString.append(NSAttributedString(
             string: "you eat?",
-            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]
+            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
         titleLabel.attributedText = attributedString

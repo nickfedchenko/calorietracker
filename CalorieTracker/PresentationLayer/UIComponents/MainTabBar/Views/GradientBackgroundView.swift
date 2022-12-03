@@ -23,10 +23,11 @@ final class GradientBackgroundView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // swiftlint:disable: void_function_in_ternary
     private func drawGradient() {
         direction == .left
-        ? drawLeftSidedGradient()
-        : drawRightSidedGradient()
+            ? drawLeftSidedGradient()
+            : drawRightSidedGradient()
     }
     
     private func drawLeftSidedGradient() {

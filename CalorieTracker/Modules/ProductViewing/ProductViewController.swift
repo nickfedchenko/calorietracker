@@ -142,6 +142,7 @@ final class ProductViewController: UIViewController {
         )
     }
     
+    // swiftlint:disable:next function_body_length
     private func setupConstraints() {
         mainScrollView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()

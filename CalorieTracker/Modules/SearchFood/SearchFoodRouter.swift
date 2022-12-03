@@ -30,6 +30,4 @@ class SearchFoodRouter: NSObject {
     }
 }
 
-extension SearchFoodRouter: SearchFoodRouterInterface {
-
-}
+extension SearchFoodRouter: SearchFoodRouterInterface {}

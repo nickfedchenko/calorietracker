@@ -80,7 +80,7 @@ final class WidgetContainerViewController: UIViewController {
     private func setupView() {
         backgroundView.backgroundColor = R.color.foodViewing.basicPrimary()?.withAlphaComponent(0.25)
         
-        var widgetFull = widgetView as? CTWidgetFullProtocol
+        let widgetFull = widgetView as? CTWidgetFullProtocol
         widgetFull?.didTapCloseButton = {
             self.router?.closeViewController()
         }

@@ -206,6 +206,7 @@ final class TripleDiagramChartView: UIView {
         configureLabels(chartData: chartData)
     }
     
+    // swiftlint:disable:next function_body_length
     private func configureLabels(chartData: TripleDiagramChartData) {
         switch chartFormat {
         case .daily:

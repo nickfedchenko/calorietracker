@@ -50,12 +50,12 @@ final class HowImproveYourEfficiencyViewController: UIViewController {
         
         attributedString.append(NSAttributedString(
             string: "What are some ways you can see yourself increasing your ",
-            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         attributedString.append(NSAttributedString(
             string: "activity level?",
-            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]
+            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
         titleLabel.attributedText = attributedString

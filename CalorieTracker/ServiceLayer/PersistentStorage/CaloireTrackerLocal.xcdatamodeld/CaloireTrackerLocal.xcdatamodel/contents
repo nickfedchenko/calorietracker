@@ -30,9 +30,9 @@
         <attribute name="favorites" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="id" attributeType="String"/>
         <attribute name="numberUses" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="dish" optional="YES" maxCount="1" deletionRule="No Action" destinationEntity="DomainDish" inverseName="foodData" inverseEntity="DomainDish"/>
-        <relationship name="product" optional="YES" maxCount="1" deletionRule="No Action" destinationEntity="DomainProduct" inverseName="foodData" inverseEntity="DomainProduct"/>
-        <relationship name="userProduct" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainUserProduct" inverseName="foodData" inverseEntity="DomainUserProduct"/>
+        <relationship name="dish" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="DomainDish" inverseName="foodData" inverseEntity="DomainDish"/>
+        <relationship name="product" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="DomainProduct" inverseName="foodData" inverseEntity="DomainProduct"/>
+        <relationship name="userProduct" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="DomainUserProduct" inverseName="foodData" inverseEntity="DomainUserProduct"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="id"/>
@@ -42,8 +42,8 @@
     <entity name="DomainMeal" representedClassName="DomainMeal" syncable="YES">
         <attribute name="id" attributeType="String"/>
         <attribute name="mealTime" attributeType="String"/>
-        <relationship name="dishes" optional="YES" toMany="YES" deletionRule="No Action" destinationEntity="DomainDish"/>
-        <relationship name="products" optional="YES" toMany="YES" deletionRule="No Action" destinationEntity="DomainProduct"/>
+        <relationship name="dishes" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="DomainDish"/>
+        <relationship name="products" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="DomainProduct"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="id"/>

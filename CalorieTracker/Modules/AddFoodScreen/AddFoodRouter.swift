@@ -47,8 +47,8 @@ extension AddFoodRouter: AddFoodRouterInterface {
     
     func openSelectedFoodCellsVC(
         _ foods: [Food],
-        complition: @escaping ([Food]) -> Void )
-    {
+        complition: @escaping ([Food]) -> Void
+    ) {
         let vc = SelectedFoodCellsRouter.setupModule(foods)
         vc.modalPresentationStyle = .overFullScreen
         vc.didChangeSeletedFoods = { newFoods in

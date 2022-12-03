@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 
+// swiftlint:disable: nesting
 struct NutritionFactsVM {
     enum CellType {
         case first
@@ -192,6 +193,7 @@ private extension Product {
         }
     }
     
+    // swiftlint:disable:next cyclomatic_complexity
     func getTitle(_ key: ProductKey) -> String {
         switch key {
         case .protein:

@@ -89,7 +89,7 @@ extension CalendarFullWidgetView: CalendarFullWidgetViewInterface {
 
 extension CalendarFullWidgetView {
     func getCalendarView() -> CalendarView {
-        return CalendarView(baseDate: Date()) { date in
+        return CalendarView(baseDate: Date()) { _ in
             
         }
     }

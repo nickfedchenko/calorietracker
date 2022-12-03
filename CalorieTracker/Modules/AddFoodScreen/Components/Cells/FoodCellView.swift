@@ -152,6 +152,7 @@ final class FoodCellView: UIView {
         )
     }
     
+    // swiftlint:disable:next function_body_length
     private func setupConstraints() {
         imageView.setContentCompressionResistancePriority(.init(1000), for: .horizontal)
         imageView.setContentHuggingPriority(.defaultHigh, for: .horizontal)

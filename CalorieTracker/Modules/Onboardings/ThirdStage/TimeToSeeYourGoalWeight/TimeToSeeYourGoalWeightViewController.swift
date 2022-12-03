@@ -47,12 +47,12 @@ final class TimeToSeeYourGoalWeightViewController: UIViewController {
         
         attributedString.append(NSAttributedString(
             string: "It’s time to see your ",
-            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         attributedString.append(NSAttributedString(
             string: "goal weight",
-            attributes: [.foregroundColor:  R.color.onboardings.radialGradientFirst()]
+            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
         titleLabel.attributedText = attributedString

@@ -55,7 +55,7 @@ final class YourHeightViewController: UIViewController {
         borderTextField.isEnabled = false
         borderTextField.textField.addTarget(
             self,
-            action:  #selector(didTapContinueCommonButton),
+            action: #selector(didTapContinueCommonButton),
             for: .touchUpInside
         )
         

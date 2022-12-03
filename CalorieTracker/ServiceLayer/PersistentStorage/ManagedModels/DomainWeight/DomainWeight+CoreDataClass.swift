@@ -18,4 +18,3 @@ public class DomainWeight: NSManagedObject {
         return weight
     }
 }
-

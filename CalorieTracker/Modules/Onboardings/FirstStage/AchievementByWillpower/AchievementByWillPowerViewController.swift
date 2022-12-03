@@ -53,12 +53,12 @@ final class AchievementByWillPowerViewController: UIViewController {
         
         attributedString.append(NSAttributedString(
             string: "It doesn’t take unlimited willpower to ",
-            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         attributedString.append(NSAttributedString(
             string: "achieve your goals.",
-            attributes: [.foregroundColor:  R.color.onboardings.radialGradientFirst()]
+            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
         titleLabel.attributedText = attributedString

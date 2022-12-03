@@ -58,12 +58,12 @@ final class LifestyleOfOthersViewController: UIViewController {
         
         attributedString.append(NSAttributedString(
             string: "Think about the people you spend the most time with. What best describes their ",
-            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         attributedString.append(NSAttributedString(
             string: "lifestyle?",
-            attributes: [.foregroundColor:  R.color.onboardings.radialGradientFirst()]
+            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
         titleLabel.attributedText = attributedString

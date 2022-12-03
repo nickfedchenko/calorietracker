@@ -22,4 +22,3 @@ class CalendarFullWidgetPresenter {
 extension CalendarFullWidgetPresenter: CalendarFullWidgetPresenterInterface {
 
 }
-

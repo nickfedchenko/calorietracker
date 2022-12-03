@@ -18,4 +18,3 @@ extension DomainWater: DomainDailyProtocol {
     @NSManaged public var year: Int32
     @NSManaged public var value: Double
 }
-

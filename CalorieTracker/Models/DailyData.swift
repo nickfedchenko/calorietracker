@@ -5,8 +5,8 @@
 //  Created by Vadim Aleshin on 02.12.2022.
 //
 
-import Foundation
 import CoreData
+import Foundation
 
 protocol DomainDailyProtocol: NSManagedObject {
     var day: Int32 { get }

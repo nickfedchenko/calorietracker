@@ -70,7 +70,7 @@ final class BorderTextField: UIView {
     }
 
     @objc private func didChangedTextField(_ sender: UITextField) {
-        let isTextFieldEmpty = sender.text?.isEmpty ?? false
+        _ = sender.text?.isEmpty ?? false
     }
     
     required init?(coder: NSCoder) {

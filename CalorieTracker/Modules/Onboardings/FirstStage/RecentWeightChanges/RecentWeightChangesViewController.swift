@@ -50,11 +50,11 @@ final class RecentWeightChangesViewController: UIViewController {
         
         attributedString.append(NSAttributedString(
             string: "Think back to when you last worked on your weight. ",
-            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]
+            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         attributedString.append(NSAttributedString(
             string: "Is anything different about this time than last time?",
-            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         titleLabel.attributedText = attributedString
