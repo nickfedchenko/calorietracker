@@ -176,9 +176,7 @@ extension WidgetContainerViewController.WidgetType {
             )
             return vc
         case .calendar:
-            return CalendarView(baseDate: Date()) { _ in
-                
-            }
+            return CalendarFullWidgetView()
         case .notes:
             return UIView()
         case .weight:
