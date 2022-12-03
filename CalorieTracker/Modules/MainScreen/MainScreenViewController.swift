@@ -140,8 +140,6 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
     
     private let stepsWidget: StepsWidgetNode = {
         let node = StepsWidgetNode(with: CTWidgetNodeConfiguration(type: .large))
-        node.progress = 0
-        node.steps = 5000
         return node
     }()
     
@@ -324,7 +322,8 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         
         let stackInset = ASInsetLayoutSpec(
             insets: .init(
-                top: self.menuButton.constants.suggestedTopSafeAreaOffset + self.node.safeAreaInsets.top,
+                top: self.menuButton.constants.suggestedTopSafeAreaOffset
+                + CTWidgetNodeConfiguration(type: .widget).safeAreaTopInset,
                 left: self.menuButton.constants.suggestedSideInset,
                 bottom: 0,
                 right: self.menuButton.constants.suggestedSideInset

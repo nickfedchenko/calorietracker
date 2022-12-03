@@ -121,6 +121,10 @@ final class CTTabBar: UIView {
             make.leading.equalToSuperview().offset(20)
             make.top.bottom.equalToSuperview()
         }
+        
+        self.snp.makeConstraints { make in
+            make.height.equalTo(Constants.itemHeight)
+        }
     }
 }
 

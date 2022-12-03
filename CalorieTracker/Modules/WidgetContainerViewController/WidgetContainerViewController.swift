@@ -24,11 +24,14 @@ final class WidgetContainerViewController: UIViewController {
     
     var suggestedSideInset: CGFloat { Size(type: .widget).suggestedSideInset }
     var suggestedTopSafeAreaOffset: CGFloat { Size(type: .widget).suggestedTopSafeAreaOffset }
+    var safeAreaTopInset: CGFloat { Size(type: .widget).safeAreaTopInset }
     var suggestedInterItemSpacing: CGFloat { Size(type: .widget).suggestedInterItemSpacing }
-    var tabBarHeight: CGFloat { Size(type: .widget).tabBarHeight }
+    var tabBarHeight: CGFloat { Size(type: .widget).tabBarHeight + bottomInset }
+    var bottomInset: CGFloat { CTTabBarController.Constants.bottomInset }
     
     var minTopInset: CGFloat {
-        suggestedTopSafeAreaOffset
+        safeAreaTopInset
+        + suggestedTopSafeAreaOffset
         + Size(type: .compact).height
         + 2 * suggestedInterItemSpacing
         + Size(type: .widget).height
@@ -94,8 +97,8 @@ final class WidgetContainerViewController: UIViewController {
         }
         
         widgetView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(widgetInsets.top)
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-widgetInsets.bottom)
+            make.top.equalToSuperview().offset(widgetInsets.top)
+            make.bottom.equalToSuperview().offset(-widgetInsets.bottom)
             make.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).offset(widgetInsets.left)
             make.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailing).offset(-widgetInsets.right)
         }
@@ -114,7 +117,7 @@ final class WidgetContainerViewController: UIViewController {
         return .init(
             top: minTopInset,
             left: self.suggestedSideInset,
-            bottom: 0,
+            bottom: self.bottomInset,
             right: self.suggestedSideInset
         )
     }
