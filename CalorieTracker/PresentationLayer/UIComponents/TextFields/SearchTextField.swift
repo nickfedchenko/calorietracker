@@ -144,11 +144,17 @@ final class SearchView: UIView {
     
     private func getPlaceholder(_ text: String) -> NSAttributedString {
         let image = R.image.searchTextField.search()!
-        let imageStr = image.asAttributedString
-        let attributedString = NSMutableAttributedString(attributedString: imageStr)
-        attributedString.append(NSAttributedString(string: " \(text)"))
+        let font = R.font.sfProDisplaySemibold(size: 18)
         
-        return attributedString
+        return text.attributedSring(
+            [
+                .init(
+                    worldIndex: Array(0...text.split(separator: " ").count),
+                    attributes: [.font(font)]
+                )
+            ],
+            image: .init(image: image, font: font, position: .left)
+        )
     }
     
     @objc private func didChangeTextValue() {

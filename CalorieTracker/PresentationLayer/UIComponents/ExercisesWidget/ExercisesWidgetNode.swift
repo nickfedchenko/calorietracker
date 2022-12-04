@@ -53,14 +53,14 @@ final class ExercisesWidgetNode: CTWidgetNode {
         return node
     }()
     
-    private var indexEnd: Int { indexStart + min(model.exercises.count, 3) - 1 }
+    private var indexEnd: Int { indexStart + min(model?.exercises.count ?? 0, 3) - 1 }
     private var indexStart = 0 {
         didSet {
             if indexStart < 0 { indexStart = 0 }
         }
     }
     
-    var model: Model {
+    var model: Model? {
         didSet {
             didChangeModel()
         }
@@ -68,10 +68,8 @@ final class ExercisesWidgetNode: CTWidgetNode {
     
     override var widgetType: WidgetContainerViewController.WidgetType { .exercises }
     
-    init(_ model: Model, with configuration: CTWidgetNodeConfiguration) {
-        self.model = model
+    override init(with configuration: CTWidgetNodeConfiguration) {
         super.init(with: configuration)
-        didChangeModel()
         backgroundColor = .white
     }
     
@@ -114,7 +112,7 @@ final class ExercisesWidgetNode: CTWidgetNode {
             ),
             exercisesStack
         ]
-        if model.progress != nil {
+        if model?.progress != nil {
             mainStackChildren.append(
                 ASInsetLayoutSpec(
                     insets: UIEdgeInsets(
@@ -151,6 +149,8 @@ final class ExercisesWidgetNode: CTWidgetNode {
     }
     
     private func didChangeModel() {
+        guard let model = model else { return }
+
         let leftColor = R.color.exercisesWidget.secondGradientColor()
         let rightColor = R.color.exercisesWidget.backgroundLine()
         let font = R.font.sfProDisplaySemibold(size: 16.fontScale())
@@ -175,6 +175,8 @@ final class ExercisesWidgetNode: CTWidgetNode {
     // MARK: - setup ElementExercisesChartNodes
     
     private func getFinalElementsChart() -> [ElementExercisesChartNode] {
+        guard let model = model else { return [] }
+
         let exercises = model.exercises
         var elements: [ElementExercisesChartNode] = []
         

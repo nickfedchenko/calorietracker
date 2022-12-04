@@ -13,6 +13,10 @@ protocol MainScreenViewControllerInterface: AnyObject {
     func setWaterWidgetModel(_ model: WaterWidgetNode.Model)
     func setStepsWidget(now: Int, goal: Int?)
     func setWeightWidget(weight: CGFloat?)
+    func setMessageWidget(_ text: String)
+    func setActivityWidget(_ model: MainWidgetViewNode.Model)
+    func setCalendarWidget(_ model: CalendarWidgetNode.Model)
+    func setExersiceWidget(_ model: ExercisesWidgetNode.Model)
 }
 //
 class MainScreenViewController: ASDKViewController<ASDisplayNode> {
@@ -31,7 +35,6 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         node.style.preferredSize = CGSize(width: 308, height: node.constants.height)
         node.style.flexShrink = 0.75
         node.backgroundColor = .clear
-        node.text = "Have a nice day! Don't forget to track your breakfast "
         return node
     }()
     
@@ -43,54 +46,11 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
             height: node.constants.height
         )
         node.style.flexShrink = 0.75
-        node.model = MainWidgetViewNode.Model(
-            text: MainWidgetViewNode.Model.Text(
-                firstLine: "1680 / 1950 kcal",
-                secondLine: "133 / 145 carbs",
-                thirdLine: "133 / 145 protein",
-                fourthLine: "23 / 30 fat",
-                excludingBurned: "778",
-                includingBurned: "1200"
-            ),
-            circleData: MainWidgetViewNode.Model.CircleData(
-                rings: [
-                    MainWidgetViewNode.Model.CircleData.RingData(
-                        progress: 0.5,
-                        color: .red,
-                        title: "C",
-                        titleColor: nil,
-                        image: nil
-                    ),
-                    MainWidgetViewNode.Model.CircleData.RingData(
-                        progress: 0.7,
-                        color: .red,
-                        title: "B",
-                        titleColor: .blue,
-                        image: nil
-                    ),
-                    MainWidgetViewNode.Model.CircleData.RingData(
-                        progress: 0.6,
-                        color: .red,
-                        title: nil,
-                        titleColor: nil,
-                        image: R.image.mainWidgetViewNode.burned()
-                    ),
-                    MainWidgetViewNode.Model.CircleData.RingData(
-                        progress: 0.8,
-                        color: .green,
-                        title: "H",
-                        titleColor: nil,
-                        image: nil
-                    )
-                ]
-            )
-        )
         return node
     }()
     
     private let calendarWidget: CalendarWidgetNode = {
         let node = CalendarWidgetNode(with: CTWidgetNodeConfiguration(type: .large))
-        node.model = .init(dateString: "May 29", daysStreak: 12)
         return node
     }()
     
@@ -105,31 +65,7 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
     }()
     
     private let exercisesWidget: ExercisesWidgetNode = {
-        let node = ExercisesWidgetNode(
-            ExercisesWidgetNode.Model(
-                exercises: [
-                    ExercisesWidgetNode.Model.Exercise(
-                        burnedKcal: 240,
-                        exerciseType: ExerciseType.basketball
-                    ),
-                    ExercisesWidgetNode.Model.Exercise(
-                        burnedKcal: 320,
-                        exerciseType: ExerciseType.swim
-                    ),
-                    ExercisesWidgetNode.Model.Exercise(
-                        burnedKcal: 135,
-                        exerciseType: ExerciseType.core
-                    ),
-                    ExercisesWidgetNode.Model.Exercise(
-                        burnedKcal: 100,
-                        exerciseType: ExerciseType.boxing
-                    )
-                ],
-                progress: 0.7,
-                burnedKcal: 772,
-                goalBurnedKcal: 900
-            ),
-            with: CTWidgetNodeConfiguration(type: .large))
+        let node = ExercisesWidgetNode(with: CTWidgetNodeConfiguration(type: .large))
         node.style.preferredSize = CGSize(
             width: 260,
             height: node.constants.height
@@ -259,6 +195,10 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         presenter?.updateWaterWidgetModel()
         presenter?.updateStepsWidget()
         presenter?.updateWeightWidget()
+        presenter?.updateExersiceWidget()
+        presenter?.updateMessageWidget()
+        presenter?.updateActivityWidget()
+        presenter?.updateCalendarWidget()
     }
     
     // MARK: - Private methods
@@ -376,6 +316,22 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
 }
 
 extension MainScreenViewController: MainScreenViewControllerInterface {
+    func setMessageWidget(_ text: String) {
+        messageNode.text = text
+    }
+    
+    func setActivityWidget(_ model: MainWidgetViewNode.Model) {
+        mainActivityWidget.model = model
+    }
+    
+    func setCalendarWidget(_ model: CalendarWidgetNode.Model) {
+        calendarWidget.model = model
+    }
+    
+    func setExersiceWidget(_ model: ExercisesWidgetNode.Model) {
+        exercisesWidget.model = model
+    }
+    
     func setWaterWidgetModel(_ model: WaterWidgetNode.Model) {
         self.waterBalanceWidget.model = model
     }

@@ -132,6 +132,7 @@ final class AddFoodViewController: UIViewController {
         
         searshTextField.textField.keyboardAppearance = .light
         searshTextField.textField.keyboardType = .webSearch
+        searshTextField.placeholderText = "SEARCH FOOD"
     
         foodCollectionViewController.dataSource = self
         foodCollectionViewController.delegate = self
