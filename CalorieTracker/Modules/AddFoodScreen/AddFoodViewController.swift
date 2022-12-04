@@ -15,6 +15,7 @@ protocol AddFoodViewControllerInterface: AnyObject {
 
 final class AddFoodViewController: UIViewController {
     var presenter: AddFoodPresenterInterface?
+    var keyboardManager: KeyboardManagerProtocol?
     
     // MARK: - Private Propertys
     
@@ -95,8 +96,9 @@ final class AddFoodViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        guard firstDraw else { return }
+        guard firstDraw, keyboardHeaderView.frame != .zero else { return }
         setupShadow()
+        configureKeyboardManager()
         firstDraw = false
     }
     
@@ -113,17 +115,6 @@ final class AddFoodViewController: UIViewController {
         menuView.closeNotAnimate()
         menuTypeSecondView.closeNotAnimate()
         menuCreateView.closeNotAnimate()
-        
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillShow),
-            name: UIResponder.keyboardWillShowNotification, object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillHide),
-            name: UIResponder.keyboardWillHideNotification, object: nil
-        )
     }
     
     // MARK: - Private functions
@@ -522,33 +513,13 @@ final class AddFoodViewController: UIViewController {
         )
     }
     
-    @objc private func keyboardWillShow(notification: NSNotification) {
-        guard let userInfo = notification.userInfo,
-              let keyboardNotification = KeyboardNotification(userInfo)
-        else { return }
-        
-        contentViewBottomAnchor?.constant = -keyboardNotification.endFrame.height
-        UIView.animate(
-            withDuration: keyboardNotification.animationDuration,
-            delay: 0,
-            options: keyboardNotification.animateCurve
-        ) {
-            self.view.layoutIfNeeded()
-        }
-    }
-    
-    @objc private func keyboardWillHide(notification: NSNotification) {
-        guard let userInfo = notification.userInfo,
-              let keyboardNotification = KeyboardNotification(userInfo)
-        else { return }
-        contentViewBottomAnchor?.constant = keyboardHeaderView.frame.height
-        UIView.animate(
-            withDuration: keyboardNotification.animationDuration,
-            delay: 0,
-            options: keyboardNotification.animateCurve
-        ) {
-            self.view.layoutIfNeeded()
-        }
+    private func configureKeyboardManager() {
+        keyboardManager?.bindToKeyboardNotifications(
+            superview: view,
+            bottomConstraint: contentViewBottomAnchor ?? .init(),
+            bottomOffset: keyboardHeaderView.frame.height,
+            animated: true
+        )
     }
     
     @objc private func hideKeyboard() {

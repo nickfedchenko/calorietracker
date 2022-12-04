@@ -25,8 +25,10 @@ class AddFoodRouter: NSObject {
         let interactor = AddFoodInteractor()
         let router = AddFoodRouter()
         let presenter = AddFoodPresenter(interactor: interactor, router: router, view: vc)
+        let keyboardManager = KeyboardManager()
 
         vc.presenter = presenter
+        vc.keyboardManager = keyboardManager
         router.presenter = presenter
         router.viewController = vc
         interactor.presenter = presenter

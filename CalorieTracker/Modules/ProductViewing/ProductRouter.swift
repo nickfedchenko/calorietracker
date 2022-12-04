@@ -21,12 +21,14 @@ class ProductRouter: NSObject {
         let vc = ProductViewController()
         let interactor = ProductInteractor()
         let router = ProductRouter()
+        let keyboardManager = KeyboardManager()
         let presenter = ProductPresenter(interactor: interactor,
                                          router: router,
                                          view: vc,
                                          product: product)
 
         vc.presenter = presenter
+        vc.keyboardManager = keyboardManager
         router.presenter = presenter
         router.viewController = vc
         interactor.presenter = presenter

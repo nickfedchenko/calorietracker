@@ -14,6 +14,7 @@ protocol ProductViewControllerInterface: AnyObject {
 
 final class ProductViewController: UIViewController {
     var presenter: ProductPresenterInterface?
+    var keyboardManager: KeyboardManagerProtocol?
     
     // MARK: - Private
     
@@ -60,31 +61,18 @@ final class ProductViewController: UIViewController {
         super.viewDidLayoutSubviews()
         
         guard firstDraw,
-                bottomGradientView.frame != .zero,
-                valueTextField.frame != .zero else { return }
+              bottomGradientView.frame != .zero,
+              valueTextField.frame != .zero,
+              headerKeyboardView.frame != .zero else { return }
         addGradientForBottomView()
         selectView.height = valueTextField.frame.height
+        configureKeyboardManager()
         firstDraw = false
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         hideNavBar()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillShow),
-            name: UIResponder.keyboardWillShowNotification, object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillHide),
-            name: UIResponder.keyboardWillHideNotification, object: nil
-        )
     }
     
     // MARK: - Private Functions
@@ -294,34 +282,13 @@ final class ProductViewController: UIViewController {
         )
     }
     
-    @objc private func keyboardWillShow(notification: NSNotification) {
-        guard let userInfo = notification.userInfo,
-              let keyboardNotification = KeyboardNotification(userInfo)
-        else { return }
-        
-        contentViewBottomAnchor?.constant = -keyboardNotification.endFrame.height
-        UIView.animate(
-            withDuration: keyboardNotification.animationDuration,
-            delay: 0,
-            options: keyboardNotification.animateCurve
-        ) {
-            self.view.layoutIfNeeded()
-        }
-    }
-    
-    @objc private func keyboardWillHide(notification: NSNotification) {
-        guard let userInfo = notification.userInfo,
-              let keyboardNotification = KeyboardNotification(userInfo)
-        else { return }
-        
-        contentViewBottomAnchor?.constant = headerKeyboardView.frame.height
-        UIView.animate(
-            withDuration: keyboardNotification.animationDuration,
-            delay: 0,
-            options: keyboardNotification.animateCurve
-        ) {
-            self.view.layoutIfNeeded()
-        }
+    private func configureKeyboardManager() {
+        keyboardManager?.bindToKeyboardNotifications(
+            superview: view,
+            bottomConstraint: contentViewBottomAnchor ?? .init(),
+            bottomOffset: headerKeyboardView.frame.height,
+            animated: true
+        )
     }
     
     @objc private func hideKeyboard() {
