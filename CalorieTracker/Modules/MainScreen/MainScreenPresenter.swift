@@ -89,44 +89,54 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
     }
     
     func updateActivityWidget() {
+        let nutritionDailyGoal = UDM.nutritionDailyGoal ?? .zero
+        let nutritionToday = FDS.shared.getNutritionToday().nutrition
+        let kcalGoal = nutritionDailyGoal.kcal
+        let carbsGoal = nutritionDailyGoal.carbs
+        let proteinGoal = nutritionDailyGoal.protein
+        let fatGoal = nutritionDailyGoal.fat
+        let kcalToday = nutritionToday.kcal
+        let carbsToday = nutritionToday.carbs
+        let proteinToday = nutritionToday.protein
+        let fatToday = nutritionToday.fat
         let model: MainWidgetViewNode.Model = .init(
             text: MainWidgetViewNode.Model.Text(
-                firstLine: "1680 / 1950 kcal",
-                secondLine: "133 / 145 carbs",
-                thirdLine: "133 / 145 protein",
-                fourthLine: "23 / 30 fat",
+                firstLine: "\(Int(kcalToday)) / \(Int(kcalGoal)) kcal",
+                secondLine: "\(Int(carbsToday)) / \(Int(carbsGoal)) carbs",
+                thirdLine: "\(Int(proteinToday)) / \(Int(proteinGoal)) protein",
+                fourthLine: "\(Int(fatToday)) / \(Int(fatGoal)) fat",
                 excludingBurned: "778",
                 includingBurned: "1200"
             ),
             circleData: MainWidgetViewNode.Model.CircleData(
                 rings: [
                     MainWidgetViewNode.Model.CircleData.RingData(
-                        progress: 0.5,
-                        color: .red,
-                        title: "C",
+                        progress: fatGoal != 0 ? fatToday / fatGoal : 0,
+                        color: R.color.addFood.menu.fat(),
+                        title: "F",
                         titleColor: nil,
                         image: nil
                     ),
                     MainWidgetViewNode.Model.CircleData.RingData(
-                        progress: 0.7,
-                        color: .red,
-                        title: "B",
+                        progress: proteinGoal != 0 ? proteinToday / proteinGoal : 0,
+                        color: R.color.addFood.menu.protein(),
+                        title: "P",
+                        titleColor: nil,
+                        image: nil
+                    ),
+                    MainWidgetViewNode.Model.CircleData.RingData(
+                        progress: carbsGoal != 0 ? carbsToday / carbsGoal : 0,
+                        color: R.color.addFood.menu.carb(),
+                        title: "C",
                         titleColor: .blue,
                         image: nil
                     ),
                     MainWidgetViewNode.Model.CircleData.RingData(
-                        progress: 0.6,
-                        color: .red,
+                        progress: kcalGoal != 0 ? kcalToday / kcalGoal : 0,
+                        color: R.color.addFood.menu.kcal(),
                         title: nil,
                         titleColor: nil,
                         image: R.image.mainWidgetViewNode.burned()
-                    ),
-                    MainWidgetViewNode.Model.CircleData.RingData(
-                        progress: 0.8,
-                        color: .green,
-                        title: "H",
-                        titleColor: nil,
-                        image: nil
                     )
                 ]
             )

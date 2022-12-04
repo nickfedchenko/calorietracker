@@ -16,6 +16,7 @@ protocol LocalDomainServiceInterface {
     func fetchWater() -> [DailyData]
     func fetchSteps() -> [DailyData]
     func fetchWeight() -> [DailyData]
+    func fetchNutrition() -> [DailyNutritionData]
     func saveProducts(products: [Product])
     func saveDishes(dishes: [Dish])
     func saveFoodData(foods: [FoodData])
@@ -23,6 +24,7 @@ protocol LocalDomainServiceInterface {
     func saveWater(data: [DailyData])
     func saveSteps(data: [DailyData])
     func saveWeight(data: [DailyData])
+    func saveNutrition(data: [DailyNutritionData])
     func searchProducts(by phrase: String) -> [Product]
     func searchProducts(barcode: String) -> [Product]
     func searchDishes(by phrase: String) -> [Dish]
@@ -151,18 +153,23 @@ extension LocalDomainService: LocalDomainServiceInterface {
         return domainWeight.compactMap { DailyData(from: $0) }
     }
     
+    func fetchNutrition() -> [DailyNutritionData] {
+        guard let domainNutrition = fetchData(for: DomainNutrition.self) else {
+            return []
+        }
+        return domainNutrition.compactMap { DailyNutritionData(from: $0) }
+    }
+    
     func saveProducts(products: [Product]) {
         let _: [DomainProduct] = products
             .map { DomainProduct.prepare(fromPlainModel: $0, context: context) }
-        //save()
-        try? context.save()
+        save()
     }
     
     func saveDishes(dishes: [Dish]) {
         let _: [DomainDish] = dishes
             .map { DomainDish.prepare(fromPlainModel: $0, context: context) }
-        //save()
-        try? context.save()
+        save()
     }
     
     func saveMeals(meals: [Meal]) {
@@ -186,6 +193,12 @@ extension LocalDomainService: LocalDomainServiceInterface {
     func saveWeight(data: [DailyData]) {
         let _: [DomainWeight] = data
             .map { DomainWeight.prepare(fromPlainModel: $0, context: context) }
+        try? context.save()
+    }
+    
+    func saveNutrition(data: [DailyNutritionData]) {
+        let _: [DomainNutrition] = data
+            .map { DomainNutrition.prepare(fromPlainModel: $0, context: context) }
         try? context.save()
     }
     

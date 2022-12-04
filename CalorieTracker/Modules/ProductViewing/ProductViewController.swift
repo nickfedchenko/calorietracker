@@ -305,6 +305,7 @@ final class ProductViewController: UIViewController {
     
     @objc private func didTapSaveButton() {
         presenter?.saveNutritionDaily(addNutrition)
+        didChangeAddNutrition()
     }
 }
 
@@ -379,7 +380,11 @@ extension ProductViewController {
     
     func getAddButton() -> BasicButtonView {
         let button = BasicButtonView(type: .add)
-        
+        button.addTarget(
+            self,
+            action: #selector(didTapSaveButton),
+            for: .touchUpInside
+        )
         return button
     }
     

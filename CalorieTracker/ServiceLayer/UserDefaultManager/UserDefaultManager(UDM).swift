@@ -15,7 +15,7 @@ final class UDM {
         case weight, calories, bmi, water, carb, dietary, protein, steps, exercises, active
         case weightGoal, caloriesGoal, bmiGoal, waterGoal, carbGoal, stepsGoal, exercisesGoal, activeGoal
         case widgetSettings
-        case nutritionDailyGoal, nutritionDaily
+        case nutritionDailyGoal
         case dailyWaterGoal, dailyStepsGoal
     }
     
@@ -385,21 +385,6 @@ final class UDM {
         set {
             let data = try? JSONEncoder().encode(newValue)
             setValue(value: data, for: .widgetSettings)
-        }
-    }
-    
-    static var nutritionDaily: DailyNutrition? {
-        get {
-            guard let data: Data = getValue(for: .nutritionDaily),
-                   let nutritionData = try? JSONDecoder().decode(DailyNutrition.self, from: data) else {
-                return nil
-            }
-            return nutritionData
-        }
-        
-        set {
-            let data = try? JSONEncoder().encode(newValue)
-            setValue(value: data, for: .nutritionDaily)
         }
     }
     
