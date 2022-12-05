@@ -11,7 +11,13 @@ protocol WeightFullWidgetInterface: AnyObject {
     
 }
 
+protocol WeightFullWidgetOutput: AnyObject {
+    func setGoal(_ widget: WeightFullWidgetView)
+    func addWeight(_ widget: WeightFullWidgetView)
+}
+
 final class WeightFullWidgetView: UIView, CTWidgetFullProtocol {
+    weak var output: WeightFullWidgetOutput?
     var didTapCloseButton: (() -> Void)?
     
     private lazy var topTitleLabel: UILabel = {
@@ -150,6 +156,10 @@ final class WeightFullWidgetView: UIView, CTWidgetFullProtocol {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func update() {
+        configureView(period: .weak)
+    }
+    
     private func setupView() {
         backgroundColor = .white
         clipsToBounds = true
@@ -179,6 +189,7 @@ final class WeightFullWidgetView: UIView, CTWidgetFullProtocol {
     }
     
     private func configureView(period: HistoryHeaderButtonType) {
+        presenter?.updateData()
         guard let startDate = presenter?.getStartDate(period: period),
               let chartData = presenter?.getChartData(period: period) else { return }
         
@@ -261,7 +272,7 @@ final class WeightFullWidgetView: UIView, CTWidgetFullProtocol {
     }
     
     @objc private func didTapAddButton() {
-        
+        output?.addWeight(self)
     }
     
     @objc private func didTapBottomCloseButton() {
@@ -269,7 +280,7 @@ final class WeightFullWidgetView: UIView, CTWidgetFullProtocol {
     }
     
     @objc private func didTapSettingsButton() {
-        
+        output?.setGoal(self)
     }
 }
 

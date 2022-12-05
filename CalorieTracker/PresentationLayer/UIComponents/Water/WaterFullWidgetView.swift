@@ -168,6 +168,10 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func update() {
+        
+    }
+    
     // MARK: - Setup View
     
     private func setupView() {

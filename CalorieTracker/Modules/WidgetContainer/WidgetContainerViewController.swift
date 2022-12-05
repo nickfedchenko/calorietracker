@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol WidgetContainerInterface: AnyObject {
+    func update()
+}
+
 final class WidgetContainerViewController: UIViewController {
     typealias Size = CTWidgetNodeConfiguration
     
@@ -20,7 +24,8 @@ final class WidgetContainerViewController: UIViewController {
         case `default`
     }
     
-    var router: WidgetContainerRouterInterface?
+    var presenter: WidgetContainerPresenterInterface?
+    var needUpdate: ((WidgetType) -> Void)?
     
     var suggestedSideInset: CGFloat { Size(type: .widget).suggestedSideInset }
     var suggestedTopSafeAreaOffset: CGFloat { Size(type: .widget).suggestedTopSafeAreaOffset }
@@ -76,8 +81,20 @@ final class WidgetContainerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        configureOutput()
         setupConstraints()
         addTapGestureRecognizer()
+    }
+    
+    private func configureOutput() {
+        switch widgetType {
+        case .weight:
+            (widgetView as? WeightFullWidgetView)?.output = self
+        case .steps:
+            (widgetView as? StepsFullWidgetView)?.output = self
+        default:
+            break
+        }
     }
     
     private func setupView() {
@@ -85,7 +102,8 @@ final class WidgetContainerViewController: UIViewController {
         
         let widgetFull = widgetView as? CTWidgetFullProtocol
         widgetFull?.didTapCloseButton = {
-            self.router?.closeViewController()
+            self.needUpdate?(self.widgetType)
+            self.presenter?.didTapView()
         }
     }
     
@@ -162,7 +180,29 @@ final class WidgetContainerViewController: UIViewController {
     }
     
     @objc private func didTapView() {
-        router?.closeViewController()
+        presenter?.didTapView()
+    }
+}
+
+extension WidgetContainerViewController: WidgetContainerInterface {
+    func update() {
+        (widgetView as? CTWidgetFullProtocol)?.update()
+    }
+}
+
+extension WidgetContainerViewController: WeightFullWidgetOutput {
+    func setGoal(_ widget: WeightFullWidgetView) {
+        presenter?.openChangeWeightViewController(.set)
+    }
+    
+    func addWeight(_ widget: WeightFullWidgetView) {
+        presenter?.openChangeWeightViewController(.add)
+    }
+}
+
+extension WidgetContainerViewController: StepsFullWidgetOutput {
+    func setGoal(_ widget: StepsFullWidgetView) {
+        presenter?.openChangeStepsViewController()
     }
 }
 
@@ -172,12 +212,7 @@ extension WidgetContainerViewController.WidgetType {
         case .water:
             return WaterFullWidgetView()
         case .steps:
-            let vc = StepsFullWidgetView()
-            vc.model = .init(
-                nowSteps: Int(StepsWidgetService.shared.getStepsNow()),
-                goalSteps: StepsWidgetService.shared.getDailyStepsGoal()
-            )
-            return vc
+            return StepsFullWidgetView()
         case .calendar:
             return CalendarFullWidgetView()
         case .notes:

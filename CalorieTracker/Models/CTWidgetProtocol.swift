@@ -13,4 +13,6 @@ protocol CTWidgetProtocol {
 
 protocol CTWidgetFullProtocol: UIView {
     var didTapCloseButton: (() -> Void)? { get set }
+    
+    func update()
 }

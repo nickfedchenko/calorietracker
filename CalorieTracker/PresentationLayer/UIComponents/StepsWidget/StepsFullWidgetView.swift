@@ -7,13 +7,24 @@
 
 import UIKit
 
+protocol StepsFullWidgetOutput: AnyObject {
+    func setGoal(_ widget: StepsFullWidgetView)
+}
+
+protocol StepsFullWidgetInterface: AnyObject {
+    func setModel(_ model: StepsFullWidgetView.Model)
+}
+
 final class StepsFullWidgetView: UIView, CTWidgetFullProtocol {
     struct Model {
         let nowSteps: Int
         let goalSteps: Int?
     }
     
+    weak var output: StepsFullWidgetOutput?
     var didTapCloseButton: (() -> Void)?
+    
+    private var presenter: StepsFullWidgetPresenterInterface?
     
     private lazy var topLabel: UILabel = {
         let label = UILabel()
@@ -94,12 +105,18 @@ final class StepsFullWidgetView: UIView, CTWidgetFullProtocol {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        presenter = StepsFullWidgetPresenter(view: self)
+        presenter?.updateModel()
         setupView()
         didChangeIsConnectedAH()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func update() {
+        presenter?.updateModel()
     }
     
     private func setupView() {
@@ -173,6 +190,12 @@ final class StepsFullWidgetView: UIView, CTWidgetFullProtocol {
     }
     
     @objc private func didTapMainButton(_ sender: UIButton) {
-        
+        output?.setGoal(self)
+    }
+}
+
+extension StepsFullWidgetView: StepsFullWidgetInterface {
+    func setModel(_ model: Model) {
+        self.model = model
     }
 }

@@ -311,7 +311,13 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         guard let widget = sender as? CTWidgetProtocol else {
             return
         }
-        presenter?.didTapWidget(widget.widgetType)
+        
+        switch widget.widgetType {
+        case .weight, .water, .calendar, .steps:
+            presenter?.didTapWidget(widget.widgetType)
+        default:
+            return
+        }
     }
 }
 

@@ -13,26 +13,33 @@ protocol WeightFullWidgetPresenterInterface: AnyObject {
     func getChartData(period: HistoryHeaderButtonType) -> [(date: Date, weight: CGFloat)]
     func getStartWeight(period: HistoryHeaderButtonType) -> CGFloat?
     func getNowWeight() -> CGFloat?
+    func updateData()
 }
 
 class WeightFullWidgetPresenter {
     unowned var view: WeightFullWidgetInterface
     
-    private let chartData: [(date: Date, weight: CGFloat)] = {
+    private lazy var chartData: [(date: Date, weight: CGFloat)] = []
+    
+    init(view: WeightFullWidgetInterface) {
+        self.view = view
+    }
+    
+    private func getAllChartData() -> [(date: Date, weight: CGFloat)] {
         let weightData = WeightWidgetService.shared.getAllWeight()
         let chartData: [(date: Date, weight: CGFloat)] = weightData.compactMap {
             guard let date = $0.day.date else { return nil }
             return (date: date, weight: CGFloat($0.value))
         }
         return chartData
-    }()
-    
-    init(view: WeightFullWidgetInterface) {
-        self.view = view
     }
 }
 
 extension WeightFullWidgetPresenter: WeightFullWidgetPresenterInterface {
+    func updateData() {
+        self.chartData = getAllChartData()
+    }
+    
     func getGoalWeight() -> CGFloat? {
         guard let goal = WeightWidgetService.shared.getWeightGoal() else {
             return nil

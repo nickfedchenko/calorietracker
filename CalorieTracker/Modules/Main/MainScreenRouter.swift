@@ -42,6 +42,23 @@ extension MainScreenRouter: MainScreenRouterInterface {
     func openWidget(_ type: WidgetContainerViewController.WidgetType) {
         let vc = WidgetContainerRouter.setupModule(type)
         vc.modalPresentationStyle = .overFullScreen
+        vc.needUpdate = { widgetType in
+            switch widgetType {
+            case .water:
+                self.presenter?.updateWaterWidgetModel()
+            case .steps:
+                self.presenter?.updateStepsWidget()
+            case .calendar:
+                self.presenter?.updateCalendarWidget()
+            case .weight:
+                self.presenter?.updateWeightWidget()
+            case .exercises:
+                self.presenter?.updateExersiceWidget()
+            default:
+                return
+            }
+        }
+        
         viewController?.present(vc, animated: true)
     }
 }

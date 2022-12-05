@@ -33,6 +33,10 @@ final class CalendarFullWidgetView: UIView, CTWidgetFullProtocol {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func update() {
+        
+    }
+    
     private func setupView() {
         backgroundColor = .white
         layer.cornerCurve = .continuous
