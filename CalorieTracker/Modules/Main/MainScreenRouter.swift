@@ -41,24 +41,32 @@ extension MainScreenRouter: MainScreenRouterInterface {
     
     func openWidget(_ type: WidgetContainerViewController.WidgetType) {
         let vc = WidgetContainerRouter.setupModule(type)
+        vc.output = self
         vc.modalPresentationStyle = .overFullScreen
-        vc.needUpdate = { widgetType in
-            switch widgetType {
-            case .water:
-                self.presenter?.updateWaterWidgetModel()
-            case .steps:
-                self.presenter?.updateStepsWidget()
-            case .calendar:
-                self.presenter?.updateCalendarWidget()
-            case .weight:
-                self.presenter?.updateWeightWidget()
-            case .exercises:
-                self.presenter?.updateExersiceWidget()
-            default:
-                return
-            }
-        }
         
         viewController?.present(vc, animated: true)
+    }
+}
+
+extension MainScreenRouter: WidgetContainerOutput {
+    func needUpdateWidget(_ type: WidgetContainerViewController.WidgetType) {
+        switch type {
+        case .water:
+            self.presenter?.updateWaterWidgetModel()
+        case .steps:
+            self.presenter?.updateStepsWidget()
+        case .calendar:
+            self.presenter?.updateCalendarWidget(nil)
+        case .weight:
+            self.presenter?.updateWeightWidget()
+        case .exercises:
+            self.presenter?.updateExersiceWidget()
+        default:
+            return
+        }
+    }
+    
+    func needUpdateCalendarWidget(_ date: Date?) {
+        self.presenter?.updateCalendarWidget(date)
     }
 }

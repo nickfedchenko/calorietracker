@@ -11,6 +11,11 @@ protocol WidgetContainerInterface: AnyObject {
     func update()
 }
 
+protocol WidgetContainerOutput: AnyObject {
+    func needUpdateWidget(_ type: WidgetContainerViewController.WidgetType)
+    func needUpdateCalendarWidget(_ date: Date?)
+}
+
 final class WidgetContainerViewController: UIViewController {
     typealias Size = CTWidgetNodeConfiguration
     
@@ -25,7 +30,7 @@ final class WidgetContainerViewController: UIViewController {
     }
     
     var presenter: WidgetContainerPresenterInterface?
-    var needUpdate: ((WidgetType) -> Void)?
+    var output: WidgetContainerOutput?
     
     var suggestedSideInset: CGFloat { Size(type: .widget).suggestedSideInset }
     var suggestedTopSafeAreaOffset: CGFloat { Size(type: .widget).suggestedTopSafeAreaOffset }
@@ -102,7 +107,14 @@ final class WidgetContainerViewController: UIViewController {
         
         let widgetFull = widgetView as? CTWidgetFullProtocol
         widgetFull?.didTapCloseButton = {
-            self.needUpdate?(self.widgetType)
+            switch self.widgetType {
+            case .calendar:
+                self.output?.needUpdateCalendarWidget(
+                    (self.widgetView as? CalendarFullWidgetView)?.date
+                )
+            default:
+                self.output?.needUpdateWidget(self.widgetType)
+            }
             self.presenter?.didTapView()
         }
     }
@@ -180,6 +192,15 @@ final class WidgetContainerViewController: UIViewController {
     }
     
     @objc private func didTapView() {
+        switch self.widgetType {
+        case .calendar:
+            self.output?.needUpdateCalendarWidget(
+                (self.widgetView as? CalendarFullWidgetView)?.date
+            )
+        default:
+            self.output?.needUpdateWidget(self.widgetType)
+        }
+        
         presenter?.didTapView()
     }
 }

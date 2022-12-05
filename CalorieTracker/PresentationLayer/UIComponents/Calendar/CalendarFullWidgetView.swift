@@ -13,6 +13,7 @@ protocol CalendarFullWidgetViewInterface: AnyObject {
 
 final class CalendarFullWidgetView: UIView, CTWidgetFullProtocol {
     var didTapCloseButton: (() -> Void)?
+    var date: Date?
     
     private var presenter: CalendarFullWidgetPresenterInterface?
     
@@ -41,6 +42,10 @@ final class CalendarFullWidgetView: UIView, CTWidgetFullProtocol {
         backgroundColor = .white
         layer.cornerCurve = .continuous
         layer.cornerRadius = 16
+        
+        calendarView.dateDataCompletion = { date in
+            return CalendarWidgetService.shared.getCalendarData(year: date.year, month: date.month)
+        }
     }
     
     private func setupConstraints() {
@@ -93,8 +98,8 @@ extension CalendarFullWidgetView: CalendarFullWidgetViewInterface {
 
 extension CalendarFullWidgetView {
     func getCalendarView() -> CalendarView {
-        return CalendarView(baseDate: Date()) { _ in
-            
+        return CalendarView(baseDate: Date()) { date in
+            self.date = date
         }
     }
     

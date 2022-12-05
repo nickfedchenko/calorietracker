@@ -14,7 +14,7 @@ protocol MainScreenPresenterInterface: AnyObject {
     func updateWaterWidgetModel()
     func updateStepsWidget()
     func updateWeightWidget()
-    func updateCalendarWidget()
+    func updateCalendarWidget(_ date: Date?)
     func updateMessageWidget()
     func updateActivityWidget()
     func updateExersiceWidget()
@@ -73,10 +73,12 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
         view.setWeightWidget(weight: CGFloat(weightNow))
     }
     
-    func updateCalendarWidget() {
+    func updateCalendarWidget(_ date: Date?) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM d"
         let calendarModel: CalendarWidgetNode.Model = .init(
-            dateString: "May 12",
-            daysStreak: 12
+            dateString: dateFormatter.string(from: date ?? Date()),
+            daysStreak: CalendarWidgetService.shared.getStreakDays()
         )
         
         view.setCalendarWidget(calendarModel)

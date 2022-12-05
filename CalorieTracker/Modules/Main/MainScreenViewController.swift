@@ -198,7 +198,7 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         presenter?.updateExersiceWidget()
         presenter?.updateMessageWidget()
         presenter?.updateActivityWidget()
-        presenter?.updateCalendarWidget()
+        presenter?.updateCalendarWidget(nil)
     }
     
     // MARK: - Private methods
@@ -313,7 +313,7 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         }
         
         switch widget.widgetType {
-        case .weight, .water, .calendar, .steps:
+        case .weight, .water, .steps, .calendar:
             presenter?.didTapWidget(widget.widgetType)
         default:
             return
