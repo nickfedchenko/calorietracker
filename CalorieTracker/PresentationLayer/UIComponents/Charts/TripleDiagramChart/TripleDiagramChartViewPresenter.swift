@@ -21,20 +21,18 @@ class TripleDiagramChartViewPresenter {
     unowned var view: TripleDiagramChartViewInterface
     
     var data: [(date: Date, values: (CGFloat, CGFloat, CGFloat))] {
-        var data: [TripleWidgetData]
         switch view.getChartType() {
         case .dietary:
-            data = UDM.dietary
-        }
-        return data.map {
-            (
-                date: $0.date,
-                values: (
-                    CGFloat($0.valueFirst),
-                    CGFloat($0.valueSecond),
-                    CGFloat($0.valueThird)
-                )
-            )
+            return FDS.shared.getAllNutrition().compactMap {
+                guard let date = $0.day.date else { return nil }
+                return (
+                    date: date,
+                    values: (
+                        CGFloat($0.nutrition.carbs),
+                        CGFloat($0.nutrition.protein),
+                        CGFloat($0.nutrition.fat)
+                    ))
+            }
         }
     }
     

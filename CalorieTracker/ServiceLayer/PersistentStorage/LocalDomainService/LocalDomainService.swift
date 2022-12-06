@@ -17,6 +17,7 @@ protocol LocalDomainServiceInterface {
     func fetchSteps() -> [DailyData]
     func fetchWeight() -> [DailyData]
     func fetchNutrition() -> [DailyNutritionData]
+    func fetchExercise() -> [Exercise]
     func saveProducts(products: [Product])
     func saveDishes(dishes: [Dish])
     func saveFoodData(foods: [FoodData])
@@ -25,6 +26,7 @@ protocol LocalDomainServiceInterface {
     func saveSteps(data: [DailyData])
     func saveWeight(data: [DailyData])
     func saveNutrition(data: [DailyNutritionData])
+    func saveExercise(data: [Exercise])
     func searchProducts(by phrase: String) -> [Product]
     func searchProducts(barcode: String) -> [Product]
     func searchDishes(by phrase: String) -> [Dish]
@@ -160,6 +162,13 @@ extension LocalDomainService: LocalDomainServiceInterface {
         return domainNutrition.compactMap { DailyNutritionData(from: $0) }
     }
     
+    func fetchExercise() -> [Exercise] {
+        guard let domainExercise = fetchData(for: DomainExercise.self) else {
+            return []
+        }
+        return domainExercise.compactMap { Exercise(from: $0) }
+    }
+    
     func saveProducts(products: [Product]) {
         let _: [DomainProduct] = products
             .map { DomainProduct.prepare(fromPlainModel: $0, context: context) }
@@ -199,6 +208,12 @@ extension LocalDomainService: LocalDomainServiceInterface {
     func saveNutrition(data: [DailyNutritionData]) {
         let _: [DomainNutrition] = data
             .map { DomainNutrition.prepare(fromPlainModel: $0, context: context) }
+        try? context.save()
+    }
+    
+    func saveExercise(data: [Exercise]) {
+        let _: [DomainExercise] = data
+            .map { DomainExercise.prepare(fromPlainModel: $0, context: context) }
         try? context.save()
     }
     

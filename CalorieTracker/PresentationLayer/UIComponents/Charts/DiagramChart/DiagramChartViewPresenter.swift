@@ -22,35 +22,45 @@ class DiagramChartViewPresenter {
     unowned var view: DiagramChartViewInterface
     
     var data: [(date: Date, value: Int)] {
-        var data: [WidgetData]
         switch view.getChartType() {
         case .calories:
-            data = UDM.calories
+            return FDS.shared.getAllNutrition().compactMap {
+                guard let date = $0.day.date else { return nil }
+                return (date: date, value: Int($0.nutrition.kcal))
+            }
         case .carb:
-            data = UDM.carb
+            return FDS.shared.getAllNutrition().compactMap {
+                guard let date = $0.day.date else { return nil }
+                return (date: date, value: Int($0.nutrition.carbs))
+            }
         case .steps:
-            data = UDM.steps
+            return StepsWidgetService.shared.getAllStepsData().compactMap {
+                guard let date = $0.day.date else { return nil }
+                return (date: date, value: Int($0.value))
+            }
         case .water:
-            data = UDM.water
+            return WaterWidgetService.shared.getAllWaterData().compactMap {
+                guard let date = $0.day.date else { return nil }
+                return (date: date, value: Int($0.value))
+            }
         case .activity:
-            data = UDM.active
+            return []
         }
-        return data.map { (date: $0.date, value: Int($0.value)) }
     }
     
     var goal: Int? {
         var goal: Double?
         switch view.getChartType() {
         case .calories:
-            goal = UDM.caloriesGoal
+            goal = UDM.nutritionDailyGoal?.kcal
         case .carb:
-            goal = UDM.carbGoal
+            goal = UDM.nutritionDailyGoal?.carbs
         case .steps:
-            goal = UDM.stepsGoal
+            goal = UDM.dailyStepsGoal
         case .water:
-            goal = UDM.waterGoal
+            goal = UDM.dailyWaterGoal
         case .activity:
-            goal = UDM.activeGoal
+            goal = 0
         }
         guard let goal = goal else { return nil }
         return Int(goal)

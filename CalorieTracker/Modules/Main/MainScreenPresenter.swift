@@ -102,14 +102,15 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
         let carbsToday = nutritionToday.carbs
         let proteinToday = nutritionToday.protein
         let fatToday = nutritionToday.fat
+        let burnedKcalToday = ExerciseWidgetServise.shared.getBurnedKcalToday()
         let model: MainWidgetViewNode.Model = .init(
             text: MainWidgetViewNode.Model.Text(
                 firstLine: "\(Int(kcalToday)) / \(Int(kcalGoal)) kcal",
                 secondLine: "\(Int(carbsToday)) / \(Int(carbsGoal)) carbs",
                 thirdLine: "\(Int(proteinToday)) / \(Int(proteinGoal)) protein",
                 fourthLine: "\(Int(fatToday)) / \(Int(fatGoal)) fat",
-                excludingBurned: "778",
-                includingBurned: "1200"
+                excludingBurned: "\(Int(kcalToday - burnedKcalToday))",
+                includingBurned: "\(Int(kcalToday))"
             ),
             circleData: MainWidgetViewNode.Model.CircleData(
                 rings: [
@@ -149,28 +150,21 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
     }
     
     func updateExersiceWidget() {
+        let exercises = ExerciseWidgetServise.shared.getExercisesToday()
+        let burnedKcal = ExerciseWidgetServise.shared.getBurnedKcalToday()
+        let burnedKcalGoal: Int? = {
+            guard let goal = ExerciseWidgetServise.shared.getBurnedKclaGoal() else {
+                return nil
+            }
+            return Int(goal)
+        }()
         let model: ExercisesWidgetNode.Model = .init(
-            exercises: [
-                ExercisesWidgetNode.Model.Exercise(
-                    burnedKcal: 240,
-                    exerciseType: ExerciseType.basketball
-                ),
-                ExercisesWidgetNode.Model.Exercise(
-                    burnedKcal: 320,
-                    exerciseType: ExerciseType.swim
-                ),
-                ExercisesWidgetNode.Model.Exercise(
-                    burnedKcal: 135,
-                    exerciseType: ExerciseType.core
-                ),
-                ExercisesWidgetNode.Model.Exercise(
-                    burnedKcal: 100,
-                    exerciseType: ExerciseType.boxing
-                )
-            ],
-            progress: 0.7,
-            burnedKcal: 772,
-            goalBurnedKcal: 900
+            exercises: exercises.map {
+                .init(burnedKcal: Int($0.burnedKcal), exerciseType: $0.type)
+            },
+            progress: burnedKcal / CGFloat(burnedKcalGoal ?? 1),
+            burnedKcal: Int(burnedKcal),
+            goalBurnedKcal: burnedKcalGoal
         )
         
         view.setExersiceWidget(model)

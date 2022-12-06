@@ -12,6 +12,7 @@ protocol StepsWidgetServiceInterface {
     func addDailySteps(_ value: Double)
     func getStepsNow() -> Double
     func setDailyStepsGoal(_ value: Double)
+    func getAllStepsData() -> [DailyData]
 }
 
 final class StepsWidgetService {
@@ -21,6 +22,10 @@ final class StepsWidgetService {
 }
 
 extension StepsWidgetService: StepsWidgetServiceInterface {
+    func getAllStepsData() -> [DailyData] {
+        localDomainService.fetchSteps()
+    }
+    
     func getDailyStepsGoal() -> Int? {
         guard let goal = UDM.dailyStepsGoal else { return nil }
         return Int(goal)

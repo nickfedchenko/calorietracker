@@ -28,9 +28,12 @@ class LineChartViewPresenter {
     var data: [(date: Date, value: CGFloat)] {
         switch view.getChartType() {
         case .weight:
-            return UDM.weight.map { (date: $0.date, value: $0.value) }
+            return WeightWidgetService.shared.getAllWeight().compactMap {
+                guard let date = $0.day.date else { return nil }
+                return (date: date, value: CGFloat($0.value))
+            }
         case .bmi:
-            return UDM.bmi.map { (date: $0.date, value: $0.value) }
+            return []
         }
     }
     

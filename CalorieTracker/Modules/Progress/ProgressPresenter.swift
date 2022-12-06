@@ -26,16 +26,6 @@ class ProgressPresenter {
         self.view = view
         self.interactor = interactor
         self.router = router
-        UDM.dietary = [
-        TripleWidgetData(date: Date() - 84000 * 0, valueFirst: 90, valueSecond: 58, valueThird: 110),
-        TripleWidgetData(date: Date() - 84000 * 1, valueFirst: 50, valueSecond: 90, valueThird: 100),
-        TripleWidgetData(date: Date() - 84000 * 2, valueFirst: 65, valueSecond: 34, valueThird: 120),
-        TripleWidgetData(date: Date() - 84000 * 3, valueFirst: 97, valueSecond: 76, valueThird: 95),
-        TripleWidgetData(date: Date() - 84000 * 4, valueFirst: 60, valueSecond: 34, valueThird: 84),
-        TripleWidgetData(date: Date() - 84000 * 5, valueFirst: 70, valueSecond: 45, valueThird: 70),
-        TripleWidgetData(date: Date() - 84000 * 6, valueFirst: 67, valueSecond: 58, valueThird: 90),
-        TripleWidgetData(date: Date() - 84000 * 7, valueFirst: 90, valueSecond: 70, valueThird: 86)
-        ]
     }
 }
 

@@ -7,7 +7,7 @@
 
 import UIKit
 
-enum ExerciseType {
+enum ExerciseType: Codable {
     case badminton
     case baseball
     case basketball
@@ -36,6 +36,7 @@ enum ExerciseType {
     case waterFitness
     case waterPolo
     case yoga
+    case `default`
 }
 
 extension ExerciseType {
@@ -97,6 +98,8 @@ extension ExerciseType {
             return R.image.exercisesWidget.fitness.waterPolo()
         case .yoga:
             return R.image.exercisesWidget.fitness.yoga()
+        default:
+            return nil
         }
     }
 }
