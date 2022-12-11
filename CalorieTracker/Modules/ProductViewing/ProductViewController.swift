@@ -100,7 +100,7 @@ final class ProductViewController: UIViewController {
         nutritionFactsView.viewModel = .init(product)
         titleLabel.text = product.title
         headerImageView.configure(
-            imageUrl: product.photo,
+            photo: product.photo,
             check: false,
             favorite: false
         )

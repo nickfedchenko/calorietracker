@@ -202,8 +202,9 @@ final class AddFoodViewController: UIViewController {
             self?.didEndTimer()
         }
         
-        menuCreateView.complition = { _ in
+        menuCreateView.complition = { type in
             self.showOverlay(false)
+            self.presenter?.createFood(type)
         }
         
         counterKcalControl.isHidden = true
@@ -688,6 +689,7 @@ private extension AddFoodViewController {
         button.titleLabel.font = R.font.sfProDisplaySemibold(size: 9)
         button.titleLabel.textAlignment = .center
         button.aspectRatio()
+        button.imageView.tintColor = R.color.foodViewing.basicGrey()
         return button
     }
     

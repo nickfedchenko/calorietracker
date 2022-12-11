@@ -17,7 +17,8 @@ protocol AddFoodPresenterInterface: AnyObject {
     func getSubInfo(_ food: Food?, _ type: FoodInfoCases) -> Int?
     func didTapCountControl(_ foods: [Food], complition: @escaping ([Food]) -> Void )
     func didTapScannerButton()
-    func saveMeal(_ mealTime: MealTime, foods: [Food]) 
+    func saveMeal(_ mealTime: MealTime, foods: [Food])
+    func createFood(_ type: FoodCreate)
 }
 
 final class AddFoodPresenter {
@@ -180,5 +181,16 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
             dishes: foods.dishes,
             products: foods.products
         )
+    }
+    
+    func createFood(_ type: FoodCreate) {
+        switch type {
+        case .food:
+            router?.openCreateProduct()
+        case .recipe:
+            return
+        case .meal:
+            return
+        }
     }
 }

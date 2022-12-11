@@ -66,13 +66,14 @@ final class HeaderImageView: UIView {
     
     // MARK: - Public Functions
     
-    func configure(imageUrl: URL?, check: Bool, favorite: Bool) {
+    func configure(photo: Product.Photo?, check: Bool, favorite: Bool) {
         likeButton.likeButtonState = .init(favorite)
         checkedImageView.isHidden = !check
         
-        if let imageUrl = imageUrl {
+        switch photo {
+        case .url(let url):
             imageView.kf.setImage(
-                with: imageUrl,
+                with: url,
                 placeholder: UIImage(),
                 options: [
                     .processor(DownsamplingImageProcessor(
@@ -80,6 +81,10 @@ final class HeaderImageView: UIView {
                     ))
                 ]
             )
+        case .data(let data):
+            imageView.image = UIImage(data: data)
+        default:
+            return
         }
     }
     
