@@ -51,4 +51,3 @@ extension ExerciseWidgetServise: ExerciseWidgetServiseInterface {
         localDomainService.saveExercise(data: [exercise])
     }
 }
-

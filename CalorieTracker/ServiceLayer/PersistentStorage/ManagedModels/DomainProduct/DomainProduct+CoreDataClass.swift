@@ -10,7 +10,7 @@ import CoreData
 
 @objc(DomainProduct)
 public class DomainProduct: NSManagedObject {
-    static func prepare(fromPlainModel model: Product, context: NSManagedObjectContext) -> DomainProduct {
+    static func prepare(fromPlainModel model: ProductDTO, context: NSManagedObjectContext) -> DomainProduct {
         let product = DomainProduct(context: context)
         product.id = Int32(model.id)
         product.barcode = model.barcode

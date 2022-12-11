@@ -13,7 +13,7 @@ protocol FoodDataServiceInterface {
     ///   - mealTime: время приема еды
     ///   - dishes: массив блюд
     ///   - products: массив продуктов
-    func createMeal(mealTime: MealTime, dishes: [Dish], products: [Product])
+    func createMeal(mealTime: MealTime, dishes: [Dish], products: [ProductDTO])
     /// Возвращает все приемы пищи
     /// - Returns: массив Meal
     func getAllMeals() -> [Meal]
@@ -27,7 +27,7 @@ protocol FoodDataServiceInterface {
     /// - Parameters:
     ///   - count: количество результатов
     /// - Returns: массив Product
-    func getRecentProducts(_ count: Int) -> [Product]
+    func getRecentProducts(_ count: Int) -> [ProductDTO]
     /// Возвращает недавно использованные блюда
     /// - Parameters:
     ///   - count: количество результатов
@@ -42,7 +42,7 @@ protocol FoodDataServiceInterface {
     func getFavoriteDishes() -> [Dish]
     /// Возвращает любимые продукты
     /// - Returns: массив Product
-    func getFavoriteProducts() -> [Product]
+    func getFavoriteProducts() -> [ProductDTO]
     /// Возвращает часто используемые блюда
     /// - Parameters:
     ///   - count: количество результатов
@@ -52,7 +52,7 @@ protocol FoodDataServiceInterface {
     /// - Parameters:
     ///   - count: количество результатов
     /// - Returns: массив Product
-    func getFrequentProducts(_ count: Int) -> [Product]
+    func getFrequentProducts(_ count: Int) -> [ProductDTO]
     /// Обновляет данные за день
     /// - Parameters:
     ///   - day: дата
@@ -91,8 +91,8 @@ extension FDS: FoodDataServiceInterface {
         return dishes
     }
     
-    func getFavoriteProducts() -> [Product] {
-        let products: [Product] = getFavoriteFoods().compactMap { food in
+    func getFavoriteProducts() -> [ProductDTO] {
+        let products: [ProductDTO] = getFavoriteFoods().compactMap { food in
             switch food.food {
             case .product(let product):
                 return product
@@ -117,8 +117,8 @@ extension FDS: FoodDataServiceInterface {
         return dishes
     }
     
-    func getFrequentProducts(_ count: Int) -> [Product] {
-        let products: [Product] = getFrequentFood(count).compactMap { food in
+    func getFrequentProducts(_ count: Int) -> [ProductDTO] {
+        let products: [ProductDTO] = getFrequentFood(count).compactMap { food in
             switch food.food {
             case .product(let product):
                 return product
@@ -144,13 +144,13 @@ extension FDS: FoodDataServiceInterface {
             .first(where: { $0.day == today }) ?? .init(day: today, nutrition: .zero)
     }
     
-    func createMeal(mealTime: MealTime, dishes: [Dish], products: [Product]) {
+    func createMeal(mealTime: MealTime, dishes: [Dish], products: [ProductDTO]) {
         let meal = Meal(mealTime: mealTime)
         localPersistentStore.saveMeals(meals: [meal])
         meal.setChild(dishes: dishes, products: products)
     }
     
-    func getRecentProducts(_ count: Int) -> [Product] {
+    func getRecentProducts(_ count: Int) -> [ProductDTO] {
         let allFoodData = localPersistentStore.fetchFoodData()
             .sorted(by: { $0.dateLastUse <= $1.dateLastUse })
             .filter { $0.food != nil }

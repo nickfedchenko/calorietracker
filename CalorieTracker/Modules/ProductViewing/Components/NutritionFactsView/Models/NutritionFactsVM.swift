@@ -163,13 +163,13 @@ private extension Product {
         case .cholesterol:
             return self.composition?.cholesterol
         case .satFat:
-            return self.composition?.saturatedFat
+            return self.composition?.satFat
         case .transFat:
             return self.composition?.transFat
         case .polyFat:
-            return self.composition?.unsaturatedFat
+            return self.composition?.unsatFat
         case .monoFat:
-            return self.composition?.unsaturatedFat
+            return self.composition?.unsatFat
         case .dietaryFiber:
             return self.composition?.fiber
         case .sugar:

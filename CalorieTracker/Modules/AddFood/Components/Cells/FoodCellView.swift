@@ -230,7 +230,7 @@ final class FoodCellView: UIView {
 }
 
 extension FoodCellView.FoodViewModel {
-    private init(_ product: Product) {
+    private init(_ product: ProductDTO) {
         self.id = product.id
         self.title = product.title
         self.description = product.servings?

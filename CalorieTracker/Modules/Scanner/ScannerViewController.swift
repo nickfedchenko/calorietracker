@@ -14,7 +14,7 @@ final class ScannerViewController: UIViewController {
     
     enum ScannerState {
         case barcodeRecognized
-        case barcodeExists(Product)
+        case barcodeExists(ProductDTO)
         case `default`
     }
     
@@ -22,6 +22,8 @@ final class ScannerViewController: UIViewController {
     var previewLayer: AVCaptureVideoPreviewLayer!
     var router: ScannerRouterInterface?
     var didRecognizedBarcode: ((String) -> Void)?
+    
+    var complition: ((String) -> Void)?
 
     // MARK: - Private
     
@@ -185,13 +187,14 @@ final class ScannerViewController: UIViewController {
         guard let barcode = barcode else { return }
         guard let product = DSF.shared.searchProducts(barcode: barcode).first else {
             self.scannerState = .barcodeRecognized
+            self.complition?(barcode)
             return
         }
         
         scannerState = .barcodeExists(product)
     }
     
-    private func showAlert(_ product: Product) {
+    private func showAlert(_ product: ProductDTO) {
         let alertVC = UIAlertController(
             title: "Штрих-код уже существует",
             message: "Продукт с таким штрих-кодом уже существует. Хотите его посмотреть?",

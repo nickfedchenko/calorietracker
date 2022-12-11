@@ -10,14 +10,14 @@ import Foundation
 struct Meal {
     let id: String
     let mealTime: MealTime
-    let products: [Product]
+    let products: [ProductDTO]
     let dishes: [Dish]
     
     init?(from managedModel: DomainMeal) {
         self.id = managedModel.id
         self.products = managedModel.products?
             .compactMap { $0 as? DomainProduct }
-            .compactMap { Product(from: $0) } ?? []
+            .compactMap { ProductDTO(from: $0) } ?? []
         self.dishes = managedModel.dishes?
             .compactMap { $0 as? DomainDish }
             .compactMap { Dish(from: $0) } ?? []
@@ -52,7 +52,7 @@ enum MealTime: String {
 }
 
 extension Meal {
-    func setChild(dishes: [Dish], products: [Product]) {
+    func setChild(dishes: [Dish], products: [ProductDTO]) {
         DSF.shared.setChildMeal(
             mealId: self.id,
             dishesID: dishes.map { $0.id },

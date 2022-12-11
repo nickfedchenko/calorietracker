@@ -15,7 +15,7 @@ protocol DataServiceFacadeInterface {
     func updateStoredDishes()
     /// Возвращает все продукты сохраненные в локальной ДБ
     /// - Returns: массив Product
-    func getAllStoredProducts() -> [Product]
+    func getAllStoredProducts() -> [ProductDTO]
     /// Возвращает все блюда сохраненные в локальной ДБ
     /// - Returns: массив Dish
     func getAllStoredDishes() -> [Dish]
@@ -30,17 +30,17 @@ protocol DataServiceFacadeInterface {
     ///   - phrase: search query
     ///   - userNetwork: флаг отвечающий за поиск через бэк
     ///   - completion: результат приходит сюда.
-    func searchProducts(by phrase: String, useNetwork: Bool, completion: @escaping ([Product]) -> Void)
+    func searchProducts(by phrase: String, useNetwork: Bool, completion: @escaping ([ProductDTO]) -> Void)
     /// Метода поиска продуктов
     /// - Parameters:
     ///   - phrase: search query
     /// - Returns: массив Product
-    func searchProducts(by phrase: String) -> [Product]
+    func searchProducts(by phrase: String) -> [ProductDTO]
     /// Метода поиска продуктов
     /// - Parameters:
     ///   - barcode: barcode
     /// - Returns: массив Product
-    func searchProducts(barcode: String) -> [Product]
+    func searchProducts(barcode: String) -> [ProductDTO]
     /// Метода поиска блюд
     /// - Parameters:
     ///   - phrase: search query
@@ -122,7 +122,7 @@ extension DSF: DataServiceFacadeInterface {
         }
     }
         
-    func getAllStoredProducts() -> [Product] {
+    func getAllStoredProducts() -> [ProductDTO] {
         let products = localPersistentStore.fetchProducts()
         return products
     }
@@ -140,7 +140,7 @@ extension DSF: DataServiceFacadeInterface {
         return localPersistentStore.fetchWater()
     }
     
-    func searchProducts(by phrase: String, useNetwork: Bool = false, completion: @escaping ([Product]) -> Void) {
+    func searchProducts(by phrase: String, useNetwork: Bool = false, completion: @escaping ([ProductDTO]) -> Void) {
         var products = localPersistentStore.searchProducts(by: phrase)
         guard useNetwork else {
             completion(products)
@@ -158,11 +158,11 @@ extension DSF: DataServiceFacadeInterface {
         }
     }
     
-    func searchProducts(by phrase: String) -> [Product] {
+    func searchProducts(by phrase: String) -> [ProductDTO] {
         localPersistentStore.searchProducts(by: phrase)
     }
     
-    func searchProducts(barcode: String) -> [Product] {
+    func searchProducts(barcode: String) -> [ProductDTO] {
         localPersistentStore.searchProducts(barcode: barcode)
     }
     

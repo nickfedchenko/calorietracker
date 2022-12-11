@@ -9,7 +9,7 @@ import UIKit
 
 protocol SelectedFoodCellsRouterInterface: AnyObject {
     func close()
-    func openProductViewController(_ product: Product)
+    func openProductViewController(_ product: ProductDTO)
 }
 
 class SelectedFoodCellsRouter: NSObject {
@@ -26,8 +26,8 @@ class SelectedFoodCellsRouter: NSObject {
 }
 
 extension SelectedFoodCellsRouter: SelectedFoodCellsRouterInterface {
-    func openProductViewController(_ product: Product) {
-        let productVC = ProductRouter.setupModule(product)
+    func openProductViewController(_ product: ProductDTO) {
+        let productVC = ProductRouter.setupModule(.init(product))
         productVC.modalPresentationStyle = .fullScreen
         viewController?.present(productVC, animated: true)
     }

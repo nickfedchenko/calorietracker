@@ -8,7 +8,7 @@
 import Foundation
 
 enum Food {
-    case product(Product)
+    case product(ProductDTO)
     case dishes(Dish)
     case userProduct(UserProduct)
     case meal(Meal)

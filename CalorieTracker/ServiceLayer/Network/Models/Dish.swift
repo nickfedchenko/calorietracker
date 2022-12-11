@@ -113,6 +113,6 @@ struct Tag: Codable {
 }
 
 struct Ingredient: Codable {
-    let product: Product?
+    let product: ProductDTO?
     let amount: String?
 }

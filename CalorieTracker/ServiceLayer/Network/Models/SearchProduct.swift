@@ -23,8 +23,8 @@ struct SearchProduct: Codable {
         case title, info, proteins, fats, carbohydrates, kcal, photo, sourceObject
     }
     
-    func getConventionalProduct() -> Product? {
-        return Product(from: self)
+    func getConventionalProduct() -> ProductDTO? {
+        return ProductDTO(from: self)
     }
 }
 

@@ -9,7 +9,7 @@ import CoreData
 import UIKit
 
 protocol LocalDomainServiceInterface {
-    func fetchProducts() -> [Product]
+    func fetchProducts() -> [ProductDTO]
     func fetchDishes() -> [Dish]
     func fetchFoodData() -> [FoodData]
     func fetchMeals() -> [Meal]
@@ -18,7 +18,7 @@ protocol LocalDomainServiceInterface {
     func fetchWeight() -> [DailyData]
     func fetchNutrition() -> [DailyNutritionData]
     func fetchExercise() -> [Exercise]
-    func saveProducts(products: [Product])
+    func saveProducts(products: [ProductDTO])
     func saveDishes(dishes: [Dish])
     func saveFoodData(foods: [FoodData])
     func saveMeals(meals: [Meal])
@@ -27,8 +27,8 @@ protocol LocalDomainServiceInterface {
     func saveWeight(data: [DailyData])
     func saveNutrition(data: [DailyNutritionData])
     func saveExercise(data: [Exercise])
-    func searchProducts(by phrase: String) -> [Product]
-    func searchProducts(barcode: String) -> [Product]
+    func searchProducts(by phrase: String) -> [ProductDTO]
+    func searchProducts(barcode: String) -> [ProductDTO]
     func searchDishes(by phrase: String) -> [Dish]
     func setChildFoodData(foodDataId: String, dishID: Int)
     func setChildFoodData(foodDataId: String, productID: Int)
@@ -120,9 +120,9 @@ final class LocalDomainService {
 // MARK: - LocalDomainServiceInterface
 extension LocalDomainService: LocalDomainServiceInterface {
 
-    func fetchProducts() -> [Product] {
+    func fetchProducts() -> [ProductDTO] {
         guard let domainProducts = fetchData(for: DomainProduct.self) else { return [] }
-        return domainProducts.compactMap { Product(from: $0) }
+        return domainProducts.compactMap { ProductDTO(from: $0) }
     }
     
     func fetchDishes() -> [Dish] {
@@ -169,7 +169,7 @@ extension LocalDomainService: LocalDomainServiceInterface {
         return domainExercise.compactMap { Exercise(from: $0) }
     }
     
-    func saveProducts(products: [Product]) {
+    func saveProducts(products: [ProductDTO]) {
         let _: [DomainProduct] = products
             .map { DomainProduct.prepare(fromPlainModel: $0, context: context) }
         save()
@@ -310,7 +310,7 @@ extension LocalDomainService: LocalDomainServiceInterface {
         try? context.save()
     }
     
-    func searchProducts(by phrase: String) -> [Product] {
+    func searchProducts(by phrase: String) -> [ProductDTO] {
         let titlePredicate = NSPredicate(format: "title CONTAINS[cd] %@", phrase)
         let brandPredicate = NSPredicate(format: "brand CONTAINS[cd] %@", phrase)
         let compoundPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [titlePredicate, brandPredicate])
@@ -321,10 +321,10 @@ extension LocalDomainService: LocalDomainServiceInterface {
         ) else {
             return []
         }
-        return products.compactMap { Product(from: $0) }.sorted { $0.title.count < $1.title.count }
+        return products.compactMap { ProductDTO(from: $0) }.sorted { $0.title.count < $1.title.count }
     }
     
-    func searchProducts(barcode: String) -> [Product] {
+    func searchProducts(barcode: String) -> [ProductDTO] {
         let barcodePredicate = NSPredicate(format: "barcode CONTAINS[cd] %@", barcode)
         let compoundPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [barcodePredicate])
      
@@ -334,7 +334,7 @@ extension LocalDomainService: LocalDomainServiceInterface {
         ) else {
             return []
         }
-        return products.compactMap { Product(from: $0) }.sorted { $0.title.count < $1.title.count }
+        return products.compactMap { ProductDTO(from: $0) }.sorted { $0.title.count < $1.title.count }
     }
     
     func searchDishes(by phrase: String) -> [Dish] {

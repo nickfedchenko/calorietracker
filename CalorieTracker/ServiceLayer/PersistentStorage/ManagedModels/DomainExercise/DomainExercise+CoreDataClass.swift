@@ -17,5 +17,3 @@ public class DomainExercise: NSManagedObject {
         return exercise
     }
 }
-
-
