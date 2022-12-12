@@ -58,7 +58,7 @@ extension CreateProductViewController {
 }
 
 extension CreateProductViewController.ProductFormSegment: WithGetTitleProtocol {
-    func getTitle(_ lenght: Lenght) -> String {
+    func getTitle(_ lenght: Lenght) -> String? {
         switch self {
         case .kcal:
             return "Calories"

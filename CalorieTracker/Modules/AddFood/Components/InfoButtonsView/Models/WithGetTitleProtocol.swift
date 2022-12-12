@@ -8,7 +8,13 @@
 import Foundation
 
 protocol WithGetTitleProtocol {
-    func getTitle(_ lenght: Lenght) -> String
+    func getTitle(_ lenght: Lenght) -> String?
+}
+
+struct EmptyGetTitle: WithGetTitleProtocol {
+    func getTitle(_ lenght: Lenght) -> String? {
+        nil
+    }
 }
 
 enum Lenght {

@@ -23,7 +23,7 @@ extension MealTime: WithGetImageProtocol, WithGetTitleProtocol {
         }
     }
     
-    func getTitle(_ lenght: Lenght) -> String {
+    func getTitle(_ lenght: Lenght) -> String? {
         switch self {
         case .breakfast:
             return "BREAKFAST"
@@ -42,7 +42,7 @@ enum FoodCreate: WithGetTitleProtocol, WithGetImageProtocol {
     case recipe
     case meal
     
-    func getTitle(_ lenght: Lenght) -> String {
+    func getTitle(_ lenght: Lenght) -> String? {
         switch self {
         case .food:
             return "Food"

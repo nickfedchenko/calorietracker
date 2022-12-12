@@ -10,7 +10,7 @@ import UIKit
 
 final class FoodCellView: UIView {
     struct FoodViewModel {
-        let id: Int
+        let id: String
         let title: String
         let description: String
         let tag: String
@@ -230,14 +230,14 @@ final class FoodCellView: UIView {
 }
 
 extension FoodCellView.FoodViewModel {
-    private init(_ product: ProductDTO) {
+    private init(_ product: Product) {
         self.id = product.id
         self.title = product.title
         self.description = product.servings?
             .compactMap { $0.title }
             .joined(separator: ", ") ?? ""
         self.tag = product.brand ?? ""
-        self.kcal = product.kcal
+        self.kcal = Int(product.kcal)
         self.image = nil
     }
     

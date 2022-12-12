@@ -7,14 +7,14 @@
 
 import Foundation
 
-struct UserProduct {
-    let id: String
-    
-    init?(from managedModel: DomainUserProduct) {
-        self.id = managedModel.id
-    }
-    
-    init() {
-        self.id = UUID().uuidString
-    }
-}
+//struct UserProduct {
+//    let id: String
+//
+//    init?(from managedModel: DomainUserProduct) {
+//        self.id = managedModel.id
+//    }
+//
+//    init() {
+//        self.id = UUID().uuidString
+//    }
+//}

@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class FormView: ViewWithShadow {
+final class FormView<T: WithGetTitleProtocol>: ViewWithShadow, UITextFieldDelegate {
     private enum FormEditingState {
         case begin
         case end
@@ -28,13 +28,16 @@ final class FormView: ViewWithShadow {
         }
     }
     
-    var model: FormModel? {
+    var model: FormModel<T>? {
         didSet {
             didChangeModel()
         }
     }
     
-    var value: String? { textField.text }
+    var value: String? {
+        get { textField.text }
+        set { textField.text = newValue }
+    }
     
     override init(_ shadows: [Shadow] = Const.shadows) {
         super.init(shadows)
@@ -66,7 +69,7 @@ final class FormView: ViewWithShadow {
         
         let containerView = UIView()
         let label = UILabel()
-        label.text = model.type?.getTitle(.long)
+        label.text = model.type.getTitle(.long)
         
         switch model.value {
         case .optional:
@@ -129,9 +132,9 @@ final class FormView: ViewWithShadow {
             }
         }
     }
-}
-
-extension FormView: UITextFieldDelegate {
+    
+    // MARK: - TextField Delegate
+    
     func textFieldDidBeginEditing(_ textField: UITextField) {
         self.editingState = .begin
     }
@@ -141,21 +144,19 @@ extension FormView: UITextFieldDelegate {
     }
 }
 
-extension FormView {
-    private struct Const {
-        static let shadows: [Shadow] = [
-            Shadow(
-                color: R.color.createProduct.formFirstShadow() ?? .black,
-                opacity: 0.15,
-                offset: CGSize(width: 0, height: 0.5),
-                radius: 2
-            ),
-            Shadow(
-                color: R.color.createProduct.formSecondShadow() ?? .black,
-                opacity: 0.1,
-                offset: CGSize(width: 0, height: 4),
-                radius: 10
-            )
-        ]
-    }
+private struct Const {
+    static let shadows: [Shadow] = [
+        Shadow(
+            color: R.color.createProduct.formFirstShadow() ?? .black,
+            opacity: 0.15,
+            offset: CGSize(width: 0, height: 0.5),
+            radius: 2
+        ),
+        Shadow(
+            color: R.color.createProduct.formSecondShadow() ?? .black,
+            opacity: 0.1,
+            offset: CGSize(width: 0, height: 4),
+            radius: 10
+        )
+    ]
 }

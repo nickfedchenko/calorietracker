@@ -8,18 +8,18 @@
 import Foundation
 
 enum Food {
-    case product(ProductDTO)
+    case product(Product)
     case dishes(Dish)
-    case userProduct(UserProduct)
+    case userProduct(Product)
     case meal(Meal)
 }
 
 extension Food {
     var foodInfo: [FoodInfoCases: Int] {
         switch self {
-        case .product(let product):
+        case let .product(product), .userProduct(product):
             return [
-                .kcal: product.kcal,
+                .kcal: Int(product.kcal),
                 .carb: Int(product.carbs),
                 .fat: Int(product.fat),
                 .protein: Int(product.protein)
@@ -31,8 +31,6 @@ extension Food {
                 .fat: Int(dish.fat),
                 .protein: Int(dish.protein)
             ]
-        case .userProduct:
-            return [:]
         case .meal:
             return [:]
         }

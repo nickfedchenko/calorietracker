@@ -107,12 +107,6 @@ struct ProductDTO: Codable {
     }
 }
 
-extension ProductDTO: Equatable {
-    static func == (lhs: ProductDTO, rhs: ProductDTO) -> Bool {
-        return lhs.id == rhs.id
-    }
-}
-
 struct CompositionDTO: Codable {
     private(set) var vitaminA, vitaminD, vitaminC, vitaminK, vitaminB1, calcium, sugar, salt,
                 fiber, saturatedFat, unsaturatedFat, transFat, sodium, cholesterol, potassium,

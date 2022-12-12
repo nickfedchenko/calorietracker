@@ -150,21 +150,21 @@ extension FirstPageFormView {
         return view
     }
     
-    private func getNameForm() -> FormView {
-        let form = FormView()
-        form.model = .init(type: nil, width: .large, value: .required(nil))
+    private func getNameForm() -> FormView<EmptyGetTitle> {
+        let form = FormView<EmptyGetTitle>()
+        form.model = .init(width: .large, value: .required(nil))
         return form
     }
     
-    private func getBrandForm() -> FormView {
-        let form = FormView()
-        form.model = .init(type: nil, width: .large, value: .optional)
+    private func getBrandForm() -> FormView<EmptyGetTitle> {
+        let form = FormView<EmptyGetTitle>()
+        form.model = .init(width: .large, value: .optional)
         return form
     }
     
-    private func getBarcodeForm() -> FormView {
-        let form = FormView()
-        form.model = .init(type: nil, width: .large, value: .required("enter or scan"))
+    private func getBarcodeForm() -> FormView<EmptyGetTitle> {
+        let form = FormView<EmptyGetTitle>()
+        form.model = .init(width: .large, value: .required("enter or scan"))
         return form
     }
 }

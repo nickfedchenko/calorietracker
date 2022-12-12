@@ -16,7 +16,7 @@ final class SelectImageView: UIView {
     
     private let viewController: UIViewController
     
-    private var image: UIImage? {
+    private(set) var image: UIImage? {
         didSet {
             didChangeImage()
         }

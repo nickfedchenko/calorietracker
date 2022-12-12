@@ -7,7 +7,9 @@
 
 import UIKit
 
-final class FormsView: UIView {
+final class FormsView<T: WithGetTitleProtocol & Hashable>: UIView,
+                                                            UICollectionViewDataSource,
+                                                            UICollectionViewDelegateFlowLayout {
     private lazy var collectionView: ContentFittingCollectionView = {
         let collectionView = ContentFittingCollectionView(
             frame: .zero,
@@ -24,9 +26,11 @@ final class FormsView: UIView {
         return layout
     }()
     
-    let formModels: [FormModel]
+    let formModels: [FormModel<T>]
     
-    init(_ models: [FormModel]) {
+    var values: [T: String?] { getDictValues() }
+    
+    init(_ models: [FormModel<T>]) {
         self.formModels = models
         super.init(frame: .zero)
         setupView()
@@ -39,8 +43,7 @@ final class FormsView: UIView {
     }
     
     private func registerCell() {
-        collectionView.register(FormCollectionViewCell.self)
-        collectionView.register(NutritionFactsCollectionViewCell.self)
+        collectionView.register(FormCollectionViewCell<T>.self)
     }
     
     private func setupView() {
@@ -55,13 +58,37 @@ final class FormsView: UIView {
             make.edges.equalToSuperview()
         }
     }
-}
-
-extension FormsView: UICollectionViewDelegate {
     
-}
-
-extension FormsView: UICollectionViewDelegateFlowLayout {
+    private func getDictValues() -> [T: String?] {
+        var dict: [T: String?] = [:]
+        collectionView
+            .visibleCells
+            .compactMap { $0 as? FormCollectionViewCell<T> }
+            .forEach {
+                if let type = $0.model?.type {
+                    dict[type] = $0.value
+                }
+            }
+        
+        return dict
+    }
+    
+    // MARK: - CollectionView DataSource
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int {
+        return formModels.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell: FormCollectionViewCell<T> = collectionView.dequeueReusableCell(for: indexPath)
+        cell.model = formModels[safe: indexPath.row]
+        return cell
+    }
+    
+    // MARK: - CollectionView FlowLayout
+    
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -75,19 +102,5 @@ extension FormsView: UICollectionViewDelegateFlowLayout {
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 16
-    }
-}
-
-extension FormsView: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView,
-                        numberOfItemsInSection section: Int) -> Int {
-        return formModels.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell: FormCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
-        cell.model = formModels[safe: indexPath.row]
-        return cell
     }
 }

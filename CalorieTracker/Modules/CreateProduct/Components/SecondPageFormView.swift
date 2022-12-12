@@ -15,6 +15,15 @@ final class SecondPageFormView: UIView {
 
     private lazy var servingSizeForm: FormView = getServingSizeForm()
     
+    var title: String? { servingSizeForm.value }
+    var weight: Double? {
+        guard let valueStr = valueTextField.text,
+               let value = Double(valueStr) else {
+            return nil
+        }
+        return value
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubviews()
@@ -86,9 +95,9 @@ extension SecondPageFormView {
         return label
     }
     
-    private func getServingSizeForm() -> FormView {
-        let form = FormView()
-        form.model = .init(type: nil, width: .large, value: .optional)
+    private func getServingSizeForm() -> FormView<EmptyGetTitle> {
+        let form = FormView<EmptyGetTitle> ()
+        form.model = .init(width: .large, value: .optional)
         return form
     }
         

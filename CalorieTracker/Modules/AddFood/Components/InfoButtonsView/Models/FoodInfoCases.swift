@@ -10,7 +10,7 @@ import UIKit
 protocol WithGetDataProtocol: WithGetTitleProtocol, WithGetColorProtocol {}
 
 enum FoodInfoCases: WithGetDataProtocol {
-    func getTitle(_ lenght: Lenght) -> String {
+    func getTitle(_ lenght: Lenght) -> String? {
         switch self {
         case .carb:
             return lenght == .long

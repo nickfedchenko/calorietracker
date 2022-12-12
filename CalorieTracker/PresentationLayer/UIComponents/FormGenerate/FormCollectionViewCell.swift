@@ -7,12 +7,22 @@
 
 import UIKit
 
-final class FormCollectionViewCell: UICollectionViewCell {
-    private let formView = FormView()
+final class FormCollectionViewCell<T: WithGetTitleProtocol>: UICollectionViewCell {
+    private let formView = FormView<T>()
     
-    var model: FormModel? {
+    var model: FormModel<T>? {
         didSet {
             formView.model = model
+        }
+    }
+    
+    var value: String? {
+        set { formView.value = newValue }
+        get {
+            guard let value = formView.value, !value.isEmpty else {
+                return nil
+            }
+            return value
         }
     }
     

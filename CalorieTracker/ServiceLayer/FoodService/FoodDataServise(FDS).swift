@@ -91,8 +91,8 @@ extension FDS: FoodDataServiceInterface {
         return dishes
     }
     
-    func getFavoriteProducts() -> [ProductDTO] {
-        let products: [ProductDTO] = getFavoriteFoods().compactMap { food in
+    func getFavoriteProducts() -> [Product] {
+        let products: [Product] = getFavoriteFoods().compactMap { food in
             switch food.food {
             case .product(let product):
                 return product
@@ -117,8 +117,8 @@ extension FDS: FoodDataServiceInterface {
         return dishes
     }
     
-    func getFrequentProducts(_ count: Int) -> [ProductDTO] {
-        let products: [ProductDTO] = getFrequentFood(count).compactMap { food in
+    func getFrequentProducts(_ count: Int) -> [Product] {
+        let products: [Product] = getFrequentFood(count).compactMap { food in
             switch food.food {
             case .product(let product):
                 return product
@@ -150,7 +150,7 @@ extension FDS: FoodDataServiceInterface {
         meal.setChild(dishes: dishes, products: products)
     }
     
-    func getRecentProducts(_ count: Int) -> [ProductDTO] {
+    func getRecentProducts(_ count: Int) -> [Product] {
         let allFoodData = localPersistentStore.fetchFoodData()
             .sorted(by: { $0.dateLastUse <= $1.dateLastUse })
             .filter { $0.food != nil }

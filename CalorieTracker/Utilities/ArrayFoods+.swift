@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension Array where Element == ProductDTO {
+extension Array where Element == Product {
     var foods: [Food] {
         self.map { .product($0) }
     }
@@ -26,7 +26,7 @@ extension Array where Element == Meal {
 }
 
 extension Array where Element == Food {
-    var products: [ProductDTO] {
+    var products: [Product] {
         self.compactMap { food in
             switch food {
             case .product(let product):
