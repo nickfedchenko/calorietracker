@@ -45,12 +45,12 @@ final class ThoughtsOnStressEatingViewController: UIViewController {
         
         attributedString.append(NSAttributedString(
             string: "Do you consider yourself an emotional ",
-            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]
+            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
         attributedString.append(NSAttributedString(
             string: "or stress-based eater?",
-            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         titleLabel.attributedText = attributedString

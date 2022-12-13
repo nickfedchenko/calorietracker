@@ -17,6 +17,12 @@ protocol FoodDataServiceInterface {
     /// Возвращает все приемы пищи
     /// - Returns: массив Meal
     func getAllMeals() -> [Meal]
+    /// Возвращает все данные о питание
+    /// - Returns: массив DailyNutritionData
+    func getAllNutrition() -> [DailyNutritionData]
+    /// Возвращает данные о питание за сегодня
+    /// - Returns: массив DailyNutritionData
+    func getNutritionToday() -> DailyNutritionData
     /// Возвращает недавно использованные продукты
     /// - Parameters:
     ///   - count: количество результатов
@@ -47,6 +53,11 @@ protocol FoodDataServiceInterface {
     ///   - count: количество результатов
     /// - Returns: массив Product
     func getFrequentProducts(_ count: Int) -> [Product]
+    /// Обновляет данные за день
+    /// - Parameters:
+    ///   - day: дата
+    ///   - nutrition: данные
+    func addNutrition(day: Day, nutrition: DailyNutrition)
 }
 
 final class FDS {
@@ -123,6 +134,16 @@ extension FDS: FoodDataServiceInterface {
         localPersistentStore.fetchMeals()
     }
     
+    func getAllNutrition() -> [DailyNutritionData] {
+        localPersistentStore.fetchNutrition()
+    }
+    
+    func getNutritionToday() -> DailyNutritionData {
+        let today = Day(Date())
+        return localPersistentStore.fetchNutrition()
+            .first(where: { $0.day == today }) ?? .init(day: today, nutrition: .zero)
+    }
+    
     func createMeal(mealTime: MealTime, dishes: [Dish], products: [Product]) {
         let meal = Meal(mealTime: mealTime)
         localPersistentStore.saveMeals(meals: [meal])
@@ -176,5 +197,15 @@ extension FDS: FoodDataServiceInterface {
             ? Array(searchHistory[0..<countSearchQuery])
             : searchHistory
         ))
+    }
+    
+    func addNutrition(day: Day, nutrition: DailyNutrition) {
+        let oldNutrition = localPersistentStore.fetchNutrition()
+            .first(where: { $0.day == day }) ?? .init(day: day, nutrition: .zero)
+        let newNutrition: DailyNutritionData = .init(
+            day: day,
+            nutrition: oldNutrition.nutrition + nutrition
+        )
+        localPersistentStore.saveNutrition(data: [newNutrition])
     }
 }

@@ -55,11 +55,11 @@ final class FinalOfTheSecondStageViewController: UIViewController {
 
         attributedString.append(NSAttributedString(
             string: "2 down ",
-            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]
+            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         attributedString.append(NSAttributedString(
             string: ", 2 to go!",
-            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         titleLabel.attributedText = attributedString

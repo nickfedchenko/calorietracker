@@ -47,11 +47,11 @@ final class CalorieTrackingViaKcalcViewController: UIViewController {
 
         attributedString.append(NSAttributedString(
             string: "Get the best calorie tracking recommendations and ",
-            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         attributedString.append(NSAttributedString(
             string: "stay fit with Kcalc",
-            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]
+            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
         titleLabel.attributedText = attributedString

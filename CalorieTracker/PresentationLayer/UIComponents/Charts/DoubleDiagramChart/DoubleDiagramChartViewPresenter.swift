@@ -25,7 +25,7 @@ class DoubleDiagramChartViewPresenter {
         var data: [DoubleWidgetData]
         switch view.getChartType() {
         case .exercises:
-            data = UDM.exercises
+            data = []
         }
         return data.map {
             (
@@ -42,7 +42,7 @@ class DoubleDiagramChartViewPresenter {
         var goal: Double?
         switch view.getChartType() {
         case .exercises:
-            goal = UDM.exercisesGoal
+            goal = 0
         }
         guard let goal = goal else { return nil }
         return Int(goal)

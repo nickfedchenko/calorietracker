@@ -11,11 +11,19 @@ protocol WeightFullWidgetInterface: AnyObject {
     
 }
 
-final class WeightFullWidgetView: UIView {
+protocol WeightFullWidgetOutput: AnyObject {
+    func setGoal(_ widget: WeightFullWidgetView)
+    func addWeight(_ widget: WeightFullWidgetView)
+}
+
+final class WeightFullWidgetView: UIView, CTWidgetFullProtocol {
+    weak var output: WeightFullWidgetOutput?
+    var didTapCloseButton: (() -> Void)?
+    
     private lazy var topTitleLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.font = R.font.sfProDisplaySemibold(size: 22)
+        label.font = R.font.sfProDisplaySemibold(size: 22.fontScale())
         label.textColor = R.color.weightWidget.weightTextColor()
         label.text = "WEIGHT"
         return label
@@ -148,6 +156,10 @@ final class WeightFullWidgetView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func update() {
+        configureView(period: .weak)
+    }
+    
     private func setupView() {
         backgroundColor = .white
         clipsToBounds = true
@@ -165,12 +177,19 @@ final class WeightFullWidgetView: UIView {
             closeButton
         ])
         
-        addButton.addTarget(self, action: #selector(didTapAddButton), for: .touchUpInside)
-        closeButton.addTarget(self, action: #selector(didTapCloseButton), for: .touchUpInside)
-        settingsButton.addTarget(self, action: #selector(didTapSettingsButtonn), for: .touchUpInside)
+        addButton.addTarget(self,
+                            action: #selector(didTapAddButton),
+                            for: .touchUpInside)
+        closeButton.addTarget(self,
+                              action: #selector(didTapBottomCloseButton),
+                              for: .touchUpInside)
+        settingsButton.addTarget(self,
+                                 action: #selector(didTapSettingsButton),
+                                 for: .touchUpInside)
     }
     
     private func configureView(period: HistoryHeaderButtonType) {
+        presenter?.updateData()
         guard let startDate = presenter?.getStartDate(period: period),
               let chartData = presenter?.getChartData(period: period) else { return }
         
@@ -214,22 +233,22 @@ final class WeightFullWidgetView: UIView {
             make.trailing.equalToSuperview().inset(18)
         }
         
+        headerView.aspectRatio(0.12)
         headerView.snp.makeConstraints { make in
             make.top.equalTo(topTitleLabel.snp.bottom).offset(8)
             make.leading.trailing.equalToSuperview().inset(16)
-            make.height.equalTo(42)
         }
         
         segmentedControl.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
-            make.height.equalTo(40)
+            make.height.equalTo(scrollView)
             make.leading.trailing.equalToSuperview().inset(16)
         }
         
+        scrollView.aspectRatio(0.104)
         scrollView.snp.makeConstraints { make in
             make.top.equalTo(headerView.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(40)
         }
         
         chart.snp.makeConstraints { make in
@@ -238,30 +257,30 @@ final class WeightFullWidgetView: UIView {
             make.leading.equalToSuperview().inset(50)
         }
         
+        addButton.aspectRatio(0.182)
         addButton.snp.makeConstraints { make in
             make.top.equalTo(chart.snp.bottom).offset(45)
             make.trailing.leading.equalToSuperview().inset(16)
-            make.height.equalTo(64)
         }
         
         closeButton.snp.makeConstraints { make in
             make.top.equalTo(addButton.snp.bottom).offset(8)
             make.bottom.equalToSuperview().inset(4)
             make.centerX.equalToSuperview()
-            make.width.height.equalTo(64)
+            make.width.height.equalTo(self.snp.width).multipliedBy(0.167)
         }
     }
     
     @objc private func didTapAddButton() {
-        
+        output?.addWeight(self)
     }
     
-    @objc private func didTapCloseButton() {
-        
+    @objc private func didTapBottomCloseButton() {
+        didTapCloseButton?()
     }
     
-    @objc private func didTapSettingsButtonn() {
-        
+    @objc private func didTapSettingsButton() {
+        output?.setGoal(self)
     }
 }
 

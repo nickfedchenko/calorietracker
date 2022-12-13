@@ -15,6 +15,8 @@ final class NoteWidgetNode: CTWidgetNode {
         return node
     }()
     
+    override var widgetType: WidgetContainerViewController.WidgetType { .notes }
+    
     override init(with configuration: CTWidgetNodeConfiguration) {
         super.init(with: configuration)
         setupNode()

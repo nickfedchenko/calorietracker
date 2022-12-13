@@ -48,11 +48,11 @@ class HealthAppViewController: UIViewController {
 
         attributedString.append(NSAttributedString(
             string: "Want to integrate ",
-            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]
+            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         attributedString.append(NSAttributedString(
             string: "the Health App?",
-            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         titleLabel.attributedText = attributedString

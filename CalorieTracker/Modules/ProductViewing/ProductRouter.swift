@@ -9,7 +9,7 @@
 import UIKit
 
 protocol ProductRouterInterface: AnyObject {
-    func closeViewController()
+    func closeViewController(_ animated: Bool)
 }
 
 class ProductRouter: NSObject {
@@ -17,16 +17,21 @@ class ProductRouter: NSObject {
     weak var presenter: ProductPresenterInterface?
     weak var viewController: UIViewController?
 
-    static func setupModule(_ product: Product) -> ProductViewController {
-        let vc = ProductViewController()
+    static func setupModule(
+        _ product: Product,
+        _ openController: ProductViewController.OpenController
+    ) -> ProductViewController {
+        let vc = ProductViewController(openController)
         let interactor = ProductInteractor()
         let router = ProductRouter()
+        let keyboardManager = KeyboardManager()
         let presenter = ProductPresenter(interactor: interactor,
                                          router: router,
                                          view: vc,
                                          product: product)
 
         vc.presenter = presenter
+        vc.keyboardManager = keyboardManager
         router.presenter = presenter
         router.viewController = vc
         interactor.presenter = presenter
@@ -35,7 +40,7 @@ class ProductRouter: NSObject {
 }
 
 extension ProductRouter: ProductRouterInterface {
-    func closeViewController() {
+    func closeViewController(_ animated: Bool) {
         viewController?.dismiss(animated: true)
     }
 }

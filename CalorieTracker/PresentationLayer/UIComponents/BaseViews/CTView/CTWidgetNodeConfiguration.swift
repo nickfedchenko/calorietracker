@@ -182,6 +182,26 @@ struct CTWidgetNodeConfiguration: CustomStringConvertible {
         }
     }
     
+    /// Константа верхнего отступа safeAria
+    var safeAreaTopInset: CGFloat {
+        switch UIDevice.screenType {
+        case .h19x414:
+            return 44
+        case .h19x428:
+            return 44
+        case .h19x375:
+            return 44
+        case .h19x390:
+            return 44
+        case .h16x414:
+            return 30
+        case .h16x375:
+            return 30
+        case .unknown:
+            return 30
+        }
+    }
+    
     var tabBarHeight: CGFloat {
         _tabBarHeight
     }

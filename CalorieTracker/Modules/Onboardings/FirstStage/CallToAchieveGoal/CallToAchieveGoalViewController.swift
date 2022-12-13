@@ -45,11 +45,11 @@ final class CallToAchieveGoalViewController: UIViewController {
         
         attributedString.append(NSAttributedString(
             string: "Awesome! ",
-            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]
+            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         attributedString.append(NSAttributedString(
             string: "Kcalс will help you build the habits you need to reach your goals.",
-            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         titleLabel.attributedText = attributedString

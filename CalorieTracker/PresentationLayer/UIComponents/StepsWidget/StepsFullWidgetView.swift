@@ -7,11 +7,24 @@
 
 import UIKit
 
-final class StepsFullWidgetView: UIView {
+protocol StepsFullWidgetOutput: AnyObject {
+    func setGoal(_ widget: StepsFullWidgetView)
+}
+
+protocol StepsFullWidgetInterface: AnyObject {
+    func setModel(_ model: StepsFullWidgetView.Model)
+}
+
+final class StepsFullWidgetView: UIView, CTWidgetFullProtocol {
     struct Model {
         let nowSteps: Int
         let goalSteps: Int?
     }
+    
+    weak var output: StepsFullWidgetOutput?
+    var didTapCloseButton: (() -> Void)?
+    
+    private var presenter: StepsFullWidgetPresenterInterface?
     
     private lazy var topLabel: UILabel = {
         let label = UILabel()
@@ -75,8 +88,12 @@ final class StepsFullWidgetView: UIView {
             configureLabel(value: model.nowSteps, goal: model.goalSteps)
             lineProgressView.progress = CGFloat(model.nowSteps) / CGFloat(model.goalSteps ?? 1)
             lineProgressView.isHidden = model.goalSteps == nil
-            mainButton.defaultTitle = model.goalSteps == nil ? " SET DAILY GOAL" :" CHANGE DAILY GOAL"
-            mainButton.isPressTitle = model.goalSteps == nil ? " SET DAILY GOAL" :" CHANGE DAILY GOAL"
+            mainButton.defaultTitle = model.goalSteps == nil
+                ? " SET DAILY GOAL"
+                : " CHANGE DAILY GOAL"
+            mainButton.isPressTitle = model.goalSteps == nil
+                ? " SET DAILY GOAL"
+                : " CHANGE DAILY GOAL"
         }
     }
     
@@ -88,6 +105,8 @@ final class StepsFullWidgetView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        presenter = StepsFullWidgetPresenter(view: self)
+        presenter?.updateModel()
         setupView()
         didChangeIsConnectedAH()
     }
@@ -96,8 +115,12 @@ final class StepsFullWidgetView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func update() {
+        presenter?.updateModel()
+    }
+    
     private func setupView() {
-        closeButton.addTarget(self, action: #selector(didTapCloseButton), for: .touchUpInside)
+        closeButton.addTarget(self, action: #selector(didTapBottomCloseButton), for: .touchUpInside)
         mainButton.addTarget(self, action: #selector(didTapMainButton), for: .touchUpInside)
         backgroundColor = .white
         layer.cornerRadius = 16
@@ -121,16 +144,11 @@ final class StepsFullWidgetView: UIView {
             make.height.equalTo(12)
         }
         
-        mainButton.snp.makeConstraints { make in
-            make.height.equalTo(64)
-        }
+        mainButton.aspectRatio(0.182)
+        connectAHView.aspectRatio(0.182)
         
         closeButton.snp.makeConstraints { make in
             make.height.width.equalTo(40)
-        }
-        
-        connectAHView.snp.makeConstraints { make in
-            make.height.equalTo(64)
         }
     }
     
@@ -140,84 +158,44 @@ final class StepsFullWidgetView: UIView {
     }
     
     private func configureLabel(value: Int, goal: Int?) {
-        let stepString = getAttributedStringWithImage(
-            image: R.image.stepsWidget.foot(),
-            attributedString: getAttributedString(
-                string: "  STEPS  ",
-                size: 22,
-                weight: .bold,
-                color: R.color.stepsWidget.secondGradientColor()
+        let leftColor = R.color.stepsWidget.secondGradientColor()
+        let rightColor = R.color.stepsWidget.ringColor()
+        let font = R.font.sfProDisplayBold(size: 22.fontScale())
+        let image = R.image.stepsWidget.foot()
+        let leftAtributes: [StringSettings] = [.font(font), .color(leftColor)]
+        let rightAtributes: [StringSettings] = [.font(font), .color(rightColor)]
+        
+        let string = goal != nil
+            ? "STEPS \(value) / \(goal ?? 0)"
+            : "STEPS \(value)"
+        
+        if goal == nil {
+            topLabel.attributedText = string.attributedSring(
+                [.init(worldIndex: [0, 1], attributes: leftAtributes)],
+                image: .init(image: image, font: font, position: .left)
             )
-        )
-        
-        let valueString = getAttributedString(
-            string: "\(value)",
-            size: 22,
-            weight: .heavy,
-            color: R.color.stepsWidget.secondGradientColor()
-        )
-        
-        var goalString: NSAttributedString?
-        
-        if let goal = goal {
-            goalString = getAttributedString(
-                string: " / \(goal)",
-                size: 22,
-                weight: .bold,
-                color: R.color.stepsWidget.ringColor()
+        } else {
+            topLabel.attributedText = string.attributedSring(
+                [
+                    .init(worldIndex: [0, 1], attributes: leftAtributes),
+                    .init(worldIndex: [3, 4], attributes: rightAtributes)
+                ],
+                image: .init(image: image, font: font, position: .left)
             )
         }
-        
-        let fullString = NSMutableAttributedString(attributedString: stepString)
-        fullString.append(valueString)
-        fullString.append(goalString ?? NSAttributedString())
-        
-        topLabel.attributedText = fullString
     }
     
-    private func getAttributedStringWithImage(image: UIImage?,
-                                              attributedString: NSAttributedString) -> NSAttributedString {
-        guard let image = image else { return NSMutableAttributedString() }
-        
-        let imageAttachment = NSTextAttachment()
-        imageAttachment.image = image
-        imageAttachment.bounds = CGRect(
-            x: 0,
-            y: (UIFont.roundedFont(
-                ofSize: 22,
-                weight: .bold
-            ).capHeight - image.size.height).rounded() / 2,
-            width: image.size.width,
-            height: image.size.height
-        )
-        let imageString = NSAttributedString(attachment: imageAttachment)
-        let fullString = NSMutableAttributedString(attributedString: imageString)
-        fullString.append(attributedString)
-        
-        return fullString
-    }
-    
-    private func getAttributedString(string: String,
-                                     size: CGFloat,
-                                     weight: UIFont.Weight,
-                                     color: UIColor?) -> NSMutableAttributedString {
-        let attributedString = NSMutableAttributedString(string: string)
-        attributedString.addAttributes(
-            [
-                .foregroundColor: color ?? .black,
-                .font: UIFont.roundedFont(ofSize: size, weight: weight)
-            ],
-            range: NSRange(location: 0, length: string.count)
-        )
-        
-        return attributedString
-    }
-    
-    @objc private func didTapCloseButton(_ sender: UIButton) {
-        
+    @objc private func didTapBottomCloseButton(_ sender: UIButton) {
+        didTapCloseButton?()
     }
     
     @objc private func didTapMainButton(_ sender: UIButton) {
-        
+        output?.setGoal(self)
+    }
+}
+
+extension StepsFullWidgetView: StepsFullWidgetInterface {
+    func setModel(_ model: Model) {
+        self.model = model
     }
 }

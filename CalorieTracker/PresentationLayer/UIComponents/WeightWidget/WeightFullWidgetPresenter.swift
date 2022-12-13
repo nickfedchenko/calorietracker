@@ -13,34 +13,45 @@ protocol WeightFullWidgetPresenterInterface: AnyObject {
     func getChartData(period: HistoryHeaderButtonType) -> [(date: Date, weight: CGFloat)]
     func getStartWeight(period: HistoryHeaderButtonType) -> CGFloat?
     func getNowWeight() -> CGFloat?
+    func updateData()
 }
 
 class WeightFullWidgetPresenter {
     unowned var view: WeightFullWidgetInterface
     
-    private let chartData: [(date: Date, weight: CGFloat)] = [
-        (date: Date(), weight: 68),
-        (date: Date() - 84000 * 1, weight: 68),
-        (date: Date() - 84000 * 2, weight: 74),
-        (date: Date() - 84000 * 3, weight: 82),
-        (date: Date() - 84000 * 4, weight: 75),
-        (date: Date() - 84000 * 5, weight: 79),
-        (date: Date() - 84000 * 6, weight: 80)
-    ]
+    private lazy var chartData: [(date: Date, weight: CGFloat)] = []
     
     init(view: WeightFullWidgetInterface) {
         self.view = view
     }
+    
+    private func getAllChartData() -> [(date: Date, weight: CGFloat)] {
+        let weightData = WeightWidgetService.shared.getAllWeight()
+        let chartData: [(date: Date, weight: CGFloat)] = weightData.compactMap {
+            guard let date = $0.day.date else { return nil }
+            return (date: date, weight: CGFloat($0.value))
+        }
+        return chartData
+    }
 }
 
 extension WeightFullWidgetPresenter: WeightFullWidgetPresenterInterface {
+    func updateData() {
+        self.chartData = getAllChartData()
+    }
+    
     func getGoalWeight() -> CGFloat? {
-        return 85
+        guard let goal = WeightWidgetService.shared.getWeightGoal() else {
+            return nil
+        }
+        return CGFloat(goal)
     }
     
     func getNowWeight() -> CGFloat? {
-        let newChartData = chartData
-        return newChartData.max(by: { $0.date < $1.date })?.weight
+        guard let weightNow = WeightWidgetService.shared.getWeightNow() else {
+            return nil
+        }
+        return CGFloat(weightNow)
     }
     
     func getStartWeight(period: HistoryHeaderButtonType) -> CGFloat? {

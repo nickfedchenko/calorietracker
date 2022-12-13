@@ -11,10 +11,12 @@ protocol WaterFullWidgetInterface: AnyObject {
     
 }
 
-final class WaterFullWidgetView: UIView {
+final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
+    var didTapCloseButton: (() -> Void)?
+    
     private lazy var waterTitleLabel: UILabel = {
         let label = UILabel()
-        label.font = R.font.sfProDisplaySemibold(size: 22)
+        label.font = R.font.sfProDisplaySemibold(size: 22.fontScale())
         label.textColor = R.color.waterWidget.firstGradientColor()
         label.text = "WATER"
         return label
@@ -22,7 +24,7 @@ final class WaterFullWidgetView: UIView {
     
     private lazy var quickAddTitleLabel: UILabel = {
         let label = UILabel()
-        label.font = R.font.sfProDisplaySemibold(size: 18)
+        label.font = R.font.sfProDisplaySemibold(size: 18.fontScale())
         label.textColor = R.color.waterWidget.firstGradientColor()
         label.text = "Set up quick add"
         return label
@@ -30,7 +32,7 @@ final class WaterFullWidgetView: UIView {
     
     private lazy var waterValueLabel: UILabel = {
         let view = UILabel()
-        view.font = R.font.sfProDisplaySemibold(size: 22)
+        view.font = R.font.sfProDisplaySemibold(size: 22.fontScale())
         return view
     }()
     
@@ -153,10 +155,8 @@ final class WaterFullWidgetView: UIView {
         configureView()
         
         quickAddStack.didTapQuickAdd = { value in
-            if let oldValue = self.presenter?.getValueNow() {
-                self.presenter?.changeValue(oldValue + value)
-                self.configureView()
-            }
+            self.presenter?.addWater(value)
+            self.configureView()
         }
         
         if let viewsType = presenter?.getQuickAddTypes() {
@@ -168,6 +168,10 @@ final class WaterFullWidgetView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func update() {
+        
+    }
+    
     // MARK: - Setup View
     
     private func setupView() {
@@ -175,9 +179,18 @@ final class WaterFullWidgetView: UIView {
         layer.cornerRadius = 16
         layer.cornerCurve = .continuous
         
-        settingsButton.addTarget(self, action: #selector(didTapSettingsButton), for: .touchUpInside)
-        trackButton.addTarget(self, action: #selector(didTapTrackButton), for: .touchUpInside)
-        goalButton.addTarget(self, action: #selector(didTapGoalButton), for: .touchUpInside)
+        settingsButton.addTarget(self,
+                                 action: #selector(didTapSettingsButton),
+                                 for: .touchUpInside)
+        trackButton.addTarget(self,
+                              action: #selector(didTapTrackButton),
+                              for: .touchUpInside)
+        goalButton.addTarget(self,
+                             action: #selector(didTapGoalButton),
+                             for: .touchUpInside)
+        closeButton.addTarget(self,
+                              action: #selector(didTapBottomCloseButton),
+                              for: .touchUpInside)
         slider.delegate = self
         
         addSubviews([
@@ -230,27 +243,16 @@ final class WaterFullWidgetView: UIView {
         mainStack.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(20)
             make.top.equalTo(waterValueLabel.snp.bottom).offset(17)
-            make.bottom.equalTo(closeButton.snp.top).offset(-35)
+            make.bottom.lessThanOrEqualTo(closeButton.snp.top).offset(-10)
         }
         
-        goalButton.snp.makeConstraints { make in
-            make.height.equalTo(64)
-        }
-        
-        trackButton.snp.makeConstraints { make in
-            make.height.equalTo(64)
-        }
+        goalButton.aspectRatio(0.187)
+        slider.aspectRatio(0.24)
+        trackButton.aspectRatio(0.187)
+        quickAddStack.aspectRatio(0.187)
         
         progressView.snp.makeConstraints { make in
             make.height.equalTo(12)
-        }
-        
-        slider.snp.makeConstraints { make in
-            make.height.equalTo(82)
-        }
-        
-        quickAddStack.snp.makeConstraints { make in
-            make.height.equalTo(64)
         }
     }
     
@@ -291,49 +293,33 @@ final class WaterFullWidgetView: UIView {
     // MARK: - setup String
     
     private func configureLabel(value: Int, goal: Int?) {
-        let mlString = getAttributedString(
-            string: " ML ",
-            size: 22,
-            color: R.color.waterWidget.firstGradientColor()
-        )
+        let string = goal == nil
+            ? "TODAY \(value) ML"
+            : "\(value) / \(goal ?? 0) ML"
+        let colorLeft = R.color.waterWidget.secondGradientColor()
+        let colorRight = R.color.waterWidget.firstGradientColor()
+        let font = R.font.sfProDisplaySemibold(size: 22.fontScale())
+        let leftAttributes: [StringSettings] = [.color(colorLeft), .font(font)]
+        let rightAttributes: [StringSettings] = [.color(colorRight), .font(font)]
         
-        let valueString = getAttributedString(
-            string: goal == nil ? "TODAY \(value)" : "\(value)",
-            size: 22,
-            color: R.color.waterWidget.secondGradientColor()
-        )
-        
-        let fullString = NSMutableAttributedString(attributedString: valueString)
-        
-        if let goal = goal {
-            let goalString = getAttributedString(
-                string: " / \(goal)",
-                size: 22,
-                color: R.color.waterWidget.firstGradientColor()
-            )
-            fullString.append(goalString)
-            fullString.append(mlString)
+        if goal != nil {
+            waterValueLabel.attributedText = string.attributedSring([
+                .init(worldIndex: [0], attributes: leftAttributes),
+                .init(worldIndex: [1, 2, 3], attributes: rightAttributes)
+            ])
         } else {
-            fullString.append(mlString)
-            fullString.append(getAttributedStringImage(image: R.image.waterWidget.editText()))
+            waterValueLabel.attributedText = string.attributedSring(
+                [
+                    .init(worldIndex: [0, 1], attributes: leftAttributes),
+                    .init(worldIndex: [2], attributes: rightAttributes)
+                ],
+                image: .init(
+                    image: R.image.waterWidget.editText(),
+                    font: font,
+                    position: .right
+                )
+            )
         }
-        
-        waterValueLabel.attributedText = fullString
-    }
-    
-    private func getAttributedString(string: String,
-                                     size: CGFloat,
-                                     color: UIColor?) -> NSMutableAttributedString {
-        let attributedString = NSMutableAttributedString(string: string)
-        attributedString.addAttributes(
-            [
-                .foregroundColor: color ?? .black,
-                .font: R.font.sfProDisplaySemibold(size: size)!
-            ],
-            range: NSRange(location: 0, length: string.count)
-        )
-        
-        return attributedString
     }
     
     private func getAttributedStringImage(image: UIImage?) -> NSAttributedString {
@@ -371,10 +357,12 @@ final class WaterFullWidgetView: UIView {
     }
     
     @objc private func didTapTrackButton(_ sender: UIButton) {
-        if let oldValue = presenter?.getValueNow() {
-            presenter?.changeValue(oldValue + slider.stepMl * slider.step)
-        }
+        presenter?.addWater(slider.stepMl * slider.step)
         configureView()
+    }
+    
+    @objc private func didTapBottomCloseButton() {
+        didTapCloseButton?()
     }
 }
 

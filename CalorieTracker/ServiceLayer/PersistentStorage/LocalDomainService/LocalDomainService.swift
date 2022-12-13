@@ -13,17 +13,26 @@ protocol LocalDomainServiceInterface {
     func fetchDishes() -> [Dish]
     func fetchFoodData() -> [FoodData]
     func fetchMeals() -> [Meal]
-    func saveProducts(products: [Product])
+    func fetchWater() -> [DailyData]
+    func fetchSteps() -> [DailyData]
+    func fetchWeight() -> [DailyData]
+    func fetchNutrition() -> [DailyNutritionData]
+    func fetchExercise() -> [Exercise]
+    func saveProducts(products: [Product], saveInPriority: Bool)
     func saveDishes(dishes: [Dish])
     func saveFoodData(foods: [FoodData])
     func saveMeals(meals: [Meal])
+    func saveWater(data: [DailyData])
+    func saveSteps(data: [DailyData])
+    func saveWeight(data: [DailyData])
+    func saveNutrition(data: [DailyNutritionData])
+    func saveExercise(data: [Exercise])
     func searchProducts(by phrase: String) -> [Product]
     func searchProducts(barcode: String) -> [Product]
     func searchDishes(by phrase: String) -> [Dish]
     func setChildFoodData(foodDataId: String, dishID: Int)
-    func setChildFoodData(foodDataId: String, productID: Int)
-    func setChildFoodData(foodDataId: String, userProductID: String)
-    func setChildMeal(mealId: String, dishesID: [Int], productsID: [Int])
+    func setChildFoodData(foodDataId: String, productID: String)
+    func setChildMeal(mealId: String, dishesID: [Int], productsID: [String])
 }
 
 final class LocalDomainService {
@@ -53,7 +62,11 @@ final class LocalDomainService {
         return container
     }()
     
-    private lazy var context = container.viewContext
+    private lazy var context: NSManagedObjectContext = {
+        let context = container.viewContext
+        context.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
+        return context
+    }()
     
 //    private lazy var taskContext: NSManagedObjectContext = {
 //        let context = container.newBackgroundContext()
@@ -126,23 +139,85 @@ extension LocalDomainService: LocalDomainServiceInterface {
         return domainMeals.compactMap { Meal(from: $0) }
     }
     
-    func saveProducts(products: [Product]) {
+    func fetchWater() -> [DailyData] {
+        guard let domainWater = fetchData(for: DomainWater.self) else { return [] }
+        return domainWater.compactMap { DailyData(from: $0) }
+    }
+    
+    func fetchSteps() -> [DailyData] {
+        guard let domainSteps = fetchData(for: DomainSteps.self) else { return [] }
+        return domainSteps.compactMap { DailyData(from: $0) }
+    }
+    
+    func fetchWeight() -> [DailyData] {
+        guard let domainWeight = fetchData(for: DomainWeight.self) else { return [] }
+        return domainWeight.compactMap { DailyData(from: $0) }
+    }
+    
+    func fetchNutrition() -> [DailyNutritionData] {
+        guard let domainNutrition = fetchData(for: DomainNutrition.self) else {
+            return []
+        }
+        return domainNutrition.compactMap { DailyNutritionData(from: $0) }
+    }
+    
+    func fetchExercise() -> [Exercise] {
+        guard let domainExercise = fetchData(for: DomainExercise.self) else {
+            return []
+        }
+        return domainExercise.compactMap { Exercise(from: $0) }
+    }
+    
+    func saveProducts(products: [Product], saveInPriority: Bool) {
         let _: [DomainProduct] = products
             .map { DomainProduct.prepare(fromPlainModel: $0, context: context) }
-        //save()
-        try? context.save()
+        
+        if saveInPriority {
+            try? context.save()
+        } else {
+            save()
+        }
     }
     
     func saveDishes(dishes: [Dish]) {
         let _: [DomainDish] = dishes
             .map { DomainDish.prepare(fromPlainModel: $0, context: context) }
-        //save()
-        try? context.save()
+        save()
     }
     
     func saveMeals(meals: [Meal]) {
         let _: [DomainMeal] = meals
             .map { DomainMeal.prepare(fromPlainModel: $0, context: context) }
+        try? context.save()
+    }
+    
+    func saveWater(data: [DailyData]) {
+        let _: [DomainWater] = data
+            .map { DomainWater.prepare(fromPlainModel: $0, context: context) }
+        try? context.save()
+    }
+    
+    func saveSteps(data: [DailyData]) {
+        let _: [DomainSteps] = data
+            .map { DomainSteps.prepare(fromPlainModel: $0, context: context) }
+        try? context.save()
+    }
+    
+    func saveWeight(data: [DailyData]) {
+        let _: [DomainWeight] = data
+            .map { DomainWeight.prepare(fromPlainModel: $0, context: context) }
+        try? context.save()
+    }
+    
+    func saveNutrition(data: [DailyNutritionData]) {
+        let _: [DomainNutrition] = data
+            .map { DomainNutrition.prepare(fromPlainModel: $0, context: context) }
+        try? context.save()
+    }
+    
+    func saveExercise(data: [Exercise]) {
+        let _: [DomainExercise] = data
+            .map { DomainExercise.prepare(fromPlainModel: $0, context: context) }
         try? context.save()
     }
     
@@ -164,14 +239,13 @@ extension LocalDomainService: LocalDomainServiceInterface {
         try? context.save()
     }
     
-    func setChildFoodData(foodDataId: String, productID: Int) {
-        let format = "id == %ld"
-        let formatStrId = "id == %@"
+    func setChildFoodData(foodDataId: String, productID: String) {
+        let format = "id == %@"
         let productRequest = NSFetchRequest<DomainProduct>(entityName: "DomainProduct")
         let foodDataRequest = NSFetchRequest<DomainFoodData>(entityName: "DomainFoodData")
 
         productRequest.predicate = NSPredicate(format: format, productID)
-        foodDataRequest.predicate = NSPredicate(format: formatStrId, foodDataId)
+        foodDataRequest.predicate = NSPredicate(format: format, foodDataId)
         
         guard let product = try? context.fetch(productRequest).first,
               let foodData = try? context.fetch(foodDataRequest).first else { return }
@@ -182,30 +256,12 @@ extension LocalDomainService: LocalDomainServiceInterface {
         try? context.save()
     }
     
-    func setChildFoodData(foodDataId: String, userProductID: String) {
-        let formatStrId = "id == %@"
-        let productRequest = NSFetchRequest<DomainUserProduct>(entityName: "DomainUserProduct")
-        let foodDataRequest = NSFetchRequest<DomainFoodData>(entityName: "DomainFoodData")
-
-        productRequest.predicate = NSPredicate(format: formatStrId, userProductID)
-        foodDataRequest.predicate = NSPredicate(format: formatStrId, foodDataId)
-        
-        guard let product = try? context.fetch(productRequest).first,
-              let foodData = try? context.fetch(foodDataRequest).first else { return }
-        
-        foodData.userProduct = product
-        foodData.dish = nil
-        foodData.product = nil
-        
-        try? context.save()
-    }
-    
-    func setChildMeal(mealId: String, dishesID: [Int], productsID: [Int]) {
+    func setChildMeal(mealId: String, dishesID: [Int], productsID: [String]) {
         let format = "id == %ld"
         let formatMeal = "id == %@"
         
         let dishPredicates = dishesID.map { NSPredicate(format: format, $0) }
-        let productPredicates = productsID.map { NSPredicate(format: format, $0) }
+        let productPredicates = productsID.map { NSPredicate(format: formatMeal, $0) }
         let mealPredicate = NSPredicate(format: formatMeal, mealId)
         
         let products = productPredicates.compactMap {

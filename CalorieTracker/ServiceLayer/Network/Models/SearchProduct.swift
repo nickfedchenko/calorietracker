@@ -24,7 +24,10 @@ struct SearchProduct: Codable {
     }
     
     func getConventionalProduct() -> Product? {
-        return Product(from: self)
+        guard let productDTO = ProductDTO(from: self) else {
+            return nil
+        }
+        return Product(productDTO)
     }
 }
 

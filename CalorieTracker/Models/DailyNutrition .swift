@@ -15,11 +15,11 @@ struct DailyNutrition: Codable, AdditiveArithmetic {
     let protein: Double
     let fat: Double
     
-    init(kcal: Double, carbs: Double, protein: Double, fat: Double) {
-        self.kcal = kcal
-        self.carbs = carbs
-        self.protein = protein
-        self.fat = fat
+    init(kcal: Double?, carbs: Double?, protein: Double?, fat: Double?) {
+        self.kcal = kcal ?? 0
+        self.carbs = carbs ?? 0
+        self.protein = protein ?? 0
+        self.fat = fat ?? 0
     }
     
     private init(_ value: Double) {

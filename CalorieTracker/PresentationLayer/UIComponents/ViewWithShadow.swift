@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ViewWithShadow: UIView {
+class ViewWithShadow: UIView {
     
     let shadows: [Shadow]
     

@@ -47,11 +47,11 @@ final class RisksOfDiseasesViewController: UIViewController {
         
         attributedString.append(NSAttributedString(
             string: "Are you at risk for any of the following ",
-            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         attributedString.append(NSAttributedString(
             string: "diseases?",
-            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]
+            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
         titleLabel.attributedText = attributedString

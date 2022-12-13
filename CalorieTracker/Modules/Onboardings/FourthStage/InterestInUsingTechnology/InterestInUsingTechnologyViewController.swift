@@ -46,12 +46,12 @@ final class InterestInUsingTechnologyViewController: UIViewController {
         
         attributedString.append(NSAttributedString(
             string: "Do you love looking at data ",
-            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]
+            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
         attributedString.append(NSAttributedString(
             string: "and using technology?",
-            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         titleLabel.attributedText = attributedString

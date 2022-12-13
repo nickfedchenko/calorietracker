@@ -25,14 +25,18 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
+    <entity name="DomainExercise" representedClassName="DomainExercise" syncable="YES">
+        <attribute name="burnedKcal" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="exerciseType" attributeType="Binary"/>
+    </entity>
     <entity name="DomainFoodData" representedClassName="DomainFoodData" syncable="YES">
         <attribute name="dateLastUse" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="favorites" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="id" attributeType="String"/>
         <attribute name="numberUses" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="dish" optional="YES" maxCount="1" deletionRule="No Action" destinationEntity="DomainDish" inverseName="foodData" inverseEntity="DomainDish"/>
-        <relationship name="product" optional="YES" maxCount="1" deletionRule="No Action" destinationEntity="DomainProduct" inverseName="foodData" inverseEntity="DomainProduct"/>
-        <relationship name="userProduct" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainUserProduct" inverseName="foodData" inverseEntity="DomainUserProduct"/>
+        <relationship name="dish" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="DomainDish" inverseName="foodData" inverseEntity="DomainDish"/>
+        <relationship name="product" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="DomainProduct" inverseName="foodData" inverseEntity="DomainProduct"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="id"/>
@@ -42,11 +46,27 @@
     <entity name="DomainMeal" representedClassName="DomainMeal" syncable="YES">
         <attribute name="id" attributeType="String"/>
         <attribute name="mealTime" attributeType="String"/>
-        <relationship name="dishes" optional="YES" toMany="YES" deletionRule="No Action" destinationEntity="DomainDish"/>
-        <relationship name="products" optional="YES" toMany="YES" deletionRule="No Action" destinationEntity="DomainProduct"/>
+        <relationship name="dishes" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="DomainDish"/>
+        <relationship name="products" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="DomainProduct"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="DomainNutrition" representedClassName="DomainNutrition" syncable="YES">
+        <attribute name="carbs" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="day" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="fat" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="kcal" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="month" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="protein" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="year" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="day"/>
+                <constraint value="month"/>
+                <constraint value="year"/>
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
@@ -56,12 +76,10 @@
         <attribute name="carbs" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="composition" optional="YES" attributeType="Binary"/>
         <attribute name="fat" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="id" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="isBasic" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="isBasicState" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="isDished" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="kcal" attributeType="Integer 16" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="photo" optional="YES" attributeType="URI"/>
+        <attribute name="id" attributeType="String"/>
+        <attribute name="isUserProduct" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="kcal" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="photo" optional="YES" attributeType="Binary"/>
         <attribute name="protein" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="servings" optional="YES" attributeType="Binary"/>
         <attribute name="title" attributeType="String"/>
@@ -72,20 +90,54 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
-    <entity name="DomainUserProduct" representedClassName="DomainUserProduct" syncable="YES">
-        <attribute name="id" optional="YES" attributeType="String"/>
-        <relationship name="foodData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainFoodData" inverseName="userProduct" inverseEntity="DomainFoodData"/>
+    <entity name="DomainSteps" representedClassName="DomainSteps" syncable="YES">
+        <attribute name="day" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="month" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="value" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="year" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
-                <constraint value="id"/>
+                <constraint value="day"/>
+                <constraint value="month"/>
+                <constraint value="year"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="DomainWater" representedClassName="DomainWater" syncable="YES">
+        <attribute name="day" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="month" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="value" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="year" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="day"/>
+                <constraint value="month"/>
+                <constraint value="year"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="DomainWeight" representedClassName="DomainWeight" syncable="YES">
+        <attribute name="day" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="month" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="value" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="year" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="day"/>
+                <constraint value="month"/>
+                <constraint value="year"/>
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
     <elements>
         <element name="DomainDish" positionX="-54" positionY="108" width="128" height="299"/>
-        <element name="DomainFoodData" positionX="-54" positionY="153" width="128" height="134"/>
+        <element name="DomainExercise" positionX="-54" positionY="153" width="128" height="74"/>
+        <element name="DomainFoodData" positionX="-54" positionY="153" width="128" height="119"/>
         <element name="DomainMeal" positionX="-36" positionY="162" width="128" height="89"/>
-        <element name="DomainProduct" positionX="-63" positionY="-9" width="128" height="254"/>
-        <element name="DomainUserProduct" positionX="-54" positionY="153" width="128" height="59"/>
+        <element name="DomainNutrition" positionX="-54" positionY="153" width="128" height="134"/>
+        <element name="DomainSteps" positionX="-45" positionY="162" width="128" height="89"/>
+        <element name="DomainProduct" positionX="-54" positionY="153" width="128" height="224"/>
+        <element name="DomainWater" positionX="-54" positionY="153" width="128" height="89"/>
+        <element name="DomainWeight" positionX="-36" positionY="171" width="128" height="89"/>
     </elements>
 </model>

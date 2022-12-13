@@ -59,11 +59,11 @@ final class AchievingDifficultGoalViewController: UIViewController {
         
         attributedString.append(NSAttributedString(
             string: "Think about someone in your life ",
-            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()]
+            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         attributedString.append(NSAttributedString(
             string: "who has achieved a difficult goal.",
-            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         titleLabel.attributedText = attributedString

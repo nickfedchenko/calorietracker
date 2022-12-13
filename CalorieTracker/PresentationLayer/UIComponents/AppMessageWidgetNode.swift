@@ -21,12 +21,16 @@ final class AppMessageWidgetNode: CTWidgetNode {
     var text: String? {
         get { textNode.attributedText?.string }
         set {
-            textNode.attributedText = getAttributedString(
-                string: newValue ?? "",
-                size: 18,
-                color: R.color.messageWidget.text()
-            )
-            
+            let string = newValue ?? ""
+            textNode.attributedText = string.attributedSring([
+                .init(
+                    worldIndex: Array(0...string.split(separator: " ").count),
+                    attributes: [
+                        .color(R.color.messageWidget.text()),
+                        .font(R.font.sfProDisplaySemibold(size: 18.fontScale()))
+                    ]
+                )
+            ])
         }
     }
     
@@ -124,18 +128,5 @@ final class AppMessageWidgetNode: CTWidgetNode {
         path.close()
         
         return path
-    }
-    
-    private func getAttributedString(string: String, size: CGFloat, color: UIColor?) -> NSMutableAttributedString {
-        let attributedString = NSMutableAttributedString(string: string)
-        attributedString.addAttributes(
-            [
-                .foregroundColor: color ?? .black,
-                .font: UIFont.roundedFont(ofSize: size, weight: .semibold)
-            ],
-            range: NSRange(location: 0, length: string.count)
-        )
-
-        return attributedString
     }
 }

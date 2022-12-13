@@ -11,9 +11,9 @@ protocol WaterFullWidgetPresenterInterface: AnyObject {
     func getGoal() -> Int
     func getValueNow() -> Int
     func changeGoal(_ newGoal: Int)
-    func changeValue(_ newValue: Int)
     func saveQuickAddTypes(_ types: [QuickAddView.TypeQuickAdd])
     func getQuickAddTypes() -> [QuickAddView.TypeQuickAdd]
+    func addWater(_ value: Int)
 }
 
 class WaterFullWidgetPresenter {
@@ -33,19 +33,19 @@ class WaterFullWidgetPresenter {
 
 extension WaterFullWidgetPresenter: WaterFullWidgetPresenterInterface {
     func getGoal() -> Int {
-        return self.goal
+        return Int(WaterWidgetService.shared.getDailyWaterGoal())
     }
     
     func getValueNow() -> Int {
-        return self.valueNow
+        Int(WaterWidgetService.shared.getWaterNow())
     }
     
     func changeGoal(_ newGoal: Int) {
-        self.goal = newGoal
+        WaterWidgetService.shared.setDailyWaterGoal(Double(newGoal))
     }
     
-    func changeValue(_ newValue: Int) {
-        self.valueNow = newValue
+    func addWater(_ value: Int) {
+        WaterWidgetService.shared.addDailyWater(Double(value))
     }
     
     func saveQuickAddTypes(_ types: [QuickAddView.TypeQuickAdd]) {

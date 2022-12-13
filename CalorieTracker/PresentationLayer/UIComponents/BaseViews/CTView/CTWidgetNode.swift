@@ -8,7 +8,7 @@
 import AsyncDisplayKit
 import UIKit
 
-class CTWidgetNode: ASDisplayNode {
+class CTWidgetNode: ASControlNode, CTWidgetProtocol {
     struct Shadow {
         let color: UIColor
         let opacity: Float
@@ -60,6 +60,8 @@ class CTWidgetNode: ASDisplayNode {
     // MARK: - Private properties
     private var configuration: CTWidgetNodeConfiguration!
     private var isFirstDraw = true
+    
+    var widgetType: WidgetContainerViewController.WidgetType { .default }
     
     // MARK: - Init
     init(with configuration: CTWidgetNodeConfiguration) {

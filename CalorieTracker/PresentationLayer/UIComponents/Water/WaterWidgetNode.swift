@@ -6,23 +6,21 @@
 //
 
 import AsyncDisplayKit
+import CoreGraphics
 
 final class WaterWidgetNode: CTWidgetNode {
-    
     struct Model {
         let progress: CGFloat
-        let waterMl: NSAttributedString
-        let waterPercent: String
+        let waterMl: String
     }
     
     private let bottomTitleLabel = ASTextNode()
-    private let waterPercentLabel = ASTextNode()
     
     private lazy var topTitleLabel: ASTextNode = {
         let node = ASTextNode()
         node.attributedText = getAttributedString(
             string: "Water",
-            size: 18,
+            size: 18.fontScale(),
             color: R.color.waterWidget.firstGradientColor()
         )
         return node
@@ -30,7 +28,7 @@ final class WaterWidgetNode: CTWidgetNode {
     
     private lazy var iconNode: ASImageNode = {
         let node = ASImageNode()
-        node.image = R.image.waterWidget.water()
+        node.image = R.image.waterWidget.waterLogo()
         node.contentMode = UIView.ContentMode.scaleAspectFit
         return node
     }()
@@ -52,6 +50,8 @@ final class WaterWidgetNode: CTWidgetNode {
         }
     }
     
+    override var widgetType: WidgetContainerViewController.WidgetType { .water }
+    
     override init(with configuration: CTWidgetNodeConfiguration) {
         super.init(with: configuration)
         setupView()
@@ -67,14 +67,6 @@ final class WaterWidgetNode: CTWidgetNode {
             topTitleLabel,
             bottomTitleLabel
         ]
-        
-        iconNode.addSubnode(waterPercentLabel)
-        iconNode.layoutSpecBlock = { _, _ in
-            return ASInsetLayoutSpec(
-                insets: UIEdgeInsets(top: 26, left: 19, bottom: 12, right: 9),
-                child: self.waterPercentLabel
-            )
-        }
         
         let secondStack = ASStackLayoutSpec.horizontal()
         secondStack.justifyContent = .spaceBetween
@@ -114,19 +106,31 @@ final class WaterWidgetNode: CTWidgetNode {
         backgroundColor = .white
         layer.cornerRadius = 16
         layer.cornerCurve = .continuous
-        waterPercentLabel.style.preferredSize = CGSize(width: 32, height: 29)
     }
     
     private func didChangeModel() {
         guard let model = model else { return }
 
-        bottomTitleLabel.attributedText = model.waterMl
-        waterPercentLabel.attributedText = getAttributedString(
-            string: model.waterPercent,
-            size: 24,
-            color: .white
-        )
         progressNode.progress = model.progress
+        
+        let font = R.font.sfProDisplaySemibold(size: 18.fontScale())
+        let leftColor = R.color.waterWidget.secondGradientColor()
+        let rightColor = R.color.waterWidget.firstGradientColor()
+        
+        let leftAttributes: [StringSettings] = [
+            .color(leftColor),
+            .font(font)
+        ]
+        
+        let rightAttributes: [StringSettings] = [
+            .color(rightColor),
+            .font(font)
+        ]
+        
+        bottomTitleLabel.attributedText = model.waterMl.attributedSring([
+            .init(worldIndex: [0], attributes: leftAttributes),
+            .init(worldIndex: [1, 2, 3], attributes: rightAttributes)
+        ])
     }
     
     private func getAttributedString(string: String, size: CGFloat, color: UIColor?) -> NSMutableAttributedString {

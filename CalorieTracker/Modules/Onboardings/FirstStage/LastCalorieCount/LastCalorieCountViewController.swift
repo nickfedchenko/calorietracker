@@ -58,17 +58,17 @@ final class LastCalorieCountViewController: UIViewController {
         
         attributedString.append(NSAttributedString(
             string: "The last time you ",
-            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         attributedString.append(NSAttributedString(
             string: "counted calories",
-            attributes: [.foregroundColor:  R.color.onboardings.radialGradientFirst()]
+            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
         attributedString.append(NSAttributedString(
             string: ", how were you doing it?",
-            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         titleLabel.attributedText = attributedString

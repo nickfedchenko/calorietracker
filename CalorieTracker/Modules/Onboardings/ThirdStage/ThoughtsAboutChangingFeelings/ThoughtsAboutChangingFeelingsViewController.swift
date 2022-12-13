@@ -58,12 +58,12 @@ final class ThoughtsAboutChangingFeelingsViewController: UIViewController {
         
         attributedString.append(NSAttributedString(
             string: "When you think about changing how you feel, what’s ",
-            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         attributedString.append(NSAttributedString(
             string: "most important?",
-            attributes: [.foregroundColor:  R.color.onboardings.radialGradientFirst()]
+            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
         titleLabel.attributedText = attributedString

@@ -58,16 +58,16 @@ final class ImportanceOfWeightLossViewController: UIViewController {
         
         attributedString.append(NSAttributedString(
             string: "How importans is it for you to ",
-            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         attributedString.append(NSAttributedString(
             string: "lose weight ",
-            attributes: [.foregroundColor:  R.color.onboardings.radialGradientFirst()]
+            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         attributedString.append(NSAttributedString(
             string: "right now?",
-            attributes: [.foregroundColor: R.color.onboardings.basicDark()]
+            attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         titleLabel.attributedText = attributedString

@@ -38,7 +38,7 @@ class ProductPresenter {
 
 extension ProductPresenter: ProductPresenterInterface {
     func getNutritionDaily() -> DailyNutrition? {
-        return UDM.nutritionDaily
+        return FDS.shared.getNutritionToday().nutrition
     }
     
     func getNutritionDailyGoal() -> DailyNutrition? {
@@ -46,7 +46,13 @@ extension ProductPresenter: ProductPresenterInterface {
     }
     
     func didTapCloseButton() {
-        router?.closeViewController()
+        switch view.getOpenController() {
+        case .addFood:
+            router?.closeViewController(true)
+        case .createProduct:
+            router?.closeViewController(false)
+            view.viewControllerShouldClose()
+        }
     }
     
     func getProduct() -> Product {
@@ -54,6 +60,6 @@ extension ProductPresenter: ProductPresenterInterface {
     }
     
     func saveNutritionDaily(_ value: DailyNutrition) {
-        UDM.nutritionDaily = (UDM.nutritionDaily ?? .zero) + value
+        FDS.shared.addNutrition(day: Date().day, nutrition: value)
     }
 }

@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 
+// swiftlint:disable: nesting
 struct NutritionFactsVM {
     enum CellType {
         case first
@@ -162,13 +163,13 @@ private extension Product {
         case .cholesterol:
             return self.composition?.cholesterol
         case .satFat:
-            return self.composition?.saturatedFat
+            return self.composition?.satFat
         case .transFat:
             return self.composition?.transFat
         case .polyFat:
-            return self.composition?.unsaturatedFat
+            return self.composition?.unsatFat
         case .monoFat:
-            return self.composition?.unsaturatedFat
+            return self.composition?.unsatFat
         case .dietaryFiber:
             return self.composition?.fiber
         case .sugar:
@@ -192,6 +193,7 @@ private extension Product {
         }
     }
     
+    // swiftlint:disable:next cyclomatic_complexity
     func getTitle(_ key: ProductKey) -> String {
         switch key {
         case .protein:
