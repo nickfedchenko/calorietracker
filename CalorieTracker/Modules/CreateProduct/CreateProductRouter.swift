@@ -11,6 +11,7 @@ import UIKit
 protocol CreateProductRouterInterface: AnyObject {
     func closeViewController()
     func openScanViewController(_ complition: @escaping (String) -> Void)
+    func openProductViewController(_ product: Product)
 }
 
 class CreateProductRouter: NSObject {
@@ -24,6 +25,7 @@ class CreateProductRouter: NSObject {
         let router = CreateProductRouter()
         let presenter = CreateProductPresenter(interactor: interactor, router: router, view: vc)
         
+        vc.keyboardManager = KeyboardManager()
         vc.presenter = presenter
         router.presenter = presenter
         router.viewController = vc
@@ -43,6 +45,17 @@ extension CreateProductRouter: CreateProductRouterInterface {
         
         vc.complition = { barcode in
             complition(barcode)
+        }
+        
+        viewController?.present(vc, animated: true)
+    }
+    
+    func openProductViewController(_ product: Product) {
+        let vc = ProductRouter.setupModule(product, .createProduct)
+        vc.modalPresentationStyle = .overFullScreen
+        
+        vc.shouldClose = {
+            self.closeViewController()
         }
         
         viewController?.present(vc, animated: true)

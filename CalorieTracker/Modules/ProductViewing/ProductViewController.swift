@@ -9,14 +9,23 @@
 import UIKit
 
 protocol ProductViewControllerInterface: AnyObject {
-
+    func getOpenController() -> ProductViewController.OpenController
+    func viewControllerShouldClose()
 }
 
 final class ProductViewController: UIViewController {
+    enum OpenController {
+        case addFood
+        case createProduct
+    }
+    
+    var shouldClose: (() -> Void)?
     var presenter: ProductPresenterInterface?
     var keyboardManager: KeyboardManagerProtocol?
     
     // MARK: - Private
+    
+    private let openController: OpenController
     
     private lazy var mainScrollView: UIScrollView = getMainScrollView()
     private lazy var titleLabel: UILabel = getTitleLabel()
@@ -46,6 +55,17 @@ final class ProductViewController: UIViewController {
         didSet {
             didChangeWeight()
         }
+    }
+    
+    // MARK: - Initialize
+    
+    init(_ openController: OpenController) {
+        self.openController = openController
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     // MARK: - Override
@@ -312,7 +332,13 @@ final class ProductViewController: UIViewController {
 // MARK: - ViewController Interface
 
 extension ProductViewController: ProductViewControllerInterface {
-
+    func getOpenController() -> OpenController {
+        return self.openController
+    }
+    
+    func viewControllerShouldClose() {
+        self.shouldClose?()
+    }
 }
 
 // MARK: - ScrollView Delegate

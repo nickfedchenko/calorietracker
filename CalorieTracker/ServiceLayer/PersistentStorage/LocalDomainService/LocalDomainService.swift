@@ -18,7 +18,7 @@ protocol LocalDomainServiceInterface {
     func fetchWeight() -> [DailyData]
     func fetchNutrition() -> [DailyNutritionData]
     func fetchExercise() -> [Exercise]
-    func saveProducts(products: [Product])
+    func saveProducts(products: [Product], saveInPriority: Bool)
     func saveDishes(dishes: [Dish])
     func saveFoodData(foods: [FoodData])
     func saveMeals(meals: [Meal])
@@ -168,10 +168,15 @@ extension LocalDomainService: LocalDomainServiceInterface {
         return domainExercise.compactMap { Exercise(from: $0) }
     }
     
-    func saveProducts(products: [Product]) {
+    func saveProducts(products: [Product], saveInPriority: Bool) {
         let _: [DomainProduct] = products
             .map { DomainProduct.prepare(fromPlainModel: $0, context: context) }
-        save()
+        
+        if saveInPriority {
+            try? context.save()
+        } else {
+            save()
+        }
     }
     
     func saveDishes(dishes: [Dish]) {

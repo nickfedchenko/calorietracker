@@ -15,7 +15,7 @@ final class FoodCellView: UIView {
         let description: String
         let tag: String
         let kcal: Int
-        let image: URL?
+        let image: Product.Photo?
     }
     
     var didTapButton: (() -> Void)?
@@ -124,16 +124,21 @@ final class FoodCellView: UIView {
         tagLabel.text = model.tag
         kalorieLabel.text = "\(model.kcal)"
         
-        if let imageUrl = model.image {
-            imageView.kf.setImage(
-                with: imageUrl,
-                placeholder: UIImage(),
-                options: [
-                    .processor(DownsamplingImageProcessor(
-                        size: CGSize(width: 64, height: 64)
-                    ))
-                ]
-            )
+        if let image = model.image {
+            switch image {
+            case .url(let url):
+                imageView.kf.setImage(
+                    with: url,
+                    placeholder: UIImage(),
+                    options: [
+                        .processor(DownsamplingImageProcessor(
+                            size: CGSize(width: 64, height: 64)
+                        ))
+                    ]
+                )
+            case .data(let data):
+                imageView.image = UIImage(data: data)
+            }
         }
     }
     
@@ -154,8 +159,9 @@ final class FoodCellView: UIView {
     
     // swiftlint:disable:next function_body_length
     private func setupConstraints() {
-        imageView.setContentCompressionResistancePriority(.init(1000), for: .horizontal)
-        imageView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        imageView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+        imageView.setContentHuggingPriority(.defaultLow, for: .vertical)
+        
         imageView.snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.top.bottom.equalToSuperview()
@@ -238,7 +244,7 @@ extension FoodCellView.FoodViewModel {
             .joined(separator: ", ") ?? ""
         self.tag = product.brand ?? ""
         self.kcal = Int(product.kcal)
-        self.image = nil
+        self.image = product.isUserProduct ? product.photo : nil
     }
     
     private init(_ dish: Dish) {

@@ -101,7 +101,10 @@ extension DSF: DataServiceFacadeInterface {
             case .failure(let error):
                 dump(error)
             case .success(let products):
-                self?.localPersistentStore.saveProducts(products: products.map { .init($0) })
+                self?.localPersistentStore.saveProducts(
+                    products: products.map { .init($0) },
+                    saveInPriority: false
+                )
             }
         }
     }

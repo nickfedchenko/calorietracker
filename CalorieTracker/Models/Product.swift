@@ -46,7 +46,7 @@ extension Product {
         self.fat = managedModel.fat
         self.kcal = managedModel.kcal
         self.carbs = managedModel.carbs
-        self.isUserProduct = true
+        self.isUserProduct = managedModel.isUserProduct
         
         if let photoData = managedModel.photo {
             self.photo = try? JSONDecoder().decode(Photo.self, from: photoData)

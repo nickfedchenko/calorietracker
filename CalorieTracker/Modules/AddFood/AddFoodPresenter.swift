@@ -73,7 +73,8 @@ final class AddFoodPresenter {
         case .myRecipes:
             break
         case .myFood:
-            break
+            let product = DSF.shared.getAllStoredProducts().filter { $0.isUserProduct }
+            self.foods = product.foods
         case .search:
             self.foods = []
         }

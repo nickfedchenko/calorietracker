@@ -422,8 +422,15 @@ final class AddFoodViewController: UIViewController {
             let cell: RecipesColectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
             return cell
         case .myFood:
+            let food = foods[safe: indexPath.row]
             let cell: FoodCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
             cell.cellType = .withShadow
+            cell.foodType = food
+            cell.colorSubInfo = selectedFoodInfo.getColor()
+            cell.subInfo = presenter?.getSubInfo(food, selectedFoodInfo)
+            cell.didTapButton = { food in
+                self.selectedFood = (self.selectedFood ?? []) + [food]
+            }
             return cell
         }
     }

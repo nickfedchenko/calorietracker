@@ -9,11 +9,18 @@
 import UIKit
 
 protocol CreateProductViewControllerInterface: AnyObject {
-
+    func getFormValues() -> [CreateProductViewController.ProductFormSegment: String?]
+    func getImage() -> UIImage?
+    func getBrand() -> String?
+    func getBarcode() -> String?
+    func getProductName() -> String?
+    func getServingDescription() -> String?
+    func getServingWeight() -> Double?
 }
 
 final class CreateProductViewController: UIViewController {
     var presenter: CreateProductPresenterInterface?
+    var keyboardManager: KeyboardManagerProtocol?
     
     private lazy var titleFirstPageLabel: UILabel = getTitleLabel()
     private lazy var descriptionFirstPageLabel: UILabel = getDescriptionLabel()
@@ -46,6 +53,7 @@ final class CreateProductViewController: UIViewController {
         addSubviews()
         setupFistPageConstraints()
         setupSecondPageConstraints()
+        setupKeyboardManager()
         didChangePage()
     }
     
@@ -220,7 +228,7 @@ final class CreateProductViewController: UIViewController {
             changePage(currentPage)
             setupSecondPage()
         case 2:
-            saveProduct()
+            presenter?.saveProduct()
         default:
             return
         }
@@ -234,62 +242,6 @@ final class CreateProductViewController: UIViewController {
             ),
             animated: true
         )
-    }
-    
-    private func saveProduct() {
-        guard let title = firstPageFormView.name,
-        let protein = stringFromDouble(formsView.values[.protein] ?? ""),
-        let fat = stringFromDouble(formsView.values[.fat] ?? ""),
-        let kcal = stringFromDouble(formsView.values[.kcal] ?? ""),
-        let carbs = stringFromDouble(formsView.values[.carb] ?? "")
-        else {
-            return
-        }
-        
-        let product: Product = .init(
-            id: UUID().uuidString,
-            title: title,
-            isUserProduct: true,
-            barcode: firstPageFormView.barcode,
-            brand: firstPageFormView.brand,
-            protein: protein,
-            fat: fat,
-            carbs: carbs,
-            kcal: kcal,
-            photo: {
-                guard let data = imageView.image?.pngData() else { return nil }
-                return .data(data)
-            }(),
-            composition: .init(
-                vitaminA: stringFromDouble(formsView.values[.vitaminA] ?? ""),
-                vitaminD: stringFromDouble(formsView.values[.vitaminD] ?? ""),
-                vitaminC: stringFromDouble(formsView.values[.vitaminC] ?? ""),
-                calcium: stringFromDouble(formsView.values[.calcium] ?? ""),
-                sugar: stringFromDouble(formsView.values[.sugars] ?? ""),
-                fiber: stringFromDouble(formsView.values[.dietaryFiber] ?? ""),
-                satFat: stringFromDouble(formsView.values[.satFat] ?? ""),
-                unsatFat: stringFromDouble(formsView.values[.monoFat] ?? ""),
-                transFat: stringFromDouble(formsView.values[.transFat] ?? ""),
-                sodium: stringFromDouble(formsView.values[.sodium] ?? ""),
-                cholesterol: stringFromDouble(formsView.values[.choleterol] ?? ""),
-                potassium: stringFromDouble(formsView.values[.potassium] ?? ""),
-                sugarAlc: stringFromDouble(formsView.values[.sugarAlco] ?? ""),
-                iron: stringFromDouble(formsView.values[.iron] ?? ""),
-                addSugar: stringFromDouble(formsView.values[.addSugars] ?? "")
-            ),
-            servings: [
-                .init(
-                    title: secondPageFormView.title,
-                    weight: secondPageFormView.weight
-                )
-            ]
-        )
-        
-    }
-    
-    private func stringFromDouble(_ str: String?) -> Double? {
-        guard let str = str else { return nil }
-        return Double(str)
     }
     
     private func setupFirstPage() {
@@ -325,6 +277,10 @@ final class CreateProductViewController: UIViewController {
         }
     }
     
+    private func setupKeyboardManager() {
+        keyboardManager?.bindToKeyboardNotifications(scrollView: mainScrollView)
+    }
+    
     @objc private func didTapCloseButton() {
         presenter?.didTapCloseButton()
     }
@@ -346,7 +302,33 @@ final class CreateProductViewController: UIViewController {
 }
 
 extension CreateProductViewController: CreateProductViewControllerInterface {
-
+    func getFormValues() -> [ProductFormSegment : String?] {
+        return formsView.values
+    }
+    
+    func getImage() -> UIImage? {
+        return imageView.image
+    }
+    
+    func getBrand() -> String? {
+        return firstPageFormView.brand
+    }
+    
+    func getBarcode() -> String? {
+        return firstPageFormView.barcode
+    }
+    
+    func getProductName() -> String? {
+        return firstPageFormView.name
+    }
+    
+    func getServingDescription() -> String? {
+        return secondPageFormView.title
+    }
+    
+    func getServingWeight() -> Double? {
+        return secondPageFormView.weight
+    }
 }
 
 // MARK: - Factory

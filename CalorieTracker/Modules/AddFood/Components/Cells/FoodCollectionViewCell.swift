@@ -8,12 +8,6 @@
 import UIKit
 
 final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
-    var foodType: Food? {
-        didSet {
-            self.configure()
-        }
-    }
-    
     enum CellType {
         case table
         case withShadow
@@ -22,6 +16,12 @@ final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
     enum CellButtonType {
         case delete
         case add
+    }
+    
+    var foodType: Food? {
+        didSet {
+            self.configure()
+        }
     }
     
     var cellType: CellType = .table {
@@ -98,6 +98,13 @@ final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
     }
     
     private func setupView() {
+        contentView.clipsToBounds = false
+        contentView.layer.masksToBounds = false
+        clipsToBounds = false
+        layer.masksToBounds = false
+        
+        layer.insertSublayer(shadowLayer, at: 0)
+        
         foodView.didTapButton = {
             guard let foodType = self.foodType else { return }
             self.didTapButton?(foodType)

@@ -46,7 +46,13 @@ extension ProductPresenter: ProductPresenterInterface {
     }
     
     func didTapCloseButton() {
-        router?.closeViewController()
+        switch view.getOpenController() {
+        case .addFood:
+            router?.closeViewController(true)
+        case .createProduct:
+            router?.closeViewController(false)
+            view.viewControllerShouldClose()
+        }
     }
     
     func getProduct() -> Product {
