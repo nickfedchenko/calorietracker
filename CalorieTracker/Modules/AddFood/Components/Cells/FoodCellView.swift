@@ -242,7 +242,7 @@ extension FoodCellView.FoodViewModel {
     }
     
     private init(_ dish: Dish) {
-        self.id = dish.id
+        self.id = String(dish.id)
         self.title = dish.title
         self.description = dish.info ?? ""
         self.tag = dish.tags.first?.tag ?? ""

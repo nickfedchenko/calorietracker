@@ -15,7 +15,7 @@ protocol DataServiceFacadeInterface {
     func updateStoredDishes()
     /// Возвращает все продукты сохраненные в локальной ДБ
     /// - Returns: массив Product
-    func getAllStoredProducts() -> [ProductDTO]
+    func getAllStoredProducts() -> [Product]
     /// Возвращает все блюда сохраненные в локальной ДБ
     /// - Returns: массив Dish
     func getAllStoredDishes() -> [Dish]
@@ -30,17 +30,17 @@ protocol DataServiceFacadeInterface {
     ///   - phrase: search query
     ///   - userNetwork: флаг отвечающий за поиск через бэк
     ///   - completion: результат приходит сюда.
-    func searchProducts(by phrase: String, useNetwork: Bool, completion: @escaping ([ProductDTO]) -> Void)
+    func searchProducts(by phrase: String, useNetwork: Bool, completion: @escaping ([Product]) -> Void)
     /// Метода поиска продуктов
     /// - Parameters:
     ///   - phrase: search query
     /// - Returns: массив Product
-    func searchProducts(by phrase: String) -> [ProductDTO]
+    func searchProducts(by phrase: String) -> [Product]
     /// Метода поиска продуктов
     /// - Parameters:
     ///   - barcode: barcode
     /// - Returns: массив Product
-    func searchProducts(barcode: String) -> [ProductDTO]
+    func searchProducts(barcode: String) -> [Product]
     /// Метода поиска блюд
     /// - Parameters:
     ///   - phrase: search query
@@ -55,18 +55,13 @@ protocol DataServiceFacadeInterface {
     /// - Parameters:
     ///   - foodDataId: id модели FoodData
     ///   - productID: id модели Product
-    func setChildFoodData(foodDataId: String, productID: Int)
-    /// Связывает модель FoodData с UserProduct
-    /// - Parameters:
-    ///   - foodDataId: id модели FoodData
-    ///   - userProductID: id модели UserProduct
-    func setChildFoodData(foodDataId: String, userProductID: String)
+    func setChildFoodData(foodDataId: String, productID: String)
     /// Связывает модель Meal с Product и Dish
     /// - Parameters:
     ///   - mealId: id модели FoodData
     ///   - dishesID: массив id Dish
     ///   - productsID: массив id Product
-    func setChildMeal(mealId: String, dishesID: [Int], productsID: [Int])
+    func setChildMeal(mealId: String, dishesID: [Int], productsID: [String])
 }
 
 final class DSF {
@@ -88,16 +83,16 @@ extension DSF: DataServiceFacadeInterface {
         localPersistentStore.setChildFoodData(foodDataId: foodDataId, dishID: dishID)
     }
     
-    func setChildFoodData(foodDataId: String, productID: Int) {
+    func setChildFoodData(foodDataId: String, productID: String) {
         localPersistentStore.setChildFoodData(foodDataId: foodDataId, productID: productID)
     }
     
-    func setChildFoodData(foodDataId: String, userProductID: String) {
-        localPersistentStore.setChildFoodData(foodDataId: foodDataId, userProductID: userProductID)
-    }
-    
-    func setChildMeal(mealId: String, dishesID: [Int], productsID: [Int]) {
-        localPersistentStore.setChildMeal(mealId: mealId, dishesID: dishesID, productsID: productsID)
+    func setChildMeal(mealId: String, dishesID: [Int], productsID: [String]) {
+        localPersistentStore.setChildMeal(
+            mealId: mealId,
+            dishesID: dishesID,
+            productsID: productsID
+        )
     }
     
     func updateStoredProducts() {
@@ -106,7 +101,7 @@ extension DSF: DataServiceFacadeInterface {
             case .failure(let error):
                 dump(error)
             case .success(let products):
-                self?.localPersistentStore.saveProducts(products: products)
+                self?.localPersistentStore.saveProducts(products: products.map { .init($0) })
             }
         }
     }
@@ -122,7 +117,7 @@ extension DSF: DataServiceFacadeInterface {
         }
     }
         
-    func getAllStoredProducts() -> [ProductDTO] {
+    func getAllStoredProducts() -> [Product] {
         let products = localPersistentStore.fetchProducts()
         return products
     }
@@ -140,7 +135,7 @@ extension DSF: DataServiceFacadeInterface {
         return localPersistentStore.fetchWater()
     }
     
-    func searchProducts(by phrase: String, useNetwork: Bool = false, completion: @escaping ([ProductDTO]) -> Void) {
+    func searchProducts(by phrase: String, useNetwork: Bool = false, completion: @escaping ([Product]) -> Void) {
         var products = localPersistentStore.searchProducts(by: phrase)
         guard useNetwork else {
             completion(products)
@@ -158,11 +153,11 @@ extension DSF: DataServiceFacadeInterface {
         }
     }
     
-    func searchProducts(by phrase: String) -> [ProductDTO] {
+    func searchProducts(by phrase: String) -> [Product] {
         localPersistentStore.searchProducts(by: phrase)
     }
     
-    func searchProducts(barcode: String) -> [ProductDTO] {
+    func searchProducts(barcode: String) -> [Product] {
         localPersistentStore.searchProducts(barcode: barcode)
     }
     

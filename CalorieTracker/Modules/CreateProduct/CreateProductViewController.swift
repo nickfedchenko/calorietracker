@@ -249,6 +249,7 @@ final class CreateProductViewController: UIViewController {
         let product: Product = .init(
             id: UUID().uuidString,
             title: title,
+            isUserProduct: true,
             barcode: firstPageFormView.barcode,
             brand: firstPageFormView.brand,
             protein: protein,

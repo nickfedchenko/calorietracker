@@ -13,7 +13,7 @@ protocol FoodDataServiceInterface {
     ///   - mealTime: время приема еды
     ///   - dishes: массив блюд
     ///   - products: массив продуктов
-    func createMeal(mealTime: MealTime, dishes: [Dish], products: [ProductDTO])
+    func createMeal(mealTime: MealTime, dishes: [Dish], products: [Product])
     /// Возвращает все приемы пищи
     /// - Returns: массив Meal
     func getAllMeals() -> [Meal]
@@ -27,7 +27,7 @@ protocol FoodDataServiceInterface {
     /// - Parameters:
     ///   - count: количество результатов
     /// - Returns: массив Product
-    func getRecentProducts(_ count: Int) -> [ProductDTO]
+    func getRecentProducts(_ count: Int) -> [Product]
     /// Возвращает недавно использованные блюда
     /// - Parameters:
     ///   - count: количество результатов
@@ -42,7 +42,7 @@ protocol FoodDataServiceInterface {
     func getFavoriteDishes() -> [Dish]
     /// Возвращает любимые продукты
     /// - Returns: массив Product
-    func getFavoriteProducts() -> [ProductDTO]
+    func getFavoriteProducts() -> [Product]
     /// Возвращает часто используемые блюда
     /// - Parameters:
     ///   - count: количество результатов
@@ -52,7 +52,7 @@ protocol FoodDataServiceInterface {
     /// - Parameters:
     ///   - count: количество результатов
     /// - Returns: массив Product
-    func getFrequentProducts(_ count: Int) -> [ProductDTO]
+    func getFrequentProducts(_ count: Int) -> [Product]
     /// Обновляет данные за день
     /// - Parameters:
     ///   - day: дата
@@ -144,7 +144,7 @@ extension FDS: FoodDataServiceInterface {
             .first(where: { $0.day == today }) ?? .init(day: today, nutrition: .zero)
     }
     
-    func createMeal(mealTime: MealTime, dishes: [Dish], products: [ProductDTO]) {
+    func createMeal(mealTime: MealTime, dishes: [Dish], products: [Product]) {
         let meal = Meal(mealTime: mealTime)
         localPersistentStore.saveMeals(meals: [meal])
         meal.setChild(dishes: dishes, products: products)

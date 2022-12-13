@@ -141,8 +141,6 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
             router?.openProductViewController(product)
         case .dishes:
             return
-        case .userProduct:
-            return
         case .meal:
             return
         }

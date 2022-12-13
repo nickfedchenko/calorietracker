@@ -9,7 +9,7 @@ import UIKit
 
 protocol ScannerRouterInterface: AnyObject {
     func close()
-    func openProductViewController(_ product: ProductDTO)
+    func openProductViewController(_ product: Product)
 }
 
 class ScannerRouter: NSObject {
@@ -26,8 +26,8 @@ class ScannerRouter: NSObject {
 }
 
 extension ScannerRouter: ScannerRouterInterface {
-    func openProductViewController(_ product: ProductDTO) {
-        let productVC = ProductRouter.setupModule(.init(product))
+    func openProductViewController(_ product: Product) {
+        let productVC = ProductRouter.setupModule(product)
         productVC.modalPresentationStyle = .fullScreen
         viewController?.present(productVC, animated: true)
     }

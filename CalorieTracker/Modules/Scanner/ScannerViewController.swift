@@ -14,7 +14,7 @@ final class ScannerViewController: UIViewController {
     
     enum ScannerState {
         case barcodeRecognized
-        case barcodeExists(ProductDTO)
+        case barcodeExists(Product)
         case `default`
     }
     
@@ -194,7 +194,7 @@ final class ScannerViewController: UIViewController {
         scannerState = .barcodeExists(product)
     }
     
-    private func showAlert(_ product: ProductDTO) {
+    private func showAlert(_ product: Product) {
         let alertVC = UIAlertController(
             title: "Штрих-код уже существует",
             message: "Продукт с таким штрих-кодом уже существует. Хотите его посмотреть?",

@@ -19,5 +19,4 @@ extension DomainFoodData {
     
     @NSManaged public var dish: DomainDish?
     @NSManaged public var product: DomainProduct?
-    @NSManaged public var userProduct: DomainUserProduct?
 }

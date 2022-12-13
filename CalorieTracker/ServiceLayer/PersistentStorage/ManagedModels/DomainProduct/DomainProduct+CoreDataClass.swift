@@ -1,31 +1,30 @@
 //
-//  DomainProduct+CoreDataClass.swift
-//  
+//  DomainUserProduct+CoreDataClass.swift
+//  CalorieTracker
 //
-//  Created by Vladimir Banushkin on 11.08.2022.
-//
+//  Created by Vadim Aleshin on 23.11.2022.
 //
 
 import CoreData
 
 @objc(DomainProduct)
 public class DomainProduct: NSManagedObject {
-    static func prepare(fromPlainModel model: ProductDTO, context: NSManagedObjectContext) -> DomainProduct {
+    static func prepare(fromPlainModel model: Product, context: NSManagedObjectContext) -> DomainProduct {
         let product = DomainProduct(context: context)
-        product.id = Int32(model.id)
-        product.barcode = model.barcode
+        product.id = model.id
+        product.isUserProduct = model.isUserProduct
         product.title = model.title
-        product.protein = model.protein
+        product.brand = model.brand
+        product.barcode = model.barcode
+        product.kcal = model.kcal
         product.fat = model.fat
         product.carbs = model.carbs
-        product.kcal = Int16(model.kcal)
-        product.photo = model.photo
+        product.protein = model.protein
+        
+        product.photo = try? JSONEncoder().encode(model.photo)
         product.composition = try? JSONEncoder().encode(model.composition)
-        product.brand = model.brand
         product.servings = try? JSONEncoder().encode(model.servings)
-        product.isBasic = model.isBasic ?? false
-        product.isDished = model.isDished ?? false
-        product.isBasicState = model.isBasicState ?? false
+        
         return product
     }
 }

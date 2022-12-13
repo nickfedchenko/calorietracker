@@ -10,6 +10,7 @@ import UIKit
 struct Product {
     let id: String
     let title: String
+    let isUserProduct: Bool
     let barcode: String?
     let brand: String?
     let protein, fat, carbs, kcal: Double
@@ -17,7 +18,7 @@ struct Product {
     let composition: Composition?
     let servings: [Serving]?
     
-    enum Photo {
+    enum Photo: Codable {
         case url(URL)
         case data(Data)
     }
@@ -36,7 +37,7 @@ struct Serving: Codable {
 }
 
 extension Product {
-    init?(from managedModel: DomainUserProduct) {
+    init?(from managedModel: DomainProduct) {
         self.id = managedModel.id
         self.barcode = managedModel.barcode
         self.title = managedModel.title
@@ -45,6 +46,13 @@ extension Product {
         self.fat = managedModel.fat
         self.kcal = managedModel.kcal
         self.carbs = managedModel.carbs
+        self.isUserProduct = true
+        
+        if let photoData = managedModel.photo {
+            self.photo = try? JSONDecoder().decode(Photo.self, from: photoData)
+        } else {
+            self.photo = nil
+        }
         
         if let servingsData = managedModel.servings {
             self.servings = try? JSONDecoder().decode([Serving].self, from: servingsData)
@@ -68,6 +76,7 @@ extension Product {
         self.fat = product.fat
         self.kcal = Double(product.kcal)
         self.carbs = product.carbs
+        self.isUserProduct = false
         
         self.servings = product.servings?.compactMap { .init($0) }
         

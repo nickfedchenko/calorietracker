@@ -10,14 +10,13 @@ import Foundation
 enum Food {
     case product(Product)
     case dishes(Dish)
-    case userProduct(Product)
     case meal(Meal)
 }
 
 extension Food {
     var foodInfo: [FoodInfoCases: Int] {
         switch self {
-        case let .product(product), .userProduct(product):
+        case .product(let product):
             return [
                 .kcal: Int(product.kcal),
                 .carb: Int(product.carbs),

@@ -10,7 +10,7 @@ import UIKit
 
 protocol AddFoodRouterInterface: AnyObject {
     func closeViewController()
-    func openProductViewController(_ product: ProductDTO)
+    func openProductViewController(_ product: Product)
     func openSelectedFoodCellsVC(_ foods: [Food], complition: @escaping ([Food]) -> Void )
     func openScanner()
     func openCreateProduct()
@@ -42,8 +42,8 @@ extension AddFoodRouter: AddFoodRouterInterface {
         viewController?.navigationController?.popViewController(animated: true)
     }
     
-    func openProductViewController(_ product: ProductDTO) {
-        let productVC = ProductRouter.setupModule(.init(product))
+    func openProductViewController(_ product: Product) {
+        let productVC = ProductRouter.setupModule(product)
         productVC.modalPresentationStyle = .fullScreen
         viewController?.present(productVC, animated: true)
     }

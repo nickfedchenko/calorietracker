@@ -63,32 +63,6 @@ struct ProductDTO: Codable {
         case id, barcode, title, photo, composition, isBasic, isBasicState, isDished, brand, servings
     }
     
-    init?(from managedModel: DomainProduct) {
-        id = Int(managedModel.id)
-        barcode = managedModel.barcode
-        title = managedModel.title
-        rawProtein = managedModel.protein
-        rawFat = managedModel.fat
-        rawCarbs = managedModel.carbs
-        rawKcal = Int(managedModel.kcal)
-        photo = managedModel.photo
-        isBasic = managedModel.isBasic
-        isBasicState = managedModel.isBasicState
-        isDished = managedModel.isDished
-        brand = managedModel.brand
-        if let servingsData = managedModel.servings {
-            servings = try? JSONDecoder().decode([ServingDTO].self, from: servingsData)
-        } else {
-            servings = nil
-        }
-        
-        if let compositionData = managedModel.composition {
-            composition = try? JSONDecoder().decode(CompositionDTO.self, from: compositionData)
-        } else {
-            composition = nil
-        }
-    }
-    
     init?(from searchModel: SearchProduct) {
         id = searchModel.productID
         barcode = searchModel.sourceObject.barcode

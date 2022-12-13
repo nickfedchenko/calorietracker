@@ -17,7 +17,6 @@ extension DomainMeal {
     @NSManaged public var mealTime: String
     @NSManaged public var dishes: NSSet?
     @NSManaged public var products: NSSet?
-    
 }
 
 extension DomainMeal {
@@ -42,7 +41,7 @@ extension DomainMeal {
     @NSManaged public func addToProducts(_ value: DomainProduct)
     
     @objc(removeProductsObject:)
-    @NSManaged public func removeFromProducts(_ value: DomainDish)
+    @NSManaged public func removeFromProducts(_ value: DomainProduct)
     
     @objc(addProducts:)
     @NSManaged public func addToProducts(_ values: NSSet)
