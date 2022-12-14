@@ -29,6 +29,11 @@
         <attribute name="burnedKcal" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="exerciseType" attributeType="Binary"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="date"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
     </entity>
     <entity name="DomainFoodData" representedClassName="DomainFoodData" syncable="YES">
         <attribute name="dateLastUse" attributeType="Date" usesScalarValueType="NO"/>
@@ -135,8 +140,8 @@
         <element name="DomainFoodData" positionX="-54" positionY="153" width="128" height="119"/>
         <element name="DomainMeal" positionX="-36" positionY="162" width="128" height="89"/>
         <element name="DomainNutrition" positionX="-54" positionY="153" width="128" height="134"/>
-        <element name="DomainSteps" positionX="-45" positionY="162" width="128" height="89"/>
         <element name="DomainProduct" positionX="-54" positionY="153" width="128" height="224"/>
+        <element name="DomainSteps" positionX="-45" positionY="162" width="128" height="89"/>
         <element name="DomainWater" positionX="-54" positionY="153" width="128" height="89"/>
         <element name="DomainWeight" positionX="-36" positionY="171" width="128" height="89"/>
     </elements>
