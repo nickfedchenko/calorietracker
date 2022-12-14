@@ -16,6 +16,7 @@ final class UDM {
         case widgetSettings
         case nutritionDailyGoal
         case dailyWaterGoal, dailyStepsGoal
+        case isAuthorisedHealthKit, dateHealthKitSync
     }
     
     static var isGloballyMetric: Bool {
@@ -108,6 +109,30 @@ final class UDM {
                 UDM.isGloballyMetric = false
             }
             setValue(value: newValue, for: .servingWeightIsMetric)
+        }
+    }
+    
+    static var isAuthorisedHealthKit: Bool {
+        get {
+            guard let value: Bool = getValue(for: .isAuthorisedHealthKit) else {
+                return false
+            }
+            return value
+        }
+        set {
+            setValue(value: newValue, for: .isAuthorisedHealthKit)
+        }
+    }
+    
+    static var dateHealthKitSync: Date? {
+        get {
+            guard let date: Date = getValue(for: .dateHealthKitSync) else {
+                return nil
+            }
+            return date
+        }
+        set {
+            setValue(value: newValue, for: .dateHealthKitSync)
         }
     }
     
