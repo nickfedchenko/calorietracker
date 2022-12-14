@@ -19,18 +19,18 @@ class TopDownViewController: UIViewController {
     }
 }
 
-extension ViewController: UIViewControllerTransitioningDelegate {
+extension TopDownViewController: UIViewControllerTransitioningDelegate {
     func animationController(
         forPresented _: UIViewController,
         presenting _: UIViewController,
         source _: UIViewController
     ) -> UIViewControllerAnimatedTransitioning? {
-        PresentTransition()
+        TopDownPresentTransition()
     }
 
     func animationController(
         forDismissed _: UIViewController
     ) -> UIViewControllerAnimatedTransitioning? {
-        DismissTransition()
+        TopDownDismissTransition()
     }
 }

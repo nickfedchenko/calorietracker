@@ -12,8 +12,13 @@ protocol SettingsViewControllerInterface: AnyObject {
 
 }
 
-final class SettingsViewController: UIViewController {
+final class SettingsViewController: TopDownViewController {
     var presenter: SettingsPresenterInterface?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = R.color.foodViewing.background()
+    }
 }
 
 extension SettingsViewController: SettingsViewControllerInterface {

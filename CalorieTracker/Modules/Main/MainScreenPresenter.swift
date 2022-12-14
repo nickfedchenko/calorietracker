@@ -10,6 +10,7 @@ import UIKit
 
 protocol MainScreenPresenterInterface: AnyObject {
     func didTapAddButton()
+    func didTapMenuButton()
     func didTapWidget(_ type: WidgetContainerViewController.WidgetType)
     func updateWaterWidgetModel()
     func updateStepsWidget()
@@ -38,6 +39,10 @@ class MainScreenPresenter {
 }
 
 extension MainScreenPresenter: MainScreenPresenterInterface {
+    func didTapMenuButton() {
+        router?.openSettingsVC()
+    }
+    
     func didTapAddButton() {
         router?.openAddFoodVC()
     }

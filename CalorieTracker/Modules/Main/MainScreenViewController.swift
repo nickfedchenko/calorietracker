@@ -25,10 +25,6 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
     var presenter: MainScreenPresenterInterface?
     
     // MARK: - Private properties
-    private let menuButton: AppWidgetNode = {
-        let node = AppWidgetNode(with: CTWidgetNodeConfiguration(type: .compact))
-        return node
-    }()
     
     private let messageNode: AppMessageWidgetNode = {
         let node = AppMessageWidgetNode(with: CTWidgetNodeConfiguration(type: .compact))
@@ -94,23 +90,6 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         return node
     }()
     
-    private let addWidgetButton: BasicButtonNode = {
-        let node = BasicButtonNode(type: .add, with: CTWidgetNodeConfiguration(type: .compact))
-        node.style.preferredSize = CGSize(
-            width: 308,
-            height: node.constants.height
-        )
-        node.style.flexShrink = 0.75
-        node.addTarget(nil,
-                       action: #selector(didTapButton),
-                       forControlEvents: .touchUpInside)
-        return node
-    }()
-    
-    @objc private func didTapButton() {
-        presenter?.didTapAddButton()
-    }
-    
     private let barCodeScannerButton: ScanButtonNode = {
         let node = ScanButtonNode(with: CTWidgetNodeConfiguration(type: .compact))
         return node
@@ -139,6 +118,31 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         node.backgroundColor = R.color.mainBackground()
         node.automaticallyManagesSubnodes = true
         node.automaticallyRelayoutOnSafeAreaChanges = true
+        return node
+    }()
+    
+    private lazy var addWidgetButton: BasicButtonNode = {
+        let node = BasicButtonNode(type: .add, with: CTWidgetNodeConfiguration(type: .compact))
+        node.style.preferredSize = CGSize(
+            width: 308,
+            height: node.constants.height
+        )
+        node.style.flexShrink = 0.75
+        node.addTarget(
+            self,
+            action: #selector(didTapButton),
+            forControlEvents: .touchUpInside
+        )
+        return node
+    }()
+    
+    private lazy var menuButton: AppWidgetNode = {
+        let node = AppWidgetNode(with: CTWidgetNodeConfiguration(type: .compact))
+        node.addTarget(
+            self,
+            action: #selector(didTapMenuButton),
+            forControlEvents: .touchUpInside
+        )
         return node
     }()
     
@@ -318,6 +322,14 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         default:
             return
         }
+    }
+    
+    @objc private func didTapMenuButton() {
+        presenter?.didTapMenuButton()
+    }
+    
+    @objc private func didTapButton() {
+        presenter?.didTapAddButton()
     }
 }
 
