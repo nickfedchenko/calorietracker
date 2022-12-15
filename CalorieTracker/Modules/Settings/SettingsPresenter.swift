@@ -7,9 +7,14 @@
 //
 
 import Foundation
+import ApphudSDK
 
 protocol SettingsPresenterInterface: AnyObject {
-    
+    func didTapCell(_ type: SettingsCategoryType)
+    func didTapCloseButton()
+    func didTapShareButton()
+    func didTapPremiumButton()
+    func updateViewController()
 }
 
 class SettingsPresenter {
@@ -17,6 +22,8 @@ class SettingsPresenter {
     unowned var view: SettingsViewControllerInterface
     let router: SettingsRouterInterface?
     let interactor: SettingsInteractorInterface?
+    
+    private var isActiveSubscribe: Bool { Apphud.hasActiveSubscription() }
     
     init(
         interactor: SettingsInteractorInterface,
@@ -30,5 +37,39 @@ class SettingsPresenter {
 }
 
 extension SettingsPresenter: SettingsPresenterInterface {
+    func updateViewController() {
+        view.updatePremiumButton(isActiveSubscribe)
+    }
     
+    func didTapCloseButton() {
+        router?.closeViewController()
+    }
+    
+    func didTapShareButton() {
+        let url = URL(string: "https://www.youtube.com")!
+        router?.openShareViewController(url)
+    }
+    
+    func didTapPremiumButton() {
+        router?.openPremiumViewController()
+    }
+    
+    func didTapCell(_ type: SettingsCategoryType) {
+        switch type {
+        case .profile:
+            router?.openProfileViewController()
+        case .chat:
+            router?.openChatViewController()
+        case .goals:
+            router?.openGoalsViewController()
+        case .app:
+            router?.openAppViewController()
+        case .reminders:
+            router?.openRemindersViewController()
+        case .rate:
+            router?.openRateViewController()
+        case .help:
+            router?.openHelpViewController()
+        }
+    }
 }
