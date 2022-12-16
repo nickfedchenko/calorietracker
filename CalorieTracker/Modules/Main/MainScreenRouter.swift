@@ -12,6 +12,7 @@ import UIKit
 protocol MainScreenRouterInterface: AnyObject {
     func openAddFoodVC()
     func openWidget(_ type: WidgetContainerViewController.WidgetType)
+    func openSettingsVC()
 }
 
 class MainScreenRouter: NSObject {
@@ -34,6 +35,11 @@ class MainScreenRouter: NSObject {
 }
 
 extension MainScreenRouter: MainScreenRouterInterface {
+    func openSettingsVC() {
+        let vc = SettingsRouter.setupModule()
+        viewController?.present(vc, animated: true)
+    }
+    
     func openAddFoodVC() {
         let vc = AddFoodRouter.setupModule()
         viewController?.navigationController?.pushViewController(vc, animated: true)
@@ -42,7 +48,6 @@ extension MainScreenRouter: MainScreenRouterInterface {
     func openWidget(_ type: WidgetContainerViewController.WidgetType) {
         let vc = WidgetContainerRouter.setupModule(type)
         vc.output = self
-        vc.modalPresentationStyle = .overFullScreen
         
         viewController?.present(vc, animated: true)
     }

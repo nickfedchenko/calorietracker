@@ -71,12 +71,13 @@ final class WidgetContainerViewController: UIViewController {
     let widgetType: WidgetType
     
     private let widgetView: UIView
-    private lazy var backgroundView = UIView()
     
     init(_ type: WidgetType) {
         self.widgetType = type
         self.widgetView = type.getWidget()
         super.init(nibName: nil, bundle: nil)
+        modalPresentationStyle = .custom
+        transitioningDelegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -88,7 +89,6 @@ final class WidgetContainerViewController: UIViewController {
         setupView()
         configureOutput()
         setupConstraints()
-        addTapGestureRecognizer()
     }
     
     private func configureOutput() {
@@ -103,8 +103,7 @@ final class WidgetContainerViewController: UIViewController {
     }
     
     private func setupView() {
-        backgroundView.backgroundColor = R.color.foodViewing.basicPrimary()?.withAlphaComponent(0.25)
-        
+        view.backgroundColor = .clear
         let widgetFull = widgetView as? CTWidgetFullProtocol
         widgetFull?.didTapCloseButton = {
             switch self.widgetType {
@@ -120,27 +119,11 @@ final class WidgetContainerViewController: UIViewController {
     }
     
     private func setupConstraints() {
-        view.addSubviews(backgroundView, widgetView)
-        
-        backgroundView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+        view.addSubview(widgetView)
         
         widgetView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(widgetInsets.top)
-            make.bottom.equalToSuperview().offset(-widgetInsets.bottom)
-            make.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).offset(widgetInsets.left)
-            make.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailing).offset(-widgetInsets.right)
+            make.edges.equalToSuperview()
         }
-    }
-    
-    private func addTapGestureRecognizer() {
-        let tapGestureRecognizer = UITapGestureRecognizer(
-            target: self,
-            action: #selector(didTapView)
-        )
-        tapGestureRecognizer.cancelsTouchesInView = true
-        backgroundView.addGestureRecognizer(tapGestureRecognizer)
     }
     
     private func getWeightWidgetInsets() -> UIEdgeInsets {
@@ -224,6 +207,34 @@ extension WidgetContainerViewController: WeightFullWidgetOutput {
 extension WidgetContainerViewController: StepsFullWidgetOutput {
     func setGoal(_ widget: StepsFullWidgetView) {
         presenter?.openChangeStepsViewController()
+    }
+}
+
+extension WidgetContainerViewController: UIViewControllerTransitioningDelegate {
+    func presentationController(
+        forPresented presented: UIViewController,
+        presenting: UIViewController?,
+        source: UIViewController
+    ) -> UIPresentationController? {
+        WidgetPresentationController(
+            presentedViewController: presented,
+            presenting: presenting,
+            insets: widgetInsets
+        )
+    }
+    
+    func animationController(
+        forPresented _: UIViewController,
+        presenting _: UIViewController,
+        source _: UIViewController
+    ) -> UIViewControllerAnimatedTransitioning? {
+        TopDownPresentTransition()
+    }
+
+    func animationController(
+        forDismissed _: UIViewController
+    ) -> UIViewControllerAnimatedTransitioning? {
+        TopDownDismissTransition()
     }
 }
 

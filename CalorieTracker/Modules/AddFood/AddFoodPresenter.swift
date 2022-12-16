@@ -81,42 +81,56 @@ final class AddFoodPresenter {
     }
     
     private func searchAmongFavorites(_ request: String) -> [Food] {
-        let lowRequest = request.lowercased()
         let favoriteDishes = FDS.shared.getFavoriteDishes()
         let favoriteProducts = FDS.shared.getFavoriteProducts()
         
-        let filteredDishes = favoriteDishes.filter { $0.title.lowercased().contains(lowRequest) }
+        let smartSearch: SmartSearch = .init(request)
+        
+        let filteredDishes = favoriteDishes.filter { smartSearch.matches($0.title) }
         let filteredProducts = favoriteProducts.filter {
-            $0.title.lowercased().contains(lowRequest)
-            || $0.brand?.lowercased().contains(lowRequest) ?? false
+            smartSearch.matches($0.title) || smartSearch.matches($0.brand ?? "")
         }
         
         return filteredDishes.foods + filteredProducts.foods
     }
     
     private func searchAmongRecent(_ request: String) -> [Food] {
-        let lowRequest = request.lowercased()
         let recentDishes = FDS.shared.getRecentDishes(10)
         let recentProducts = FDS.shared.getRecentProducts(10)
         
-        let filteredDishes = recentDishes.filter { $0.title.lowercased().contains(lowRequest) }
+        let smartSearch: SmartSearch = .init(request)
+        
+        let filteredDishes = recentDishes.filter { smartSearch.matches($0.title) }
         let filteredProducts = recentProducts.filter {
-            $0.title.lowercased().contains(lowRequest)
-            || $0.brand?.lowercased().contains(lowRequest) ?? false
+            smartSearch.matches($0.title) || smartSearch.matches($0.brand ?? "")
+        }
+        
+        return filteredDishes.foods + filteredProducts.foods
+    }
+    
+    private func searchAmongAll(_ request: String) -> [Food] {
+        let dishes = DSF.shared.getAllStoredDishes()
+        let products = DSF.shared.getAllStoredProducts()
+        
+        let smartSearch: SmartSearch = .init(request)
+        
+        let filteredDishes = dishes.filter { smartSearch.matches($0.title) }
+        let filteredProducts = products.filter {
+            smartSearch.matches($0.title) || smartSearch.matches($0.brand ?? "")
         }
         
         return filteredDishes.foods + filteredProducts.foods
     }
     
     private func searchAmongFrequent(_ request: String) -> [Food] {
-        let lowRequest = request.lowercased()
         let frequentDishes = FDS.shared.getFrequentDishes(10)
         let frequentProducts = FDS.shared.getFrequentProducts(10)
         
-        let filteredDishes = frequentDishes.filter { $0.title.lowercased().contains(lowRequest) }
+        let smartSearch: SmartSearch = .init(request)
+        
+        let filteredDishes = frequentDishes.filter { smartSearch.matches($0.title) }
         let filteredProducts = frequentProducts.filter {
-            $0.title.lowercased().contains(lowRequest)
-            || $0.brand?.lowercased().contains(lowRequest) ?? false
+            smartSearch.matches($0.title) || smartSearch.matches($0.brand ?? "")
         }
         
         return filteredDishes.foods + filteredProducts.foods
@@ -161,9 +175,8 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
         let frequents = searchAmongFrequent(request)
         let favorites = searchAmongFavorites(request)
         let recents = searchAmongRecent(request)
-        let basicDishes = DSF.shared.searchDishes(by: request).foods
-        let basicProducts = DSF.shared.searchProducts(by: request).foods
-        let foods = frequents + recents + favorites + basicDishes + basicProducts
+        let basicFood = searchAmongAll(request)
+        let foods = frequents + recents + favorites + basicFood
         
         self.foods = foods
         
