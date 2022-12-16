@@ -41,7 +41,7 @@ final class CreateProductViewController: UIViewController {
     private lazy var secondPageFormView = SecondPageFormView()
     private lazy var saveButton = BasicButtonView(type: .save)
     
-    private var bottomConstraints: NSLayoutConstraint?
+    private var firstDraw = true
     
     private var currentPage: Int = 0 {
         didSet {
@@ -55,21 +55,24 @@ final class CreateProductViewController: UIViewController {
         addSubviews()
         setupFistPageConstraints()
         setupSecondPageConstraints()
-        setupKeyboardManager()
         didChangePage()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        guard headerView.frame != .zero else { return }
+        guard headerView.frame != .zero, firstDraw else { return }
         let insets = UIEdgeInsets(
             top: headerView.bounds.height,
             left: 0,
-            bottom: 0,
+            bottom: view.frame.height - (saveButton.frame.minY - 10),
             right: 0
         )
         leftScrollView.contentInset = insets
         rightScrollView.contentInset = insets
+
+        setupKeyboardManager()
+        
+        firstDraw = false
     }
     
     private func setupView() {
@@ -119,16 +122,13 @@ final class CreateProductViewController: UIViewController {
     }
     
     private func setupFistPageConstraints() {
-        bottomConstraints = mainScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        bottomConstraints?.isActive = true
-        
         headerView.snp.makeConstraints { make in
             make.leading.trailing.top.equalToSuperview()
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.top).offset(50)
         }
         
         mainScrollView.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
+            make.top.leading.trailing.bottom.equalToSuperview()
         }
         
         leftScrollView.snp.makeConstraints { make in
@@ -220,7 +220,7 @@ final class CreateProductViewController: UIViewController {
             make.leading.trailing.equalToSuperview().inset(20)
             make.width.equalTo(view).offset(-40)
             make.top.equalTo(servingSizeView.snp.bottom).offset(20)
-            make.bottom.equalToSuperview().offset(-20)
+            make.bottom.equalToSuperview()
         }
     }
     
@@ -308,6 +308,12 @@ final class CreateProductViewController: UIViewController {
     }
 }
 
+extension CreateProductViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        print(scrollView.contentOffset.y)
+    }
+}
+
 extension CreateProductViewController: CreateProductViewControllerInterface {
     func getFormValues() -> [ProductFormSegment: String?] {
         return formsView.values
@@ -367,6 +373,8 @@ extension CreateProductViewController {
         let scrollView = UIScrollView()
         scrollView.showsVerticalScrollIndicator = false
         scrollView.showsHorizontalScrollIndicator = false
+        scrollView.contentInsetAdjustmentBehavior = .never
+        scrollView.delegate = self
         return scrollView
     }
     
@@ -374,6 +382,7 @@ extension CreateProductViewController {
         let scrollView = UIScrollView()
         scrollView.showsVerticalScrollIndicator = false
         scrollView.showsHorizontalScrollIndicator = false
+        scrollView.contentInsetAdjustmentBehavior = .never
         scrollView.isScrollEnabled = false
         return scrollView
     }
