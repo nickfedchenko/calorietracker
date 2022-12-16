@@ -22,6 +22,7 @@ final class CreateProductViewController: UIViewController {
     var presenter: CreateProductPresenterInterface?
     var keyboardManager: KeyboardManagerProtocol?
     
+    private lazy var titleHeaderLabel: UILabel = getTitleHeaderLabel()
     private lazy var titleFirstPageLabel: UILabel = getTitleLabel()
     private lazy var descriptionFirstPageLabel: UILabel = getDescriptionLabel()
     private lazy var titleSecondPageLabel: UILabel = getTitleLabel()
@@ -94,6 +95,7 @@ final class CreateProductViewController: UIViewController {
         view.addSubviews(
             mainScrollView,
             headerView,
+            titleHeaderLabel,
             closeButton,
             backButton,
             saveButton
@@ -125,6 +127,12 @@ final class CreateProductViewController: UIViewController {
         headerView.snp.makeConstraints { make in
             make.leading.trailing.top.equalToSuperview()
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.top).offset(50)
+        }
+        
+        titleHeaderLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(backButton)
+            make.leading.equalTo(backButton.snp.trailing).offset(16)
+            make.trailing.equalTo(closeButton.snp.leading).offset(-16)
         }
         
         mainScrollView.snp.makeConstraints { make in
@@ -251,11 +259,15 @@ final class CreateProductViewController: UIViewController {
     
     private func setupFirstPage() {
         backButton.isHidden = true
+        titleHeaderLabel.text = "Food Creation"
+        titleHeaderLabel.isHidden = checkTitleIsHidden(leftScrollView)
     }
     
     private func setupSecondPage() {
         backButton.isHidden = false
         titleSecondPageLabel.text = firstPageFormView.name
+        titleHeaderLabel.text = firstPageFormView.name
+        titleHeaderLabel.isHidden = checkTitleIsHidden(rightScrollView)
     }
     
     private func checkFirstPage() {
@@ -280,6 +292,10 @@ final class CreateProductViewController: UIViewController {
         }) {
             currentPage = 2
         }
+    }
+    
+    private func checkTitleIsHidden(_ scrollView: UIScrollView) -> Bool {
+        return !(scrollView.contentOffset.y > -50)
     }
     
     private func setupKeyboardManager() {
@@ -310,7 +326,7 @@ final class CreateProductViewController: UIViewController {
 
 extension CreateProductViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        print(scrollView.contentOffset.y)
+        titleHeaderLabel.isHidden = checkTitleIsHidden(scrollView)
     }
 }
 
@@ -424,5 +440,13 @@ extension CreateProductViewController {
             separatorLineHeight: .large
         )
         return view
+    }
+    
+    private func getTitleHeaderLabel() -> UILabel {
+        let label = UILabel()
+        label.font = R.font.sfProDisplaySemibold(size: 17)
+        label.textColor = R.color.foodViewing.basicPrimary()
+        label.textAlignment = .center
+        return label
     }
 }
