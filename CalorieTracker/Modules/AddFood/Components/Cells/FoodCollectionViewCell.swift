@@ -57,10 +57,11 @@ final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
     }()
     
     private let foodView = FoodCellView()
-    private let shadowLayer = CALayer()
+    private let shadowView = ViewWithShadow([
+        ShadowConst.firstShadow,
+        ShadowConst.secondShadow
+    ])
 
-    private var firstDraw = true
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -70,13 +71,6 @@ final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        guard firstDraw else { return }
-        setupShadow()
-        firstDraw = false
     }
     
     override func preferredLayoutAttributesFitting(
@@ -103,7 +97,7 @@ final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
         clipsToBounds = false
         layer.masksToBounds = false
         
-        layer.insertSublayer(shadowLayer, at: 0)
+        shadowView.layer.cornerRadius = 8
         
         foodView.didTapButton = {
             guard let foodType = self.foodType else { return }
@@ -112,10 +106,18 @@ final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
     }
     
     private func addSubviews() {
-        contentView.addSubviews(foodView, bottomLineView)
+        contentView.addSubviews(
+            shadowView,
+            foodView,
+            bottomLineView
+        )
     }
     
     private func setupConstraints() {
+        shadowView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
         foodView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -129,26 +131,14 @@ final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
     private func didChangeCellType() {
         switch cellType {
         case .table:
-            shadowLayer.isHidden = true
+            shadowView.isHidden = true
             bottomLineView.isHidden = false
+            foodView.layer.cornerRadius = 0
         case .withShadow:
-            shadowLayer.isHidden = false
+            shadowView.isHidden = false
             bottomLineView.isHidden = true
+            foodView.layer.cornerRadius = 8
         }
-    }
-    
-    private func setupShadow() {
-        shadowLayer.frame = bounds
-        shadowLayer.addShadow(
-            shadow: ShadowConst.firstShadow,
-            rect: bounds,
-            cornerRadius: 8
-        )
-        shadowLayer.addShadow(
-            shadow: ShadowConst.secondShadow,
-            rect: bounds,
-            cornerRadius: 8
-        )
     }
 }
 

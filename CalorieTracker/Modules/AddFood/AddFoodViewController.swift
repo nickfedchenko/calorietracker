@@ -195,6 +195,15 @@ final class AddFoodViewController: UIViewController {
         
         segmentedControl.onSegmentChanged = { model in
             self.isSelectedType = model.id
+            
+            switch model.id {
+            case .frequent, .recent, .favorites:
+                self.infoButtonsView.isHidden = false
+            case .myMeals, .myRecipes, .myFood:
+                self.infoButtonsView.isHidden = true
+            case .search:
+                break
+            }
         }
         
         searchHistoryViewController.complition = { [weak self] search in

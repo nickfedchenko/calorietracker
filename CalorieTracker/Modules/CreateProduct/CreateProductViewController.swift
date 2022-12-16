@@ -41,6 +41,8 @@ final class CreateProductViewController: UIViewController {
     private lazy var secondPageFormView = SecondPageFormView()
     private lazy var saveButton = BasicButtonView(type: .save)
     
+    private var bottomConstraints: NSLayoutConstraint?
+    
     private var currentPage: Int = 0 {
         didSet {
             didChangePage()
@@ -117,13 +119,16 @@ final class CreateProductViewController: UIViewController {
     }
     
     private func setupFistPageConstraints() {
+        bottomConstraints = mainScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        bottomConstraints?.isActive = true
+        
         headerView.snp.makeConstraints { make in
             make.leading.trailing.top.equalToSuperview()
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.top).offset(50)
         }
         
         mainScrollView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.leading.trailing.equalToSuperview()
         }
         
         leftScrollView.snp.makeConstraints { make in
@@ -278,7 +283,9 @@ final class CreateProductViewController: UIViewController {
     }
     
     private func setupKeyboardManager() {
-        keyboardManager?.bindToKeyboardNotifications(scrollView: mainScrollView)
+        addTapToHideKeyboardGesture()
+        keyboardManager?.bindToKeyboardNotifications(scrollView: leftScrollView)
+        keyboardManager?.bindToKeyboardNotifications(scrollView: rightScrollView)
     }
     
     @objc private func didTapCloseButton() {
@@ -302,7 +309,7 @@ final class CreateProductViewController: UIViewController {
 }
 
 extension CreateProductViewController: CreateProductViewControllerInterface {
-    func getFormValues() -> [ProductFormSegment : String?] {
+    func getFormValues() -> [ProductFormSegment: String?] {
         return formsView.values
     }
     

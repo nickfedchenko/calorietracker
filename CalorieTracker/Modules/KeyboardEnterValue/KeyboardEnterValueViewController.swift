@@ -16,6 +16,7 @@ final class KeyboardEnterValueViewController: UIViewController {
     enum KeyboardEnterValueType {
         case weight(WeightKeyboardHeaderView.ActionType)
         case steps
+        case height
     }
     var needUpdate: (() -> Void)?
     var keyboardManager: KeyboardManagerProtocol = KeyboardManager()
@@ -57,6 +58,8 @@ final class KeyboardEnterValueViewController: UIViewController {
                 }
             case .steps:
                 StepsWidgetService.shared.setDailyStepsGoal(value)
+            case .height:
+                break
             }
             self.needUpdate?()
         }
@@ -90,6 +93,8 @@ final class KeyboardEnterValueViewController: UIViewController {
             return WeightKeyboardHeaderView(actionType)
         case .steps:
             return StepsKeyboardHeaderView()
+        case .height:
+            return HeightKeyboardHeaderView()
         }
     }
 }

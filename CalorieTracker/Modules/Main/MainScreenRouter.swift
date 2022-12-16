@@ -37,7 +37,10 @@ class MainScreenRouter: NSObject {
 extension MainScreenRouter: MainScreenRouterInterface {
     func openSettingsVC() {
         let vc = SettingsRouter.setupModule()
-        viewController?.present(vc, animated: true)
+        viewController?.present(
+            TopDownNavigationController(rootViewController: vc),
+            animated: true
+        )
     }
     
     func openAddFoodVC() {
