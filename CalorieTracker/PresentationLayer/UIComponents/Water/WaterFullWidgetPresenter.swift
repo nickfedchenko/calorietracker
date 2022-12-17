@@ -19,8 +19,6 @@ protocol WaterFullWidgetPresenterInterface: AnyObject {
 class WaterFullWidgetPresenter {
     unowned var view: WaterFullWidgetInterface
     
-    private var valueNow = 1600
-    private var goal = 2000
     private var quickAddTypes: [QuickAddView.TypeQuickAdd] = [
         .bottle(200),
         .jug(1000)
@@ -33,19 +31,21 @@ class WaterFullWidgetPresenter {
 
 extension WaterFullWidgetPresenter: WaterFullWidgetPresenterInterface {
     func getGoal() -> Int {
-        return Int(WaterWidgetService.shared.getDailyWaterGoal())
+        return Int(BAMeasurement(WaterWidgetService.shared.getDailyWaterGoal(), .liquid).localized)
     }
     
     func getValueNow() -> Int {
-        Int(WaterWidgetService.shared.getWaterNow())
+        Int(BAMeasurement(WaterWidgetService.shared.getWaterNow(), .liquid).localized)
     }
     
     func changeGoal(_ newGoal: Int) {
-        WaterWidgetService.shared.setDailyWaterGoal(Double(newGoal))
+        let goal = BAMeasurement(Double(newGoal), .liquid).value
+        WaterWidgetService.shared.setDailyWaterGoal(goal)
     }
     
     func addWater(_ value: Int) {
-        WaterWidgetService.shared.addDailyWater(Double(value))
+        let addValue = BAMeasurement(Double(value), .liquid).value
+        WaterWidgetService.shared.addDailyWater(addValue)
     }
     
     func saveQuickAddTypes(_ types: [QuickAddView.TypeQuickAdd]) {

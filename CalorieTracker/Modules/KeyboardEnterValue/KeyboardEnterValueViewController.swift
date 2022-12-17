@@ -50,11 +50,12 @@ final class KeyboardEnterValueViewController: UIViewController {
         headerView?.didChangeValue = { value in
             switch self.type {
             case .weight(let actionType):
+                let weight = BAMeasurement(value, .weight).value
                 switch actionType {
                 case .add:
-                    WeightWidgetService.shared.addWeight(value)
+                    WeightWidgetService.shared.addWeight(weight)
                 case .set:
-                    WeightWidgetService.shared.setWeightGoal(value)
+                    WeightWidgetService.shared.setWeightGoal(weight)
                 }
             case .steps:
                 StepsWidgetService.shared.setDailyStepsGoal(value)

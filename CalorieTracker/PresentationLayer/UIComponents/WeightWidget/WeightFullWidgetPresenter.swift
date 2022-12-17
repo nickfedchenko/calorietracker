@@ -29,7 +29,10 @@ class WeightFullWidgetPresenter {
         let weightData = WeightWidgetService.shared.getAllWeight()
         let chartData: [(date: Date, weight: CGFloat)] = weightData.compactMap {
             guard let date = $0.day.date else { return nil }
-            return (date: date, weight: CGFloat($0.value))
+            return (
+                date: date,
+                weight: CGFloat(BAMeasurement($0.value, .weight).localized)
+            )
         }
         return chartData
     }
@@ -44,14 +47,14 @@ extension WeightFullWidgetPresenter: WeightFullWidgetPresenterInterface {
         guard let goal = WeightWidgetService.shared.getWeightGoal() else {
             return nil
         }
-        return CGFloat(goal)
+        return CGFloat(BAMeasurement(goal, .weight).localized)
     }
     
     func getNowWeight() -> CGFloat? {
         guard let weightNow = WeightWidgetService.shared.getWeightNow() else {
             return nil
         }
-        return CGFloat(weightNow)
+        return CGFloat(BAMeasurement(weightNow, .weight).localized)
     }
     
     func getStartWeight(period: HistoryHeaderButtonType) -> CGFloat? {
