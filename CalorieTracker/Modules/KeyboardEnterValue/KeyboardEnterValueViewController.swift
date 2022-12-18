@@ -19,15 +19,19 @@ final class KeyboardEnterValueViewController: UIViewController {
         case height
     }
     var needUpdate: (() -> Void)?
+    var complition: ((Double) -> Void)?
     var keyboardManager: KeyboardManagerProtocol = KeyboardManager()
     let type: KeyboardEnterValueType
     
     private var headerView: KeyboardHeaderProtocol?
     private var bottomLayoutConstraint: NSLayoutConstraint?
+    private var enterValue: Double?
     
     init(_ type: KeyboardEnterValueType) {
         self.type = type
         super.init(nibName: nil, bundle: nil)
+        transitioningDelegate = self
+        modalPresentationStyle = .custom
         headerView = getHeaderView()
     }
     
@@ -42,12 +46,22 @@ final class KeyboardEnterValueViewController: UIViewController {
         configureKeyboard()
     }
     
+    override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+        super.dismiss(animated: flag, completion: completion)
+        guard let enterValue = enterValue else {
+            return
+        }
+
+        self.complition?(enterValue)
+    }
+    
     private func setupView() {
         headerView?.didTapClose = {
             self.dismiss(animated: true)
         }
         
         headerView?.didChangeValue = { value in
+            self.enterValue = value
             switch self.type {
             case .weight(let actionType):
                 let weight = BAMeasurement(value, .weight).value
@@ -97,5 +111,19 @@ final class KeyboardEnterValueViewController: UIViewController {
         case .height:
             return HeightKeyboardHeaderView()
         }
+    }
+}
+
+extension KeyboardEnterValueViewController: UIViewControllerTransitioningDelegate {
+    func presentationController(
+        forPresented presented: UIViewController,
+        presenting: UIViewController?,
+        source: UIViewController
+    ) -> UIPresentationController? {
+        WidgetPresentationController(
+            presentedViewController: presented,
+            presenting: presenting,
+            insets: .zero
+        )
     }
 }
