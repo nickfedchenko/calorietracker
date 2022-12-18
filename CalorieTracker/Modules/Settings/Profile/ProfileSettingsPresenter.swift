@@ -9,6 +9,9 @@ import Foundation
 
 protocol ProfileSettingsPresenterInterface: AnyObject {
     func didTapBackButton()
+    func didTapHeightCell(_ complition: @escaping (Double) -> Void)
+    func didTapDateCell(_ complition: @escaping (Date) -> Void)
+    func didTapDietaryCell()
 }
 
 class ProfileSettingsPresenter {
@@ -28,5 +31,21 @@ class ProfileSettingsPresenter {
 extension ProfileSettingsPresenter: ProfileSettingsPresenterInterface {
     func didTapBackButton() {
         router?.closeViewController()
+    }
+    
+    func didTapHeightCell(_ complition: @escaping (Double) -> Void) {
+        router?.openHeightEnterValueViewController { value in
+            complition(value)
+        }
+    }
+    
+    func didTapDateCell(_ complition: @escaping (Date) -> Void) {
+        router?.openDatePickerViewController { date in
+            complition(date)
+        }
+    }
+    
+    func didTapDietaryCell() {
+        router?.openDietaryViewController()
     }
 }

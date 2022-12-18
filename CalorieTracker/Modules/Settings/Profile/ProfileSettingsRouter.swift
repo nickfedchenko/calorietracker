@@ -9,6 +9,9 @@ import UIKit
 
 protocol ProfileSettingsRouterInterface: AnyObject {
     func closeViewController()
+    func openHeightEnterValueViewController(_ complition: @escaping (Double) -> Void)
+    func openDatePickerViewController(_ complition: @escaping (Date) -> Void)
+    func openDietaryViewController()
 }
 
 class ProfileSettingsRouter: NSObject {
@@ -21,6 +24,17 @@ class ProfileSettingsRouter: NSObject {
         let router = ProfileSettingsRouter()
         let presenter = ProfileSettingsPresenter(router: router, view: vc)
         
+        vc.viewModel = .init([
+            .title,
+            .name,
+            .lastName,
+            .city,
+            .sex,
+            .date,
+            .height,
+            .dietary
+        ])
+        vc.keyboardManager = KeyboardManager()
         vc.presenter = presenter
         router.viewController = vc
         router.presenter = presenter
@@ -31,5 +45,25 @@ class ProfileSettingsRouter: NSObject {
 extension ProfileSettingsRouter: ProfileSettingsRouterInterface {
     func closeViewController() {
         viewController?.navigationController?.popViewController(animated: true)
+    }
+    
+    func openHeightEnterValueViewController(_ complition: @escaping (Double) -> Void) {
+        let vc = KeyboardEnterValueViewController(.height)
+        vc.complition = { value in
+            complition(value)
+        }
+        viewController?.present(vc, animated: true)
+    }
+    
+    func openDatePickerViewController(_ complition: @escaping (Date) -> Void) {
+        let vc = DatePickerViewController()
+        vc.date = { date in
+            complition(date)
+        }
+        viewController?.present(vc, animated: true)
+    }
+    
+    func openDietaryViewController() {
+        
     }
 }

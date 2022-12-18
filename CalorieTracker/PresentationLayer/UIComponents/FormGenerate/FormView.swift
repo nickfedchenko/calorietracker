@@ -105,7 +105,7 @@ final class FormView<T: WithGetTitleProtocol>: ViewWithShadow, UITextFieldDelega
         guard let model = model else { return }
         
         textField.placeholder = model.value.getTitle(.long)
-        if model.type != nil {
+        if model.type.getTitle(.long) != nil {
             textField.textAlignment = .right
             setupTextFieldLeftView()
         } else {
