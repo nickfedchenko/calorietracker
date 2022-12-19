@@ -17,6 +17,7 @@ final class UDM {
         case nutritionDailyGoal
         case dailyWaterGoal, dailyStepsGoal
         case isAuthorisedHealthKit, dateHealthKitSync
+        case userData
     }
     
     static var isGloballyMetric: Bool {
@@ -205,6 +206,21 @@ final class UDM {
         set {
             let data = try? JSONEncoder().encode(newValue)
             setValue(value: data, for: .nutritionDailyGoal)
+        }
+    }
+    
+    static var userData: UserData? {
+        get {
+            guard let data: Data = getValue(for: .userData),
+                   let userData = try? JSONDecoder().decode(UserData.self, from: data) else {
+                return nil
+            }
+            return userData
+        }
+        
+        set {
+            let data = try? JSONEncoder().encode(newValue)
+            setValue(value: data, for: .userData)
         }
     }
     
