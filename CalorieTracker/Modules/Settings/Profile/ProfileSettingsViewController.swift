@@ -8,7 +8,12 @@
 import UIKit
 
 protocol ProfileSettingsViewControllerInterface: AnyObject {
-    
+    func getName() -> String?
+    func getLastName() -> String?
+    func getCity() -> String?
+    func getSex() -> String?
+    func getHeight() -> String?
+    func getDate() -> String?
 }
 
 final class ProfileSettingsViewController: UIViewController {
@@ -18,6 +23,8 @@ final class ProfileSettingsViewController: UIViewController {
     
     private lazy var backButton: UIButton = getBackButton()
     private lazy var collectionView: UICollectionView = getCollectionView()
+    private lazy var headerView: UIView = getHeaderView()
+    private lazy var titleHeaderLabel: UILabel = getTitleHeaderLabel()
     private lazy var dateFormatter: DateFormatter = getDateFormatter()
     
     private var firstDraw = true
@@ -36,6 +43,11 @@ final class ProfileSettingsViewController: UIViewController {
         super.viewWillAppear(animated)
         guard let index = viewModel?.getIndexType(.dietary) else { return }
         collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        presenter?.saveUserData()
     }
     
     private func registerCell() {
@@ -61,10 +73,25 @@ final class ProfileSettingsViewController: UIViewController {
     }
     
     private func addSubviews() {
-        view.addSubviews(collectionView, backButton)
+        view.addSubviews(
+            collectionView,
+            backButton,
+            headerView,
+            titleHeaderLabel
+        )
     }
     
     private func setupConstraints() {
+        titleHeaderLabel.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(28)
+            make.bottom.equalTo(headerView.snp.bottom).offset(-8)
+        }
+        
+        headerView.snp.makeConstraints { make in
+            make.leading.trailing.top.equalToSuperview()
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.top).offset(50)
+        }
+        
         backButton.snp.makeConstraints { make in
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-30)
             make.centerX.equalToSuperview()
@@ -75,13 +102,44 @@ final class ProfileSettingsViewController: UIViewController {
         }
     }
     
+    private func getCellText(_ type: ProfileSettingsCategoryType) -> String? {
+        guard let row = viewModel?.getIndexType(type) else { return nil }
+        let cell = collectionView
+            .cellForItem(at: IndexPath(row: row, section: 0))
+        as? SettingsProfileTextFieldCollectionViewCell
+        
+        return cell?.text
+    }
+    
     @objc private func didTapBackButton() {
         presenter?.didTapBackButton()
     }
 }
 
 extension ProfileSettingsViewController: ProfileSettingsViewControllerInterface {
+    func getName() -> String? {
+        getCellText(.name)
+    }
     
+    func getLastName() -> String? {
+        getCellText(.lastName)
+    }
+    
+    func getSex() -> String? {
+        getCellText(.sex)
+    }
+    
+    func getCity() -> String? {
+        getCellText(.city)
+    }
+    
+    func getHeight() -> String? {
+        getCellText(.height)
+    }
+    
+    func getDate() -> String? {
+        getCellText(.date)
+    }
 }
 
 // MARK: - CollectionView FlowLayout
@@ -135,6 +193,10 @@ extension ProfileSettingsViewController: UICollectionViewDelegate {
         default:
             return
         }
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        titleHeaderLabel.isHidden = !(scrollView.contentOffset.y > -75)
     }
 }
 
@@ -196,5 +258,21 @@ extension ProfileSettingsViewController {
         let formatter = DateFormatter()
         formatter.dateFormat = "MMMM d, yyyy"
         return formatter
+    }
+    
+    private func getTitleHeaderLabel() -> UILabel {
+        let label = UILabel()
+        label.text = "PROFILE"
+        label.font = R.font.sfProDisplaySemibold(size: 22)
+        label.textColor = R.color.foodViewing.basicPrimary()
+        label.isHidden = true
+        return label
+    }
+    
+    private func getHeaderView() -> UIView {
+        let blurEffect = UIBlurEffect(style: .light)
+        let view = UIVisualEffectView(effect: blurEffect)
+        view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        return view
     }
 }

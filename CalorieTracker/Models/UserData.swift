@@ -17,7 +17,7 @@ struct UserData: Codable {
     let dietary: UserDietary
 }
 
-enum UserSex: Codable {
+enum UserSex: String, Codable {
     case male
     case famale
 }

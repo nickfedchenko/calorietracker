@@ -36,11 +36,33 @@ struct SettingsProfileViewModel {
         case .title:
             let cell: SettingsProfileHeaderCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
             cell.type = type
-            cell.title = "Profile"
+            cell.title = "PROFILE"
             return cell
         default:
             let cell: SettingsProfileTextFieldCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
             cell.viewModel = getCategoryCellViewModel(type)
+            cell.text = {
+                switch type {
+                case .name:
+                    return presenter?.getUserData()?.name
+                case .lastName:
+                    return presenter?.getUserData()?.lastName
+                case .city:
+                    return presenter?.getUserData()?.city
+                case .sex:
+                    return presenter?.getUserData()?.sex.getTitle(.long)
+                case .date:
+                    guard let date = presenter?.getUserData()?.dateOfBirth else { return nil }
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "MMMM d, yyyy"
+                    return dateFormatter.string(from: date)
+                case .height:
+                    guard let value = presenter?.getUserData()?.height else { return nil }
+                    return BAMeasurement(value, .lenght).string
+                default:
+                    return nil
+                }
+            }()
             cell.type = type
             return cell
         }
@@ -150,6 +172,17 @@ struct SettingsProfileViewModel {
             return R.image.settings.dietaryVegetarian()
         case .vegan:
             return R.image.settings.dietaryVegan()
+        }
+    }
+}
+
+extension UserSex: WithGetTitleProtocol {
+    func getTitle(_ lenght: Lenght) -> String? {
+        switch self {
+        case .male:
+            return "Male"
+        case .famale:
+            return "Famale"
         }
     }
 }
