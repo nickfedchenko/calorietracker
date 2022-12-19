@@ -12,6 +12,7 @@ protocol ProfileSettingsPresenterInterface: AnyObject {
     func didTapHeightCell(_ complition: @escaping (Double) -> Void)
     func didTapDateCell(_ complition: @escaping (Date) -> Void)
     func didTapDietaryCell()
+    func getUserData() -> UserData?
 }
 
 class ProfileSettingsPresenter {
@@ -47,5 +48,9 @@ extension ProfileSettingsPresenter: ProfileSettingsPresenterInterface {
     
     func didTapDietaryCell() {
         router?.openDietaryViewController()
+    }
+    
+    func getUserData() -> UserData? {
+        UDM.userData
     }
 }

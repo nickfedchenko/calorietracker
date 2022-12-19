@@ -23,17 +23,21 @@ class ProfileSettingsRouter: NSObject {
         let vc = ProfileSettingsViewController()
         let router = ProfileSettingsRouter()
         let presenter = ProfileSettingsPresenter(router: router, view: vc)
+        let viewModel = SettingsProfileViewModel(
+            types: [
+                .title,
+                .name,
+                .lastName,
+                .city,
+                .sex,
+                .date,
+                .height,
+                .dietary
+            ],
+            presenter: presenter
+        )
         
-        vc.viewModel = .init([
-            .title,
-            .name,
-            .lastName,
-            .city,
-            .sex,
-            .date,
-            .height,
-            .dietary
-        ])
+        vc.viewModel = viewModel
         vc.keyboardManager = KeyboardManager()
         vc.presenter = presenter
         router.viewController = vc
@@ -64,6 +68,7 @@ extension ProfileSettingsRouter: ProfileSettingsRouterInterface {
     }
     
     func openDietaryViewController() {
-        
+        let vc = DietarySettingsRouter.setupModule()
+        viewController?.navigationController?.pushViewController(vc, animated: true)
     }
 }

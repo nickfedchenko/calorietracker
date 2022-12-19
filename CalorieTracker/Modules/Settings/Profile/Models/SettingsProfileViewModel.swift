@@ -9,11 +9,15 @@ import UIKit
 
 struct SettingsProfileViewModel {
     private let profileCategoryType: [ProfileSettingsCategoryType]
-    
+    private var presenter: ProfileSettingsPresenterInterface?
     var needUpadate: (() -> Void)?
     
-    init(_ profileCategoryType: [ProfileSettingsCategoryType]) {
+    init(
+        types profileCategoryType: [ProfileSettingsCategoryType],
+        presenter: ProfileSettingsPresenterInterface? = nil
+    ) {
         self.profileCategoryType = profileCategoryType
+        self.presenter = presenter
     }
     
     func numberOfItemsInSection() -> Int {
@@ -60,14 +64,20 @@ struct SettingsProfileViewModel {
         profileCategoryType[safe: indexPath.row]
     }
     
+    func getIndexType(_ type: ProfileSettingsCategoryType) -> Int? {
+        profileCategoryType.firstIndex(of: type)
+    }
+    
     private func getDietaryCellViewModel() -> SettingsCategoryCellViewModel {
-        .init(
+        let dietary = presenter?.getUserData()?.dietary ?? .classic
+        
+        return .init(
             title: "Dietary Preference",
             description: nil,
             titleColor: R.color.foodViewing.basicDark(),
             descriptionColor: nil,
-            image: R.image.settings.goals(),
-            imageBackgroundColor: R.color.settings.goals(),
+            image: getImageForDietaryCell(dietary),
+            imageBackgroundColor: getColorForDietaryCell(dietary),
             remindersCount: 0
         )
     }
@@ -114,6 +124,32 @@ struct SettingsProfileViewModel {
             )
         default:
             return nil
+        }
+    }
+    
+    private func getColorForDietaryCell(_ dietary: UserDietary) -> UIColor? {
+        switch dietary {
+        case .classic:
+            return R.color.settings.dietaryClassic()
+        case .pescatarian:
+            return R.color.settings.dietaryPescatarian()
+        case .vegetarian:
+            return R.color.settings.dietaryVegetarian()
+        case .vegan:
+            return R.color.settings.dietaryVegan()
+        }
+    }
+    
+    private func getImageForDietaryCell(_ dietary: UserDietary) -> UIImage? {
+        switch dietary {
+        case .classic:
+            return R.image.settings.dietaryClassic()
+        case .pescatarian:
+            return R.image.settings.dietaryPescatarian()
+        case .vegetarian:
+            return R.image.settings.dietaryVegetarian()
+        case .vegan:
+            return R.image.settings.dietaryVegan()
         }
     }
 }

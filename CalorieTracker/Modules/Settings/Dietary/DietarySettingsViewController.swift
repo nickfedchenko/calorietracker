@@ -1,52 +1,35 @@
 //
-//  ProfileSettingsViewController.swift
+//  DietarySettingsViewController.swift
 //  CalorieTracker
 //
-//  Created by Vadim Aleshin on 16.12.2022.
+//  Created by Vadim Aleshin on 19.12.2022.
 //
 
 import UIKit
 
-protocol ProfileSettingsViewControllerInterface: AnyObject {
+protocol DietarySettingsViewControllerInterface: AnyObject {
     
 }
 
-final class ProfileSettingsViewController: UIViewController {
-    var presenter: ProfileSettingsPresenterInterface?
-    var viewModel: SettingsProfileViewModel?
-    var keyboardManager: KeyboardManagerProtocol?
+final class DietarySettingsViewController: UIViewController {
+    var presenter: DietarySettingsPresenterInterface?
+    var viewModel: DietarySettingsViewModel?
     
     private lazy var backButton: UIButton = getBackButton()
     private lazy var collectionView: UICollectionView = getCollectionView()
-    private lazy var dateFormatter: DateFormatter = getDateFormatter()
-    
-    private var firstDraw = true
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         registerCell()
         setupView()
-        setupKeyboard()
         addSubviews()
         setupConstraints()
-        addTapToHideKeyboardGesture()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        guard let index = viewModel?.getIndexType(.dietary) else { return }
-        collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
     }
     
     private func registerCell() {
-        collectionView.register(SettingsProfileTextFieldCollectionViewCell.self)
         collectionView.register(SettingsCategoryCollectionViewCell.self)
         collectionView.register(SettingsProfileHeaderCollectionViewCell.self)
         collectionView.register(UICollectionViewCell.self)
-    }
-    
-    private func setupKeyboard() {
-        keyboardManager?.bindToKeyboardNotifications(scrollView: collectionView)
     }
     
     private func setupView() {
@@ -80,13 +63,13 @@ final class ProfileSettingsViewController: UIViewController {
     }
 }
 
-extension ProfileSettingsViewController: ProfileSettingsViewControllerInterface {
+extension DietarySettingsViewController: DietarySettingsViewControllerInterface {
     
 }
 
 // MARK: - CollectionView FlowLayout
 
-extension ProfileSettingsViewController: UICollectionViewDelegateFlowLayout {
+extension DietarySettingsViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -99,48 +82,47 @@ extension ProfileSettingsViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 8
+        return 16
     }
 }
 
 // MARK: - CollectionView Delegate
 
-extension ProfileSettingsViewController: UICollectionViewDelegate {
+extension DietarySettingsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let type = viewModel?.getTypeCell(indexPath) else {
-            return
-        }
+        guard let type = viewModel?.getTypeCell(indexPath),
+              type != .title,
+              let cell = collectionView.cellForItem(at: indexPath)
+                as? SettingsCategoryCollectionViewCell
+        else { return }
         
-        switch type {
-        case .sex:
-            break
-        case .date:
-            guard let cell = collectionView.cellForItem(at: indexPath)
-                    as? SettingsProfileTextFieldCollectionViewCell else {
-                return
-            }
-            presenter?.didTapDateCell { date in
-                cell.text = self.dateFormatter.string(from: date)
-            }
-        case .height:
-            guard let cell = collectionView.cellForItem(at: indexPath)
-                    as? SettingsProfileTextFieldCollectionViewCell else {
-                return
-            }
-            presenter?.didTapHeightCell { value in
-                cell.text = BAMeasurement(value, .lenght).string
-            }
-        case .dietary:
-            presenter?.didTapDietaryCell()
-        default:
-            return
-        }
+        presenter?.saveDietary(
+            {
+                switch type {
+                case .title:
+                    return .classic
+                case .classic:
+                    return .classic
+                case .pescatarian:
+                    return .pescatarian
+                case .vegetarian:
+                    return .vegetarian
+                case .vegan:
+                    return .vegan
+                }
+            }()
+        )
+        
+        self.collectionView
+            .visibleCells
+            .compactMap { $0 as? SettingsCategoryCollectionViewCell }
+            .forEach { $0.cellState = $0 == cell ? .isSelected : .isNotSelected }
     }
 }
 
 // MARK: - CollectionView DataSource
 
-extension ProfileSettingsViewController: UICollectionViewDataSource {
+extension DietarySettingsViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModel?.numberOfItemsInSection() ?? 0
     }
@@ -155,12 +137,12 @@ extension ProfileSettingsViewController: UICollectionViewDataSource {
 
 // MARK: - Factory
 
-extension ProfileSettingsViewController {
+extension DietarySettingsViewController {
     private func getBackButton() -> UIButton {
         let button = UIButton()
         button.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
         button.setAttributedTitle(
-            "PREFERENCES".attributedSring(
+            "PROFILE".attributedSring(
                 [
                     StringSettingsModel(
                         worldIndex: [0],
@@ -190,11 +172,5 @@ extension ProfileSettingsViewController {
         collectionView.clipsToBounds = false
         collectionView.layer.masksToBounds = false
         return collectionView
-    }
-    
-    private func getDateFormatter() -> DateFormatter {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMMM d, yyyy"
-        return formatter
     }
 }
