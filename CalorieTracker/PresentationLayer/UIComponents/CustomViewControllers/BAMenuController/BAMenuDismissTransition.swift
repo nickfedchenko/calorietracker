@@ -20,7 +20,7 @@ class BAMenuDismissTransition: NSObject, UIViewControllerAnimatedTransitioning {
         UIView.animate(withDuration: transitionDuration(using: transitionContext),
                        delay: 0,
                        options: .curveEaseInOut) {
-            fromView.alpha = 0
+            fromView.alpha = 0.8
         } completion: { _ in
             fromView.removeFromSuperview()
             transitionContext.completeTransition(true)

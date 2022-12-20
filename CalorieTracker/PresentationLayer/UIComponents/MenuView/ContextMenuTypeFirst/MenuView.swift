@@ -7,8 +7,9 @@
 
 import UIKit
 
-final class MenuView<ID: WithGetTitleProtocol & WithGetImageProtocol>: UIView {    
+final class MenuView<ID: WithGetTitleProtocol & WithGetImageProtocol>: ViewWithShadow, MenuViewProtocol {
     var complition: ((ID) -> Void)?
+    var didClose: (() -> Void)?
     
     private lazy var stackView: UIStackView = {
         let stack = UIStackView()
@@ -17,16 +18,11 @@ final class MenuView<ID: WithGetTitleProtocol & WithGetImageProtocol>: UIView {
         return stack
     }()
     
-    private var firstDraw = true
-    private var zeroHeightAnchor: NSLayoutConstraint?
-    private var zeroHeightAnchors: [NSLayoutConstraint] = []
-    private var shadowLayer = CALayer()
-    
     let model: [ID]
     
     init(_ model: [ID]) {
         self.model = model
-        super.init(frame: .zero)
+        super.init([ShadowConst.firstShadow, ShadowConst.secondShadow])
         setupView()
         addSubviews()
         setupConstraints()
@@ -35,13 +31,6 @@ final class MenuView<ID: WithGetTitleProtocol & WithGetImageProtocol>: UIView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        guard firstDraw else { return }
-        setupShadow()
-        firstDraw = false
     }
     
     func closeNotAnimate() {
@@ -66,6 +55,7 @@ final class MenuView<ID: WithGetTitleProtocol & WithGetImageProtocol>: UIView {
         shadowLayer.isHidden = true
         if index == -1 {
             isHidden = true
+            didClose?()
             return
         } else {
             UIView.animate(withDuration: 0.08, delay: 0, options: .curveEaseInOut) {
@@ -107,12 +97,9 @@ final class MenuView<ID: WithGetTitleProtocol & WithGetImageProtocol>: UIView {
     }
     
     private func setupConstraints() {
-        zeroHeightAnchor = self.heightAnchor.constraint(equalToConstant: 0)
-        
         stackView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(12)
         }
-        
     }
     
     private func configureStack() {
@@ -128,22 +115,7 @@ final class MenuView<ID: WithGetTitleProtocol & WithGetImageProtocol>: UIView {
             }
             
             stackView.addArrangedSubview(menuCellView)
-            zeroHeightAnchors.append(menuCellView.heightAnchor.constraint(equalToConstant: 0))
         }
-    }
-    
-    private func setupShadow() {
-        shadowLayer.frame = bounds
-        shadowLayer.addShadow(
-            shadow: ShadowConst.firstShadow,
-            rect: bounds,
-            cornerRadius: layer.cornerRadius
-        )
-        shadowLayer.addShadow(
-            shadow: ShadowConst.secondShadow,
-            rect: bounds,
-            cornerRadius: layer.cornerRadius
-        )
     }
     
     @objc private func didSelectedCell(_ sender: UIControl) {

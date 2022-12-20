@@ -8,6 +8,8 @@
 import UIKit
 
 final class BAMenuPresentationController: UIPresentationController {
+    
+    var handleTapView: (() -> Void)?
 
     private lazy var dimmView: UIView = {
         let view = UIView()
@@ -31,7 +33,7 @@ final class BAMenuPresentationController: UIPresentationController {
     init(
         presentedViewController: UIViewController,
         presenting: UIViewController?,
-        frame: CGRect
+        controllerFrame frame: CGRect
     ) {
         self.controllerFrame = frame
         super.init(
@@ -56,12 +58,12 @@ final class BAMenuPresentationController: UIPresentationController {
         dimmView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        
+
         presentedView.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(controllerFrame.origin.x)
+            make.top.equalToSuperview().offset(controllerFrame.origin.y)
             make.height.equalTo(controllerFrame.height)
             make.width.equalTo(controllerFrame.width)
-            make.left.equalToSuperview().offset(controllerFrame.origin.x)
-            make.top.equalToSuperview().offset(controllerFrame.origin.y)
         }
     }
 
@@ -92,6 +94,6 @@ final class BAMenuPresentationController: UIPresentationController {
     }
 
     @objc private func handleTap(_ sender: UITapGestureRecognizer) {
-        presentingViewController.dismiss(animated: true)
+        handleTapView?()
     }
 }

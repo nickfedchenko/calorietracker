@@ -7,16 +7,29 @@
 
 import UIKit
 
+protocol MenuViewProtocol: UIView {
+    func closeNotAnimate()
+    func showAndCloseView(_ flag: Bool)
+    var didClose: (() -> Void)? { get set }
+}
+
 class BAMenuController: UIViewController {
-    private let menuView: UIView
-    private let frame: CGRect
+    private let menuView: MenuViewProtocol
+    private let width: CGFloat
+    private let anchorPoint: CGPoint
+    private var controllerFrame: CGRect?
     
-    init(_ view: UIView, frame: CGRect) {
+    private var firstDraw = true
+    
+    init(_ view: MenuViewProtocol, width: CGFloat, anchorPoint: CGPoint) {
         self.menuView = view
-        self.frame = frame
+        self.width = width
+        self.anchorPoint = anchorPoint
         super.init(nibName: nil, bundle: nil)
         transitioningDelegate = self
         modalPresentationStyle = .custom
+        
+        self.controllerFrame = getViewFrame()
     }
     
     required init?(coder: NSCoder) {
@@ -28,12 +41,44 @@ class BAMenuController: UIViewController {
         setupView()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        guard firstDraw else { return }
+        firstDraw = false
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        menuView.closeNotAnimate()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        menuView.showAndCloseView(true)
+    }
+    
     private func setupView() {
+        menuView.isHidden = true
+        menuView.didClose = {
+            self.dismiss(animated: true)
+        }
+        
         view.addSubview(menuView)
         
         menuView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.leading.trailing.equalToSuperview()
         }
+    }
+    
+    private func getViewFrame() -> CGRect {
+        CGRect(
+            origin: anchorPoint,
+            size: menuView.systemLayoutSizeFitting(
+                CGSize(width: width, height: .leastNormalMagnitude),
+                withHorizontalFittingPriority: .required,
+                verticalFittingPriority: .defaultLow
+            )
+        )
     }
 }
 
@@ -43,11 +88,17 @@ extension BAMenuController: UIViewControllerTransitioningDelegate {
         presenting: UIViewController?,
         source: UIViewController
     ) -> UIPresentationController? {
-        BAMenuPresentationController(
+        let presentationController = BAMenuPresentationController(
             presentedViewController: presented,
             presenting: presenting,
-            frame: self.frame
+            controllerFrame: self.controllerFrame ?? .zero
         )
+        
+        presentationController.handleTapView = {
+            self.menuView.showAndCloseView(false)
+        }
+        
+        return presentationController
     }
     
     func animationController(
@@ -55,7 +106,7 @@ extension BAMenuController: UIViewControllerTransitioningDelegate {
         presenting _: UIViewController,
         source _: UIViewController
     ) -> UIViewControllerAnimatedTransitioning? {
-        BAMenuPresentTransition()
+        BAMenuPresentTransition(self.controllerFrame ?? .zero)
     }
 
     func animationController(

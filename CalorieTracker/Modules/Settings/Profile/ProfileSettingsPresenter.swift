@@ -56,25 +56,29 @@ extension ProfileSettingsPresenter: ProfileSettingsPresenterInterface {
     }
     
     func saveUserData() {
-//        let oldUserData = UDM.userData
-//        let dateFormatter = DateFormatter()
-//        
-//        let newDate = dateFormatter.date(from: view.getDate() ?? "")
-//        let newHeight = Double(view.getHeight()?.split(separator: " ").first ?? "")
-//        let newSexStr = view.getSex() ?? ""
-//        let newSex = UserSex.allCases.first(where: { $0.rawValue == newSexStr })
-//        
-//        let newUserData: UserData = .init(
-//            name: view.getName() ?? oldUserData?.name ?? "",
-//            lastName: view.getLastName(),
-//            city: view.getCity(),
-//            sex: newSex ?? oldUserData?.sex,
-//            dateOfBirth: newDate ?? oldUserData?.dateOfBirth ?? Date(),
-//            height: newHeight ?? oldUserData?.height ?? 0,
-//            dietary: oldUserData?.dietary ?? .classic
-//        )
-//        
-//        UDM.userData = newUserData
+        let oldUserData = UDM.userData
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMMM d, yyyy"
+
+        let newDate = dateFormatter.date(from: view.getDate() ?? "")
+        let newHeight = Double(view.getHeight()?.split(separator: " ").first ?? "")
+        let newSexStr = view.getSex() ?? ""
+        let newSex = UserSex.allCases.first(where: { $0.rawValue == newSexStr.lowercased() })
+        let newCity = view.getCity()
+        let newLastName = view.getLastName()
+        let newName = view.getName() ?? oldUserData?.name
+        
+        let newUserData = UserData(
+            name: newName ?? "",
+            lastName: newLastName,
+            city: newCity,
+            sex: newSex ?? .male,
+            dateOfBirth: newDate ?? Date(),
+            height: newHeight ?? 0,
+            dietary: oldUserData?.dietary ?? .classic
+        )
+
+        UDM.userData = newUserData
     }
 }
 

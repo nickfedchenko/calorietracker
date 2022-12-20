@@ -8,8 +8,15 @@
 import UIKit
 
 class BAMenuPresentTransition: NSObject, UIViewControllerAnimatedTransitioning {
+    
+    private let frame: CGRect
+    
+    init(_ frame: CGRect) {
+        self.frame = frame
+    }
+    
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return 0.4
+        return 0.2
     }
     
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
@@ -20,16 +27,14 @@ class BAMenuPresentTransition: NSObject, UIViewControllerAnimatedTransitioning {
             return
         }
         
-        var toViewInitialFrame = fromController.view.frame
-        toViewInitialFrame.size.height = .zero
-        
-        toView.frame = toViewInitialFrame
+        toView.frame = fromController.view.frame
+        toView.alpha = 0.8
         container.addSubview(toView)
         
         UIView.animate(withDuration: transitionDuration(using: transitionContext),
                        delay: 0,
                        options: .curveEaseInOut) {
-            toView.frame = fromController.view.frame
+            toView.alpha = 1
         } completion: { _ in
             transitionContext.completeTransition(true)
         }
