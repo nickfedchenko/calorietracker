@@ -6,8 +6,8 @@
 //  Copyright © 2022 Mov4D. All rights reserved.
 //
 
-import UIKit
 import SafariServices
+import UIKit
 
 protocol SettingsRouterInterface: AnyObject {
     func openChatViewController()
@@ -93,7 +93,8 @@ extension SettingsRouter: SettingsRouterInterface {
     }
     
     func openGoalsViewController() {
-        
+        let vc = GoalsSettingsRouter.setupModule()
+        viewController?.navigationController?.pushViewController(vc, animated: true)
     }
     
     func openRemindersViewController() {

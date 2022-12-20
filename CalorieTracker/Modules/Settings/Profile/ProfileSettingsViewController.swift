@@ -8,12 +8,10 @@
 import UIKit
 
 protocol ProfileSettingsViewControllerInterface: AnyObject {
-    func getName() -> String?
-    func getLastName() -> String?
-    func getCity() -> String?
-    func getSex() -> String?
-    func getHeight() -> String?
-    func getDate() -> String?
+    func updateCell(_ type: ProfileSettingsCategoryType)
+    func getNameStr() -> String?
+    func getLastNameStr() -> String?
+    func getCityStr() -> String?
 }
 
 final class ProfileSettingsViewController: UIViewController {
@@ -25,7 +23,10 @@ final class ProfileSettingsViewController: UIViewController {
     private lazy var collectionView: UICollectionView = getCollectionView()
     private lazy var headerView: UIView = getHeaderView()
     private lazy var titleHeaderLabel: UILabel = getTitleHeaderLabel()
-    private lazy var dateFormatter: DateFormatter = getDateFormatter()
+    
+    private lazy var userSexMenuView: MenuView<UserSex> = getUserSexMenuView()
+    
+    private var userSexMenuController: BAMenuController?
     
     private var firstDraw = true
     
@@ -33,21 +34,28 @@ final class ProfileSettingsViewController: UIViewController {
         super.viewDidLoad()
         registerCell()
         setupView()
-        setupKeyboard()
         addSubviews()
         setupConstraints()
         addTapToHideKeyboardGesture()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        guard firstDraw, backButton.frame != .zero else { return }
+        collectionView.contentInset = .init(
+            top: 76,
+            left: 0,
+            bottom: view.frame.height - backButton.frame.minY - view.safeAreaInsets.bottom,
+            right: 0
+        )
+        setupKeyboard()
+        firstDraw = false
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         guard let index = viewModel?.getIndexType(.dietary) else { return }
         collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        presenter?.saveUserData()
     }
     
     private func registerCell() {
@@ -64,12 +72,11 @@ final class ProfileSettingsViewController: UIViewController {
     private func setupView() {
         view.backgroundColor = R.color.mainBackground()
         
-        collectionView.contentInset = .init(
-            top: 76,
-            left: 0,
-            bottom: 0,
-            right: 0
-        )
+        userSexMenuController = .init(userSexMenuView, width: 200)
+        
+        userSexMenuView.complition = { userSex in
+            self.presenter?.setUserSex(userSex)
+        }
     }
     
     private func addSubviews() {
@@ -111,34 +118,36 @@ final class ProfileSettingsViewController: UIViewController {
         return cell?.text
     }
     
+    private func showUserSexMenu(_ point: CGPoint) {
+        guard let userSexMenuController = userSexMenuController else {
+            return
+        }
+        userSexMenuController.anchorPoint = point
+
+        present(userSexMenuController, animated: true)
+    }
+    
     @objc private func didTapBackButton() {
         presenter?.didTapBackButton()
     }
 }
 
 extension ProfileSettingsViewController: ProfileSettingsViewControllerInterface {
-    func getName() -> String? {
-        getCellText(.name)
+    func updateCell(_ type: ProfileSettingsCategoryType) {
+        guard let row = viewModel?.getIndexType(type) else { return }
+        collectionView.reloadItems(at: [IndexPath(row: row, section: 0)])
     }
     
-    func getLastName() -> String? {
-        getCellText(.lastName)
-    }
-    
-    func getSex() -> String? {
-        getCellText(.sex)
-    }
-    
-    func getCity() -> String? {
+    func getCityStr() -> String? {
         getCellText(.city)
     }
     
-    func getHeight() -> String? {
-        getCellText(.height)
+    func getNameStr() -> String? {
+        getCellText(.name)
     }
     
-    func getDate() -> String? {
-        getCellText(.date)
+    func getLastNameStr() -> String? {
+        getCellText(.lastName)
     }
 }
 
@@ -165,29 +174,20 @@ extension ProfileSettingsViewController: UICollectionViewDelegateFlowLayout {
 
 extension ProfileSettingsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let type = viewModel?.getTypeCell(indexPath) else {
+        guard let type = viewModel?.getTypeCell(indexPath),
+               let cell = collectionView.cellForItem(at: indexPath) else {
             return
         }
+        let rect = collectionView.convert(cell.frame, to: view)
+        let anchorPoint = CGPoint(x: view.frame.width - 20, y: rect.midY)
         
         switch type {
         case .sex:
-            break
+            showUserSexMenu(anchorPoint)
         case .date:
-            guard let cell = collectionView.cellForItem(at: indexPath)
-                    as? SettingsProfileTextFieldCollectionViewCell else {
-                return
-            }
-            presenter?.didTapDateCell { date in
-                cell.text = self.dateFormatter.string(from: date)
-            }
+            presenter?.didTapDateCell()
         case .height:
-            guard let cell = collectionView.cellForItem(at: indexPath)
-                    as? SettingsProfileTextFieldCollectionViewCell else {
-                return
-            }
-            presenter?.didTapHeightCell { value in
-                cell.text = BAMeasurement(value, .lenght).string
-            }
+            presenter?.didTapHeightCell()
         case .dietary:
             presenter?.didTapDietaryCell()
         default:
@@ -196,7 +196,12 @@ extension ProfileSettingsViewController: UICollectionViewDelegate {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        titleHeaderLabel.isHidden = !(scrollView.contentOffset.y > -75)
+        guard let row = viewModel?.getIndexType(.title),
+              let cell = collectionView.cellForItem(at: IndexPath(row: row, section: 0)) else {
+            return
+        }
+        let frameCell = collectionView.convert(cell.frame, to: view)
+        titleHeaderLabel.isHidden = frameCell.maxY > headerView.frame.maxY
     }
 }
 
@@ -227,14 +232,14 @@ extension ProfileSettingsViewController {
                     StringSettingsModel(
                         worldIndex: [0],
                         attributes: [
-                            .font(R.font.sfProDisplaySemibold(size: 22)),
+                            .font(R.font.sfProDisplaySemibold(size: 22.fontScale())),
                             .color(R.color.foodViewing.basicGrey())
                         ]
                     )
                 ],
                 image: .init(
                     image: R.image.settings.leftChevron(),
-                    font: R.font.sfProDisplaySemibold(size: 22),
+                    font: R.font.sfProDisplaySemibold(size: 22.fontScale()),
                     position: .left
                 )
             ),
@@ -251,19 +256,15 @@ extension ProfileSettingsViewController {
         collectionView.backgroundColor = .clear
         collectionView.clipsToBounds = false
         collectionView.layer.masksToBounds = false
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.showsHorizontalScrollIndicator = false
         return collectionView
-    }
-    
-    private func getDateFormatter() -> DateFormatter {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMMM d, yyyy"
-        return formatter
     }
     
     private func getTitleHeaderLabel() -> UILabel {
         let label = UILabel()
         label.text = "PROFILE"
-        label.font = R.font.sfProDisplaySemibold(size: 22)
+        label.font = R.font.sfProDisplaySemibold(size: 22.fontScale())
         label.textColor = R.color.foodViewing.basicPrimary()
         label.isHidden = true
         return label
@@ -274,5 +275,9 @@ extension ProfileSettingsViewController {
         let view = UIVisualEffectView(effect: blurEffect)
         view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         return view
+    }
+    
+    private func getUserSexMenuView() -> MenuView<UserSex> {
+        MenuView<UserSex>([.male, .famale])
     }
 }

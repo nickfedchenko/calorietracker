@@ -44,21 +44,17 @@ struct SettingsProfileViewModel {
             cell.text = {
                 switch type {
                 case .name:
-                    return presenter?.getUserData()?.name
+                    return presenter?.getNameStr()
                 case .lastName:
-                    return presenter?.getUserData()?.lastName
+                    return presenter?.getLastNameStr()
                 case .city:
-                    return presenter?.getUserData()?.city
+                    return presenter?.getCityStr()
                 case .sex:
-                    return presenter?.getUserData()?.sex.getTitle(.long)
+                    return presenter?.getUserSexStr()
                 case .date:
-                    guard let date = presenter?.getUserData()?.dateOfBirth else { return nil }
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "MMMM d, yyyy"
-                    return dateFormatter.string(from: date)
+                    return presenter?.getDateStr()
                 case .height:
-                    guard let value = presenter?.getUserData()?.height else { return nil }
-                    return BAMeasurement(value, .lenght).string
+                    return presenter?.getHeightStr()
                 default:
                     return nil
                 }
@@ -91,7 +87,7 @@ struct SettingsProfileViewModel {
     }
     
     private func getDietaryCellViewModel() -> SettingsCategoryCellViewModel {
-        let dietary = presenter?.getUserData()?.dietary ?? .classic
+        let dietary = presenter?.getDietary() ?? .classic
         
         return .init(
             title: "Dietary Preference",
@@ -172,17 +168,6 @@ struct SettingsProfileViewModel {
             return R.image.settings.dietaryVegetarian()
         case .vegan:
             return R.image.settings.dietaryVegan()
-        }
-    }
-}
-
-extension UserSex: WithGetTitleProtocol {
-    func getTitle(_ lenght: Lenght) -> String? {
-        switch self {
-        case .male:
-            return "Male"
-        case .famale:
-            return "Famale"
         }
     }
 }

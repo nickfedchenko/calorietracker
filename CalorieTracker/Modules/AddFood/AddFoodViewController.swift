@@ -101,13 +101,7 @@ final class AddFoodViewController: UIViewController {
         guard firstDraw, keyboardHeaderView.frame != .zero else { return }
         setupShadow()
         configureKeyboardManager()
-        
-        menuMealController = BAMenuController(
-            menuMealView,
-            width: 200.fontScale(),
-            anchorPoint: menuButton.frame.origin
-        )
-        
+        menuMealController?.anchorPoint = menuButton.frame.origin
         firstDraw = false
     }
     
@@ -173,6 +167,8 @@ final class AddFoodViewController: UIViewController {
             
             FDS.shared.rememberSearchQuery(text)
         }
+        
+        menuMealController = .init(menuMealView, width: 200)
         
         menuButton.configure(Const.menuModels.first)
         menuButton.completion = { [weak self] complition in

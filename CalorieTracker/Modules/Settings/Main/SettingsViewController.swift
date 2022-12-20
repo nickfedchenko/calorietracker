@@ -20,8 +20,9 @@ final class SettingsViewController: UIViewController {
     private lazy var collectionView: UICollectionView = getCollectionView()
     private lazy var shareButton: UIButton = getShareButton()
     private lazy var premiumButton: PremiumButton = getPremiumButton()
-    
     private lazy var logoView: LogoView = .init(frame: .zero)
+    
+    private var firstDraw = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +31,18 @@ final class SettingsViewController: UIViewController {
         addSubviews()
         setupConstraints()
         presenter?.updateViewController()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        guard firstDraw, closeButton.frame != .zero else { return }
+        collectionView.contentInset = .init(
+            top: 5,
+            left: 0,
+            bottom: view.frame.height - closeButton.frame.minY - view.safeAreaInsets.bottom,
+            right: 0
+        )
+        firstDraw = false
     }
     
     private func setupView() {
@@ -166,8 +179,8 @@ extension SettingsViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.backgroundColor = .clear
-        collectionView.clipsToBounds = false
-        collectionView.layer.masksToBounds = false
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.showsHorizontalScrollIndicator = false
         return collectionView
     }
     

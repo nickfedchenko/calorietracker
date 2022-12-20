@@ -52,7 +52,7 @@ extension ProfileSettingsRouter: ProfileSettingsRouterInterface {
     }
     
     func openHeightEnterValueViewController(_ complition: @escaping (Double) -> Void) {
-        let vc = KeyboardEnterValueViewController(.height)
+        let vc = KeyboardEnterValueViewController(.standart("HEIGHT"))
         vc.complition = { value in
             complition(value)
         }
