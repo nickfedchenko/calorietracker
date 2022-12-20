@@ -22,7 +22,11 @@ class RecipesScreenViewController: UIViewController {
     
     private let selectorView = CTRecipesScreenSelector()
     
-    lazy var selectorHeightConstant: CGFloat = 48
+    lazy var selectorHeightConstant: CGFloat = 48 {
+        didSet {
+            print("Selector height changed \(selectorHeightConstant)")
+        }
+    }
     var isHeaderCurrentlyAnimation: Bool = false
     
     let header = CTRecipesScreenHeader()
@@ -125,6 +129,11 @@ class RecipesScreenViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         print("Safe area top inset \(view.safeAreaInsets.top)")
+        guard
+            !isFirstLayout else {
+            isFirstLayout = false
+            return
+        }
     }
     
     func updateTopViewHeight() {
@@ -216,11 +225,7 @@ extension RecipesScreenViewController: UICollectionViewDataSource {
 
 extension RecipesScreenViewController: UICollectionViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard
-            !isFirstLayout else {
-            isFirstLayout = false
-            return
-        }
+        guard !isFirstLayout else { return }
         
         currentOffset = scrollView.contentOffset.y
         if currentOffset > previousOffset {

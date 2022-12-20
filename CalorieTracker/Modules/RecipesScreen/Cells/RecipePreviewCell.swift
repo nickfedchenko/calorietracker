@@ -99,7 +99,7 @@ final class RecipePreviewCell: UICollectionViewCell {
             make.height.width.equalTo(16)
             make.top.equalToSuperview().offset(8)
             make.trailing.equalToSuperview().inset(12)
-            make.leading.equalTo(mainImage.snp.trailing).offset(12)
+//            make.leading.equalTo(mainImage.snp.trailing).offset(12)
         }
         
         timerValueLabel.snp.makeConstraints { make in
