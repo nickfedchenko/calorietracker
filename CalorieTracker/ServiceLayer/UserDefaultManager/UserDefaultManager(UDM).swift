@@ -18,6 +18,10 @@ final class UDM {
         case dailyWaterGoal, dailyStepsGoal
         case isAuthorisedHealthKit, dateHealthKitSync
         case userData
+        case startWeight
+        case weeklyGoal
+        case goalType
+        case activityLevel
     }
     
     static var isGloballyMetric: Bool {
@@ -165,6 +169,20 @@ final class UDM {
         }
     }
     
+    static var weeklyGoal: Double? {
+        get {
+            guard let value: Double = getValue(for: .weeklyGoal) else {
+                return nil
+            }
+            return value
+        }
+        
+        set {
+            guard let value = newValue else { return }
+            setValue(value: value, for: .weeklyGoal)
+        }
+    }
+    
     static var bmiGoal: Double? {
         get {
             guard let value: Double = getValue(for: .bmiGoal) else {
@@ -176,6 +194,20 @@ final class UDM {
         set {
             guard let value = newValue else { return }
             setValue(value: value, for: .bmiGoal)
+        }
+    }
+    
+    static var startWeight: Double? {
+        get {
+            guard let value: Double = getValue(for: .startWeight) else {
+                return nil
+            }
+            return value
+        }
+        
+        set {
+            guard let value = newValue else { return }
+            setValue(value: value, for: .startWeight)
         }
     }
     
@@ -206,6 +238,36 @@ final class UDM {
         set {
             let data = try? JSONEncoder().encode(newValue)
             setValue(value: data, for: .nutritionDailyGoal)
+        }
+    }
+    
+    static var goalType: GoalType? {
+        get {
+            guard let data: Data = getValue(for: .goalType),
+                   let goalData = try? JSONDecoder().decode(GoalType.self, from: data) else {
+                return nil
+            }
+            return goalData
+        }
+        
+        set {
+            let data = try? JSONEncoder().encode(newValue)
+            setValue(value: data, for: .goalType)
+        }
+    }
+    
+    static var activityLevel: ActivityLevel? {
+        get {
+            guard let data: Data = getValue(for: .activityLevel),
+                   let activityData = try? JSONDecoder().decode(ActivityLevel.self, from: data) else {
+                return nil
+            }
+            return activityData
+        }
+        
+        set {
+            let data = try? JSONEncoder().encode(newValue)
+            setValue(value: data, for: .activityLevel)
         }
     }
     

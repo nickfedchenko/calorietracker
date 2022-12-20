@@ -9,12 +9,6 @@ import UIKit
 
 class BAMenuPresentTransition: NSObject, UIViewControllerAnimatedTransitioning {
     
-    private let frame: CGRect
-    
-    init(_ frame: CGRect) {
-        self.frame = frame
-    }
-    
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return 0.2
     }

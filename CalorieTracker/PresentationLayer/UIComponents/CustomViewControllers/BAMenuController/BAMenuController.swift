@@ -16,20 +16,20 @@ protocol MenuViewProtocol: UIView {
 class BAMenuController: UIViewController {
     private let menuView: MenuViewProtocol
     private let width: CGFloat
-    private let anchorPoint: CGPoint
-    private var controllerFrame: CGRect?
+    private var controllerSize: CGSize?
     
     private var firstDraw = true
     
-    init(_ view: MenuViewProtocol, width: CGFloat, anchorPoint: CGPoint) {
+    var anchorPoint: CGPoint?
+    
+    init(_ view: MenuViewProtocol, width: CGFloat) {
         self.menuView = view
         self.width = width
-        self.anchorPoint = anchorPoint
         super.init(nibName: nil, bundle: nil)
         transitioningDelegate = self
         modalPresentationStyle = .custom
         
-        self.controllerFrame = getViewFrame()
+        self.controllerSize = getViewSize()
     }
     
     required init?(coder: NSCoder) {
@@ -70,14 +70,11 @@ class BAMenuController: UIViewController {
         }
     }
     
-    private func getViewFrame() -> CGRect {
-        CGRect(
-            origin: anchorPoint,
-            size: menuView.systemLayoutSizeFitting(
-                CGSize(width: width, height: .leastNormalMagnitude),
-                withHorizontalFittingPriority: .required,
-                verticalFittingPriority: .defaultLow
-            )
+    private func getViewSize() -> CGSize {
+        menuView.systemLayoutSizeFitting(
+            CGSize(width: width, height: .leastNormalMagnitude),
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .defaultLow
         )
     }
 }
@@ -91,7 +88,10 @@ extension BAMenuController: UIViewControllerTransitioningDelegate {
         let presentationController = BAMenuPresentationController(
             presentedViewController: presented,
             presenting: presenting,
-            controllerFrame: self.controllerFrame ?? .zero
+            controllerFrame: CGRect(
+                origin: anchorPoint ?? .zero,
+                size: controllerSize ?? .zero
+            )
         )
         
         presentationController.handleTapView = {
@@ -106,7 +106,7 @@ extension BAMenuController: UIViewControllerTransitioningDelegate {
         presenting _: UIViewController,
         source _: UIViewController
     ) -> UIViewControllerAnimatedTransitioning? {
-        BAMenuPresentTransition(self.controllerFrame ?? .zero)
+        BAMenuPresentTransition()
     }
 
     func animationController(

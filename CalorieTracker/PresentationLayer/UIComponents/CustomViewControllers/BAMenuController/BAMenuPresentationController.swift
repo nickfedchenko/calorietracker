@@ -60,8 +60,18 @@ final class BAMenuPresentationController: UIPresentationController {
         }
 
         presentedView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(controllerFrame.origin.x)
-            make.top.equalToSuperview().offset(controllerFrame.origin.y)
+            if controllerFrame.origin.x + controllerFrame.width > containerView.frame.width {
+                make.trailing.equalToSuperview().offset(controllerFrame.origin.x - containerView.frame.width)
+            } else {
+                make.leading.equalToSuperview().offset(controllerFrame.origin.x)
+            }
+            
+            if controllerFrame.origin.y + controllerFrame.height > containerView.frame.height {
+                make.bottom.equalToSuperview().offset(controllerFrame.origin.y - containerView.frame.height)
+            } else {
+                make.top.equalToSuperview().offset(controllerFrame.origin.y)
+            }
+
             make.height.equalTo(controllerFrame.height)
             make.width.equalTo(controllerFrame.width)
         }

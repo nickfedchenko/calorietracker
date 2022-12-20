@@ -16,12 +16,21 @@ final class KeyboardEnterValueViewController: UIViewController {
     enum KeyboardEnterValueType {
         case weight(WeightKeyboardHeaderView.ActionType)
         case steps
-        case height
+        case standart(String)
     }
     var needUpdate: (() -> Void)?
     var complition: ((Double) -> Void)?
     var keyboardManager: KeyboardManagerProtocol = KeyboardManager()
     let type: KeyboardEnterValueType
+    
+    private lazy var tapRecognizer: UITapGestureRecognizer = {
+        let recognizer = UITapGestureRecognizer(
+            target: self,
+            action: #selector(handleTap)
+        )
+        recognizer.cancelsTouchesInView = true
+        return recognizer
+    }()
     
     private var headerView: KeyboardHeaderProtocol?
     private var bottomLayoutConstraint: NSLayoutConstraint?
@@ -56,6 +65,8 @@ final class KeyboardEnterValueViewController: UIViewController {
     }
     
     private func setupView() {
+        //view.addGestureRecognizer(tapRecognizer)
+        
         headerView?.didTapClose = {
             self.dismiss(animated: true)
         }
@@ -73,7 +84,7 @@ final class KeyboardEnterValueViewController: UIViewController {
                 }
             case .steps:
                 StepsWidgetService.shared.setDailyStepsGoal(value)
-            case .height:
+            case .standart:
                 break
             }
             self.needUpdate?()
@@ -108,9 +119,13 @@ final class KeyboardEnterValueViewController: UIViewController {
             return WeightKeyboardHeaderView(actionType)
         case .steps:
             return StepsKeyboardHeaderView()
-        case .height:
-            return HeightKeyboardHeaderView()
+        case .standart(let title):
+            return StandartKeyboardHeaderView(title)
         }
+    }
+    
+    @objc private func handleTap(_ sender: UITapGestureRecognizer) {
+        dismiss(animated: true)
     }
 }
 
