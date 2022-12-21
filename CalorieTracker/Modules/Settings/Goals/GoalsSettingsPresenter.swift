@@ -40,7 +40,7 @@ extension GoalsSettingsPresenter: GoalsSettingsPresenterInterface {
     }
     
     func getNutrientGoal() -> String? {
-        return ""
+        return (UDM.nutrientPercent ?? .default).getTitle(.long)
     }
     
     func getGoal() -> String? {
@@ -87,7 +87,7 @@ extension GoalsSettingsPresenter: GoalsSettingsPresenterInterface {
         case .calorie:
             return
         case .nutrient:
-            return
+            router?.openNutrientGoalsVC()
         }
     }
     
