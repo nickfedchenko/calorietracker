@@ -16,17 +16,31 @@ final class KeyboardEnterValueViewController: UIViewController {
     enum KeyboardEnterValueType {
         case weight(WeightKeyboardHeaderView.ActionType)
         case steps
+        case standart(String)
     }
     var needUpdate: (() -> Void)?
+    var complition: ((Double) -> Void)?
     var keyboardManager: KeyboardManagerProtocol = KeyboardManager()
     let type: KeyboardEnterValueType
     
+    private lazy var tapRecognizer: UITapGestureRecognizer = {
+        let recognizer = UITapGestureRecognizer(
+            target: self,
+            action: #selector(handleTap)
+        )
+        recognizer.cancelsTouchesInView = true
+        return recognizer
+    }()
+    
     private var headerView: KeyboardHeaderProtocol?
     private var bottomLayoutConstraint: NSLayoutConstraint?
+    private var enterValue: Double?
     
     init(_ type: KeyboardEnterValueType) {
         self.type = type
         super.init(nibName: nil, bundle: nil)
+        transitioningDelegate = self
+        modalPresentationStyle = .custom
         headerView = getHeaderView()
     }
     
@@ -41,22 +55,37 @@ final class KeyboardEnterValueViewController: UIViewController {
         configureKeyboard()
     }
     
+    override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+        super.dismiss(animated: flag, completion: completion)
+        guard let enterValue = enterValue else {
+            return
+        }
+
+        self.complition?(enterValue)
+    }
+    
     private func setupView() {
+        //view.addGestureRecognizer(tapRecognizer)
+        
         headerView?.didTapClose = {
             self.dismiss(animated: true)
         }
         
         headerView?.didChangeValue = { value in
+            self.enterValue = value
             switch self.type {
             case .weight(let actionType):
+                let weight = BAMeasurement(value, .weight).value
                 switch actionType {
                 case .add:
-                    WeightWidgetService.shared.addWeight(value)
+                    WeightWidgetService.shared.addWeight(weight)
                 case .set:
-                    WeightWidgetService.shared.setWeightGoal(value)
+                    WeightWidgetService.shared.setWeightGoal(weight)
                 }
             case .steps:
                 StepsWidgetService.shared.setDailyStepsGoal(value)
+            case .standart:
+                break
             }
             self.needUpdate?()
         }
@@ -90,6 +119,26 @@ final class KeyboardEnterValueViewController: UIViewController {
             return WeightKeyboardHeaderView(actionType)
         case .steps:
             return StepsKeyboardHeaderView()
+        case .standart(let title):
+            return StandartKeyboardHeaderView(title)
         }
+    }
+    
+    @objc private func handleTap(_ sender: UITapGestureRecognizer) {
+        dismiss(animated: true)
+    }
+}
+
+extension KeyboardEnterValueViewController: UIViewControllerTransitioningDelegate {
+    func presentationController(
+        forPresented presented: UIViewController,
+        presenting: UIViewController?,
+        source: UIViewController
+    ) -> UIPresentationController? {
+        WidgetPresentationController(
+            presentedViewController: presented,
+            presenting: presenting,
+            insets: .zero
+        )
     }
 }

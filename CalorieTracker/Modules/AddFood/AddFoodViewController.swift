@@ -35,13 +35,15 @@ final class AddFoodViewController: UIViewController {
     private lazy var doneButton: UIButton = getDoneButton()
     
     private lazy var bottomGradientView = UIView()
-    private lazy var menuView = MenuView(Const.menuModels)
+    private lazy var menuMealView = MenuView(Const.menuModels)
     private lazy var menuTypeSecondView = ContextMenuTypeSecondView(Const.menuTypeSecondModels)
     private lazy var menuButton = MenuButton<MealTime>()
     private lazy var searshTextField = SearchView()
     private lazy var foodCollectionViewController = FoodCollectionViewController()
     private lazy var searchHistoryViewController = SearchHistoryViewController()
     private lazy var counterKcalControl = CounterKcalControl()
+    
+    private var menuMealController: BAMenuController?
     
     private let speechRecognitionManager: SpeechRecognitionManager = .init()
     private var speechRecognitionTask: Task<Void, Error>?
@@ -99,6 +101,7 @@ final class AddFoodViewController: UIViewController {
         guard firstDraw, keyboardHeaderView.frame != .zero else { return }
         setupShadow()
         configureKeyboardManager()
+        menuMealController?.anchorPoint = menuButton.frame.origin
         firstDraw = false
     }
     
@@ -111,8 +114,6 @@ final class AddFoodViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        menuView.closeNotAnimate()
         menuTypeSecondView.closeNotAnimate()
         menuCreateView.closeNotAnimate()
     }
@@ -126,7 +127,6 @@ final class AddFoodViewController: UIViewController {
         view.backgroundColor = .white
         foodCollectionViewController.view.backgroundColor = .white
         
-        menuView.isHidden = true
         menuTypeSecondView.isHidden = true
         menuCreateView.isHidden = true
         
@@ -168,12 +168,12 @@ final class AddFoodViewController: UIViewController {
             FDS.shared.rememberSearchQuery(text)
         }
         
+        menuMealController = .init(menuMealView, width: 200)
+        
         menuButton.configure(Const.menuModels.first)
         menuButton.completion = { [weak self] complition in
-            self?.showOverlay(true)
-            self?.menuView.showAndCloseView(true)
-            self?.menuView.complition = { model in
-                self?.showOverlay(false)
+            self?.showMealMenu()
+            self?.menuMealView.complition = { model in
                 complition(model)
             }
         }
@@ -195,6 +195,15 @@ final class AddFoodViewController: UIViewController {
         
         segmentedControl.onSegmentChanged = { model in
             self.isSelectedType = model.id
+            
+            switch model.id {
+            case .frequent, .recent, .favorites:
+                self.infoButtonsView.isHidden = false
+            case .myMeals, .myRecipes, .myFood:
+                self.infoButtonsView.isHidden = true
+            case .search:
+                break
+            }
         }
         
         searchHistoryViewController.complition = { [weak self] search in
@@ -237,7 +246,7 @@ final class AddFoodViewController: UIViewController {
             searshTextField,
             doneButton,
             overlayView,
-            menuView,
+ 
             menuTypeSecondView,
             menuCreateView
         )
@@ -261,12 +270,6 @@ final class AddFoodViewController: UIViewController {
             make.top.equalTo(view.safeAreaLayoutGuide).offset(2)
             make.height.equalTo(40)
             make.width.equalTo(143)
-        }
-        
-        menuView.snp.makeConstraints { make in
-            make.width.equalTo(205)
-            make.top.equalTo(menuButton.snp.top)
-            make.leading.equalTo(menuButton.snp.leading)
         }
         
         menuTypeSecondView.snp.makeConstraints { make in
@@ -399,6 +402,14 @@ final class AddFoodViewController: UIViewController {
         } completion: { _ in
             self.overlayView.isHidden = !flag
         }
+    }
+    
+    private func showMealMenu() {
+        guard let menuMealController = menuMealController else {
+            return
+        }
+
+        present(menuMealController, animated: true)
     }
     
     private func getCell(collectionView: UICollectionView,

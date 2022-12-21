@@ -8,6 +8,13 @@
 import UIKit
 
 final class SettingsCategoryView: UIView {
+    
+    var state: SettingsCategoryViewState = .default {
+        didSet {
+            didChangeState()
+        }
+    }
+    
     var viewModel: SettingsCategoryCellViewModel? {
         didSet {
             updateViewModel()
@@ -62,6 +69,17 @@ final class SettingsCategoryView: UIView {
         }
     }
     
+    private func didChangeState() {
+        switch state {
+        case .isSelected:
+            rightButton.setImage(R.image.settings.isSelected(), for: .normal)
+        case .isNotSelected:
+            rightButton.setImage(R.image.settings.isNotSelected(), for: .normal)
+        case .default:
+            rightButton.setImage(R.image.foodViewing.rightChevron(), for: .normal)
+        }
+    }
+    
     private func setupView() {
         layer.cornerCurve = .continuous
         layer.cornerRadius = 16
@@ -96,8 +114,8 @@ final class SettingsCategoryView: UIView {
         
         rightButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().offset(-8)
-            make.height.width.equalTo(24)
-            make.bottom.top.greaterThanOrEqualToSuperview()
+            make.height.width.equalTo(32)
+            make.bottom.top.lessThanOrEqualToSuperview()
             make.centerY.equalToSuperview()
         }
         

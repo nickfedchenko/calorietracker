@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class MenuCellView<ID: WithGetTitleProtocol & WithGetImageProtocol>: UIControl {
+final class MenuCellView<ID: WithGetTitleProtocol & WithGetImageProtocol>: ControlWithShadow {
     private lazy var stackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
@@ -30,9 +30,6 @@ final class MenuCellView<ID: WithGetTitleProtocol & WithGetImageProtocol>: UICon
         return label
     }()
     
-    private var firstDraw = true
-    private var shadowLayer = CALayer()
-    
     let model: ID
     
     var isSelectedBackgroundColor: UIColor? = .white
@@ -50,7 +47,7 @@ final class MenuCellView<ID: WithGetTitleProtocol & WithGetImageProtocol>: UICon
     
     init(_ model: ID) {
         self.model = model
-        super.init(frame: .zero)
+        super.init([ShadowConst.firstShadow, ShadowConst.secondShadow])
         titleLabel.text = model.getTitle(.long)
         imageView.image = model.getImage()
         
@@ -64,15 +61,7 @@ final class MenuCellView<ID: WithGetTitleProtocol & WithGetImageProtocol>: UICon
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        guard firstDraw else { return }
-        setupShadow()
-        firstDraw = false
-    }
-    
     private func setupView() {
-        layer.insertSublayer(shadowLayer, at: 0)
         layer.cornerCurve = .continuous
         layer.cornerRadius = 16
         layer.borderWidth = 1
@@ -105,20 +94,6 @@ final class MenuCellView<ID: WithGetTitleProtocol & WithGetImageProtocol>: UICon
             titleLabel.textColor = isNotSelectedTextColor
             shadowLayer.isHidden = false
         }
-    }
-    
-    private func setupShadow() {
-        shadowLayer.frame = bounds
-        shadowLayer.addShadow(
-            shadow: ShadowConst.firstShadow,
-            rect: bounds,
-            cornerRadius: layer.cornerRadius
-        )
-        shadowLayer.addShadow(
-            shadow: ShadowConst.secondShadow,
-            rect: bounds,
-            cornerRadius: layer.cornerRadius
-        )
     }
 }
 

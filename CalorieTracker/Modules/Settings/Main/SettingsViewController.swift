@@ -12,7 +12,7 @@ protocol SettingsViewControllerInterface: AnyObject {
     func updatePremiumButton(_ isSubscribe: Bool)
 }
 
-final class SettingsViewController: TopDownViewController {
+final class SettingsViewController: UIViewController {
     var presenter: SettingsPresenterInterface?
     var viewModel: SettingsСategoriesViewModel?
     
@@ -20,8 +20,9 @@ final class SettingsViewController: TopDownViewController {
     private lazy var collectionView: UICollectionView = getCollectionView()
     private lazy var shareButton: UIButton = getShareButton()
     private lazy var premiumButton: PremiumButton = getPremiumButton()
-    
     private lazy var logoView: LogoView = .init(frame: .zero)
+    
+    private var firstDraw = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,8 +33,22 @@ final class SettingsViewController: TopDownViewController {
         presenter?.updateViewController()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        guard firstDraw, closeButton.frame != .zero else { return }
+        collectionView.contentInset = .init(
+            top: 5,
+            left: 0,
+            bottom: view.frame.height - closeButton.frame.minY - view.safeAreaInsets.bottom,
+            right: 0
+        )
+        firstDraw = false
+    }
+    
     private func setupView() {
         view.backgroundColor = R.color.foodViewing.background()
+        navigationController?.setToolbarHidden(true, animated: false)
+        navigationController?.navigationBar.isHidden = true
     }
     
     private func addSubviews() {
@@ -72,7 +87,6 @@ final class SettingsViewController: TopDownViewController {
         
         premiumButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().offset(-20)
-            make.height.equalTo(32)
             make.bottom.equalTo(logoView.snp.bottom)
         }
     }
@@ -165,6 +179,8 @@ extension SettingsViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.backgroundColor = .clear
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.showsHorizontalScrollIndicator = false
         return collectionView
     }
     
@@ -183,14 +199,14 @@ extension SettingsViewController {
                     StringSettingsModel(
                         worldIndex: [0],
                         attributes: [
-                            .font(R.font.sfProTextMedium(size: 17)),
+                            .font(R.font.sfProTextMedium(size: 17.fontScale())),
                             .color(R.color.foodViewing.basicPrimary())
                         ]
                     )
                 ],
                 image: .init(
                     image: R.image.settings.share(),
-                    font: R.font.sfProTextMedium(size: 17),
+                    font: R.font.sfProTextMedium(size: 14.fontScale()),
                     position: .right
                 )
             ),

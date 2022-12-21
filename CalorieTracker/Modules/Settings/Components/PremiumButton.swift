@@ -48,13 +48,13 @@ final class PremiumButton: UIControl {
         titleLabel.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.centerY.equalToSuperview()
-            make.top.bottom.lessThanOrEqualToSuperview()
+            make.top.bottom.lessThanOrEqualToSuperview().inset(6)
         }
     }
     
     private func didChangeState() {
         titleLabel.text = isSubscribe ? "PREMIUM" : "Upgrade to Premium"
-        titleLabel.font = R.font.sfProTextMedium(size: isSubscribe ? 16 : 13)
+        titleLabel.font = R.font.sfProTextMedium(size: (isSubscribe ? 16 : 13).fontScale())
         
         titleLabel.snp.updateConstraints { make in
             make.leading.trailing.equalToSuperview().inset(isSubscribe ? 38 : 10)

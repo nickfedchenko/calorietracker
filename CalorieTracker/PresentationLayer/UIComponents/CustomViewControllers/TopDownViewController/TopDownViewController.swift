@@ -7,9 +7,9 @@
 
 import UIKit
 
-class TopDownViewController: UIViewController {
-    init() {
-        super.init(nibName: nil, bundle: nil)
+class TopDownNavigationController: UINavigationController {
+    override init(rootViewController: UIViewController) {
+        super.init(rootViewController: rootViewController)
         modalPresentationStyle = .custom
         transitioningDelegate = self
     }
@@ -19,7 +19,7 @@ class TopDownViewController: UIViewController {
     }
 }
 
-extension TopDownViewController: UIViewControllerTransitioningDelegate {
+extension TopDownNavigationController: UIViewControllerTransitioningDelegate {
     func animationController(
         forPresented _: UIViewController,
         presenting _: UIViewController,

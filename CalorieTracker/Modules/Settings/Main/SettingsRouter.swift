@@ -6,6 +6,7 @@
 //  Copyright © 2022 Mov4D. All rights reserved.
 //
 
+import SafariServices
 import UIKit
 
 protocol SettingsRouterInterface: AnyObject {
@@ -48,6 +49,12 @@ class SettingsRouter: NSObject {
         interactor.presenter = presenter
         return vc
     }
+    
+    private func openSafaryUrl(_ urlStr: String) {
+        guard let url = URL(string: urlStr) else { return }
+        let safaryVC = SFSafariViewController(url: url)
+        viewController?.present(safaryVC, animated: true)
+    }
 }
 
 extension SettingsRouter: SettingsRouterInterface {
@@ -69,7 +76,8 @@ extension SettingsRouter: SettingsRouterInterface {
     }
     
     func openProfileViewController() {
-        
+        let vc = ProfileSettingsRouter.setupModule()
+        viewController?.navigationController?.pushViewController(vc, animated: true)
     }
     
     func openAppViewController() {
@@ -81,11 +89,12 @@ extension SettingsRouter: SettingsRouterInterface {
     }
     
     func openHelpViewController() {
-        
+        openSafaryUrl("https://www.google.ru/")
     }
     
     func openGoalsViewController() {
-        
+        let vc = GoalsSettingsRouter.setupModule()
+        viewController?.navigationController?.pushViewController(vc, animated: true)
     }
     
     func openRemindersViewController() {
@@ -93,6 +102,6 @@ extension SettingsRouter: SettingsRouterInterface {
     }
     
     func openRateViewController() {
-        
+        openSafaryUrl("https://www.google.ru/")
     }
 }

@@ -279,36 +279,19 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
     }
     
     private func addTapGestureRecognizer() {
-        calendarWidget.addTarget(
-            self,
-            action: #selector(didTapWidget),
-            forControlEvents: .touchUpInside
-        )
-        waterBalanceWidget.addTarget(
-            self,
-            action: #selector(didTapWidget),
-            forControlEvents: .touchUpInside
-        )
-        weightMeasureWidget.addTarget(
-            self,
-            action: #selector(didTapWidget),
-            forControlEvents: .touchUpInside
-        )
-        notesWidget.addTarget(
-            self,
-            action: #selector(didTapWidget),
-            forControlEvents: .touchUpInside
-        )
-        stepsWidget.addTarget(
-            self,
-            action: #selector(didTapWidget),
-            forControlEvents: .touchUpInside
-        )
-        exercisesWidget.addTarget(
-            self,
-            action: #selector(didTapWidget),
-            forControlEvents: .touchUpInside
-        )
+        [calendarWidget,
+         waterBalanceWidget,
+         weightMeasureWidget,
+         notesWidget, stepsWidget,
+         exercisesWidget,
+         mainActivityWidget]
+            .forEach {
+                $0.addTarget(
+                    self,
+                    action: #selector(didTapWidget),
+                    forControlEvents: .touchUpInside
+                )
+            }
     }
     
     @objc private func didTapWidget(_ sender: ASControlNode) {

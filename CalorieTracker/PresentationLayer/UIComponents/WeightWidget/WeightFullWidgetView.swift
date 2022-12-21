@@ -200,18 +200,9 @@ final class WeightFullWidgetView: UIView, CTWidgetFullProtocol {
         )
         
         headerView.model = WeightHeaderView.Model(
-            start: String(
-                format: "%.1f",
-                presenter?.getStartWeight(period: period) ?? 0
-            ).replacingOccurrences(of: ".", with: ","),
-            now: String(
-                format: "%.1f kg",
-                presenter?.getNowWeight() ?? 0
-            ).replacingOccurrences(of: ".", with: ","),
-            goal: String(
-                format: "%.1f",
-                presenter?.getGoalWeight() ?? 0
-            ).replacingOccurrences(of: ".", with: ",")
+            start: Double(presenter?.getStartWeight(period: period) ?? 0).clean,
+            now: BAMeasurement(Double(presenter?.getNowWeight() ?? 0), .weight).string,
+            goal: Double(presenter?.getGoalWeight() ?? 0).clean
         )
         
         switch period {

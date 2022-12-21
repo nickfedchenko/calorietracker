@@ -16,6 +16,7 @@ final class FoodCellView: UIView {
         let tag: String
         let kcal: Int
         let image: Product.Photo?
+        let verified: Bool
     }
     
     var didTapButton: (() -> Void)?
@@ -44,7 +45,8 @@ final class FoodCellView: UIView {
     
     private lazy var imageView: UIImageView = {
         let view = UIImageView()
-        view.contentMode = .scaleAspectFit
+        view.contentMode = .scaleAspectFill
+        view.clipsToBounds = true
         return view
     }()
     
@@ -108,6 +110,7 @@ final class FoodCellView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        setupView()
         addSubviews()
         setupConstraints()
         didChangeButtonType()
@@ -121,8 +124,15 @@ final class FoodCellView: UIView {
         guard let model = model else { return }
         titleLabel.text = model.title
         descriptionLabel.text = model.description
-        tagLabel.text = model.tag
         kalorieLabel.text = "\(model.kcal)"
+        checkImageView.isHidden = !model.verified
+        
+        if model.tag.isEmpty {
+            tagBackgroundView.isHidden = true
+        } else {
+            tagBackgroundView.isHidden = false
+            tagLabel.text = model.tag
+        }
         
         if let image = model.image {
             switch image {
@@ -139,7 +149,14 @@ final class FoodCellView: UIView {
             case .data(let data):
                 imageView.image = UIImage(data: data)
             }
+        } else {
+            imageView.image = nil
         }
+    }
+    
+    private func setupView() {
+        backgroundColor = .white
+        layer.masksToBounds = true
     }
     
     private func addSubviews() {
@@ -157,29 +174,28 @@ final class FoodCellView: UIView {
         )
     }
     
-    // swiftlint:disable:next function_body_length
     private func setupConstraints() {
-        imageView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
-        imageView.setContentHuggingPriority(.defaultLow, for: .vertical)
-        
         imageView.snp.makeConstraints { make in
+            make.width.lessThanOrEqualTo(snp.height)
             make.leading.equalToSuperview()
             make.top.bottom.equalToSuperview()
         }
         
+        titleLabel.setContentHuggingPriority(.init(rawValue: 751), for: .vertical)
         titleLabel.snp.makeConstraints { make in
             make.leading.equalTo(imageView.snp.trailing).offset(4)
+            make.trailing.lessThanOrEqualTo(infoLabel.snp.leading).offset(-6)
             make.top.equalToSuperview().offset(4)
         }
         
+        tagBackgroundView.setContentHuggingPriority(.init(rawValue: 751), for: .vertical)
         tagBackgroundView.snp.makeConstraints { make in
+            make.height.equalTo(18)
             make.leading.equalTo(imageView.snp.trailing).offset(4)
             make.top.equalTo(titleLabel.snp.bottom).offset(5)
             make.bottom.equalToSuperview().offset(-7)
         }
         
-        tagLabel.setContentCompressionResistancePriority(.init(1000), for: .horizontal)
-        tagLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         tagLabel.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
             make.leading.trailing.equalToSuperview().inset(5)
@@ -189,6 +205,7 @@ final class FoodCellView: UIView {
         checkImageView.snp.makeConstraints { make in
             make.centerY.equalTo(tagBackgroundView)
             make.leading.equalTo(tagBackgroundView.snp.trailing).offset(6)
+            make.trailing.lessThanOrEqualTo(descriptionLabel.snp.leading).offset(-6)
             make.height.equalTo(tagBackgroundView)
         }
         
@@ -196,27 +213,21 @@ final class FoodCellView: UIView {
         selectButton.snp.makeConstraints { make in
             make.centerY.equalTo(tagBackgroundView)
             make.trailing.equalToSuperview()
-            make.height.equalTo(tagBackgroundView)
+            make.height.equalTo(20)
         }
         
         descriptionLabel.snp.makeConstraints { make in
             make.centerY.equalTo(tagBackgroundView)
-            make.leading.equalTo(checkImageView.snp.trailing).offset(6)
-            make.trailing.lessThanOrEqualTo(selectButton.snp.leading).offset(-6)
+            make.trailing.equalTo(selectButton.snp.leading).offset(-6)
         }
         
-        kalorieLabel.setContentCompressionResistancePriority(.init(1000), for: .horizontal)
-        kalorieLabel.setContentHuggingPriority(.init(1000), for: .horizontal)
         kalorieLabel.snp.makeConstraints { make in
             make.trailing.equalToSuperview()
             make.centerY.equalTo(titleLabel)
         }
         
-        infoLabel.setContentCompressionResistancePriority(.init(1000), for: .horizontal)
-        infoLabel.setContentHuggingPriority(.init(1000), for: .horizontal)
         infoLabel.snp.makeConstraints { make in
             make.trailing.equalTo(kalorieLabel.snp.leading).offset(-8)
-            make.leading.greaterThanOrEqualTo(titleLabel.snp.trailing).offset(6)
             make.centerY.equalTo(titleLabel)
         }
     }
@@ -245,6 +256,7 @@ extension FoodCellView.FoodViewModel {
         self.tag = product.brand ?? ""
         self.kcal = Int(product.kcal)
         self.image = product.isUserProduct ? product.photo : nil
+        self.verified = !product.isUserProduct
     }
     
     private init(_ dish: Dish) {
@@ -254,6 +266,7 @@ extension FoodCellView.FoodViewModel {
         self.tag = dish.tags.first?.tag ?? ""
         self.kcal = dish.kсal
         self.image = nil
+        self.verified = true
     }
     
     init?(_ food: Food) {

@@ -22,6 +22,7 @@ final class CreateProductViewController: UIViewController {
     var presenter: CreateProductPresenterInterface?
     var keyboardManager: KeyboardManagerProtocol?
     
+    private lazy var titleHeaderLabel: UILabel = getTitleHeaderLabel()
     private lazy var titleFirstPageLabel: UILabel = getTitleLabel()
     private lazy var descriptionFirstPageLabel: UILabel = getDescriptionLabel()
     private lazy var titleSecondPageLabel: UILabel = getTitleLabel()
@@ -41,6 +42,8 @@ final class CreateProductViewController: UIViewController {
     private lazy var secondPageFormView = SecondPageFormView()
     private lazy var saveButton = BasicButtonView(type: .save)
     
+    private var firstDraw = true
+    
     private var currentPage: Int = 0 {
         didSet {
             didChangePage()
@@ -53,21 +56,24 @@ final class CreateProductViewController: UIViewController {
         addSubviews()
         setupFistPageConstraints()
         setupSecondPageConstraints()
-        setupKeyboardManager()
         didChangePage()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        guard headerView.frame != .zero else { return }
+        guard headerView.frame != .zero, firstDraw else { return }
         let insets = UIEdgeInsets(
             top: headerView.bounds.height,
             left: 0,
-            bottom: 0,
+            bottom: view.frame.height - (saveButton.frame.minY - 10),
             right: 0
         )
         leftScrollView.contentInset = insets
         rightScrollView.contentInset = insets
+
+        setupKeyboardManager()
+        
+        firstDraw = false
     }
     
     private func setupView() {
@@ -89,6 +95,7 @@ final class CreateProductViewController: UIViewController {
         view.addSubviews(
             mainScrollView,
             headerView,
+            titleHeaderLabel,
             closeButton,
             backButton,
             saveButton
@@ -122,8 +129,14 @@ final class CreateProductViewController: UIViewController {
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.top).offset(50)
         }
         
+        titleHeaderLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(backButton)
+            make.leading.equalTo(backButton.snp.trailing).offset(16)
+            make.trailing.equalTo(closeButton.snp.leading).offset(-16)
+        }
+        
         mainScrollView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.leading.trailing.bottom.equalToSuperview()
         }
         
         leftScrollView.snp.makeConstraints { make in
@@ -215,7 +228,7 @@ final class CreateProductViewController: UIViewController {
             make.leading.trailing.equalToSuperview().inset(20)
             make.width.equalTo(view).offset(-40)
             make.top.equalTo(servingSizeView.snp.bottom).offset(20)
-            make.bottom.equalToSuperview().offset(-20)
+            make.bottom.equalToSuperview()
         }
     }
     
@@ -246,11 +259,15 @@ final class CreateProductViewController: UIViewController {
     
     private func setupFirstPage() {
         backButton.isHidden = true
+        titleHeaderLabel.text = "Food Creation"
+        titleHeaderLabel.isHidden = checkTitleIsHidden(leftScrollView)
     }
     
     private func setupSecondPage() {
         backButton.isHidden = false
         titleSecondPageLabel.text = firstPageFormView.name
+        titleHeaderLabel.text = firstPageFormView.name
+        titleHeaderLabel.isHidden = checkTitleIsHidden(rightScrollView)
     }
     
     private func checkFirstPage() {
@@ -277,8 +294,14 @@ final class CreateProductViewController: UIViewController {
         }
     }
     
+    private func checkTitleIsHidden(_ scrollView: UIScrollView) -> Bool {
+        return !(scrollView.contentOffset.y > -50)
+    }
+    
     private func setupKeyboardManager() {
-        keyboardManager?.bindToKeyboardNotifications(scrollView: mainScrollView)
+        addTapToHideKeyboardGesture()
+        keyboardManager?.bindToKeyboardNotifications(scrollView: leftScrollView)
+        keyboardManager?.bindToKeyboardNotifications(scrollView: rightScrollView)
     }
     
     @objc private func didTapCloseButton() {
@@ -301,8 +324,14 @@ final class CreateProductViewController: UIViewController {
     }
 }
 
+extension CreateProductViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        titleHeaderLabel.isHidden = checkTitleIsHidden(scrollView)
+    }
+}
+
 extension CreateProductViewController: CreateProductViewControllerInterface {
-    func getFormValues() -> [ProductFormSegment : String?] {
+    func getFormValues() -> [ProductFormSegment: String?] {
         return formsView.values
     }
     
@@ -360,6 +389,8 @@ extension CreateProductViewController {
         let scrollView = UIScrollView()
         scrollView.showsVerticalScrollIndicator = false
         scrollView.showsHorizontalScrollIndicator = false
+        scrollView.contentInsetAdjustmentBehavior = .never
+        scrollView.delegate = self
         return scrollView
     }
     
@@ -367,6 +398,7 @@ extension CreateProductViewController {
         let scrollView = UIScrollView()
         scrollView.showsVerticalScrollIndicator = false
         scrollView.showsHorizontalScrollIndicator = false
+        scrollView.contentInsetAdjustmentBehavior = .never
         scrollView.isScrollEnabled = false
         return scrollView
     }
@@ -408,5 +440,13 @@ extension CreateProductViewController {
             separatorLineHeight: .large
         )
         return view
+    }
+    
+    private func getTitleHeaderLabel() -> UILabel {
+        let label = UILabel()
+        label.font = R.font.sfProDisplaySemibold(size: 17)
+        label.textColor = R.color.foodViewing.basicPrimary()
+        label.textAlignment = .center
+        return label
     }
 }

@@ -52,12 +52,13 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
     }
     
     func updateWaterWidgetModel() {
-        let goal = WaterWidgetService.shared.getDailyWaterGoal()
-        let waterNow = WaterWidgetService.shared.getWaterNow()
+        let goal = BAMeasurement(WaterWidgetService.shared.getDailyWaterGoal(), .liquid).localized
+        let waterNow = BAMeasurement(WaterWidgetService.shared.getWaterNow(), .liquid).localized
+        let suffix = BAMeasurement.measurmentSuffix(.liquid)
         
         let model = WaterWidgetNode.Model(
             progress: CGFloat(waterNow / goal),
-            waterMl: "\(Int(waterNow)) / \(Int(goal)) ml"
+            waterMl: "\(Int(waterNow)) / \(Int(goal)) \(suffix)"
         )
         
         view.setWaterWidgetModel(model)
@@ -75,7 +76,7 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
             view.setWeightWidget(weight: nil)
             return
         }
-        view.setWeightWidget(weight: CGFloat(weightNow))
+        view.setWeightWidget(weight: CGFloat(BAMeasurement(weightNow, .weight).localized))
     }
     
     func updateCalendarWidget(_ date: Date?) {

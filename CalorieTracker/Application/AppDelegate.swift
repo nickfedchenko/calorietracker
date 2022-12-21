@@ -18,6 +18,8 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
+    private let localDomainService: LocalDomainServiceInterface = LocalDomainService()
+    
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
@@ -30,14 +32,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
         
-        DSF.shared.updateStoredDishes()
-        DSF.shared.updateStoredProducts()
-        
+        updateHealthKitData()
+        updateFoodData()
+  
         //generateFakeUserData()
         
         return true
     }
-    
     
     // Создает данные юзера (Рандомно) позже удалить
     private func generateFakeUserData() {
@@ -56,4 +57,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
+    private func updateFoodData() {
+        DSF.shared.updateStoredDishes()
+        DSF.shared.updateStoredProducts()
+    }
+    
+    private func updateHealthKitData() {
+        guard UDM.isAuthorisedHealthKit else { return }
+        
+        HealthKitDataManager.shared.getSteps { [weak self] steps in
+            self?.localDomainService.saveSteps(data: steps)
+        }
+        
+        HealthKitDataManager.shared.getWorkouts { [weak self] exercises  in
+            self?.localDomainService.saveExercise(data: exercises)
+        }
+    }
 }

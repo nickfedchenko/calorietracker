@@ -44,7 +44,7 @@ final class WeightWidgetNode: CTWidgetNode {
     var weight: CGFloat? {
         didSet {
             guard let weight = weight else { return }
-            valueLabel.attributedText = String(format: "%.1f", weight).attributedSring([
+            valueLabel.attributedText = Double(weight).clean.attributedSring([
                 .init(
                     worldIndex: [0],
                     attributes: [

@@ -6,8 +6,8 @@
 //  Copyright © 2022 Mov4D. All rights reserved.
 //
 
-import Foundation
 import ApphudSDK
+import Foundation
 
 protocol SettingsPresenterInterface: AnyObject {
     func didTapCell(_ type: SettingsCategoryType)

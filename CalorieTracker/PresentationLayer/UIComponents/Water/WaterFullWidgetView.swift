@@ -293,9 +293,10 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
     // MARK: - setup String
     
     private func configureLabel(value: Int, goal: Int?) {
+        let suffix = BAMeasurement.measurmentSuffix(.liquid).uppercased()
         let string = goal == nil
-            ? "TODAY \(value) ML"
-            : "\(value) / \(goal ?? 0) ML"
+        ? "TODAY \(value) \(suffix)"
+            : "\(value) / \(goal ?? 0) \(suffix)"
         let colorLeft = R.color.waterWidget.secondGradientColor()
         let colorRight = R.color.waterWidget.firstGradientColor()
         let font = R.font.sfProDisplaySemibold(size: 22.fontScale())

@@ -13,6 +13,10 @@ protocol WeightWidgetServiceInterface {
     func setWeightGoal(_ value: Double)
     func getWeightNow() -> Double?
     func getAllWeight() -> [DailyData]
+    func getStartWeight() -> Double?
+    func getWeeklyGoal() -> Double?
+    func setWeeklyGoal(_ value: Double)
+    func setStartWeight(_ value: Double)
 }
 
 final class WeightWidgetService {
@@ -37,6 +41,14 @@ extension WeightWidgetService: WeightWidgetServiceInterface {
         return weightNow?.value
     }
     
+    func getStartWeight() -> Double? {
+        UDM.startWeight
+    }
+    
+    func getWeeklyGoal() -> Double? {
+        UDM.weeklyGoal
+    }
+    
     func addWeight(_ value: Double) {
         let dayNow = Day(Date())
         localDomainService.saveWeight(
@@ -51,5 +63,13 @@ extension WeightWidgetService: WeightWidgetServiceInterface {
     
     func setWeightGoal(_ value: Double) {
         UDM.weightGoal = value
+    }
+    
+    func setStartWeight(_ value: Double) {
+        UDM.startWeight = value
+    }
+    
+    func setWeeklyGoal(_ value: Double) {
+        UDM.weeklyGoal = value
     }
 }
