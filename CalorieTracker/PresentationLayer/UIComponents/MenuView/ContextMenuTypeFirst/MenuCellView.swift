@@ -7,11 +7,20 @@
 
 import UIKit
 
-final class MenuCellView<ID: WithGetTitleProtocol & WithGetImageProtocol>: ControlWithShadow {
+final class MenuCellView<ID: WithGetTitleProtocol
+                            & WithGetImageProtocol
+                            & WithGetDescriptionProtocol>: ControlWithShadow {
     private lazy var stackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
         stack.spacing = 8
+        stack.isUserInteractionEnabled = false
+        return stack
+    }()
+    
+    private lazy var textStackView: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
         stack.isUserInteractionEnabled = false
         return stack
     }()
@@ -26,6 +35,12 @@ final class MenuCellView<ID: WithGetTitleProtocol & WithGetImageProtocol>: Contr
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = R.font.sfProDisplaySemibold(size: 18)
+        label.isUserInteractionEnabled = false
+        return label
+    }()
+    
+    private lazy var descriptionLabel: UILabel = {
+        let label = UILabel()
         label.isUserInteractionEnabled = false
         return label
     }()
@@ -49,7 +64,20 @@ final class MenuCellView<ID: WithGetTitleProtocol & WithGetImageProtocol>: Contr
         self.model = model
         super.init([ShadowConst.firstShadow, ShadowConst.secondShadow])
         titleLabel.text = model.getTitle(.long)
-        imageView.image = model.getImage()
+        
+        if let image = model.getImage() {
+            imageView.image = image
+            imageView.isHidden = false
+        } else {
+            imageView.isHidden = true
+        }
+        
+        if let description = model.getDescription() {
+            descriptionLabel.attributedText = description
+            descriptionLabel.isHidden = false
+        } else {
+            descriptionLabel.isHidden = true
+        }
         
         setupView()
         addSubviews()
@@ -69,8 +97,8 @@ final class MenuCellView<ID: WithGetTitleProtocol & WithGetImageProtocol>: Contr
     
     private func addSubviews() {
         addSubviews(stackView)
-        stackView.addArrangedSubview(imageView)
-        stackView.addArrangedSubview(titleLabel)
+        stackView.addArrangedSubviews(imageView, textStackView)
+        textStackView.addArrangedSubviews(titleLabel, descriptionLabel)
     }
     
     private func setupConstraints() {

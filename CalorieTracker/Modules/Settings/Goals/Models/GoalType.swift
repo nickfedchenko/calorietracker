@@ -26,8 +26,12 @@ extension GoalType: WithGetTitleProtocol {
     }
 }
 
-extension GoalType: WithGetImageProtocol {
+extension GoalType: WithGetImageProtocol, WithGetDescriptionProtocol {
     func getImage() -> UIImage? {
+        return nil
+    }
+    
+    func getDescription() -> NSAttributedString? {
         return nil
     }
 }

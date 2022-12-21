@@ -11,6 +11,10 @@ protocol WithGetTitleProtocol {
     func getTitle(_ lenght: Lenght) -> String?
 }
 
+protocol WithGetDescriptionProtocol {
+    func getDescription() -> NSAttributedString?
+}
+
 struct EmptyGetTitle: WithGetTitleProtocol {
     func getTitle(_ lenght: Lenght) -> String? {
         nil

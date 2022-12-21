@@ -9,7 +9,7 @@ import UIKit
 
 // MARK: - Const
 
-extension MealTime: WithGetImageProtocol, WithGetTitleProtocol {
+extension MealTime: WithGetImageProtocol, WithGetTitleProtocol, WithGetDescriptionProtocol {
     func getImage() -> UIImage? {
         switch self {
         case .breakfast:
@@ -35,9 +35,13 @@ extension MealTime: WithGetImageProtocol, WithGetTitleProtocol {
             return "SNACK"
         }
     }
+    
+    func getDescription() -> NSAttributedString? {
+        return nil
+    }
 }
 
-enum FoodCreate: WithGetTitleProtocol, WithGetImageProtocol {
+enum FoodCreate: WithGetTitleProtocol, WithGetImageProtocol, WithGetDescriptionProtocol {
     case food
     case recipe
     case meal
@@ -54,6 +58,10 @@ enum FoodCreate: WithGetTitleProtocol, WithGetImageProtocol {
     }
     
     func getImage() -> UIImage? {
+        return nil
+    }
+    
+    func getDescription() -> NSAttributedString? {
         return nil
     }
 }

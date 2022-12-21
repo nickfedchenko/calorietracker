@@ -18,8 +18,12 @@ extension UserSex: WithGetTitleProtocol {
     }
 }
 
-extension UserSex: WithGetImageProtocol {
+extension UserSex: WithGetImageProtocol, WithGetDescriptionProtocol {
     func getImage() -> UIImage? {
+        return nil
+    }
+    
+    func getDescription() -> NSAttributedString? {
         return nil
     }
 }

@@ -7,7 +7,9 @@
 
 import UIKit
 
-final class MenuView<ID: WithGetTitleProtocol & WithGetImageProtocol>: ViewWithShadow, MenuViewProtocol {
+final class MenuView<ID: WithGetTitleProtocol
+                        & WithGetImageProtocol
+                        & WithGetDescriptionProtocol>: ViewWithShadow, MenuViewProtocol {
     var complition: ((ID) -> Void)?
     var didClose: (() -> Void)?
     
