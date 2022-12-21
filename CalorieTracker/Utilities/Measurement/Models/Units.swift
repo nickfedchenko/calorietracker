@@ -11,3 +11,8 @@ enum Units: Codable {
     case metric
     case imperial
 }
+
+enum NutrientUnit {
+    case kcal
+    case gram
+}
