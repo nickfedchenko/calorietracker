@@ -37,7 +37,6 @@ class SettingsRouter: NSObject {
             .chat,
             .goals,
             .app,
-            .reminders,
             .rate,
             .help
         ])

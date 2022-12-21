@@ -85,7 +85,7 @@ extension GoalsSettingsPresenter: GoalsSettingsPresenterInterface {
         case .weekly:
             router?.openEnterWeeklyGoalVC()
         case .calorie:
-            return
+            router?.openCalorieGoalVC()
         case .nutrient:
             router?.openNutrientGoalsVC()
         }
