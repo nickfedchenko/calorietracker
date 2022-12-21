@@ -22,6 +22,7 @@ final class UDM {
         case weeklyGoal
         case goalType
         case activityLevel
+        case nutrientPercent
     }
     
     static var isGloballyMetric: Bool {
@@ -238,6 +239,21 @@ final class UDM {
         set {
             let data = try? JSONEncoder().encode(newValue)
             setValue(value: data, for: .nutritionDailyGoal)
+        }
+    }
+    
+    static var nutrientPercent: NutrientGoalType? {
+        get {
+            guard let data: Data = getValue(for: .nutrientPercent),
+                   let nutritionData = try? JSONDecoder().decode(NutrientGoalType.self, from: data) else {
+                return nil
+            }
+            return nutritionData
+        }
+        
+        set {
+            let data = try? JSONEncoder().encode(newValue)
+            setValue(value: data, for: .nutrientPercent)
         }
     }
     

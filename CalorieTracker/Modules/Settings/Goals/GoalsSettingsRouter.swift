@@ -12,6 +12,7 @@ protocol GoalsSettingsRouterInterface: AnyObject {
     func openEnterStartWeightVC()
     func openEnterGoalWeightVC()
     func openEnterWeeklyGoalVC()
+    func openNutrientGoalsVC()
 }
 
 class GoalsSettingsRouter: NSObject {
@@ -80,5 +81,13 @@ extension GoalsSettingsRouter: GoalsSettingsRouterInterface {
         }
         
         viewController?.present(vc, animated: true)
+    }
+    
+    func openNutrientGoalsVC() {
+        let vc = NutrientGoalSettingsRouter.setupModule()
+        vc.needUpdate = {
+            self.presenter?.updateCell(type: .nutrient)
+        }
+        viewController?.navigationController?.pushViewController(vc, animated: true)
     }
 }

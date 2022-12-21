@@ -29,8 +29,12 @@ extension ActivityLevel: WithGetTitleProtocol {
     }
 }
 
-extension ActivityLevel: WithGetImageProtocol {
+extension ActivityLevel: WithGetImageProtocol, WithGetDescriptionProtocol {
     func getImage() -> UIImage? {
+        return nil
+    }
+    
+    func getDescription() -> NSAttributedString? {
         return nil
     }
 }
