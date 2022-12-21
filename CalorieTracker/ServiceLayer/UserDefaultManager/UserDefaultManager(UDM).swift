@@ -14,7 +14,6 @@ final class UDM {
         case searchHistory
         case weightGoal, bmiGoal, burnedKcalGoal
         case widgetSettings
-        case nutritionDailyGoal
         case dailyWaterGoal, dailyStepsGoal
         case isAuthorisedHealthKit, dateHealthKitSync
         case userData
@@ -23,6 +22,7 @@ final class UDM {
         case goalType
         case activityLevel
         case nutrientPercent
+        case kcalGoal
     }
     
     static var isGloballyMetric: Bool {
@@ -212,6 +212,20 @@ final class UDM {
         }
     }
     
+    static var kcalGoal: Double? {
+        get {
+            guard let value: Double = getValue(for: .kcalGoal) else {
+                return nil
+            }
+            return value
+        }
+        
+        set {
+            guard let value = newValue else { return }
+            setValue(value: value, for: .kcalGoal)
+        }
+    }
+    
     static var widgetSettings: [WidgetType] {
         get {
             guard let data: Data = getValue(for: .widgetSettings),
@@ -224,21 +238,6 @@ final class UDM {
         set {
             let data = try? JSONEncoder().encode(newValue)
             setValue(value: data, for: .widgetSettings)
-        }
-    }
-    
-    static var nutritionDailyGoal: DailyNutrition? {
-        get {
-            guard let data: Data = getValue(for: .nutritionDailyGoal),
-                   let nutritionData = try? JSONDecoder().decode(DailyNutrition.self, from: data) else {
-                return nil
-            }
-            return nutritionData
-        }
-        
-        set {
-            let data = try? JSONEncoder().encode(newValue)
-            setValue(value: data, for: .nutritionDailyGoal)
         }
     }
     

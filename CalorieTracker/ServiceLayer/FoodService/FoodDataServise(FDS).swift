@@ -58,6 +58,9 @@ protocol FoodDataServiceInterface {
     ///   - day: дата
     ///   - nutrition: данные
     func addNutrition(day: Day, nutrition: DailyNutrition)
+    /// Возвращает циль на дневное питание
+    /// - Returns: массив DailyNutrition
+    func getNutritionGoals() -> DailyNutrition?
 }
 
 final class FDS {
@@ -207,5 +210,18 @@ extension FDS: FoodDataServiceInterface {
             nutrition: oldNutrition.nutrition + nutrition
         )
         localPersistentStore.saveNutrition(data: [newNutrition])
+    }
+    
+    func getNutritionGoals() -> DailyNutrition? {
+        guard let kcalGoal = UDM.kcalGoal,
+               let nutrientPercent = UDM.nutrientPercent else {
+            return nil
+        }
+        return .init(
+            kcal: kcalGoal,
+            carbs: kcalGoal * nutrientPercent.getNutrientPercent().carbs,
+            protein: kcalGoal * nutrientPercent.getNutrientPercent().protein,
+            fat: kcalGoal * nutrientPercent.getNutrientPercent().fat
+        )
     }
 }

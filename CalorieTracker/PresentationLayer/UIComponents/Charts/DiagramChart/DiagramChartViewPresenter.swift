@@ -52,9 +52,9 @@ class DiagramChartViewPresenter {
         var goal: Double?
         switch view.getChartType() {
         case .calories:
-            goal = UDM.nutritionDailyGoal?.kcal
+            goal = FDS.shared.getNutritionGoals()?.kcal
         case .carb:
-            goal = UDM.nutritionDailyGoal?.carbs
+            goal = FDS.shared.getNutritionGoals()?.carbs
         case .steps:
             goal = UDM.dailyStepsGoal
         case .water:

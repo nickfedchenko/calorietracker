@@ -9,6 +9,7 @@ import UIKit
 
 protocol CalorieGoalSettingsRouterInterface: AnyObject {
     func closeViewController()
+    func openEnterCalorieGoalVC()
 }
 
 class CalorieGoalSettingsRouter: NSObject {
@@ -45,5 +46,12 @@ extension CalorieGoalSettingsRouter: CalorieGoalSettingsRouterInterface {
     func closeViewController() {
         viewController?.navigationController?.popViewController(animated: true)
     }
+    
+    func openEnterCalorieGoalVC() {
+        let vc = KeyboardEnterValueViewController(.standart("CALORIE GOAL"))
+        vc.complition = { value in
+            self.presenter?.setKcalGoal(value)
+        }
+        viewController?.present(vc, animated: true)
+    }
 }
-

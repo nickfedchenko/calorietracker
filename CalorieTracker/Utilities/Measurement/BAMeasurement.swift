@@ -14,9 +14,13 @@ struct BAMeasurement {
     var localized: Double { self.getLocalized() }
     var string: String { self.getString() }
     
-    init(_ value: Double, _ measurement: MeasurementValue) {
+    init(_ value: Double, _ measurement: MeasurementValue, isMetric: Bool = false) {
         self.measurement = measurement
-        self.value = BAMeasurement.bringToStandard(value, measurement: measurement)
+        if isMetric {
+            self.value = value
+        } else {
+            self.value = BAMeasurement.bringToStandard(value, measurement: measurement)
+        }
     }
     
     static func measurmentSuffix(_ measurement: MeasurementValue) -> String {

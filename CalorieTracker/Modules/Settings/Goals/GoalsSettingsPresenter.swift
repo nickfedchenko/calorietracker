@@ -36,7 +36,8 @@ class GoalsSettingsPresenter {
 
 extension GoalsSettingsPresenter: GoalsSettingsPresenterInterface {
     func getCalorieGoal() -> String? {
-        return ""
+        guard let kcalGoal = UDM.kcalGoal else { return nil }
+        return BAMeasurement(kcalGoal, .energy).string
     }
     
     func getNutrientGoal() -> String? {

@@ -83,25 +83,25 @@ struct CalorieGoalSettingsViewModel {
             return .init(
                 title: "Breakfast",
                 leftDescription: presenter?.getBreakfastPercentStr(),
-                rightDescription: presenter?.getGoalKcalStr()
+                rightDescription: presenter?.getBreakfastGoalKcalStr()
             )
         case .lunch:
             return .init(
                 title: "Lunch",
                 leftDescription: presenter?.getLunchPercentStr(),
-                rightDescription: presenter?.getGoalKcalStr()
+                rightDescription: presenter?.getLunchGoalKcalStr()
             )
         case .dinner:
             return .init(
                 title: "Dinner",
                 leftDescription: presenter?.getDinnerPercentStr(),
-                rightDescription: presenter?.getGoalKcalStr()
+                rightDescription: presenter?.getDinnerGoalKcalStr()
             )
         case .snacks:
             return .init(
                 title: "Snacks",
                 leftDescription: presenter?.getSnacksPercentStr(),
-                rightDescription: presenter?.getGoalKcalStr()
+                rightDescription: presenter?.getSnacksGoalKcalStr()
             )
         default:
             return nil

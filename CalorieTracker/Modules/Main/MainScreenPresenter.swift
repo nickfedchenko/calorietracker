@@ -98,7 +98,7 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
     
     // swiftlint:disable:next function_body_length
     func updateActivityWidget() {
-        let nutritionDailyGoal = UDM.nutritionDailyGoal ?? .zero
+        let nutritionDailyGoal = FDS.shared.getNutritionGoals() ?? .zero
         let nutritionToday = FDS.shared.getNutritionToday().nutrition
         let kcalGoal = nutritionDailyGoal.kcal
         let carbsGoal = nutritionDailyGoal.carbs

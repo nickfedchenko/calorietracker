@@ -146,9 +146,8 @@ extension CalorieGoalSettingsViewController: UICollectionViewDelegateFlowLayout 
 
 extension CalorieGoalSettingsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let type = viewModel?.getTypeCell(indexPath),
-              let cell = collectionView.cellForItem(at: indexPath) else { return }
-       
+        guard let type = viewModel?.getTypeCell(indexPath) else { return }
+        presenter?.didTapCell(type)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
