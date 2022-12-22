@@ -9,7 +9,7 @@ import Foundation
 
 protocol CalorieGoalSettingsPresenterInterface: AnyObject {
     func didTapBackButton()
-    func didTapResetButton()
+    func didTapRecalculateButton()
     func didTapSaveButton()
     func didTapCell(_ type: CalorieGoalSettingsCategoryType)
     func getGoalKcalStr() -> String?
@@ -22,6 +22,9 @@ protocol CalorieGoalSettingsPresenterInterface: AnyObject {
     func getDinnerPercentStr() -> String?
     func getLunchPercentStr() -> String?
     func setKcalGoal(_ value: Double)
+    func saveGoals()
+    func getKcalGoal() -> Double?
+    func setMealKcalPercent(value: Double, mealTime: MealTime)
 }
 
 class CalorieGoalSettingsPresenter {
@@ -36,6 +39,8 @@ class CalorieGoalSettingsPresenter {
         }
     }
     
+    private var mealPercent: MealKcalPercent?
+    
     unowned var view: CalorieGoalSettingsViewControllerInterface
     let router: CalorieGoalSettingsRouterInterface?
     
@@ -45,57 +50,91 @@ class CalorieGoalSettingsPresenter {
     ) {
         self.view = view
         self.router = router
+        self.kcalGoal = UDM.kcalGoal
+        self.mealPercent = UDM.mealKcalPercent
     }
 }
 
 extension CalorieGoalSettingsPresenter: CalorieGoalSettingsPresenterInterface {
-    func didTapResetButton() {
-
+    func didTapRecalculateButton() {
+        guard let userData = UDM.userData,
+        let age = userData.dateOfBirth.years(to: Date()),
+        let activity = UDM.activityLevel,
+        let weight = WeightWidgetService.shared.getWeightNow(),
+        let goal = UDM.goalType else {
+            return
+        }
+        
+        let newKcal = CalorieMeasurment.calculationRecommendedCalorie(
+            sex: userData.sex,
+            activity: activity,
+            age: age,
+            height: userData.height,
+            weight: weight,
+            goal: goal
+        )
+        
+        router?.openRecalculateAlert(newKcal)
     }
     
     func didTapSaveButton() {
-        router?.closeViewController()
+        self.saveGoals()
     }
     
     func didTapBackButton() {
-        router?.closeViewController()
+        if kcalGoal == UDM.kcalGoal && mealPercent == UDM.mealKcalPercent {
+            router?.closeViewController()
+        } else {
+            router?.openDiscardChangesAlert()
+        }
     }
     
     func getGoalKcalStr() -> String? {
         guard let kcalGoal = self.kcalGoal else { return nil }
-        return BAMeasurement(kcalGoal, .energy, isMetric: true).string
+        return BAMeasurement(kcalGoal.rounded(), .energy, isMetric: true).string
     }
     
     func getLunchGoalKcalStr() -> String? {
-        return ""
+        guard let lunchPercent = mealPercent?.lunch,
+                let kcalGoal = kcalGoal else { return nil }
+        return BAMeasurement((lunchPercent * kcalGoal).rounded(), .energy).string
     }
     
     func getDinnerGoalKcalStr() -> String? {
-        return "1900 kcal"
+        guard let dinnerPercent = mealPercent?.dinner,
+                let kcalGoal = kcalGoal else { return nil }
+        return BAMeasurement((dinnerPercent * kcalGoal).rounded(), .energy).string
     }
     
     func getSnacksGoalKcalStr() -> String? {
-        return "1900 kcal"
+        guard let snacksPercent = mealPercent?.snacks, let kcalGoal = kcalGoal else { return nil }
+        return BAMeasurement((snacksPercent * kcalGoal).rounded(), .energy).string
     }
     
     func getBreakfastGoalKcalStr() -> String? {
-        return "1900 kcal"
+        guard let breakfastPercent = mealPercent?.breakfast,
+                let kcalGoal = kcalGoal else { return nil }
+        return BAMeasurement((breakfastPercent * kcalGoal).rounded(), .energy).string
     }
     
     func getLunchPercentStr() -> String? {
-        return "30%"
+        guard let lunchPercent = mealPercent?.lunch else { return nil }
+        return "\(Int(lunchPercent * 100))%"
     }
     
     func getDinnerPercentStr() -> String? {
-        return "30%"
+        guard let dinnerPercent = mealPercent?.dinner else { return nil }
+        return "\(Int(dinnerPercent * 100))%"
     }
     
     func getSnacksPercentStr() -> String? {
-        return "30%"
+        guard let snacksPercent = mealPercent?.snacks else { return nil }
+        return "\(Int(snacksPercent * 100))%"
     }
     
     func getBreakfastPercentStr() -> String? {
-        return "30%"
+        guard let breakfastPercent = mealPercent?.breakfast else { return nil }
+        return "\(Int(breakfastPercent * 100))%"
     }
     
     func didTapCell(_ type: CalorieGoalSettingsCategoryType) {
@@ -103,19 +142,88 @@ extension CalorieGoalSettingsPresenter: CalorieGoalSettingsPresenterInterface {
         case .goal:
             router?.openEnterCalorieGoalVC()
         case .breakfast:
-            return
+            router?.openMealEnterPercentVC(.breakfast)
         case .lunch:
-            return
+            router?.openMealEnterPercentVC(.launch)
         case .dinner:
-            return
+            router?.openMealEnterPercentVC(.dinner)
         case .snacks:
-            return
+            router?.openMealEnterPercentVC(.snack)
         default:
             return
         }
     }
     
     func setKcalGoal(_ value: Double) {
-        self.kcalGoal = BAMeasurement(value, .energy).value
+        guard let userData = UDM.userData,
+        let age = userData.dateOfBirth.years(to: Date()),
+        let activity = UDM.activityLevel,
+        let weight = WeightWidgetService.shared.getWeightNow(),
+        let goal = UDM.goalType else {
+            return
+        }
+        
+        if CalorieMeasurment.checkCalorie(
+            kcal: value,
+            sex: userData.sex,
+            activity: activity,
+            age: age,
+            height: userData.height,
+            weight: weight,
+            goal: goal
+        ) {
+            self.kcalGoal = BAMeasurement(value, .energy).value
+        } else {
+            
+        }
+    }
+    
+    func setMealKcalPercent(value: Double, mealTime: MealTime) {
+        guard let oldMealKcalPercent = mealPercent else { return }
+
+        switch mealTime {
+        case .breakfast:
+            self.mealPercent = .init(
+                breakfast: value,
+                lunch: oldMealKcalPercent.lunch,
+                dinner: oldMealKcalPercent.dinner,
+                snacks: oldMealKcalPercent.snacks
+            )
+            view.updateCell(.breakfast)
+        case .launch:
+            self.mealPercent = .init(
+                breakfast: oldMealKcalPercent.breakfast,
+                lunch: value,
+                dinner: oldMealKcalPercent.dinner,
+                snacks: oldMealKcalPercent.snacks
+            )
+            view.updateCell(.lunch)
+        case .dinner:
+            self.mealPercent = .init(
+                breakfast: oldMealKcalPercent.breakfast,
+                lunch: oldMealKcalPercent.lunch,
+                dinner: value,
+                snacks: oldMealKcalPercent.snacks
+            )
+            view.updateCell(.dinner)
+        case .snack:
+            self.mealPercent = .init(
+                breakfast: oldMealKcalPercent.breakfast,
+                lunch: oldMealKcalPercent.lunch,
+                dinner: oldMealKcalPercent.dinner,
+                snacks: value
+            )
+            view.updateCell(.snacks)
+        }
+    }
+    
+    func saveGoals() {
+        UDM.kcalGoal = self.kcalGoal
+        UDM.mealKcalPercent = mealPercent ?? .standart
+        router?.closeViewController()
+    }
+    
+    func getKcalGoal() -> Double? {
+        self.kcalGoal
     }
 }

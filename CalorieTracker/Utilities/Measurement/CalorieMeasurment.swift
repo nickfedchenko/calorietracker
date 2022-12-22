@@ -13,14 +13,44 @@ struct CalorieMeasurment {
         activity: ActivityLevel,
         age: Int,
         height: Double,
-        weight: Double
+        weight: Double,
+        goal: GoalType = .maintainWeight
     ) -> Double {
         let calorie = sex.mainFactor
         + sex.weightFactor * weight
         + sex.heightFactor * height
         - sex.ageFactor * Double(age)
         
-        return calorie * activity.factor
+        return calorie * activity.factor * goal.factor
+    }
+    
+    static func checkCalorie(
+        kcal: Double,
+        sex: UserSex,
+        activity: ActivityLevel,
+        age: Int,
+        height: Double,
+        weight: Double,
+        goal: GoalType = .maintainWeight
+    ) -> Bool {
+        let recommendedCalorie = calculationRecommendedCalorie(
+            sex: sex,
+            activity: activity,
+            age: age,
+            height: height,
+            weight: weight
+        )
+        
+        let percent = 1 - (kcal / recommendedCalorie)
+        
+        switch goal {
+        case .loseWeight:
+            return (percent >= -0.31) && (percent < 0.05)
+        case .buildMuscle:
+            return (percent <= 0.31) && (percent > -0.05)
+        case .maintainWeight:
+            return abs(percent) <= 0.05
+        }
     }
 }
 
@@ -73,6 +103,19 @@ private extension UserSex {
             return 66.5
         case .famale:
             return 655.1
+        }
+    }
+}
+
+private extension GoalType {
+    var factor: Double {
+        switch self {
+        case .loseWeight:
+            return 0.7
+        case .buildMuscle:
+            return 1.3
+        case .maintainWeight:
+            return 1
         }
     }
 }

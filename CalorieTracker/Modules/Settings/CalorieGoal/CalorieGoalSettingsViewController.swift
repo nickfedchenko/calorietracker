@@ -108,7 +108,7 @@ final class CalorieGoalSettingsViewController: UIViewController {
     }
     
     @objc private func didTapResetButton() {
-        presenter?.didTapResetButton()
+        presenter?.didTapRecalculateButton()
     }
 }
 
@@ -269,4 +269,3 @@ extension CalorieGoalSettingsViewController {
         return button
     }
 }
-
