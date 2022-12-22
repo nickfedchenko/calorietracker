@@ -19,4 +19,8 @@ extension Date {
     func months(to secondDate: Date, calendar: Calendar = Calendar.current) -> Int? {
         return calendar.dateComponents([.month], from: self, to: secondDate).month
     }
+    
+    func years(to secondDate: Date, calendar: Calendar = Calendar.current) -> Int? {
+        return calendar.dateComponents([.year], from: self, to: secondDate).year
+    }
 }
