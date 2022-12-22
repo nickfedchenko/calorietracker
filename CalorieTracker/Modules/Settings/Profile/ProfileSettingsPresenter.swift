@@ -92,6 +92,7 @@ extension ProfileSettingsPresenter: ProfileSettingsPresenterInterface {
         self.lastName = view.getLastNameStr()
         self.city = view.getCityStr()
         self.updateValue()
+        view.needUpdateParentVC()
         router?.closeViewController()
     }
     

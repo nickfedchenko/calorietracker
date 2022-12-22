@@ -12,12 +12,14 @@ protocol ProfileSettingsViewControllerInterface: AnyObject {
     func getNameStr() -> String?
     func getLastNameStr() -> String?
     func getCityStr() -> String?
+    func needUpdateParentVC()
 }
 
 final class ProfileSettingsViewController: UIViewController {
     var presenter: ProfileSettingsPresenterInterface?
     var viewModel: SettingsProfileViewModel?
     var keyboardManager: KeyboardManagerProtocol?
+    var needUpdate: (() -> Void)?
     
     private lazy var backButton: UIButton = getBackButton()
     private lazy var collectionView: UICollectionView = getCollectionView()
@@ -133,6 +135,10 @@ final class ProfileSettingsViewController: UIViewController {
 }
 
 extension ProfileSettingsViewController: ProfileSettingsViewControllerInterface {
+    func needUpdateParentVC() {
+        self.needUpdate?()
+    }
+    
     func updateCell(_ type: ProfileSettingsCategoryType) {
         guard let row = viewModel?.getIndexType(type) else { return }
         collectionView.reloadItems(at: [IndexPath(row: row, section: 0)])
