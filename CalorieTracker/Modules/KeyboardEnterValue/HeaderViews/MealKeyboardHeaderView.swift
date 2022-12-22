@@ -1,13 +1,13 @@
 //
-//  StandartKeyboardHeaderView.swift
+//  MealKeyboardHeaderView.swift
 //  CalorieTracker
 //
-//  Created by Vadim Aleshin on 16.12.2022.
+//  Created by Vadim Aleshin on 22.12.2022.
 //
 
 import UIKit
 
-final class StandartKeyboardHeaderView: UIView, KeyboardHeaderProtocol {
+final class MealKeyboardHeaderView: UIView, KeyboardHeaderProtocol {
     private lazy var gradientBackgroundView: UIView = getGradientBackgroundView()
     private lazy var titleLabel: UILabel = getTitleLabel()
     private lazy var textField: UITextField = getTextField()
@@ -20,8 +20,11 @@ final class StandartKeyboardHeaderView: UIView, KeyboardHeaderProtocol {
     var didTapClose: (() -> Void)?
     var didChangeValue: ((Double) -> Void)?
     
-    init(_ title: String) {
+    private var complition: ((String) -> String)?
+    
+    init(_ title: String, complition: ((String) -> String)?) {
         self.title = title
+        self.complition = complition
         super.init(frame: .zero)
         setupView()
         setupConstraints()
@@ -52,6 +55,8 @@ final class StandartKeyboardHeaderView: UIView, KeyboardHeaderProtocol {
             action: #selector(didTapSaveButton),
             for: .touchUpInside
         )
+        
+        textField.addTarget(self, action: #selector(didChangeValueTextField), for: .editingChanged)
     }
     
     private func setupConstraints() {
@@ -106,11 +111,37 @@ final class StandartKeyboardHeaderView: UIView, KeyboardHeaderProtocol {
         }
         self.didTapClose?()
     }
+    
+    @objc private func didChangeValueTextField() {
+        guard let description = complition?(textField.text ?? ""), !description.isEmpty else {
+            titleLabel.attributedText = nil
+            titleLabel.text = title
+            return
+        }
+        let str = "\(title) (\(description))"
+        let font = R.font.sfProDisplaySemibold(size: 22.fontScale())
+        titleLabel.attributedText = str.attributedSring([
+            .init(
+                worldIndex: [0],
+                attributes: [
+                    .font(font),
+                    .color(R.color.foodViewing.basicDark())
+                ]
+            ),
+            .init(
+                worldIndex: Array(1...str.split(separator: " ").count),
+                attributes: [
+                    .font(font),
+                    .color(R.color.foodViewing.basicDarkGrey())
+                ]
+            )
+        ])
+    }
 }
 
 // MARK: - Factory
 
-extension StandartKeyboardHeaderView {
+extension MealKeyboardHeaderView {
     private func getGradientBackgroundView() -> UIView {
         let view = UIView()
         return view
@@ -158,7 +189,7 @@ extension StandartKeyboardHeaderView {
     }
 }
 
-extension StandartKeyboardHeaderView {
+extension MealKeyboardHeaderView {
     private struct Const {
         static let gradientColors = [
             R.color.keyboardHeader.topGradient(),

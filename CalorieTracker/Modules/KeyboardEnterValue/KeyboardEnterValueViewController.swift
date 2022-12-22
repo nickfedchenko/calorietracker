@@ -17,6 +17,7 @@ final class KeyboardEnterValueViewController: UIViewController {
         case weight(WeightKeyboardHeaderView.ActionType)
         case steps
         case standart(String)
+        case meal(String, ((String) -> String)?)
     }
     var needUpdate: (() -> Void)?
     var complition: ((Double) -> Void)?
@@ -84,7 +85,7 @@ final class KeyboardEnterValueViewController: UIViewController {
                 }
             case .steps:
                 StepsWidgetService.shared.setDailyStepsGoal(value)
-            case .standart:
+            case .standart, .meal:
                 break
             }
             self.needUpdate?()
@@ -121,6 +122,8 @@ final class KeyboardEnterValueViewController: UIViewController {
             return StepsKeyboardHeaderView()
         case .standart(let title):
             return StandartKeyboardHeaderView(title)
+        case .meal(let title, let complition):
+            return MealKeyboardHeaderView(title, complition: complition)
         }
     }
     

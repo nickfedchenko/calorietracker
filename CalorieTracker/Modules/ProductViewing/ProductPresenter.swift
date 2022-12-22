@@ -42,7 +42,7 @@ extension ProductPresenter: ProductPresenterInterface {
     }
     
     func getNutritionDailyGoal() -> DailyNutrition? {
-        return UDM.nutritionDailyGoal
+        FDS.shared.getNutritionGoals()
     }
     
     func didTapCloseButton() {

@@ -54,6 +54,7 @@ class NutrientGoalSettingsPresenter {
         self.view = view
         self.router = router
         self.nutrientTypeGoal = UDM.nutrientPercent
+        self.kcalGoal = UDM.kcalGoal
     }
     
     private func update() {
