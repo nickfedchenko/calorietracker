@@ -22,6 +22,7 @@ final class CalendarFullWidgetView: UIView, CTWidgetFullProtocol {
     private lazy var leftButton: UIButton = getLeftButton()
     private lazy var rightButton: UIButton = getRightButton()
     private lazy var headerView: UIView = getHeaderView()
+    private lazy var dateFormatter: DateFormatter = getDateFormatter()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -43,8 +44,14 @@ final class CalendarFullWidgetView: UIView, CTWidgetFullProtocol {
         layer.cornerCurve = .continuous
         layer.cornerRadius = 16
         
+        updateDateLabel(Date())
+        
         calendarView.dateDataCompletion = { date in
             return CalendarWidgetService.shared.getCalendarData(year: date.year, month: date.month)
+        }
+        
+        calendarView.didChangeDate = { date in
+            self.updateDateLabel(date)
         }
     }
     
@@ -75,18 +82,21 @@ final class CalendarFullWidgetView: UIView, CTWidgetFullProtocol {
         
         calendarView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            make.centerY.equalToSuperview()
             make.bottom.greaterThanOrEqualToSuperview()
-            make.top.lessThanOrEqualTo(headerView.snp.bottom)
+            make.top.equalTo(headerView.snp.bottom)
         }
     }
     
+    private func updateDateLabel(_ date: Date) {
+        dateLabel.text = dateFormatter.string(from: date)
+    }
+    
     @objc private func didTapLeftButton() {
-        
+        calendarView.didSwipeRight()
     }
     
     @objc private func didTapRightButton() {
-        
+        calendarView.didSwipeLeft()
     }
 }
 
@@ -132,6 +142,12 @@ extension CalendarFullWidgetView {
         view.layer.cornerRadius = 16
         view.backgroundColor = R.color.calendarWidget.header()
         return view
+    }
+    
+    func getDateFormatter() -> DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM yyyy"
+        return formatter
     }
 }
 
