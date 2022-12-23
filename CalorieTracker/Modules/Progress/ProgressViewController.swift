@@ -74,6 +74,7 @@ final class ProgressViewController: UIViewController {
         view.insets = UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2)
         view.selectorRadius = 14
         view.layer.cornerRadius = 16
+        view.selectedButtonType = .daily
         return view
     }()
     

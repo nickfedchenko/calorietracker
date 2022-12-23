@@ -658,6 +658,7 @@ private extension AddFoodViewController {
     func getSegmentedControl() -> SegmentedControl<AddFood> {
         let view = SegmentedControl<AddFood>(Const.segmentedModels)
         view.backgroundColor = R.color.addFood.menu.background()
+        view.selectedButtonType = .frequent
         return view
     }
     

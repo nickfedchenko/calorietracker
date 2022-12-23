@@ -76,7 +76,7 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
             view.setWeightWidget(weight: nil)
             return
         }
-        view.setWeightWidget(weight: CGFloat(BAMeasurement(weightNow, .weight).localized))
+        view.setWeightWidget(weight: CGFloat(BAMeasurement(weightNow, .weight, isMetric: true).localized))
     }
     
     func updateCalendarWidget(_ date: Date?) {

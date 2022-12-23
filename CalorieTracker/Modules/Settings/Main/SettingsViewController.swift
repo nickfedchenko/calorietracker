@@ -46,6 +46,11 @@ final class SettingsViewController: UIViewController {
         firstDraw = false
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        presenter?.updateCell(.profile)
+    }
+    
     private func setupView() {
         view.backgroundColor = R.color.foodViewing.background()
         navigationController?.setToolbarHidden(true, animated: false)

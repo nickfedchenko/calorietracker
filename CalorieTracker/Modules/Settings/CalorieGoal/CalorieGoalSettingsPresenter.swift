@@ -21,7 +21,7 @@ protocol CalorieGoalSettingsPresenterInterface: AnyObject {
     func getSnacksPercentStr() -> String?
     func getDinnerPercentStr() -> String?
     func getLunchPercentStr() -> String?
-    func setKcalGoal(_ value: Double)
+    func setKcalGoal(_ value: Double, isMetric: Bool)
     func saveGoals()
     func getKcalGoal() -> Double?
     func setMealKcalPercent(value: Double, mealTime: MealTime)
@@ -97,24 +97,24 @@ extension CalorieGoalSettingsPresenter: CalorieGoalSettingsPresenterInterface {
     func getLunchGoalKcalStr() -> String? {
         guard let lunchPercent = mealPercent?.lunch,
                 let kcalGoal = kcalGoal else { return nil }
-        return BAMeasurement((lunchPercent * kcalGoal).rounded(), .energy).string
+        return BAMeasurement((lunchPercent * kcalGoal).rounded(), .energy, isMetric: true).string
     }
     
     func getDinnerGoalKcalStr() -> String? {
         guard let dinnerPercent = mealPercent?.dinner,
                 let kcalGoal = kcalGoal else { return nil }
-        return BAMeasurement((dinnerPercent * kcalGoal).rounded(), .energy).string
+        return BAMeasurement((dinnerPercent * kcalGoal).rounded(), .energy, isMetric: true).string
     }
     
     func getSnacksGoalKcalStr() -> String? {
         guard let snacksPercent = mealPercent?.snacks, let kcalGoal = kcalGoal else { return nil }
-        return BAMeasurement((snacksPercent * kcalGoal).rounded(), .energy).string
+        return BAMeasurement((snacksPercent * kcalGoal).rounded(), .energy, isMetric: true).string
     }
     
     func getBreakfastGoalKcalStr() -> String? {
         guard let breakfastPercent = mealPercent?.breakfast,
                 let kcalGoal = kcalGoal else { return nil }
-        return BAMeasurement((breakfastPercent * kcalGoal).rounded(), .energy).string
+        return BAMeasurement((breakfastPercent * kcalGoal).rounded(), .energy, isMetric: true).string
     }
     
     func getLunchPercentStr() -> String? {
@@ -154,7 +154,7 @@ extension CalorieGoalSettingsPresenter: CalorieGoalSettingsPresenterInterface {
         }
     }
     
-    func setKcalGoal(_ value: Double) {
+    func setKcalGoal(_ value: Double, isMetric: Bool = false) {
         guard let userData = UDM.userData,
         let age = userData.dateOfBirth.years(to: Date()),
         let activity = UDM.activityLevel,
@@ -163,8 +163,10 @@ extension CalorieGoalSettingsPresenter: CalorieGoalSettingsPresenterInterface {
             return
         }
         
+        let metricValue = BAMeasurement(value, .energy, isMetric: isMetric).value
+        
         if CalorieMeasurment.checkCalorie(
-            kcal: value,
+            kcal: metricValue,
             sex: userData.sex,
             activity: activity,
             age: age,
@@ -172,7 +174,7 @@ extension CalorieGoalSettingsPresenter: CalorieGoalSettingsPresenterInterface {
             weight: weight,
             goal: goal
         ) {
-            self.kcalGoal = BAMeasurement(value, .energy).value
+            self.kcalGoal = metricValue
         } else {
             
         }

@@ -7,13 +7,13 @@
 
 import UIKit
 
-final class SegmentedControl<ID>: UIView {
+final class SegmentedControl<ID: Equatable>: UIView {
     typealias Button = SegmentedButton<ID>
     
     private let buttons: [Button]
     private var firstDraw = true
     
-    var selectedButton: Button? {
+    private(set) var selectedButton: Button? {
         didSet {
             UIView.animate(withDuration: 0.15, delay: 0, options: .curveEaseOut) {
                 self.selectorView.frame = {
@@ -44,6 +44,7 @@ final class SegmentedControl<ID>: UIView {
     
     private var flag = true
     
+    var selectedButtonType: ID?
     var onSegmentChanged: ((Button.Model) -> Void)?
     var textNormalColor: UIColor? = .black
     var textSelectedColor: UIColor? = .green
@@ -92,19 +93,23 @@ final class SegmentedControl<ID>: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         setupShadow()
-        guard firstDraw, let button = buttons.first, button.frame != .zero else { return }
-        selectedButton = buttons.first
+        guard firstDraw,
+              let button = getSelectedButton(selectedButtonType),
+              button.frame != .zero else { return }
+        button.isSelected = true
+        selectedButton = button
         setupShadow()
         firstDraw = false
+    }
+    
+    private func getSelectedButton(_ type: ID?) -> Button? {
+        return buttons.first(where: { $0.model.id == type })
     }
 
     private func setupViews() {
         layer.cornerRadius = 8
         layer.cornerCurve = .circular
-  
-        selectedButton = buttons.first
 
-        buttons.first?.isSelected = true
         buttons.forEach { button in
             let view = UIView()
             view.addSubview(button)

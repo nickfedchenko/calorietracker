@@ -70,7 +70,7 @@ final class SettingsNutrientGoalView: UIView {
         weightBackgroundView.snp.makeConstraints { make in
             make.trailing.top.equalToSuperview()
             make.bottom.lessThanOrEqualTo(slider.snp.top)
-            make.width.equalTo(62)
+            make.width.equalTo(62).priority(.low)
         }
         
         weightTitleLabel.snp.makeConstraints { make in

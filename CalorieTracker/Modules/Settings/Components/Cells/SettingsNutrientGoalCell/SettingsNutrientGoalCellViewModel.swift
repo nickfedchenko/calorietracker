@@ -70,14 +70,14 @@ struct SettingsNutrientGoalCellViewModel {
         let percentTitle = "\(percent)%"
         let nutrientTypeTitle = nutrientType.getTitle(.long) ?? ""
         let kcal = Double(percent) * kcalPerPercentage
-        let kcalTitle = "(\(BAMeasurement(kcal, .energy).string))"
+        let kcalTitle = "(\(BAMeasurement(kcal, .energy, isMetric: true).string))"
         let weight = NutrientMeasurment.convert(
             value: kcal,
             type: nutrientType,
             from: .kcal,
             to: .gram
         )
-        let weightTitle = BAMeasurement(weight, .serving).string
+        let weightTitle = BAMeasurement(weight, .serving, isMetric: true).string
         
         output?.updateView(
             percentTitle: percentTitle,
