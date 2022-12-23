@@ -88,7 +88,8 @@ extension SettingsRouter: SettingsRouterInterface {
     }
     
     func openAppViewController() {
-        
+        let vc = AppSettingsRouter.setupModule()
+        viewController?.navigationController?.pushViewController(vc, animated: true)
     }
     
     func openChatViewController() {
