@@ -28,7 +28,11 @@ final class BasicButtonNode: CTWidgetButtonNode {
     
     var active: Bool = true {
         didSet {
-            if !active { didEnterInactive() }
+            if !active {
+                didEnterInactive()
+            } else {
+                setupButton(isPress: false)
+            }
         }
     }
     

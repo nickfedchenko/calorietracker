@@ -11,8 +11,14 @@ protocol WaterFullWidgetInterface: AnyObject {
     
 }
 
+protocol WaterFullWidgetOutput: AnyObject {
+    func setGoal(_ widget: WaterFullWidgetView)
+    func setQuickAdd(_ widget: WaterFullWidgetView, complition: @escaping (QuickAddModel) -> Void)
+}
+
 final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
     var didTapCloseButton: (() -> Void)?
+    weak var output: WaterFullWidgetOutput?
     
     private lazy var waterTitleLabel: UILabel = {
         let label = UILabel()
@@ -159,6 +165,13 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
             self.configureView()
         }
         
+        quickAddStack.didTapEdit = { complition in
+            self.output?.setQuickAdd(self, complition: { model in
+                self.presenter?.addQuickAddTypes(model)
+                complition(model)
+            })
+        }
+        
         if let viewsType = presenter?.getQuickAddTypes() {
             quickAddStack.viewsType = viewsType
         }
@@ -169,7 +182,7 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
     }
     
     func update() {
-        
+        configureView()
     }
     
     // MARK: - Setup View
@@ -259,6 +272,8 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
     private func configureView() {
         quickAddStack.isEdit = isSelectedSettingsButton
         slider.step = 0
+        slider.stepVolume = presenter?.getSliderStepVolume() ?? 0
+        slider.countParts = presenter?.getCountSliderParts() ?? 0
         let goal = presenter?.getGoal() ?? 1
         let valueNow = presenter?.getValueNow() ?? 0
         switch isSelectedSettingsButton {
@@ -306,13 +321,13 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
         if goal != nil {
             waterValueLabel.attributedText = string.attributedSring([
                 .init(worldIndex: [0], attributes: leftAttributes),
-                .init(worldIndex: [1, 2, 3], attributes: rightAttributes)
+                .init(worldIndex: [1, 2, 3, 4], attributes: rightAttributes)
             ])
         } else {
             waterValueLabel.attributedText = string.attributedSring(
                 [
                     .init(worldIndex: [0, 1], attributes: leftAttributes),
-                    .init(worldIndex: [2], attributes: rightAttributes)
+                    .init(worldIndex: [2, 3], attributes: rightAttributes)
                 ],
                 image: .init(
                     image: R.image.waterWidget.editText(),
@@ -321,21 +336,6 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
                 )
             )
         }
-    }
-    
-    private func getAttributedStringImage(image: UIImage?) -> NSAttributedString {
-        guard let image = image else { return NSMutableAttributedString() }
-        
-        let imageAttachment = NSTextAttachment()
-        imageAttachment.image = image
-        imageAttachment.bounds = CGRect(
-            x: 0,
-            y: (R.font.sfProDisplaySemibold(size: 22)!.capHeight - image.size.height).rounded() / 2,
-            width: image.size.width,
-            height: image.size.height
-        )
-
-        return NSAttributedString(attachment: imageAttachment)
     }
     
     // MARK: - Selectors
@@ -347,18 +347,17 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
             settingsButton.setImage(R.image.waterWidget.closeSettings(), for: .normal)
         case false:
             settingsButton.setImage(R.image.waterWidget.openSettings(), for: .normal)
-            presenter?.saveQuickAddTypes(quickAddStack.viewsType)
         }
         
         configureView()
     }
     
     @objc private func didTapGoalButton(_ sender: UIButton) {
-        
+        output?.setGoal(self)
     }
     
     @objc private func didTapTrackButton(_ sender: UIButton) {
-        presenter?.addWater(slider.stepMl * slider.step)
+        presenter?.addWater(slider.stepVolume * slider.step)
         configureView()
     }
     

@@ -97,6 +97,8 @@ final class WidgetContainerViewController: UIViewController {
             (widgetView as? WeightFullWidgetView)?.output = self
         case .steps:
             (widgetView as? StepsFullWidgetView)?.output = self
+        case .water:
+            (widgetView as? WaterFullWidgetView)?.output = self
         default:
             break
         }
@@ -201,6 +203,22 @@ extension WidgetContainerViewController: WeightFullWidgetOutput {
     
     func addWeight(_ widget: WeightFullWidgetView) {
         presenter?.openChangeWeightViewController(.add)
+    }
+}
+
+extension WidgetContainerViewController: WaterFullWidgetOutput {
+    func setQuickAdd(_ widget: WaterFullWidgetView, complition: @escaping (QuickAddModel) -> Void) {
+        let vc = KeyboardEnterValueViewController(.water)
+        
+        vc.waterComplition = { model in
+            complition(model)
+        }
+        
+        present(vc, animated: true)
+    }
+    
+    func setGoal(_ widget: WaterFullWidgetView) {
+        presenter?.setGoalWater()
     }
 }
 

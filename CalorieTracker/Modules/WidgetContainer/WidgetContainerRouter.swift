@@ -11,6 +11,7 @@ protocol WidgetContainerRouterInterface: AnyObject {
     func closeViewController()
     func openChangeWeightViewController(_ type: WeightKeyboardHeaderView.ActionType)
     func openChangeStepsViewController()
+    func openSetGoalWaterVC()
 }
 
 class WidgetContainerRouter: NSObject {
@@ -48,6 +49,17 @@ extension WidgetContainerRouter: WidgetContainerRouterInterface {
         let vc = KeyboardEnterValueViewController(.steps)
         vc.modalPresentationStyle = .overFullScreen
         vc.needUpdate = {
+            self.presenter?.updateView()
+        }
+        
+        viewController?.present(vc, animated: true)
+    }
+    
+    func openSetGoalWaterVC() {
+        let vc = KeyboardEnterValueViewController(.standart("I will drink daily:"))
+        
+        vc.complition = { value in
+            WaterWidgetService.shared.setDailyWaterGoal(BAMeasurement(value, .liquid).value)
             self.presenter?.updateView()
         }
         

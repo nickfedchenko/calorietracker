@@ -31,8 +31,8 @@ final class WaterSliderView: UIView {
     private var isFirstDraw = true
     
     var countParts: Int = 15
-    var minMl: Int = 0
-    var stepMl: Int = 50
+    var minVolume: Int = 0
+    var stepVolume: Int = 50
     
     var step: Int {
         get { slider.step }
@@ -84,13 +84,14 @@ final class WaterSliderView: UIView {
     
     private func setupWaterTextNodes(width: CGFloat) {
         var textLabels: [UILabel] = []
+        let suffix = BAMeasurement.measurmentSuffix(.liquid).uppercased()
         
         for index in 0...countParts {
             let label = UILabel()
             label.isHidden = index != 0
             label.textAlignment = .center
             label.attributedText = getAttributedString(
-                string: index == 0 ? "\(minMl) ML" : "+\(minMl + index * stepMl) ML",
+                string: index == 0 ? "\(minVolume) \(suffix)" : "+\(minVolume + index * stepVolume) \(suffix)",
                 color: index == 0 ? R.color.waterSlider.background() : R.color.waterSlider.shadow()
             )
             label.frame = CGRect(

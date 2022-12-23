@@ -129,7 +129,7 @@ final class WaterWidgetNode: CTWidgetNode {
         
         bottomTitleLabel.attributedText = model.waterMl.attributedSring([
             .init(worldIndex: [0], attributes: leftAttributes),
-            .init(worldIndex: [1, 2, 3], attributes: rightAttributes)
+            .init(worldIndex: [1, 2, 3, 4], attributes: rightAttributes)
         ])
     }
     

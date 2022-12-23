@@ -52,8 +52,16 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
     }
     
     func updateWaterWidgetModel() {
-        let goal = BAMeasurement(WaterWidgetService.shared.getDailyWaterGoal(), .liquid).localized
-        let waterNow = BAMeasurement(WaterWidgetService.shared.getWaterNow(), .liquid).localized
+        let goal = BAMeasurement(
+            WaterWidgetService.shared.getDailyWaterGoal(),
+            .liquid,
+            isMetric: true
+        ).localized
+        let waterNow = BAMeasurement(
+            WaterWidgetService.shared.getWaterNow(),
+            .liquid,
+            isMetric: true
+        ).localized
         let suffix = BAMeasurement.measurmentSuffix(.liquid)
         
         let model = WaterWidgetNode.Model(
