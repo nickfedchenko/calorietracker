@@ -33,7 +33,13 @@ class LineChartViewPresenter {
                 return (date: date, value: CGFloat($0.value))
             }
         case .bmi:
-            return []
+            return WeightWidgetService.shared.getAllWeight().compactMap {
+                guard let date = $0.day.date, let height = UDM.userData?.height else { return nil }
+                return (
+                    date: date,
+                    value: CGFloat(BMIMeasurment(weight: $0.value, height: height).bmi)
+                )
+            }
         }
     }
     
@@ -43,7 +49,8 @@ class LineChartViewPresenter {
         case .weight:
             goal = UDM.weightGoal
         case .bmi:
-            goal = UDM.bmiGoal
+            guard let height = UDM.userData?.height, let weightGoal = UDM.weightGoal else { return nil }
+            goal = BMIMeasurment(weight: weightGoal, height: height).bmi
         }
         guard let goal = goal else { return nil }
         return CGFloat(goal)

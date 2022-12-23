@@ -24,25 +24,45 @@ struct BAMeasurement {
     }
     
     static func measurmentSuffix(_ measurement: MeasurementValue) -> String {
+        measurmentSuffix(
+            measurement,
+            isMetric: {
+                switch measurement {
+                case .weight:
+                    return UDM.weightIsMetric
+                case .lenght:
+                    return UDM.lengthIsMetric
+                case .energy:
+                    return UDM.energyIsMetric
+                case .liquid:
+                    return UDM.liquidCapacityIsMetric
+                case .serving:
+                    return UDM.servingIsMetric
+                }
+            }()
+        )
+    }
+    
+    static func measurmentSuffix(_ measurement: MeasurementValue, isMetric: Bool) -> String {
         switch measurement {
         case .weight:
-            return UDM.weightIsMetric
+            return isMetric
                 ? "kg"
                 : "lb"
         case .lenght:
-            return UDM.lengthIsMetric
+            return isMetric
                 ? "cm"
                 : "in"
         case .energy:
-            return UDM.energyIsMetric
+            return isMetric
                 ? "kcal"
                 : "kj"
         case .liquid:
-            return UDM.liquidCapacityIsMetric
+            return isMetric
                 ? "ml"
                 : "fl oz"
         case .serving:
-            return UDM.servingIsMetric
+            return isMetric
                 ? "g"
                 : "oz"
         }

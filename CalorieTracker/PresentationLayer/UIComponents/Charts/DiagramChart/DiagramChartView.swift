@@ -23,6 +23,7 @@ final class DiagramChartView: UIView {
         case steps
         case water
         case activity
+        case protein
         
         func getTitle() -> String {
             switch self {
@@ -36,6 +37,8 @@ final class DiagramChartView: UIView {
                 return "WATER"
             case .activity:
                 return "ACTIVITY ENERGY"
+            case .protein:
+                return "PROTEIN"
             }
         }
         
@@ -48,9 +51,11 @@ final class DiagramChartView: UIView {
             case .steps:
                 return ""
             case .water:
-                return "ml"
+                return BAMeasurement.measurmentSuffix(.liquid)
             case .activity:
-                return "Kcal"
+                return BAMeasurement.measurmentSuffix(.energy)
+            case .protein:
+                return BAMeasurement.measurmentSuffix(.energy)
             }
         }
         
@@ -66,6 +71,8 @@ final class DiagramChartView: UIView {
                 return R.color.progressScreen.water()
             case .activity:
                 return R.color.progressScreen.active()
+            case .protein:
+                return R.color.progressScreen.protein()
             }
         }
     }

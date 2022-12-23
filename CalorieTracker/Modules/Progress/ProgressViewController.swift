@@ -34,7 +34,7 @@ final class ProgressViewController: UIViewController {
     
     private lazy var progressTitleLabel: UILabel = {
         let label = UILabel()
-        label.font = R.font.sfProDisplaySemibold(size: 24)
+        label.font = R.font.sfProDisplaySemibold(size: 24.fontScale())
         label.textColor = R.color.progressScreen.title()
         label.text = "PROGRESS"
         return label
@@ -97,40 +97,6 @@ final class ProgressViewController: UIViewController {
     private lazy var bottomBackgroundView: UIView = {
         let view = UIView()
         view.backgroundColor = R.color.progressScreen.background()
-        return view
-    }()
-    
-    private lazy var viewChartFirst: LineChartView = {
-        let view = LineChartView(.weight)
-        view.titleChart = "WEIGHT"
-        return view
-    }()
-    
-    private lazy var viewChartSec: UIImageView = {
-        let view = UIImageView()
-        view.image = R.image.progressScreen.weight()
-        view.contentMode = .scaleAspectFill
-        return view
-    }()
-    
-    private lazy var viewChartThird: UIImageView = {
-        let view = UIImageView()
-        view.image = R.image.progressScreen.carb()
-        view.contentMode = .scaleAspectFill
-        return view
-    }()
-    
-    private lazy var viewChartFour: UIImageView = {
-        let view = UIImageView()
-        view.image = R.image.progressScreen.dietary()
-        view.contentMode = .scaleAspectFill
-        return view
-    }()
-    
-    private lazy var viewChartFive: UIImageView = {
-        let view = UIImageView()
-        view.image = R.image.progressScreen.calories()
-        view.contentMode = .scaleAspectFill
         return view
     }()
     
@@ -254,7 +220,7 @@ final class ProgressViewController: UIViewController {
         case .dietary:
             return TripleDiagramChartView(.dietary)
         case .protein:
-            return DiagramChartView(.carb)
+            return DiagramChartView(.protein)
         case .steps:
             return DiagramChartView(.steps)
         case .water:
