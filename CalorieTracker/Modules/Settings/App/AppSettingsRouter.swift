@@ -5,11 +5,13 @@
 //  Created by Vadim Aleshin on 22.12.2022.
 //
 
+import SafariServices
 import UIKit
 
 protocol AppSettingsRouterInterface: AnyObject {
     func closeViewController()
     func openUnitsSettingsVC()
+    func openAboutSettingsVC()
 }
 
 class AppSettingsRouter: NSObject {
@@ -24,12 +26,8 @@ class AppSettingsRouter: NSObject {
         let viewModel = AppSettingsViewModel(
             types: [
                 .title,
-                .account,
                 .units,
                 .sync,
-                .database,
-                .haptic,
-                .meal,
                 .about
             ],
             presenter: presenter
@@ -41,6 +39,12 @@ class AppSettingsRouter: NSObject {
         router.presenter = presenter
         return vc
     }
+    
+    private func openSafaryUrl(_ urlStr: String) {
+        guard let url = URL(string: urlStr) else { return }
+        let safaryVC = SFSafariViewController(url: url)
+        viewController?.present(safaryVC, animated: true)
+    }
 }
 
 extension AppSettingsRouter: AppSettingsRouterInterface {
@@ -51,5 +55,9 @@ extension AppSettingsRouter: AppSettingsRouterInterface {
     func openUnitsSettingsVC() {
         let vc = UnitsSettingsRouter.setupModule()
         viewController?.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func openAboutSettingsVC() {
+        openSafaryUrl("https://www.google.ru/")
     }
 }

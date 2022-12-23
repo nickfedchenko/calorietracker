@@ -42,7 +42,7 @@ extension AppSettingsPresenter: AppSettingsPresenterInterface {
         case .meal:
             return
         case .about:
-            return
+            router?.openAboutSettingsVC()
         default:
             return
         }
