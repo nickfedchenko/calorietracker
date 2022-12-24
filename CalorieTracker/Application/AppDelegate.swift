@@ -26,7 +26,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     ) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
         
-        let getStartedViewController = WelcomeRouter.setupModule()
+        var getStartedViewController: UIViewController
+        if UDM.userData == nil {
+            getStartedViewController = WelcomeRouter.setupModule()
+        } else {
+            getStartedViewController = CTTabBarController()
+        }
+        
         let navigationController = UINavigationController(rootViewController: getStartedViewController)
         
         window?.rootViewController = navigationController

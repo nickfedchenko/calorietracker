@@ -8,6 +8,51 @@
 import Foundation
 
 struct CalorieMeasurment {
+    private let age: Int
+    private let height: Double
+    private let sex: UserSex
+    private let weight: Double
+    private let goalWeight: Double
+    private let kcalPercent: Double
+    
+    private let kcalForKg: Double = 7700
+    
+    let recommendedCalorie: Double
+    
+    init(age: Int, height: Double, sex: UserSex, weight: Double, goalWeight: Double, kcalPercent: Double) {
+        self.age = age
+        self.height = height
+        self.sex = sex
+        self.weight = weight
+        self.goalWeight = goalWeight
+        self.kcalPercent = weight >= goalWeight ? 1 - kcalPercent : 1 + kcalPercent
+        self.recommendedCalorie = Self.calculationRecommendedCalorie(
+            sex: sex,
+            activity: .moderate,
+            age: age,
+            height: height,
+            weight: weight
+        )
+    }
+    
+    func goalCompletionDate(_ date: Date) -> Date? {
+        let newDailyKcal = recommendedCalorie * kcalPercent
+        let kcalDifference = abs(recommendedCalorie - newDailyKcal)
+        let weightDifference = abs(goalWeight - weight)
+        let burnKgDays = kcalForKg / kcalDifference
+        let days = Int(weightDifference * burnKgDays)
+        
+        let calendar = Calendar.current
+        return calendar.date(byAdding: .day, value: days, to: date)
+    }
+    
+    func weekGoalKg() -> Double {
+        let newDailyKcal = recommendedCalorie * kcalPercent
+        let kcalDifference = abs(recommendedCalorie - newDailyKcal)
+        let burnKgDays = kcalForKg / kcalDifference
+        return 7.0 / burnKgDays
+    }
+    
     static func calculationRecommendedCalorie(
         sex: UserSex,
         activity: ActivityLevel,

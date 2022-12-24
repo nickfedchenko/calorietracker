@@ -159,4 +159,6 @@
 "onboarding.first.welcome.motivation" = "Motivation / Goal";
 "onboarding.first.welcome.habits" = "Habits";
 
-"onboarding.first.welcome.title" = "History";
+"onboarding.chart.description" = "At this rate, we expect you to reach your target weight around December";
+"onboarding.chart.now" = "Now";
+"onboarding.chart.title" = "Weight gain chart";

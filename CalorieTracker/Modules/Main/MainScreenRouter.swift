@@ -13,6 +13,7 @@ protocol MainScreenRouterInterface: AnyObject {
     func openAddFoodVC()
     func openWidget(_ type: WidgetContainerViewController.WidgetType)
     func openSettingsVC()
+    func openOnboarding()
 }
 
 class MainScreenRouter: NSObject {
@@ -53,6 +54,14 @@ extension MainScreenRouter: MainScreenRouterInterface {
         vc.output = self
         
         viewController?.present(vc, animated: true)
+    }
+    
+    func openOnboarding() {
+        let vc = WelcomeRouter.setupModule()
+        viewController?.present(
+            UINavigationController(rootViewController: vc),
+            animated: false
+        )
     }
 }
 

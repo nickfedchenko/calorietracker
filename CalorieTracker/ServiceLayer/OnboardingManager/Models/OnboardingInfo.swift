@@ -52,6 +52,7 @@ struct OnboardingInfo {
     var jointWeightLoss: JointWeightLoss?
     var lifestyleOfOthers: LifestyleOfOthers?
     var emotionalSupportSystem: EmotionalSupportSystem?
+    var weightGoal: WeightGoal?
     
     private var firstStageData: [Any?] {
         return [

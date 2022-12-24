@@ -58,6 +58,8 @@ protocol OnboardingManagerInterface {
     func set(yourWeight: Double)
     func getYourWeight() -> Double?
     
+    func set(weightGoal: WeightGoal)
+    
     func getAllRisksOfDiseases() -> [RisksOfDiseases]
     func set(risksOfDiseases: RisksOfDiseases)
     
@@ -456,5 +458,9 @@ extension OnboardingManager: OnboardingManagerInterface {
     
     func set(emotionalSupportSystem: EmotionalSupportSystem) {
         onboardingInfo.emotionalSupportSystem = emotionalSupportSystem
+    }
+    
+    func set(weightGoal: WeightGoal) {
+        onboardingInfo.weightGoal = weightGoal
     }
 }

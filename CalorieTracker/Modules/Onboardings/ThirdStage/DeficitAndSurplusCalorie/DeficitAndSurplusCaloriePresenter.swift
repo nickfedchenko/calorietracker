@@ -51,6 +51,10 @@ extension DeficitAndSurplusCaloriePresenter: DeficitAndSurplusCaloriePresenterIn
         if let weightGoal = interactor?.getWeightGoal(rate: 5.0) {
             view.set(weightGoal: weightGoal)
         }
+        
+        if let date = interactor?.getDate(rate: 5.0) {
+            view.set(date: date)
+        }
     }
     
     func didTapContinueCommonButton() {
@@ -60,6 +64,10 @@ extension DeficitAndSurplusCaloriePresenter: DeficitAndSurplusCaloriePresenterIn
     func didChangeRate(on value: Double) {
         if let weightGoal = interactor?.getWeightGoal(rate: value) {
             view.set(weightGoal: weightGoal)
+        }
+        
+        if let date = interactor?.getDate(rate: value) {
+            view.set(date: date)
         }
     }
 }

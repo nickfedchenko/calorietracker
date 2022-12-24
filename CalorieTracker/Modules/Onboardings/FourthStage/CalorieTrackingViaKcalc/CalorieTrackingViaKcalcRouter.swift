@@ -7,7 +7,9 @@
 
 import UIKit
 
-protocol CalorieTrackingViaKcalcRouterInterface: AnyObject {}
+protocol CalorieTrackingViaKcalcRouterInterface: AnyObject {
+    func openMainController()
+}
 
 class CalorieTrackingViaKcalcRouter {
     
@@ -38,4 +40,10 @@ class CalorieTrackingViaKcalcRouter {
 
 // MARK: - CalorieTrackingViaKcalcRouterInterface
 
-extension CalorieTrackingViaKcalcRouter: CalorieTrackingViaKcalcRouterInterface {}
+extension CalorieTrackingViaKcalcRouter: CalorieTrackingViaKcalcRouterInterface {
+    func openMainController() {
+        let vc = UINavigationController(rootViewController: CTTabBarController())
+        vc.modalPresentationStyle = .overFullScreen
+        viewController?.present(vc, animated: true)
+    }
+}

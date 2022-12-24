@@ -19,6 +19,7 @@ protocol MainScreenPresenterInterface: AnyObject {
     func updateMessageWidget()
     func updateActivityWidget()
     func updateExersiceWidget()
+    func checkOnboarding()
 }
 
 class MainScreenPresenter {
@@ -39,6 +40,10 @@ class MainScreenPresenter {
 }
 
 extension MainScreenPresenter: MainScreenPresenterInterface {
+    func checkOnboarding() {
+        router?.openOnboarding()
+    }
+    
     func didTapMenuButton() {
         router?.openSettingsVC()
     }

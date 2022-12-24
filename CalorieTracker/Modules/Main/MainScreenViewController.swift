@@ -190,6 +190,7 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
     override func viewDidLoad() {
         super.viewDidLoad()
         addTapGestureRecognizer()
+        presenter?.checkOnboarding()
     }
     
     override func viewWillAppear(_ animated: Bool) {

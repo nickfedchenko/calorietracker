@@ -25,10 +25,19 @@ final class GetStartedViewController: UIViewController {
     private let stackView: UIStackView = .init()
     private let logoImageView: UIImageView = .init()
     private let logoTextImageView: UIImageView = .init()
-    private let trackCheckMarkDescriptionView: CheckMarkDescriptionView = .init(text: R.string.localizable.onboardingFirstGetStartedTrack())
-    private let followCheckMarkDescriptionView: CheckMarkDescriptionView = .init(text: R.string.localizable.onboardingFirstGetStartedFollow())
-    private let reachCheckMarkDescriptionView: CheckMarkDescriptionView = .init(text: R.string.localizable.onboardingFirstGetStartedReach())
-    private let getStartedCommonButton: CommonButton = .init(style: .filled, text: R.string.localizable.onboardingFirstGetStartedGetStarted())
+    private let trackCheckMarkDescriptionView: CheckMarkDescriptionView = .init(
+        text: R.string.localizable.onboardingFirstGetStartedTrack()
+    )
+    private let followCheckMarkDescriptionView: CheckMarkDescriptionView = .init(
+        text: R.string.localizable.onboardingFirstGetStartedFollow()
+    )
+    private let reachCheckMarkDescriptionView: CheckMarkDescriptionView = .init(
+        text: R.string.localizable.onboardingFirstGetStartedReach()
+    )
+    private let getStartedCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingFirstGetStartedGetStarted()
+    )
     private let getStartedSignInAppleButton: SignInAppleButton = .init()
     
     // MARK: - Lifecycle methods

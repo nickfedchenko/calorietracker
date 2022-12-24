@@ -13,6 +13,7 @@ protocol DeficitAndSurplusCalorieViewControllerInterface: AnyObject {
     func set(yourWeight: Double)
     func set(yourGoalWeight: Double)
     func set(weightGoal: WeightGoal)
+    func set(date: Date)
 }
 
 final class DeficitAndSurplusCalorieViewController: UIViewController {
@@ -29,7 +30,7 @@ final class DeficitAndSurplusCalorieViewController: UIViewController {
     private let stackView: UIStackView = .init()
     private let currentYourWeightComponent: YourWeightComponent = .init(style: .current)
     private let targetYourWeightComponent: YourWeightComponent = .init(style: .target)
-    private let scheduleImageView: UIImageView = .init()
+    private let chartView: OnboardingChartView = .init()
     private let sliderBackground: UIView = .init()
     private let firstDotView: UIView = .init()
     private let secondDotView: UIView = .init()
@@ -45,6 +46,8 @@ final class DeficitAndSurplusCalorieViewController: UIViewController {
     private let thirdProcentLabel: UILabel = .init()
     private let fourthProcentLabel: UILabel = .init()
     private let continueCommonButton: CommonButton = .init(style: .filled, text: "Continue")
+    
+    private var weightGoal: WeightGoal?
     
     // MARK: - Lifecycle methods
     
@@ -68,10 +71,10 @@ final class DeficitAndSurplusCalorieViewController: UIViewController {
         stackView.spacing = 15
         stackView.alignment = .center
         
-        rateLabel.font = .systemFont(ofSize: 18, weight: .bold)
+        rateLabel.font = .systemFont(ofSize: 18.fontScale(), weight: .bold)
         rateLabel.textColor = R.color.onboardings.basicDark()
         
-        resultLabel.font = .systemFont(ofSize: 18, weight: .bold)
+        resultLabel.font = .systemFont(ofSize: 18.fontScale(), weight: .bold)
         resultLabel.textColor = R.color.onboardings.radialGradientFirst()
         
         sliderBackground.clipsToBounds = false
@@ -121,10 +124,6 @@ final class DeficitAndSurplusCalorieViewController: UIViewController {
         continueCommonButton.addTarget(self, action: #selector(didTapContinueCommonButton), for: .touchUpInside)
     }
     
-    @objc private func didTapContinueCommonButton() {
-        presenter?.didTapContinueCommonButton()
-    }
-    
     // swiftlint:disable:next function_body_length
     private func configureLayouts() {
         view.addSubview(scrolView)
@@ -138,7 +137,7 @@ final class DeficitAndSurplusCalorieViewController: UIViewController {
         stackView.addArrangedSubview(currentYourWeightComponent)
         stackView.addArrangedSubview(targetYourWeightComponent)
         
-        contentView.addSubview(scheduleImageView)
+        contentView.addSubview(chartView)
         
         contentView.addSubview(resultLabel)
         
@@ -194,21 +193,19 @@ final class DeficitAndSurplusCalorieViewController: UIViewController {
             $0.width.equalTo(targetYourWeightComponent.snp.width)
         }
         
-        scheduleImageView.snp.makeConstraints {
+        chartView.snp.makeConstraints {
             $0.top.equalTo(stackView.snp.bottom).offset(18)
             $0.left.equalTo(contentView.snp.left).offset(40)
             $0.right.equalTo(contentView.snp.right).offset(-40)
-            $0.width.equalTo(scheduleImageView.snp.height)
-                .multipliedBy(scheduleImageView.image!.size.width / scheduleImageView.image!.size.height)
         }
         
         rateLabel.snp.makeConstraints {
-            $0.top.equalTo(scheduleImageView.snp.bottom).offset(35)
+            $0.top.equalTo(chartView.snp.bottom).offset(35)
             $0.left.equalTo(sliderBackground.snp.left).offset(-10)
         }
         
         resultLabel.snp.makeConstraints {
-            $0.top.equalTo(scheduleImageView.snp.bottom).offset(35)
+            $0.top.equalTo(chartView.snp.bottom).offset(35)
             $0.left.equalTo(rateLabel.snp.right).offset(10)
             $0.right.equalTo(sliderBackground.snp.right).offset(10)
         }
@@ -262,19 +259,9 @@ final class DeficitAndSurplusCalorieViewController: UIViewController {
             $0.height.equalTo(64)
         }
     }
-}
-
-extension DeficitAndSurplusCalorieViewController: DeficitAndSurplusCalorieViewControllerInterface {
-    func set(yourWeight: Double) {
-        targetYourWeightComponent.set(yourCurrentWeight: yourWeight)
-    }
     
-    func set(yourGoalWeight: Double) {
-        currentYourWeightComponent.set(yourTargetWeight: yourGoalWeight)
-    }
-    
-    func set(currentOnboardingStage: OnboardingStage) {
-        stageCounterView.set(onboardingStage: currentOnboardingStage)
+    @objc private func didTapContinueCommonButton() {
+        presenter?.didTapContinueCommonButton()
     }
     
     @objc private func handlePanGesture(sender: UIPanGestureRecognizer) {
@@ -301,13 +288,35 @@ extension DeficitAndSurplusCalorieViewController: DeficitAndSurplusCalorieViewCo
             }
         }
     }
+}
+
+extension DeficitAndSurplusCalorieViewController: DeficitAndSurplusCalorieViewControllerInterface {
+    func set(date: Date) {
+        guard let weightGoal = weightGoal else { return }
+        chartView.configure(
+            date: date,
+            weightGoal: weightGoal
+        )
+    }
+    
+    func set(yourWeight: Double) {
+        targetYourWeightComponent.set(yourCurrentWeight: yourWeight)
+    }
+    
+    func set(yourGoalWeight: Double) {
+        currentYourWeightComponent.set(yourTargetWeight: yourGoalWeight)
+    }
+    
+    func set(currentOnboardingStage: OnboardingStage) {
+        stageCounterView.set(onboardingStage: currentOnboardingStage)
+    }
     
     func set(weightGoal: WeightGoal) {
+        self.weightGoal = weightGoal
         switch weightGoal {
         case .gain(let calorieSurplus):
-            scheduleImageView.image = R.image.onboardings.scheduleSurplus()
             rateLabel.text = "Calorie surplus"
-            resultLabel.text = "+ \(calorieSurplus) kg per week"
+            resultLabel.text = "+\(calorieSurplus.clean) kg per week"
             sliderBackground.backgroundColor = R.color.onboardings.radialGradientFirst()
             sliderThumb.backgroundColor = R.color.onboardings.radialGradientFirst()
             firstDotView.layer.borderColor = R.color.onboardings.radialGradientFirst()?.cgColor
@@ -319,9 +328,8 @@ extension DeficitAndSurplusCalorieViewController: DeficitAndSurplusCalorieViewCo
             thirdProcentLabel.textColor = R.color.onboardings.radialGradientFirst()
             fourthProcentLabel.textColor = R.color.onboardings.radialGradientFirst()
         case .loss(let calorieDeficit):
-            scheduleImageView.image = R.image.onboardings.scheduleDeficit()
             rateLabel.text = "Calorie deficit"
-            resultLabel.text = "- \(calorieDeficit) kg per week"
+            resultLabel.text = "-\(calorieDeficit.clean) kg per week"
             sliderBackground.backgroundColor = R.color.onboardings.currentWeight()
             sliderThumb.backgroundColor = R.color.onboardings.currentWeight()
             firstDotView.layer.borderColor = R.color.onboardings.currentWeight()?.cgColor
@@ -332,7 +340,6 @@ extension DeficitAndSurplusCalorieViewController: DeficitAndSurplusCalorieViewCo
             secondProcentLabel.textColor = R.color.onboardings.currentWeight()
             thirdProcentLabel.textColor = R.color.onboardings.currentWeight()
             fourthProcentLabel.textColor = R.color.onboardings.currentWeight()
-            
         }
     }
 }

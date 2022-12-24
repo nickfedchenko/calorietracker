@@ -5,3 +5,160 @@
   Created by Vadim Aleshin on 23.12.2022.
   
 */
+
+"onboarding.first.achievementByWillPower.title" = "History";
+"onboarding.first.achievementByWillPower.button" = "Let’s do it!";
+"onboarding.first.achievementByWillPower.title.first" = "It doesn’t take unlimited willpower to ";
+"onboarding.first.achievementByWillPower.title.second" = "achieve your goals.";
+"onboarding.first.achievementByWillPower.description" = "Learning and implementing some new habits can go a long way in getting you there. Are you ready to take the first steps towards building your own strong habits?";
+
+"onboarding.first.achievingDifficultGoal.button" = "Next";
+"onboarding.first.achievingDifficultGoal.title.first" = "Think about someone in your life ";
+"onboarding.first.achievingDifficultGoal.title.second" = "who has achieved a difficult goal.";
+"onboarding.first.achievingDifficultGoal.title" = "History";
+"onboarding.first.achievingDifficultGoal.title" = "History";
+"onboarding.first.achievingDifficultGoal.description" = "What do you think helped them become successful?";
+"onboarding.first.achievingDifficultGoal.naturalWillpowerAndMentalStrength" = "Natural willpower and mental strength";
+"onboarding.first.achievingDifficultGoal.aPlanAndGoodHabits" = "A plan and good habits";
+
+"onboarding.first.callToAchieveGoal.title" = "History";
+"onboarding.first.callToAchieveGoal.button" = "Continue";
+"onboarding.first.callToAchieveGoal.title.first" = "Awesome! ";
+"onboarding.first.callToAchieveGoal.title.second" = "Kcalс will help you build the habits you need to reach your goals.";
+
+"onboarding.first.calorieCount.title" = "History";
+"onboarding.first.calorieCount.approval" = "Yes";
+"onboarding.first.calorieCount.rejection" = "No";
+"onboarding.first.calorieCount.title.first" = "Have you ";
+"onboarding.first.calorieCount.title.second" = "counted calories ";
+"onboarding.first.calorieCount.title.third" = "before??";
+
+"onboarding.first.descriptionOfExperience.title" = "History";
+"onboarding.first.descriptionOfExperience.button" = "Next";
+"onboarding.first.descriptionOfExperience.title.first" = "What best describes ";
+"onboarding.first.descriptionOfExperience.title.second" = "your past experiences with weight loss?";
+"onboarding.first.descriptionOfExperience.iHaveNeverLostMuchWeightBefore" = "I’ve never lost much weight before";
+"onboarding.first.descriptionOfExperience.iLostWeightAndGainedItAllBack" = "I lost weight and gained it all back";
+"onboarding.first.descriptionOfExperience.iLostWeightAndGainedSomeBack" = "I lost weight and gained some back";
+"onboarding.first.descriptionOfExperience.iLostWeightAndHaveMoreLose" = "I lost weight and have more lose";
+"onboarding.first.descriptionOfExperience.iLostWeightAndAmMaintainingIt" = "I lost weight and am maintaining it";
+
+"onboarding.first.final.button" = "keep it coming!";
+"onboarding.first.final.description" = "We’re happy to have you here. We’ll walk you through these steps to get you set up for weight loss success: ";
+"onboarding.first.final.title.first" = "1 down ";
+"onboarding.first.final.title.second" = ", 3 to go!";
+"onboarding.first.final.history" = "History";
+"onboarding.first.final.user.data" = "User data";
+"onboarding.first.final.motivation" = "Motivation / Goal";
+"onboarding.first.final.habits" = "Habits";
+
+"onboarding.first.formationGoodHabits.button" = "Continue";
+"onboarding.first.formationGoodHabits.title" = "History";
+"onboarding.first.formationGoodHabits.title.first" = "Building good habits takes a plan ";
+"onboarding.first.formationGoodHabits.title.second" = "and accountability.";
+"onboarding.first.formationGoodHabits.description" = "How do you plan to stay on track?";
+"onboarding.first.formationGoodHabits.logEveryMealBefore" = "Log every meal before I eat it";
+"onboarding.first.formationGoodHabits.logOnDaysEvenWhenKnow" = "Log on days even when I know I’m going over budget";
+"onboarding.first.formationGoodHabits.stayOnTrackWithAnAccountabilityBuddy" = "Stay on track with an accountability buddy";
+"onboarding.first.formationGoodHabits.planOutMyMealsInAdvance" = "Plan out my meals in advance";
+"onboarding.first.formationGoodHabits.seeHowLongOfTrackingStreak" = "See how long of a tracking streak I can keep up";
+"onboarding.first.formationGoodHabits.planOutDaysWhereKnow" = "Plan out days where I know I’ll be eating indulgent foods";
+
+"onboarding.first.getStarted.title" = "History";
+"onboarding.first.getStarted.track" = "Track what you eat";
+"onboarding.first.getStarted.follow" = "Follow a calorie budget";
+"onboarding.first.getStarted.reach" = "Reach your goals";
+"onboarding.first.getStarted.getStarted" = "Get started";
+"onboarding.first.getStarted.title" = "History";
+
+"onboarding.first.lastCalorieCount.title" = "History";
+"onboarding.first.lastCalorieCount.button" = "Next";
+"onboarding.first.lastCalorieCount.title.first" = "The last time you ";
+"onboarding.first.lastCalorieCount.title.second" = "counted calories";
+"onboarding.first.lastCalorieCount.title.third" = ", how were you doing it?";
+"onboarding.first.lastCalorieCount.usingAnApp" = "Using an app";
+"onboarding.first.lastCalorieCount.onWebsite" = "On a website";
+"onboarding.first.lastCalorieCount.byTakingNotes" = "By taking notes";
+"onboarding.first.lastCalorieCount.usingSpreadsheet" = "Using a spreadsheet";
+"onboarding.first.lastCalorieCount.anotherWay" = "Another way";
+
+"onboarding.first.obsessingOverFood.title" = "History";
+"onboarding.first.obsessingOverFood.button" = "Next";
+"onboarding.first.obsessingOverFood.title.first" = "Have you ever found yourself ";
+"onboarding.first.obsessingOverFood.title.second" = "obsessing over food?";
+"onboarding.first.obsessingOverFood.yesDefinitely" = "Yes, definitely";
+"onboarding.first.obsessingOverFood.sureSometimes" = "Sure, sometimes";
+"onboarding.first.obsessingOverFood.noNotReall" = "No, not really";
+
+"onboarding.first.previousApplication.title" = "History";
+"onboarding.first.previousApplication.button" = "Next";
+"onboarding.first.previousApplication.title.first" = "Which app did you use?";
+"onboarding.first.previousApplication.myFitnessPal" = "MyFitnessPal";
+"onboarding.first.previousApplication.formerlyWeightWatchers" = "WW (formerly Weight Watchers)";
+"onboarding.first.previousApplication.noom" = "Noom";
+"onboarding.first.previousApplication.kcalc" = "Kcalc";
+"onboarding.first.previousApplication.fitbit" = "Fitbit";
+"onboarding.first.previousApplication.loseIt" = "Lose It!";
+"onboarding.first.previousApplication.anotherApp" = "Another app";
+"onboarding.first.previousApplication.iDontRemember" = "I don’t remember";
+
+"onboarding.first.purposeOfTheParish.title" = "History";
+"onboarding.first.purposeOfTheParish.button" = "Next";
+"onboarding.first.purposeOfTheParish.title.first" = "What brings ";
+"onboarding.first.purposeOfTheParish.title.second" = "you here now?";
+"onboarding.first.purposeOfTheParish.thisTimeToGetBackToHealthyHabits" = "It’s time to get back to healthy habits";
+"onboarding.first.purposeOfTheParish.iUnhappyWithMyWeight" = "I’m unhappy with my weight";
+"onboarding.first.purposeOfTheParish.iHaveSomeFreshMotivation" = "I have some fresh motivation";
+"onboarding.first.purposeOfTheParish.iReadyToStartFeelingGoodAgain" = "I’m ready to start feeling good again";
+"onboarding.first.purposeOfTheParish.iAmCuriousToCheckOutKcalc" = "I am curious to check out Kcalc";
+"onboarding.first.purposeOfTheParish.somethingElse" = "Something else";
+
+"onboarding.first.questionAboutTheChange.title" = "History";
+"onboarding.first.questionAboutTheChange.button" = "Next";
+"onboarding.first.questionAboutTheChange.title.first" = "What’s defferent ";
+"onboarding.first.questionAboutTheChange.title.second" = "from last time?";
+"onboarding.first.questionAboutTheChange.description" = "Other than you using Kcalс, of cource";
+"onboarding.first.questionAboutTheChange.iHaveDifferentMindset" = "I have a different mindset";
+"onboarding.first.questionAboutTheChange.iHadSomeBigChangesInMyLife" = "I’ve had some big changes in my life";
+"onboarding.first.questionAboutTheChange.iWeightMoreThanIdidLastTime" = "I weight more than I did last time";
+"onboarding.first.questionAboutTheChange.iTryingDifferentWayOfEating" = "I’m trying a different way of eating";
+"onboarding.first.questionAboutTheChange.iTryingNewExercisePlan" = "I’m trying a new exercise plan";
+"onboarding.first.questionAboutTheChange.iHadSomeHealthChanges" = "I’ve had some health changes";
+
+"onboarding.first.questionOfLosingWeight.title" = "History";
+"onboarding.first.questionOfLosingWeight.approval" = "Yes";
+"onboarding.first.questionOfLosingWeight.rejection" = "No";
+"onboarding.first.questionOfLosingWeight.title.first" = "Have you tried ";
+"onboarding.first.questionOfLosingWeight.title.second" = "to lose weight befor?";
+
+"onboarding.first.recentWeightChanges.title" = "History";
+"onboarding.first.recentWeightChanges.approval" = "Yes";
+"onboarding.first.recentWeightChanges.rejection" = "No";
+"onboarding.first.recentWeightChanges.title.first" = "Think back to when you last worked on your weight. ";
+"onboarding.first.recentWeightChanges.title.second" = "Is anything different about this time than last time?";
+
+"onboarding.first.thanksForTheInformation.title" = "History";
+"onboarding.first.thanksForTheInformation.button" = "Continue";
+"onboarding.first.thanksForTheInformation.title.first" = "Thanks ";
+"onboarding.first.thanksForTheInformation.title.second" = "for the information!";
+"onboarding.first.thanksForTheInformation.description" = "We know that losing weight can be difficult. Remember, it's not about the numbers on the scale, it's about becoming a better and healthier version of yourself.";
+
+"onboarding.first.theEffectOfWeight.title" = "History";
+"onboarding.first.theEffectOfWeight.button" = "Next";
+"onboarding.first.theEffectOfWeight.title.first" = "Have you ever found yourself ";
+"onboarding.first.theEffectOfWeight.title.second" = "obsessing over food?";
+"onboarding.first.theEffectOfWeight.yesLot" = "Yes, a lot";
+"onboarding.first.theEffectOfWeight.sureBit" = "Sure, a bit";
+"onboarding.first.theEffectOfWeight.noNotReall" = "No, not really";
+
+"onboarding.first.welcome.button" = "Let’s Go!";
+"onboarding.first.welcome.title.first" = "Welcome!";
+"onboarding.first.welcome.description" = "We’re happy to have you here. We’ll walk walk you through these steps to get you  set upfor weight loss success:";
+"onboarding.first.welcome.history" = "History";
+"onboarding.first.welcome.user.data" = "User data";
+"onboarding.first.welcome.motivation" = "Motivation / Goal";
+"onboarding.first.welcome.habits" = "Habits";
+
+"onboarding.chart.description" = "At this rate, we expect you to reach your target weight around December";
+"onboarding.chart.now" = "Now";
+"onboarding.chart.title" = "Weight gain chart";

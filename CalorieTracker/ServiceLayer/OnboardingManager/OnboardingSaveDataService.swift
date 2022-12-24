@@ -14,25 +14,15 @@ struct OnboardingSaveDataService {
         self.onboardingInfo = info
         saveUserData()
         saveUnitsData()
+        saveValueData()
     }
     
     private func saveUserData() {
-        let userSex: UserSex = {
-            switch onboardingInfo.whatsYourGender {
-            case .male:
-                return .male
-            case .female:
-                return .famale
-            default:
-                return .male
-            }
-        }()
-        
         let userData: UserData = .init(
             name: onboardingInfo.enterYourName ?? "",
             lastName: nil,
             city: nil,
-            sex: userSex,
+            sex: onboardingInfo.whatsYourGender?.userSex ?? .male,
             dateOfBirth: onboardingInfo.dateOfBirth ?? Date(),
             height: onboardingInfo.yourHeight ?? 0,
             dietary: .classic
@@ -64,5 +54,18 @@ struct OnboardingSaveDataService {
     private func saveValueData() {
         UDM.weightGoal = onboardingInfo.whatIsYourGoalWeight
         WeightWidgetService.shared.addWeight(onboardingInfo.yourWeight ?? 0)
+        UDM.activityLevel = .moderate
+        
+        switch onboardingInfo.weightGoal {
+        case .gain(let value):
+            UDM.goalType = .buildMuscle
+            UDM.weeklyGoal = value
+        case .loss(let value):
+            UDM.goalType = .loseWeight
+            UDM.weeklyGoal = -value
+        default:
+            UDM.goalType = .maintainWeight
+            UDM.weeklyGoal = nil
+        }
     }
 }

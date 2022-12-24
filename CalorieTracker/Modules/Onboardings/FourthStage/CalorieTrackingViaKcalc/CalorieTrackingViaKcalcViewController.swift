@@ -59,6 +59,7 @@ final class CalorieTrackingViaKcalcViewController: UIViewController {
         titleLabel.textAlignment = .center
         titleLabel.font = UIFont.systemFont(ofSize: 38, weight: .medium)
         
+        getStartedSignInAppleButton.isHidden = true
         getStartedSignInAppleButton.addTarget(
             self,
             action: #selector(didTapGetStartedSignInAppleButton),
@@ -89,7 +90,7 @@ final class CalorieTrackingViaKcalcViewController: UIViewController {
         contentView.addSubview(continueWithoutRegistrationButton)
         
         scrolView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.top.equalTo(view.snp.top)
             $0.left.equalTo(view.snp.left)
             $0.right.equalTo(view.snp.right)
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
@@ -137,7 +138,7 @@ final class CalorieTrackingViaKcalcViewController: UIViewController {
     }
     
     @objc private func didTapContinueWithoutRegistrationButton() {
-        print("didTapContinueWithoutRegistrationButton")
+        presenter?.didTapContinueWithoutRegistrationButton()
     }
     
     override func viewWillAppear(_ animated: Bool) {
