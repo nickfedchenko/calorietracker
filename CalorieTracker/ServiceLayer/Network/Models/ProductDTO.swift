@@ -5,203 +5,126 @@ typealias ProductsResult = (Result<[ProductDTO], ErrorDomain>) -> Void
 /// Product
 struct ProductDTO: Codable {
     let id: Int
-    let barcode: String?
     let title: String
-    private var rawProtein, rawFat, rawCarbs: Double
-    private var rawKcal: Int
-    let photo: URL?
-    let composition: CompositionDTO?
-    let isBasic, isBasicState, isDished: Bool?
-    let brand: String?
-    let servings: [ServingDTO]?
+    let productTypeID: Int
+    let brand, barcode: String?
+    let marketCategory: AdditionalTag?
+    let productURL: Int?
+    let units: [UnitElement]
+    let marketUnit: MarketUnitClass?
+    let serving: Serving
+    let ketoRating: String?
+    let nutritions: [Nutrition]
+    let baseTags: [AdditionalTag]
+    let photo: String
+    let isDraft: Bool
+    let createdAt: String
+    
+    enum CodingKeys: String, CodingKey {
+        case id, title
+        case productTypeID = "productTypeId"
+        case brand, barcode, marketCategory
+        case productURL = "product_url"
+        case units, marketUnit, serving, ketoRating, nutritions, baseTags, photo, isDraft, createdAt
+    }
     
     var protein: Double {
-        get {
-            UDM.weightIsMetric ? rawProtein : rawProtein * ImperialConstants.lbsToGramsRatio
+        guard let protein = nutritions.first(where: { $0.nutritionType == .protein }) else {
+            return .zero
         }
-        
-        set {
-            rawProtein = UDM.weightIsMetric ? newValue : newValue / ImperialConstants.lbsToGramsRatio
-        }
+        return protein.value ?? .zero
     }
     
     var fat: Double {
-        get {
-            UDM.weightIsMetric ? rawFat : rawFat * ImperialConstants.lbsToGramsRatio
+        guard let fat = nutritions.first(where: { $0.nutritionType == .fatsOverall }) else {
+            return .zero
         }
-        
-        set {
-            rawFat = UDM.weightIsMetric ? newValue : newValue / ImperialConstants.lbsToGramsRatio
+        return fat.value ?? .zero
+    }
+    
+    var kcal: Double {
+        guard let kcal = nutritions.first(where: { $0.nutritionType == .kcal }) else {
+            return .zero
         }
+        return kcal.value ?? .zero
     }
     
     var carbs: Double {
-        get {
-            UDM.weightIsMetric ? rawCarbs : rawCarbs * ImperialConstants.lbsToGramsRatio
+        guard let carbs = nutritions.first(where: { $0.nutritionType == .carbsTotal }) else {
+            return .zero
         }
-        
-        set {
-            rawCarbs = UDM.weightIsMetric ? newValue : newValue / ImperialConstants.lbsToGramsRatio
-        }
+        return carbs.value ?? .zero
     }
     
-    var kcal: Int {
-        get {
-            UDM.energyIsMetric ? rawKcal : Int(Double(rawKcal) * ImperialConstants.kJToKcalRatio)
-        }
-        
-        set {
-            rawKcal = UDM.energyIsMetric ? newValue : Int(Double(newValue) / ImperialConstants.kJToKcalRatio)
-        }
-    }
     
-    enum CodingKeys: String, CodingKey {
-        case rawProtein = "protein"
-        case rawFat = "fat"
-        case rawCarbs = "carbs"
-        case rawKcal = "kcal"
-        case id, barcode, title, photo, composition, isBasic, isBasicState, isDished, brand, servings
-    }
     
-    init?(from searchModel: SearchProduct) {
-        id = searchModel.productID
-        barcode = searchModel.sourceObject.barcode
-        title = searchModel.title
-        rawProtein = searchModel.proteins
-        rawFat = searchModel.fats
-        rawCarbs = searchModel.carbohydrates
-        rawKcal = searchModel.kcal
-        photo = searchModel.photo
-        composition = CompositionDTO(from: searchModel.sourceObject)
-        isBasic = searchModel.sourceObject.isBasic == 0 ? false : true
-        isBasicState = searchModel.sourceObject.isBasicState == 0 ? false : true
-        isDished = searchModel.sourceObject.isDished == 0 ? false : true
-        brand = searchModel.sourceObject.brand
-        servings = searchModel.sourceObject.servings.compactMap { ServingDTO(from: $0) }
-    }
+//    init?(from searchModel: SearchProduct) {
+//        id = searchModel.productID
+//        barcode = searchModel.sourceObject.barcode
+//        title = searchModel.title
+//        rawProtein = searchModel.proteins
+//        rawFat = searchModel.fats
+//        rawCarbs = searchModel.carbohydrates
+//        rawKcal = searchModel.kcal
+//        photo = searchModel.photo
+//        composition = CompositionDTO(from: searchModel.sourceObject)
+//        isBasic = searchModel.sourceObject.isBasic == 0 ? false : true
+//        isBasicState = searchModel.sourceObject.isBasicState == 0 ? false : true
+//        isDished = searchModel.sourceObject.isDished == 0 ? false : true
+//        brand = searchModel.sourceObject.brand
+//        servings = searchModel.sourceObject.servings.compactMap { ServingDTO(from: $0) }
+//    }
+//}
+
+
 }
 
-struct CompositionDTO: Codable {
-    private(set) var vitaminA, vitaminD, vitaminC, vitaminK, vitaminB1, calcium, sugar, salt,
-                fiber, saturatedFat, unsaturatedFat, transFat, sodium, cholesterol, potassium,
-                sugarAlc, iron, magnesium, phosphorus, zinc, copper, manganese,
-                selenium, fluoride, vitB2, vitB3, vitB5, vitB6, vitB7, vitB9, vitB12,
-                vitE: Double?
-    
-    let glycemicIndex: Double?
-    
-    init?(from model: SourceObject) {
-        vitaminA = Double(model.vitaminA100G ?? "0")
-        vitaminD = Double(model.vitaminD100G ?? "0")
-        vitaminC = Double(model.vitaminC100G ?? "0")
-        vitaminK = model.vitaminK100G
-        vitaminB1 = model.vitaminB1100G
-        calcium = Double(model.calcium100G ?? "0")
-        sugar = Double(model.sugars100G ?? "0")
-        salt = Double(model.salt100G ?? "0")
-        fiber = Double(model.fiber100G ?? "0")
-        saturatedFat = model.saturatedFat
-        unsaturatedFat = model.unsaturatedFat
-        transFat = model.transFat
-        sodium = model.sodium
-        cholesterol = model.cholesterol
-        potassium = model.potassium
-        sugarAlc = model.sugarAlc
-        iron = model.iron
-        magnesium = model.magnesium
-        phosphorus = model.phosphorus
-        zinc = model.zinc
-        copper = model.copper
-        manganese = model.manganese
-        selenium = model.selenium
-        fluoride = model.fluoride
-        vitB2 = model.vitB2
-        vitB3 = model.vitB3
-        vitB5 = model.vitB5
-        vitB6 = model.vitB6
-        vitB7 = model.vitB7
-        vitB9 = model.vitB9
-        vitB12 = model.vitB12
-        vitE = Double(model.vitE ?? 0)
-        glycemicIndex = model.glycemicIndex
-    }
-    
-    enum CodingKeys: String, CodingKey {
-        case sodium
-        case saturatedFat = "saturated_fat"
-        case sugar
-        case fiber
-        case unsaturatedFat = "unsaturated_fat"
-        case cholesterol
-        case potassium
-        case calcium
-        case iron
-        case salt
-        case transFat = "trans_fat"
-        case vitaminC = "vitamin_c"
-        case manganese
-        case selenium
-        case vitB2 = "vit_b2"
-        case phosphorus
-        case zinc
-        case copper
-        case vitB3 = "vit_b3"
-        case vitaminK = "vitamin_k"
-        case vitE = "vit_e"
-        case vitaminD = "vitamin_d"
-        case vitaminA = "vitamin_a"
-        case vitaminB1 = "vitamin_b1"
-        case fluoride
-        case vitB5 = "vit_b5"
-        case vitB6 = "vit_b6"
-        case vitB7 = "vit_b7"
-        case vitB9 = "vit_b9"
-        case vitB12 = "vit_b12"
-        case sugarAlc = "sugar_alc"
-        case glycemicIndex = "glycemic_index"
-        case magnesium
-    }
-    
-    private func processWeightToGet(_ value: Double?) -> Double? {
-        guard let value = value else {
-            return nil
-        }
-        return UDM.weightIsMetric ? value : value * ImperialConstants.lbsToGramsRatio
-    }
-    
-    private func processWeightToSet(_ value: Double?) -> Double? {
-        guard let value = value else {
-            return nil
-        }
-        return UDM.weightIsMetric ? value : value / ImperialConstants.lbsToGramsRatio
-    }
-}
-
-struct ServingDTO: Codable {
+struct UnitElement: Codable {
+    let id: Int?
+    let productUnitID: Int?
     let title: String
-    let plural: String?
-    private var rawWeight: Double?
-    
-    init?(from model: SearchServing) {
-        title = model.title
-        plural = nil
-    }
-    
-    var weight: Double? {
-        get {
-            guard let rawWeight = rawWeight else {
-                return nil
-            }
-            return UDM.weightIsMetric ? rawWeight : rawWeight * ImperialConstants.lbsToGramsRatio
-        }
-        set {
-            guard let newValue = newValue else { return }
-            rawWeight = UDM.weightIsMetric ? newValue : newValue / ImperialConstants.lbsToGramsRatio
-        }
-    }
+    let value, kcal: Double?
+    let isNamed, isReference, isDefault: Bool
     
     enum CodingKeys: String, CodingKey {
-        case title, plural
-        case rawWeight = "weight"
+        case id
+        case productUnitID = "productUnitId"
+        case title, value, kcal, isNamed, isReference, isDefault
+    }
+}
+
+struct Nutrition: Codable {
+    enum NutritionType: Int {
+        case fatsOverall = 1
+        case saturatedFats
+        case transFats
+        case polyUnsaturatedFats
+        case monoUnsaturatedFats
+        case cholesterol
+        case sodium
+        case carbsTotal
+        case alimentaryFiber
+        case netCarbs
+        case sugarOverall
+        case includingAdditionalSugars
+        case sugarSpirits
+        case protein
+        case vitaminD
+        case calcium
+        case ferrum
+        case potassium
+        case vitaminA
+        case vitaminC
+        case kcal
+        case undefined
+    }
+    
+    let id: Int
+    let title: String
+    let unit: MarketUnitClass
+    let value: Double?
+    
+    var nutritionType: NutritionType {
+        return NutritionType(rawValue: id) ?? .undefined
     }
 }
