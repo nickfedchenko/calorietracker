@@ -9,7 +9,7 @@ import Foundation
 
 protocol DateOfBirthPresenterInterface: AnyObject {
     func viewDidLoad()
-    func didTapContinueCommonButton(with name: String)
+    func didTapContinueCommonButton(with date: Date)
 }
 
 class DateOfBirthPresenter {
@@ -45,8 +45,8 @@ extension DateOfBirthPresenter: DateOfBirthPresenterInterface {
         }
     }
     
-    func didTapContinueCommonButton(with name: String) {
-        interactor?.set(dateOfBirth: name)
+    func didTapContinueCommonButton(with date: Date) {
+        interactor?.set(dateOfBirth: date)
         router?.openYourHeight()
     }
 }

@@ -24,8 +24,14 @@ final class RecentWeightChangesViewController: UIViewController {
     private let contentView: UIView = .init()
     private let stageCounterView: StageCounterView = .init()
     private let titleLabel: UILabel = .init()
-    private let approvalCommonButton: CommonButton = .init(style: .bordered, text: "Yes".uppercased())
-    private let rejectionCommonButton: CommonButton = .init(style: .bordered, text: "No".uppercased())
+    private let approvalCommonButton: CommonButton = .init(
+        style: .bordered,
+        text: R.string.localizable.onboardingFirstRecentWeightChangesApproval().uppercased()
+    )
+    private let rejectionCommonButton: CommonButton = .init(
+        style: .bordered,
+        text: R.string.localizable.onboardingFirstRecentWeightChangesRejection().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -40,7 +46,7 @@ final class RecentWeightChangesViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "History"
+        title = R.string.localizable.onboardingFirstRecentWeightChangesTitle()
         
         view.backgroundColor = R.color.mainBackground()
         
@@ -49,11 +55,11 @@ final class RecentWeightChangesViewController: UIViewController {
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: "Think back to when you last worked on your weight. ",
+            string: R.string.localizable.onboardingFirstRecentWeightChangesTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         attributedString.append(NSAttributedString(
-            string: "Is anything different about this time than last time?",
+            string: R.string.localizable.onboardingFirstRecentWeightChangesTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         

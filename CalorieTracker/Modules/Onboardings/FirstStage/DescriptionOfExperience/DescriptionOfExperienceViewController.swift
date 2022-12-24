@@ -33,7 +33,10 @@ final class DescriptionOfExperienceViewController: UIViewController {
     private let titleLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
     private var answerOptions: [AnswerOption] = []
-    private let nextCommonButton: CommonButton = .init(style: .filled, text: "Next".uppercased())
+    private let nextCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingFirstDescriptionOfExperienceButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -48,7 +51,7 @@ final class DescriptionOfExperienceViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "History"
+        title = R.string.localizable.onboardingFirstDescriptionOfExperienceTitle()
         
         view.backgroundColor = R.color.mainBackground()
         
@@ -57,12 +60,12 @@ final class DescriptionOfExperienceViewController: UIViewController {
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: "What best describes ",
+            string: R.string.localizable.onboardingFirstDescriptionOfExperienceTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
         attributedString.append(NSAttributedString(
-            string: "your past experiences with weight loss?",
+            string: R.string.localizable.onboardingFirstDescriptionOfExperienceTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
@@ -200,15 +203,15 @@ fileprivate extension DescriptionOfExperience {
     var description: String {
         switch self {
         case .iHaveNeverLostMuchWeightBefore:
-            return "I’ve never lost much weight before"
+            return R.string.localizable.onboardingFirstDescriptionOfExperienceIHaveNeverLostMuchWeightBefore()
         case .iLostWeightAndGainedItAllBack:
-            return "I lost weight and gained it all back"
+            return R.string.localizable.onboardingFirstDescriptionOfExperienceILostWeightAndGainedItAllBack()
         case .iLostWeightAndGainedSomeBack:
-            return "I lost weight and gained some back"
+            return R.string.localizable.onboardingFirstDescriptionOfExperienceILostWeightAndGainedSomeBack()
         case .iLostWeightAndHaveMoreLose:
-            return "I lost weight and have more lose"
+            return R.string.localizable.onboardingFirstDescriptionOfExperienceILostWeightAndHaveMoreLose()
         case .iLostWeightAndAmMaintainingIt:
-            return "I lost weight and am maintaining it"
+            return R.string.localizable.onboardingFirstDescriptionOfExperienceILostWeightAndAmMaintainingIt()
         }
     }
 }

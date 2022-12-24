@@ -33,7 +33,10 @@ final class PurposeOfTheParishViewController: UIViewController {
     private let titleLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
     private var answerOptions: [AnswerOption] = []
-    private let nextCommonButton: CommonButton = .init(style: .filled, text: "Next".uppercased())
+    private let nextCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingFirstPurposeOfTheParishButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -48,7 +51,7 @@ final class PurposeOfTheParishViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "History"
+        title = R.string.localizable.onboardingFirstPurposeOfTheParishTitle()
         
         view.backgroundColor = R.color.mainBackground()
         
@@ -57,11 +60,11 @@ final class PurposeOfTheParishViewController: UIViewController {
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: "What brings ",
+            string: R.string.localizable.onboardingFirstPurposeOfTheParishTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         attributedString.append(NSAttributedString(
-            string: "you here now?",
+            string: R.string.localizable.onboardingFirstPurposeOfTheParishTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
@@ -199,17 +202,17 @@ fileprivate extension PurposeOfTheParish {
     var description: String {
         switch self {
         case .thisTimeToGetBackToHealthyHabits:
-            return "It’s time to get back to healthy habits"
+            return R.string.localizable.onboardingFirstPurposeOfTheParishThisTimeToGetBackToHealthyHabits()
         case .iUnhappyWithMyWeight:
-            return "I’m unhappy with my weight"
+            return R.string.localizable.onboardingFirstPurposeOfTheParishIUnhappyWithMyWeight()
         case .iHaveSomeFreshMotivation:
-            return "I have some fresh motivation"
+            return R.string.localizable.onboardingFirstPurposeOfTheParishIHaveSomeFreshMotivation()
         case .iReadyToStartFeelingGoodAgain:
-            return "I’m ready to start feeling good again"
+            return R.string.localizable.onboardingFirstPurposeOfTheParishIReadyToStartFeelingGoodAgain()
         case .iAmCuriousToCheckOutKcalc:
-            return "I am curious to check out Kcalc"
+            return R.string.localizable.onboardingFirstPurposeOfTheParishIAmCuriousToCheckOutKcalc()
         case .somethingElse:
-            return "Something else"
+            return R.string.localizable.onboardingFirstPurposeOfTheParishSomethingElse()
         }
     }
 }

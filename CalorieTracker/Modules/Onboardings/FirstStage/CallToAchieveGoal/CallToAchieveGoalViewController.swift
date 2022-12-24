@@ -22,7 +22,10 @@ final class CallToAchieveGoalViewController: UIViewController {
     
     private let stageCounterView: StageCounterView = .init()
     private let titleLabel: UILabel = .init()
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "Continue".uppercased())
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingFirstCallToAchieveGoalButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -37,18 +40,18 @@ final class CallToAchieveGoalViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "History"
+        title = R.string.localizable.onboardingFirstCallToAchieveGoalTitle()
         
         view.backgroundColor = R.color.mainBackground()
         
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: "Awesome! ",
+            string: R.string.localizable.onboardingFirstCallToAchieveGoalTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         attributedString.append(NSAttributedString(
-            string: "Kcalс will help you build the habits you need to reach your goals.",
+            string: R.string.localizable.onboardingFirstCallToAchieveGoalTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         

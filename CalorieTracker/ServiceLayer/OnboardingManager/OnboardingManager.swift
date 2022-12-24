@@ -5,6 +5,8 @@
 //  Created by Алексей on 24.08.2022.
 //
 
+import Foundation
+
 protocol OnboardingManagerInterface {
     func getCurrentOnboardingStage() -> OnboardingStage
     
@@ -49,9 +51,9 @@ protocol OnboardingManagerInterface {
     func getAllMeasurementSystem() -> [MeasurementSystem]
     func set(measurementSystem: MeasurementSystem)
     
-    func set(dateOfBirth: String)
+    func set(dateOfBirth: Date)
     
-    func set(yourHeight: String)
+    func set(yourHeight: Double)
     
     func set(yourWeight: Double)
     func getYourWeight() -> Double?
@@ -126,6 +128,8 @@ protocol OnboardingManagerInterface {
     
     func getAllEmotionalSupportSystem() -> [EmotionalSupportSystem]
     func set(emotionalSupportSystem: EmotionalSupportSystem)
+    
+    func getOnboardingInfo() -> OnboardingInfo
 }
 
 class OnboardingManager {
@@ -146,6 +150,10 @@ class OnboardingManager {
 // MARK: - OnboardingManagerInterface
 
 extension OnboardingManager: OnboardingManagerInterface {
+    func getOnboardingInfo() -> OnboardingInfo {
+        return onboardingInfo
+    }
+    
     func getCurrentOnboardingStage() -> OnboardingStage {
         return onboardingInfo.currentOnboardingStage
     }
@@ -254,11 +262,11 @@ extension OnboardingManager: OnboardingManagerInterface {
         onboardingInfo.measurementSystem = measurementSystem
     }
     
-    func set(dateOfBirth: String) {
+    func set(dateOfBirth: Date) {
         onboardingInfo.dateOfBirth = dateOfBirth
     }
     
-    func set(yourHeight: String) {
+    func set(yourHeight: Double) {
         onboardingInfo.yourHeight = yourHeight
     }
     

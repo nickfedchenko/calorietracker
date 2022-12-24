@@ -33,7 +33,10 @@ final class TheEffectOfWeightViewController: UIViewController {
     private let titleLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
     private var answerOptions: [AnswerOption] = []
-    private let nextCommonButton: CommonButton = .init(style: .filled, text: "Next".uppercased())
+    private let nextCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingFirstTheEffectOfWeightButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -48,7 +51,7 @@ final class TheEffectOfWeightViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "History"
+        title = R.string.localizable.onboardingFirstTheEffectOfWeightTitle()
         
         view.backgroundColor = R.color.mainBackground()
         
@@ -57,11 +60,11 @@ final class TheEffectOfWeightViewController: UIViewController {
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: "Have you ever found yourself ",
+            string: R.string.localizable.onboardingFirstTheEffectOfWeightTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         attributedString.append(NSAttributedString(
-            string: "obsessing over food?",
+            string: R.string.localizable.onboardingFirstTheEffectOfWeightTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
@@ -199,11 +202,11 @@ fileprivate extension TheEffectOfWeight {
     var description: String {
         switch self {
         case .yesLot:
-            return "Yes, a lot"
+            return R.string.localizable.onboardingFirstTheEffectOfWeightYesLot()
         case .sureBit:
-            return "Sure, a bit"
+            return R.string.localizable.onboardingFirstTheEffectOfWeightSureBit()
         case .noNotReall:
-            return "No, not really"
+            return R.string.localizable.onboardingFirstTheEffectOfWeightNoNotReall()
         }
     }
 }

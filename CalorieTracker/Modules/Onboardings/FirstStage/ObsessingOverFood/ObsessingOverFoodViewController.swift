@@ -33,7 +33,10 @@ final class ObsessingOverFoodViewController: UIViewController {
     private let titleLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
     private var answerOptions: [AnswerOption] = []
-    private let nextCommonButton: CommonButton = .init(style: .filled, text: "Next".uppercased())
+    private let nextCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingFirstObsessingOverFoodButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -48,7 +51,7 @@ final class ObsessingOverFoodViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "History"
+        title = R.string.localizable.onboardingFirstObsessingOverFoodTitle()
         
         view.backgroundColor = R.color.mainBackground()
         
@@ -57,12 +60,12 @@ final class ObsessingOverFoodViewController: UIViewController {
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: "Have you ever found yourself ",
+            string: R.string.localizable.onboardingFirstObsessingOverFoodTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
         attributedString.append(NSAttributedString(
-            string: "obsessing over food?",
+            string: R.string.localizable.onboardingFirstObsessingOverFoodTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
@@ -200,11 +203,11 @@ fileprivate extension ObsessingOverFood {
     var description: String {
         switch self {
         case .yesDefinitely:
-            return "Yes, definitely"
+            return R.string.localizable.onboardingFirstObsessingOverFoodYesDefinitely()
         case .sureSometimes:
-            return "Sure, sometimes"
+            return R.string.localizable.onboardingFirstObsessingOverFoodSureSometimes()
         case .noNotReall:
-            return "No, not really"
+            return R.string.localizable.onboardingFirstObsessingOverFoodNoNotReall()
         }
     }
 }

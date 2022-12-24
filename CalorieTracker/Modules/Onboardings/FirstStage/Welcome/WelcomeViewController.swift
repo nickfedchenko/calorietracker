@@ -32,7 +32,10 @@ final class WelcomeViewController: UIViewController {
     private let habitsImageView: UIImageView = .init()
     private let habitsLabel: UILabel = .init()
     private let delimeterView: UIView = .init()
-    private let welcomCommonButton: CommonButton = .init(style: .filled, text: "Let’s Go!")
+    private let welcomCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingFirstWelcomeButton()
+    )
     
     // MARK: - Initialization
     
@@ -51,12 +54,12 @@ final class WelcomeViewController: UIViewController {
         
         welcomImageView.image = R.image.onboardings.welcom()
         
-        titleLabel.text = "Welcome!"
+        titleLabel.text = R.string.localizable.onboardingFirstWelcomeTitleFirst()
         titleLabel.font = UIFont.systemFont(ofSize: 38, weight: .medium)
         titleLabel.textColor = R.color.onboardings.basicDark()
         
         // swiftlint:disable:next line_length
-        descriptionLabel.text = "We’re happy to have you here. We’ll walk walk you through these steps to get you  set upfor weight loss success:"
+        descriptionLabel.text = R.string.localizable.onboardingFirstWelcomeDescription()
         descriptionLabel.numberOfLines = 0
         descriptionLabel.textAlignment = .center
         descriptionLabel.font = UIFont.systemFont(ofSize: 18, weight: .regular)
@@ -64,25 +67,25 @@ final class WelcomeViewController: UIViewController {
    
         historyDotImageView.image = R.image.onboardings.dotOn()
         
-        historyLabel.text = "History"
+        historyLabel.text = R.string.localizable.onboardingFirstWelcomeHistory()
         historyLabel.font = UIFont.systemFont(ofSize: 23, weight: .medium)
         historyLabel.textColor = R.color.onboardings.basicDark()
         
         userDataDotImageView.image = R.image.onboardings.dotOff()
         
-        userDataLabel.text = "User data"
+        userDataLabel.text = R.string.localizable.onboardingFirstWelcomeUserData()
         userDataLabel.font = UIFont.systemFont(ofSize: 23, weight: .medium)
         userDataLabel.textColor = R.color.onboardings.basicDark()
         
         motivationImageView.image = R.image.onboardings.dotOff()
         
-        motivationLabel.text = "Motivation / Goal"
+        motivationLabel.text = R.string.localizable.onboardingFirstWelcomeMotivation()
         motivationLabel.font = UIFont.systemFont(ofSize: 23, weight: .medium)
         motivationLabel.textColor = R.color.onboardings.basicDark()
         
         habitsImageView.image = R.image.onboardings.dotOff()
         
-        habitsLabel.text = "Habits"
+        habitsLabel.text = R.string.localizable.onboardingFirstWelcomeHabits()
         habitsLabel.font = UIFont.systemFont(ofSize: 23, weight: .medium)
         habitsLabel.textColor = R.color.onboardings.basicDark()
         

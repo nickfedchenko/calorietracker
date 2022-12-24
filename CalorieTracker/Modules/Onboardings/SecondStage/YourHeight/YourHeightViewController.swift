@@ -86,7 +86,7 @@ final class YourHeightViewController: UIViewController {
     @objc private func didTapContinueCommonButton() {
         guard let name = borderTextField.text, !name.isEmpty else { return }
         
-        presenter?.didTapContinueCommonButton(with: name)
+        presenter?.didTapContinueCommonButton(with: Double(name) ?? 0)
     }
     
     // swiftlint:disable:next function_body_length

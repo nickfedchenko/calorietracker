@@ -89,8 +89,7 @@ final class DateOfBirthViewController: UIViewController {
     
     @objc private func didTapContinueCommonButton() {
         guard let name = borderTextField.text, !name.isEmpty else { return }
-        
-        presenter?.didTapContinueCommonButton(with: name)
+        presenter?.didTapContinueCommonButton(with: datePicker.date)
     }
     
     // swiftlint:disable:next function_body_length
