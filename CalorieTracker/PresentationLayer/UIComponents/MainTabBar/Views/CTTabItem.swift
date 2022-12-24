@@ -58,11 +58,11 @@ final class CTTabItem: UIView {
     // MARK: - Private properties
     private(set) var configuration: CTTabConfiguration
     
-    private let iconView = AnimationView()
+    private let iconView = LottieAnimationView()
     
     private let title: UILabel = {
         let label = UILabel()
-        label.font = R.font.sfProDisplaySemibold(size: 11)
+        label.font = R.font.sfProDisplaySemibold(size: 11.fontScale())
         label.textColor = R.color.tabTitleTextColor()
         return label
     }()
@@ -116,10 +116,6 @@ final class CTTabItem: UIView {
         addSubview(title)
         //        iconImage.image = configuration.stateAnimations.deselected
         title.attributedText = NSAttributedString(string: configuration.title)
-        
-        snp.makeConstraints { make in
-            make.height.width.equalTo(64)
-        }
         
         iconView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()

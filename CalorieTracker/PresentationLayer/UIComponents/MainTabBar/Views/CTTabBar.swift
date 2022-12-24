@@ -50,12 +50,6 @@ final class CTTabBar: UIView {
         let spacing = Constants.tabSpacing
         stackView.spacing = spacing
         stackView.isLayoutMarginsRelativeArrangement = true
-        stackView.directionalLayoutMargins = NSDirectionalEdgeInsets(
-            top: 0,
-            leading: spacing,
-            bottom: 0,
-            trailing: spacing
-        )
         return stackView
     }()
     
@@ -103,12 +97,13 @@ final class CTTabBar: UIView {
         addSubview(HStack)
         
         tabItems.forEach {
+            $0.aspectRatio()
             HStack.addArrangedSubview($0)
         }
         
         HStack.snp.makeConstraints { make in
             make.bottom.top.equalToSuperview()
-            make.leading.trailing.equalToSuperview().inset(20)
+            make.leading.trailing.equalToSuperview().inset(20 + Constants.tabSpacing)
         }
         
         rightBackground.snp.makeConstraints { make in
