@@ -27,7 +27,10 @@ final class LifeChangesAfterWeightLossViewController: UIViewController {
     private let titleLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
     private var answerOptions: [AnswerOption] = []
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "Continue".uppercased())
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingThirdLifeChangesAfterWeightLossButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -42,19 +45,19 @@ final class LifeChangesAfterWeightLossViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "Motivation/Goal"
+        title = R.string.localizable.onboardingThirdLifeChangesAfterWeightLossTitle()
 
         view.backgroundColor = R.color.mainBackground()
         
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: "Think about how your life will be different once you’ve lost the weight. ",
+            string: R.string.localizable.onboardingThirdLifeChangesAfterWeightLossTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         attributedString.append(NSAttributedString(
-            string: "What are you most excited about?",
+            string: R.string.localizable.onboardingThirdLifeChangesAfterWeightLossTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
@@ -177,19 +180,19 @@ fileprivate extension LifeChangesAfterWeightLoss {
     var description: String {
         switch self {
         case .beingProudOfMyself:
-            return "Being proud of myself"
+            return R.string.localizable.onboardingThirdLifeChangesAfterWeightLossBeingProudOfMyself()
         case .feelingGreat:
-            return "Feeling great"
+            return R.string.localizable.onboardingThirdLifeChangesAfterWeightLossFeelingGreat()
         case .wearingDifferentClothes:
-            return "Wearing different clothes"
+            return R.string.localizable.onboardingThirdLifeChangesAfterWeightLossWearingDifferentClothes()
         case .havingBetterHealthMetrics:
-            return "Having better health metrics"
+            return R.string.localizable.onboardingThirdLifeChangesAfterWeightLossHavingBetterHealthMetrics()
         case .settingGoodExampleForOthers:
-            return "Setting a good example for others"
+            return R.string.localizable.onboardingThirdLifeChangesAfterWeightLossSettingGoodExampleForOthers()
         case .havingMoreEnergy:
-            return "Having more energy"
+            return R.string.localizable.onboardingThirdLifeChangesAfterWeightLossHavingMoreEnergy()
         case .beingMoreFit:
-            return "Being more fit"
+            return R.string.localizable.onboardingThirdLifeChangesAfterWeightLossBeingMoreFit()
         }
     }
 }

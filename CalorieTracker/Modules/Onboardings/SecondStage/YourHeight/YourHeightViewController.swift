@@ -26,7 +26,10 @@ final class YourHeightViewController: UIViewController {
     private let titleLabel: UILabel = .init()
     private let borderTextField: BorderTextField = .init()
     private let containerPickerView: UIView = .init()
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "Continue")
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingSecondYourHeightButton()
+    )
     private let pickerView: UIPickerView = .init()
     
     private var height: Double?
@@ -48,12 +51,11 @@ final class YourHeightViewController: UIViewController {
         
         scrolView.showsVerticalScrollIndicator = false
         
-        titleLabel.text = "Your height"
+        titleLabel.text = R.string.localizable.onboardingSecondYourHeightTitle()
         titleLabel.textColor = R.color.onboardings.basicDark()
         titleLabel.textAlignment = .center
         titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .medium)
         
-        borderTextField.text = "100 cm"
         borderTextField.isEnabled = false
         borderTextField.textField.addTarget(
             self,
@@ -209,11 +211,11 @@ extension YourHeightViewController: UIPickerViewDelegate {
         if component == 0 {
             return "\(row + 1)"
         } else if component == 1 {
-            return "м"
+            return R.string.localizable.onboardingSecondYourHeightM()
         } else if component == 2 {
             return "\(row * 1)"
         } else if component == 3 {
-            return "см"
+            return BAMeasurement.measurmentSuffix(.lenght)
         }
         return nil
     }

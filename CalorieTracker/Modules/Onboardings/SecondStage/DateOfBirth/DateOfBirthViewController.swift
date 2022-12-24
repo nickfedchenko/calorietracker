@@ -27,7 +27,10 @@ final class DateOfBirthViewController: UIViewController {
     private let borderTextField: BorderTextField = .init()
     private let containerdatePickerView: UIView = .init()
     private let datePicker: UIDatePicker = .init()
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "Continue")
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingSecondDateOfBirthButton()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -46,7 +49,7 @@ final class DateOfBirthViewController: UIViewController {
         
         scrolView.showsVerticalScrollIndicator = false
         
-        titleLabel.text = "Your date of birth"
+        titleLabel.text = R.string.localizable.onboardingSecondDateOfBirthTitle()
         titleLabel.textColor = R.color.onboardings.basicDark()
         titleLabel.textAlignment = .center
         titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .medium)

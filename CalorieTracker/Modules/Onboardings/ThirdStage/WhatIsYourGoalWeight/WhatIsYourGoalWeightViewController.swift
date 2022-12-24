@@ -30,7 +30,10 @@ final class WhatIsYourGoalWeightViewController: UIViewController {
     private let titleLabel: UILabel = .init()
     private let borderTextField: BorderTextField = .init()
     private let containerPickerView: UIView = .init()
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "Continue")
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingThirdWhatIsYourGoalWeightButton()
+    )
     private let pickerView: UIPickerView = .init()
     
     // MARK: - Lifecycle methods
@@ -46,7 +49,7 @@ final class WhatIsYourGoalWeightViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "Motivation/Goal"
+        title = R.string.localizable.onboardingThirdWhatIsYourGoalWeightTitle()
 
         view.backgroundColor = R.color.mainBackground()
         
@@ -55,12 +58,12 @@ final class WhatIsYourGoalWeightViewController: UIViewController {
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: "What is ",
+            string: R.string.localizable.onboardingThirdWhatIsYourGoalWeightTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         attributedString.append(NSAttributedString(
-            string: "your goal weight?",
+            string: R.string.localizable.onboardingThirdWhatIsYourGoalWeightTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
@@ -69,7 +72,7 @@ final class WhatIsYourGoalWeightViewController: UIViewController {
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .medium)
         
-        borderTextField.text = "0.0 kg"
+        borderTextField.text = R.string.localizable.onboardingThirdWhatIsYourGoalWeightTitleWeight()
         borderTextField.isEnabled = false
         borderTextField.textField.addTarget(self, action: #selector(didTapContinueCommonButton), for: .touchUpInside)
         
@@ -219,7 +222,7 @@ extension WhatIsYourGoalWeightViewController: UIPickerViewDelegate {
         } else if component == 2 {
             return "\(row)"
         } else if component == 3 {
-            return "кг"
+            return BAMeasurement.measurmentSuffix(.weight, isMetric: true)
         }
         return nil
     }

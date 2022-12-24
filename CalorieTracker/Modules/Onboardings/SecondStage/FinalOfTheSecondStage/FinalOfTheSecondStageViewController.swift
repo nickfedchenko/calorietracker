@@ -32,7 +32,10 @@ final class FinalOfTheSecondStageViewController: UIViewController {
     private let habitsImageView: UIImageView = .init()
     private let habitsLabel: UILabel = .init()
     private let delimeterView: UIView = .init()
-    private let continueToMotivationCommonButton = CommonButton(style: .filled, text: "keep it coming!".uppercased())
+    private let continueToMotivationCommonButton = CommonButton(
+        style: .filled,
+        text: R.string.localizable.onboardingSecondFinalButton().uppercased()
+    )
     
     // MARK: - Initialization
     
@@ -54,11 +57,11 @@ final class FinalOfTheSecondStageViewController: UIViewController {
         let attributedString = NSMutableAttributedString()
 
         attributedString.append(NSAttributedString(
-            string: "2 down ",
+            string: R.string.localizable.onboardingSecondFinalTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         attributedString.append(NSAttributedString(
-            string: ", 2 to go!",
+            string: R.string.localizable.onboardingSecondFinalTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
@@ -68,7 +71,7 @@ final class FinalOfTheSecondStageViewController: UIViewController {
         titleLabel.font = UIFont.systemFont(ofSize: 38, weight: .medium)
         
         // swiftlint:disable:next line_length
-        descriptionLabel.text = "We’re happy to have you here. We’ll walk you through these steps to get you set up for weight loss success:"
+        descriptionLabel.text = R.string.localizable.onboardingSecondFinalDescription()
         descriptionLabel.numberOfLines = 0
         descriptionLabel.textAlignment = .center
         descriptionLabel.font = UIFont.systemFont(ofSize: 18, weight: .regular)
@@ -76,25 +79,25 @@ final class FinalOfTheSecondStageViewController: UIViewController {
    
         historyDotImageView.image = R.image.onboardings.complet()
         
-        historyLabel.text = "History"
+        historyLabel.text = R.string.localizable.onboardingSecondFinalHistory()
         historyLabel.font = UIFont.systemFont(ofSize: 23, weight: .medium)
         historyLabel.textColor = R.color.onboardings.basicDark()
         
         userDataDotImageView.image = R.image.onboardings.complet()
         
-        userDataLabel.text = "User data"
+        userDataLabel.text = R.string.localizable.onboardingSecondFinalUserData()
         userDataLabel.font = UIFont.systemFont(ofSize: 23, weight: .medium)
         userDataLabel.textColor = R.color.onboardings.basicDark()
         
         motivationImageView.image = R.image.onboardings.dotOn()
         
-        motivationLabel.text = "Motivation / Goal"
+        motivationLabel.text = R.string.localizable.onboardingSecondFinalMotivation()
         motivationLabel.font = UIFont.systemFont(ofSize: 23, weight: .medium)
         motivationLabel.textColor = R.color.onboardings.basicDark()
         
         habitsImageView.image = R.image.onboardings.dotOff()
         
-        habitsLabel.text = "Habits"
+        habitsLabel.text = R.string.localizable.onboardingSecondFinalHabits()
         habitsLabel.font = UIFont.systemFont(ofSize: 23, weight: .medium)
         habitsLabel.textColor = R.color.onboardings.basicDark()
         

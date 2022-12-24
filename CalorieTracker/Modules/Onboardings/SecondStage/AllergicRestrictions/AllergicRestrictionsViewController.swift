@@ -27,7 +27,10 @@ final class AllergicRestrictionsViewController: UIViewController {
     private let titleLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
     private var variabilityResponses: [VariabilityResponse] = []
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "continue".uppercased())
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingSecondAllergicRestrictionsButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -44,7 +47,7 @@ final class AllergicRestrictionsViewController: UIViewController {
     private func configureViews() {
         view.backgroundColor = R.color.mainBackground()
         
-        titleLabel.text = "Allergic restrictions"
+        titleLabel.text = R.string.localizable.onboardingSecondAllergicRestrictionsTitle()
         titleLabel.textColor = R.color.onboardings.basicDark()
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 0
@@ -158,23 +161,23 @@ fileprivate extension AllergicRestrictions {
     var description: String {
         switch self {
         case .gluten:
-            return "Gluten"
+            return R.string.localizable.onboardingSecondAllergicRestrictionsGluten()
         case .fish:
-            return "Fish"
+            return R.string.localizable.onboardingSecondAllergicRestrictionsFish()
         case .shellfish:
-            return "Shellfish"
+            return R.string.localizable.onboardingSecondAllergicRestrictionsShellfish()
         case .dairy:
-            return "Dairy"
+            return R.string.localizable.onboardingSecondAllergicRestrictionsDairy()
         case .eggs:
-            return "Eggs"
+            return R.string.localizable.onboardingSecondAllergicRestrictionsEggs()
         case .nuts:
-            return "Nuts"
+            return R.string.localizable.onboardingSecondAllergicRestrictionsNuts()
         case .peanut:
-            return "Peanut"
+            return R.string.localizable.onboardingSecondAllergicRestrictionsPeanut()
         case .soya:
-            return "Soya"
+            return R.string.localizable.onboardingSecondAllergicRestrictionsSoya()
         case .wheat:
-            return "Wheat"
+            return R.string.localizable.onboardingSecondAllergicRestrictionsWheat()
         }
     }
 }

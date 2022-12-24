@@ -24,7 +24,10 @@ final class TimeToSeeYourGoalWeightViewController: UIViewController {
     private let stackView: UIStackView = .init()
     private let titleLabel: UILabel = .init()
     private let descriptionLabel: UILabel = .init()
-    private let setGoalWeightCommonButton: CommonButton = .init(style: .filled, text: "Continue".uppercased())
+    private let setGoalWeightCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingThirdTimeToSeeYourGoalWeightButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -39,19 +42,19 @@ final class TimeToSeeYourGoalWeightViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "Motivation/Goal"
+        title = R.string.localizable.onboardingThirdTimeToSeeYourGoalWeightTitle()
         
         view.backgroundColor = R.color.mainBackground()
         
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: "It’s time to see your ",
+            string: R.string.localizable.onboardingThirdTimeToSeeYourGoalWeightTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         attributedString.append(NSAttributedString(
-            string: "goal weight",
+            string: R.string.localizable.onboardingThirdTimeToSeeYourGoalWeightTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
@@ -61,7 +64,7 @@ final class TimeToSeeYourGoalWeightViewController: UIViewController {
         titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .medium)
         
         // swiftlint:disable:next line_length
-        descriptionLabel.text = "Some people prefer to start with a smaller goal, while others prefer to keep the focus on their long term goal. Do whichever feels best to you!"
+        descriptionLabel.text = R.string.localizable.onboardingThirdTimeToSeeYourGoalWeightDescription()
         descriptionLabel.textAlignment = .center
         descriptionLabel.numberOfLines = 0
         descriptionLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)

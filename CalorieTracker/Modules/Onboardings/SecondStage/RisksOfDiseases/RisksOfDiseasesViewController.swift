@@ -27,7 +27,10 @@ final class RisksOfDiseasesViewController: UIViewController {
     private let titleLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
     private var variabilityResponses: [VariabilityResponse] = []
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "continue".uppercased())
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingSecondRisksOfDiseasesButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -46,11 +49,11 @@ final class RisksOfDiseasesViewController: UIViewController {
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: "Are you at risk for any of the following ",
+            string: R.string.localizable.onboardingSecondRisksOfDiseasesTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         attributedString.append(NSAttributedString(
-            string: "diseases?",
+            string: R.string.localizable.onboardingSecondRisksOfDiseasesTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
@@ -167,19 +170,19 @@ fileprivate extension RisksOfDiseases {
     var description: String {
         switch self {
         case .highBloodPressure:
-            return "High blood pressure"
+            return R.string.localizable.onboardingSecondRisksOfDiseasesHighBloodPressure()
         case .heartDiseaseOrStroke:
-            return "Heart disease or stroke)"
+            return R.string.localizable.onboardingSecondRisksOfDiseasesHeartDiseaseOrStroke()
         case .diabetes:
-            return "Diabetes"
+            return R.string.localizable.onboardingSecondRisksOfDiseasesDiabetes()
         case .osteoarthritis:
-            return "Osteoarthritis"
+            return R.string.localizable.onboardingSecondRisksOfDiseasesOsteoarthritis()
         case .kidneyDisease:
-            return "Kidney disease"
+            return R.string.localizable.onboardingSecondRisksOfDiseasesKidneyDisease()
         case .depression:
-            return "Depression"
+            return R.string.localizable.onboardingSecondRisksOfDiseasesDepression()
         case .noneOfThese:
-            return "None of these"
+            return R.string.localizable.onboardingSecondRisksOfDiseasesNoneOfThese()
         }
     }
 }

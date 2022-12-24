@@ -45,7 +45,10 @@ final class DeficitAndSurplusCalorieViewController: UIViewController {
     private let secondProcentLabel: UILabel = .init()
     private let thirdProcentLabel: UILabel = .init()
     private let fourthProcentLabel: UILabel = .init()
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "Continue")
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingThirdDeficitAndSurplusCalorieButton()
+    )
     
     private var weightGoal: WeightGoal?
     
@@ -63,7 +66,7 @@ final class DeficitAndSurplusCalorieViewController: UIViewController {
     
     // swiftlint:disable:next function_body_length
     private func configureViews() {
-        title = "Motivation/Goal"
+        title = R.string.localizable.onboardingThirdDeficitAndSurplusCalorieTitle()
 
         view.backgroundColor = R.color.mainBackground()
         
@@ -313,10 +316,11 @@ extension DeficitAndSurplusCalorieViewController: DeficitAndSurplusCalorieViewCo
     
     func set(weightGoal: WeightGoal) {
         self.weightGoal = weightGoal
+        let suffix = R.string.localizable.onboardingThirdDeficitAndSurplusCalorieResult()
         switch weightGoal {
         case .gain(let calorieSurplus):
-            rateLabel.text = "Calorie surplus"
-            resultLabel.text = "+\(calorieSurplus.clean) kg per week"
+            rateLabel.text = R.string.localizable.onboardingThirdDeficitAndSurplusCalorieSurplus()
+            resultLabel.text = "+\(calorieSurplus.clean) \(suffix)"
             sliderBackground.backgroundColor = R.color.onboardings.radialGradientFirst()
             sliderThumb.backgroundColor = R.color.onboardings.radialGradientFirst()
             firstDotView.layer.borderColor = R.color.onboardings.radialGradientFirst()?.cgColor
@@ -328,8 +332,8 @@ extension DeficitAndSurplusCalorieViewController: DeficitAndSurplusCalorieViewCo
             thirdProcentLabel.textColor = R.color.onboardings.radialGradientFirst()
             fourthProcentLabel.textColor = R.color.onboardings.radialGradientFirst()
         case .loss(let calorieDeficit):
-            rateLabel.text = "Calorie deficit"
-            resultLabel.text = "-\(calorieDeficit.clean) kg per week"
+            rateLabel.text = R.string.localizable.onboardingThirdDeficitAndSurplusCalorieDeficit()
+            resultLabel.text = "-\(calorieDeficit.clean) \(suffix)"
             sliderBackground.backgroundColor = R.color.onboardings.currentWeight()
             sliderThumb.backgroundColor = R.color.onboardings.currentWeight()
             firstDotView.layer.borderColor = R.color.onboardings.currentWeight()?.cgColor

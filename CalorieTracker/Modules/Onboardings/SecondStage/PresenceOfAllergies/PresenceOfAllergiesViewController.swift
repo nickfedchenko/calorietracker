@@ -31,7 +31,10 @@ final class PresenceOfAllergiesViewController: UIViewController {
     private let titleLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
     private var variabilityResponses: [VariabilityResponse] = []
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "continue".uppercased())
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingSecondPresenceOfAllergiesButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -51,17 +54,17 @@ final class PresenceOfAllergiesViewController: UIViewController {
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: "Do you have any ",
+            string: R.string.localizable.onboardingSecondPresenceOfAllergiesTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         attributedString.append(NSAttributedString(
-            string: "allergic ",
+            string: R.string.localizable.onboardingSecondPresenceOfAllergiesTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
         attributedString.append(NSAttributedString(
-            string: "restrictions?",
+            string: R.string.localizable.onboardingSecondPresenceOfAllergiesTitleThird(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
@@ -174,9 +177,9 @@ fileprivate extension PresenceOfAllergies {
     var description: String {
         switch self {
         case .yes:
-            return "Yes"
+            return R.string.localizable.onboardingSecondPresenceOfAllergiesDescriptionYes()
         case .no:
-            return "No"
+            return R.string.localizable.onboardingSecondPresenceOfAllergiesDescriptionNo()
         }
     }
 }

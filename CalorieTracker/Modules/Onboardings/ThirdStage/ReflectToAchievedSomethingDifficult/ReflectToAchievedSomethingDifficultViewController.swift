@@ -27,7 +27,10 @@ final class ReflectToAchievedSomethingDifficultViewController: UIViewController 
     private let titleLabel: UILabel = .init()
     private let firstDescriptionLabel: UILabel = .init()
     private let secondDescriptionLabel: UILabel = .init()
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "Continue".uppercased())
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingThirdReflectToAchievedSomethingDifficultButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -42,26 +45,26 @@ final class ReflectToAchievedSomethingDifficultViewController: UIViewController 
     }
     
     private func configureViews() {
-        title = "Motivation/Goal"
+        title = R.string.localizable.onboardingThirdReflectToAchievedSomethingDifficultTitle()
         
         view.backgroundColor = R.color.mainBackground()
         
         scrolView.showsVerticalScrollIndicator = false
         
-        titleLabel.text = "Reflect on the last time you achieved something difficult."
+        titleLabel.text = R.string.localizable.onboardingThirdReflectToAchievedSomethingDifficultTitleFirst()
         titleLabel.textColor = R.color.onboardings.basicDark()
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .medium)
         
-        firstDescriptionLabel.text = "What made that work successful? How did you achieving that goal make you feel?"
+        firstDescriptionLabel.text = R.string.localizable.onboardingThirdReflectToAchievedSomethingDifficultDescriptionFirst()
         firstDescriptionLabel.textAlignment = .center
         firstDescriptionLabel.numberOfLines = 0
         firstDescriptionLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
         firstDescriptionLabel.textColor = R.color.onboardings.backTitle()
         
         // swiftlint:disable:next line_length
-        secondDescriptionLabel.text = "Keep these thoughts in mind as you navigate your health journey. You’ve done hard work before; you can definitely do it again!"
+        secondDescriptionLabel.text = R.string.localizable.onboardingThirdReflectToAchievedSomethingDifficultDescriptionSecond()
         secondDescriptionLabel.textAlignment = .center
         secondDescriptionLabel.numberOfLines = 0
         secondDescriptionLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
