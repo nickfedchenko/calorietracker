@@ -18,13 +18,13 @@ extension ActivityLevel: WithGetTitleProtocol {
     func getTitle(_ lenght: Lenght) -> String? {
         switch self {
         case .low:
-            return "Low"
+            return R.string.localizable.low()
         case .moderate:
-            return "Moderate"
+            return R.string.localizable.moderate()
         case .high:
-            return "High"
+            return R.string.localizable.high()
         case .veryHigh:
-            return "Very High"
+            return R.string.localizable.veryHigh()
         }
     }
 }

@@ -24,22 +24,25 @@ final class PaywallViewController: UIViewController {
     private let titleLabel: UILabel = .init()
     private let subscriptionBenefitsContainerView: UIView = .init()
     private let convenientCalorieSubscriptionBenefits = SubscriptionBenefits(
-        text: "Convenient calorie and activity tracker"
+        text: R.string.localizable.paywallConvenientCalorie()
     )
     
     private let effectiveWeightSubscriptionBenefits = SubscriptionBenefits(
-        text: "Effective weight loss or weight gain"
+        text: R.string.localizable.paywallEffectiveWeight()
     )
     
     private let recipesForDifferentSubscriptionBenefits = SubscriptionBenefits(
-        text: "10000+ recipes for different types of diets"
+        text: R.string.localizable.paywallRecipesForDifferent()
     )
     
     private let bestWaySubscriptionBenefits = SubscriptionBenefits(
-        text: "The best way to keep your body in shape"
+        text: R.string.localizable.paywallBestWay()
     )
     private let subscriptionAmount: SubscriptionAmount = .init()
-    private let startNowCommonButton: CommonButton = .init(style: .filled, text: "Start now!")
+    private let startNowCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.paywallStartNow()
+    )
     private let cancelAnytimeButton: CancelAnytime = .init()
     private let privacyPolicyButton: PrivacyPolicy = .init()
     private let termOfUseButton: TermOfUse = .init()
@@ -61,7 +64,7 @@ final class PaywallViewController: UIViewController {
         
         imageView.image = R.image.paywall.woman()
         
-        titleLabel.text = "Losing weight has never been so easy!"
+        titleLabel.text = R.string.localizable.paywallTitle()
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.systemFont(ofSize: 36, weight: .semibold)

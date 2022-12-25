@@ -132,7 +132,7 @@ final class AddFoodViewController: UIViewController {
         
         searshTextField.textField.keyboardAppearance = .light
         searshTextField.textField.keyboardType = .webSearch
-        searshTextField.placeholderText = "SEARCH FOOD"
+        searshTextField.placeholderText = R.string.localizable.addFoodPlaceholder()
     
         foodCollectionViewController.dataSource = self
         foodCollectionViewController.delegate = self
@@ -690,7 +690,7 @@ private extension AddFoodViewController {
         let button = VerticalButton()
         button.addTarget(self, action: #selector(didTapCreateButton), for: .touchUpInside)
         button.setImage(R.image.addFood.tabBar.pencil(), .normal)
-        button.setTitle("CREATE", .normal)
+        button.setTitle(R.string.localizable.addFoodCreate(), .normal)
         button.setTitleColor(R.color.addFood.recipesCell.basicGray(), .normal)
         button.titleLabel.font = R.font.sfProDisplaySemibold(size: 9)
         button.titleLabel.textAlignment = .center
@@ -703,7 +703,7 @@ private extension AddFoodViewController {
         let button = VerticalButton()
         button.addTarget(self, action: #selector(didTapScanButton), for: .touchUpInside)
         button.setImage(R.image.addFood.tabBar.scan(), .normal)
-        button.setTitle("SCAN", .normal)
+        button.setTitle(R.string.localizable.addFoodScan(), .normal)
         button.setTitleColor(R.color.addFood.recipesCell.basicGray(), .normal)
         button.titleLabel.font = R.font.sfProDisplaySemibold(size: 9)
         button.titleLabel.textAlignment = .center
@@ -716,7 +716,7 @@ private extension AddFoodViewController {
         let button = VerticalButton()
         button.addTarget(self, action: #selector(didTapCalorieButton), for: .touchUpInside)
         button.setImage(R.image.addFood.tabBar.calories(), .normal)
-        button.setTitle("CALORIES", .normal)
+        button.setTitle(R.string.localizable.kcal(), .normal)
         button.setTitleColor(R.color.addFood.recipesCell.basicGray(), .normal)
         button.titleLabel.font = R.font.sfProDisplaySemibold(size: 9)
         button.titleLabel.textAlignment = .center
@@ -785,7 +785,7 @@ private extension AddFoodViewController {
         button.layer.borderColor = R.color.foodViewing.basicSecondaryDark()?.cgColor
         button.backgroundColor = R.color.foodViewing.basicPrimary()
         button.addTarget(self, action: #selector(didTapDoneButton), for: .touchUpInside)
-        button.setTitle("DONE", for: .normal)
+        button.setTitle(R.string.localizable.addFoodDone(), for: .normal)
         button.titleLabel?.font = R.font.sfProDisplaySemibold(size: 18)
         return button
     }

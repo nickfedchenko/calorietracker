@@ -108,7 +108,7 @@ extension FirstPageFormView {
         let label = UILabel()
         label.font = R.font.sfProTextMedium(size: 17)
         label.textColor = R.color.foodViewing.basicGrey()
-        label.text = "Name"
+        label.text = R.string.localizable.createFormName()
         return label
     }
     
@@ -116,7 +116,7 @@ extension FirstPageFormView {
         let label = UILabel()
         label.font = R.font.sfProTextMedium(size: 17)
         label.textColor = R.color.foodViewing.basicGrey()
-        label.text = "Brand / Producer"
+        label.text = R.string.localizable.createFormBrand()
         return label
     }
     
@@ -124,7 +124,7 @@ extension FirstPageFormView {
         let label = UILabel()
         label.font = R.font.sfProTextMedium(size: 17)
         label.textColor = R.color.foodViewing.basicGrey()
-        label.text = "Barcode"
+        label.text = R.string.localizable.createFormBarcode()
         return label
     }
     
@@ -164,7 +164,10 @@ extension FirstPageFormView {
     
     private func getBarcodeForm() -> FormView<EmptyGetTitle> {
         let form = FormView<EmptyGetTitle>()
-        form.model = .init(width: .large, value: .required("enter or scan"))
+        form.model = .init(
+            width: .large,
+            value: .required(R.string.localizable.createFormBarcodePlaceholder())
+        )
         return form
     }
 }

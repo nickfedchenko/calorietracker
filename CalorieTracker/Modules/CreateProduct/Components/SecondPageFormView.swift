@@ -83,7 +83,7 @@ extension SecondPageFormView {
         let label = UILabel()
         label.font = R.font.sfProTextMedium(size: 17)
         label.textColor = R.color.foodViewing.basicGrey()
-        label.text = "Serving weight"
+        label.text = R.string.localizable.createFormServingWeight()
         return label
     }
     
@@ -91,12 +91,12 @@ extension SecondPageFormView {
         let label = UILabel()
         label.font = R.font.sfProTextMedium(size: 17)
         label.textColor = R.color.foodViewing.basicGrey()
-        label.text = "Serving size description"
+        label.text = R.string.localizable.createFormServingDescription()
         return label
     }
     
     private func getServingSizeForm() -> FormView<EmptyGetTitle> {
-        let form = FormView<EmptyGetTitle> ()
+        let form = FormView<EmptyGetTitle>()
         form.model = .init(width: .large, value: .optional)
         return form
     }

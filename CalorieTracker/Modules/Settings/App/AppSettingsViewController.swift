@@ -229,7 +229,7 @@ extension AppSettingsViewController {
     
     private func getTitleHeaderLabel() -> UILabel {
         let label = UILabel()
-        label.text = "APP SETTINGS"
+        label.text = R.string.localizable.settingsApp().uppercased()
         label.font = R.font.sfProDisplaySemibold(size: 22.fontScale())
         label.textColor = R.color.foodViewing.basicPrimary()
         label.isHidden = true

@@ -704,3 +704,6 @@
 "widget.weight.add" = "ADD WEIGHING";
 
 "ah.connect.title" = "Connect to Apple Health";
+
+"bmi.short" = "BMI";
+"active" = "Active Energy";

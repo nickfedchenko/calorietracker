@@ -26,13 +26,13 @@ extension MealTime: WithGetImageProtocol, WithGetTitleProtocol, WithGetDescripti
     func getTitle(_ lenght: Lenght) -> String? {
         switch self {
         case .breakfast:
-            return "BREAKFAST"
+            return R.string.localizable.breakfast().uppercased()
         case .launch:
-            return "LUNCH"
+            return R.string.localizable.lunch().uppercased()
         case .dinner:
-            return "DINNER"
+            return R.string.localizable.dinner().uppercased()
         case .snack:
-            return "SNACK"
+            return R.string.localizable.snack().uppercased()
         }
     }
     

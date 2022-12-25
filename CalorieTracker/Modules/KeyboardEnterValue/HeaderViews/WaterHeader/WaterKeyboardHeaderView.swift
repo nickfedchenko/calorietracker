@@ -63,8 +63,8 @@ final class WaterKeyboardHeaderView: UIView, KeyboardHeaderProtocol {
         
         layer.masksToBounds = true
         
-        titleLabel.text = "Choose Icon:"
-        descriptionLabel.text = "Choose volume:"
+        titleLabel.text = R.string.localizable.keyboardWaterTitle()
+        descriptionLabel.text = R.string.localizable.keyboardWaterDescription()
         
         saveButton.active = false
         

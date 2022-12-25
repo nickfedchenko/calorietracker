@@ -21,11 +21,11 @@ final class ProgressViewController: UIViewController {
         func getTitle() -> String {
             switch self {
             case .daily:
-                return "DAILY"
+                return R.string.localizable.daily().uppercased()
             case .weekly:
-                return "WEEKLY"
+                return R.string.localizable.weekly().uppercased()
             case .monthly:
-                return "MONTHLY"
+                return R.string.localizable.monthly().uppercased()
             }
         }
     }
@@ -36,7 +36,7 @@ final class ProgressViewController: UIViewController {
         let label = UILabel()
         label.font = R.font.sfProDisplaySemibold(size: 24.fontScale())
         label.textColor = R.color.progressScreen.title()
-        label.text = "PROGRESS"
+        label.text = R.string.localizable.progressTitle()
         return label
     }()
     

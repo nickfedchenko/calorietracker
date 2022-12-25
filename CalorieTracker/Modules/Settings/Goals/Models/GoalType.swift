@@ -17,11 +17,11 @@ extension GoalType: WithGetTitleProtocol {
     func getTitle(_ lenght: Lenght) -> String? {
         switch self {
         case .loseWeight:
-            return "Lose Weight"
+            return R.string.localizable.loseWeight()
         case .buildMuscle:
-            return "Build Muscle"
+            return R.string.localizable.buildMuscle()
         case .maintainWeight:
-            return "Maintain Weight"
+            return R.string.localizable.maintainWeight()
         }
     }
 }

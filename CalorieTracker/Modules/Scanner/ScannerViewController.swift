@@ -196,18 +196,18 @@ final class ScannerViewController: UIViewController {
     
     private func showAlert(_ product: Product) {
         let alertVC = UIAlertController(
-            title: "Штрих-код уже существует",
-            message: "Продукт с таким штрих-кодом уже существует. Хотите его посмотреть?",
+            title: R.string.localizable.scanAlertTitle(),
+            message: R.string.localizable.scanAlertDescription(),
             preferredStyle: .alert
         )
         
         alertVC.addAction(UIAlertAction(
-            title: "Отмена",
+            title: R.string.localizable.cancel(),
             style: .cancel
         ))
         
         alertVC.addAction(UIAlertAction(
-            title: "Смотреть",
+            title: R.string.localizable.viewing(),
             style: .default,
             handler: { [weak self] _ in
                 self?.router?.openProductViewController(product)

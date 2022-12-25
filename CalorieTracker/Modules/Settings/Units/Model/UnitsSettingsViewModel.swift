@@ -33,7 +33,7 @@ struct UnitsSettingsViewModel {
         switch type {
         case .title:
             let cell: SettingsProfileHeaderCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
-            cell.title = "APP SETTINGS"
+            cell.title = R.string.localizable.settingsApp()
             return cell
         case .weight, .energy, .liquid, .serving, .lenght:
             let cell: SettingsUnitsCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
@@ -68,35 +68,35 @@ struct UnitsSettingsViewModel {
             return .init(
                 metricTitle: BAMeasurement.measurmentSuffix(.lenght, isMetric: true),
                 imperialTitle: BAMeasurement.measurmentSuffix(.lenght, isMetric: false),
-                title: "Length",
+                title: R.string.localizable.length(),
                 unit: presenter?.getLenghtUnits() ?? .metric
             )
         case .energy:
             return .init(
                 metricTitle: BAMeasurement.measurmentSuffix(.energy, isMetric: true),
                 imperialTitle: BAMeasurement.measurmentSuffix(.energy, isMetric: false),
-                title: "Energy Value",
+                title: R.string.localizable.energy(),
                 unit: presenter?.getEnergyUnits() ?? .metric
             )
         case .liquid:
             return .init(
                 metricTitle: BAMeasurement.measurmentSuffix(.liquid, isMetric: true),
                 imperialTitle: BAMeasurement.measurmentSuffix(.liquid, isMetric: false),
-                title: "Liquid",
+                title: R.string.localizable.liquid(),
                 unit: presenter?.getLiquidUnits() ?? .metric
             )
         case .serving:
             return .init(
                 metricTitle: BAMeasurement.measurmentSuffix(.serving, isMetric: true),
                 imperialTitle: BAMeasurement.measurmentSuffix(.serving, isMetric: false),
-                title: "Serving",
+                title: R.string.localizable.serving(),
                 unit: presenter?.getServingUnits() ?? .metric
             )
         case .weight:
             return .init(
                 metricTitle: BAMeasurement.measurmentSuffix(.weight, isMetric: true),
                 imperialTitle: BAMeasurement.measurmentSuffix(.weight, isMetric: false),
-                title: "Weight",
+                title: R.string.localizable.weight(),
                 unit: presenter?.getWeightUnits() ?? .metric
             )
         }

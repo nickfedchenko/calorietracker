@@ -33,7 +33,7 @@ struct AppSettingsViewModel {
         switch type {
         case .title:
             let cell: SettingsProfileHeaderCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
-            cell.title = "APP SETTINGS"
+            cell.title = R.string.localizable.settingsApp()
             return cell
         case .account, .units, .sync, .database, .haptic, .meal, .about:
             let cell: SettingsCategoryCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
@@ -63,7 +63,7 @@ struct AppSettingsViewModel {
             return nil
         case .account:
             return .init(
-                title: "Account",
+                title: R.string.localizable.settingsAppAccount(),
                 description: nil,
                 titleColor: R.color.foodViewing.basicDark(),
                 descriptionColor: nil,
@@ -73,7 +73,7 @@ struct AppSettingsViewModel {
             )
         case .units:
             return .init(
-                title: "Units of Measurement",
+                title: R.string.localizable.settingsAppUnits(),
                 description: nil,
                 titleColor: R.color.foodViewing.basicDark(),
                 descriptionColor: nil,
@@ -83,7 +83,7 @@ struct AppSettingsViewModel {
             )
         case .sync:
             return .init(
-                title: "Sync",
+                title: R.string.localizable.settingsAppSync(),
                 description: nil,
                 titleColor: R.color.foodViewing.basicDark(),
                 descriptionColor: nil,
@@ -93,7 +93,7 @@ struct AppSettingsViewModel {
             )
         case .database:
             return .init(
-                title: "Database",
+                title: R.string.localizable.settingsAppDatabase(),
                 description: nil,
                 titleColor: R.color.foodViewing.basicDark(),
                 descriptionColor: nil,
@@ -103,7 +103,7 @@ struct AppSettingsViewModel {
             )
         case .haptic:
             return .init(
-                title: "Haptic Feedback",
+                title: R.string.localizable.settingsAppHaptic(),
                 description: nil,
                 titleColor: R.color.foodViewing.basicDark(),
                 descriptionColor: nil,
@@ -113,7 +113,7 @@ struct AppSettingsViewModel {
             )
         case .meal:
             return .init(
-                title: "Rename Meal Types",
+                title: R.string.localizable.settingsAppMeal(),
                 description: nil,
                 titleColor: R.color.foodViewing.basicDark(),
                 descriptionColor: nil,
@@ -123,7 +123,7 @@ struct AppSettingsViewModel {
             )
         case .about:
             return .init(
-                title: "About KCALC",
+                title: R.string.localizable.settingsAppAbout(),
                 description: nil,
                 titleColor: R.color.foodViewing.basicDark(),
                 descriptionColor: nil,

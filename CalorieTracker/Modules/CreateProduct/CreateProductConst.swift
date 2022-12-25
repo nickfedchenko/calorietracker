@@ -61,45 +61,45 @@ extension CreateProductViewController.ProductFormSegment: WithGetTitleProtocol {
     func getTitle(_ lenght: Lenght) -> String? {
         switch self {
         case .kcal:
-            return "Calories"
+            return R.string.localizable.kcal()
         case .fat:
-            return "Total Fat"
+            return R.string.localizable.fat()
         case .satFat:
-            return "Saturated Fat"
+            return R.string.localizable.satFat()
         case .transFat:
-            return "Trans Fat"
+            return R.string.localizable.transFat()
         case .polyFat:
-            return "Polyunsaturated Fat"
+            return R.string.localizable.polyFat()
         case .monoFat:
-            return "Monounsaturated Fat"
+            return R.string.localizable.monoFat()
         case .choleterol:
-            return "Cholesterol"
+            return R.string.localizable.choleterol()
         case .sodium:
-            return "Sodium"
+            return R.string.localizable.sodium()
         case .carb:
-            return "Total Carbohydrate"
+            return R.string.localizable.carb()
         case .dietaryFiber:
-            return "Dietary Fiber"
+            return R.string.localizable.dietaryFiber()
         case .sugars:
-            return "Total Sugars"
+            return R.string.localizable.sugars()
         case .addSugars:
-            return "Includes Added Sugars"
+            return R.string.localizable.addSugars()
         case .sugarAlco:
-            return "Sugar Alcohols"
+            return R.string.localizable.sugarAlco()
         case .protein:
-            return "Protein"
+            return R.string.localizable.protein()
         case .vitaminD:
-            return "Vitamin D"
+            return R.string.localizable.vitaminD()
         case .calcium:
-            return "Calcium"
+            return R.string.localizable.calcium()
         case .iron:
-            return "Iron"
+            return R.string.localizable.iron()
         case .potassium:
-            return "Potassium"
+            return R.string.localizable.potassium()
         case .vitaminA:
-            return "Vitamin A"
+            return R.string.localizable.vitaminA()
         case .vitaminC:
-            return "Vitamin C"
+            return R.string.localizable.vitaminC()
         }
     }
 }

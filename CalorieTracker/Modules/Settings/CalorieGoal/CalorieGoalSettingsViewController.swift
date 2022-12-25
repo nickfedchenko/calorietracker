@@ -182,7 +182,7 @@ extension CalorieGoalSettingsViewController {
         let button = UIButton()
         button.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
         button.setAttributedTitle(
-            "MY GOALS".attributedSring(
+            R.string.localizable.settingsMyGoalsTitle().attributedSring(
                 [
                     StringSettingsModel(
                         worldIndex: [0, 1],
@@ -222,7 +222,7 @@ extension CalorieGoalSettingsViewController {
     
     private func getTitleHeaderLabel() -> UILabel {
         let label = UILabel()
-        label.text = "CALORIE GOAL"
+        label.text = R.string.localizable.settingsCalorieGoalTitle()
         label.font = R.font.sfProDisplaySemibold(size: 22.fontScale())
         label.textColor = R.color.foodViewing.basicPrimary()
         label.isHidden = true
@@ -263,8 +263,8 @@ extension CalorieGoalSettingsViewController {
                 borderColorPress: R.color.foodViewing.basicSecondary()
             )
         ))
-        button.defaultTitle = " RECALCULATE GOAL"
-        button.isPressTitle = " RECALCULATE GOAL"
+        button.defaultTitle = " \(R.string.localizable.settingsCalorieGoalRecalculate())"
+        button.isPressTitle = " \(R.string.localizable.settingsCalorieGoalRecalculate())"
         button.addTarget(self, action: #selector(didTapResetButton), for: .touchUpInside)
         return button
     }

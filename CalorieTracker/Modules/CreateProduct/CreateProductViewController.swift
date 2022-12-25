@@ -80,9 +80,10 @@ final class CreateProductViewController: UIViewController {
         view.backgroundColor = R.color.createProduct.background()
         
         saveButton.addTarget(self, action: #selector(didTapSaveButton), for: .touchUpInside)
-        
-        descriptionFirstPageLabel.text = "Step \(1) of \(2)"
-        descriptionSecondPageLabel.text = "Step \(2) of \(2)"
+        let stepStr = R.string.localizable.createDescriptionFirst()
+        let ofStr = R.string.localizable.createDescriptionSecond()
+        descriptionFirstPageLabel.text = "\(stepStr) \(1) \(ofStr) \(2)"
+        descriptionSecondPageLabel.text = "\(stepStr) \(2) \(ofStr) \(2)"
         
         firstPageFormView.complition = { complition in
             self.presenter?.didTapScanButton({ barcode in
@@ -259,7 +260,7 @@ final class CreateProductViewController: UIViewController {
     
     private func setupFirstPage() {
         backButton.isHidden = true
-        titleHeaderLabel.text = "Food Creation"
+        titleHeaderLabel.text = R.string.localizable.createTitle()
         titleHeaderLabel.isHidden = checkTitleIsHidden(leftScrollView)
     }
     
@@ -374,7 +375,7 @@ extension CreateProductViewController {
         let label = UILabel()
         label.font = R.font.sfProDisplaySemibold(size: 24)
         label.textColor = R.color.foodViewing.basicPrimary()
-        label.text = "FOOD CREATION"
+        label.text = R.string.localizable.createTitle().uppercased()
         return label
     }
     
@@ -421,7 +422,7 @@ extension CreateProductViewController {
     private func getNutritionView() -> NutritionFactsCellView {
         let view = NutritionFactsCellView()
         view.viewModel = .init(
-            title: "Nutrition Facts".uppercased(),
+            title: R.string.localizable.createNutrition().uppercased(),
             subtitle: "",
             font: .average,
             cellWidth: .large,
@@ -433,7 +434,7 @@ extension CreateProductViewController {
     private func getServingSizeView() -> NutritionFactsCellView {
         let view = NutritionFactsCellView()
         view.viewModel = .init(
-            title: "Serving Size",
+            title: R.string.localizable.createServing(),
             subtitle: nil,
             font: .average,
             cellWidth: .large,

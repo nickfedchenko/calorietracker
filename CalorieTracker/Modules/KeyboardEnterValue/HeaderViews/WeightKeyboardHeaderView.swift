@@ -73,9 +73,9 @@ final class WeightKeyboardHeaderView: UIView, KeyboardHeaderProtocol {
         titleLabel.text = {
             switch actionType {
             case .add:
-                return "My weight today:"
+                return R.string.localizable.keyboardWeightTitleAdd()
             case .set:
-                return "I will weigh:"
+                return R.string.localizable.keyboardWeightTitleSet()
             }
         }()
         
