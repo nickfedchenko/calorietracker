@@ -37,6 +37,6 @@ class CalorieTrackingViaKcalcPresenter {
 extension CalorieTrackingViaKcalcPresenter: CalorieTrackingViaKcalcPresenterInterface {
     func didTapContinueWithoutRegistrationButton() {
         _ = OnboardingSaveDataService(OnboardingManager.shared.getOnboardingInfo())
-        router?.openMainController()
+        router?.openPaywallController()
     }
 }

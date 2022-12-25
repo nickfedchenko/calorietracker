@@ -13,6 +13,7 @@ import Lottie
 import SnapKit
 import Swinject
 import UIKit
+import ApphudSDK
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -29,8 +30,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         var getStartedViewController: UIViewController
         if UDM.userData == nil {
             getStartedViewController = WelcomeRouter.setupModule()
-        } else {
+        } else if Apphud.hasActiveSubscription() {
             getStartedViewController = CTTabBarController()
+        } else {
+            getStartedViewController = PaywallRouter.setupModule()
         }
         
         let navigationController = UINavigationController(rootViewController: getStartedViewController)

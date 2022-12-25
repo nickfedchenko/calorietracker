@@ -8,31 +8,17 @@
 import Foundation
 import UIKit
 
-final class SubscriptionAmount: UIButton {
+final class SubscriptionAmount: UIView {    
     
     // MARK: - Public properties
     
-    var title: String? {
-        get {
-            return nameLabel.text
-        }
-        set {
-            nameLabel.isHidden = newValue == nil
-            nameLabel.text = newValue
+    var model: SubscriptionAmountModel? {
+        didSet {
+            didChangeModel()
         }
     }
     
-    var describe: String? {
-        get {
-            return describeLabel.text
-        }
-        set {
-            describeLabel.isHidden = newValue == nil
-            describeLabel.text = newValue
-        }
-    }
-    
-    override var isSelected: Bool {
+    var isSelected: Bool = false {
         didSet { didChageIsSelected() }
     }
     
@@ -104,6 +90,12 @@ final class SubscriptionAmount: UIButton {
             layer.borderColor = R.color.onboardings.basicGray()?.cgColor
             checkMarkImageView.image = R.image.paywall.dottedLine()
         }
+    }
+    
+    private func didChangeModel() {
+        guard let model = model else { return }
+        nameLabel.text = model.title
+        describeLabel.text = model.describe
     }
     
     required init?(coder: NSCoder) {

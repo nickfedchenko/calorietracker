@@ -7,7 +7,12 @@
 
 import UIKit
 
-protocol PaywallRouterInterface: AnyObject {}
+protocol PaywallRouterInterface: AnyObject {
+    func navigateToApp()
+    func showAlert()
+    func openTerms()
+    func openPolicy()
+}
 
 class PaywallRouter {
     
@@ -22,12 +27,14 @@ class PaywallRouter {
         let vc = PaywallViewController()
         let interactor = PaywallInteractor()
         let router = PaywallRouter()
+        let viewModel = SubscriptionViewModel()
         let presenter = PaywallPresenter(
             interactor: interactor,
             router: router,
             view: vc
         )
 
+        vc.subscriptionViewModel = viewModel
         vc.presenter = presenter
         router.presenter = presenter
         router.viewController = vc
@@ -38,4 +45,43 @@ class PaywallRouter {
 
 // MARK: - PaywallRouterInterface
 
-extension PaywallRouter: PaywallRouterInterface {}
+extension PaywallRouter: PaywallRouterInterface {
+    func navigateToApp() {
+        let vc = CTTabBarController()
+        if let navigationController = viewController?.navigationController {
+            vc.navigationController?.isNavigationBarHidden = true
+            navigationController.setViewControllers([vc], animated: true)
+            UIView.transition(
+                with: navigationController.view,
+                duration: 0.3,
+                options: [.transitionCrossDissolve],
+                animations: nil
+            )
+        } else {
+            viewController?.dismiss(animated: true)
+        }
+    }
+    
+    func showAlert() {
+        let alert = UIAlertController(
+            title: "Error",
+            message: "Performing purchase",
+            preferredStyle: .alert
+        )
+        
+        alert.addAction(.init(
+            title: R.string.localizable.cancel().capitalized,
+            style: .cancel
+        ))
+        
+        viewController?.present(alert, animated: true)
+    }
+    
+    func openTerms() {
+        viewController?.openSafaryUrl("")
+    }
+    
+    func openPolicy() {
+        viewController?.openSafaryUrl("")
+    }
+}

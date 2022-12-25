@@ -39,12 +39,6 @@ class AppSettingsRouter: NSObject {
         router.presenter = presenter
         return vc
     }
-    
-    private func openSafaryUrl(_ urlStr: String) {
-        guard let url = URL(string: urlStr) else { return }
-        let safaryVC = SFSafariViewController(url: url)
-        viewController?.present(safaryVC, animated: true)
-    }
 }
 
 extension AppSettingsRouter: AppSettingsRouterInterface {
@@ -58,6 +52,6 @@ extension AppSettingsRouter: AppSettingsRouterInterface {
     }
     
     func openAboutSettingsVC() {
-        openSafaryUrl("https://www.google.ru/")
+        viewController?.openSafaryUrl("https://www.google.ru/")
     }
 }
