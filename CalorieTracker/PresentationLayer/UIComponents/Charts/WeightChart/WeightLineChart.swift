@@ -18,7 +18,6 @@ final class WeightLineChart: UIView {
         let data: [(date: Date, weight: CGFloat)]
         let dateStart: Date
         let goal: CGFloat?
-        
     }
     
     var goalLineColor: UIColor? = R.color.weightWidget.weightTextColor()

@@ -494,3 +494,215 @@
 "onboarding.fourth.youreNotAlone.title" = "Habits";
 "onboarding.fourth.youreNotAlone.title.first" = "You’re not alone!";
 "onboarding.fourth.youreNotAlone.description" = "A lot of people save calories during the week so that they have some wiggle room on the weekends.";
+
+"addFood.placeholder" = "SEARCH FOOD";
+"addFood.create" = "CREATE";
+"addFood.scan" = "SCAN";
+"addFood.calories" = "CALORIES";
+"addFood.done" = "DONE";
+"addFood.title.recent" = "recent searches";
+
+"breakfast" = "BREAKFAST";
+"lunch" = "LUNCH";
+"dinner" = "DINNER";
+"snack" = "SNACK";
+"food" = "Food";
+"recipe" = "Recipe";
+"meal" = "Meal";
+"frequent" = "Frequent";
+"recent" = "Recent";
+"favorites" = "Favorites";
+"myMeals" = "My Meals";
+"myRecipes" = "My Recipes";
+"myFood" = "My Food";
+"nutrition" = "Nutrition";
+
+"kcal.short" = "kcal"
+"carbs.short" = "carbs"
+"fat.short" = "fat";
+"kcal" = "Calories";
+"fat" = "Total Fat";
+"satFat" = "Saturated Fat";
+"transFat" = "Trans Fat";
+"polyFat" = "Polyunsaturated Fat";
+"monoFat" = "Monounsaturated Fat";
+"choleterol" = "Cholesterol";
+"sodium" = "Sodium";
+"carb" = "Total Carbohydrate";
+"dietaryFiber" = "Dietary Fiber";
+"sugars" = "Total Sugars";
+"addSugars" = "Includes Added Sugars";
+"sugarAlco" = "Sugar Alcohols";
+"protein" = "Protein";
+"vitaminD" = "Vitamin D";
+"calcium" = "Calcium";
+"iron" = "Iron";
+"potassium" = "Potassium";
+"vitaminA" = "Vitamin A";
+"vitaminC" = "Vitamin C";
+
+"select" = "Select";
+"galary" = "Galary";
+"delete" = "Delete";
+"cancel" = "Cancel";
+
+"ounce" = "Ounce";
+"gram" = "Gram";
+"piece" = "Piece";
+
+"daily" = "DAILY";
+"weekly" = "WEEKLY";
+"monthly" = "MONTHLY";
+
+"viewing" = "Viewving";
+
+"length" = "Length";
+"energy" = "Energy Value";
+"liquid" = "Liquid";
+"serving" = "Serving";
+"weight" = "Weight";
+
+"goal" = "Goal";
+
+"default" = "Default";
+"share" = "Share";
+
+"lowCarb" = "Low Carb";
+"highProtein" = "High Protein";
+"lowFat" = "Low Fat";
+"custom" = "Custom";
+
+"low" = "Low";
+"moderate" = "Moderate";
+"high" = "High";
+"veryHigh" = "Very High";
+"loseWeight" = "Lose Weight";
+"buildMuscle" = "Build Muscle";
+"maintainWeight" = "Maintain Weight";
+
+"male" = "Male";
+"famale" = "Famale";
+
+"save" = "save";
+"apply" = "apply";
+
+"last" = "Last";
+"days" = "Days";
+"weeks" = "Weeks";
+"months" = "Months";
+
+"track" = "TRACK";
+
+"exercises" = "exercises";
+
+"create.title" = "Food Creation";
+"create.description.first" = "Step";
+"create.description.second" = "of";
+"create.nutrition" = "Nutrition Facts";
+"create.serving" = "Serving Size";
+"create.form.name" = "Name";
+"create.form.brand" = "Brand / Producer";
+"create.form.barcode" = "Barcode";
+"create.form.barcode.placeholder" = "enter or scan";
+"create.form.serving.weight" = "Serving weight";
+"create.form.serving.description" = "Serving size description";
+
+"keyboard.weight.title.add" = "My weight today:";
+"keyboard.weight.title.set" = "I will weigh:";
+"keyboard.steps.title" = "I will walk at least daily:";
+"keyboard.water.title" = "Choose Icon:";
+"keyboard.water.description" = "Choose volume:";
+
+"paywall.convenientCalorie" = "Convenient calorie and activity tracker";
+"paywall.effectiveWeight" = "Effective weight loss or weight gain";
+"paywall.recipesForDifferent" = "10000+ recipes for different types of diets";
+"paywall.bestWay" = "The best way to keep your body in shape";
+"paywall.startNow" = "Start now!";
+"paywall.title" = "Losing weight has never been so easy!";
+
+"product.nothingWasFound.title" = "nothing was found";
+"product.dailyFoodIntake.title" = "Percent of daily goal";
+
+"progress.title" = "PROGRESS";
+"progress.settings.title" = "EDIT PROGRESS VIEW";
+
+"scan.alert.title" = "Barcode already exists";
+"scan.alert.description" = "A product with this barcode already exists. Do you want to see it?";
+
+"settings.app" = "App Settings";
+"settings.preferences.title" = "PREFERENCES";
+"settings.units.title" = "UNITS";
+"settings.app.account" = "Account";
+"settings.app.units" = "Units of Measurement";
+"settings.app.sync" = "Sync";
+"settings.app.database" = "Database";
+"settings.app.haptic" = "Haptic Feedback";
+"settings.app.meal" = "Rename Meal Types";
+"settings.app.about" = "About KCALC";
+"settings.myGoals.title" = "MY GOALS";
+"settings.calorieGoal.title" = "Calorie Goal";
+"settings.calorieGoal.recalculate" = "RECALCULATE GOAL";
+"settings.calorieGoal.description" = "Calorie Distribution";
+"settings.nutrientGoal.title" = "Nutrient Goals";
+"settings.nutrientGoal.reset" = "RESET";
+"settings.goal.goal" = "Goal";
+"settings.goal.startWeight" = "Starting Weight";
+"settings.goal.weight" = "Goal Weight";
+"settings.goal.activityLevel" = "Activity Level";
+"settings.goal.weekly" = "Weekly Goal";
+"settings.profile.title" = "Profile";
+"settings.dietary.title" = "Dietary Preference";
+"settings.dietary.classic.title" = "Classic";
+"settings.dietary.classic.decription" = "I have no dietary preferences";
+"settings.dietary.pescatarian.title" = "Pescatarian";
+"settings.dietary.pescatarian.decription" = "I eat seafood but not meat";
+"settings.dietary.vegetarian.title" = "Vegetarian";
+"settings.dietary.vegetarian.decription" = "I don’t eat meat or seafood";
+"settings.dietary.vegan.title" = "Vegan";
+"settings.dietary.vegan.decription" = "I don’t eat any animal product";
+"settings.main.chat.title" = "Live Chat Support";
+"settings.main.reminders.title" = "Reminders";
+"settings.main.rate.title" = "Rate this App";
+"settings.main.help.title" = "Help & FAQ";
+"settings.profile.name.title" = "First Name";
+"settings.profile.lastName.title" = "Last Name";
+"settings.profile.city.title" = "City";
+"settings.profile.sex.title" = "Sex";
+"settings.profile.date.title" = "Date of Birth";
+"settings.profile.date.description" = "Month Day, Year";
+"settings.profile.height.title" = "Height";
+
+"diagramChartType.calories.title" = "CALORIES";
+"diagramChartType.carb.title" = "CARBOHYDRATES";
+"diagramChartType.steps.title" = "STEPS";
+"diagramChartType.water.title" = "WATER";
+"diagramChartType.activity.title" = "ACTIVITY ENERGY";
+"diagramChartType.protein.title" = "PROTEIN";
+"doubleDiagramChart.exercises.title" = "EXERSISE ENERGY";
+"lineChartType.bmi.title" = "BODY MASS INDEX";
+"tripleDiagramChartType.dietary.title" = "DIETARY INTAKE";
+
+"chart.message.title.first" = "There are no measurements. Your first";
+"chart.message.title.second" = "has not yet passed";
+"chart.right.bottom.title" = "Daily Average";
+"lineChart.right.bottom.first" = "Starting Weight: ";
+"lineChart.right.bottom.second" = "Starting: ";
+
+"tabBar.myDay" = "MY DAY";
+"tabBar.progress" = "PROGRESS";
+"tabBar.food" = "FOOD";
+
+"widget.main.including.title" = "INCLUDING BURNED";
+"widget.main.excluding.title" = "EXCLUDING BURNED";
+"widget.main.kcalLeft.title" = "KCAL LEFT";
+"widget.steps.title" = "steps";
+
+"widget.water.setGoal.title" = "I will drink daily:";
+"widget.water.title" = "WATER";
+"widget.water.quickAdd.title" = "Set up quick add";
+"widget.water.quickAdd.goalbutton.title" = "CHANGE DAILY GOAL";
+
+"widget.weight.title" = "WEIGHT";
+"widget.weight.add" = "ADD WEIGHING";
+
+"ah.connect.title" = "Connect to Apple Health";

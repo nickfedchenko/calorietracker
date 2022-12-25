@@ -112,16 +112,6 @@ extension UnitsSettingsViewController: UICollectionViewDelegateFlowLayout {
 // MARK: - CollectionView Delegate
 
 extension UnitsSettingsViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let type = viewModel?.getTypeCell(indexPath),
-              let cell = collectionView.cellForItem(at: indexPath) else { return }
-        
-        let rect = collectionView.convert(cell.frame, to: view)
-        let anchorPoint = CGPoint(x: view.frame.width - 20, y: rect.midY)
-       
-        
-    }
-    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard let row = viewModel?.getIndexType(.title),
               let cell = collectionView.cellForItem(at: IndexPath(row: row, section: 0)) else {
@@ -204,4 +194,3 @@ extension UnitsSettingsViewController {
         return view
     }
 }
-

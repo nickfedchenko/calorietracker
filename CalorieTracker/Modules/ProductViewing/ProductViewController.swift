@@ -380,7 +380,6 @@ extension ProductViewController {
         label.font = R.font.sfProDisplayBold(size: 24)
         label.textColor = R.color.foodViewing.basicPrimary()
         label.numberOfLines = 0
-        label.text = "Apple"
         return label
     }
     
