@@ -20,6 +20,7 @@ protocol MainScreenPresenterInterface: AnyObject {
     func updateActivityWidget()
     func updateExersiceWidget()
     func checkOnboarding()
+    func didTapExerciseWidget()
 }
 
 class MainScreenPresenter {
@@ -186,6 +187,14 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
             goalBurnedKcal: burnedKcalGoal
         )
         
-        view.setExersiceWidget(model)
+        view.setExersiceWidget(model, UDM.isAuthorisedHealthKit)
+    }
+    
+    func didTapExerciseWidget() {
+        if !UDM.isAuthorisedHealthKit {
+            ExerciseWidgetServise.shared.syncWithHealthKit {
+                self.updateExersiceWidget()
+            }
+        }
     }
 }

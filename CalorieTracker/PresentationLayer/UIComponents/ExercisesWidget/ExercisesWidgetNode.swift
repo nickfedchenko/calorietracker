@@ -36,8 +36,27 @@ final class ExercisesWidgetNode: CTWidgetNode {
         return node
     }()
     
+    private lazy var connectAHTextNode: ASTextNode = {
+        let node = ASTextNode()
+        node.attributedText = "Connect to\napple health".attributedSring([
+            .init(
+                worldIndex: Array(0...5),
+                attributes: [
+                    .font(R.font.sfProDisplaySemibold(size: 13.fontScale()))
+                ]
+            )
+        ])
+        return node
+    }()
+    
     private lazy var burnedTextNode: ASTextNode = {
         let node = ASTextNode()
+        return node
+    }()
+    
+    private lazy var connectAHImageNode: ASImageNode = {
+        let node = ASImageNode()
+        node.image = R.image.onboardings.healthApp()
         return node
     }()
     
@@ -66,6 +85,12 @@ final class ExercisesWidgetNode: CTWidgetNode {
         }
     }
     
+    var isConnectAH = true {
+        didSet {
+            transitionLayout(withAnimation: false, shouldMeasureAsync: false)
+        }
+    }
+    
     override var widgetType: WidgetContainerViewController.WidgetType { .exercises }
     
     override init(with configuration: CTWidgetNodeConfiguration) {
@@ -83,6 +108,38 @@ final class ExercisesWidgetNode: CTWidgetNode {
     }
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
+        return isConnectAH
+            ? isConnectedState(constrainedSize)
+            : isNotConnectedState(constrainedSize)
+    }
+    
+    private func isNotConnectedState(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
+        let leftTextStack = ASStackLayoutSpec.vertical()
+        leftTextStack.justifyContent = .spaceBetween
+        leftTextStack.children = [
+            exercisesTextNode,
+            connectAHTextNode
+        ]
+        
+        let mainStack = ASStackLayoutSpec.horizontal()
+        mainStack.justifyContent = .spaceBetween
+        mainStack.children = [
+            leftTextStack,
+            connectAHImageNode
+        ]
+        
+        return ASInsetLayoutSpec(
+            insets: UIEdgeInsets(
+                top: 24.fontScale(),
+                left: 12.fontScale(),
+                bottom: 24.fontScale(),
+                right: 24.fontScale()
+            ),
+            child: mainStack
+        )
+    }
+    
+    private func isConnectedState(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         let topTextStack = ASStackLayoutSpec.horizontal()
         topTextStack.justifyContent = .spaceBetween
         topTextStack.children = [

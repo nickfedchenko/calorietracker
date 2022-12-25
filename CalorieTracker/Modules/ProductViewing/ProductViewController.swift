@@ -108,7 +108,9 @@ final class ProductViewController: UIViewController {
         )
         
         headerImageView.didTapLike = { value in
-            print(value)
+            if let product = self.presenter?.getProduct() {
+                FDS.shared.foodUpdate(food: .product(product), favorites: value)
+            }
         }
         
         selectView.didSelectedCell = { type, isColapsed in
@@ -326,6 +328,10 @@ final class ProductViewController: UIViewController {
     @objc private func didTapSaveButton() {
         presenter?.saveNutritionDaily(addNutrition)
         didChangeAddNutrition()
+        
+        if let product = presenter?.getProduct() {
+            FDS.shared.foodUpdate(food: .product(product), favorites: nil)
+        }
     }
 }
 

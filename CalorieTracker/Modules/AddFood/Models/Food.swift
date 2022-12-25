@@ -34,6 +34,17 @@ extension Food {
             return [:]
         }
     }
+    
+    var id: String {
+        switch self {
+        case .product(let product):
+            return product.id
+        case .dishes(let dish):
+            return String(dish.id)
+        case .meal(let meal):
+            return meal.id
+        }
+    }
 }
 
 extension Food: Equatable {

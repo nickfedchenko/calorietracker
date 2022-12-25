@@ -424,6 +424,7 @@ final class AddFoodViewController: UIViewController {
             cell.subInfo = presenter?.getSubInfo(food, selectedFoodInfo)
             cell.didTapButton = { food in
                 self.selectedFood = (self.selectedFood ?? []) + [food]
+                FDS.shared.foodUpdate(food: food, favorites: false)
             }
             return cell
         case .myMeals:
@@ -458,14 +459,11 @@ final class AddFoodViewController: UIViewController {
             kcal: sumKcal,
             count: selectedFood.count
         ))
-        showDoneButton(true)
-        searshTextField.state = .smallNotEdit
     }
     
     private func didChangeState() {
         switch self.state {
         case .search(let state):
-            showDoneButton(false)
             switch state {
             case .recent:
                 setupSearchRecentState()
@@ -475,10 +473,6 @@ final class AddFoodViewController: UIViewController {
                 setupSearchFoundResultsState()
             }
         case .default:
-            if let selectedFood = selectedFood, !selectedFood.isEmpty {
-                showDoneButton(true)
-                searshTextField.state = .smallNotEdit
-            }
             setupDefaultState()
         }
     }

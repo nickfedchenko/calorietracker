@@ -16,7 +16,7 @@ protocol MainScreenViewControllerInterface: AnyObject {
     func setMessageWidget(_ text: String)
     func setActivityWidget(_ model: MainWidgetViewNode.Model)
     func setCalendarWidget(_ model: CalendarWidgetNode.Model)
-    func setExersiceWidget(_ model: ExercisesWidgetNode.Model)
+    func setExersiceWidget(_ model: ExercisesWidgetNode.Model, _ isConnectedAH: Bool)
 }
 //
 class MainScreenViewController: ASDKViewController<ASDisplayNode> {
@@ -303,6 +303,8 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         switch widget.widgetType {
         case .weight, .water, .steps, .calendar:
             presenter?.didTapWidget(widget.widgetType)
+        case .exercises:
+            presenter?.didTapExerciseWidget()
         default:
             return
         }
@@ -330,8 +332,9 @@ extension MainScreenViewController: MainScreenViewControllerInterface {
         calendarWidget.model = model
     }
     
-    func setExersiceWidget(_ model: ExercisesWidgetNode.Model) {
+    func setExersiceWidget(_ model: ExercisesWidgetNode.Model, _ isConnectedAH: Bool) {
         exercisesWidget.model = model
+        exercisesWidget.isConnectAH = isConnectedAH
     }
     
     func setWaterWidgetModel(_ model: WaterWidgetNode.Model) {
