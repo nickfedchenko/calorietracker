@@ -16,7 +16,6 @@
 "onboarding.first.achievingDifficultGoal.title.first" = "Think about someone in your life ";
 "onboarding.first.achievingDifficultGoal.title.second" = "who has achieved a difficult goal.";
 "onboarding.first.achievingDifficultGoal.title" = "History";
-"onboarding.first.achievingDifficultGoal.title" = "History";
 "onboarding.first.achievingDifficultGoal.description" = "What do you think helped them become successful?";
 "onboarding.first.achievingDifficultGoal.naturalWillpowerAndMentalStrength" = "Natural willpower and mental strength";
 "onboarding.first.achievingDifficultGoal.aPlanAndGoodHabits" = "A plan and good habits";
@@ -69,7 +68,6 @@
 "onboarding.first.getStarted.follow" = "Follow a calorie budget";
 "onboarding.first.getStarted.reach" = "Reach your goals";
 "onboarding.first.getStarted.getStarted" = "Get started";
-"onboarding.first.getStarted.title" = "History";
 
 "onboarding.first.lastCalorieCount.title" = "History";
 "onboarding.first.lastCalorieCount.button" = "Next";
@@ -403,11 +401,11 @@
 "onboarding.fourth.increasingYourActivityLevel.title.first" = "Are you planning to increase your ";
 "onboarding.fourth.increasingYourActivityLevel.title.second" = "activity level?";
 
-"onboarding.fourth.increasingYourActivityLevel.button.yes" = "Yes";
-"onboarding.fourth.increasingYourActivityLevel.button.no" = "NO, not really";
-"onboarding.fourth.increasingYourActivityLevel.title" = "Habits";
-"onboarding.fourth.increasingYourActivityLevel.title.first" = "Do you love looking at data ";
-"onboarding.fourth.increasingYourActivityLevel.title.second" = "and using technology?";
+"onboarding.fourth.interestInUsingTechnology.button.yes" = "Yes";
+"onboarding.fourth.interestInUsingTechnology.button.no" = "NO, not really";
+"onboarding.fourth.interestInUsingTechnology.title" = "Habits";
+"onboarding.fourth.interestInUsingTechnology.title.first" = "Do you love looking at data ";
+"onboarding.fourth.interestInUsingTechnology.title.second" = "and using technology?";
 
 "onboarding.fourth.jointWeightLoss.title" = "Habits";
 "onboarding.fourth.jointWeightLoss.button" = "continue";
@@ -438,12 +436,12 @@
 "onboarding.fourth.placeOfResidence.inSuburbanArea" = "In a suburban area";
 "onboarding.fourth.placeOfResidence.inCity" = "In a city";
 
-"onboarding.fourth.placeOfResidence.button.no" = "No";
-"onboarding.fourth.placeOfResidence.button.yes" = "Yes";
-"onboarding.fourth.placeOfResidence.title" = "Habits";
-"onboarding.fourth.placeOfResidence.title.first" = "Do you ";
-"onboarding.fourth.placeOfResidence.title.second" = "typically eat ";
-"onboarding.fourth.placeOfResidence.title.third" = "your meals around the same times each day?";
+"onboarding.fourth.representationOfIncreasedActivityLevels.button.no" = "No";
+"onboarding.fourth.representationOfIncreasedActivityLevels.button.yes" = "Yes";
+"onboarding.fourth.representationOfIncreasedActivityLevels.title" = "Habits";
+"onboarding.fourth.representationOfIncreasedActivityLevels.title.first" = "Do you ";
+"onboarding.fourth.representationOfIncreasedActivityLevels.title.second" = "typically eat ";
+"onboarding.fourth.representationOfIncreasedActivityLevels.title.third" = "your meals around the same times each day?";
 
 "onboarding.fourth.sequenceOfHabitFormation.button" = "Continue";
 "onboarding.fourth.sequenceOfHabitFormation.title" = "Habits";
@@ -517,8 +515,8 @@
 "myFood" = "My Food";
 "nutrition" = "Nutrition";
 
-"kcal.short" = "kcal"
-"carbs.short" = "carbs"
+"kcal.short" = "kcal";
+"carbs.short" = "carbs";
 "fat.short" = "fat";
 "kcal" = "Calories";
 "fat" = "Total Fat";
