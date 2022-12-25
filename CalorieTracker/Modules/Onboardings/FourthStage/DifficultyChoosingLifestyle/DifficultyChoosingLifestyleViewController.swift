@@ -22,8 +22,14 @@ final class DifficultyChoosingLifestyleViewController: UIViewController {
 
     private let stageCounterView: StageCounterView = .init()
     private let titleLabel: UILabel = .init()
-    private let approvalCommonButton: CommonButton = .init(style: .bordered, text: "Yes".uppercased())
-    private let rejectionCommonButton: CommonButton = .init(style: .bordered, text: "No".uppercased())
+    private let approvalCommonButton: CommonButton = .init(
+        style: .bordered,
+        text: R.string.localizable.onboardingFourthDifficultyChoosingLifestyleButtonYes().uppercased()
+    )
+    private let rejectionCommonButton: CommonButton = .init(
+        style: .bordered,
+        text: R.string.localizable.onboardingFourthDifficultyChoosingLifestyleButtonNo().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -38,11 +44,11 @@ final class DifficultyChoosingLifestyleViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "Habits"
+        title = R.string.localizable.onboardingFourthDifficultyChoosingLifestyleTitle()
         
         view.backgroundColor = R.color.mainBackground()
         
-        titleLabel.text = "Is it harder for you to make healthy choices on the weekend?"
+        titleLabel.text = R.string.localizable.onboardingFourthDifficultyChoosingLifestyleTitleFirst()
         titleLabel.textColor = R.color.onboardings.basicDark()
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 0

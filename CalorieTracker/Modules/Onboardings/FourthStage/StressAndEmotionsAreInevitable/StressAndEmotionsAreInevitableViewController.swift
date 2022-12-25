@@ -24,7 +24,10 @@ final class StressAndEmotionsAreInevitableViewController: UIViewController {
     private let stackView: UIStackView = .init()
     private let titleLabel: UILabel = .init()
     private let descriptionLabel: UILabel = .init()
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "continue".uppercased())
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingFourthStressAndEmotionsAreInevitableButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -39,7 +42,7 @@ final class StressAndEmotionsAreInevitableViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "Habits"
+        title = R.string.localizable.onboardingFourthStressAndEmotionsAreInevitableTitle()
         
         view.backgroundColor = R.color.mainBackground()
         
@@ -47,14 +50,14 @@ final class StressAndEmotionsAreInevitableViewController: UIViewController {
         stackView.alignment = .center
         stackView.axis = .vertical
         
-        titleLabel.text = "Stress and emotions are inevitable."
+        titleLabel.text = R.string.localizable.onboardingFourthStressAndEmotionsAreInevitableTitleFirst()
         titleLabel.textColor = R.color.onboardings.basicDark()
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.systemFont(ofSize: 30, weight: .medium)
         
         // swiftlint:disable:next line_length
-        descriptionLabel.text = "If you end up going your calorie limit, that’s okay! Don’t let one slip up define you. Tracking everything you eat is more important early on in your health journey than staying under budget."
+        descriptionLabel.text = R.string.localizable.onboardingFourthStressAndEmotionsAreInevitableDescription()
         descriptionLabel.textColor = R.color.onboardings.basicGray()
         descriptionLabel.textAlignment = .center
         descriptionLabel.numberOfLines = 0

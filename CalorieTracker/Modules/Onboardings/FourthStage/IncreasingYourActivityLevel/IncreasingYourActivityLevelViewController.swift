@@ -26,8 +26,14 @@ final class IncreasingYourActivityLevelViewController: UIViewController {
     private let stackView: UIStackView = .init()
     private let imageView: UIImageView = .init()
     private let titleLabel: UILabel = .init()
-    private let approvalCommonButton: CommonButton = .init(style: .bordered, text: "Yes".uppercased())
-    private let rejectionCommonButton: CommonButton = .init(style: .bordered, text: "No".uppercased())
+    private let approvalCommonButton: CommonButton = .init(
+        style: .bordered,
+        text: R.string.localizable.onboardingFourthIncreasingYourActivityLevelButtonYes().uppercased()
+    )
+    private let rejectionCommonButton: CommonButton = .init(
+        style: .bordered,
+        text: R.string.localizable.onboardingFourthIncreasingYourActivityLevelButtonNo().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -42,7 +48,7 @@ final class IncreasingYourActivityLevelViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "Habits"
+        title = R.string.localizable.onboardingFourthIncreasingYourActivityLevelTitle()
         
         view.backgroundColor = R.color.mainBackground()
         
@@ -57,12 +63,12 @@ final class IncreasingYourActivityLevelViewController: UIViewController {
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: "Are you planning to increase your ",
+            string: R.string.localizable.onboardingFourthIncreasingYourActivityLevelTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         attributedString.append(NSAttributedString(
-            string: "activity level?",
+            string: R.string.localizable.onboardingFourthIncreasingYourActivityLevelTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         

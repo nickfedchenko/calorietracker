@@ -33,7 +33,10 @@ final class TimeForYourselfViewController: UIViewController {
     private let titleLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
     private var answerOptions: [AnswerOption] = []
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "continue".uppercased())
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingFourthTimeForYourselfButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -48,13 +51,13 @@ final class TimeForYourselfViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "Habits"
+        title = R.string.localizable.onboardingFourthTimeForYourselfTitle()
         
         view.backgroundColor = R.color.mainBackground()
         
         scrolView.showsVerticalScrollIndicator = false
         
-        titleLabel.text = "How much time do you have for yourself in a typical week?"
+        titleLabel.text = R.string.localizable.onboardingFourthTimeForYourselfTitleFirst()
         titleLabel.textColor = R.color.onboardings.basicDark()
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 0
@@ -184,13 +187,13 @@ fileprivate extension TimeForYourself {
     var description: String {
         switch self {
         case .nearlyNone:
-            return "Nearly none"
+            return R.string.localizable.onboardingFourthTimeForYourselfNearlyNone()
         case .littleBitHereAndThere:
-            return "A little bit, here and there"
+            return R.string.localizable.onboardingFourthTimeForYourselfLittleBitHereAndThere()
         case .goodAmount:
-            return "A good amount"
+            return R.string.localizable.onboardingFourthTimeForYourselfGoodAmount()
         case .asMuchAsWant:
-            return "As much as I want"
+            return R.string.localizable.onboardingFourthTimeForYourselfAsMuchAsWant()
         }
     }
 }

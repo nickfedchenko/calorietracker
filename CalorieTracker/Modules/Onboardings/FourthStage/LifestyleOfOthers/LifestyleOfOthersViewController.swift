@@ -33,7 +33,10 @@ final class LifestyleOfOthersViewController: UIViewController {
     private let titleLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
     private var answerOptions: [AnswerOption] = []
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "continue".uppercased())
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingFourthLifestyleOfOthersButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -48,7 +51,7 @@ final class LifestyleOfOthersViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "Habits"
+        title = R.string.localizable.onboardingFourthLifestyleOfOthersTitle()
         
         view.backgroundColor = R.color.mainBackground()
         
@@ -57,12 +60,12 @@ final class LifestyleOfOthersViewController: UIViewController {
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: "Think about the people you spend the most time with. What best describes their ",
+            string: R.string.localizable.onboardingFourthLifestyleOfOthersTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         attributedString.append(NSAttributedString(
-            string: "lifestyle?",
+            string: R.string.localizable.onboardingFourthLifestyleOfOthersTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
@@ -195,13 +198,13 @@ fileprivate extension LifestyleOfOthers {
     var description: String {
         switch self {
         case .theyMostlyEatWellAndAreActive:
-            return "They mostly eat well and are active"
+            return R.string.localizable.onboardingFourthLifestyleOfOthersTheyMostlyEatWellAndAreActive()
         case .theyHaveSomeHealthyHabits:
-            return "They have some healthy habits"
+            return R.string.localizable.onboardingFourthLifestyleOfOthersTheyHaveSomeHealthyHabits()
         case .dontHaveManyHealthyHabitsount:
-            return "They don’t have many healthy habits"
+            return R.string.localizable.onboardingFourthLifestyleOfOthersDontHaveManyHealthyHabitsount()
         case .imNotSure:
-            return "I’m not sure"
+            return R.string.localizable.onboardingFourthLifestyleOfOthersImNotSure()
         }
     }
 }

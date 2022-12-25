@@ -46,11 +46,11 @@ final class CalorieTrackingViaKcalcViewController: UIViewController {
         let attributedString = NSMutableAttributedString()
 
         attributedString.append(NSAttributedString(
-            string: "Get the best calorie tracking recommendations and ",
+            string: R.string.localizable.onboardingFourthCalorieTrackingViaKcalcTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         attributedString.append(NSAttributedString(
-            string: "stay fit with Kcalc",
+            string: R.string.localizable.onboardingFourthCalorieTrackingViaKcalcTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
@@ -67,7 +67,10 @@ final class CalorieTrackingViaKcalcViewController: UIViewController {
         )
         
         continueWithoutRegistrationButton.titleLabel?.font = .systemFont(ofSize: 18, weight: .semibold)
-        continueWithoutRegistrationButton.setTitle("Сontinue without registration", for: .normal)
+        continueWithoutRegistrationButton.setTitle(
+            R.string.localizable.onboardingFourthCalorieTrackingViaKcalcButton(),
+            for: .normal
+        )
         continueWithoutRegistrationButton.setTitleColor(R.color.onboardings.basicDarkGray(), for: .normal)
         continueWithoutRegistrationButton.addTarget(
             self,

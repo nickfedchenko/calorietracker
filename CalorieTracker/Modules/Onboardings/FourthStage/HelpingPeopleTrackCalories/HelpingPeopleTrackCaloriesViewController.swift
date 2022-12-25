@@ -24,7 +24,10 @@ final class HelpingPeopleTrackCaloriesViewController: UIViewController {
     private let stackView: UIStackView = .init()
     private let imageView: UIImageView = .init()
     private let titleLabel: UILabel = .init()
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "continue".uppercased())
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingFourthHelpingPeopleTrackCaloriesButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -39,7 +42,7 @@ final class HelpingPeopleTrackCaloriesViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "Habits"
+        title = R.string.localizable.onboardingFourthHelpingPeopleTrackCaloriesTitle()
         
         view.backgroundColor = R.color.mainBackground()
        
@@ -49,7 +52,7 @@ final class HelpingPeopleTrackCaloriesViewController: UIViewController {
         
         imageView.image = UIImage(named: R.image.onboardings.calendar.name)
         
-        titleLabel.text = "We’ve been helping people track calories since 2015."
+        titleLabel.text = R.string.localizable.onboardingFourthHelpingPeopleTrackCaloriesTitleFirst()
         titleLabel.textColor = R.color.onboardings.basicDark()
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 0

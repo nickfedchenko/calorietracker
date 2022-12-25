@@ -21,8 +21,14 @@ final class ThoughtsOnStressEatingViewController: UIViewController {
 
     private let stageCounterView: StageCounterView = .init()
     private let titleLabel: UILabel = .init()
-    private let approvalCommonButton: CommonButton = .init(style: .bordered, text: "Yes".uppercased())
-    private let rejectionCommonButton: CommonButton = .init(style: .bordered, text: "No".uppercased())
+    private let approvalCommonButton: CommonButton = .init(
+        style: .bordered,
+        text: R.string.localizable.onboardingFourthThoughtsOnStressEatingButtonYes().uppercased()
+    )
+    private let rejectionCommonButton: CommonButton = .init(
+        style: .bordered,
+        text: R.string.localizable.onboardingFourthThoughtsOnStressEatingButtonNo().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -37,19 +43,19 @@ final class ThoughtsOnStressEatingViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "Habits"
+        title = R.string.localizable.onboardingFourthThoughtsOnStressEatingTitle()
         
         view.backgroundColor = R.color.mainBackground()
         
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: "Do you consider yourself an emotional ",
+            string: R.string.localizable.onboardingFourthThoughtsOnStressEatingTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
         attributedString.append(NSAttributedString(
-            string: "or stress-based eater?",
+            string: R.string.localizable.onboardingFourthThoughtsOnStressEatingTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         

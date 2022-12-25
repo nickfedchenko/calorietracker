@@ -22,8 +22,14 @@ final class InterestInUsingTechnologyViewController: UIViewController {
 
     private let stageCounterView: StageCounterView = .init()
     private let titleLabel: UILabel = .init()
-    private let approvalCommonButton: CommonButton = .init(style: .bordered, text: "Yes".uppercased())
-    private let rejectionCommonButton: CommonButton = .init(style: .bordered, text: "NO, not really".uppercased())
+    private let approvalCommonButton: CommonButton = .init(
+        style: .bordered,
+        text: R.string.localizable.onboardingFourthInterestInUsingTechnologyButtonYes().uppercased()
+    )
+    private let rejectionCommonButton: CommonButton = .init(
+        style: .bordered,
+        text: R.string.localizable.onboardingFourthInterestInUsingTechnologyButtonNo().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -38,19 +44,19 @@ final class InterestInUsingTechnologyViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "Habits"
+        title = R.string.localizable.onboardingFourthInterestInUsingTechnologyTitle()
         
         view.backgroundColor = R.color.mainBackground()
         
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: "Do you love looking at data ",
+            string: R.string.localizable.onboardingFourthInterestInUsingTechnologyTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
         attributedString.append(NSAttributedString(
-            string: "and using technology?",
+            string: R.string.localizable.onboardingFourthInterestInUsingTechnologyTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         

@@ -33,7 +33,10 @@ final class EmotionalSupportSystemViewController: UIViewController {
     private let titleLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
     private var answerOptions: [AnswerOption] = []
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "continue".uppercased())
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingFourthEmotionalSupportSystemButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -48,13 +51,13 @@ final class EmotionalSupportSystemViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "Habits"
+        title = R.string.localizable.onboardingFourthEmotionalSupportSystemTitle()
         
         view.backgroundColor = R.color.mainBackground()
         
         scrolView.showsVerticalScrollIndicator = false
         
-        titleLabel.text = "How would you describe your emotional support system?"
+        titleLabel.text = R.string.localizable.onboardingFourthEmotionalSupportSystemTitleFirst()
         titleLabel.textColor = R.color.onboardings.basicDark()
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 0
@@ -184,13 +187,13 @@ fileprivate extension EmotionalSupportSystem {
     var description: String {
         switch self {
         case .haveSomeCanLeanOnForSupport:
-            return "I have some I can lean on for support"
+            return R.string.localizable.onboardingFourthEmotionalSupportSystemHaveSomeCanLeanOnForSupport()
         case .knowWhereCanGoForsupportWhenNeedIt:
-            return "I know where I can go for support when I need it"
+            return R.string.localizable.onboardingFourthEmotionalSupportSystemKnowWhereCanGoForsupportWhenNeedIt()
         case .wishMySupportSystemWasBetter:
-            return "I wish my support system was better"
+            return R.string.localizable.onboardingFourthEmotionalSupportSystemWishMySupportSystemWasBetter()
         case .dontUsuallyNeedSupportSystem:
-            return "I don’t usually need a support system"
+            return R.string.localizable.onboardingFourthEmotionalSupportSystemDontUsuallyNeedSupportSystem()
         }
     }
 }

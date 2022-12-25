@@ -24,7 +24,10 @@ final class YoureNotAloneViewController: UIViewController {
     private let stackView: UIStackView = .init()
     private let titleLabel: UILabel = .init()
     private let descriptionLabel: UILabel = .init()
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "continue".uppercased())
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingFourthYoureNotAloneButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -39,7 +42,7 @@ final class YoureNotAloneViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "Habits"
+        title = R.string.localizable.onboardingFourthYoureNotAloneTitle()
         
         view.backgroundColor = R.color.mainBackground()
     
@@ -47,14 +50,14 @@ final class YoureNotAloneViewController: UIViewController {
         stackView.alignment = .center
         stackView.axis = .vertical
         
-        titleLabel.text = "You’re not alone!"
+        titleLabel.text = R.string.localizable.onboardingFourthYoureNotAloneTitleFirst()
         titleLabel.textColor = R.color.onboardings.radialGradientFirst()
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.systemFont(ofSize: 30, weight: .medium)
         
         // swiftlint:disable:next line_length
-        descriptionLabel.text = "A lot of people save calories during the week so that they have some wiggle room on the weekends."
+        descriptionLabel.text = R.string.localizable.onboardingFourthYoureNotAloneDescription()
         descriptionLabel.textColor = R.color.onboardings.basicGray()
         descriptionLabel.textAlignment = .center
         descriptionLabel.numberOfLines = 0

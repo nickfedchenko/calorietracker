@@ -26,11 +26,11 @@ final class WhatImportantToYouViewController: UIViewController {
     private let titleLabel: UILabel = .init()
     private let caloriesInMyFoodCommonButton = CommonButton(
         style: .bordered,
-        text: "The calories in my food".uppercased()
+        text: R.string.localizable.onboardingFourthWhatImportantToYouButtonCalorie().uppercased()
     )
     private let nutritionOfMyFoodCommonButton = CommonButton(
         style: .bordered,
-        text: "The nutrition of my food".uppercased()
+        text: R.string.localizable.onboardingFourthWhatImportantToYouButtonNutrition().uppercased()
     )
     
     // MARK: - Lifecycle methods
@@ -46,7 +46,7 @@ final class WhatImportantToYouViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "Habits"
+        title = R.string.localizable.onboardingFourthWhatImportantToYouTitle()
         
         view.backgroundColor = R.color.mainBackground()
         
@@ -56,7 +56,7 @@ final class WhatImportantToYouViewController: UIViewController {
         
         imageView.image = UIImage(named: R.image.onboardings.vegan.name)
         
-        titleLabel.text = "What is more important to you?"
+        titleLabel.text = R.string.localizable.onboardingFourthWhatImportantToYouTitleFirst()
         titleLabel.textColor = R.color.onboardings.basicDark()
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 0

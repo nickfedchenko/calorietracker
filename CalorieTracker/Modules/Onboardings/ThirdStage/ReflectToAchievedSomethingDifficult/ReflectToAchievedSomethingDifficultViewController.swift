@@ -57,7 +57,8 @@ final class ReflectToAchievedSomethingDifficultViewController: UIViewController 
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .medium)
         
-        firstDescriptionLabel.text = R.string.localizable.onboardingThirdReflectToAchievedSomethingDifficultDescriptionFirst()
+        firstDescriptionLabel
+            .text = R.string.localizable.onboardingThirdReflectToAchievedSomethingDifficultDescriptionFirst()
         firstDescriptionLabel.textAlignment = .center
         firstDescriptionLabel.numberOfLines = 0
         firstDescriptionLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)

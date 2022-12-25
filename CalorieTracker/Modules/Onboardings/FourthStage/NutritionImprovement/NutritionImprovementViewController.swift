@@ -26,8 +26,14 @@ final class NutritionImprovementViewController: UIViewController {
     private let stackView: UIStackView = .init()
     private let imageView: UIImageView = .init()
     private let titleLabel: UILabel = .init()
-    private let approvalCommonButton: CommonButton = .init(style: .bordered, text: "Yes".uppercased())
-    private let rejectionCommonButton: CommonButton = .init(style: .bordered, text: "No".uppercased())
+    private let approvalCommonButton: CommonButton = .init(
+        style: .bordered,
+        text: R.string.localizable.onboardingFourthNutritionImprovementButtonYes().uppercased()
+    )
+    private let rejectionCommonButton: CommonButton = .init(
+        style: .bordered,
+        text: R.string.localizable.onboardingFourthNutritionImprovementButtonNo().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -42,7 +48,7 @@ final class NutritionImprovementViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "Habits"
+        title = R.string.localizable.onboardingFourthNutritionImprovementTitle()
         
         view.backgroundColor = R.color.mainBackground()
         
@@ -57,12 +63,12 @@ final class NutritionImprovementViewController: UIViewController {
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: "Are you hoping to improve the way ",
+            string: R.string.localizable.onboardingFourthNutritionImprovementTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         attributedString.append(NSAttributedString(
-            string: "you eat?",
+            string: R.string.localizable.onboardingFourthNutritionImprovementTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         

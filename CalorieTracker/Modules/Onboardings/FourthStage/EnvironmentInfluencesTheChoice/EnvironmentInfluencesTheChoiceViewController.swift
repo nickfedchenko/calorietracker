@@ -34,7 +34,10 @@ final class EnvironmentInfluencesTheChoiceViewController: UIViewController {
     private let descriptionLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
     private var answerOptions: [AnswerOption] = []
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "continue".uppercased())
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingFourthEnvironmentInfluencesTheChoiceButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -49,19 +52,19 @@ final class EnvironmentInfluencesTheChoiceViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "Habits"
+        title = R.string.localizable.onboardingFourthEnvironmentInfluencesTheChoiceTitle()
         
         view.backgroundColor = R.color.mainBackground()
         
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: "Our environment ",
+            string: R.string.localizable.onboardingFourthEnvironmentInfluencesTheChoiceTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         attributedString.append(NSAttributedString(
-            string: "influences our choices",
+            string: R.string.localizable.onboardingFourthEnvironmentInfluencesTheChoiceTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
@@ -71,7 +74,7 @@ final class EnvironmentInfluencesTheChoiceViewController: UIViewController {
         titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .medium)
         
         // swiftlint:disable:next line_length
-        descriptionLabel.text = "Sometimes we want something simply because we see it! What are some ways you can change your space to inspire healthy choices?"
+        descriptionLabel.text = R.string.localizable.onboardingFourthEnvironmentInfluencesTheChoiceDescription()
         descriptionLabel.textColor = R.color.onboardings.basicGray()
         descriptionLabel.textAlignment = .center
         descriptionLabel.numberOfLines = 0
@@ -209,17 +212,18 @@ fileprivate extension EnvironmentInfluencesTheChoice {
     var description: String {
         switch self {
         case .keepMySneakersByTheDoor:
-            return "Keep my sneakers by the door"
+            return R.string.localizable.onboardingFourthEnvironmentInfluencesTheChoiceKeepMySneakersByTheDoor()
         case .keepWaterNearby:
-            return "Keep water nearby"
+            return R.string.localizable.onboardingFourthEnvironmentInfluencesTheChoiceKeepWaterNearby()
         case .keepHealthySnacksOnHand:
-            return "Keep healthy snacks on hand"
+            return R.string.localizable.onboardingFourthEnvironmentInfluencesTheChoiceKeepHealthySnacksOnHand()
         case .stockUpOnFruitsAndVeggies:
-            return "Stock up on fruits and veggies"
+            return R.string.localizable.onboardingFourthEnvironmentInfluencesTheChoiceStockUpOnFruitsAndVeggies()
         case .keepDistractionsAwayWhileEating:
-            return "Keep distractions away while eating"
+            return R.string.localizable.onboardingFourthEnvironmentInfluencesTheChoiceKeepDistractionsAwayWhileEating()
         case .displayMyMealPlanOrCalendarOnTheFridge:
-            return "Display my meal plan or calendar on the fridge"
+            return R.string.localizable
+                .onboardingFourthEnvironmentInfluencesTheChoiceDisplayMyMealPlanOrCalendarOnTheFridge()
         }
     }
 }

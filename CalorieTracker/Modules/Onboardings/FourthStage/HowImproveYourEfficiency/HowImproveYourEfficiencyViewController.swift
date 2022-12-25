@@ -27,7 +27,10 @@ final class HowImproveYourEfficiencyViewController: UIViewController {
     private let titleLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
     private var answerOptions: [AnswerOption] = []
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "Continue".uppercased())
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingFourthHowImproveYourEfficiencyButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -42,19 +45,19 @@ final class HowImproveYourEfficiencyViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "Habits"
+        title = R.string.localizable.onboardingFourthHowImproveYourEfficiencyTitle()
 
         view.backgroundColor = R.color.mainBackground()
         
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: "What are some ways you can see yourself increasing your ",
+            string: R.string.localizable.onboardingFourthHowImproveYourEfficiencyTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         attributedString.append(NSAttributedString(
-            string: "activity level?",
+            string: R.string.localizable.onboardingFourthHowImproveYourEfficiencyTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
@@ -177,17 +180,17 @@ fileprivate extension HowImproveYourEfficiency {
     var description: String {
         switch self {
         case .exploringNewTypesOfActivity:
-            return "Exploring new types of activity"
+            return R.string.localizable.onboardingFourthHowImproveYourEfficiencyExploringNewTypesOfActivity()
         case .hittingDailyStepGoal:
-            return "Hitting a daily step goal"
+            return R.string.localizable.onboardingFourthHowImproveYourEfficiencyHittingDailyStepGoal()
         case .takingMoreWalks:
-            return "Taking more walks"
+            return R.string.localizable.onboardingFourthHowImproveYourEfficiencyTakingMoreWalks()
         case .buildingActivityIntoMyDailyRoutine:
-            return "Building activity into my daily routine"
+            return R.string.localizable.onboardingFourthHowImproveYourEfficiencyBuildingActivityIntoMyDailyRoutine()
         case .tryingNewWorkoutPlan:
-            return "Trying a new workout plan"
+            return R.string.localizable.onboardingFourthHowImproveYourEfficiencyTryingNewWorkoutPlan()
         case .findingWorkoutsCanDoAtHome:
-            return "Finding workouts I can do at home"
+            return R.string.localizable.onboardingFourthHowImproveYourEfficiencyFindingWorkoutsCanDoAtHome()
         }
     }
 }
