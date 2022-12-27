@@ -5,10 +5,17 @@
 //  Created by Vladimir Banushkin on 04.08.2022.
 //
 
-import AsyncDisplayKit
+import UIKit
+
+protocol RecipesFolderHeaderDelegate: AnyObject {
+    func didSelectSectionHeader(at index: Int)
+}
 
 class RecipesFolderHeader: UICollectionReusableView {
     static let identifier = String(describing: RecipesFolderHeader.self)
+    weak var delegate: RecipesFolderHeaderDelegate?
+    
+    var index: Int = -1
     
     private let folderIcon: UIImageView = {
         let imageView = UIImageView()
@@ -21,7 +28,6 @@ class RecipesFolderHeader: UICollectionReusableView {
         let label = UILabel()
         label.font = R.font.sfProRoundedBold(size: 16)
         label.textColor = R.color.folderTitleText()
-        label.text = ["Breakfast", "Lunch", "Dinner"].randomElement()
         return label
     }()
     
@@ -29,7 +35,6 @@ class RecipesFolderHeader: UICollectionReusableView {
         let label = UILabel()
         label.font = R.font.sfProRoundedBold(size: 16)
         label.textColor = R.color.grayBasicGray()
-        label.text = ["128", "280", "175"].randomElement()
         return label
     }()
     
@@ -43,10 +48,25 @@ class RecipesFolderHeader: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupSubviews()
+        setupActions() 
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func configure(with model: RecipeSectionModel) {
+        folderTitleLabel.text = model.title
+        recipesCountLabel.text = String(model.dishes.count)
+    }
+    
+    private func setupActions() {
+        let recognizer = UITapGestureRecognizer(target: self, action: #selector(headerTapped))
+        addGestureRecognizer(recognizer)
+    }
+    
+    @objc private func headerTapped() {
+        delegate?.didSelectSectionHeader(at: index)
     }
     
     private func setupSubviews() {

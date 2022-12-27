@@ -10,7 +10,7 @@ import AsyncDisplayKit
 import UIKit
 
 protocol RecipesScreenViewControllerInterface: AnyObject {
-    
+    func shouldReloadDishesCollection()
 }
 
 class RecipesScreenViewController: UIViewController {
@@ -20,21 +20,33 @@ class RecipesScreenViewController: UIViewController {
     }
     var presenter: RecipesScreenPresenterInterface?
     
-    private let selectorView = CTRecipesScreenSelector()
+//    private let selectorView = CTRecipesScreenSelector()
     
-    lazy var selectorHeightConstant: CGFloat = 48 {
-        didSet {
-            print("Selector height changed \(selectorHeightConstant)")
-        }
-    }
-    var isHeaderCurrentlyAnimation: Bool = false
+//    lazy var selectorHeightConstant: CGFloat = 48 {
+//        didSet {
+//            print("Selector height changed \(selectorHeightConstant)")
+//        }
+//    }
+//    var isHeaderCurrentlyAnimation: Bool = false
     
-    let header = CTRecipesScreenHeader()
-    lazy var previousOffset: CGFloat = -152
-    lazy var currentOffset: CGFloat = 0
-    var selectorsAlpha: CGFloat {
-        selectorHeightConstant / 48
-    }
+//    let header = CTRecipesScreenHeader()
+//    lazy var previousOffset: CGFloat = -152
+//    lazy var currentOffset: CGFloat = 0
+//    var selectorsAlpha: CGFloat {
+//        selectorHeightConstant / 48
+//    }
+    
+    private let blurView = UIVisualEffectView(effect: nil)
+    private var blurRadiusDriver: UIViewPropertyAnimator?
+    
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = UIColor(hex: "0C695E")
+        label.font = R.font.sfProRoundedBold(size: 24)
+        label.text = "Recipes".localized
+        label.textAlignment = .left
+        return label
+    }()
     
     private let topPartContentView: UIVisualEffectView = {
         let view = UIVisualEffectView(effect: UIBlurEffect(style: .light))
@@ -49,9 +61,9 @@ class RecipesScreenViewController: UIViewController {
         collectionView.backgroundColor = R.color.mainBackground()
         collectionView.bounces = false
         collectionView.contentInset = UIEdgeInsets(
-            top: 104,
+            top: 108,
             left: 0,
-            bottom: 84,
+            bottom: 120,
             right: 0
         )
         collectionView.register(RecipePreviewCell.self, forCellWithReuseIdentifier: RecipePreviewCell.identifier)
@@ -61,6 +73,7 @@ class RecipesScreenViewController: UIViewController {
             withReuseIdentifier: RecipesFolderHeader.identifier
         )
         collectionView.clipsToBounds = false
+        collectionView.contentInsetAdjustmentBehavior = .never
         return collectionView
     }()
     
@@ -76,6 +89,8 @@ class RecipesScreenViewController: UIViewController {
     }
     
     private func makeSection(for index: Int) -> NSCollectionLayoutSection {
+        let itemsInSection = CGFloat(presenter?.numberOfItemsInSection(section: index) ?? 0)
+        print("Got items ins section = \(itemsInSection)")
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .absolute(160),
             heightDimension: .absolute(128)
@@ -86,14 +101,14 @@ class RecipesScreenViewController: UIViewController {
         )
         
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: .estimated(160 * 8 + (8 * 7)),
+            widthDimension: .estimated(160 * itemsInSection + (8 * (itemsInSection - 1))),
             heightDimension: .absolute(128)
         )
         
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: groupSize,
             subitem: item,
-            count: 8
+            count: Int(itemsInSection)
         )
         group.interItemSpacing = .fixed(8)
         
@@ -126,6 +141,18 @@ class RecipesScreenViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        presenter?.askForSections()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: false)
+        presenter?.askForSections()
+        reinitBlurView()
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         print("Safe area top inset \(view.safeAreaInsets.top)")
@@ -136,52 +163,60 @@ class RecipesScreenViewController: UIViewController {
         }
     }
     
-    func updateTopViewHeight() {
-        isHeaderCurrentlyAnimation = true
-        selectorView.snp.remakeConstraints { make in
-            make.top.equalToSuperview()
-            make.leading.trailing.equalToSuperview()
-            
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.top).offset(selectorHeightConstant)
-        }
-        
-        UIView.animate(withDuration: 0.1) {
-            self.selectorView.alpha = self.selectorsAlpha
-            self.view.layoutIfNeeded()
-        } completion: { _ in
-            self.isHeaderCurrentlyAnimation = false
-        }
-    }
+//    func updateTopViewHeight() {
+//        isHeaderCurrentlyAnimation = true
+//        selectorView.snp.remakeConstraints { make in
+//            make.top.equalToSuperview()
+//            make.leading.trailing.equalToSuperview()
+//
+//            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.top).offset(selectorHeightConstant)
+//        }
+//
+//        UIView.animate(withDuration: 0.1) {
+//            self.selectorView.alpha = self.selectorsAlpha
+//            self.view.layoutIfNeeded()
+//        } completion: { _ in
+//            self.isHeaderCurrentlyAnimation = false
+//        }
+//    }
     
     private func setupSubviews() {
-        view.addSubviews(collectionView, topPartContentView)
-        topPartContentView.contentView.addSubviews(header, selectorView)
-        
-        topPartContentView.snp.makeConstraints { make in
+        view.addSubviews(collectionView)
+        view.addSubview(blurView)
+        blurView.contentView.addSubview(titleLabel)
+             
+        blurView.snp.makeConstraints { make in
+            make.height.equalTo(84)
             make.top.leading.trailing.equalToSuperview()
         }
         
-        selectorView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.leading.trailing.equalToSuperview()
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.top).offset(selectorHeightConstant)
-        }
-        
-        header.snp.makeConstraints { make in
-            make.top.equalTo(selectorView.snp.bottom).offset(16)
-            make.leading.trailing.equalToSuperview()
-            make.height.equalTo(40)
+        titleLabel.snp.makeConstraints { make in
+            make.height.equalTo(24)
             make.bottom.equalToSuperview()
+            make.leading.equalToSuperview().offset(20)
         }
         
         collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }
+    
+    private func reinitBlurView() {
+        blurRadiusDriver?.stopAnimation(true)
+        blurRadiusDriver?.finishAnimation(at: .current)
+        
+        blurView.effect = nil
+        blurRadiusDriver = UIViewPropertyAnimator(duration: 1, curve: .linear, animations: {
+            self.blurView.effect = UIBlurEffect(style: .light)
+        })
+        blurRadiusDriver?.fractionComplete = 0.1
+    }
 }
 
 extension RecipesScreenViewController: RecipesScreenViewControllerInterface {
-    
+    func shouldReloadDishesCollection() {
+        collectionView.reloadData()
+    }
 }
 
 extension RecipesScreenViewController: UICollectionViewDataSource {
@@ -200,8 +235,11 @@ extension RecipesScreenViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: RecipePreviewCell.identifier,
             for: indexPath
-        ) as? RecipePreviewCell
-        else { return UICollectionViewCell() }
+        ) as? RecipePreviewCell,
+              let model = presenter?.getDishModel(at: indexPath) else {
+            return UICollectionViewCell()
+        }
+        cell.configure(with: model)
         return cell
     }
     
@@ -215,7 +253,12 @@ extension RecipesScreenViewController: UICollectionViewDataSource {
             ofKind: kind,
             withReuseIdentifier: RecipesFolderHeader.identifier,
             for: indexPath
-           ) as? RecipesFolderHeader {
+           ) as? RecipesFolderHeader,
+           let sectionModel = presenter?.getSectionModel(at: indexPath)
+        {
+            header.index = indexPath.section
+            header.delegate = self
+            header.configure(with: sectionModel)
             return header
         } else {
             return UICollectionReusableView()
@@ -224,27 +267,33 @@ extension RecipesScreenViewController: UICollectionViewDataSource {
 }
 
 extension RecipesScreenViewController: UICollectionViewDelegate {
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard !isFirstLayout else { return }
-        
-        currentOffset = scrollView.contentOffset.y
-        if currentOffset > previousOffset {
-            if  selectorHeightConstant > 0 && selectorHeightConstant <= 48 {
-                selectorHeightConstant -= abs(previousOffset - currentOffset)
-                selectorHeightConstant = selectorHeightConstant < 0 ? 0 : selectorHeightConstant
-                updateTopViewHeight()
-            }
-        } else {
-            guard currentOffset < -104 else {
-                previousOffset = currentOffset
-                return
-            }
-            if  selectorHeightConstant >= 0 && selectorHeightConstant < 48 {
-                selectorHeightConstant += abs(previousOffset - currentOffset)
-                selectorHeightConstant = selectorHeightConstant > 48 ? 48 : selectorHeightConstant
-                updateTopViewHeight()
-            }
-        }
-        previousOffset = currentOffset
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        guard !isFirstLayout else { return }
+//
+//        currentOffset = scrollView.contentOffset.y
+//        if currentOffset > previousOffset {
+//            if  selectorHeightConstant > 0 && selectorHeightConstant <= 48 {
+//                selectorHeightConstant -= abs(previousOffset - currentOffset)
+//                selectorHeightConstant = selectorHeightConstant < 0 ? 0 : selectorHeightConstant
+//                updateTopViewHeight()
+//            }
+//        } else {
+//            guard currentOffset < -104 else {
+//                previousOffset = currentOffset
+//                return
+//            }
+//            if  selectorHeightConstant >= 0 && selectorHeightConstant < 48 {
+//                selectorHeightConstant += abs(previousOffset - currentOffset)
+//                selectorHeightConstant = selectorHeightConstant > 48 ? 48 : selectorHeightConstant
+//                updateTopViewHeight()
+//            }
+//        }
+//        previousOffset = currentOffset
+//    }
+}
+
+extension RecipesScreenViewController: RecipesFolderHeaderDelegate {
+    func didSelectSectionHeader(at index: Int) {
+        presenter?.didTapSectionHeader(at: index)
     }
 }

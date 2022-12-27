@@ -1,34 +1,39 @@
 //
-//  PrototypeCell.swift
-//  CalorieTracker
+//  RecipeListCell.swift
+//  GroceryList
 //
-//  Created by Vladimir Banushkin on 04.08.2022.
+//  Created by Vladimir Banushkin on 25.12.2022.
 //
 
-import AsyncDisplayKit
+import UIKit
 
-final class RecipePreviewCell: UICollectionViewCell {
-   private var isFirstLayout = true
-    static let identifier = String(describing: RecipePreviewCell.self)
-    private let shadowLayer = CAShapeLayer()
+protocol RecipeListCellDelegate: AnyObject {
+    func didTapToButProductsAtRecipe(at index: Int)
+}
+
+final class RecipeListCell: UICollectionViewCell {
+    static let identifier = String(describing: RecipeListCell.self)
+    var selectedIndex = -1
+    weak var delegate: RecipeListCellDelegate?
+    private var isFirstLayout = true
+    private var shadowLayer: CAShapeLayer
     
     private let mainImage: UIImageView = {
         let image = UIImageView()
         image.layer.cornerRadius = 8
         image.layer.cornerCurve = .continuous
-        image.layer.maskedCorners = [.layerMinXMinYCorner]
-        image.contentMode = .scaleAspectFill
+        image.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
         image.clipsToBounds = true
+        image.contentMode = .scaleAspectFill
         return image
     }()
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = R.font.sfProTextSemibold(size: 15)
-        label.textColor = R.color.grayBasicDark()
+        label.font = R.font.sfProTextSemibold(size: 16)
+        label.textColor = UIColor(hex: "192621")
         label.textAlignment = .center
         label.numberOfLines = 2
-        label.text = "Air fryer bacon"
         return label
     }()
     
@@ -43,7 +48,6 @@ final class RecipePreviewCell: UICollectionViewCell {
     
     private let timerIcon: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = R.image.timerIcon()
         return imageView
     }()
     
@@ -63,19 +67,26 @@ final class RecipePreviewCell: UICollectionViewCell {
         return imageView
     }()
     
-    
-    func configure(with model: Dish) {
-        if let photoUrl = URL(string: model.photo) {
-            mainImage.kf.setImage(with: photoUrl)
+    func configure(with dish: Dish) {
+        titleLabel.text = dish.title
+        if let url = URL(string: dish.photo) {
+            mainImage.kf.setImage(with: url)
         }
-        titleLabel.text = model.title
-        timerValueLabel.text = String(model.cookTime)
-        calorieValueLabel.text = String(format: "%.0f", model.kcal)
+        calorieValueLabel.text = String(format: "%.0f", dish.kcal)
+        timerValueLabel.text = String(dish.cookTime)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        drawInlinedStroke()
     }
     
     override init(frame: CGRect) {
+        shadowLayer = CAShapeLayer()
         super.init(frame: frame)
         setupSubviews()
+        setupActions()
+        clipsToBounds = false
         layer.insertSublayer(shadowLayer, at: 0)
     }
     
@@ -83,36 +94,41 @@ final class RecipePreviewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
         drawShadows()
+    }
+    
+    private func setupActions() {
+        
     }
     
     private func setupSubviews() {
         contentView.backgroundColor = .white
         layer.cornerRadius = 8
         layer.cornerCurve = .continuous
+        layer.masksToBounds = true
         contentView.layer.cornerRadius = 8
         contentView.layer.cornerCurve = .continuous
-        contentView.addSubviews(titleLabel, mainImage, timerIcon, timerValueLabel, calorieIcon, calorieValueLabel)
+        [titleLabel, mainImage, timerIcon, timerValueLabel, calorieIcon, calorieValueLabel].forEach {
+            contentView.addSubview($0)
+        }
         
         mainImage.snp.makeConstraints { make in
-            make.top.leading.equalToSuperview()
-            make.width.equalTo(120)
-            make.height.equalTo(80)
+            make.top.leading.bottom.equalToSuperview()
+            make.width.equalTo(96)
         }
         
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(mainImage.snp.bottom).offset(4)
-            make.leading.trailing.equalToSuperview().inset(8)
-            make.bottom.equalToSuperview().inset(8).priority(.low)
+            make.centerY.equalToSuperview()
+            make.leading.equalTo(mainImage.snp.trailing).offset(8)
+            make.trailing.equalToSuperview().inset(48)
         }
         
         timerIcon.snp.makeConstraints { make in
-            make.height.width.equalTo(16)
-            make.top.equalToSuperview().offset(8)
-            make.trailing.equalToSuperview().inset(12)
-//            make.leading.equalTo(mainImage.snp.trailing).offset(12)
+            make.width.height.equalTo(12)
+            make.top.equalToSuperview().offset(5)
+            make.trailing.equalToSuperview().inset(14)
         }
         
         timerValueLabel.snp.makeConstraints { make in
@@ -121,9 +137,9 @@ final class RecipePreviewCell: UICollectionViewCell {
         }
         
         calorieIcon.snp.makeConstraints { make in
-            make.width.height.equalTo(16)
-            make.top.equalTo(timerValueLabel.snp.bottom).offset(8)
-            make.centerX.equalTo(timerValueLabel)
+            make.centerX.equalTo(timerIcon)
+            make.top.equalTo(timerValueLabel.snp.bottom).offset(4)
+            make.width.height.equalTo(12)
         }
         
         calorieValueLabel.snp.makeConstraints { make in
@@ -132,23 +148,23 @@ final class RecipePreviewCell: UICollectionViewCell {
         }
     }
     
-    private func drawShadows() {
-        let shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: layer.cornerRadius)
-        layer.shadowPath = shadowPath.cgPath
-        layer.shadowColor = R.color.widgetShadowColorMainLayer()?.cgColor
-        layer.shadowOffset = CGSize(width: 0, height: 4)
-        layer.shadowRadius = 10
-        layer.shadowOpacity = 0.2
-        shadowLayer.shadowPath = shadowPath.cgPath
-        shadowLayer.shadowColor = R.color.widgetShadowColorSecondaryLayer()?.cgColor
-        shadowLayer.shadowOpacity = 0.25
-        shadowLayer.shadowRadius = 2
-        shadowLayer.shadowOffset = CGSize(width: 0, height: 0.5)
-        drawInlinedStroke()
-    }
-    
     func drawInlinedStroke() {
         layer.borderColor = UIColor.white.cgColor
         layer.borderWidth = 1
+    }
+    
+    private func drawShadows() {
+        let shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: layer.cornerRadius)
+        layer.shadowPath = shadowPath.cgPath
+        layer.shadowColor = UIColor(hex: "06BBBB").cgColor
+        layer.shadowOffset = CGSize(width: 0, height: 4)
+        layer.shadowRadius = 10
+        layer.shadowOpacity = 0.1
+        shadowLayer.shadowPath = shadowPath.cgPath
+        shadowLayer.shadowColor = UIColor(hex: "123E5E").cgColor
+        shadowLayer.shadowOpacity = 0.15
+        shadowLayer.shadowRadius = 2
+        shadowLayer.shadowOffset = CGSize(width: 0, height: 0.5)
+        drawInlinedStroke()
     }
 }

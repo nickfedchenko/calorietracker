@@ -9,6 +9,11 @@ import AsyncDisplayKit
 import UIKit
 
 final class CTTabBarController: ASTabBarController {
+    private let footer = CTTabBarGradientFooter()
+    let blurView = UIVisualEffectView(effect: nil)
+    private var blurRadiusDriver: UIViewPropertyAnimator?
+    var isTabBarHidden: Bool = false
+    
     enum Constants {
         /// Так как в макете отступ не соответствует отступу SafeAreaInsets.bottom - такое вот полуручное управления пришлось применить
         static let bottomInset: CGFloat = {
@@ -33,9 +38,18 @@ final class CTTabBarController: ASTabBarController {
                 return 32
             }
         }()
+        
+        static var tabBarHeight: CGFloat {
+            return 116
+        }
     }
     
     private lazy var customTabBar = CTTabBar()
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        reinitBlurView()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,12 +60,58 @@ final class CTTabBarController: ASTabBarController {
         setViewControllers(viewControllers, animated: false)
     }
     
+    func hideTabBar() {
+        blurView.snp.remakeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(116)
+            make.top.equalTo(view.snp.bottom)
+        }
+        
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
+        }
+        isTabBarHidden = true
+    }
+    
+    func showTabBar() {
+        blurView.snp.remakeConstraints { make in
+            make.leading.trailing.bottom.equalToSuperview()
+            make.height.equalTo(116)
+        }
+        
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
+        }
+        isTabBarHidden = false
+    }
+    
     private func setupSubviews() {
-        view.addSubview(customTabBar)
+        view.addSubview(blurView)
+        blurView.contentView.addSubview(footer)
+        blurView.contentView.addSubview(customTabBar)
         customTabBar.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.bottom.equalToSuperview().inset(Constants.bottomInset)
         }
+        
+        blurView.snp.makeConstraints { make in
+            make.leading.trailing.bottom.equalToSuperview()
+            make.height.equalTo(116)
+        }
+        
+        footer.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+    }
+    
+    private func reinitBlurView() {
+        blurRadiusDriver?.stopAnimation(true)
+        blurRadiusDriver?.finishAnimation(at: .current)
+        
+        blurRadiusDriver = UIViewPropertyAnimator(duration: 1, curve: .linear) {
+            self.blurView.effect = UIBlurEffect(style: .light)
+        }
+        blurRadiusDriver?.fractionComplete = 0.1
     }
 }
 
@@ -59,4 +119,6 @@ extension CTTabBarController: CTTabBarDelegate {
     func tabSelected(at index: Int) {
         selectedIndex = index
     }
+    
+    
 }

@@ -62,7 +62,7 @@ public class DomainDish: NSManagedObject {
         }
         
         if let processingTypeTags = try? JSONEncoder().encode(model.processingTypeTags) {
-            dish.eatingTags = processingTypeTags
+            dish.processingTypeTags = processingTypeTags
         }
         
         if let additionalTags = try? JSONEncoder().encode(model.additionalTags) {

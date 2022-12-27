@@ -22,7 +22,8 @@ struct Dish: Codable {
     let ingredients: [Ingredient]
     let values: Values?
     let eatingTags, dishTypeTags, processingTypeTags, additionalTags: [AdditionalTag]
-    let dietTags, exceptionTags: [AdditionalTag]
+    let dietTags: [AdditionalTag]
+    let exceptionTags: [ExceptionTag]
     let photo: String
     let isDraft: Bool
     let createdAt: String
@@ -182,7 +183,7 @@ struct Dish: Codable {
         
         if
             let exceptionTagsData = managedModel.exceptionTags,
-            let exceptionTags = try? decoder.decode([AdditionalTag].self, from: exceptionTagsData) {
+            let exceptionTags = try? decoder.decode([ExceptionTag].self, from: exceptionTagsData) {
             self.exceptionTags = exceptionTags
         } else {
             self.exceptionTags = []
@@ -206,14 +207,10 @@ struct Photo: Codable {
     let photo: String?
 }
 
-struct Tag: Codable {
-    let tag: String?
-}
-
-//struct Ingredient: Codable {
+// struct Ingredient: Codable {
 //    let product: ProductDTO?
 //    let amount: String?
-//}
+// }
 
 struct Ingredient: Codable {
     let id: Int
@@ -226,20 +223,51 @@ struct Ingredient: Codable {
 // MARK: - New DTO
 
 struct AdditionalTag: Codable {
-    enum EatingTime: Int {
+    enum ConvenientTag: Int {
         case breakfast = 8
         case dinner = 10
         case lunch = 9
         case snack = 11
+        case garnish = 12
+        case salad = 13
+        case soup = 14
+        case drink = 15
+        case bakery = 16
+        case sandwich = 17
+        case pizza = 18
+        case appetiser = 19
+        case sauce = 42
+        case withoutHeat = 20
+        case toBoil = 21
+        case toBake = 22
+        case toSteam = 23
+        case toFry = 24
+        case toStew = 25
+        case microwaving = 26
+        case onCoals = 27
+        case deepFried = 41
+        case suvid = 43
+        case juniorMenu = 28
+        case intalianCusine = 29
+        case asianCusine = 30
+        case chrismasAndNewYear = 31
+        case lowCarb = 32
+        case highProtein = 33
+        case lowFat = 34
+        case keto = 35
+        case paleo = 36
+        case mediterranean = 37
+        case pescatarian = 38
+        case vegetarian = 39
+        case vegan = 40
     }
     
     let id: Int
     let title: String
     
-    var eatingType: EatingTime? {
-        EatingTime(rawValue: id)
+    var convenientTag: ConvenientTag? {
+        ConvenientTag(rawValue: id)
     }
-    
 }
 
 struct MarketUnitClass: Codable {

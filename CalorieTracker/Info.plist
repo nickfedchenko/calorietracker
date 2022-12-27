@@ -2,14 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSHealthShareUsageDescription</key>
-	<string>The healthkit entry isn’t used by WatchKit extensions.</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Fix Me</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Fix Me</string>
-	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>Fix me</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -31,6 +23,14 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Fix Me</string>
+	<key>NSHealthShareUsageDescription</key>
+	<string>The healthkit entry isn’t used by WatchKit extensions.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Fix Me</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Fix me</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>SF-Pro-Display-Heavy.otf</string>
@@ -49,6 +49,8 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>UIUserInterfaceStyle</key>
+	<string>Light</string>
 	<key>backendKey</key>
 	<string>nfcKe99yXems6W8QstzV</string>
 </dict>

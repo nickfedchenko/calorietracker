@@ -10,4 +10,5 @@ target 'CalorieTracker' do
   pod 'SwiftLint'
   pod 'Texture'
   pod 'ApphudSDK'
+  pod 'AlignedCollectionViewFlowLayout'
 end

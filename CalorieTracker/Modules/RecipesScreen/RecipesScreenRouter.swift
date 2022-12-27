@@ -10,14 +10,15 @@ import Foundation
 import UIKit
 
 protocol RecipesScreenRouterInterface: AnyObject {
-
+    func navigateToRecipesList(for section: RecipeSectionModel)
 }
 
 class RecipesScreenRouter: NSObject {
 
     weak var presenter: RecipesScreenPresenterInterface?
+    var navigationController: UINavigationController?
 
-    static func setupModule() -> RecipesScreenViewController {
+    static func setupModule() -> UIViewController {
         let vc = RecipesScreenViewController()
         let interactor = RecipesScreenInteractor()
         let router = RecipesScreenRouter()
@@ -26,11 +27,15 @@ class RecipesScreenRouter: NSObject {
         vc.presenter = presenter
         router.presenter = presenter
         interactor.presenter = presenter
-        return vc
+        let navigationController = UINavigationController(rootViewController: vc)
+        router.navigationController = navigationController
+        return navigationController
     }
-    
 }
 
 extension RecipesScreenRouter: RecipesScreenRouterInterface {
-
+    func navigateToRecipesList(for section: RecipeSectionModel) {
+        let vc = RecipesListRouter.setupModule(with: section, navigationController: navigationController)
+        navigationController?.pushViewController(vc, animated: true)
+    }
 }
