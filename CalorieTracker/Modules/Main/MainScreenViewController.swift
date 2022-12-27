@@ -172,7 +172,7 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
                     insets: UIEdgeInsets(
                         top: 0,
                         left: 0,
-                        bottom: 0,
+                        bottom: CTWidgetNodeConfiguration(type: .widget).suggestedInterItemSpacing,
                         right: 0
                     ),
                     child: containerNode

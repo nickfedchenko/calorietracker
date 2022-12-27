@@ -193,7 +193,9 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
     func didTapExerciseWidget() {
         if !UDM.isAuthorisedHealthKit {
             ExerciseWidgetServise.shared.syncWithHealthKit {
-                self.updateExersiceWidget()
+                DispatchQueue.main.async {
+                    self.updateExersiceWidget()
+                }
             }
         }
     }
