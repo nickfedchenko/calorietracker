@@ -44,7 +44,7 @@ final class StepsKeyboardHeaderView: UIView, KeyboardHeaderProtocol {
         
         layer.masksToBounds = true
         
-        titleLabel.text = "I will walk at least daily:"
+        titleLabel.text = R.string.localizable.keyboardStepsTitle()
         
         saveButton.addTarget(
             self,

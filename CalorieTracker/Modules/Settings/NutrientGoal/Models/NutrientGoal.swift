@@ -25,15 +25,15 @@ extension NutrientGoalType: WithGetTitleProtocol {
     func getTitle(_ lenght: Lenght) -> String? {
         switch self {
         case .default:
-            return "Default"
+            return R.string.localizable.default()
         case .lowCarb:
-            return "Low Carb"
+            return R.string.localizable.lowCarb()
         case .highProtein:
-            return "High Protein"
+            return R.string.localizable.highProtein()
         case .lowFat:
-            return "Low Fat"
+            return R.string.localizable.lowFat()
         case .custom:
-            return "Custom"
+            return R.string.localizable.custom()
         }
     }
 }

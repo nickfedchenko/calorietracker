@@ -32,11 +32,11 @@ struct CalorieGoalSettingsViewModel {
         switch type {
         case .title:
             let cell: SettingsProfileHeaderCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
-            cell.title = "CALORIE GOAL"
+            cell.title = R.string.localizable.settingsCalorieGoalTitle()
             return cell
         case .description:
             let cell: SettingsProfileHeaderCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
-            cell.title = "Calorie Distribution"
+            cell.title = R.string.localizable.settingsCalorieGoalDescription()
             return cell
         case .breakfast, .goal, .lunch, .dinner, .snacks:
             let cell: SettingsGoalCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
@@ -75,31 +75,31 @@ struct CalorieGoalSettingsViewModel {
         switch type {
         case .goal:
             return .init(
-                title: "Goal",
+                title: R.string.localizable.goal(),
                 leftDescription: nil,
                 rightDescription: presenter?.getGoalKcalStr()
             )
         case .breakfast:
             return .init(
-                title: "Breakfast",
+                title: R.string.localizable.breakfast().capitalized,
                 leftDescription: presenter?.getBreakfastPercentStr(),
                 rightDescription: presenter?.getBreakfastGoalKcalStr()
             )
         case .lunch:
             return .init(
-                title: "Lunch",
+                title: R.string.localizable.lunch().capitalized,
                 leftDescription: presenter?.getLunchPercentStr(),
                 rightDescription: presenter?.getLunchGoalKcalStr()
             )
         case .dinner:
             return .init(
-                title: "Dinner",
+                title: R.string.localizable.dinner().capitalized,
                 leftDescription: presenter?.getDinnerPercentStr(),
                 rightDescription: presenter?.getDinnerGoalKcalStr()
             )
         case .snacks:
             return .init(
-                title: "Snacks",
+                title: R.string.localizable.snack().capitalized,
                 leftDescription: presenter?.getSnacksPercentStr(),
                 rightDescription: presenter?.getSnacksGoalKcalStr()
             )

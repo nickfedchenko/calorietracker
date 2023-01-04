@@ -28,7 +28,10 @@ final class FormationGoodHabitsViewController: UIViewController {
     private let descriptionLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
     private var answerOptions: [AnswerOption] = []
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "Continue".uppercased())
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingFirstFormationGoodHabitsButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -43,18 +46,18 @@ final class FormationGoodHabitsViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "History"
+        title = R.string.localizable.onboardingFirstFormationGoodHabitsTitle()
         
         view.backgroundColor = R.color.mainBackground()
         
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: "Building good habits takes a plan ",
+            string: R.string.localizable.onboardingFirstFormationGoodHabitsTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         attributedString.append(NSAttributedString(
-            string: "and accountability.",
+            string: R.string.localizable.onboardingFirstFormationGoodHabitsTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
@@ -63,7 +66,7 @@ final class FormationGoodHabitsViewController: UIViewController {
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .medium)
         
-        descriptionLabel.text = "How do you plan to stay on track?"
+        descriptionLabel.text = R.string.localizable.onboardingFirstFormationGoodHabitsDescription()
         descriptionLabel.textAlignment = .center
         descriptionLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
         descriptionLabel.textColor = R.color.onboardings.backTitle()
@@ -194,17 +197,17 @@ fileprivate extension FormationGoodHabits {
     var description: String {
         switch self {
         case .logEveryMealBefore:
-            return "Log every meal before I eat it"
+            return R.string.localizable.onboardingFirstFormationGoodHabitsLogEveryMealBefore()
         case .logOnDaysEvenWhenKnow:
-            return "Log on days even when I know I’m going over budget"
+            return R.string.localizable.onboardingFirstFormationGoodHabitsLogOnDaysEvenWhenKnow()
         case .stayOnTrackWithAnAccountabilityBuddy:
-            return "Stay on track with an accountability buddy"
+            return R.string.localizable.onboardingFirstFormationGoodHabitsStayOnTrackWithAnAccountabilityBuddy()
         case .planOutMyMealsInAdvance:
-            return "Plan out my meals in advance"
+            return R.string.localizable.onboardingFirstFormationGoodHabitsPlanOutMyMealsInAdvance()
         case .seeHowLongOfTrackingStreak:
-            return "See how long of a tracking streak I can keep up"
+            return R.string.localizable.onboardingFirstFormationGoodHabitsSeeHowLongOfTrackingStreak()
         case .planOutDaysWhereKnow:
-            return "Plan out days where I know I’ll be eating indulgent foods"
+            return R.string.localizable.onboardingFirstFormationGoodHabitsPlanOutDaysWhereKnow()
         }
     }
 }

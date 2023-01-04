@@ -33,7 +33,10 @@ final class ImportanceOfWeightLossViewController: UIViewController {
     private let titleLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
     private var answerOptions: [AnswerOption] = []
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "continue".uppercased())
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingThirdImportanceOfWeightLossButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -48,7 +51,7 @@ final class ImportanceOfWeightLossViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "Motivation/Goal"
+        title = R.string.localizable.onboardingThirdImportanceOfWeightLossTitle()
         
         view.backgroundColor = R.color.mainBackground()
         
@@ -57,16 +60,16 @@ final class ImportanceOfWeightLossViewController: UIViewController {
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: "How importans is it for you to ",
+            string: R.string.localizable.onboardingThirdImportanceOfWeightLossTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         attributedString.append(NSAttributedString(
-            string: "lose weight ",
+            string: R.string.localizable.onboardingThirdImportanceOfWeightLossTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         attributedString.append(NSAttributedString(
-            string: "right now?",
+            string: R.string.localizable.onboardingThirdImportanceOfWeightLossTitleThird(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
@@ -199,13 +202,13 @@ fileprivate extension ImportanceOfWeightLoss {
     var description: String {
         switch self {
         case .itIsMyTopPriority:
-            return "It is my top priority"
+            return R.string.localizable.onboardingThirdImportanceOfWeightLossItIsMyTopPriority()
         case .itIsVeryImportant:
-            return "It is very important"
+            return R.string.localizable.onboardingThirdImportanceOfWeightLossItIsVeryImportant()
         case .itIsFairlyImportant:
-            return "It is fairly important"
+            return R.string.localizable.onboardingThirdImportanceOfWeightLossItIsFairlyImportant()
         case .itIsNotThatImportant:
-            return "It is not that important"
+            return R.string.localizable.onboardingThirdImportanceOfWeightLossItIsNotThatImportant()
         }
     }
 }

@@ -31,7 +31,10 @@ final class MeasurementSystemViewController: UIViewController {
     private let titleLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
     private var variabilityResponses: [VariabilityResponse] = []
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "continue".uppercased())
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingSecondMeasurementSystemButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -48,7 +51,7 @@ final class MeasurementSystemViewController: UIViewController {
     private func configureViews() {
         view.backgroundColor = R.color.mainBackground()
         
-        titleLabel.text = "Measurement system"
+        titleLabel.text = R.string.localizable.onboardingSecondMeasurementSystemTitle()
         titleLabel.textColor = R.color.onboardings.basicDark()
         titleLabel.textAlignment = .center
         titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .medium)
@@ -158,18 +161,18 @@ fileprivate extension MeasurementSystem {
     var description: String {
         switch self {
         case .metricSystem:
-            return "Metric system"
+            return R.string.localizable.onboardingSecondMeasurementSystemDescriptionMetricSystem()
         case .imperialSystem:
-            return "Imperial system"
+            return R.string.localizable.onboardingSecondMeasurementSystemDescriptionImperialSystem()
         }
     }
     
     var describe: String {
         switch self {
         case .metricSystem:
-            return "cm, kg, calories"
+            return R.string.localizable.onboardingSecondMeasurementSystemDescribeMetricSystem()
         case .imperialSystem:
-            return "feet, pounds, calories"
+            return R.string.localizable.onboardingSecondMeasurementSystemDescribeImperialSystem()
         }
     }
 }

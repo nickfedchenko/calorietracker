@@ -15,11 +15,11 @@ enum FoodViewingWeightType: WithGetTitleProtocol, CaseIterable {
     func getTitle(_ lenght: Lenght) -> String? {
         switch self {
         case .ounce:
-            return "Ounce"
+            return R.string.localizable.ounce()
         case .gram:
-            return "Gram"
+            return R.string.localizable.gram()
         case .piece:
-            return "Piece"
+            return R.string.localizable.piece()
         }
     }
 }

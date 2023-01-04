@@ -51,9 +51,11 @@ extension CalorieGoalSettingsRouter: CalorieGoalSettingsRouterInterface {
     }
     
     func openEnterCalorieGoalVC() {
-        let vc = KeyboardEnterValueViewController(.standart("CALORIE GOAL"))
+        let vc = KeyboardEnterValueViewController(
+            .standart(R.string.localizable.settingsCalorieGoalTitle())
+        )
         vc.complition = { value in
-            self.presenter?.setKcalGoal(value)
+            self.presenter?.setKcalGoal(value, isMetric: false)
         }
         viewController?.present(vc, animated: true)
     }
@@ -70,7 +72,7 @@ extension CalorieGoalSettingsRouter: CalorieGoalSettingsRouterInterface {
             title: "APPLY",
             style: .default,
             handler: { _ in
-                self.presenter?.setKcalGoal(newKcal)
+                self.presenter?.setKcalGoal(newKcal, isMetric: true)
             }
         ))
         

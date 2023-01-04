@@ -13,6 +13,7 @@ import Lottie
 import SnapKit
 import Swinject
 import UIKit
+import ApphudSDK
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -26,7 +27,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     ) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
         
-        let getStartedViewController = CTTabBarController()
+        var getStartedViewController: UIViewController
+        if UDM.userData == nil {
+            getStartedViewController = WelcomeRouter.setupModule()
+        } else if Apphud.hasActiveSubscription() {
+            getStartedViewController = CTTabBarController()
+        } else {
+            getStartedViewController = PaywallRouter.setupModule()
+        }
+        
         let navigationController = UINavigationController(rootViewController: getStartedViewController)
         
         window?.rootViewController = navigationController
@@ -34,27 +43,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         updateHealthKitData()
         updateFoodData()
-  
-        //generateFakeUserData()
         
         return true
-    }
-    
-    // Создает данные юзера (Рандомно) позже удалить
-    private func generateFakeUserData() {
-        let products = Array(DSF.shared.getAllStoredProducts()[10...30])
-
-        products.forEach {
-            let foodData = FoodData(
-                dateLastUse: Date(),
-                favorites: Bool.random(),
-                numberUses: Int.random(in: 0...5)
-            )
-
-            LocalDomainService().saveFoodData(foods: [foodData])
-
-            foodData.setChild($0)
-        }
     }
     
     private func updateFoodData() {

@@ -32,14 +32,17 @@ class SettingsRouter: NSObject {
         let interactor = SettingsInteractor()
         let router = SettingsRouter()
         let presenter = SettingsPresenter(interactor: interactor, router: router, view: vc)
-        let viewModel = SettingsСategoriesViewModel([
-            .profile,
-            .chat,
-            .goals,
-            .app,
-            .rate,
-            .help
-        ])
+        let viewModel = SettingsСategoriesViewModel(
+            [
+                .profile,
+                .chat,
+                .goals,
+                .app,
+                .rate,
+                .help
+            ],
+            presenter: presenter
+        )
         
         vc.viewModel = viewModel
         vc.presenter = presenter
@@ -76,11 +79,17 @@ extension SettingsRouter: SettingsRouterInterface {
     
     func openProfileViewController() {
         let vc = ProfileSettingsRouter.setupModule()
+        
+        vc.needUpdate = {
+            self.presenter?.updateCell(.profile)
+        }
+        
         viewController?.navigationController?.pushViewController(vc, animated: true)
     }
     
     func openAppViewController() {
-        
+        let vc = AppSettingsRouter.setupModule()
+        viewController?.navigationController?.pushViewController(vc, animated: true)
     }
     
     func openChatViewController() {

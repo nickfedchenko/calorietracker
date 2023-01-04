@@ -9,7 +9,7 @@ import Foundation
 
 protocol YourHeightPresenterInterface: AnyObject {
     func viewDidLoad()
-    func didTapContinueCommonButton(with name: String)
+    func didTapContinueCommonButton(with height: Double)
 }
 
 class YourHeightPresenter {
@@ -42,8 +42,8 @@ extension YourHeightPresenter: YourHeightPresenterInterface {
         }
     }
     
-    func didTapContinueCommonButton(with name: String) {
-        interactor?.set(yourHeight: name)
+    func didTapContinueCommonButton(with height: Double) {
+        interactor?.set(yourHeight: height)
         router?.openYourWeight()
     }
 }

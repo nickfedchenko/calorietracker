@@ -25,8 +25,14 @@ final class CalorieCountViewController: UIViewController {
     private let stageCounterView: StageCounterView = .init()
     private let titleLabel: UILabel = .init()
     private let imagView: UIImageView = .init()
-    private let approvalCommonButton: CommonButton = .init(style: .bordered, text: "Yes".uppercased())
-    private let rejectionCommonButton: CommonButton = .init(style: .bordered, text: "No".uppercased())
+    private let approvalCommonButton: CommonButton = .init(
+        style: .bordered,
+        text: R.string.localizable.onboardingFirstCalorieCountApproval().uppercased()
+    )
+    private let rejectionCommonButton: CommonButton = .init(
+        style: .bordered,
+        text: R.string.localizable.onboardingFirstCalorieCountRejection().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -41,7 +47,7 @@ final class CalorieCountViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "History"
+        title = R.string.localizable.onboardingFirstCalorieCountTitle()
         
         view.backgroundColor = R.color.mainBackground()
         
@@ -50,15 +56,15 @@ final class CalorieCountViewController: UIViewController {
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: "Have you ",
+            string: R.string.localizable.onboardingFirstCalorieCountTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         attributedString.append(NSAttributedString(
-            string: "counted calories ",
+            string: R.string.localizable.onboardingFirstCalorieCountTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         attributedString.append(NSAttributedString(
-            string: "before??",
+            string: R.string.localizable.onboardingFirstCalorieCountTitleThird(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         

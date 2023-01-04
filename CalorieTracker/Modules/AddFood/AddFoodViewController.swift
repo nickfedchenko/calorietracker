@@ -132,7 +132,7 @@ final class AddFoodViewController: UIViewController {
         
         searshTextField.textField.keyboardAppearance = .light
         searshTextField.textField.keyboardType = .webSearch
-        searshTextField.placeholderText = "SEARCH FOOD"
+        searshTextField.placeholderText = R.string.localizable.addFoodPlaceholder()
     
         foodCollectionViewController.dataSource = self
         foodCollectionViewController.delegate = self
@@ -424,6 +424,7 @@ final class AddFoodViewController: UIViewController {
             cell.subInfo = presenter?.getSubInfo(food, selectedFoodInfo)
             cell.didTapButton = { food in
                 self.selectedFood = (self.selectedFood ?? []) + [food]
+                FDS.shared.foodUpdate(food: food, favorites: false)
             }
             return cell
         case .myMeals:
@@ -458,14 +459,11 @@ final class AddFoodViewController: UIViewController {
             kcal: sumKcal,
             count: selectedFood.count
         ))
-        showDoneButton(true)
-        searshTextField.state = .smallNotEdit
     }
     
     private func didChangeState() {
         switch self.state {
         case .search(let state):
-            showDoneButton(false)
             switch state {
             case .recent:
                 setupSearchRecentState()
@@ -475,10 +473,6 @@ final class AddFoodViewController: UIViewController {
                 setupSearchFoundResultsState()
             }
         case .default:
-            if let selectedFood = selectedFood, !selectedFood.isEmpty {
-                showDoneButton(true)
-                searshTextField.state = .smallNotEdit
-            }
             setupDefaultState()
         }
     }
@@ -658,6 +652,7 @@ private extension AddFoodViewController {
     func getSegmentedControl() -> SegmentedControl<AddFood> {
         let view = SegmentedControl<AddFood>(Const.segmentedModels)
         view.backgroundColor = R.color.addFood.menu.background()
+        view.selectedButtonType = .frequent
         return view
     }
     
@@ -689,7 +684,7 @@ private extension AddFoodViewController {
         let button = VerticalButton()
         button.addTarget(self, action: #selector(didTapCreateButton), for: .touchUpInside)
         button.setImage(R.image.addFood.tabBar.pencil(), .normal)
-        button.setTitle("CREATE", .normal)
+        button.setTitle(R.string.localizable.addFoodCreate(), .normal)
         button.setTitleColor(R.color.addFood.recipesCell.basicGray(), .normal)
         button.titleLabel.font = R.font.sfProDisplaySemibold(size: 9)
         button.titleLabel.textAlignment = .center
@@ -702,7 +697,7 @@ private extension AddFoodViewController {
         let button = VerticalButton()
         button.addTarget(self, action: #selector(didTapScanButton), for: .touchUpInside)
         button.setImage(R.image.addFood.tabBar.scan(), .normal)
-        button.setTitle("SCAN", .normal)
+        button.setTitle(R.string.localizable.addFoodScan(), .normal)
         button.setTitleColor(R.color.addFood.recipesCell.basicGray(), .normal)
         button.titleLabel.font = R.font.sfProDisplaySemibold(size: 9)
         button.titleLabel.textAlignment = .center
@@ -715,7 +710,7 @@ private extension AddFoodViewController {
         let button = VerticalButton()
         button.addTarget(self, action: #selector(didTapCalorieButton), for: .touchUpInside)
         button.setImage(R.image.addFood.tabBar.calories(), .normal)
-        button.setTitle("CALORIES", .normal)
+        button.setTitle(R.string.localizable.kcal(), .normal)
         button.setTitleColor(R.color.addFood.recipesCell.basicGray(), .normal)
         button.titleLabel.font = R.font.sfProDisplaySemibold(size: 9)
         button.titleLabel.textAlignment = .center
@@ -784,7 +779,7 @@ private extension AddFoodViewController {
         button.layer.borderColor = R.color.foodViewing.basicSecondaryDark()?.cgColor
         button.backgroundColor = R.color.foodViewing.basicPrimary()
         button.addTarget(self, action: #selector(didTapDoneButton), for: .touchUpInside)
-        button.setTitle("DONE", for: .normal)
+        button.setTitle(R.string.localizable.addFoodDone(), for: .normal)
         button.titleLabel?.font = R.font.sfProDisplaySemibold(size: 18)
         return button
     }

@@ -51,13 +51,13 @@ enum DailyFoodIntakeCircles {
     func getTitles() -> String {
         switch self {
         case .fat:
-            return "Fat"
+            return R.string.localizable.fatShort().capitalized
         case .protein:
-            return "Protein"
+            return R.string.localizable.protein().capitalized
         case .carb:
-            return "Carbs"
+            return R.string.localizable.carbsShort().capitalized
         case .kcal:
-            return "Kcal"
+            return R.string.localizable.kcalShort().capitalized
         }
     }
 }

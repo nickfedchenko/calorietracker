@@ -18,7 +18,6 @@ final class WeightLineChart: UIView {
         let data: [(date: Date, weight: CGFloat)]
         let dateStart: Date
         let goal: CGFloat?
-        
     }
     
     var goalLineColor: UIColor? = R.color.weightWidget.weightTextColor()
@@ -311,10 +310,7 @@ extension WeightLineChart {
             
             toolTip.text = (
                 date: dateFormatter.string(from: data[point.index].date),
-                weight: String(
-                    format: "%.1f " + "kg",
-                    data[point.index].weight
-                ).replacingOccurrences(of: ".", with: ",")
+                weight: BAMeasurement(data[point.index].weight, .weight).string
             )
             toolTip.rotated = flag
             toolTip.frame = CGRect(

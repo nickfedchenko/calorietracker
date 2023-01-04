@@ -33,7 +33,10 @@ final class PreviousApplicationViewController: UIViewController {
     private let titleLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
     private var answerOptions: [AnswerOption] = []
-    private let nextCommonButton: CommonButton = .init(style: .filled, text: "Next".uppercased())
+    private let nextCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingFirstPreviousApplicationButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -48,11 +51,11 @@ final class PreviousApplicationViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "History"
+        title = R.string.localizable.onboardingFirstPreviousApplicationTitle()
         
         view.backgroundColor = R.color.mainBackground()
         
-        titleLabel.text = "Which app did you use?"
+        titleLabel.text = R.string.localizable.onboardingFirstPreviousApplicationTitleFirst()
         titleLabel.textColor = R.color.onboardings.basicDark()
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 0
@@ -186,21 +189,21 @@ fileprivate extension PreviousApplication {
     var description: String {
         switch self {
         case .myFitnessPal:
-            return "MyFitnessPal"
+            return R.string.localizable.onboardingFirstPreviousApplicationMyFitnessPal()
         case .formerlyWeightWatchers:
-            return "WW (formerly Weight Watchers)"
+            return R.string.localizable.onboardingFirstPreviousApplicationFormerlyWeightWatchers()
         case .noom:
-            return "Noom"
+            return R.string.localizable.onboardingFirstPreviousApplicationNoom()
         case .kcalc:
-            return "Kcalc"
+            return R.string.localizable.onboardingFirstPreviousApplicationKcalc()
         case .fitbit:
-            return "Fitbit"
+            return R.string.localizable.onboardingFirstPreviousApplicationFitbit()
         case .loseIt:
-            return "Lose It!"
+            return R.string.localizable.onboardingFirstPreviousApplicationLoseIt()
         case .anotherApp:
-            return "Another app"
+            return R.string.localizable.onboardingFirstPreviousApplicationAnotherApp()
         case .iDontRemember:
-            return "I don’t remember"
+            return R.string.localizable.onboardingFirstPreviousApplicationIDontRemember()
         }
     }
 }

@@ -288,7 +288,7 @@ extension NutrientGoalSettingsViewController {
     
     private func getTitleHeaderLabel() -> UILabel {
         let label = UILabel()
-        label.text = "NUTRIENT GOAL"
+        label.text = R.string.localizable.settingsNutrientGoalTitle().uppercased()
         label.font = R.font.sfProDisplaySemibold(size: 22.fontScale())
         label.textColor = R.color.foodViewing.basicPrimary()
         label.isHidden = true
@@ -329,8 +329,8 @@ extension NutrientGoalSettingsViewController {
                 borderColorPress: R.color.foodViewing.basicSecondary()
             )
         ))
-        button.defaultTitle = " RESET"
-        button.isPressTitle = " RESET"
+        button.defaultTitle = " \(R.string.localizable.settingsNutrientGoalReset())"
+        button.isPressTitle = " \(R.string.localizable.settingsNutrientGoalReset())"
         button.addTarget(self, action: #selector(didTapResetButton), for: .touchUpInside)
         return button
     }

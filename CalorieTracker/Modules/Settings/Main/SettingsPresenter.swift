@@ -15,6 +15,9 @@ protocol SettingsPresenterInterface: AnyObject {
     func didTapShareButton()
     func didTapPremiumButton()
     func updateViewController()
+    func getNameProfile() -> String?
+    func getDescriptionProfile() -> String?
+    func updateCell(_ type: SettingsCategoryType)
 }
 
 class SettingsPresenter {
@@ -37,6 +40,27 @@ class SettingsPresenter {
 }
 
 extension SettingsPresenter: SettingsPresenterInterface {
+    func updateCell(_ type: SettingsCategoryType) {
+        view.updateCell(type)
+    }
+    
+    func getNameProfile() -> String? {
+        guard let userData = UDM.userData else { return nil }
+        let name = userData.name
+        let lastName = userData.lastName
+        
+        return "\(name) \(lastName ?? "")"
+    }
+    
+    func getDescriptionProfile() -> String? {
+        guard let userData = UDM.userData else { return nil }
+        let sex = userData.sex.getTitle(.long) ?? ""
+        let height = BAMeasurement(userData.height, .lenght, isMetric: true).string
+        let age = userData.dateOfBirth.years(to: Date()) ?? 0
+        
+        return "\(sex) ● \(age) years old ● \(height)"
+    }
+    
     func updateViewController() {
         view.updatePremiumButton(isActiveSubscribe)
     }

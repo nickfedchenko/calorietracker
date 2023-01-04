@@ -32,7 +32,7 @@ struct NutrientGoalSettingsViewModel {
         switch type {
         case .title:
             let cell: SettingsProfileHeaderCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
-            cell.title = "NUTRIENT GOAL"
+            cell.title = R.string.localizable.settingsNutrientGoalTitle()
             return cell
         case .nutritionTitle:
             let cell: SettingsProfileHeaderCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
@@ -87,7 +87,7 @@ struct NutrientGoalSettingsViewModel {
     
     private func getNutritionCellViewModel() -> SettingsGoalCellViewModel {
         .init(
-            title: "Nutrition",
+            title: R.string.localizable.nutrition().uppercased(),
             leftDescription: nil,
             rightDescription: presenter?.getNutritionGoalStr()
         )

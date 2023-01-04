@@ -31,7 +31,10 @@ final class WhatsYourGenderViewController: UIViewController {
     private let titleLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
     private var variabilityResponses: [VariabilityResponse] = []
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "continue".uppercased())
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingSecondWhatsYourGenderButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -48,7 +51,7 @@ final class WhatsYourGenderViewController: UIViewController {
     private func configureViews() {
         view.backgroundColor = R.color.mainBackground()
         
-        titleLabel.text = "What's your gender"
+        titleLabel.text = R.string.localizable.onboardingSecondWhatsYourGenderTitle()
         titleLabel.textColor = R.color.onboardings.basicDark()
         titleLabel.textAlignment = .center
         titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .medium)
@@ -158,9 +161,9 @@ fileprivate extension WhatsYourGender {
     var description: String {
         switch self {
         case .male:
-            return "Male"
+            return R.string.localizable.onboardingSecondWhatsYourGenderMale()
         case .female:
-            return "Female"
+            return R.string.localizable.onboardingSecondWhatsYourGenderFemale()
         }
     }
     

@@ -26,7 +26,10 @@ final class ThanksForTheInformationViewController: UIViewController {
     private let titleLabel: UILabel = .init()
     private let imageView: UIImageView = .init()
     private let descriptionLabel: UILabel = .init()
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "Continue".uppercased())
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingFirstThanksForTheInformationButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -41,7 +44,7 @@ final class ThanksForTheInformationViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "History"
+        title = R.string.localizable.onboardingFirstThanksForTheInformationTitle()
         
         view.backgroundColor = R.color.mainBackground()
         
@@ -50,12 +53,12 @@ final class ThanksForTheInformationViewController: UIViewController {
         let attributedString = NSMutableAttributedString()
 
         attributedString.append(NSAttributedString(
-            string: "Thanks ",
+            string: R.string.localizable.onboardingFirstThanksForTheInformationTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
         attributedString.append(NSAttributedString(
-            string: "for the information!",
+            string: R.string.localizable.onboardingFirstThanksForTheInformationTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
@@ -66,8 +69,7 @@ final class ThanksForTheInformationViewController: UIViewController {
         
         imageView.image = R.image.onboardings.picThkYouPageScreen()
         
-        // swiftlint:disable:next line_length
-        descriptionLabel.text = "We know that losing weight can be difficult. Remember, it's not about the numbers on the scale, it's about becoming a better and healthier version of yourself."
+        descriptionLabel.text = R.string.localizable.onboardingFirstThanksForTheInformationDescription()
         descriptionLabel.numberOfLines = 0
         descriptionLabel.textAlignment = .center
         descriptionLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)

@@ -9,6 +9,7 @@ import UIKit
 
 final class CalendarView: UIView {
     var dateDataCompletion: (((year: Int, month: Int)) -> ([Day: CalorieCorridor]))?
+    var didChangeDate: ((Date) -> Void)?
     var linesColor: UIColor? = R.color.calendarWidget.lines()
     var calorieCorridorPartColor: UIColor? = R.color.calendarWidget.calorieCorridorPart()
     var selectionColor: UIColor? = R.color.calendarWidget.header()
@@ -96,6 +97,19 @@ final class CalendarView: UIView {
         }
     }
     
+    @objc func didSwipeLeft() {
+        let newDate = calculateDate(date: baseDate, value: 1)
+        
+        if calendar.component(.month, from: newDate) <= calendar.component(.month, from: Date()) &&
+            calendar.component(.year, from: newDate) <= calendar.component(.year, from: Date()) {
+            baseDate = newDate
+        }
+    }
+    
+    @objc func didSwipeRight() {
+        baseDate = calculateDate(date: baseDate, value: -1)
+    }
+    
     private func setupView() {
         collectionView.register(
             CalendarCollectionViewCell.self,
@@ -118,6 +132,7 @@ final class CalendarView: UIView {
     }
     
     private func didChangeBaseDate() {
+        didChangeDate?(baseDate)
         selectedFlag = true
         days = generateDaysInMonth(for: baseDate)
 
@@ -199,25 +214,12 @@ final class CalendarView: UIView {
         collectionView.addGestureRecognizer(swipeGestureRecognizerRight)
     }
     
-    @objc private func didSwipeLeft() {
-        let newDate = self.calendar.date(
+    private func calculateDate(date oldDate: Date, value: Int) -> Date {
+        return self.calendar.date(
             byAdding: .month,
-            value: 1,
-            to: self.baseDate
-        ) ?? self.baseDate
-        
-        if calendar.component(.month, from: newDate) <= calendar.component(.month, from: Date()) &&
-            calendar.component(.year, from: newDate) <= calendar.component(.year, from: Date()) {
-            baseDate = newDate
-        }
-    }
-    
-    @objc private func didSwipeRight() {
-        baseDate = self.calendar.date(
-            byAdding: .month,
-            value: -1,
-            to: self.baseDate
-        ) ?? self.baseDate
+            value: value,
+            to: oldDate
+        ) ?? oldDate
     }
 }
 

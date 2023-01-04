@@ -26,8 +26,13 @@ final class YourHeightViewController: UIViewController {
     private let titleLabel: UILabel = .init()
     private let borderTextField: BorderTextField = .init()
     private let containerPickerView: UIView = .init()
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "Continue")
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingSecondYourHeightButton()
+    )
     private let pickerView: UIPickerView = .init()
+    
+    private var height: Double?
     
     // MARK: - Lifecycle methods
     
@@ -46,12 +51,11 @@ final class YourHeightViewController: UIViewController {
         
         scrolView.showsVerticalScrollIndicator = false
         
-        titleLabel.text = "Your height"
+        titleLabel.text = R.string.localizable.onboardingSecondYourHeightTitle()
         titleLabel.textColor = R.color.onboardings.basicDark()
         titleLabel.textAlignment = .center
         titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .medium)
         
-        borderTextField.text = "100 cm"
         borderTextField.isEnabled = false
         borderTextField.textField.addTarget(
             self,
@@ -86,7 +90,7 @@ final class YourHeightViewController: UIViewController {
     @objc private func didTapContinueCommonButton() {
         guard let name = borderTextField.text, !name.isEmpty else { return }
         
-        presenter?.didTapContinueCommonButton(with: name)
+        presenter?.didTapContinueCommonButton(with: height ?? 0)
     }
     
     // swiftlint:disable:next function_body_length
@@ -195,21 +199,23 @@ extension YourHeightViewController: UIPickerViewDataSource {
 
 extension YourHeightViewController: UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        let meters = String(pickerView.selectedRow(inComponent: 0) + 1)
-        let centimeters = String(format: "%02d", pickerView.selectedRow(inComponent: 2))
+        let meters = pickerView.selectedRow(inComponent: 0) + 1
+        let centimeters = pickerView.selectedRow(inComponent: 2)
+        let height = Double(meters * 100 + centimeters)
         
-        borderTextField.text = meters + centimeters + " " + "cm"
+        self.height = height
+        borderTextField.text = BAMeasurement(height, .lenght, isMetric: true).string
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         if component == 0 {
             return "\(row + 1)"
         } else if component == 1 {
-            return "м"
+            return R.string.localizable.onboardingSecondYourHeightM()
         } else if component == 2 {
             return "\(row * 1)"
         } else if component == 3 {
-            return "см"
+            return BAMeasurement.measurmentSuffix(.lenght)
         }
         return nil
     }

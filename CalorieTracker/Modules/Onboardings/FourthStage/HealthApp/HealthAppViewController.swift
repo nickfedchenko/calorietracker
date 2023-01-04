@@ -27,7 +27,10 @@ class HealthAppViewController: UIViewController {
     private let healthAppTitleLabel: UILabel = .init()
     private let healthAppDescriptionLabel: UILabel = .init()
     private let arrowImageView: UIImageView = .init()
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "continue".uppercased())
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingFourthHealthAppButton().uppercased()
+    )
     
     // MARK: - Initialization
     
@@ -47,11 +50,11 @@ class HealthAppViewController: UIViewController {
         scrolView.showsVerticalScrollIndicator = false
 
         attributedString.append(NSAttributedString(
-            string: "Want to integrate ",
+            string: R.string.localizable.onboardingFourthHealthAppTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         attributedString.append(NSAttributedString(
-            string: "the Health App?",
+            string: R.string.localizable.onboardingFourthHealthAppTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
@@ -61,7 +64,7 @@ class HealthAppViewController: UIViewController {
         titleLabel.font = UIFont.systemFont(ofSize: 38, weight: .medium)
         
         // swiftlint:disable:next line_length
-        descriptionLabel.text = "We’re happy to have you here. We’ll walk you through these steps to get you set up for weight loss success: "
+        descriptionLabel.text = R.string.localizable.onboardingFourthHealthAppDescription()
         descriptionLabel.numberOfLines = 0
         descriptionLabel.textAlignment = .center
         descriptionLabel.font = UIFont.systemFont(ofSize: 18, weight: .regular)
@@ -71,11 +74,11 @@ class HealthAppViewController: UIViewController {
         
         healthAppImageView.image = UIImage(named: R.image.onboardings.healthApp.name)
         
-        healthAppTitleLabel.text = "Apple Health"
+        healthAppTitleLabel.text = R.string.localizable.onboardingFourthHealthAppTitleHealth()
         healthAppTitleLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         healthAppTitleLabel.textColor = R.color.onboardings.basicDark()
         
-        healthAppDescriptionLabel.text = "Workout, Nutrition"
+        healthAppDescriptionLabel.text = R.string.localizable.onboardingFourthHealthAppDescriptionHealth()
         healthAppDescriptionLabel.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         healthAppDescriptionLabel.textColor = R.color.onboardings.basicDarkGray()
         

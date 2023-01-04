@@ -15,7 +15,7 @@ final class DailyFoodIntakeView: UIView {
         label.textColor = R.color.foodViewing.basicDark()
         label.clipsToBounds = false
         label.textAlignment = .center
-        label.text = "Percent of daily goal"
+        label.text = R.string.localizable.productDailyFoodIntakeTitle()
         return label
     }()
     

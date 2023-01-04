@@ -33,7 +33,10 @@ final class ThoughtsAboutChangingFeelingsViewController: UIViewController {
     private let titleLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
     private var answerOptions: [AnswerOption] = []
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "continue".uppercased())
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingThirdThoughtsAboutChangingFeelingsButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -48,7 +51,7 @@ final class ThoughtsAboutChangingFeelingsViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "Motivation/Goal"
+        title = R.string.localizable.onboardingThirdThoughtsAboutChangingFeelingsTitle()
         
         view.backgroundColor = R.color.mainBackground()
         
@@ -57,12 +60,12 @@ final class ThoughtsAboutChangingFeelingsViewController: UIViewController {
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: "When you think about changing how you feel, what’s ",
+            string: R.string.localizable.onboardingThirdThoughtsAboutChangingFeelingsTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         attributedString.append(NSAttributedString(
-            string: "most important?",
+            string: R.string.localizable.onboardingThirdThoughtsAboutChangingFeelingsTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
@@ -195,13 +198,13 @@ fileprivate extension ThoughtsAboutChangingFeelings {
     var description: String {
         switch self {
         case .havingMoreEnergy:
-            return "Having more energy"
+            return R.string.localizable.onboardingThirdThoughtsAboutChangingFeelingsHavingMoreEnergy()
         case .feelingBetterInMyClothes:
-            return "Feeling better in my clothes"
+            return R.string.localizable.onboardingThirdThoughtsAboutChangingFeelingsFeelingBetterInMyClothes()
         case .havingMoreConfidence:
-            return "Having more confidence"
+            return R.string.localizable.onboardingThirdThoughtsAboutChangingFeelingsHavingMoreConfidence()
         case .physicallyFeelingMoreComfortable:
-            return "Physically feeling more comfortable"
+            return R.string.localizable.onboardingThirdThoughtsAboutChangingFeelingsPhysicallyFeelingMoreComfortable()
         }
     }
 }

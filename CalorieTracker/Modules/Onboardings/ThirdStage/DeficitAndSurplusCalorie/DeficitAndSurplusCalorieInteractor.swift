@@ -12,6 +12,7 @@ protocol DeficitAndSurplusCalorieInteractorInterface: AnyObject {
     func getYourGoalWeight() -> Double?
     func getYourWeight() -> Double?
     func getWeightGoal(rate: Double) -> WeightGoal?
+    func getDate(rate: Double) -> Date?
 }
 
 class DeficitAndSurplusCalorieInteractor {
@@ -35,16 +36,51 @@ class DeficitAndSurplusCalorieInteractor {
 
 extension DeficitAndSurplusCalorieInteractor: DeficitAndSurplusCalorieInteractorInterface {
     func getWeightGoal(rate: Double) -> WeightGoal? {
-        guard
-            let currentWeight = onboardingManager.getYourWeight(),
-            let targetWeight = onboardingManager.getYourGoalWeight()
+        guard let currentWeight = onboardingManager.getYourWeight(),
+              let targetWeight = onboardingManager.getYourGoalWeight(),
+              let gender = onboardingManager.getOnboardingInfo().whatsYourGender?.userSex,
+              let age = onboardingManager.getOnboardingInfo().dateOfBirth?.years(to: Date()),
+              let height = onboardingManager.getOnboardingInfo().yourHeight
         else { return nil }
         
-        return weightChartService.calculateWeightGoal(
-            currentWeight: currentWeight,
-            targetWeight: targetWeight,
-            rate: rate
+        let calorieMeasurment = CalorieMeasurment(
+            age: age,
+            height: height,
+            sex: gender,
+            weight: currentWeight,
+            goalWeight: targetWeight,
+            kcalPercent: rate / 100
         )
+
+        let weekGoal = calorieMeasurment.weekGoalKg()
+        let weightGoal: WeightGoal = currentWeight >= targetWeight
+            ? .loss(calorieDeficit: weekGoal)
+            : .gain(calorieSurplus: weekGoal)
+        
+        onboardingManager.set(weightGoal: weightGoal)
+        UDM.kcalGoal = calorieMeasurment.recommendedCalorie
+        
+        return weightGoal
+    }
+    
+    func getDate(rate: Double) -> Date? {
+        guard let currentWeight = onboardingManager.getYourWeight(),
+              let targetWeight = onboardingManager.getYourGoalWeight(),
+              let gender = onboardingManager.getOnboardingInfo().whatsYourGender?.userSex,
+              let age = onboardingManager.getOnboardingInfo().dateOfBirth?.years(to: Date()),
+              let height = onboardingManager.getOnboardingInfo().yourHeight
+        else { return nil }
+        
+        let calorieMeasurment = CalorieMeasurment(
+            age: age,
+            height: height,
+            sex: gender,
+            weight: currentWeight,
+            goalWeight: targetWeight,
+            kcalPercent: rate / 100
+        )
+        
+        return calorieMeasurment.goalCompletionDate(Date())
     }
     
     func getYourGoalWeight() -> Double? {

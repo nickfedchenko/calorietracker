@@ -10,6 +10,7 @@ import UIKit
 
 protocol SettingsViewControllerInterface: AnyObject {
     func updatePremiumButton(_ isSubscribe: Bool)
+    func updateCell(_ type: SettingsCategoryType)
 }
 
 final class SettingsViewController: UIViewController {
@@ -43,6 +44,11 @@ final class SettingsViewController: UIViewController {
             right: 0
         )
         firstDraw = false
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        presenter?.updateCell(.profile)
     }
     
     private func setupView() {
@@ -113,6 +119,15 @@ final class SettingsViewController: UIViewController {
 extension SettingsViewController: SettingsViewControllerInterface {
     func updatePremiumButton(_ isSubscribe: Bool) {
         premiumButton.isSubscribe = isSubscribe
+    }
+    
+    func updateCell(_ type: SettingsCategoryType) {
+        guard let row = viewModel?.getIndexType(type) else {
+            return
+        }
+        
+        let indexPath = IndexPath(row: row, section: 0)
+        collectionView.reloadItems(at: [indexPath])
     }
 }
 

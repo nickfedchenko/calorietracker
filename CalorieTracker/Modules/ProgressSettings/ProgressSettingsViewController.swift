@@ -28,7 +28,7 @@ final class ProgressSettingsViewController: UIViewController {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "EDIT PROGRESS VIEW"
+        label.text = R.string.localizable.progressSettingsTitle()
         label.font = R.font.sfProDisplaySemibold(size: 24)
         return label
     }()

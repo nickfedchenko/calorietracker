@@ -27,7 +27,10 @@ final class SoundsLikePlanViewController: UIViewController {
     private let imageView: UIImageView = .init()
     private let titleLabel: UILabel = .init()
     private let descriptionLabel: UILabel = .init()
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "Continue".uppercased())
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingFourthSoundsLikePlanButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -42,7 +45,7 @@ final class SoundsLikePlanViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "Habits"
+        title = R.string.localizable.onboardingFourthSoundsLikePlanTitle()
         
         view.backgroundColor = R.color.mainBackground()
         
@@ -54,14 +57,14 @@ final class SoundsLikePlanViewController: UIViewController {
         
         imageView.image = UIImage(named: R.image.onboardings.vegan.name)
         
-        titleLabel.text = "Sounds like a plan!"
+        titleLabel.text = R.string.localizable.onboardingFourthSoundsLikePlanTitleFirst()
         titleLabel.textColor = R.color.onboardings.basicDark()
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.systemFont(ofSize: 30, weight: .medium)
         
         // swiftlint:disable:next line_length
-        descriptionLabel.text = "Making smart food decisions is a big part of weight loss. Just don’t do anything to lose the weight that you won’t do to keep it off!"
+        descriptionLabel.text = R.string.localizable.onboardingFourthSoundsLikePlanDescription()
         descriptionLabel.textColor = R.color.onboardings.basicGray()
         descriptionLabel.textAlignment = .center
         descriptionLabel.numberOfLines = 0

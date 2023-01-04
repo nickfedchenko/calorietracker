@@ -23,6 +23,7 @@ final class QuickAddStackView: UIView {
     ]
     
     var didTapQuickAdd: ((Int) -> Void)?
+    var didTapEdit: ((@escaping (QuickAddModel) -> Void) -> Void)?
     
     var isEdit = false {
         didSet {
@@ -30,10 +31,10 @@ final class QuickAddStackView: UIView {
         }
     }
     
-    var viewsType: [QuickAddView.TypeQuickAdd] {
-        get { views.map { $0.typeQuickAdd } }
+    var viewsType: [QuickAddModel] {
+        get { views.map { $0.model } }
         set {
-            zip(views, newValue).forEach { $0.0.typeQuickAdd = $0.1 }
+            zip(views, newValue).forEach { $0.0.model = $0.1 }
             configureView()
         }
     }
@@ -79,17 +80,17 @@ final class QuickAddStackView: UIView {
         case true:
             cnv.forEach {
                 $0.0.isHidden = false
-                $0.1.typeQuickAdd = $0.1.typeQuickAdd == .add
-                ? .edit
-                : $0.1.typeQuickAdd
+                $0.1.model = $0.1.model.type == .add
+                ? .init(type: .edit, value: nil)
+                : $0.1.model
                 $0.1.isEdit = true
             }
         case false:
             cnv.forEach {
-                $0.1.typeQuickAdd = $0.1.typeQuickAdd == .edit
-                ? .add
-                : $0.1.typeQuickAdd
-                $0.0.isHidden = $0.1.typeQuickAdd == .add
+                $0.1.model = $0.1.model.type == .edit
+                ? .init(type: .add, value: nil)
+                : $0.1.model
+                $0.0.isHidden = $0.1.model.type == .add
                 $0.1.isEdit = false
             }
             containers.last?.isHidden = false
@@ -99,21 +100,11 @@ final class QuickAddStackView: UIView {
     @objc private func didTapView(_ sender: UIGestureRecognizer) {
         guard let view = sender.view as? QuickAddView else { return }
         if isEdit {
-            // change QuickAddView
-            view.typeQuickAdd = .bottle(300)
-        } else {
-            switch view.typeQuickAdd {
-            case .add, .edit:
-                break
-            case .cup(let value):
-                didTapQuickAdd?(value)
-            case .bottle(let value):
-                didTapQuickAdd?(value)
-            case .bottleSport(let value):
-                didTapQuickAdd?(value)
-            case .jug(let value):
-                didTapQuickAdd?(value)
+            didTapEdit? { model in
+                view.model = model
             }
+        } else {
+            didTapQuickAdd?(view.model.value ?? 0)
         }
     }
 }

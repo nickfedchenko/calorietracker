@@ -26,7 +26,10 @@ final class AchievementByWillPowerViewController: UIViewController {
     private let imageView: UIImageView = .init()
     private let titleLabel: UILabel = .init()
     private let descriptionLabel: UILabel = .init()
-    private let letsDoItCommonButton: CommonButton = .init(style: .filled, text: "Let’s do it!".uppercased())
+    private let letsDoItCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingFirstAchievementByWillPowerButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -41,7 +44,7 @@ final class AchievementByWillPowerViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "History"
+        title = R.string.localizable.onboardingFirstAchievementByWillPowerTitle()
         
         view.backgroundColor = R.color.mainBackground()
         
@@ -52,12 +55,12 @@ final class AchievementByWillPowerViewController: UIViewController {
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: "It doesn’t take unlimited willpower to ",
+            string: R.string.localizable.onboardingFirstAchievementByWillPowerTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         attributedString.append(NSAttributedString(
-            string: "achieve your goals.",
+            string: R.string.localizable.onboardingFirstAchievementByWillPowerTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
@@ -66,8 +69,7 @@ final class AchievementByWillPowerViewController: UIViewController {
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .medium)
         
-        // swiftlint:disable:next line_length
-        descriptionLabel.text = "Learning and implementing some new habits can go a long way in getting you there. Are you ready to take the first steps towards building your own strong habits?"
+        descriptionLabel.text = R.string.localizable.onboardingFirstAchievementByWillPowerDescription()
         descriptionLabel.textAlignment = .center
         descriptionLabel.numberOfLines = 0
         descriptionLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)

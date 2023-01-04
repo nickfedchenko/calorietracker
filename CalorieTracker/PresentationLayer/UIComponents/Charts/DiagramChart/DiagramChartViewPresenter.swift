@@ -45,6 +45,11 @@ class DiagramChartViewPresenter {
             }
         case .activity:
             return []
+        case .protein:
+            return FDS.shared.getAllNutrition().compactMap {
+                guard let date = $0.day.date else { return nil }
+                return (date: date, value: Int($0.nutrition.protein))
+            }
         }
     }
     
@@ -53,6 +58,8 @@ class DiagramChartViewPresenter {
         switch view.getChartType() {
         case .calories:
             goal = FDS.shared.getNutritionGoals()?.kcal
+        case .protein:
+            goal = FDS.shared.getNutritionGoals()?.protein
         case .carb:
             goal = FDS.shared.getNutritionGoals()?.carbs
         case .steps:

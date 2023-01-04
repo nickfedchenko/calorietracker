@@ -22,8 +22,14 @@ final class QuestionOfLosingWeightViewController: UIViewController {
 
     private let stageCounterView: StageCounterView = .init()
     private let titleLabel: UILabel = .init()
-    private let approvalCommonButton: CommonButton = .init(style: .bordered, text: "Yes".uppercased())
-    private let rejectionCommonButton: CommonButton = .init(style: .bordered, text: "No".uppercased())
+    private let approvalCommonButton: CommonButton = .init(
+        style: .bordered,
+        text: R.string.localizable.onboardingFirstQuestionOfLosingWeightApproval().uppercased()
+    )
+    private let rejectionCommonButton: CommonButton = .init(
+        style: .bordered,
+        text: R.string.localizable.onboardingFirstQuestionOfLosingWeightRejection().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -38,18 +44,18 @@ final class QuestionOfLosingWeightViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "History"
+        title = R.string.localizable.onboardingFirstQuestionOfLosingWeightTitle()
         
         view.backgroundColor = R.color.mainBackground()
                 
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: "Have you tried ",
+            string: R.string.localizable.onboardingFirstQuestionOfLosingWeightTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         attributedString.append(NSAttributedString(
-            string: "to lose weight befor?",
+            string: R.string.localizable.onboardingFirstQuestionOfLosingWeightTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         

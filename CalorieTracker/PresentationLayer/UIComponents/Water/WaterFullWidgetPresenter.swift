@@ -10,37 +10,41 @@ import UIKit
 protocol WaterFullWidgetPresenterInterface: AnyObject {
     func getGoal() -> Int
     func getValueNow() -> Int
-    func changeGoal(_ newGoal: Int)
-    func saveQuickAddTypes(_ types: [QuickAddView.TypeQuickAdd])
-    func getQuickAddTypes() -> [QuickAddView.TypeQuickAdd]
+    func getQuickAddTypes() -> [QuickAddModel]
     func addWater(_ value: Int)
+    func getSliderStepVolume() -> Int
+    func getCountSliderParts() -> Int
+    func addQuickAddTypes(_ type: QuickAddModel)
 }
 
 class WaterFullWidgetPresenter {
     unowned var view: WaterFullWidgetInterface
     
-    private var quickAddTypes: [QuickAddView.TypeQuickAdd] = [
-        .bottle(200),
-        .jug(1000)
+    private let countSliderParts = 15
+    private let stepMl: Double = 50
+    
+    private var quickAddTypes: [QuickAddModel] = [
+        .init(type: .bottle, value: 100),
+        .init(type: .cup, value: 50)
     ]
     
     init(view: WaterFullWidgetInterface) {
         self.view = view
+        if let models = UDM.quickAddWaterModels {
+            quickAddTypes = models
+        }
     }
 }
 
 extension WaterFullWidgetPresenter: WaterFullWidgetPresenterInterface {
     func getGoal() -> Int {
-        return Int(BAMeasurement(WaterWidgetService.shared.getDailyWaterGoal(), .liquid).localized)
+        let value = WaterWidgetService.shared.getDailyWaterGoal()
+        return Int(BAMeasurement(value, .liquid, isMetric: true).localized)
     }
     
     func getValueNow() -> Int {
-        Int(BAMeasurement(WaterWidgetService.shared.getWaterNow(), .liquid).localized)
-    }
-    
-    func changeGoal(_ newGoal: Int) {
-        let goal = BAMeasurement(Double(newGoal), .liquid).value
-        WaterWidgetService.shared.setDailyWaterGoal(goal)
+        let value = WaterWidgetService.shared.getWaterNow()
+        return Int(BAMeasurement(value, .liquid, isMetric: true).localized)
     }
     
     func addWater(_ value: Int) {
@@ -48,11 +52,22 @@ extension WaterFullWidgetPresenter: WaterFullWidgetPresenterInterface {
         WaterWidgetService.shared.addDailyWater(addValue)
     }
     
-    func saveQuickAddTypes(_ types: [QuickAddView.TypeQuickAdd]) {
-        quickAddTypes = types
+    func getQuickAddTypes() -> [QuickAddModel] {
+        return quickAddTypes
     }
     
-    func getQuickAddTypes() -> [QuickAddView.TypeQuickAdd] {
-        return quickAddTypes
+    func getSliderStepVolume() -> Int {
+        Int(BAMeasurement(stepMl, .liquid, isMetric: true).localized)
+    }
+    
+    func getCountSliderParts() -> Int {
+        self.countSliderParts
+    }
+    
+    func addQuickAddTypes(_ type: QuickAddModel) {
+        var newArray = quickAddTypes
+        newArray.append(type)
+        self.quickAddTypes = newArray
+        UDM.quickAddWaterModels = quickAddTypes
     }
 }

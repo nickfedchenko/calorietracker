@@ -27,7 +27,10 @@ final class DifficultyOfMakingHealthyChoicesViewController: UIViewController {
     private let titleLabel: UILabel = .init()
     private let firstDescriptionLabel: UILabel = .init()
     private let secondDescriptionLabel: UILabel = .init()
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "Continue".uppercased())
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingFourthDifficultyOfMakingHealthyChoicesButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -42,26 +45,27 @@ final class DifficultyOfMakingHealthyChoicesViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "Motivation/Goal"
+        title = R.string.localizable.onboardingFourthDifficultyOfMakingHealthyChoicesTitle()
         
         view.backgroundColor = R.color.mainBackground()
         
         scrolView.showsVerticalScrollIndicator = false
         
-        titleLabel.text = "It is hard to make healthy choices when the people around you are not."
+        titleLabel.text = R.string.localizable.onboardingFourthDifficultyOfMakingHealthyChoicesTitleFirst()
         titleLabel.textColor = R.color.onboardings.basicDark()
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .medium)
         
         // swiftlint:disable:next line_length
-        firstDescriptionLabel.text = "Try to be aware of these moments, and break the mold of mirroring the behavior of other people. you are in charge of your own behavior."
+        firstDescriptionLabel.text = R.string.localizable.onboardingFourthDifficultyOfMakingHealthyChoicesDescriptionFirst()
         firstDescriptionLabel.textAlignment = .center
         firstDescriptionLabel.numberOfLines = 0
         firstDescriptionLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
         firstDescriptionLabel.textColor = R.color.onboardings.backTitle()
         
-        secondDescriptionLabel.text = "You may besurprised at the effect it has on those around you!"
+        secondDescriptionLabel
+            .text = R.string.localizable.onboardingFourthDifficultyOfMakingHealthyChoicesDescriptionSecond()
         secondDescriptionLabel.textAlignment = .center
         secondDescriptionLabel.numberOfLines = 0
         secondDescriptionLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)

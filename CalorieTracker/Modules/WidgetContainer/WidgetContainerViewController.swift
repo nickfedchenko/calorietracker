@@ -38,6 +38,7 @@ final class WidgetContainerViewController: UIViewController {
     var suggestedInterItemSpacing: CGFloat { Size(type: .widget).suggestedInterItemSpacing }
     var tabBarHeight: CGFloat { Size(type: .widget).tabBarHeight + bottomInset }
     var bottomInset: CGFloat { CTTabBarController.Constants.bottomInset }
+    var screenSize: CGSize { UIScreen.main.bounds.size }
     
     var minTopInset: CGFloat {
         safeAreaTopInset
@@ -97,6 +98,8 @@ final class WidgetContainerViewController: UIViewController {
             (widgetView as? WeightFullWidgetView)?.output = self
         case .steps:
             (widgetView as? StepsFullWidgetView)?.output = self
+        case .water:
+            (widgetView as? WaterFullWidgetView)?.output = self
         default:
             break
         }
@@ -127,22 +130,52 @@ final class WidgetContainerViewController: UIViewController {
     }
     
     private func getWeightWidgetInsets() -> UIEdgeInsets {
-        return .init(
-            top: minTopInset,
-            left: self.suggestedSideInset,
-            bottom: self.bottomInset,
-            right: self.suggestedSideInset
-        )
+        switch UIDevice.screenType {
+        case .h19x414, .h19x428, .h19x375, .h19x390:
+            return .init(
+                top: minTopInset,
+                left: self.suggestedSideInset,
+                bottom: self.bottomInset,
+                right: self.suggestedSideInset
+            )
+        case .h16x414, .h16x375:
+            let height = (screenSize.width - 2 * suggestedSideInset) * 1.361
+            let topInsets = screenSize.height - height - minBottomInset
+            return .init(
+                top: topInsets,
+                left: self.suggestedSideInset,
+                bottom: self.minBottomInset,
+                right: self.suggestedSideInset
+            )
+        case .unknown:
+            return .zero
+        }
     }
     
     private func getCalendarWidgetInsets() -> UIEdgeInsets {
-        let bottomInset = minBottomInset + Size(type: .compact).height + suggestedInterItemSpacing
-        return .init(
-            top: minTopInset,
-            left: self.suggestedSideInset,
-            bottom: bottomInset,
-            right: self.suggestedSideInset
-        )
+        let bottomInset = minBottomInset
+            + Size(type: .compact).height
+            + suggestedInterItemSpacing
+        switch UIDevice.screenType {
+        case .h19x414, .h19x428, .h19x375, .h19x390:
+            return .init(
+                top: minTopInset,
+                left: self.suggestedSideInset,
+                bottom: bottomInset,
+                right: self.suggestedSideInset
+            )
+        case .h16x414, .h16x375:
+            let height = (screenSize.width - 2 * suggestedSideInset) * 0.947
+            let topInsets = screenSize.height - height - bottomInset
+            return .init(
+                top: topInsets,
+                left: self.suggestedSideInset,
+                bottom: bottomInset,
+                right: self.suggestedSideInset
+            )
+        case .unknown:
+            return .zero
+        }
     }
     
     private func getExercisesWidgetInsets() -> UIEdgeInsets {
@@ -154,24 +187,58 @@ final class WidgetContainerViewController: UIViewController {
     }
     
     private func getStepsWidgetInsets() -> UIEdgeInsets {
-        let bottomInset = minBottomInset + Size(type: .compact).height + suggestedInterItemSpacing
-        let topInset = minTopInset + Size(type: .large).height + suggestedInterItemSpacing
-        return .init(
-            top: topInset,
-            left: self.suggestedSideInset,
-            bottom: bottomInset,
-            right: self.suggestedSideInset
-        )
+        let bottomInset = minBottomInset
+            + Size(type: .compact).height
+            + suggestedInterItemSpacing
+        
+        switch UIDevice.screenType {
+        case .h19x414, .h19x428, .h19x375, .h19x390:
+            let topInset = minTopInset + Size(type: .large).height + suggestedInterItemSpacing
+            return .init(
+                top: topInset,
+                left: self.suggestedSideInset,
+                bottom: bottomInset,
+                right: self.suggestedSideInset
+            )
+        case .h16x414, .h16x375:
+            let height = (screenSize.width - 2 * suggestedSideInset) * 0.638
+            let topInsets = screenSize.height - height - bottomInset
+            return .init(
+                top: topInsets,
+                left: self.suggestedSideInset,
+                bottom: bottomInset,
+                right: self.suggestedSideInset
+            )
+        case .unknown:
+            return .zero
+        }
     }
     
     private func getWaterWidgetInsets() -> UIEdgeInsets {
-        let bottomInset = minBottomInset + Size(type: .compact).height + suggestedInterItemSpacing
-        return .init(
-            top: minTopInset,
-            left: self.suggestedSideInset,
-            bottom: bottomInset,
-            right: self.suggestedSideInset
-        )
+        let bottomInset = minBottomInset
+            + Size(type: .compact).height
+            + suggestedInterItemSpacing
+        
+        switch UIDevice.screenType {
+        case .h19x414, .h19x428, .h19x375, .h19x390:
+            return .init(
+                top: minTopInset,
+                left: self.suggestedSideInset,
+                bottom: bottomInset,
+                right: self.suggestedSideInset
+            )
+        case .h16x414, .h16x375:
+            let height = (screenSize.width - 2 * suggestedSideInset) * 0.963
+            let topInsets = screenSize.height - height - bottomInset
+            return .init(
+                top: topInsets,
+                left: self.suggestedSideInset,
+                bottom: bottomInset,
+                right: self.suggestedSideInset
+            )
+        case .unknown:
+            return .zero
+        }
     }
     
     @objc private func didTapView() {
@@ -201,6 +268,22 @@ extension WidgetContainerViewController: WeightFullWidgetOutput {
     
     func addWeight(_ widget: WeightFullWidgetView) {
         presenter?.openChangeWeightViewController(.add)
+    }
+}
+
+extension WidgetContainerViewController: WaterFullWidgetOutput {
+    func setQuickAdd(_ widget: WaterFullWidgetView, complition: @escaping (QuickAddModel) -> Void) {
+        let vc = KeyboardEnterValueViewController(.water)
+        
+        vc.waterComplition = { model in
+            complition(model)
+        }
+        
+        present(vc, animated: true)
+    }
+    
+    func setGoal(_ widget: WaterFullWidgetView) {
+        presenter?.setGoalWater()
     }
 }
 

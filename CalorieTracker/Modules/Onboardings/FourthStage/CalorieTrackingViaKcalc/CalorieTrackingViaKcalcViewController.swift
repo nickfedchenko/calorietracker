@@ -46,11 +46,11 @@ final class CalorieTrackingViaKcalcViewController: UIViewController {
         let attributedString = NSMutableAttributedString()
 
         attributedString.append(NSAttributedString(
-            string: "Get the best calorie tracking recommendations and ",
+            string: R.string.localizable.onboardingFourthCalorieTrackingViaKcalcTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         attributedString.append(NSAttributedString(
-            string: "stay fit with Kcalc",
+            string: R.string.localizable.onboardingFourthCalorieTrackingViaKcalcTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
@@ -59,6 +59,7 @@ final class CalorieTrackingViaKcalcViewController: UIViewController {
         titleLabel.textAlignment = .center
         titleLabel.font = UIFont.systemFont(ofSize: 38, weight: .medium)
         
+        getStartedSignInAppleButton.isHidden = true
         getStartedSignInAppleButton.addTarget(
             self,
             action: #selector(didTapGetStartedSignInAppleButton),
@@ -66,7 +67,10 @@ final class CalorieTrackingViaKcalcViewController: UIViewController {
         )
         
         continueWithoutRegistrationButton.titleLabel?.font = .systemFont(ofSize: 18, weight: .semibold)
-        continueWithoutRegistrationButton.setTitle("Сontinue without registration", for: .normal)
+        continueWithoutRegistrationButton.setTitle(
+            R.string.localizable.onboardingFourthCalorieTrackingViaKcalcButton(),
+            for: .normal
+        )
         continueWithoutRegistrationButton.setTitleColor(R.color.onboardings.basicDarkGray(), for: .normal)
         continueWithoutRegistrationButton.addTarget(
             self,
@@ -89,7 +93,7 @@ final class CalorieTrackingViaKcalcViewController: UIViewController {
         contentView.addSubview(continueWithoutRegistrationButton)
         
         scrolView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.top.equalTo(view.snp.top)
             $0.left.equalTo(view.snp.left)
             $0.right.equalTo(view.snp.right)
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
@@ -137,7 +141,7 @@ final class CalorieTrackingViaKcalcViewController: UIViewController {
     }
     
     @objc private func didTapContinueWithoutRegistrationButton() {
-        print("didTapContinueWithoutRegistrationButton")
+        presenter?.didTapContinueWithoutRegistrationButton()
     }
     
     override func viewWillAppear(_ animated: Bool) {

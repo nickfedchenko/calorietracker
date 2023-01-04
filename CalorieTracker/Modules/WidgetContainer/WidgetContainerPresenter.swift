@@ -11,6 +11,7 @@ protocol WidgetContainerPresenterInterface: AnyObject {
     func didTapView()
     func openChangeWeightViewController(_ type: WeightKeyboardHeaderView.ActionType)
     func openChangeStepsViewController()
+    func setGoalWater()
     func updateView()
 }
 
@@ -43,5 +44,9 @@ extension WidgetContainerPresenter: WidgetContainerPresenterInterface {
     
     func updateView() {
         view.update()
+    }
+    
+    func setGoalWater() {
+        router?.openSetGoalWaterVC()
     }
 }

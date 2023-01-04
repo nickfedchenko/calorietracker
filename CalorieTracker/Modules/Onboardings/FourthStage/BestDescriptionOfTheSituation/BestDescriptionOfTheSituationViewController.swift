@@ -33,7 +33,10 @@ final class BestDescriptionOfTheSituationViewController: UIViewController {
     private let titleLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
     private var answerOptions: [AnswerOption] = []
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "continue".uppercased())
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingFourthBestDescriptionOfTheSituationButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -48,13 +51,13 @@ final class BestDescriptionOfTheSituationViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "Habits"
+        title = R.string.localizable.onboardingFourthBestDescriptionOfTheSituationTitle()
         
         view.backgroundColor = R.color.mainBackground()
         
         scrolView.showsVerticalScrollIndicator = false
         
-        titleLabel.text = "What best describes your living situation?"
+        titleLabel.text = R.string.localizable.onboardingFourthBestDescriptionOfTheSituationTitleFirst()
         titleLabel.textColor = R.color.onboardings.basicDark()
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 0
@@ -184,17 +187,17 @@ fileprivate extension BestDescriptionOfTheSituation {
     var description: String {
         switch self {
         case .liveOnMyOwn:
-            return "I live on my own"
+            return R.string.localizable.onboardingFourthBestDescriptionOfTheSituationLiveOnMyOwn()
         case .liveWithMyFamily:
-            return "I live with my family"
+            return R.string.localizable.onboardingFourthBestDescriptionOfTheSituationLiveWithMyFamily()
         case .liveWithPartner:
-            return "I live with a partner"
+            return R.string.localizable.onboardingFourthBestDescriptionOfTheSituationLiveWithPartner()
         case .livewithRoommates:
-            return "I live with roommates"
+            return R.string.localizable.onboardingFourthBestDescriptionOfTheSituationLivewithRoommates()
         case .liveInSharedHousing:
-            return "I live in shared housing"
+            return R.string.localizable.onboardingFourthBestDescriptionOfTheSituationLiveInSharedHousing()
         case .somethingElse:
-            return "Something else"
+            return R.string.localizable.onboardingFourthBestDescriptionOfTheSituationSomethingElse()
         }
     }
 }

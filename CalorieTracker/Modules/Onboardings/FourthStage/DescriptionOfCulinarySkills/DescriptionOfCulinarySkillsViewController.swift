@@ -34,7 +34,10 @@ final class DescriptionOfCulinarySkillsViewController: UIViewController {
     private let titleLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
     private var answerOptions: [AnswerOption] = []
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "Continue".uppercased())
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingFourthDescriptionOfCulinarySkillsButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -49,7 +52,7 @@ final class DescriptionOfCulinarySkillsViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "Habits"
+        title = R.string.localizable.onboardingFourthDescriptionOfCulinarySkillsTitle()
 
         view.backgroundColor = R.color.mainBackground()
         
@@ -58,12 +61,12 @@ final class DescriptionOfCulinarySkillsViewController: UIViewController {
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: "How would you describe your ",
+            string: R.string.localizable.onboardingFourthDescriptionOfCulinarySkillsTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         attributedString.append(NSAttributedString(
-            string: "cooking skills?",
+            string: R.string.localizable.onboardingFourthDescriptionOfCulinarySkillsTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
@@ -203,13 +206,13 @@ fileprivate extension DescriptionOfCulinarySkills {
     var description: String {
         switch self {
         case .imPrettyGoodCook:
-            return "I’m a pretty good cook"
+            return R.string.localizable.onboardingFourthDescriptionOfCulinarySkillsImPrettyGoodCook()
         case .iDoWellEnough:
-            return "I do well enough"
+            return R.string.localizable.onboardingFourthDescriptionOfCulinarySkillsIDoWellEnough()
         case .imLearning:
-            return "I’m learning"
+            return R.string.localizable.onboardingFourthDescriptionOfCulinarySkillsImLearning()
         case .imNotMuchOfCook:
-            return "I’m not much of a cook"
+            return R.string.localizable.onboardingFourthDescriptionOfCulinarySkillsImNotMuchOfCook()
         }
     }
 }

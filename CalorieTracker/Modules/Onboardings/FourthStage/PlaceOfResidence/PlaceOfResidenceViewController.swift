@@ -34,7 +34,10 @@ final class PlaceOfResidenceViewController: UIViewController {
     private let titleLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
     private var answerOptions: [AnswerOption] = []
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "continue".uppercased())
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingFourthPlaceOfResidenceButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -49,7 +52,7 @@ final class PlaceOfResidenceViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "Habits"
+        title = R.string.localizable.onboardingFourthPlaceOfResidenceTitle()
         
         view.backgroundColor = R.color.mainBackground()
         
@@ -57,7 +60,7 @@ final class PlaceOfResidenceViewController: UIViewController {
         
         imageView.image = R.image.onboardings.house()
         
-        titleLabel.text = "Your environment can influence your weight loss a lot. So where do you live?"
+        titleLabel.text = R.string.localizable.onboardingFourthPlaceOfResidenceTitleFirst()
         titleLabel.textColor = R.color.onboardings.basicDark()
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 0
@@ -195,11 +198,11 @@ fileprivate extension PlaceOfResidence {
     var description: String {
         switch self {
         case .inRuralArea:
-            return "In a rural area"
+            return R.string.localizable.onboardingFourthPlaceOfResidenceInRuralArea()
         case .inSuburbanArea:
-            return "In a suburban area"
+            return R.string.localizable.onboardingFourthPlaceOfResidenceInSuburbanArea()
         case .inCity:
-            return "In a city"
+            return R.string.localizable.onboardingFourthPlaceOfResidenceInCity()
         }
     }
 }

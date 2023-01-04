@@ -8,7 +8,7 @@
 import Foundation
 
 protocol DateOfBirthInteractorInterface: AnyObject {
-    func set(dateOfBirth: String)
+    func set(dateOfBirth: Date)
     func getCurrentOnboardingStage() -> OnboardingStage
 }
 
@@ -36,7 +36,7 @@ extension DateOfBirthInteractor: DateOfBirthInteractorInterface {
         return onboardingManager.getCurrentOnboardingStage()
     }
     
-    func set(dateOfBirth: String) {
+    func set(dateOfBirth: Date) {
         onboardingManager.set(dateOfBirth: dateOfBirth)
     }
 }

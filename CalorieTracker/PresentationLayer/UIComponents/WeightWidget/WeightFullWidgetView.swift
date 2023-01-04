@@ -85,7 +85,7 @@ final class WeightFullWidgetView: UIView, CTWidgetFullProtocol {
             )
         ])
         view.backgroundColor = R.color.weightWidget.segmentedControl()
-        
+        view.selectedButtonType = .weak
         return view
     }()
     

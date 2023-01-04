@@ -5,6 +5,8 @@
 //  Created by Алексей on 24.08.2022.
 //
 
+import Foundation
+
 struct OnboardingInfo {
     var isHaveYouTriedToLoseWeightBefor: Bool?
     var descriptionOfExperience: DescriptionOfExperience?
@@ -21,8 +23,8 @@ struct OnboardingInfo {
     var enterYourName: String?
     var whatsYourGender: WhatsYourGender?
     var measurementSystem: MeasurementSystem?
-    var dateOfBirth: String?
-    var yourHeight: String?
+    var dateOfBirth: Date?
+    var yourHeight: Double?
     var yourWeight: Double?
     var risksOfDiseases: RisksOfDiseases?
     var presenceOfAllergies: PresenceOfAllergies?
@@ -50,6 +52,7 @@ struct OnboardingInfo {
     var jointWeightLoss: JointWeightLoss?
     var lifestyleOfOthers: LifestyleOfOthers?
     var emotionalSupportSystem: EmotionalSupportSystem?
+    var weightGoal: WeightGoal?
     
     private var firstStageData: [Any?] {
         return [

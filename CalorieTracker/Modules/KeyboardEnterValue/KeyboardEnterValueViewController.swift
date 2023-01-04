@@ -18,9 +18,11 @@ final class KeyboardEnterValueViewController: UIViewController {
         case steps
         case standart(String)
         case meal(String, ((String) -> String)?)
+        case water
     }
     var needUpdate: (() -> Void)?
     var complition: ((Double) -> Void)?
+    var waterComplition: ((QuickAddModel) -> Void)?
     var keyboardManager: KeyboardManagerProtocol = KeyboardManager()
     let type: KeyboardEnterValueType
     
@@ -54,6 +56,7 @@ final class KeyboardEnterValueViewController: UIViewController {
         setupView()
         setupConstraint()
         configureKeyboard()
+        setupOutput()
     }
     
     override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
@@ -66,8 +69,6 @@ final class KeyboardEnterValueViewController: UIViewController {
     }
     
     private func setupView() {
-        //view.addGestureRecognizer(tapRecognizer)
-        
         headerView?.didTapClose = {
             self.dismiss(animated: true)
         }
@@ -85,7 +86,7 @@ final class KeyboardEnterValueViewController: UIViewController {
                 }
             case .steps:
                 StepsWidgetService.shared.setDailyStepsGoal(value)
-            case .standart, .meal:
+            case .standart, .meal, .water:
                 break
             }
             self.needUpdate?()
@@ -103,6 +104,21 @@ final class KeyboardEnterValueViewController: UIViewController {
         headerView.snp.makeConstraints({ make in
             make.leading.trailing.equalToSuperview()
         })
+    }
+    
+    private func setupOutput() {
+        switch type {
+        case .weight:
+            return
+        case .steps:
+            return
+        case .standart:
+            return
+        case .meal:
+            return
+        case .water:
+            (headerView as? WaterKeyboardHeaderView)?.output = self
+        }
     }
     
     private func configureKeyboard() {
@@ -124,11 +140,19 @@ final class KeyboardEnterValueViewController: UIViewController {
             return StandartKeyboardHeaderView(title)
         case .meal(let title, let complition):
             return MealKeyboardHeaderView(title, complition: complition)
+        case .water:
+            return WaterKeyboardHeaderView("")
         }
     }
     
     @objc private func handleTap(_ sender: UITapGestureRecognizer) {
         dismiss(animated: true)
+    }
+}
+
+extension KeyboardEnterValueViewController: WaterKeyboardHeaderOutput {
+    func saveModel(_ model: QuickAddModel) {
+        waterComplition?(model)
     }
 }
 

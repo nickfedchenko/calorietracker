@@ -24,7 +24,10 @@ final class SoundsGoodViewController: UIViewController {
     private let stackView: UIStackView = .init()
     private let titleLabel: UILabel = .init()
     private let descriptionLabel: UILabel = .init()
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "continue".uppercased())
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingFourthSoundsGoodButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -39,7 +42,7 @@ final class SoundsGoodViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "Habits"
+        title = R.string.localizable.onboardingFourthSoundsGoodTitle()
         
         view.backgroundColor = R.color.mainBackground()
         
@@ -47,14 +50,14 @@ final class SoundsGoodViewController: UIViewController {
         stackView.alignment = .center
         stackView.axis = .vertical
         
-        titleLabel.text = "Sounds good!"
+        titleLabel.text = R.string.localizable.onboardingFourthSoundsGoodTitleFirst()
         titleLabel.textColor = R.color.onboardings.radialGradientFirst()
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.systemFont(ofSize: 30, weight: .medium)
         
         // swiftlint:disable:next line_length
-        descriptionLabel.text = "Setting this plan for logging, at least to start, can help you maintain motivation and progree towards your goals."
+        descriptionLabel.text = R.string.localizable.onboardingFourthSoundsGoodDescription()
         descriptionLabel.textColor = R.color.onboardings.basicGray()
         descriptionLabel.textAlignment = .center
         descriptionLabel.numberOfLines = 0

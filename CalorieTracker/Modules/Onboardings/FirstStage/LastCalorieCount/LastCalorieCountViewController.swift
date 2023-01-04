@@ -33,7 +33,10 @@ final class LastCalorieCountViewController: UIViewController {
     private let titleLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
     private var answerOptions: [AnswerOption] = []
-    private let nextCommonButton: CommonButton = .init(style: .filled, text: "Next".uppercased())
+    private let nextCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingFirstLastCalorieCountButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -48,7 +51,7 @@ final class LastCalorieCountViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "History"
+        title = R.string.localizable.onboardingFirstLastCalorieCountTitle()
         
         view.backgroundColor = R.color.mainBackground()
         
@@ -57,17 +60,17 @@ final class LastCalorieCountViewController: UIViewController {
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: "The last time you ",
+            string: R.string.localizable.onboardingFirstLastCalorieCountTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         attributedString.append(NSAttributedString(
-            string: "counted calories",
+            string: R.string.localizable.onboardingFirstLastCalorieCountTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
         attributedString.append(NSAttributedString(
-            string: ", how were you doing it?",
+            string: R.string.localizable.onboardingFirstLastCalorieCountTitleThird(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
@@ -205,15 +208,15 @@ fileprivate extension LastCalorieCount {
     var description: String {
         switch self {
         case .usingAnApp:
-            return "Using an app"
+            return R.string.localizable.onboardingFirstLastCalorieCountUsingAnApp()
         case .onWebsite:
-            return "On a website"
+            return R.string.localizable.onboardingFirstLastCalorieCountOnWebsite()
         case .byTakingNotes:
-            return "By taking notes"
+            return R.string.localizable.onboardingFirstLastCalorieCountByTakingNotes()
         case .usingSpreadsheet:
-            return "Using a spreadsheet"
+            return R.string.localizable.onboardingFirstLastCalorieCountUsingSpreadsheet()
         case .anotherWay:
-            return "Another way"
+            return R.string.localizable.onboardingFirstLastCalorieCountAnotherWay()
         }
     }
 }

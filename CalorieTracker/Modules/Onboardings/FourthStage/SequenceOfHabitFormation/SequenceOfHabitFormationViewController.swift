@@ -28,7 +28,10 @@ final class SequenceOfHabitFormationViewController: UIViewController {
     private let descriptionLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
     private var answerOptions: [AnswerOption] = []
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "Continue".uppercased())
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingFourthSequenceOfHabitFormationButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -43,19 +46,19 @@ final class SequenceOfHabitFormationViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "Habits"
+        title = R.string.localizable.onboardingFourthSequenceOfHabitFormationTitle()
 
         view.backgroundColor = R.color.mainBackground()
         
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: "What are some ways you can see yourself increasing your ",
+            string: R.string.localizable.onboardingFourthSequenceOfHabitFormationTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         attributedString.append(NSAttributedString(
-            string: "activity level?",
+            string: R.string.localizable.onboardingFourthSequenceOfHabitFormationTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
@@ -65,7 +68,7 @@ final class SequenceOfHabitFormationViewController: UIViewController {
         titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .medium)
         
         // swiftlint:disable:next line_length
-        descriptionLabel.text = "The first step is to track, and the second is to make it meaningful. For your first few days, which do you think will work best for you?"
+        descriptionLabel.text = R.string.localizable.onboardingFourthSequenceOfHabitFormationDescription()
         descriptionLabel.textColor = R.color.onboardings.basicGray()
         descriptionLabel.textAlignment = .center
         descriptionLabel.numberOfLines = 0
@@ -193,15 +196,16 @@ fileprivate extension SequenceOfHabitFormation {
     var description: String {
         switch self {
         case .logEachMealBeforeYouTakeTheFirstBite:
-            return "Exploring new types of activity"
+            return R.string.localizable.onboardingFourthSequenceOfHabitFormationLogEachMealBeforeYouTakeTheFirstBite()
         case .logImmediatelyAfterEachMeal:
-            return "Hitting a daily step goal"
+            return R.string.localizable.onboardingFourthSequenceOfHabitFormationLogImmediatelyAfterEachMeal()
         case .logAllOfYoutMealsBeforeTheDayStarts:
-            return "Taking more walks"
+            return R.string.localizable.onboardingFourthSequenceOfHabitFormationLogAllOfYoutMealsBeforeTheDayStarts()
         case .logAllOfYourMealsAtTheEndOfTheDay:
-            return "Building activity into my daily routine"
+            return R.string.localizable.onboardingFourthSequenceOfHabitFormationLogAllOfYourMealsAtTheEndOfTheDay()
         case .imNotSureImStillFiguringOutWhatWillWorkForMe:
-            return "Trying a new workout plan"
+            return R.string.localizable
+                .onboardingFourthSequenceOfHabitFormationImNotSureImStillFiguringOutWhatWillWorkForMe()
         }
     }
 }

@@ -19,6 +19,13 @@ final class BasicButtonView: UIControl {
         set { buttonNode.defaultTitle = newValue }
     }
     
+    var active: Bool = true {
+        didSet {
+            buttonNode.active = active
+            self.isEnabled = active
+        }
+    }
+    
     init(type: BasicButtonType) {
         buttonNode = BasicButtonNode(
             type: type,

@@ -24,6 +24,7 @@ final class UDM {
         case nutrientPercent
         case kcalGoal
         case mealKcalPercent
+        case quickAddWaterModels
     }
     
     static var isGloballyMetric: Bool {
@@ -254,6 +255,21 @@ final class UDM {
         set {
             let data = try? JSONEncoder().encode(newValue)
             setValue(value: data, for: .nutrientPercent)
+        }
+    }
+    
+    static var quickAddWaterModels: [QuickAddModel]? {
+        get {
+            guard let data: Data = getValue(for: .quickAddWaterModels),
+                   let waterData = try? JSONDecoder().decode([QuickAddModel].self, from: data) else {
+                return nil
+            }
+            return waterData
+        }
+        
+        set {
+            let data = try? JSONEncoder().encode(newValue)
+            setValue(value: data, for: .quickAddWaterModels)
         }
     }
     

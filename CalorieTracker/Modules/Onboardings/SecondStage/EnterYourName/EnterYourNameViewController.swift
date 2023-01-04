@@ -24,7 +24,10 @@ final class EnterYourNameViewController: UIViewController {
     private let titleLabel: UILabel = .init()
     private let textField: UITextField = .init()
     private let delimeterView: UIView = .init()
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "Continue")
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingSecondEnterYourNameButton()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -41,7 +44,7 @@ final class EnterYourNameViewController: UIViewController {
     private func configureViews() {
         view.backgroundColor = R.color.mainBackground()
         
-        titleLabel.text = "Enter your name"
+        titleLabel.text = R.string.localizable.onboardingSecondEnterYourNameTitle()
         titleLabel.textColor = R.color.onboardings.basicDark()
         titleLabel.textAlignment = .center
         titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .medium)

@@ -30,7 +30,10 @@ final class YourWeightViewController: UIViewController {
     private let titleLabel: UILabel = .init()
     private let borderTextField: BorderTextField = .init()
     private let containerPickerView: UIView = .init()
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "Continue")
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingSecondYourWeightButton()
+    )
     private let pickerView: UIPickerView = .init()
     
     // MARK: - Lifecycle methods
@@ -50,12 +53,12 @@ final class YourWeightViewController: UIViewController {
         
         scrolView.showsVerticalScrollIndicator = false
         
-        titleLabel.text = "Your weight"
+        titleLabel.text = R.string.localizable.onboardingSecondYourWeightTitleFirst()
         titleLabel.textColor = R.color.onboardings.basicDark()
         titleLabel.textAlignment = .center
         titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .medium)
         
-        borderTextField.text = "0.0 kg"
+        borderTextField.text = R.string.localizable.onboardingSecondYourWeightTitleWeight()
         borderTextField.isEnabled = false
         borderTextField.textField.addTarget(
             self,
@@ -213,7 +216,7 @@ extension YourWeightViewController: UIPickerViewDelegate {
         } else if component == 2 {
             return "\(row)"
         } else if component == 3 {
-            return "кг"
+            return BAMeasurement.measurmentSuffix(.weight)
         }
         return nil
     }

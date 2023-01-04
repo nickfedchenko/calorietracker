@@ -9,9 +9,11 @@ import UIKit
 
 struct SettingsСategoriesViewModel {
     private let settingsCategoryTypes: [SettingsCategoryType]
+    var presenter: SettingsPresenterInterface?
     
-    init(_ settingsCategoryTypes: [SettingsCategoryType]) {
+    init(_ settingsCategoryTypes: [SettingsCategoryType], presenter: SettingsPresenterInterface? = nil) {
         self.settingsCategoryTypes = settingsCategoryTypes
+        self.presenter = presenter
     }
     
     func numberOfItemsInSection() -> Int {
@@ -50,6 +52,10 @@ struct SettingsСategoriesViewModel {
         return CGSize(width: width, height: height)
     }
     
+    func getIndexType(_ type: SettingsCategoryType) -> Int? {
+        settingsCategoryTypes.firstIndex(of: type)
+    }
+    
     func getTypeCell(_ indexPath: IndexPath) -> SettingsCategoryType? {
         settingsCategoryTypes[safe: indexPath.row]
     }
@@ -57,8 +63,8 @@ struct SettingsСategoriesViewModel {
     private func getProfileCellViewModel() -> SettingsProfileCellViewModel {
         .init(
             title: "Profile",
-            name: "",
-            description: nil,
+            name: presenter?.getNameProfile() ?? "",
+            description: presenter?.getDescriptionProfile(),
             titleColor: R.color.foodViewing.basicDark(),
             nameColor: R.color.foodViewing.basicPrimary(),
             descriptionColor: R.color.foodViewing.basicPrimary(),

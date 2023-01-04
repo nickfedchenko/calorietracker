@@ -33,7 +33,7 @@ struct GoalsSettingsViewModel {
         switch type {
         case .title:
             let cell: SettingsProfileHeaderCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
-            cell.title = "MY GOALS"
+            cell.title = R.string.localizable.settingsMyGoalsTitle()
             return cell
         case .goal, .startWeight, .weight, .activityLevel, .weekly, .calorie, .nutrient:
             let cell: SettingsGoalCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
@@ -63,43 +63,43 @@ struct GoalsSettingsViewModel {
             return nil
         case .goal:
             return .init(
-                title: "Goal",
+                title: R.string.localizable.goal(),
                 leftDescription: nil,
                 rightDescription: presenter?.getGoal()
             )
         case .startWeight:
             return .init(
-                title: "Starting Weight",
+                title: R.string.localizable.settingsGoalStartWeight(),
                 leftDescription: nil,
                 rightDescription: presenter?.getStartWeight()
             )
         case .weight:
             return .init(
-                title: "Goal Weight",
+                title: R.string.localizable.settingsGoalWeight(),
                 leftDescription: nil,
                 rightDescription: presenter?.getGoalWeight()
             )
         case .activityLevel:
             return .init(
-                title: "Activity Level",
+                title: R.string.localizable.settingsGoalActivityLevel(),
                 leftDescription: nil,
                 rightDescription: presenter?.getActivityLevel()
             )
         case .weekly:
             return .init(
-                title: "Weekly Goal",
+                title: R.string.localizable.settingsGoalWeekly(),
                 leftDescription: nil,
                 rightDescription: presenter?.getWeeklyGoal()
             )
         case .calorie:
             return .init(
-                title: "Calorie Goal",
+                title: R.string.localizable.settingsCalorieGoalTitle(),
                 leftDescription: nil,
                 rightDescription: presenter?.getCalorieGoal()
             )
         case .nutrient:
             return .init(
-                title: "Nutrient Goals",
+                title: R.string.localizable.settingsNutrientGoalTitle(),
                 leftDescription: nil,
                 rightDescription: presenter?.getNutrientGoal()
             )

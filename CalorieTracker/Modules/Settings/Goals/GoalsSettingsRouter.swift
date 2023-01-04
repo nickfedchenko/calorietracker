@@ -56,7 +56,7 @@ extension GoalsSettingsRouter: GoalsSettingsRouterInterface {
         let vc = KeyboardEnterValueViewController(.standart("STARTING WEIGHT"))
         
         vc.complition = { value in
-            WeightWidgetService.shared.setStartWeight(value)
+            WeightWidgetService.shared.setStartWeight(BAMeasurement(value, .weight).value)
             self.presenter?.updateCell(type: .startWeight)
         }
         
@@ -77,7 +77,7 @@ extension GoalsSettingsRouter: GoalsSettingsRouterInterface {
         let vc = KeyboardEnterValueViewController(.standart("WEEKLY GOAL"))
         
         vc.complition = { value in
-            WeightWidgetService.shared.setWeeklyGoal(value)
+            WeightWidgetService.shared.setWeeklyGoal(BAMeasurement(value, .weight).value)
             self.presenter?.updateCell(type: .weekly)
         }
         

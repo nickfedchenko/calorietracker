@@ -12,13 +12,13 @@ final class NothingWasFoundView: UIView {
         let label = UILabel()
         label.font = R.font.sfProDisplayBold(size: 22)
         label.textColor = R.color.foodViewing.basicPrimary()
-        label.text = "nothing was found".uppercased()
+        label.text = R.string.localizable.productNothingWasFoundTitle().uppercased()
         return label
     }()
     
     private lazy var createButton: VerticalButton = {
         let button = VerticalButton()
-        button.setTitle("CREATE", .normal)
+        button.setTitle(R.string.localizable.addFoodCreate(), .normal)
         button.setImage(R.image.addFood.tabBar.pencil(), .normal)
         button.setTitleColor(R.color.foodViewing.basicPrimary(), .normal)
         button.imageView.tintColor = R.color.foodViewing.basicPrimary()

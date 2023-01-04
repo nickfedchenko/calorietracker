@@ -5,13 +5,13 @@
 //  Created by Алексей on 08.09.2022.
 //
 
+import ApphudSDK
 import Foundation
 
 protocol PaywallPresenterInterface: AnyObject {
-    func didTapStartNow()
-    func didTapCancelAnytime()
     func didTapPrivacyPolicy()
     func didTapTermOfUse()
+    func productPurchase(_ product: ApphudProduct)
 }
 
 class PaywallPresenter {
@@ -38,11 +38,30 @@ class PaywallPresenter {
 // MARK: - PaywallPresenterInterface
 
 extension PaywallPresenter: PaywallPresenterInterface {
-    func didTapStartNow() {}
+    func didTapPrivacyPolicy() {
+        router?.openPolicy()
+    }
     
-    func didTapCancelAnytime() {}
+    func didTapTermOfUse() {
+        router?.openTerms()
+    }
     
-    func didTapPrivacyPolicy() {}
-    
-    func didTapTermOfUse() {}
+    func productPurchase(_ product: ApphudProduct) {
+        Apphud.purchase(product) { [weak self] result in
+            guard result.error == nil else {
+                self?.router?.showAlert()
+                return
+            }
+            
+            if let subscription = result.subscription, subscription.isActive() {
+                self?.router?.navigateToApp()
+            } else if let purchase = result.nonRenewingPurchase, purchase.isActive() {
+                self?.router?.navigateToApp()
+            } else {
+                if Apphud.hasActiveSubscription() {
+                    self?.router?.navigateToApp()
+                }
+            }
+        }
+    }
 }

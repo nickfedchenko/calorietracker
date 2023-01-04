@@ -19,6 +19,8 @@ protocol MainScreenPresenterInterface: AnyObject {
     func updateMessageWidget()
     func updateActivityWidget()
     func updateExersiceWidget()
+    func checkOnboarding()
+    func didTapExerciseWidget()
 }
 
 class MainScreenPresenter {
@@ -39,6 +41,10 @@ class MainScreenPresenter {
 }
 
 extension MainScreenPresenter: MainScreenPresenterInterface {
+    func checkOnboarding() {
+        router?.openOnboarding()
+    }
+    
     func didTapMenuButton() {
         router?.openSettingsVC()
     }
@@ -52,8 +58,16 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
     }
     
     func updateWaterWidgetModel() {
-        let goal = BAMeasurement(WaterWidgetService.shared.getDailyWaterGoal(), .liquid).localized
-        let waterNow = BAMeasurement(WaterWidgetService.shared.getWaterNow(), .liquid).localized
+        let goal = BAMeasurement(
+            WaterWidgetService.shared.getDailyWaterGoal(),
+            .liquid,
+            isMetric: true
+        ).localized
+        let waterNow = BAMeasurement(
+            WaterWidgetService.shared.getWaterNow(),
+            .liquid,
+            isMetric: true
+        ).localized
         let suffix = BAMeasurement.measurmentSuffix(.liquid)
         
         let model = WaterWidgetNode.Model(
@@ -76,7 +90,7 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
             view.setWeightWidget(weight: nil)
             return
         }
-        view.setWeightWidget(weight: CGFloat(BAMeasurement(weightNow, .weight).localized))
+        view.setWeightWidget(weight: CGFloat(BAMeasurement(weightNow, .weight, isMetric: true).localized))
     }
     
     func updateCalendarWidget(_ date: Date?) {
@@ -173,6 +187,16 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
             goalBurnedKcal: burnedKcalGoal
         )
         
-        view.setExersiceWidget(model)
+        view.setExersiceWidget(model, UDM.isAuthorisedHealthKit)
+    }
+    
+    func didTapExerciseWidget() {
+        if !UDM.isAuthorisedHealthKit {
+            ExerciseWidgetServise.shared.syncWithHealthKit {
+                DispatchQueue.main.async {
+                    self.updateExersiceWidget()
+                }
+            }
+        }
     }
 }

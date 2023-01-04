@@ -22,25 +22,25 @@ enum WidgetType: Codable, CaseIterable {
     func getTitle() -> String {
         switch self {
         case .weight:
-            return "Weight"
+            return R.string.localizable.weight()
         case .calories:
-            return "Calories"
+            return R.string.localizable.kcal()
         case .bmi:
-            return "BMI"
+            return R.string.localizable.bmiShort()
         case .carb:
-            return "Carbohydrates"
+            return R.string.localizable.carb()
         case .dietary:
-            return "Dietary Intake"
+            return R.string.localizable.tripleDiagramChartTypeDietaryTitle().capitalized
         case .protein:
-            return "Protein"
+            return R.string.localizable.protein()
         case .steps:
-            return "Steps"
+            return R.string.localizable.widgetStepsTitle().capitalized
         case .water:
-            return "Water"
+            return R.string.localizable.widgetWaterTitle().capitalized
         case .exercises:
-            return "Exercises"
+            return R.string.localizable.exercises()
         case .active:
-            return "Active Energy"
+            return R.string.localizable.active()
         }
     }
     

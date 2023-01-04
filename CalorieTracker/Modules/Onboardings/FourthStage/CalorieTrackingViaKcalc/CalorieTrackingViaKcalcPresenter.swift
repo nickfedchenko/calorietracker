@@ -7,7 +7,9 @@
 
 import Foundation
 
-protocol CalorieTrackingViaKcalcPresenterInterface: AnyObject {}
+protocol CalorieTrackingViaKcalcPresenterInterface: AnyObject {
+    func didTapContinueWithoutRegistrationButton()
+}
 
 class CalorieTrackingViaKcalcPresenter {
     
@@ -32,4 +34,9 @@ class CalorieTrackingViaKcalcPresenter {
 
 // MARK: - CalorieTrackingViaKcalcPresenterInterface
 
-extension CalorieTrackingViaKcalcPresenter: CalorieTrackingViaKcalcPresenterInterface {}
+extension CalorieTrackingViaKcalcPresenter: CalorieTrackingViaKcalcPresenterInterface {
+    func didTapContinueWithoutRegistrationButton() {
+        _ = OnboardingSaveDataService(OnboardingManager.shared.getOnboardingInfo())
+        router?.openPaywallController()
+    }
+}

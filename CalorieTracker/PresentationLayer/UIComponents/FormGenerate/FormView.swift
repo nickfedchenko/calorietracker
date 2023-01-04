@@ -92,13 +92,7 @@ final class FormView<T: WithGetTitleProtocol>: ViewWithShadow, UITextFieldDelega
     }
     
     private func setupTextFieldRightView() {
-        let containerView = UIView()
-        containerView.snp.makeConstraints { make in
-            make.width.equalTo(16)
-        }
-        
-        textField.rightViewMode = .always
-        textField.rightView = containerView
+        textField.setRightPaddingPoints(16)
     }
     
     private func didChangeModel() {
@@ -110,6 +104,7 @@ final class FormView<T: WithGetTitleProtocol>: ViewWithShadow, UITextFieldDelega
             setupTextFieldLeftView()
         } else {
             textField.textAlignment = .left
+            textField.setLeftPaddingPoints(16)
         }
         didChangeState()
     }

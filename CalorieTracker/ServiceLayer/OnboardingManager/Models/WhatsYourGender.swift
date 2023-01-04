@@ -9,3 +9,14 @@ enum WhatsYourGender: CaseIterable {
     case male
     case female
 }
+
+extension WhatsYourGender {
+    var userSex: UserSex {
+        switch self {
+        case .male:
+            return .male
+        case .female:
+            return .famale
+        }
+    }
+}

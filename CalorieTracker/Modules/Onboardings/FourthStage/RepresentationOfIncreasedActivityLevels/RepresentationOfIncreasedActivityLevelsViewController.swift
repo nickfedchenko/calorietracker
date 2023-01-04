@@ -26,8 +26,14 @@ final class RepresentationOfIncreasedActivityLevelsViewController: UIViewControl
     private let stackView: UIStackView = .init()
     private let imageView: UIImageView = .init()
     private let titleLabel: UILabel = .init()
-    private let approvalCommonButton: CommonButton = .init(style: .bordered, text: "Yes".uppercased())
-    private let rejectionCommonButton: CommonButton = .init(style: .bordered, text: "No".uppercased())
+    private let approvalCommonButton: CommonButton = .init(
+        style: .bordered,
+        text: R.string.localizable.onboardingFourthRepresentationOfIncreasedActivityLevelsButtonYes().uppercased()
+    )
+    private let rejectionCommonButton: CommonButton = .init(
+        style: .bordered,
+        text: R.string.localizable.onboardingFourthRepresentationOfIncreasedActivityLevelsButtonNo().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -42,7 +48,7 @@ final class RepresentationOfIncreasedActivityLevelsViewController: UIViewControl
     }
     
     private func configureViews() {
-        title = "Habits"
+        title = R.string.localizable.onboardingFourthRepresentationOfIncreasedActivityLevelsTitle()
         
         view.backgroundColor = R.color.mainBackground()
         
@@ -57,17 +63,17 @@ final class RepresentationOfIncreasedActivityLevelsViewController: UIViewControl
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: "Do you ",
+            string: R.string.localizable.onboardingFourthRepresentationOfIncreasedActivityLevelsTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         attributedString.append(NSAttributedString(
-            string: "typically eat ",
+            string: R.string.localizable.onboardingFourthRepresentationOfIncreasedActivityLevelsTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
         attributedString.append(NSAttributedString(
-            string: "your meals around the same times each day?",
+            string: R.string.localizable.onboardingFourthRepresentationOfIncreasedActivityLevelsTitleThird(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         

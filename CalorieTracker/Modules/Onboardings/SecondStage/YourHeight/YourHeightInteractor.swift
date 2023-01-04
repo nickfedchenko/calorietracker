@@ -8,7 +8,7 @@
 import Foundation
 
 protocol YourHeightInteractorInterface: AnyObject {
-    func set(yourHeight: String)
+    func set(yourHeight: Double)
     func getCurrentOnboardingStage() -> OnboardingStage
 }
 
@@ -36,7 +36,7 @@ extension YourHeightInteractor: YourHeightInteractorInterface {
         return onboardingManager.getCurrentOnboardingStage()
     }
     
-    func set(yourHeight: String) {
+    func set(yourHeight: Double) {
         onboardingManager.set(yourHeight: yourHeight)
     }
 }

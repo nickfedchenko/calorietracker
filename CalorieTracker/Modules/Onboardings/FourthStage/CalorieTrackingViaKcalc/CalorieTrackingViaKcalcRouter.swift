@@ -7,7 +7,9 @@
 
 import UIKit
 
-protocol CalorieTrackingViaKcalcRouterInterface: AnyObject {}
+protocol CalorieTrackingViaKcalcRouterInterface: AnyObject {
+    func openPaywallController()
+}
 
 class CalorieTrackingViaKcalcRouter {
     
@@ -38,4 +40,9 @@ class CalorieTrackingViaKcalcRouter {
 
 // MARK: - CalorieTrackingViaKcalcRouterInterface
 
-extension CalorieTrackingViaKcalcRouter: CalorieTrackingViaKcalcRouterInterface {}
+extension CalorieTrackingViaKcalcRouter: CalorieTrackingViaKcalcRouterInterface {
+    func openPaywallController() {
+        let vc = PaywallRouter.setupModule()
+        viewController?.navigationController?.pushViewController(vc, animated: true)
+    }
+}

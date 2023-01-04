@@ -33,6 +33,8 @@ protocol LocalDomainServiceInterface {
     func setChildFoodData(foodDataId: String, dishID: Int)
     func setChildFoodData(foodDataId: String, productID: String)
     func setChildMeal(mealId: String, dishesID: [Int], productsID: [String])
+    func setFoodData(favorites: Bool?, date dateLastUse: Date?, numberUses: Int?, food: Food)
+    func getFoodData(_ food: Food) -> FoodData?
 }
 
 final class LocalDomainService {
@@ -113,6 +115,19 @@ final class LocalDomainService {
             debugPrint("Error occurred: \(error.localizedDescription)")
         }
         return fetchedResult
+    }
+    
+    func getDomainFoodData(_ food: Food) -> DomainFoodData? {
+        let format = "id == %@"
+        let productRequest = NSFetchRequest<DomainProduct>(entityName: "DomainProduct")
+        productRequest.predicate = NSPredicate(format: format, food.id)
+        
+        guard let product = try? context.fetch(productRequest).first,
+                let domainFoodData = product.foodData else {
+            return nil
+        }
+        
+        return domainFoodData
     }
 }
 
@@ -256,6 +271,32 @@ extension LocalDomainService: LocalDomainServiceInterface {
         try? context.save()
     }
     
+    func setFoodData(favorites: Bool?, date dateLastUse: Date?, numberUses: Int?, food: Food) {
+        guard let foodData = getDomainFoodData(food) else { return }
+        
+        if let favorites = favorites {
+            foodData.favorites = favorites
+        }
+        
+        if let dateLastUse = dateLastUse {
+            foodData.dateLastUse = dateLastUse
+        }
+        
+        if let numberUses = numberUses {
+            foodData.numberUses = Int32(numberUses)
+        }
+        
+        try? context.save()
+    }
+    
+    func getFoodData(_ food: Food) -> FoodData? {
+        guard let domainFoodData = getDomainFoodData(food) else {
+            return nil
+        }
+        
+        return FoodData(from: domainFoodData)
+    }
+    
     func setChildMeal(mealId: String, dishesID: [Int], productsID: [String]) {
         let format = "id == %ld"
         let formatMeal = "id == %@"
@@ -287,6 +328,21 @@ extension LocalDomainService: LocalDomainServiceInterface {
         meal.addToProducts(NSSet(array: products))
         
         try? context.save()
+    }
+    
+    func getFoodData(_ id: String) -> FoodData? {
+        let predicate = NSPredicate(format: "id == %@", id)
+        
+        let domainFoodData = fetchData(
+            for: DomainFoodData.self,
+            withPredicate: NSCompoundPredicate(orPredicateWithSubpredicates: [predicate])
+        )?.first
+        
+        guard let domainFoodData = domainFoodData else {
+            return nil
+        }
+        
+        return FoodData(from: domainFoodData)
     }
     
     func saveFoodData(foods: [FoodData]) {

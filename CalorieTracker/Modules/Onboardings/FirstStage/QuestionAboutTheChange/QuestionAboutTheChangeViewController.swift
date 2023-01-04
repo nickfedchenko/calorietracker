@@ -35,7 +35,10 @@ final class QuestionAboutTheChangeViewController: UIViewController {
     private var answerOptions: [AnswerOption] = []
     private let stackView: UIStackView = .init()
     
-    private let nextCommonButton: CommonButton = .init(style: .filled, text: "Next".uppercased())
+    private let nextCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingFirstQuestionAboutTheChangeButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -50,7 +53,7 @@ final class QuestionAboutTheChangeViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "History"
+        title = R.string.localizable.onboardingFirstQuestionAboutTheChangeTitle()
         
         view.backgroundColor = R.color.mainBackground()
         
@@ -59,12 +62,12 @@ final class QuestionAboutTheChangeViewController: UIViewController {
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: "What’s defferent ",
+            string: R.string.localizable.onboardingFirstQuestionAboutTheChangeTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
         attributedString.append(NSAttributedString(
-            string: "from last time?",
+            string: R.string.localizable.onboardingFirstQuestionAboutTheChangeTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
@@ -73,7 +76,7 @@ final class QuestionAboutTheChangeViewController: UIViewController {
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .medium)
         
-        descriptionLabel.text = "Other than you using Kcalс, of cource"
+        descriptionLabel.text = R.string.localizable.onboardingFirstQuestionAboutTheChangeDescription()
         descriptionLabel.textAlignment = .center
         descriptionLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
         descriptionLabel.textColor = R.color.onboardings.backTitle()
@@ -214,17 +217,17 @@ fileprivate extension QuestionAboutTheChange {
     var description: String {
         switch self {
         case .iHaveDifferentMindset:
-            return "I have a different mindset"
+            return R.string.localizable.onboardingFirstQuestionAboutTheChangeIHaveDifferentMindset()
         case .iHadSomeBigChangesInMyLife:
-            return "I’ve had some big changes in my life"
+            return R.string.localizable.onboardingFirstQuestionAboutTheChangeIHadSomeBigChangesInMyLife()
         case .iWeightMoreThanIdidLastTime:
-            return "I weight more than I did last time"
+            return R.string.localizable.onboardingFirstQuestionAboutTheChangeIWeightMoreThanIdidLastTime()
         case .iTryingDifferentWayOfEating:
-            return "I’m trying a different way of eating"
+            return R.string.localizable.onboardingFirstQuestionAboutTheChangeITryingDifferentWayOfEating()
         case .iTryingNewExercisePlan:
-            return "I’m trying a new exercise plan"
+            return R.string.localizable.onboardingFirstQuestionAboutTheChangeITryingNewExercisePlan()
         case .iHadSomeHealthChanges:
-            return "I’ve had some health changes"
+            return R.string.localizable.onboardingFirstQuestionAboutTheChangeIHadSomeHealthChanges()
         }
     }
 }

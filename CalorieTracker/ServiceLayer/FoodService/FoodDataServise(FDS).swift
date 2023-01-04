@@ -61,6 +61,7 @@ protocol FoodDataServiceInterface {
     /// Возвращает циль на дневное питание
     /// - Returns: массив DailyNutrition
     func getNutritionGoals() -> DailyNutrition?
+    func foodUpdate(food: Food, favorites: Bool?)
 }
 
 final class FDS {
@@ -81,6 +82,35 @@ final class FDS {
 }
 
 extension FDS: FoodDataServiceInterface {
+    func foodUpdate(food: Food, favorites: Bool?) {
+        guard let foodData = localPersistentStore.getFoodData(food) else {
+            let foodData = FoodData(
+                dateLastUse: Date(),
+                favorites: favorites ?? false,
+                numberUses: 1
+            )
+            localPersistentStore.saveFoodData(foods: [foodData])
+            
+            switch food {
+            case .product(let product):
+                foodData.setChild(product)
+            case .dishes(let dish):
+                foodData.setChild(dish)
+            default:
+                return
+            }
+            
+            return
+        }
+        
+        localPersistentStore.setFoodData(
+            favorites: favorites,
+            date: Date(),
+            numberUses: foodData.numberUses + 1,
+            food: food
+        )
+    }
+    
     func getFavoriteDishes() -> [Dish] {
         let dishes: [Dish] = getFavoriteFoods().compactMap { food in
             switch food.food {
@@ -213,10 +243,12 @@ extension FDS: FoodDataServiceInterface {
     }
     
     func getNutritionGoals() -> DailyNutrition? {
-        guard let kcalGoal = UDM.kcalGoal,
-               let nutrientPercent = UDM.nutrientPercent else {
+        guard let kcalGoal = UDM.kcalGoal else {
             return nil
         }
+        
+        let nutrientPercent = UDM.nutrientPercent ?? .default
+        
         return .init(
             kcal: kcalGoal,
             carbs: kcalGoal * nutrientPercent.getNutrientPercent().carbs,

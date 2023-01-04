@@ -34,7 +34,10 @@ final class AchievingDifficultGoalViewController: UIViewController {
     private let descriptionLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
     private var answerOptions: [AnswerOption] = []
-    private let nextCommonButton: CommonButton = .init(style: .filled, text: "Next".uppercased())
+    private let nextCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingFirstAchievingDifficultGoalButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -49,7 +52,7 @@ final class AchievingDifficultGoalViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "History"
+        title = R.string.localizable.onboardingFirstAchievingDifficultGoalTitle()
         
         view.backgroundColor = R.color.mainBackground()
         
@@ -58,11 +61,11 @@ final class AchievingDifficultGoalViewController: UIViewController {
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: "Think about someone in your life ",
+            string: R.string.localizable.onboardingFirstAchievingDifficultGoalTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         attributedString.append(NSAttributedString(
-            string: "who has achieved a difficult goal.",
+            string: R.string.localizable.onboardingFirstAchievingDifficultGoalTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
@@ -71,7 +74,7 @@ final class AchievingDifficultGoalViewController: UIViewController {
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .medium)
         
-        descriptionLabel.text = "What do you think helped them become successful?"
+        descriptionLabel.text = R.string.localizable.onboardingFirstAchievingDifficultGoalDescription()
         descriptionLabel.textAlignment = .center
         descriptionLabel.numberOfLines = 0
         descriptionLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
@@ -214,9 +217,9 @@ fileprivate extension AchievingDifficultGoal {
     var description: String {
         switch self {
         case .naturalWillpowerAndMentalStrength:
-            return "Natural willpower and mental strength"
+            return R.string.localizable.onboardingFirstAchievingDifficultGoalNaturalWillpowerAndMentalStrength()
         case .aPlanAndGoodHabits:
-            return "A plan and good habits"
+            return R.string.localizable.onboardingFirstAchievingDifficultGoalAPlanAndGoodHabits()
         }
     }
 }

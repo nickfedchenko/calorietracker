@@ -42,7 +42,10 @@ extension WeightWidgetService: WeightWidgetServiceInterface {
     }
     
     func getStartWeight() -> Double? {
-        UDM.startWeight
+        let weightData = localDomainService.fetchWeight().sorted(by: { $0.day > $1.day })
+        let weightStart = weightData.last
+        
+        return weightStart?.value
     }
     
     func getWeeklyGoal() -> Double? {
@@ -66,7 +69,11 @@ extension WeightWidgetService: WeightWidgetServiceInterface {
     }
     
     func setStartWeight(_ value: Double) {
-        UDM.startWeight = value
+        let weightData = localDomainService.fetchWeight().sorted(by: { $0.day > $1.day })
+        guard let weightStart = weightData.last else { return }
+        localDomainService.saveWeight(data: [
+            .init(day: weightStart.day, value: value)
+        ])
     }
     
     func setWeeklyGoal(_ value: Double) {

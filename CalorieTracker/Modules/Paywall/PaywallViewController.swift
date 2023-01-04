@@ -5,7 +5,7 @@
 //  Created by Алексей on 08.09.2022.
 //
 
-import Foundation
+import ApphudSDK
 import UIKit
 
 protocol PaywallViewControllerInterface: AnyObject {}
@@ -15,53 +15,69 @@ final class PaywallViewController: UIViewController {
     // MARK: - Public properties
     
     var presenter: PaywallPresenterInterface?
+    var subscriptionViewModel: SubscriptionViewModel?
     
     // MARK: - Views properties
     
-    private let scrolView: UIScrollView = .init()
-    private let contentView: UIView = .init()
     private let imageView: UIImageView = .init()
     private let titleLabel: UILabel = .init()
     private let subscriptionBenefitsContainerView: UIView = .init()
     private let convenientCalorieSubscriptionBenefits = SubscriptionBenefits(
-        text: "Convenient calorie and activity tracker"
+        text: R.string.localizable.paywallConvenientCalorie()
     )
     
     private let effectiveWeightSubscriptionBenefits = SubscriptionBenefits(
-        text: "Effective weight loss or weight gain"
+        text: R.string.localizable.paywallEffectiveWeight()
     )
     
     private let recipesForDifferentSubscriptionBenefits = SubscriptionBenefits(
-        text: "10000+ recipes for different types of diets"
+        text: R.string.localizable.paywallRecipesForDifferent()
     )
     
     private let bestWaySubscriptionBenefits = SubscriptionBenefits(
-        text: "The best way to keep your body in shape"
+        text: R.string.localizable.paywallBestWay()
     )
     private let subscriptionAmount: SubscriptionAmount = .init()
-    private let startNowCommonButton: CommonButton = .init(style: .filled, text: "Start now!")
-    private let cancelAnytimeButton: CancelAnytime = .init()
-    private let privacyPolicyButton: PrivacyPolicy = .init()
-    private let termOfUseButton: TermOfUse = .init()
+    private let startNowCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.paywallStartNow()
+    )
+
+    private lazy var privacyPolicyButton: UIButton = getPolicyButton()
+    private lazy var termOfUseButton: UIButton = getTermsButton()
+    private lazy var collectionView: UICollectionView = getCollectionView()
     
     // MARK: - Lifecycle methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        registerCell()
         configureViews()
         configureLayouts()
+        
+        subscriptionViewModel?.loadProducts()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: animated)
+    }
+    
+    private func registerCell() {
+        collectionView.register(SubscriptionAmountCollectionViewCell.self)
     }
     
     private func configureViews() {
         view.backgroundColor = R.color.mainBackground()
         
-        scrolView.contentInsetAdjustmentBehavior = .never
-        scrolView.showsVerticalScrollIndicator = false
-        
         imageView.image = R.image.paywall.woman()
         
-        titleLabel.text = "Losing weight has never been so easy!"
+        titleLabel.text = R.string.localizable.paywallTitle()
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.systemFont(ofSize: 36, weight: .semibold)
@@ -74,102 +90,65 @@ final class PaywallViewController: UIViewController {
         subscriptionBenefitsContainerView.layer.shadowOffset = CGSize(width: 5, height: 5)
         subscriptionBenefitsContainerView.layer.shadowRadius = 5
         
-        subscriptionAmount.addTarget(self, action: #selector(didTapSubscriptionAmount), for: .touchUpInside)
+        startNowCommonButton.addTarget(
+            self,
+            action: #selector(didTapStartNow),
+            for: .touchUpInside
+        )
         
-        startNowCommonButton.addTarget(self, action: #selector(didTapStartNow), for: .touchUpInside)
+        privacyPolicyButton.addTarget(
+            self,
+            action: #selector(didTapPrivacyPolicy),
+            for: .touchUpInside
+        )
         
-        cancelAnytimeButton.addTarget(self, action: #selector(didTapCancelAnytime), for: .touchUpInside)
+        termOfUseButton.addTarget(
+            self,
+            action: #selector(didTapTermOfUse),
+            for: .touchUpInside
+        )
         
-        privacyPolicyButton.addTarget(self, action: #selector(didTapPrivacyPolicy), for: .touchUpInside)
-        
-        termOfUseButton.addTarget(self, action: #selector(didTapTermOfUse), for: .touchUpInside)
-    }
-    
-    @objc func didTapSubscriptionAmount(_ sender: SubscriptionAmount) {
-        if subscriptionAmount == sender {
-            let isSelected = !subscriptionAmount.isSelected
-                
-            subscriptionAmount.isSelected = isSelected
-                
-        } else {
-            subscriptionAmount.isSelected = false
+        subscriptionViewModel?.reloadHandler = { [weak self] in
+            DispatchQueue.main.async {
+                self?.collectionView.reloadData()
+            }
         }
-    }
-    
-    @objc private func didTapStartNow() {
-        presenter?.didTapStartNow()
-    }
-    
-    @objc private func didTapCancelAnytime() {
-        presenter?.didTapCancelAnytime()
-    }
-    
-    @objc private func didTapPrivacyPolicy() {
-        presenter?.didTapPrivacyPolicy()
-    }
-    
-    @objc private func didTapTermOfUse() {
-        presenter?.didTapTermOfUse()
     }
     
     // swiftlint:disable:next function_body_length
     private func configureLayouts() {
-        view.addSubview(scrolView)
+        view.addSubviews(
+            imageView,
+            titleLabel,
+            subscriptionBenefitsContainerView,
+            collectionView,
+            privacyPolicyButton,
+            termOfUseButton,
+            startNowCommonButton
+        )
         
-        scrolView.addSubview(contentView)
-        
-        contentView.addSubview(imageView)
-        
-        contentView.addSubview(titleLabel)
-        
-        contentView.addSubview(subscriptionBenefitsContainerView)
-        
-        subscriptionBenefitsContainerView.addSubview(convenientCalorieSubscriptionBenefits)
-        subscriptionBenefitsContainerView.addSubview(effectiveWeightSubscriptionBenefits)
-        subscriptionBenefitsContainerView.addSubview(recipesForDifferentSubscriptionBenefits)
-        subscriptionBenefitsContainerView.addSubview(bestWaySubscriptionBenefits)
-        
-        contentView.addSubview(subscriptionAmount)
-        
-        contentView.addSubview(startNowCommonButton)
-        
-        contentView.addSubview(cancelAnytimeButton)
-        
-        contentView.addSubview(privacyPolicyButton)
-        
-        contentView.addSubview(termOfUseButton)
-        
-        scrolView.snp.makeConstraints {
-            $0.top.equalTo(view.snp.top)
-            $0.left.equalTo(view.snp.left)
-            $0.right.equalTo(view.snp.right)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
-        }
-        
-        contentView.snp.makeConstraints {
-            $0.top.equalTo(scrolView.snp.top)
-            $0.left.equalTo(view.snp.left)
-            $0.right.equalTo(view.snp.right)
-            $0.bottom.equalTo(scrolView.snp.bottom)
-            $0.height.greaterThanOrEqualTo(scrolView.snp.height)
-        }
+        subscriptionBenefitsContainerView.addSubviews(
+            convenientCalorieSubscriptionBenefits,
+            effectiveWeightSubscriptionBenefits,
+            recipesForDifferentSubscriptionBenefits,
+            bestWaySubscriptionBenefits
+        )
         
         imageView.snp.makeConstraints {
-            $0.top.equalTo(contentView.snp.top)
-            $0.left.equalTo(contentView.snp.left)
-            $0.right.equalTo(contentView.snp.right)
+            $0.top.equalToSuperview()
+            $0.left.equalToSuperview()
+            $0.right.equalToSuperview()
         }
         
         titleLabel.snp.makeConstraints {
-            $0.left.equalTo(contentView.snp.left).offset(24)
-            $0.right.equalTo(contentView.snp.right).offset(-24)
-            $0.bottom.equalTo(imageView.snp.bottom).offset(-60)
+            $0.left.equalToSuperview().offset(24)
+            $0.right.equalToSuperview().offset(-24)
+            $0.top.equalTo(imageView.snp.top).offset(60)
         }
         
         subscriptionBenefitsContainerView.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(24)
-            $0.left.equalTo(contentView.snp.left).offset(25)
-            $0.right.equalTo(contentView.snp.right).offset(-25)
+            $0.leading.trailing.equalToSuperview().inset(25)
         }
         
         convenientCalorieSubscriptionBenefits.snp.makeConstraints {
@@ -197,47 +176,117 @@ final class PaywallViewController: UIViewController {
             $0.bottom.equalTo(subscriptionBenefitsContainerView.snp.bottom).offset(-25)
         }
         
-        subscriptionAmount.snp.makeConstraints {
-            $0.top.equalTo(subscriptionBenefitsContainerView.snp.bottom).offset(28)
-            $0.left.equalTo(contentView.snp.left).offset(28)
-            $0.right.equalTo(contentView.snp.right).offset(-28)
-            $0.size.equalTo(72)
+        collectionView.snp.makeConstraints { make in
+            make.top.equalTo(subscriptionBenefitsContainerView.snp.bottom).offset(28)
+            make.leading.trailing.bottom.equalToSuperview()
         }
         
         startNowCommonButton.snp.makeConstraints {
-            $0.top.greaterThanOrEqualTo(subscriptionAmount.snp.bottom).offset(32)
-            $0.left.equalTo(contentView.snp.left).offset(40)
-            $0.right.equalTo(contentView.snp.right).offset(-40)
+            $0.leading.trailing.equalToSuperview().inset(40)
             $0.height.equalTo(64)
-        }
-        
-        cancelAnytimeButton.snp.makeConstraints {
-            $0.top.equalTo(startNowCommonButton.snp.bottom).offset(24)
-            $0.centerX.equalTo(startNowCommonButton.snp.centerX)
+            $0.bottom.equalTo(privacyPolicyButton.snp.top).offset(-35)
         }
         
         privacyPolicyButton.snp.makeConstraints {
-            $0.top.greaterThanOrEqualTo(cancelAnytimeButton.snp.bottom).offset(26)
-            $0.left.equalTo(contentView.snp.left).offset(24)
-            $0.bottom.equalTo(contentView.snp.bottom).offset(-35)
+            $0.leading.equalToSuperview().offset(24)
+            $0.bottom.equalToSuperview().offset(-35)
         }
         
         termOfUseButton.snp.makeConstraints {
-            $0.top.greaterThanOrEqualTo(cancelAnytimeButton.snp.bottom).offset(26)
-            $0.right.equalTo(contentView.snp.right).offset(-24)
-            $0.bottom.equalTo(contentView.snp.bottom).offset(-35)
+            $0.trailing.equalToSuperview().offset(-24)
+            $0.bottom.equalToSuperview().offset(-35)
         }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: animated)
+    @objc private func didTapStartNow() {
+        guard let product = subscriptionViewModel?.getProductToPurchase() else {
+            return
+        }
+        
+        presenter?.productPurchase(product)
     }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: animated)
+    
+    @objc private func didTapPrivacyPolicy() {
+        presenter?.didTapPrivacyPolicy()
+    }
+    
+    @objc private func didTapTermOfUse() {
+        presenter?.didTapTermOfUse()
     }
 }
 
 extension PaywallViewController: PaywallViewControllerInterface {}
+
+// MARK: - CollectionView Delegate
+
+extension PaywallViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView,
+                        didSelectItemAt indexPath: IndexPath) {
+        guard let cell = collectionView.cellForItem(at: indexPath)
+                as? SubscriptionAmountCollectionViewCell else { return }
+        collectionView.visibleCells
+            .map { $0 as? SubscriptionAmountCollectionViewCell }
+            .forEach { $0?.isSelectedCell = cell == $0 }
+        
+        subscriptionViewModel?.selectedIndex = indexPath.row
+    }
+}
+
+// MARK: - CollectionView FlowLayout
+
+extension PaywallViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = view.frame.width - 56
+        let height = width * 0.2
+        return CGSize(width: width, height: height)
+    }
+}
+
+// MARK: - CollectionView DataSource
+
+extension PaywallViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int {
+        subscriptionViewModel?.numberOfProducts() ?? 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell: SubscriptionAmountCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
+        cell.model = subscriptionViewModel?.makeModelForProduct(at: indexPath)
+        return cell
+    }
+}
+
+// MARK: - Factory
+
+extension PaywallViewController {
+    private func getTermsButton() -> UIButton {
+        let button = UIButton()
+        button.setTitle("Terms", for: .normal)
+        button.titleLabel?.font = R.font.sfProDisplaySemibold(size: 12)
+        button.setTitleColor(.black, for: .normal)
+        return button
+    }
+    
+    private func getPolicyButton() -> UIButton {
+        let button = UIButton()
+        button.setTitle("Privacy Policy", for: .normal)
+        button.titleLabel?.font = R.font.sfProDisplaySemibold(size: 12)
+        button.setTitleColor(.black, for: .normal)
+        return button
+    }
+    
+    private func getCollectionView() -> UICollectionView {
+        let layout = UICollectionViewFlowLayout()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.backgroundColor = .clear
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        return collectionView
+    }
+}

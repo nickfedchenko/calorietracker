@@ -92,12 +92,13 @@ extension ProfileSettingsPresenter: ProfileSettingsPresenterInterface {
         self.lastName = view.getLastNameStr()
         self.city = view.getCityStr()
         self.updateValue()
+        view.needUpdateParentVC()
         router?.closeViewController()
     }
     
     func didTapHeightCell() {
         router?.openHeightEnterValueViewController { value in
-            self.height = value
+            self.height = BAMeasurement(value, .lenght).value
         }
     }
     
@@ -132,7 +133,7 @@ extension ProfileSettingsPresenter: ProfileSettingsPresenterInterface {
     
     func getHeightStr() -> String? {
         guard let height = UDM.userData?.height else { return nil }
-        return BAMeasurement(height, .lenght).string
+        return BAMeasurement(height, .lenght, isMetric: true).string
     }
     
     func getUserSexStr() -> String? {

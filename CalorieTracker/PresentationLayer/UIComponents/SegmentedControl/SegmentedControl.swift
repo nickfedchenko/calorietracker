@@ -7,16 +7,22 @@
 
 import UIKit
 
-final class SegmentedControl<ID>: UIView {
+final class SegmentedControl<ID: Equatable>: UIView {
     typealias Button = SegmentedButton<ID>
     
     private let buttons: [Button]
     private var firstDraw = true
     
-    var selectedButton: Button? {
+    private(set) var selectedButton: Button? {
         didSet {
             UIView.animate(withDuration: 0.15, delay: 0, options: .curveEaseOut) {
-                self.selectorView.frame = self.selectedButton?.superview?.frame ?? CGRect.zero
+                self.selectorView.frame = {
+                    guard let selectedButtonFrame = self.selectedButton?.superview?.frame else {
+                        return .zero
+                    }
+                    
+                    return self.stack.convert(selectedButtonFrame, to: self)
+                }()
             }
         }
     }
@@ -38,10 +44,11 @@ final class SegmentedControl<ID>: UIView {
     
     private var flag = true
     
+    var selectedButtonType: ID?
     var onSegmentChanged: ((Button.Model) -> Void)?
     var textNormalColor: UIColor? = .black
     var textSelectedColor: UIColor? = .green
-    var font: UIFont? = R.font.sfProDisplaySemibold(size: 16) {
+    var font: UIFont? = R.font.sfProDisplaySemibold(size: 16.fontScale()) {
         didSet {
             buttons.forEach { button in
                 button.font = font
@@ -66,7 +73,10 @@ final class SegmentedControl<ID>: UIView {
     }
     var selectorRadius: CGFloat {
         get { selectorView.layer.cornerRadius }
-        set { selectorView.layer.cornerRadius = newValue }
+        set {
+            selectorView.layer.cornerRadius = newValue
+            stack.arrangedSubviews.forEach { $0.layer.cornerRadius = newValue }
+        }
     }
     
     init(_ buttons: [Button.Model]) {
@@ -83,19 +93,23 @@ final class SegmentedControl<ID>: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         setupShadow()
-        guard firstDraw, let button = buttons.first, button.frame != .zero else { return }
-        selectedButton = buttons.first
+        guard firstDraw,
+              let button = getSelectedButton(selectedButtonType),
+              button.frame != .zero else { return }
+        button.isSelected = true
+        selectedButton = button
         setupShadow()
         firstDraw = false
+    }
+    
+    private func getSelectedButton(_ type: ID?) -> Button? {
+        return buttons.first(where: { $0.model.id == type })
     }
 
     private func setupViews() {
         layer.cornerRadius = 8
         layer.cornerCurve = .circular
-  
-        selectedButton = buttons.first
 
-        buttons.first?.isSelected = true
         buttons.forEach { button in
             let view = UIView()
             view.addSubview(button)
@@ -125,12 +139,12 @@ final class SegmentedControl<ID>: UIView {
         selectorView.layer.addShadow(
             shadow: ShadowConst.firstShadow,
             rect: selectorView.bounds,
-            cornerRadius: 8
+            cornerRadius: selectorRadius
         )
         selectorView.layer.addShadow(
             shadow: ShadowConst.secondShadow,
             rect: selectorView.bounds,
-            cornerRadius: 8
+            cornerRadius: selectorRadius
         )
     }
     

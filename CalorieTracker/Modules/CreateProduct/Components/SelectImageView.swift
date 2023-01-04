@@ -69,14 +69,14 @@ final class SelectImageView: UIView {
     
     private func showAlert() {
         let alert = UIAlertController(
-            title: "Select",
+            title: R.string.localizable.select(),
             message: nil,
             preferredStyle: .actionSheet
         )
         
         alert.addAction(
             .init(
-                title: "Galary",
+                title: R.string.localizable.galary(),
                 style: .default,
                 handler: { [weak self] _ in
                     self?.showImagePicker()
@@ -86,7 +86,7 @@ final class SelectImageView: UIView {
         
         alert.addAction(
             .init(
-                title: "Delete",
+                title: R.string.localizable.delete(),
                 style: .destructive,
                 handler: { [weak self] _ in
                     self?.image = nil
@@ -96,7 +96,7 @@ final class SelectImageView: UIView {
         
         alert.addAction(
             .init(
-                title: "Cancel",
+                title: R.string.localizable.cancel(),
                 style: .cancel
             )
         )

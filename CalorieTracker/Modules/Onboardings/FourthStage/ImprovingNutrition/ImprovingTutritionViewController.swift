@@ -27,7 +27,10 @@ final class ImprovingNutritionViewController: UIViewController {
     private let titleLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
     private var answerOptions: [AnswerOption] = []
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "Continue".uppercased())
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingFourthImprovingNutritionButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -42,19 +45,19 @@ final class ImprovingNutritionViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "Habits"
+        title = R.string.localizable.onboardingFourthImprovingNutritionTitle()
 
         view.backgroundColor = R.color.mainBackground()
         
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: "What would you consider trying when it comes to improving the way ",
+            string: R.string.localizable.onboardingFourthImprovingNutritionTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         attributedString.append(NSAttributedString(
-            string: "you eat?",
+            string: R.string.localizable.onboardingFourthImprovingNutritionTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
@@ -177,17 +180,17 @@ fileprivate extension ImprovingNutrition {
     var description: String {
         switch self {
         case .beingMoreAwareOfFoodChoice:
-            return "Being more aware of food choice"
+            return R.string.localizable.onboardingFourthImprovingNutritionBeingMoreAwareOfFoodChoice()
         case .focusingOnWholeFoods:
-            return "Focusing on whole foods"
+            return R.string.localizable.onboardingFourthImprovingNutritionFocusingOnWholeFoods()
         case .aimingForMoreFruitVeggies:
-            return "Aiming for more fruit & veggies"
+            return R.string.localizable.onboardingFourthImprovingNutritionAimingForMoreFruitVeggies()
         case .learningMoreAboutNutrition:
-            return "Learning more about nutrition"
+            return R.string.localizable.onboardingFourthImprovingNutritionLearningMoreAboutNutrition()
         case .avoidHavingTemptingFoodNearby:
-            return "Avoid having tempting food nearby"
+            return R.string.localizable.onboardingFourthImprovingNutritionAvoidHavingTemptingFoodNearby()
         case .payAttentionToPortionSizes:
-            return "Pay attention to portion sizes"
+            return R.string.localizable.onboardingFourthImprovingNutritionPayAttentionToPortionSizes()
         }
     }
 }

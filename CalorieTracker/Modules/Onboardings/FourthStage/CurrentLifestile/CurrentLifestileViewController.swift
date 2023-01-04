@@ -33,7 +33,10 @@ final class CurrentLifestileViewController: UIViewController {
     private let titleLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
     private var answerOptions: [AnswerOption] = []
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "continue".uppercased())
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingFourthCurrentLifestileButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -48,7 +51,7 @@ final class CurrentLifestileViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "Habits"
+        title = R.string.localizable.onboardingFourthCurrentLifestileTitle()
         
         view.backgroundColor = R.color.mainBackground()
         
@@ -57,12 +60,12 @@ final class CurrentLifestileViewController: UIViewController {
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: "How would you describe your current ",
+            string: R.string.localizable.onboardingFourthCurrentLifestileTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         attributedString.append(NSAttributedString(
-            string: "lifestyle?",
+            string: R.string.localizable.onboardingFourthCurrentLifestileTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
@@ -195,15 +198,15 @@ fileprivate extension CurrentLifestile {
     var description: String {
         switch self {
         case .iEatWellAndAmActive:
-            return "I eat well and am active"
+            return R.string.localizable.onboardingFourthCurrentLifestileIEatWellAndAmActive()
         case .iEatWellButAmNotVeryActive:
-            return "I eat well but am not very active"
+            return R.string.localizable.onboardingFourthCurrentLifestileIEatWellButAmNotVeryActive()
         case .iDontEatVeryWellButiAmActive:
-            return "I don’t eat very well but I am active"
+            return R.string.localizable.onboardingFourthCurrentLifestileIDontEatVeryWellButiAmActive()
         case .iHaveSomeHealthyHabits:
-            return "I have some healthy habits"
+            return R.string.localizable.onboardingFourthCurrentLifestileIHaveSomeHealthyHabits()
         case .myDietAndActivityNeedImprovement:
-            return "My diet and activity need improvement"
+            return R.string.localizable.onboardingFourthCurrentLifestileMyDietAndActivityNeedImprovement()
         }
     }
 }

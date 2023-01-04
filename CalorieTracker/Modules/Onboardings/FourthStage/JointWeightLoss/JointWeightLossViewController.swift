@@ -31,7 +31,10 @@ final class JointWeightLossViewController: UIViewController {
     private let titleLabel: UILabel = .init()
     private let stackView: UIStackView = .init()
     private var answerOptions: [AnswerOption] = []
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "continue".uppercased())
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingFourthJointWeightLossButton().uppercased()
+    )
     
     // MARK: - Lifecycle methods
     
@@ -46,11 +49,11 @@ final class JointWeightLossViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = "Habits"
+        title = R.string.localizable.onboardingFourthJointWeightLossTitle()
         
         view.backgroundColor = R.color.mainBackground()
         
-        titleLabel.text = "Is your partner also trying to lose weight?"
+        titleLabel.text = R.string.localizable.onboardingFourthJointWeightLossTitleFirst()
         titleLabel.textColor = R.color.onboardings.basicDark()
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 0
@@ -160,11 +163,11 @@ fileprivate extension JointWeightLoss {
     var description: String {
         switch self {
         case .yes:
-            return "Yes"
+            return R.string.localizable.onboardingFourthJointWeightLossDescriptionYes()
         case .imNotSure:
-            return "I’m not sure"
+            return R.string.localizable.onboardingFourthJointWeightLossDescriptionImNotSure()
         case .no:
-            return "No"
+            return R.string.localizable.onboardingFourthJointWeightLossDescriptionNo()
         }
     }
 }

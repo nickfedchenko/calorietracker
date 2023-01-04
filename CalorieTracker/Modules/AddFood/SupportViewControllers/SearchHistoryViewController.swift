@@ -15,7 +15,7 @@ final class SearchHistoryViewController: UIViewController {
         let label = UILabel()
         label.textColor = R.color.addFood.menu.isSelectedBorder()
         label.font = R.font.sfProDisplayBold(size: 22)
-        label.text = "recent searches".uppercased()
+        label.text = R.string.localizable.addFoodTitleRecent().uppercased()
         label.textAlignment = .center
         return label
     }()

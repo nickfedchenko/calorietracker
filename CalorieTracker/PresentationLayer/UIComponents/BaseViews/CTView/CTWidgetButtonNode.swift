@@ -58,7 +58,8 @@ class CTWidgetButtonNode: ASButtonNode {
     
     // MARK: - Private properties
     private var configuration: CTWidgetNodeConfiguration!
-    private var isFirstDraw = true
+    
+    private var shadowLayer = CALayer()
     
     // MARK: - Init
     init(with configuration: CTWidgetNodeConfiguration) {
@@ -66,26 +67,48 @@ class CTWidgetButtonNode: ASButtonNode {
         automaticallyManagesSubnodes = true
         self.configuration = configuration
         setupView()
-    }
-    
-    override func didLoad() {
-        super.didLoad()
         setupCorners()
-       
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func willEnterHierarchy() {
-        super.willEnterHierarchy()
-        guard isFirstDraw else { return }
+    override func layoutDidFinish() {
         drawShadows()
-        isFirstDraw = false
+    }
+    
+    // MARK: - Public methods
+    
+    func setTopOffset(_ offset: CGFloat) {
+        configuration.setCustomTopOffset(offset)
+    }
+    
+    func setSidesInset(_ inset: CGFloat) {
+        configuration.setCustomSideInset(inset)
+    }
+    
+    func setInteritemSpacing(_ spacing: CGFloat) {
+        configuration.setCustomInterItemSpacing(spacing)
+    }
+    
+    // MARK: - Private methods
+    
+    private func setupView() {
+        style.height = ASDimension(unit: .points, value: constants.height)
+        style.minWidth = style.height
+        
+        layer.insertSublayer(shadowLayer, at: 0)
+    }
+    
+    private func setupCorners() {
+        cornerRadius = 16
+        layer.cornerCurve = .continuous
     }
     
     private func drawShadows() {
+        shadowLayer.sublayers?.forEach { $0.removeFromSuperlayer() }
+        shadowLayer.frame = bounds
         shadows.forEach { addShadowLayer(shadow: $0) }
     }
     
@@ -119,32 +142,6 @@ class CTWidgetButtonNode: ASButtonNode {
         mask.path = path.cgPath
         mask.fillRule = .evenOdd
         shadowLayer.mask = mask
-        layer.insertSublayer(shadowLayer, at: 0)
-    }
-    
-    // MARK: - Public methods
-    
-    func setTopOffset(_ offset: CGFloat) {
-        configuration.setCustomTopOffset(offset)
-    }
-    
-    func setSidesInset(_ inset: CGFloat) {
-        configuration.setCustomSideInset(inset)
-    }
-    
-    func setInteritemSpacing(_ spacing: CGFloat) {
-        configuration.setCustomInterItemSpacing(spacing)
-    }
-    
-    // MARK: - Private methods
-    
-    private func setupView() {
-        style.height = ASDimension(unit: .points, value: constants.height)
-        style.minWidth = style.height
-    }
-    
-    private func setupCorners() {
-        cornerRadius = 16
-        layer.cornerCurve = .continuous
+        self.shadowLayer.insertSublayer(shadowLayer, at: 0)
     }
 }

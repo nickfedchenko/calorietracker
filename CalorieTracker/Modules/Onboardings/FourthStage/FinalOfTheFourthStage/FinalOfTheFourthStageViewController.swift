@@ -32,7 +32,10 @@ final class FinalOfTheFourthStageViewController: UIViewController {
     private let habitsImageView: UIImageView = .init()
     private let habitsLabel: UILabel = .init()
     private let delimeterView: UIView = .init()
-    private let continueCommonButton: CommonButton = .init(style: .filled, text: "keep it coming!".uppercased())
+    private let continueCommonButton: CommonButton = .init(
+        style: .filled,
+        text: R.string.localizable.onboardingFourthFinalButton().uppercased()
+    )
     
     // MARK: - Initialization
     
@@ -51,13 +54,13 @@ final class FinalOfTheFourthStageViewController: UIViewController {
         
         passedImageView.image = R.image.onboardings.passed()
         
-        titleLabel.text = "Magnificently!"
+        titleLabel.text = R.string.localizable.onboardingFourthFinalTitle()
         titleLabel.textColor = R.color.onboardings.radialGradientFirst()
         titleLabel.textAlignment = .center
         titleLabel.font = UIFont.systemFont(ofSize: 38, weight: .medium)
         
         // swiftlint:disable:next line_length
-        descriptionLabel.text = "We’re happy to have you here. We’ll walk you through these steps to get you set up for weight loss success:"
+        descriptionLabel.text = R.string.localizable.onboardingFourthFinalDescription()
         descriptionLabel.numberOfLines = 0
         descriptionLabel.textAlignment = .center
         descriptionLabel.font = UIFont.systemFont(ofSize: 18, weight: .regular)
@@ -65,25 +68,25 @@ final class FinalOfTheFourthStageViewController: UIViewController {
    
         historyDotImageView.image = R.image.onboardings.complet()
         
-        historyLabel.text = "History"
+        historyLabel.text = R.string.localizable.onboardingFourthFinalHistory()
         historyLabel.font = UIFont.systemFont(ofSize: 23, weight: .medium)
         historyLabel.textColor = R.color.onboardings.basicDark()
         
         userDataDotImageView.image = R.image.onboardings.complet()
         
-        userDataLabel.text = "User data"
+        userDataLabel.text = R.string.localizable.onboardingFourthFinalUserData()
         userDataLabel.font = UIFont.systemFont(ofSize: 23, weight: .medium)
         userDataLabel.textColor = R.color.onboardings.basicDark()
         
         motivationImageView.image = R.image.onboardings.complet()
         
-        motivationLabel.text = "Motivation / Goal"
+        motivationLabel.text = R.string.localizable.onboardingFourthFinalMotivation()
         motivationLabel.font = UIFont.systemFont(ofSize: 23, weight: .medium)
         motivationLabel.textColor = R.color.onboardings.basicDark()
         
         habitsImageView.image = R.image.onboardings.complet()
         
-        habitsLabel.text = "Habits"
+        habitsLabel.text = R.string.localizable.onboardingThirdFinalHabits()
         habitsLabel.font = UIFont.systemFont(ofSize: 23, weight: .medium)
         habitsLabel.textColor = R.color.onboardings.basicDark()
         
