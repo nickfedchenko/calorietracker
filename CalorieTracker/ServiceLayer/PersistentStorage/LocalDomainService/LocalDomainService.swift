@@ -18,6 +18,7 @@ protocol LocalDomainServiceInterface {
     func fetchWeight() -> [DailyData]
     func fetchNutrition() -> [DailyNutritionData]
     func fetchExercise() -> [Exercise]
+    func fetchNotes() -> [Note]
     func saveProducts(products: [Product], saveInPriority: Bool)
     func saveDishes(dishes: [Dish])
     func saveFoodData(foods: [FoodData])
@@ -27,6 +28,7 @@ protocol LocalDomainServiceInterface {
     func saveWeight(data: [DailyData])
     func saveNutrition(data: [DailyNutritionData])
     func saveExercise(data: [Exercise])
+    func saveNotes(data: [Note])
     func searchProducts(by phrase: String) -> [Product]
     func searchProducts(barcode: String) -> [Product]
     func searchDishes(by phrase: String) -> [Dish]
@@ -183,6 +185,13 @@ extension LocalDomainService: LocalDomainServiceInterface {
         return domainExercise.compactMap { Exercise(from: $0) }
     }
     
+    func fetchNotes() -> [Note] {
+        guard let domainNotes = fetchData(for: DomainNote.self) else {
+            return []
+        }
+        return domainNotes.compactMap { Note(from: $0) }
+    }
+    
     func saveProducts(products: [Product], saveInPriority: Bool) {
         let _: [DomainProduct] = products
             .map { DomainProduct.prepare(fromPlainModel: $0, context: context) }
@@ -233,6 +242,12 @@ extension LocalDomainService: LocalDomainServiceInterface {
     func saveExercise(data: [Exercise]) {
         let _: [DomainExercise] = data
             .map { DomainExercise.prepare(fromPlainModel: $0, context: context) }
+        try? context.save()
+    }
+    
+    func saveNotes(data: [Note]) {
+        let _: [DomainNote] = data
+            .map { DomainNote.prepare(fromPlainModel: $0, context: context) }
         try? context.save()
     }
     

@@ -59,6 +59,18 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
+    <entity name="DomainNote" representedClassName="DomainNote" syncable="YES">
+        <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="estimation" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="id" attributeType="String"/>
+        <attribute name="imageUrl" optional="YES" attributeType="URI"/>
+        <attribute name="text" attributeType="String"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
     <entity name="DomainNutrition" representedClassName="DomainNutrition" syncable="YES">
         <attribute name="carbs" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="day" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
@@ -144,5 +156,6 @@
         <element name="DomainSteps" positionX="-45" positionY="162" width="128" height="89"/>
         <element name="DomainWater" positionX="-54" positionY="153" width="128" height="89"/>
         <element name="DomainWeight" positionX="-36" positionY="171" width="128" height="89"/>
+        <element name="DomainNote" positionX="-45" positionY="252" width="128" height="104"/>
     </elements>
 </model>
