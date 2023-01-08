@@ -305,6 +305,8 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
             presenter?.didTapWidget(widget.widgetType)
         case .exercises:
             presenter?.didTapExerciseWidget()
+        case .notes:
+            presenter?.didTapNotesWidget()
         default:
             return
         }

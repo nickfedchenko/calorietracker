@@ -21,6 +21,7 @@ protocol MainScreenPresenterInterface: AnyObject {
     func updateExersiceWidget()
     func checkOnboarding()
     func didTapExerciseWidget()
+    func didTapNotesWidget()
 }
 
 class MainScreenPresenter {
@@ -198,5 +199,9 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
                 }
             }
         }
+    }
+    
+    func didTapNotesWidget() {
+        router?.openCreateNotesVC()
     }
 }
