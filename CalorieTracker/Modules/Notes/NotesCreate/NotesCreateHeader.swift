@@ -58,6 +58,7 @@ final class NotesCreateHeader: UIView {
         layer.maskedCorners = .topCorners
     }
     
+    // swiftlint:disable:next function_body_length
     private func setupConstraints() {
         addSubviews(
             allNotesButton,

@@ -95,7 +95,7 @@ final class FirstPageFormView: UIView {
     }
     
     @objc private func didTapBarcodeButton() {
-        complition? { barcode in
+        complition? { _ in
             
         }
     }

@@ -73,8 +73,8 @@ final class EnvironmentInfluencesTheChoiceViewController: UIViewController {
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .medium)
         
-        // swiftlint:disable:next line_length
-        descriptionLabel.text = R.string.localizable.onboardingFourthEnvironmentInfluencesTheChoiceDescription()
+        descriptionLabel.text =
+            R.string.localizable.onboardingFourthEnvironmentInfluencesTheChoiceDescription()
         descriptionLabel.textColor = R.color.onboardings.basicGray()
         descriptionLabel.textAlignment = .center
         descriptionLabel.numberOfLines = 0

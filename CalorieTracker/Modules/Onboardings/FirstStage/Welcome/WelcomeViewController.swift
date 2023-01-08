@@ -58,7 +58,6 @@ final class WelcomeViewController: UIViewController {
         titleLabel.font = UIFont.systemFont(ofSize: 38, weight: .medium)
         titleLabel.textColor = R.color.onboardings.basicDark()
         
-        // swiftlint:disable:next line_length
         descriptionLabel.text = R.string.localizable.onboardingFirstWelcomeDescription()
         descriptionLabel.numberOfLines = 0
         descriptionLabel.textAlignment = .center

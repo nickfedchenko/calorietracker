@@ -4,7 +4,9 @@
 //
 //  Created by Vladimir Banushkin on 15.07.2022.
 //
+
 import Alamofire
+import ApphudSDK
 import AsyncDisplayKit
 import Firebase
 import Gzip
@@ -13,7 +15,6 @@ import Lottie
 import SnapKit
 import Swinject
 import UIKit
-import ApphudSDK
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {

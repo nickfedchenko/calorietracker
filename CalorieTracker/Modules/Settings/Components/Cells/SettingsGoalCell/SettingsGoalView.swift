@@ -112,4 +112,3 @@ extension SettingsGoalView {
         return button
     }
 }
-

@@ -68,6 +68,7 @@ final class NotesViewingHeaderView: UIView {
         layer.cornerRadius = 12
     }
     
+    // swiftlint:disable:next function_body_length
     private func setupConstraints() {
         addSubviews(
             smileImageView,
@@ -207,7 +208,6 @@ final class NotesViewingHeaderView: UIView {
         
         return dateFormatter.string(from: date).uppercased()
     }
-    
     
     @objc private func didTapShareButton() {
         
