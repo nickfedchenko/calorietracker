@@ -14,7 +14,7 @@ final class NotesCreateHeader: UIView {
     private lazy var doneButton: UIButton = getDoneButton()
     private lazy var closeButton: UIButton = getCloseButton()
     private lazy var allNotesButton: UIButton = getAllNotesButton()
-    private lazy var textView: UITextView = getTextView()
+    private lazy var textView: SLTextView = getTextView()
     private lazy var photoView: UIImageView = getPhotoView()
     
     var complitionPhotoButton: (() -> Void)?
@@ -161,13 +161,14 @@ final class NotesCreateHeader: UIView {
 // MARK: - Factory
 
 extension NotesCreateHeader {
-    private func getTextView() -> UITextView {
-        let textView = UITextView()
+    private func getTextView() -> SLTextView {
+        let textView = SLTextView()
         textView.font = R.font.sfProTextMedium(size: 16.fontScale())
         textView.backgroundColor = .clear
         textView.isScrollEnabled = false
         textView.textColor = R.color.notes.text()
         textView.tintColor = R.color.notes.noteAccent()
+        textView.separatorLinesColor = R.color.notes.noteGray()
         return textView
     }
     
