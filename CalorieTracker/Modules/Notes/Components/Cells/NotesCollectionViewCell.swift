@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class NotesCollectionViewCell: UICollectionViewCell {
+final class NotesTableViewCell: UITableViewCell {
     var viewModel: NotesCellViewModel? {
         didSet {
             view.model = viewModel
@@ -17,8 +17,8 @@ final class NotesCollectionViewCell: UICollectionViewCell {
     private lazy var view: NotesCellView = .init(frame: .zero)
     private lazy var shadowView: ViewWithShadow = .init(Const.shadows)
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
         setupConstraints()
     }
@@ -29,22 +29,27 @@ final class NotesCollectionViewCell: UICollectionViewCell {
     
     private func setupView() {
         shadowView.layer.cornerRadius = 16
+        selectionStyle = .none
+        backgroundColor = .clear
+        contentView.backgroundColor = .clear
     }
     
     private func setupConstraints() {
         contentView.addSubviews(shadowView, view)
         
         shadowView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
+            make.top.bottom.equalToSuperview().inset(6)
         }
         
         view.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
+            make.top.bottom.equalToSuperview().inset(6)
         }
     }
 }
 
-extension NotesCollectionViewCell {
+extension NotesTableViewCell {
     struct Const {
         static let shadows: [Shadow] = [
             Shadow(

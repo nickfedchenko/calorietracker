@@ -37,6 +37,7 @@ protocol LocalDomainServiceInterface {
     func setChildMeal(mealId: String, dishesID: [Int], productsID: [String])
     func setFoodData(favorites: Bool?, date dateLastUse: Date?, numberUses: Int?, food: Food)
     func getFoodData(_ food: Food) -> FoodData?
+    @discardableResult func delete<T>(_ object: T) -> Bool
 }
 
 final class LocalDomainService {
@@ -249,6 +250,24 @@ extension LocalDomainService: LocalDomainServiceInterface {
         let _: [DomainNote] = data
             .map { DomainNote.prepare(fromPlainModel: $0, context: context) }
         try? context.save()
+    }
+    
+    @discardableResult
+    func delete<T>(_ object: T) -> Bool {
+        let format = "id == %@"
+        
+        switch object.self {
+        case is Note:
+            guard let note = object as? Note else { return false }
+            let request = NSFetchRequest<DomainNote>(entityName: "DomainNote")
+            request.predicate = NSPredicate(format: format, note.id)
+            guard let domainNote = try? context.fetch(request).first else { return false }
+            context.delete(domainNote)
+            try? context.save()
+            return true
+        default:
+            return false
+        }
     }
     
     func setChildFoodData(foodDataId: String, dishID: Int) {

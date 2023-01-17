@@ -15,7 +15,7 @@ protocol NotesViewControllerInterface: AnyObject {
 final class NotesViewController: UIViewController {
     var presenter: NotesPresenterInterface?
     
-    private lazy var collectionView: UICollectionView = getCollectionView()
+    private lazy var tableView: UITableView = getTableView()
     private lazy var topView: UIView = getBlurView()
     private lazy var bottomView: UIView = getBlurView()
     private lazy var closeButton: UIButton = getCloseButton()
@@ -30,7 +30,7 @@ final class NotesViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        collectionView.contentInset = .init(
+        tableView.contentInset = .init(
             top: topView.frame.height + 10,
             left: 0,
             bottom: bottomView.frame.height + 10,
@@ -39,8 +39,8 @@ final class NotesViewController: UIViewController {
     }
     
     private func registerCell() {
-        collectionView.register(UICollectionViewCell.self)
-        collectionView.register(NotesCollectionViewCell.self)
+        tableView.register(UITableViewCell.self)
+        tableView.register(NotesTableViewCell.self)
     }
     
     private func setupView() {
@@ -53,15 +53,16 @@ final class NotesViewController: UIViewController {
     
     private func setupConstraints() {
         view.addSubviews(
-            collectionView,
+            tableView,
             topView,
             bottomView,
             closeButton,
             titleLabel
         )
         
-        collectionView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+        tableView.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(20)
         }
         
         topView.snp.makeConstraints { make in
@@ -94,64 +95,74 @@ final class NotesViewController: UIViewController {
 
 extension NotesViewController: NotesViewControllerInterface {
     func reload() {
-        collectionView.reloadData()
+        tableView.reloadData()
     }
 }
 
-// MARK: - CollectionView Delegate
+// MARK: - TableView Delegate
 
-extension NotesViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+extension NotesViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         presenter?.didTapCell(indexPath)
     }
 }
 
-// MARK: - CollectionView DataSource
+// MARK: - TableView DataSource
 
-extension NotesViewController: UICollectionViewDataSource {
-    func collectionView(
-        _ collectionView: UICollectionView,
-        numberOfItemsInSection section: Int
-    ) -> Int {
+extension NotesViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return presenter?.numberOfItemsInSection() ?? 0
     }
     
-    func collectionView(
-        _ collectionView: UICollectionView,
-        cellForItemAt indexPath: IndexPath
-    ) -> UICollectionViewCell {
-        guard let cell = presenter?.getNotesCell(collectionView, indexPath: indexPath) else {
-            let defaultCell: UICollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = presenter?.getNotesCell(tableView, indexPath: indexPath) else {
+            let defaultCell: UITableViewCell = tableView.dequeueReusableCell(for: indexPath)
             return defaultCell
         }
+        
         return cell
     }
-}
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return presenter?.getHeight(view.frame.width) ?? 0
+    }
+    
+    func tableView(_ tableView: UITableView,
+                   trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
 
-// MARK: - CollectionView FlowLayout
+        let action = UIContextualAction(
+            style: .destructive,
+            title: nil,
+            handler: { _, _, completion in
+                self.presenter?.deleteNote(indexPath)
+                tableView.deleteRows(at: [indexPath], with: .left)
+                completion(true)
+            }
+        )
 
-extension NotesViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(
-        _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        sizeForItemAt indexPath: IndexPath
-    ) -> CGSize {
-        return presenter?.getSize(view.frame.width) ?? .zero
+        action.image = R.image.notes.deleteCell()
+        action.backgroundColor = R.color.notes.background()
+        let configuration = UISwipeActionsConfiguration(actions: [action])
+        configuration.performsFirstActionWithFullSwipe = true
+
+        return configuration
     }
 }
 
 // MARK: - Factory
 
 extension NotesViewController {
-    private func getCollectionView() -> UICollectionView {
-        let layout = UICollectionViewFlowLayout()
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .clear
-        collectionView.showsVerticalScrollIndicator = false
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        return collectionView
+    private func getTableView() -> UITableView {
+        let tableView = UITableView(frame: .zero, style: .plain)
+        tableView.backgroundColor = .clear
+        tableView.separatorStyle = .none
+        tableView.clipsToBounds = false
+        tableView.layer.masksToBounds = false
+        tableView.showsVerticalScrollIndicator = false
+        tableView.showsHorizontalScrollIndicator = false
+        tableView.dataSource = self
+        tableView.delegate = self
+        return tableView
     }
     
     private func getBlurView() -> UIView {

@@ -9,12 +9,13 @@
 import UIKit
 
 protocol NotesPresenterInterface: AnyObject {
-    func getNotesCell(_ collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell
+    func getNotesCell(_ tableView: UITableView, indexPath: IndexPath) -> UITableViewCell
     func numberOfItemsInSection() -> Int
-    func getSize(_ width: CGFloat) -> CGSize
+    func getHeight(_ screenWidth: CGFloat) -> CGFloat 
     func didTapCloseButton()
     func didTapCell(_ indexPath: IndexPath)
     func updateNotes()
+    func deleteNote(_ indexPass: IndexPath)
 }
 
 class NotesPresenter {
@@ -23,9 +24,10 @@ class NotesPresenter {
     let router: NotesRouterInterface?
     let interactor: NotesInteractorInterface?
     
-    private var notesViewModels: [NotesCellViewModel] = [] {
+    private var notesViewModels: [NotesCellViewModel] = []
+    private var notes: [Note] = [] {
         didSet {
-            view.reload()
+            updateNotesViewModel()
         }
     }
     
@@ -40,7 +42,6 @@ class NotesPresenter {
     }
     
     private func updateNotesViewModel() {
-        let notes = DSF.shared.getAllStoredNotes()
         let weightData = WeightWidgetService.shared.getAllWeight()
         
         notesViewModels = notes.map { note in
@@ -56,11 +57,15 @@ class NotesPresenter {
             )
         }
     }
+    
+    private func notesUpdate() {
+        notes = NotesWidgetService.shared.getAllNotes()
+    }
 }
 
 extension NotesPresenter: NotesPresenterInterface {
-    func getNotesCell(_ collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell {
-        let cell: NotesCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
+    func getNotesCell(_ tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
+        let cell: NotesTableViewCell = tableView.dequeueReusableCell(for: indexPath)
         cell.viewModel = notesViewModels[safe: indexPath.row]
         return cell
     }
@@ -69,10 +74,10 @@ extension NotesPresenter: NotesPresenterInterface {
         return notesViewModels.count
     }
     
-    func getSize(_ screenWidth: CGFloat) -> CGSize {
+    func getHeight(_ screenWidth: CGFloat) -> CGFloat {
         let width = screenWidth - 40
-        let height = width * 0.299
-        return .init(width: width, height: height)
+        let height = width * 0.299 + 12
+        return height
     }
     
     func didTapCloseButton() {
@@ -80,7 +85,9 @@ extension NotesPresenter: NotesPresenterInterface {
     }
     
     func updateNotes() {
+        notesUpdate()
         updateNotesViewModel()
+        view.reload()
     }
     
     func didTapCell(_ indexPath: IndexPath) {
@@ -89,5 +96,13 @@ extension NotesPresenter: NotesPresenterInterface {
         }
         
         router?.openNotesViewingVC(model)
+    }
+    
+    func deleteNote(_ indexPass: IndexPath) {
+        guard let note = notes[safe: indexPass.row] else { return }
+        notes.remove(at: indexPass.row)
+        DispatchQueue.global().async {
+            NotesWidgetService.shared.deleteNote(note)
+        }
     }
 }
