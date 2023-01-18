@@ -40,6 +40,9 @@ extension NotesRouter: NotesRouterInterface {
     func openNotesViewingVC(_ model: NotesCellViewModel) {
         let vc = NotesViewingViewController()
         vc.viewModel = model
+        vc.needUpdate = { [weak self] in
+            self?.presenter?.updateNotes()
+        }
         viewController?.present(vc, animated: true)
     }
 }

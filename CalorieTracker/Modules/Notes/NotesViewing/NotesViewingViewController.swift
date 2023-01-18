@@ -10,6 +10,7 @@ import UIKit
 final class NotesViewingViewController: UIViewController {
     var keyboardManager: KeyboardManagerProtocol = KeyboardManager()
     var handlerAllNotes: (() -> Void)?
+    var needUpdate: (() -> Void)?
     
     var viewModel: NotesCellViewModel? {
         didSet {
@@ -39,6 +40,11 @@ final class NotesViewingViewController: UIViewController {
         addGestureRecognizer()
     }
     
+    override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+        super.dismiss(animated: flag, completion: completion)
+        needUpdate?()
+    }
+    
     private func setupView() {
         headerView.complitionCloseButton = { [weak self] in
             self?.dismiss(animated: true)
@@ -53,6 +59,15 @@ final class NotesViewingViewController: UIViewController {
         headerView.complitionDoneButton = { [weak self] in
             self?.saveNote()
             self?.dismiss(animated: true)
+        }
+        
+        headerView.complitionDeleteButton = { [weak self] in
+            self?.deleteNote()
+            self?.dismiss(animated: true)
+        }
+        
+        headerView.complitionShareButton = { [weak self] in
+            self?.shareNote()
         }
     }
     
@@ -82,20 +97,41 @@ final class NotesViewingViewController: UIViewController {
     }
     
     private func saveNote() {
-//        guard let text = headerView.text,
-//              let estimation = headerView.selectedEstimation else {
-//            return
-//        }
-//        let id = UUID().uuidString
-//        let note = Note(
-//            id: id,
-//            date: Date(),
-//            text: text,
-//            estimation: estimation,
-//            imageUrl: try? headerView.photo?.save(at: .applicationDirectory, pathAndImageName: id)
-//        )
-//
-//        LocalDomainService().saveNotes(data: [note])
+        guard let viewModel = viewModel,
+              let text = headerView.text else {
+            return
+        }
+
+        let note = Note(
+            id: viewModel.note.id,
+            date: viewModel.date,
+            text: text,
+            estimation: headerView.selectedEstimation ?? viewModel.estimation,
+            imageUrl: viewModel.note.imageUrl
+        )
+
+        LocalDomainService().saveNotes(data: [note])
+    }
+    
+    private func deleteNote() {
+        guard let viewModel = viewModel else {
+            return
+        }
+
+        NotesWidgetService.shared.deleteNote(viewModel.note)
+    }
+    
+    private func shareNote() {
+        guard let viewModel = viewModel else {
+            return
+        }
+
+        let activityVC = UIActivityViewController(
+            activityItems: [viewModel.image, viewModel.text],
+            applicationActivities: nil
+        )
+        
+        present(activityVC, animated: true)
     }
     
     @objc private func handleTap(_ sender: UITapGestureRecognizer) {

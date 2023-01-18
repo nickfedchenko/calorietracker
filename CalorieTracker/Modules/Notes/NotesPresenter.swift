@@ -46,6 +46,7 @@ class NotesPresenter {
         
         notesViewModels = notes.map { note in
             NotesCellViewModel(
+                note: note,
                 estimation: note.estimation,
                 text: note.text,
                 date: note.date,

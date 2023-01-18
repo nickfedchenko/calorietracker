@@ -30,6 +30,13 @@ final class NotesViewingHeaderView: UIView {
     var complitionCloseButton: (() -> Void)?
     var complitionAllNotesButton: (() -> Void)?
     var complitionDoneButton: (() -> Void)?
+    var complitionDeleteButton: (() -> Void)?
+    var complitionShareButton: (() -> Void)?
+    
+    var text: String? {
+        get { textView.text }
+        set { textView.text = newValue }
+    }
     
     var selectedEstimation: Estimation? { estimationView.selectedEstimation }
     
@@ -185,6 +192,7 @@ final class NotesViewingHeaderView: UIView {
                 make.top.equalTo(weightBackgroundView.snp.bottom).offset(16)
                 make.leading.trailing.greaterThanOrEqualToSuperview().inset(20)
                 make.height.lessThanOrEqualTo(self.snp.width).multipliedBy(0.6)
+                make.centerX.equalToSuperview()
             }
             
         } else {
@@ -210,11 +218,11 @@ final class NotesViewingHeaderView: UIView {
     }
     
     @objc private func didTapShareButton() {
-        
+        complitionShareButton?()
     }
     
     @objc private func didTapDeleteButton() {
-        
+        complitionDeleteButton?()
     }
     
     @objc private func didTapDoneButton() {
