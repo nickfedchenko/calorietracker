@@ -16,6 +16,7 @@ class SLTextView: UITextView {
     }
     
     private var firstDraw = true
+    private var exclusionPathsObserver: NSKeyValueObservation?
     
     override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)
@@ -50,8 +51,8 @@ class SLTextView: UITextView {
             return
         }
         
-        _ = textContainer.observe(\.exclusionPaths) { _, _ in
-            self.setNeedsDisplay()
+        exclusionPathsObserver = textContainer.observe(\.exclusionPaths) { [weak self] _, _ in
+            self?.setNeedsDisplay()
         }
         
         firstDraw = false
