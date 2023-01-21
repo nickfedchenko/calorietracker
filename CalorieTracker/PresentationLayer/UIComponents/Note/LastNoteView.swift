@@ -18,6 +18,8 @@ class LastNoteView: UIView {
     private lazy var photoImageView: UIImageView = getPhotoImageView()
     private lazy var estimationImageView: UIImageView = getEstimationImageView()
     
+    private var photoWidthConstraints: NSLayoutConstraint?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -41,9 +43,13 @@ class LastNoteView: UIView {
         if let photo = model.photo {
             photoImageView.image = photo
             photoImageView.isHidden = false
+            photoWidthConstraints?.isActive = false
         } else {
             photoImageView.isHidden = true
+            photoWidthConstraints?.isActive = true
         }
+        
+        setNeedsDisplay()
     }
     
     private func setupView() {
@@ -59,7 +65,7 @@ class LastNoteView: UIView {
         
         textView.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(12)
-            make.trailing.equalTo(photoImageView).offset(-7)
+            make.trailing.equalTo(photoImageView.snp.leading).offset(-7)
             make.top.bottom.equalToSuperview().inset(21)
         }
         
@@ -69,9 +75,11 @@ class LastNoteView: UIView {
             make.height.width.equalTo(24.fontScale())
         }
         
+        photoWidthConstraints = photoImageView.widthAnchor.constraint(equalToConstant: 0)
         photoImageView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview().inset(5)
             make.trailing.equalToSuperview().offset(-5)
+            make.width.equalTo(photoImageView.snp.height).multipliedBy(0.666).priority(.medium)
         }
     }
 }
@@ -94,7 +102,9 @@ extension LastNoteView {
     
     private func getPhotoImageView() -> UIImageView {
         let view = UIImageView()
-        
+        view.layer.cornerCurve = .continuous
+        view.layer.cornerRadius = 12
+        view.layer.masksToBounds = true
         return view
     }
     

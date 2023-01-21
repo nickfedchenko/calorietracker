@@ -39,6 +39,7 @@ final class NotesCreateHeader: UIView {
         super.init(frame: frame)
         setupView()
         setupConstraints()
+        addGestureRecognizerForPhotoView()
     }
     
     required init?(coder: NSCoder) {
@@ -52,10 +53,16 @@ final class NotesCreateHeader: UIView {
     }
     
     private func setupView() {
-        backgroundColor = R.color.notes.background()
+        backgroundColor = R.color.noteWidgetNode.background()
         layer.cornerCurve = .continuous
         layer.cornerRadius = 12
         layer.maskedCorners = .topCorners
+        
+        estimationView.didChangeValue = { [weak self] _ in
+            self?.doneButton.isEnabled = true
+            self?.doneButton.layer.borderColor = R.color.notes.noteAccent()?.cgColor
+            self?.doneButton.setTitleColor(R.color.notes.noteAccent(), for: .normal)
+        }
     }
     
     // swiftlint:disable:next function_body_length
@@ -117,6 +124,11 @@ final class NotesCreateHeader: UIView {
             make.bottom.lessThanOrEqualTo(textView.snp.bottom)
             make.height.equalTo(0)
         }
+    }
+    
+    private func addGestureRecognizerForPhotoView() {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapPhotoButton))
+        photoView.addGestureRecognizer(tapGestureRecognizer)
     }
     
     private func didChangePhoto() {
@@ -182,12 +194,13 @@ extension NotesCreateHeader {
     private func getDoneButton() -> UIButton {
         let button = UIButton()
         button.setTitle("DONE", for: .normal)
-        button.setTitleColor(R.color.notes.noteAccent(), for: .normal)
+        button.setTitleColor(R.color.notes.noteGray(), for: .normal)
         button.addTarget(self, action: #selector(didTapDoneButton), for: .touchUpInside)
         button.layer.cornerCurve = .continuous
         button.layer.cornerRadius = 8
         button.layer.borderWidth = 1
-        button.layer.borderColor = R.color.notes.noteAccent()?.cgColor
+        button.layer.borderColor = R.color.notes.noteGray()?.cgColor
+        button.isEnabled = false
         return button
     }
     
@@ -226,6 +239,7 @@ extension NotesCreateHeader {
         view.layer.cornerCurve = .continuous
         view.layer.cornerRadius = 8
         view.layer.masksToBounds = true
+        view.isUserInteractionEnabled = true
         return view
     }
 }

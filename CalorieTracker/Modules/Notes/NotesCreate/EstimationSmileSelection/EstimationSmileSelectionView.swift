@@ -29,6 +29,8 @@ final class EstimationSmileSelectionView: UIView {
             .first(where: { $0.isSelectedSmile })?.type
     }
     
+    var didChangeValue: ((Estimation) -> Void)?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupStack()
@@ -57,6 +59,7 @@ final class EstimationSmileSelectionView: UIView {
     }
     
     @objc private func didTapButton(_ sender: EstimationSmileButton) {
+        didChangeValue?(sender.type)
         stackView.arrangedSubviews
             .compactMap { return ($0 as? EstimationSmileButton) }
             .forEach { $0.isSelectedSmile = $0 == sender }
