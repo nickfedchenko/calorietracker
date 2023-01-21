@@ -172,15 +172,18 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
     }
     
     func search(_ request: String, complition: ((Bool) -> Void)?) {
-        let frequents = searchAmongFrequent(request)
-        let favorites = searchAmongFavorites(request)
-        let recents = searchAmongRecent(request)
-        let basicFood = searchAmongAll(request)
-        let foods = frequents + recents + favorites + basicFood
-        
-        self.foods = foods
-        
-        complition?(!foods.isEmpty)
+        DispatchQueue.global(qos: .userInteractive).async {
+            let frequents = self.searchAmongFrequent(request)
+            let favorites = self.searchAmongFavorites(request)
+            let recents = self.searchAmongRecent(request)
+            let basicFood = self.searchAmongAll(request)
+            let foods = frequents + recents + favorites + basicFood
+            
+            DispatchQueue.main.async {
+                self.foods = foods
+                complition?(!foods.isEmpty)
+            }
+        }
     }
     
     func getSubInfo(_ food: Food?, _ type: FoodInfoCases) -> Double? {
