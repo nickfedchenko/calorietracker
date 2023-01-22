@@ -15,7 +15,7 @@ struct ProductDTO: Codable {
     let serving: Serving
     let ketoRating: String?
     let nutritions: [Nutrition]
-    let baseTags: [AdditionalTag]
+    let baseTags: [ExceptionTag]
     let photo: String
     let isDraft: Bool
     let createdAt: String
@@ -126,5 +126,34 @@ struct Nutrition: Codable {
     
     var nutritionType: NutritionType {
         return NutritionType(rawValue: id) ?? .undefined
+    }
+}
+
+struct ExceptionTag: Codable {
+
+    enum ConvenientExceptionTag: Int, CaseIterable {
+        case peanut = 2
+        case gluten = 3
+        case meat = 4
+        case mutton = 5
+        case beef = 6
+        case pork = 7
+        case starchyVegetables = 8
+        case milkProducts = 9
+        case seafood = 10
+        case nuts = 11
+        case poultry = 12
+        case chicken = 13
+        case turkey = 14
+        case fish = 15
+        case soy = 16
+        case eggs = 17
+        case honey = 18
+    }
+    
+    let id: Int
+    let title: String
+    var convenientTag: ConvenientExceptionTag? {
+        ConvenientExceptionTag(rawValue: id)
     }
 }

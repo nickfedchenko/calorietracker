@@ -39,7 +39,7 @@ protocol LocalDomainServiceInterface {
 
 final class LocalDomainService {
     // MARK: - Constants
-    
+    private let savingQueue = DispatchQueue(label: "savingQueue", qos: .utility)
     enum Constants {
         static let modelName: String = "CaloireTrackerLocal"
     }
@@ -82,14 +82,19 @@ final class LocalDomainService {
         guard taskContext.hasChanges else {
             return
         }
-        taskContext.perform { [weak taskContext] in
+        
+        let workItem = DispatchWorkItem(flags: .barrier) { [weak taskContext] in
             do {
-                 try taskContext?.save()
+                try taskContext?.save()
             } catch let error {
                 taskContext?.rollback()
                 print(error)
             }
         }
+        
+         taskContext.perform { [weak self] in
+             self?.savingQueue.async(execute: workItem)
+         }
     }
     
     private func deleteObject<T: NSManagedObject> (object: T) {
@@ -184,20 +189,19 @@ extension LocalDomainService: LocalDomainServiceInterface {
     }
     
     func saveProducts(products: [Product], saveInPriority: Bool) {
+        let backgroundContext = container.newBackgroundContext()
         let _: [DomainProduct] = products
-            .map { DomainProduct.prepare(fromPlainModel: $0, context: context) }
+            .map { DomainProduct.prepare(fromPlainModel: $0, context: backgroundContext) }
         
-        if saveInPriority {
-            try? context.save()
-        } else {
-            save()
-        }
+        try? backgroundContext.save()
     }
     
     func saveDishes(dishes: [Dish]) {
+        let backgroundContext = container.newBackgroundContext()
+        
         let _: [DomainDish] = dishes
-            .map { DomainDish.prepare(fromPlainModel: $0, context: taskContext) }
-        save()
+            .map { DomainDish.prepare(fromPlainModel: $0, context: backgroundContext) }
+        try? backgroundContext.save()
     }
     
     func saveMeals(meals: [Meal]) {
