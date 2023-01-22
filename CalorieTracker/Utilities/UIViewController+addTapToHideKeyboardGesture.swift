@@ -29,3 +29,17 @@ extension UIViewController {
         return tapGesture
     }
 }
+
+extension UIViewController {
+    var shouldHideTabBar: Bool {
+        get {
+            guard let tabBarController = tabBarController as? CTTabBarController else { return false }
+            return tabBarController.isTabBarHidden
+        }
+        
+        set {
+            guard let tabBarController = tabBarController as? CTTabBarController else { return }
+            _ = newValue ? tabBarController.hideTabBar() : tabBarController.showTabBar()
+        }
+    }
+}

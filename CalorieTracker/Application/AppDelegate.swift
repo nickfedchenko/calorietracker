@@ -44,6 +44,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         updateHealthKitData()
         updateFoodData()
         
+        let appearance = UINavigationBarAppearance()
+        appearance.backgroundEffect = nil
+        
+        UINavigationBar.appearance().standardAppearance = appearance
         return true
     }
     

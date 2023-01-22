@@ -458,22 +458,6 @@ final class AddFoodViewController: UIViewController {
         }
     }
     
-    private func getFoodCellModel(_ indexPath: IndexPath) -> FoodCellViewModel? {
-        switch isSelectedType {
-        case .frequent, .recent, .favorites, .search, .myFood:
-            let food = foods[safe: indexPath.row]
-            return FoodCellViewModel(
-                cellType: isSelectedType == .myFood ? .withShadow : .table,
-                food: food,
-                buttonType: .add,
-                subInfo: presenter?.getSubInfo(food, selectedFoodInfo),
-                colorSubInfo: selectedFoodInfo.getColor()
-            )
-        default:
-            return nil
-        }
-    }
-    
     private func didChangeSelectedFood() {
         guard let selectedFood = selectedFood, !selectedFood.isEmpty else {
             counterKcalControl.isHidden = true

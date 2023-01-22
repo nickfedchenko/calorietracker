@@ -189,7 +189,8 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
     }
     
     func getSubInfo(_ food: Food?, _ type: FoodInfoCases) -> Int? {
-        return food?.foodInfo[type]
+        guard let info = food?.foodInfo[type] else { return nil }
+        return Int(info)
     }
     
     func saveMeal(_ mealTime: MealTime, foods: [Food]) {

@@ -14,21 +14,21 @@ enum Food {
 }
 
 extension Food {
-    var foodInfo: [FoodInfoCases: Int] {
+    var foodInfo: [FoodInfoCases: Double] {
         switch self {
         case .product(let product):
             return [
-                .kcal: Int(product.kcal),
-                .carb: Int(product.carbs),
-                .fat: Int(product.fat),
-                .protein: Int(product.protein)
+                .kcal: product.kcal,
+                .carb: product.carbs,
+                .fat: product.fat,
+                .protein: product.protein
             ]
         case .dishes(let dish):
             return [
-                .kcal: dish.kсal,
-                .carb: Int(dish.carbs),
-                .fat: Int(dish.fat),
-                .protein: Int(dish.protein)
+                .kcal: dish.kcal,
+                .carb: dish.carbs,
+                .fat: dish.fat,
+                .protein: dish.protein
             ]
         case .meal:
             return [:]
