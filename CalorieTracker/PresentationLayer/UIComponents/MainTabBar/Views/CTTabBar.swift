@@ -46,9 +46,11 @@ final class CTTabBar: UIView {
     private lazy var HStack: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
-        stackView.distribution = .equalSpacing
+        stackView.distribution = .fillEqually
         let spacing = Constants.tabSpacing
+        print("spacing id \(spacing)")
         stackView.spacing = spacing
+        stackView.setContentCompressionResistancePriority(.required, for: .horizontal)
         stackView.isLayoutMarginsRelativeArrangement = true
         return stackView
     }()

@@ -115,6 +115,7 @@ extension DSF: DataServiceFacadeInterface {
             case .failure(let error):
                 dump(error)
             case .success(let dishes):
+                print("dishes received \(dishes.count)")
                 self?.localPersistentStore.saveDishes(dishes: dishes)
             }
         }

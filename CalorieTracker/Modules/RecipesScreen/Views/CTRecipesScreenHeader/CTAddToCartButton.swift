@@ -14,6 +14,8 @@ final class CTAddToCartButton: UIView {
     
     private let addToCartButton: UIButton = {
         let button = UIButton.systemButton(with: R.image.addToCartIcon() ?? UIImage(), target: nil, action: nil)
+        button.backgroundColor = .clear
+        button.tintColor = UIColor(hex: "0C695E")
         return button
     }()
     
@@ -47,11 +49,13 @@ final class CTAddToCartButton: UIView {
     private func setupAppearance() {
         guard isFirstLayout else { return }
         contentView.backgroundColor = .white
+        contentView.layer.cornerRadius = 8
+        print("Button inset is \(addToCartButton.imageEdgeInsets)")
         layer.cornerRadius = 8
         layer.cornerCurve = .continuous
-        layer.borderWidth = 1
-        layer.borderColor = R.color.basicSecondaryDarkGreen()?.cgColor
-        frame = frame.insetBy(dx: 1, dy: 1)
+//        layer.borderWidth = 1
+//        layer.borderColor = R.color.basicSecondaryDarkGreen()?.cgColor
+//        frame = frame.insetBy(dx: 1, dy: 1)
         let shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: layer.cornerRadius)
         layer.shadowPath = shadowPath.cgPath
         layer.shadowColor = UIColor(hex: "06BBBB").cgColor
