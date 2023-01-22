@@ -129,9 +129,9 @@ struct Nutrition: Codable {
     }
 }
 
-struct ExceptionTag: Codable {
+struct ExceptionTag: Hashable, Codable {
 
-    enum ConvenientExceptionTag: Int, CaseIterable {
+    enum ConvenientExceptionTag: Int, CaseIterable, Codable {
         case peanut = 2
         case gluten = 3
         case meat = 4
@@ -155,5 +155,13 @@ struct ExceptionTag: Codable {
     let title: String
     var convenientTag: ConvenientExceptionTag? {
         ConvenientExceptionTag(rawValue: id)
+    }
+    
+    var colorRepresentationTag: TagTypeColorRepresentation? {
+        guard let convenientTag = convenientTag else { return nil }
+        switch convenientTag {
+        case _:
+            return .ingredients
+        }
     }
 }

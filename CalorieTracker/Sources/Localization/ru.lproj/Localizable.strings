@@ -1,0 +1,17 @@
+/* 
+  Localizable.strings
+  CalorieTracker
+
+  Created by Vladimir Banushkin on 15.01.2023.
+  
+*/
+
+"min" = "мин";
+"Ingredients" = "Ингредиенты";
+"servings" = "порции";
+"servings-1" = "порция";
+"servings-2-4" = "порции";
+"servings>4" = "порций";
+"by taste" = "по вкусу";
+"Instructions" = "Инструкции";
+"ByTaste" = "по вкусу";

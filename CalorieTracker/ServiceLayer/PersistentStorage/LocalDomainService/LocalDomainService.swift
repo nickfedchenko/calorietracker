@@ -190,6 +190,7 @@ extension LocalDomainService: LocalDomainServiceInterface {
     
     func saveProducts(products: [Product], saveInPriority: Bool) {
         let backgroundContext = container.newBackgroundContext()
+        backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
         let _: [DomainProduct] = products
             .map { DomainProduct.prepare(fromPlainModel: $0, context: backgroundContext) }
         
@@ -198,7 +199,7 @@ extension LocalDomainService: LocalDomainServiceInterface {
     
     func saveDishes(dishes: [Dish]) {
         let backgroundContext = container.newBackgroundContext()
-        
+        backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
         let _: [DomainDish] = dishes
             .map { DomainDish.prepare(fromPlainModel: $0, context: backgroundContext) }
         try? backgroundContext.save()

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 protocol RecipeListCellDelegate: AnyObject {
     func didTapToButProductsAtRecipe(at index: Int)
@@ -32,7 +33,7 @@ final class RecipeListCell: UICollectionViewCell {
         let label = UILabel()
         label.font = R.font.sfProTextSemibold(size: 16)
         label.textColor = UIColor(hex: "192621")
-        label.textAlignment = .center
+        label.textAlignment = .left
         label.numberOfLines = 2
         return label
     }()
@@ -48,6 +49,7 @@ final class RecipeListCell: UICollectionViewCell {
     
     private let timerIcon: UIImageView = {
         let imageView = UIImageView()
+        imageView.image = R.image.timerIcon()
         return imageView
     }()
     
@@ -68,7 +70,18 @@ final class RecipeListCell: UICollectionViewCell {
     }()
     
     func configure(with dish: Dish) {
-        titleLabel.text = dish.title
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.maximumLineHeight = 17.9
+        let title = NSAttributedString(
+            string: dish.title,
+            attributes: [
+                .paragraphStyle: paragraphStyle,
+                .font: R.font.sfProTextSemibold(size: 16) ?? .systemFont(ofSize: 16),
+                .foregroundColor: UIColor(hex: "192621"),
+                .kern: 0.38
+            ]
+        )
+        titleLabel.attributedText = title
         if let url = URL(string: dish.photo) {
             mainImage.kf.setImage(with: url)
         }
@@ -145,6 +158,7 @@ final class RecipeListCell: UICollectionViewCell {
         calorieValueLabel.snp.makeConstraints { make in
             make.centerX.equalTo(calorieIcon)
             make.top.equalTo(calorieIcon.snp.bottom)
+//            make.bottom.equalToSuperview().inset(5)
         }
     }
     

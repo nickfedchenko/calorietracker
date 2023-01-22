@@ -11,4 +11,5 @@ target 'CalorieTracker' do
   pod 'Texture'
   pod 'ApphudSDK'
   pod 'AlignedCollectionViewFlowLayout'
+  pod 'NVActivityIndicatorView'
 end

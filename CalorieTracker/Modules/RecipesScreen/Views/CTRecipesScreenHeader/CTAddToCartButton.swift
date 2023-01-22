@@ -50,7 +50,6 @@ final class CTAddToCartButton: UIView {
         guard isFirstLayout else { return }
         contentView.backgroundColor = .white
         contentView.layer.cornerRadius = 8
-        print("Button inset is \(addToCartButton.imageEdgeInsets)")
         layer.cornerRadius = 8
         layer.cornerCurve = .continuous
 //        layer.borderWidth = 1

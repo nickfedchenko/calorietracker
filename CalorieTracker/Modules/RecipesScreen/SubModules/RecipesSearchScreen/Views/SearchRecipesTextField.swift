@@ -11,6 +11,7 @@ final class SearchRecipesSearchField: UITextField {
     
     private let shadowLayer = CAShapeLayer()
     private let shapeLayer = CAShapeLayer()
+    var filtersButtonTapAction: (() -> Void)?
     
     override var backgroundColor: UIColor? {
         get {
@@ -40,14 +41,23 @@ final class SearchRecipesSearchField: UITextField {
         super.init(frame: frame)
         setupAdditionalViews()
         setupAppearance()
+        setupActions()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         drawShadow()
+    }
+    
+    private func setupActions() {
+        let filterAction = UIAction { [weak self] _ in
+            self?.filtersButtonTapAction?()
+        }
+        filterButton.addAction(filterAction, for: .touchUpInside)
     }
     
     private func setupAdditionalViews() {
@@ -72,13 +82,25 @@ final class SearchRecipesSearchField: UITextField {
     }
     
     override func leftViewRect(forBounds bounds: CGRect) -> CGRect {
-        CGRect(x: 55, y: 16, width: 32, height: 32)
+        if !isFirstResponder {
+            return CGRect(x: 55, y: 16, width: 32, height: 32)
+        } else {
+            return CGRect(x: 12, y: 16, width: 32, height: 32)
+        }
     }
     
     override func rightViewRect(forBounds bounds: CGRect) -> CGRect {
         var rect = super.rightViewRect(forBounds: bounds)
         rect.origin.x -= 12
         return rect
+    }
+    
+    override func textRect(forBounds bounds: CGRect) -> CGRect {
+        if !isFirstResponder {
+            return CGRect(x: 90, y: 12, width: 157, height: 40)
+        } else {
+            return super.textRect(forBounds: bounds)
+        }
     }
     
     override func becomeFirstResponder() -> Bool {

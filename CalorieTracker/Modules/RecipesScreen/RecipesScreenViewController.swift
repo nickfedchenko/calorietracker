@@ -6,7 +6,7 @@
 //  Copyright © 2022 FedmanCassad. All rights reserved.
 //
 
-import AsyncDisplayKit
+import NVActivityIndicatorView
 import UIKit
 
 protocol RecipesScreenViewControllerInterface: AnyObject {
@@ -19,6 +19,16 @@ class RecipesScreenViewController: UIViewController {
         case up, down
     }
     var presenter: RecipesScreenPresenterInterface?
+    
+    let activityIndicator: NVActivityIndicatorView = {
+        let activityIndicator = NVActivityIndicatorView(
+            frame: .zero,
+            type: .ballRotate,
+            color: UIColor(hex: "62D3B4"),
+            padding: 60
+        )
+        return activityIndicator
+    }()
     
 //    private let selectorView = CTRecipesScreenSelector()
     
@@ -90,7 +100,6 @@ class RecipesScreenViewController: UIViewController {
     
     private func makeSection(for index: Int) -> NSCollectionLayoutSection {
         let itemsInSection = CGFloat(presenter?.numberOfItemsInSection(section: index) ?? 0)
-        print("Got items ins section = \(itemsInSection)")
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .absolute(160),
             heightDimension: .absolute(128)
@@ -108,7 +117,7 @@ class RecipesScreenViewController: UIViewController {
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: groupSize,
             subitem: item,
-            count: Int(itemsInSection)
+            count: Int(itemsInSection == 0 ? 1 : itemsInSection)
         )
         group.interItemSpacing = .fixed(8)
         
@@ -143,24 +152,28 @@ class RecipesScreenViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        presenter?.askForSections()
+//        presenter?.askForSections()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
+        showActivityIndicator()
         presenter?.askForSections()
-        reinitBlurView()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        print("Safe area top inset \(view.safeAreaInsets.top)")
         guard
             !isFirstLayout else {
             isFirstLayout = false
             return
         }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        reinitBlurView()
     }
     
 //    func updateTopViewHeight() {
@@ -179,6 +192,20 @@ class RecipesScreenViewController: UIViewController {
 //            self.isHeaderCurrentlyAnimation = false
 //        }
 //    }
+    
+    private func showActivityIndicator() {
+        activityIndicator.startAnimating()
+        UIView.animate(withDuration: 0.3, delay: 0) {
+            self.activityIndicator.alpha = 1
+        }
+    }
+    
+    private func hideActivityIndicator() {
+        activityIndicator.stopAnimating()
+        UIView.animate(withDuration: 0.3, delay: 0) {
+            self.activityIndicator.alpha = 0
+        }
+    }
     
     private func setupSubviews() {
         view.addSubviews(collectionView)
@@ -199,6 +226,13 @@ class RecipesScreenViewController: UIViewController {
         collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        
+        view.addSubview(activityIndicator)
+        activityIndicator.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.centerX.centerY.equalToSuperview().inset(96)
+            make.height.equalTo(UIScreen.main.bounds.width)
+        }
     }
     
     private func reinitBlurView() {
@@ -215,13 +249,15 @@ class RecipesScreenViewController: UIViewController {
 
 extension RecipesScreenViewController: RecipesScreenViewControllerInterface {
     func shouldReloadDishesCollection() {
+        hideActivityIndicator()
         collectionView.reloadData()
     }
 }
 
 extension RecipesScreenViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        presenter?.numberOfItemsInSection(section: section) ?? 0
+        print("Got recipes count \(presenter?.numberOfItemsInSection(section: section) ?? 0)")
+        return presenter?.numberOfItemsInSection(section: section) ?? 0
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {

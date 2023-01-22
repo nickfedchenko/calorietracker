@@ -54,9 +54,9 @@ final class PushAnimationTransitioningController: NSObject, UIViewControllerAnim
         animator.addCompletion { position in
             if position == .end {
                 UIView.animate(
-                    withDuration: 0.3,
+                    withDuration: 0.5,
                     delay: 0,
-                    usingSpringWithDamping: 0.3,
+                    usingSpringWithDamping: 0.8,
                     initialSpringVelocity: 0.9
                 ) {
                     toView.frame.origin = .zero

@@ -116,6 +116,7 @@ extension DSF: DataServiceFacadeInterface {
                 print(error)
             case .success(let dishes):
                 print("dishes received \(dishes.count)")
+                self?.makeTagTitles(from: dishes)
                 self?.localPersistentStore.saveDishes(dishes: dishes)
             }
         }
@@ -167,5 +168,43 @@ extension DSF: DataServiceFacadeInterface {
     
     func searchDishes(by phrase: String) -> [Dish] {
         localPersistentStore.searchDishes(by: phrase)
+    }
+    
+    private func makeTagTitles(from allDishes: [Dish]) {
+        var possibleFilterTags: Set<AdditionalTag> = []
+        var possibleExceptionTags: Set<ExceptionTag> = []
+        allDishes.forEach {
+            $0.additionalTags.forEach {
+                possibleFilterTags.update(with: $0)
+            }
+            $0.dietTags.forEach {
+                possibleFilterTags.update(with: $0)
+            }
+            $0.dishTypeTags.forEach {
+                possibleFilterTags.update(with: $0)
+            }
+            $0.eatingTags.forEach {
+                possibleFilterTags.update(with: $0)
+            }
+            
+            $0.processingTypeTags.forEach {
+                possibleFilterTags.update(with: $0)
+            }
+            $0.exceptionTags.forEach {
+                possibleExceptionTags.update(with: $0)
+            }
+        }
+        
+        UDM.possibleIngredientsTags = possibleExceptionTags
+        
+        for tag in possibleFilterTags {
+            guard let convTag = tag.convenientTag else { continue }
+            UDM.titlesForFilterTags[convTag] = tag.title
+        }
+        
+        for tag in possibleExceptionTags {
+            guard let convTag = tag.convenientTag else { continue }
+            UDM.titlesForExceptionTags[convTag] = tag.title
+        }
     }
 }

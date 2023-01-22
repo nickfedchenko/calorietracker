@@ -24,7 +24,13 @@ final class UDM {
         case nutrientPercent
         case kcalGoal
         case mealKcalPercent
+<<<<<<< HEAD
         case quickAddWaterModels
+=======
+        case filterTagsTitles
+        case exceptionTagsTitles
+        case possibleExceptionTags
+>>>>>>> 24769db (almost done)
     }
     
     static var isGloballyMetric: Bool {
@@ -369,6 +375,60 @@ final class UDM {
         
         set {
             setValue(value: newValue, for: .burnedKcalGoal)
+        }
+    }
+    
+    static var titlesForFilterTags: [AdditionalTag.ConvenientTag: String] {
+        get {
+            guard
+                let data: Data = getValue(for: .filterTagsTitles),
+                let titles = try? JSONDecoder().decode([AdditionalTag.ConvenientTag: String].self, from: data)  else {
+                return [:]
+            }
+            return titles
+        }
+        
+        set {
+            let data = try? JSONEncoder().encode(newValue)
+            setValue(value: data, for: .filterTagsTitles)
+        }
+    }
+    
+    static var titlesForExceptionTags: [ExceptionTag.ConvenientExceptionTag: String] {
+        get {
+            guard
+                let data: Data = getValue(for: .exceptionTagsTitles),
+                let titles = try? JSONDecoder().decode(
+                    [ExceptionTag.ConvenientExceptionTag: String].self,
+                    from: data
+                )  else {
+                return [:]
+            }
+            return titles
+        }
+        
+        set {
+            let data = try? JSONEncoder().encode(newValue)
+            setValue(value: data, for: .exceptionTagsTitles)
+        }
+    }
+    
+    static var possibleIngredientsTags: Set<ExceptionTag> {
+        get {
+            guard
+                let data: Data = getValue(for: .possibleExceptionTags),
+                let titles = try? JSONDecoder().decode(
+                    Set<ExceptionTag> .self,
+                    from: data
+                )  else {
+                return []
+            }
+            return titles
+        }
+        
+        set {
+            let data = try? JSONEncoder().encode(newValue)
+            setValue(value: data, for: .possibleExceptionTags)
         }
     }
 }
