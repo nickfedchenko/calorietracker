@@ -25,14 +25,14 @@ struct Product {
 }
 
 struct Composition: Codable {
-    let vitaminA, vitaminD, vitaminC, calcium,
+    var vitaminA, vitaminD, vitaminC, calcium,
         sugar, fiber, satFat, unsatFat, transFat,
         sodium, cholesterol, potassium, sugarAlc,
         iron, addSugar: Double?
 }
 
 struct Serving: Codable {
-    let title: String?
+    let size: String?
     let weight: Double?
 }
 
@@ -77,16 +77,12 @@ extension Product {
         self.kcal = Double(product.kcal)
         self.carbs = product.carbs
         self.isUserProduct = false
-        
-        self.servings = product.servings?.compactMap { .init($0) }
-        
-        self.composition = {
-            guard let compositionDTO = product.composition else { return nil }
-            return .init(compositionDTO)
-        }()
+        self.servings = [product.serving]
+       
+        self.composition = Composition(product.nutritions)
         
         self.photo = {
-            guard let url = product.photo else { return nil }
+            guard let url = URL(string: product.photo) else { return nil }
             return .url(url)
         }()
     }
@@ -98,29 +94,57 @@ extension Product: Equatable {
     }
 }
 
+// MARK: - swiftlint:disable:next cyclomatic_complexity
 extension Composition {
-    init(_ composition: CompositionDTO) {
-        self.vitaminA = composition.vitaminA
-        self.vitaminD = composition.vitaminD
-        self.vitaminC = composition.vitaminC
-        self.calcium = composition.calcium
-        self.sugar = composition.sugar
-        self.fiber = composition.fiber
-        self.satFat = composition.saturatedFat
-        self.unsatFat = composition.unsaturatedFat
-        self.transFat = composition.transFat
-        self.sodium = composition.sodium
-        self.cholesterol = composition.cholesterol
-        self.potassium = composition.potassium
-        self.sugarAlc = composition.sugarAlc
-        self.iron = composition.iron
-        self.addSugar = nil
-    }
-}
-
-extension Serving {
-    init(_ serving: ServingDTO) {
-        self.title = serving.title
-        self.weight = serving.weight
+    init(_ nutritions: [Nutrition]) {
+        for nutrition in nutritions {
+            switch nutrition.nutritionType {
+            
+            case .fatsOverall:
+                continue
+            case .saturatedFats:
+                self.satFat = nutrition.value ?? .zero
+            case .transFats:
+                self.transFat = nutrition.value ?? .zero
+            case .polyUnsaturatedFats:
+                continue
+            case .monoUnsaturatedFats:
+                continue
+            case .cholesterol:
+                self.cholesterol = nutrition.value ?? .zero
+            case .sodium:
+                self.sodium = nutrition.value ?? .zero
+            case .carbsTotal:
+                continue
+            case .alimentaryFiber:
+                self.fiber = nutrition.value ?? .zero
+            case .netCarbs:
+                continue
+            case .sugarOverall:
+                self.sugar = nutrition.value ?? .zero
+            case .includingAdditionalSugars:
+                self.addSugar = nutrition.value ?? .zero
+            case .sugarSpirits:
+                self.sugarAlc = nutrition.value ?? .zero
+            case .protein:
+                continue
+            case .vitaminD:
+                self.vitaminD = nutrition.value ?? .zero
+            case .calcium:
+                self.calcium = nutrition.value ?? .zero
+            case .ferrum:
+                self.iron = nutrition.value ?? .zero
+            case .potassium:
+                self.potassium = nutrition.value ?? .zero
+            case .vitaminA:
+                self.vitaminA = nutrition.value ?? .zero
+            case .vitaminC:
+                self.vitaminC = nutrition.value ?? .zero
+            case .kcal:
+                continue
+            case .undefined:
+                continue
+            }
+        }
     }
 }

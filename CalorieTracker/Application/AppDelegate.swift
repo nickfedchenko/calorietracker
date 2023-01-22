@@ -43,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         updateHealthKitData()
         updateFoodData()
-        
+
         return true
     }
     

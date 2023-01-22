@@ -113,7 +113,7 @@ extension DSF: DataServiceFacadeInterface {
         networkService.fetchDishes { [weak self] result in
             switch result {
             case .failure(let error):
-                dump(error)
+                print(error)
             case .success(let dishes):
                 print("dishes received \(dishes.count)")
                 self?.localPersistentStore.saveDishes(dishes: dishes)

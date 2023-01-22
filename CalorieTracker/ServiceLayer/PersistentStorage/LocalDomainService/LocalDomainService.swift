@@ -72,7 +72,7 @@ final class LocalDomainService {
     
     private lazy var taskContext: NSManagedObjectContext = {
         let context = container.newBackgroundContext()
-        context.mergePolicy = NSMergePolicy(merge: .mergeByPropertyStoreTrumpMergePolicyType)
+        context.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
         return context
     }()
     
@@ -138,7 +138,9 @@ extension LocalDomainService: LocalDomainServiceInterface {
     }
     
     func fetchDishes() -> [Dish] {
-        guard let domainDishes = fetchData(for: DomainDish.self) else { return [] }
+        guard let domainDishes = fetchData(for: DomainDish.self) else {
+            return []
+        }
         return domainDishes.compactMap { Dish(from: $0) }
     }
     
@@ -194,7 +196,7 @@ extension LocalDomainService: LocalDomainServiceInterface {
     
     func saveDishes(dishes: [Dish]) {
         let _: [DomainDish] = dishes
-            .map { DomainDish.prepare(fromPlainModel: $0, context: context) }
+            .map { DomainDish.prepare(fromPlainModel: $0, context: taskContext) }
         save()
     }
     
@@ -387,6 +389,7 @@ extension LocalDomainService: LocalDomainServiceInterface {
         ) else {
             return []
         }
-        return products.compactMap { Dish(from: $0) }.sorted { $0.title.count < $1.title.count }
+//        return products.compactMap { Dish(from: $0) }.sorted { $0.title.count < $1.title.count }
+        return []
     }
 }

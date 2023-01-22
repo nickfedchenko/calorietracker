@@ -27,6 +27,10 @@ final class CTTabBarController: ASTabBarController {
                 return 0
             case .unknown:
                 return 0
+            case .h19x430:
+                return 32
+            case .h19x393:
+                return 32
             }
         }()
     }

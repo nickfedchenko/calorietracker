@@ -9,10 +9,12 @@ import UIKit
 
 extension UIDevice {
     enum ScreenType {
-        case h19x414
+        case h19x430
         case h19x428
-        case h19x375
+        case h19x414
+        case h19x393
         case h19x390
+        case h19x375
         case h16x414
         case h16x375
         case unknown
@@ -32,6 +34,10 @@ extension UIDevice {
             return .h16x414
         case (375, 667):
             return .h16x375
+        case  (430, 932):
+            return .h19x430
+        case (393, 852):
+            return .h19x393
         default:
             return .unknown
         }
