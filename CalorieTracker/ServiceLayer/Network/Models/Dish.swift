@@ -212,6 +212,11 @@ struct Photo: Codable {
 //    let amount: String?
 // }
 
+//struct Ingredient: Codable {
+//    let product: ProductDTO?
+//    let amount: String?
+//}
+
 struct Ingredient: Codable {
     let id: Int
     let product: ProductDTO

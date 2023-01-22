@@ -23,6 +23,26 @@ final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
         }
     }
     
+    var cellButtonType: CellButtonType = .add {
+        didSet {
+            foodView.cellButtonType = cellButtonType
+        }
+    }
+    
+    var colorSubInfo: UIColor? {
+        didSet {
+            foodView.color = colorSubInfo
+        }
+    }
+    
+    var subInfo: Double? {
+        didSet {
+            foodView.subInfo = subInfo
+        }
+    }
+    
+    var didTapButton: ((Food) -> Void)?
+    
     private lazy var bottomLineView: UIView = {
         let view = UIView()
         view.backgroundColor = R.color.addFood.recipesCell.line()
