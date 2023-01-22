@@ -133,6 +133,4 @@ extension CTTabBarController: CTTabBarDelegate {
     func tabSelected(at index: Int) {
         selectedIndex = index
     }
-    
-    
 }
