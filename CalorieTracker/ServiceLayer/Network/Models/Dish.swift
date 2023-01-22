@@ -5,7 +5,7 @@
 //  Created by Vladimir Banushkin on 10.08.2022.
 //
 
-import Foundation
+import UIKit
 
 typealias DishesResponse = (Result<[Dish], ErrorDomain>) -> Void
 
@@ -222,8 +222,8 @@ struct Ingredient: Codable {
 
 // MARK: - New DTO
 
-struct AdditionalTag: Codable {
-    enum ConvenientTag: Int {
+struct AdditionalTag: Hashable, Codable {
+    enum ConvenientTag: Int, Codable {
         case breakfast = 8
         case dinner = 10
         case lunch = 9
@@ -260,6 +260,7 @@ struct AdditionalTag: Codable {
         case pescatarian = 38
         case vegetarian = 39
         case vegan = 40
+        case favorite = 9999
     }
     
     let id: Int
@@ -268,9 +269,27 @@ struct AdditionalTag: Codable {
     var convenientTag: ConvenientTag? {
         ConvenientTag(rawValue: id)
     }
+    
+    var tagColorRepresentation: TagTypeColorRepresentation? {
+        guard let convenientTag = convenientTag else { return nil }
+        switch convenientTag {
+        case .salad, .soup, .drink, .bakery, .sandwich, .pizza, .appetiser, .sauce, .garnish:
+            return .dish
+        case .toBoil, .toBake, .toSteam, .toStew, .toFry, .microwaving, .onCoals, .deepFried, .withoutHeat, .suvid:
+            return .method
+        case .breakfast, .lunch, .dinner, .snack:
+            return .meal
+        case .juniorMenu, .intalianCusine, .asianCusine, .chrismasAndNewYear, .lowFat, .lowCarb, .highProtein,
+                .keto, .paleo, .mediterranean, .pescatarian, .vegetarian, .vegan:
+            return .diet
+        case .favorite:
+            return .favorites
+        }
+    }
 }
 
 struct MarketUnitClass: Codable {
+    
     enum MarketUnitPrepared: Int {
         case kilogram = 17
         case gram = 18
@@ -306,7 +325,6 @@ struct MarketUnitClass: Codable {
     let title, shortTitle: String
     let isOnlyForMarket: Bool
     var step: MarketUnitPrepared? {
-        print("Id for step instance  =  \(id)")
         return MarketUnitPrepared(rawValue: id)
     }
 }
@@ -320,4 +338,52 @@ struct DishValues: Codable {
     let netCarbs, proteins, fats: Double
     let kcal: Double
     let carbohydrates: Double
+}
+
+enum TagTypeColorRepresentation {
+    case favorites
+    case meal
+    case dish
+    case diet
+    case method
+    case ingredients
+    case custom
+    
+    var baseColor: UIColor? {
+        switch self {
+        case .favorites:
+            return UIColor(hex: "FFB3A8")
+        case .meal:
+            return UIColor(hex: "FFC37D")
+        case .dish:
+            return UIColor(hex: "FFE665")
+        case .diet:
+            return UIColor(hex: "ADE7A4")
+        case .method:
+            return UIColor(hex: "B7EFF6")
+        case .ingredients:
+            return UIColor(hex: "ADCCFA")
+        case .custom:
+            return UIColor(hex: "DAC2FA")
+        }
+    }
+    
+    var textColor: UIColor {
+        switch self {
+        case .favorites:
+            return UIColor(hex: "DE422B")
+        case .meal:
+            return UIColor(hex: "D77707")
+        case .dish:
+            return UIColor(hex: "DDB900")
+        case .diet:
+            return UIColor(hex: "51AF43")
+        case .method:
+            return UIColor(hex: "3BC6D8")
+        case .ingredients:
+            return UIColor(hex: "4681D9")
+        case .custom:
+            return UIColor(hex: "9560DC")
+        }
+    }
 }

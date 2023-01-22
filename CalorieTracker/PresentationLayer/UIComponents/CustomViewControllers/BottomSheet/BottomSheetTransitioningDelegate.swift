@@ -511,4 +511,3 @@ extension BottomSheetInteractiveDismissalTransition: UIViewControllerInteractive
         1.0
     }
 }
-

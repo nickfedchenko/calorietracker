@@ -14,6 +14,8 @@ protocol RecipesListPresenterInterface: AnyObject {
     func getDishModel(at indexPath: IndexPath) -> Dish?
     func backButtonTapped()
     func searchButtonTapped()
+    func getAllDishes() -> [Dish]
+    func didSelectRecipe(at indexPath: IndexPath)
 }
 
 class RecipesListPresenter {
@@ -34,6 +36,15 @@ class RecipesListPresenter {
 }
 
 extension RecipesListPresenter: RecipesListPresenterInterface {
+    func didSelectRecipe(at indexPath: IndexPath) {
+        guard let dish = interactor?.getDishModel(at: indexPath) else { return }
+        router?.showRecipeScreen(with: dish)
+    }
+    
+    func getAllDishes() -> [Dish] {
+        interactor?.getAllDishes() ?? []
+    }
+    
     func getTitleForHeader() -> String {
         interactor?.getTitleForHeader() ?? ""
     }

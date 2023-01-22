@@ -46,9 +46,9 @@ final class PopAnimationTransitioningController: NSObject, UIViewControllerAnima
         container.addSubview(fromView)
         container.addSubview(toView)
         UIView.animate(
-            withDuration: 0.3,
+            withDuration: 0.5,
             delay: 0,
-            usingSpringWithDamping: 0.3,
+            usingSpringWithDamping: 0.8,
             initialSpringVelocity: 0.9
         ) {
                     fromView.frame.origin = CGPoint(x: 0, y: -fromView.frame.height)

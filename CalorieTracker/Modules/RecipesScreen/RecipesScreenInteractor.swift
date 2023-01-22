@@ -62,7 +62,7 @@ extension RecipesScreenInteractor: RecipesScreenInteractorInterface {
             guard let self = self else { return }
             var sections: [RecipeSectionModel] = []
             //        var possibleTags: Set<AdditionalTag.EatingTime> = []
-            let dishes = self.requestAllDishes()
+            let dishes = self.requestAllDishes().sorted(by: { $0.title < $1.title })
             //        dishes.forEach {
             //            print("Eating tags count \($0.eatingTags.count)")
             //

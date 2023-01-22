@@ -9,20 +9,28 @@
 import Foundation
 import UIKit
 
-protocol RecipesSearchRouterInterface: AnyObject {
+protocol FilterSelectionIncoming {
+    func tagsSelected(tags: [SelectedTagsCell.TagType])
+}
 
+protocol RecipesSearchRouterInterface: AnyObject {
+    func showFiltersScreen()
 }
 
 class RecipesSearchRouter: NSObject {
 
     weak var presenter: RecipesSearchPresenterInterface?
-
-    static func setupModule() -> RecipesSearchViewController {
+    private var navigationController: UINavigationController?
+    
+    static func setupModule(
+        with navigationController: UINavigationController?,
+        and dishesPool: [Dish]
+    ) -> RecipesSearchViewController {
         let vc = RecipesSearchViewController()
-        let interactor = RecipesSearchInteractor()
+        let interactor = RecipesSearchInteractor(with: dishesPool)
         let router = RecipesSearchRouter()
         let presenter = RecipesSearchPresenter(interactor: interactor, router: router, view: vc)
-
+        router.navigationController = navigationController
         vc.presenter = presenter
         router.presenter = presenter
         interactor.presenter = presenter
@@ -31,5 +39,17 @@ class RecipesSearchRouter: NSObject {
 }
 
 extension RecipesSearchRouter: RecipesSearchRouterInterface {
+    func showFiltersScreen() {
+        let filtersVC = RecipesFilterScreenRouter.setupModule(
+            with: self,
+            selectedTags: presenter?.getSelectedTags() ?? []
+        )
+        navigationController?.pushViewController(filtersVC, animated: true)
+    }
+}
 
+extension RecipesSearchRouter: RecipesFilterScreenRouterOutput {
+    func filtersDidSelected(with tags: [SelectedTagsCell.TagType]) {
+        presenter?.setFilterTags(tags: tags)
+    }
 }

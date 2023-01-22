@@ -12,6 +12,7 @@ import UIKit
 protocol RecipesListRouterInterface: AnyObject {
     func backButtonTapped()
     func showSearchController()
+    func showRecipeScreen(with dish: Dish)
 }
 
 class RecipesListRouter: NSObject {
@@ -42,7 +43,11 @@ extension RecipesListRouter: RecipesListRouterInterface {
     }
     
     func showSearchController() {
-        let searchVC = RecipesSearchRouter.setupModule()
+        let dishes = presenter?.getAllDishes() ?? []
+        let searchVC = RecipesSearchRouter.setupModule(
+            with: navigationController,
+            and: dishes
+        )
         navigationController?.pushViewController(searchVC, animated: true)
     }
 }
@@ -63,5 +68,14 @@ extension RecipesListRouter: UINavigationControllerDelegate {
             let animator = PopAnimationTransitioningController(fromViewController: fromVC, toViewController: toVC)
             return animator
         }
+    }
+    
+    func showRecipeScreen(with dish: Dish) {
+        let recipeScreenModule = RecipePageScreenRouter.setupModule(
+            with: dish,
+            backButtonTitle: presenter?.getTitleForHeader() ?? ""
+        )
+        recipeScreenModule.modalPresentationStyle = .fullScreen
+        navigationController?.present(recipeScreenModule, animated: true)
     }
 }

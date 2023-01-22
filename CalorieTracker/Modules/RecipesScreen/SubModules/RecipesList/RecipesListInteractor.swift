@@ -12,6 +12,7 @@ protocol RecipesListInteractorInterface: AnyObject {
     func getTitleForHeader() -> String
     func getNumberOfItems() -> Int
     func getDishModel(at indexPath: IndexPath) -> Dish
+    func getAllDishes() -> [Dish]
 }
 
 class RecipesListInteractor {
@@ -24,6 +25,10 @@ class RecipesListInteractor {
 }
 
 extension RecipesListInteractor: RecipesListInteractorInterface {
+    func getAllDishes() -> [Dish] {
+        section.dishes
+    }
+    
     func getNumberOfItems() -> Int {
         section.dishes.count
     }

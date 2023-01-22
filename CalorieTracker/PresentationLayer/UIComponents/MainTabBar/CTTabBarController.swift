@@ -13,6 +13,7 @@ final class CTTabBarController: ASTabBarController {
     let blurView = UIVisualEffectView(effect: nil)
     private var blurRadiusDriver: UIViewPropertyAnimator?
     var isTabBarHidden: Bool = false
+    var shouldHideBlur = false
     
     enum Constants {
         /// Так как в макете отступ не соответствует отступу SafeAreaInsets.bottom - такое вот полуручное управления пришлось применить
@@ -48,6 +49,7 @@ final class CTTabBarController: ASTabBarController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        guard !shouldHideBlur else { return }
         reinitBlurView()
     }
     
@@ -76,13 +78,25 @@ final class CTTabBarController: ASTabBarController {
     func showTabBar() {
         blurView.snp.remakeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
-            make.height.equalTo(116)
+            make.height.equalTo(116.fitH)
         }
         
         UIView.animate(withDuration: 0.3) {
             self.view.layoutIfNeeded()
         }
         isTabBarHidden = false
+    }
+    
+    func makeBlurTransperent() {
+        blurView.effect = nil
+        footer.alpha = 0
+        shouldHideBlur = true
+    }
+    
+    func restoreBlur() {
+        shouldHideBlur = false
+        reinitBlurView()
+        footer.alpha = 1
     }
     
     private func setupSubviews() {
@@ -96,7 +110,7 @@ final class CTTabBarController: ASTabBarController {
         
         blurView.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
-            make.height.equalTo(116)
+            make.height.equalTo(110.fitH)
         }
         
         footer.snp.makeConstraints { make in
@@ -119,6 +133,4 @@ extension CTTabBarController: CTTabBarDelegate {
     func tabSelected(at index: Int) {
         selectedIndex = index
     }
-    
-    
 }

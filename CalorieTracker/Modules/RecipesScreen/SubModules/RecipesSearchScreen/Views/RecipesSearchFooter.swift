@@ -6,6 +6,9 @@
 //
 
 import UIKit
+protocol RecipesSearchFooterDelegate: AnyObject {
+    func searchPhraseChanged(to phrase: String)
+}
 
 final class RecipesSearchFooter: UIView {
     enum RecipesFooterState {
@@ -14,6 +17,8 @@ final class RecipesSearchFooter: UIView {
     
     let gradientLayer = CAGradientLayer()
     var backButtonTappedHandler: (() -> Void)?
+    var filtersButtonTapHandler: (() -> Void)?
+    weak var delegate: RecipesSearchFooterDelegate?
     
     private let backButton: UIButton = {
         let button = UIButton(type: .system)
@@ -23,21 +28,28 @@ final class RecipesSearchFooter: UIView {
         return button
     }()
     
+    private let mainFilterButton: FiltersButton = {
+        let button = FiltersButton(type: .system)
+        button.setImage(R.image.filtersIcon(), for: .normal)
+        return button
+    }()
+    
     let textField = SearchRecipesSearchField()
     var state: RecipesFooterState = .compact {
         didSet {
             setNeedsDisplay()
+            updateMainButtonState()
         }
     }
     
     var colorsForGradient: [CGColor] {
         state == .compact
-        ? [UIColor.white.cgColor, UIColor.white.withAlphaComponent(0).cgColor]
+        ? [UIColor.white.cgColor, UIColor.white.withAlphaComponent(0.1).cgColor]
         : [UIColor(hex: "CACDD4").cgColor, UIColor(hex: "E5EAF1").cgColor]
     }
     
     var startPoint: CGPoint {
-        state == .compact ? CGPoint(x: 0.5, y: 0.2) : CGPoint(x: 0.5, y: 0.3)
+        state == .compact ? CGPoint(x: 0.5, y: 0.1) : CGPoint(x: 0.5, y: 0.3)
     }
     
     var endPoint: CGPoint {
@@ -45,7 +57,7 @@ final class RecipesSearchFooter: UIView {
     }
     
     var locations: [NSNumber] {	
-        state == .compact ? [0, 0.5] : [0, 0.7]
+        state == .compact ? [0, 0.9] : [0, 0.9]
     }
     
     override init(frame: CGRect) {
@@ -66,11 +78,48 @@ final class RecipesSearchFooter: UIView {
         drawGradient()
     }
     
+    func showFiltersBadge() {
+        mainFilterButton.showBadge()
+    }
+    
+    func hideFiltersBadge() {
+        mainFilterButton.hideBadge()
+    }
+    
     private func setupActions() {
         let popAction = UIAction { [weak self] _ in
             self?.backButtonTappedHandler?()
         }
         backButton.addAction(popAction, for: .touchUpInside)
+        textField.filtersButtonTapAction =  { [weak self] in
+            self?.filtersButtonTapHandler?()
+        }
+        
+        let mainFilterButtonAction = UIAction { [weak self] _ in
+            if self?.state == .expanded {
+                self?.textField.resignFirstResponder()
+                self?.state = .compact
+                self?.updateMainButtonState()
+//                self?.mainFilterButton.tintColor = UIColor(hex: "0C695E")
+            } else {
+//                self?.mainFilterButton.setImage(R.image.burnedKcalTextField.chevron(), for: .normal)
+//                self?.mainFilterButton.tintColor = .black
+                self?.filtersButtonTapHandler?()
+                self?.updateMainButtonState()
+            }
+        }
+        
+        mainFilterButton.addAction(mainFilterButtonAction, for: .touchUpInside)
+        textField.addTarget(self, action: #selector(searchPhraseChanged(sender:)), for: .editingChanged)
+    }
+    
+    private func updateMainButtonState() {
+        if state == .compact {
+            mainFilterButton.setImage(R.image.filtersIcon(), for: .normal)
+        } else {
+            mainFilterButton.setImage(R.image.burnedKcalTextField.chevron(), for: .normal)
+            mainFilterButton.tintColor = .black
+        }
     }
     
     private func drawGradient() {
@@ -81,12 +130,12 @@ final class RecipesSearchFooter: UIView {
         gradientLayer.endPoint = endPoint
         gradientLayer.locations = locations
         gradientLayer.setNeedsDisplay()
-        print("Current bounds now \(gradientLayer.frame)")
     }
     
     private func setupSubviews() {
         addSubview(textField)
         addSubview(backButton)
+        addSubview(mainFilterButton)
         
         textField.snp.makeConstraints { make in
             make.height.equalTo(64)
@@ -100,13 +149,23 @@ final class RecipesSearchFooter: UIView {
             make.centerX.equalToSuperview()
             make.bottom.equalToSuperview().inset(16)
         }
+        
+        mainFilterButton.snp.makeConstraints { make in
+            make.height.width.equalTo(64)
+            make.centerY.equalTo(textField)
+            make.trailing.equalToSuperview().inset(20)
+        }
+    }
+    
+    @objc private func searchPhraseChanged(sender: UITextField) {
+        guard let phrase = sender.text else { return }
+        delegate?.searchPhraseChanged(to: phrase)
     }
 }
 
-
 extension RecipesSearchFooter: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
+        textField.endEditing(true)
         state = .compact
         return true
     }
