@@ -8,47 +8,20 @@
 import UIKit
 
 final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
-    enum CellType {
-        case table
-        case withShadow
-    }
-    
-    enum CellButtonType {
-        case delete
-        case add
-    }
-    
-    var foodType: Food? {
+    var viewModel: FoodCellViewModel? {
         didSet {
-            self.configure()
+            configure()
         }
     }
     
-    var cellType: CellType = .table {
+    var foodType: Food?
+    var didTapButton: ((Food) -> Void)?
+    
+    private var cellType: CellType = .table {
         didSet {
             didChangeCellType()
         }
     }
-    
-    var cellButtonType: CellButtonType = .add {
-        didSet {
-            foodView.cellButtonType = cellButtonType
-        }
-    }
-    
-    var colorSubInfo: UIColor? {
-        didSet {
-            foodView.color = colorSubInfo
-        }
-    }
-    
-    var subInfo: Int? {
-        didSet {
-            foodView.subInfo = subInfo
-        }
-    }
-    
-    var didTapButton: ((Food) -> Void)?
     
     private lazy var bottomLineView: UIView = {
         let view = UIView()
@@ -86,9 +59,13 @@ final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
     }
     
     private func configure() {
-        guard let foodType = foodType else { return }
-        
-        foodView.configure(.init(foodType))
+        guard let model = viewModel else { return }
+        foodView.configure(.init(model.food))
+        foodView.color = model.colorSubInfo
+        foodView.subInfo = model.subInfo
+        foodView.cellButtonType = model.buttonType
+        cellType = model.cellType
+        foodType = model.food
     }
     
     private func setupView() {
@@ -100,7 +77,7 @@ final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
         shadowView.layer.cornerRadius = 8
         
         foodView.didTapButton = {
-            guard let foodType = self.foodType else { return }
+            guard let foodType = self.viewModel?.food else { return }
             self.didTapButton?(foodType)
         }
     }

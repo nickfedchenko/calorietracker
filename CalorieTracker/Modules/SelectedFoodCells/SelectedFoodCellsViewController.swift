@@ -137,11 +137,19 @@ extension SelectedFoodCellsViewController: FoodCollectionViewControllerDelegate 
 // MARK: - FoodCollection DataSource
 
 extension SelectedFoodCellsViewController: FoodCollectionViewControllerDataSource {
+    func foodCellModel(_ indexPath: IndexPath) -> FoodCellViewModel? {
+        return .init(
+            cellType: .table,
+            food: foods[safe: indexPath.row],
+            buttonType: .delete,
+            subInfo: nil,
+            colorSubInfo: nil
+        )
+    }
+    
     func cell(collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell {
         let cell: FoodCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
-        cell.cellType = .table
-        cell.foodType = foods[safe: indexPath.row]
-        cell.cellButtonType = .delete
+
         cell.didTapButton = { food in
             guard let index = self.foods.firstIndex(where: { $0 == food }) else { return }
             self.foods.remove(at: index)
