@@ -27,6 +27,8 @@ final class AddFoodPresenter {
     let router: AddFoodRouterInterface?
     let interactor: AddFoodInteractorInterface?
     
+    private let searchGroup = DispatchGroup()
+    
     private var foods: [Food]? {
         didSet {
             view.setFoods(foods ?? [])
@@ -73,8 +75,13 @@ final class AddFoodPresenter {
         case .myRecipes:
             self.foods = []
         case .myFood:
-            let product = DSF.shared.getAllStoredProducts().filter { $0.isUserProduct }
-            self.foods = product.foods
+            self.foods = []
+            DispatchQueue.global(qos: .userInteractive).async {
+                let product = DSF.shared.getAllStoredProducts().filter { $0.isUserProduct }
+                DispatchQueue.main.async {
+                    self.foods = product.foods
+                }
+            }
         case .search:
             self.foods = []
         }
@@ -109,17 +116,10 @@ final class AddFoodPresenter {
     }
     
     private func searchAmongAll(_ request: String) -> [Food] {
-        let dishes = DSF.shared.getAllStoredDishes()
-        let products = DSF.shared.getAllStoredProducts()
+        let dishes = DSF.shared.searchDishes(by: request)
+        let products = DSF.shared.searchProducts(by: request)
         
-        let smartSearch: SmartSearch = .init(request)
-        
-        let filteredDishes = dishes.filter { smartSearch.matches($0.title) }
-        let filteredProducts = products.filter {
-            smartSearch.matches($0.title) || smartSearch.matches($0.brand ?? "")
-        }
-        
-        return filteredDishes.foods + filteredProducts.foods
+        return dishes.foods + products.foods
     }
     
     private func searchAmongFrequent(_ request: String) -> [Food] {
@@ -172,16 +172,18 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
     }
     
     func search(_ request: String, complition: ((Bool) -> Void)?) {
+        searchGroup.enter()
         DispatchQueue.global(qos: .userInteractive).async {
+            
             let frequents = self.searchAmongFrequent(request)
             let favorites = self.searchAmongFavorites(request)
             let recents = self.searchAmongRecent(request)
             let basicFood = self.searchAmongAll(request)
             let foods = frequents + recents + favorites + basicFood
-            
             DispatchQueue.main.async {
                 self.foods = foods
                 complition?(!foods.isEmpty)
+                self.searchGroup.leave()
             }
         }
     }

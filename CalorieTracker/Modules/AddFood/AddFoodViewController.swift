@@ -91,6 +91,7 @@ final class AddFoodViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        setupHandlers()
         addSubviews()
         setupConstraints()
         didChangeState()
@@ -120,7 +121,6 @@ final class AddFoodViewController: UIViewController {
     
     // MARK: - Private functions
     
-    // swiftlint:disable:next function_body_length
     private func setupView() {
         presenter?.setFoodType(.frequent)
         
@@ -140,10 +140,19 @@ final class AddFoodViewController: UIViewController {
         self.addChild(foodCollectionViewController)
         self.addChild(searchHistoryViewController)
         
+        counterKcalControl.isHidden = true
+        counterKcalControl.addTarget(
+            self,
+            action: #selector(didTapCounterControl),
+            for: .touchUpInside
+        )
+    }
+    
+    // swiftlint:disable:next function_body_length
+    private func setupHandlers() {
         searshTextField.didBeginEditing = { text in
             self.isSelectedType = .search
-            self.createTimer()
-            
+
             guard !text.isEmpty else {
                 self.state = .search(.recent)
                 return
@@ -216,12 +225,9 @@ final class AddFoodViewController: UIViewController {
             self.presenter?.createFood(type)
         }
         
-        counterKcalControl.isHidden = true
-        counterKcalControl.addTarget(
-            self,
-            action: #selector(didTapCounterControl),
-            for: .touchUpInside
-        )
+        foodCollectionViewController.createHandler = {
+            self.presenter?.createFood(.food)
+        }
     }
     
     private func addSubviews() {
@@ -246,7 +252,6 @@ final class AddFoodViewController: UIViewController {
             searshTextField,
             doneButton,
             overlayView,
- 
             menuTypeSecondView,
             menuCreateView
         )
@@ -418,10 +423,13 @@ final class AddFoodViewController: UIViewController {
         case .frequent, .recent, .favorites, .search:
             let cell: FoodCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
             let food = foods[safe: indexPath.row]
-            cell.cellType = .table
-            cell.foodType = food
-            cell.colorSubInfo = selectedFoodInfo.getColor()
-            cell.subInfo = presenter?.getSubInfo(food, selectedFoodInfo)
+            cell.viewModel = .init(
+                cellType: .table,
+                food: food,
+                buttonType: .add,
+                subInfo: presenter?.getSubInfo(food, selectedFoodInfo),
+                colorSubInfo: selectedFoodInfo.getColor()
+            )
             cell.didTapButton = { food in
                 self.selectedFood = (self.selectedFood ?? []) + [food]
                 FDS.shared.foodUpdate(food: food, favorites: false)
@@ -434,16 +442,35 @@ final class AddFoodViewController: UIViewController {
             let cell: RecipesColectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
             return cell
         case .myFood:
-            let food = foods[safe: indexPath.row]
             let cell: FoodCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
-            cell.cellType = .withShadow
-            cell.foodType = food
-            cell.colorSubInfo = selectedFoodInfo.getColor()
-            cell.subInfo = presenter?.getSubInfo(food, selectedFoodInfo)
+            let food = foods[safe: indexPath.row]
+            cell.viewModel = .init(
+                cellType: .table,
+                food: food,
+                buttonType: .add,
+                subInfo: presenter?.getSubInfo(food, selectedFoodInfo),
+                colorSubInfo: selectedFoodInfo.getColor()
+            )
             cell.didTapButton = { food in
                 self.selectedFood = (self.selectedFood ?? []) + [food]
             }
             return cell
+        }
+    }
+    
+    private func getFoodCellModel(_ indexPath: IndexPath) -> FoodCellViewModel? {
+        switch isSelectedType {
+        case .frequent, .recent, .favorites, .search, .myFood:
+            let food = foods[safe: indexPath.row]
+            return FoodCellViewModel(
+                cellType: isSelectedType == .myFood ? .withShadow : .table,
+                food: food,
+                buttonType: .add,
+                subInfo: presenter?.getSubInfo(food, selectedFoodInfo),
+                colorSubInfo: selectedFoodInfo.getColor()
+            )
+        default:
+            return nil
         }
     }
     

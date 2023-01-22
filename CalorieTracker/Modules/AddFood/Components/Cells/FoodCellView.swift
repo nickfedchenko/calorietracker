@@ -27,7 +27,7 @@ final class FoodCellView: UIView {
         }
     }
     
-    var cellButtonType: FoodCollectionViewCell.CellButtonType = .add {
+    var cellButtonType: CellButtonType = .add {
         didSet {
             didChangeButtonType()
         }
@@ -108,6 +108,9 @@ final class FoodCellView: UIView {
         return label
     }()
     
+    private var widthBackgroundTagViewConstraint: NSLayoutConstraint?
+    private var widthImageViewConstraints: NSLayoutConstraint?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -129,12 +132,15 @@ final class FoodCellView: UIView {
         
         if model.tag.isEmpty {
             tagBackgroundView.isHidden = true
+            widthBackgroundTagViewConstraint?.isActive = true
         } else {
             tagBackgroundView.isHidden = false
             tagLabel.text = model.tag
+            widthBackgroundTagViewConstraint?.isActive = false
         }
         
         if let image = model.image {
+            widthImageViewConstraints?.isActive = false
             switch image {
             case .url(let url):
                 imageView.kf.setImage(
@@ -151,6 +157,7 @@ final class FoodCellView: UIView {
             }
         } else {
             imageView.image = nil
+            widthImageViewConstraints?.isActive = true
         }
     }
     
@@ -175,6 +182,7 @@ final class FoodCellView: UIView {
     }
     
     private func setupConstraints() {
+        widthImageViewConstraints = imageView.widthAnchor.constraint(equalToConstant: 0)
         imageView.snp.makeConstraints { make in
             make.width.lessThanOrEqualTo(snp.height)
             make.leading.equalToSuperview()
@@ -188,7 +196,7 @@ final class FoodCellView: UIView {
             make.top.equalToSuperview().offset(4)
         }
         
-        tagBackgroundView.setContentHuggingPriority(.init(rawValue: 751), for: .vertical)
+        widthBackgroundTagViewConstraint = tagBackgroundView.widthAnchor.constraint(equalToConstant: 0)
         tagBackgroundView.snp.makeConstraints { make in
             make.height.equalTo(18)
             make.leading.equalTo(imageView.snp.trailing).offset(4)
@@ -206,7 +214,7 @@ final class FoodCellView: UIView {
             make.centerY.equalTo(tagBackgroundView)
             make.leading.equalTo(tagBackgroundView.snp.trailing).offset(6)
             make.trailing.lessThanOrEqualTo(descriptionLabel.snp.leading).offset(-6)
-            make.height.equalTo(tagBackgroundView)
+            make.height.equalTo(18)
         }
         
         selectButton.aspectRatio()
@@ -216,16 +224,19 @@ final class FoodCellView: UIView {
             make.height.equalTo(20)
         }
         
+        descriptionLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         descriptionLabel.snp.makeConstraints { make in
             make.centerY.equalTo(tagBackgroundView)
             make.trailing.equalTo(selectButton.snp.leading).offset(-6)
         }
         
+        kalorieLabel.setContentCompressionResistancePriority(.init(rawValue: 753), for: .horizontal)
         kalorieLabel.snp.makeConstraints { make in
             make.trailing.equalToSuperview()
             make.centerY.equalTo(titleLabel)
         }
         
+        infoLabel.setContentCompressionResistancePriority(.init(rawValue: 753), for: .horizontal)
         infoLabel.snp.makeConstraints { make in
             make.trailing.equalTo(kalorieLabel.snp.leading).offset(-8)
             make.centerY.equalTo(titleLabel)
@@ -269,7 +280,7 @@ extension FoodCellView.FoodViewModel {
         self.verified = true
     }
     
-    init?(_ food: Food) {
+    init?(_ food: Food?) {
         switch food {
         case .product(let product):
             self.init(product)

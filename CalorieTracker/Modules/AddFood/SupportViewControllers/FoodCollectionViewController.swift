@@ -25,6 +25,7 @@ final class FoodCollectionViewController: UIViewController {
     weak var dataSource: FoodCollectionViewControllerDataSource?
     weak var delegate: FoodCollectionViewControllerDelegate?
     
+    var createHandler: (() -> Void)?
     var isSelectedType: AddFood = .recent
     
     var isScrollEnabled: Bool {
@@ -62,6 +63,8 @@ final class FoodCollectionViewController: UIViewController {
         return layout
     }()
     
+    private lazy var nothingWasFoundView = NothingWasFoundView()
+    
     private let collectionViewLayput: CollectionViewLayout
     
     init(_ layout: CollectionViewLayout = .default) {
@@ -83,6 +86,7 @@ final class FoodCollectionViewController: UIViewController {
     
     func reloadData() {
         collectionView.reloadData()
+        nothingWasFoundView.isHidden = (dataSource?.foodsCount() ?? 0) != 0
     }
     
     private func registerCells() {
@@ -96,15 +100,28 @@ final class FoodCollectionViewController: UIViewController {
         
         collectionView.dataSource = self
         collectionView.delegate = self
+        
+        nothingWasFoundView.isHidden = true
+        nothingWasFoundView.createHandler = {
+            self.createHandler?()
+        }
     }
     
     private func addSubviews() {
-        view.addSubviews(collectionView)
+        view.addSubviews(
+            collectionView,
+            nothingWasFoundView
+        )
     }
     
     private func setupConstraints() {
         collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+        }
+        
+        nothingWasFoundView.snp.makeConstraints { make in
+            make.top.equalTo(view.snp.centerY).multipliedBy(0.7)
+            make.centerX.equalToSuperview()
         }
     }
 }
@@ -134,7 +151,7 @@ extension FoodCollectionViewController: UICollectionViewDelegateFlowLayout {
                         minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         switch isSelectedType {
         case .frequent, .recent, .favorites, .search:
-            return 0
+            return 1
         case .myMeals, .myRecipes, .myFood:
             return 8
         }

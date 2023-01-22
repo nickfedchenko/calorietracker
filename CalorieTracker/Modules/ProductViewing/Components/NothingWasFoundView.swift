@@ -8,9 +8,11 @@
 import UIKit
 
 final class NothingWasFoundView: UIView {
+    var createHandler: (() -> Void)?
+    
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = R.font.sfProDisplayBold(size: 22)
+        label.font = R.font.sfProDisplayBold(size: 22.fontScale())
         label.textColor = R.color.foodViewing.basicPrimary()
         label.text = R.string.localizable.productNothingWasFoundTitle().uppercased()
         return label
@@ -21,7 +23,9 @@ final class NothingWasFoundView: UIView {
         button.setTitle(R.string.localizable.addFoodCreate(), .normal)
         button.setImage(R.image.addFood.tabBar.pencil(), .normal)
         button.setTitleColor(R.color.foodViewing.basicPrimary(), .normal)
+        button.addTarget(self, action: #selector(didTapButton), for: .touchUpInside)
         button.imageView.tintColor = R.color.foodViewing.basicPrimary()
+        button.titleLabel.font = R.font.sfProDisplaySemibold(size: 11.fontScale())
         return button
     }()
     
@@ -41,11 +45,6 @@ final class NothingWasFoundView: UIView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
     }
     
     private func addSubviews() {
@@ -68,6 +67,10 @@ final class NothingWasFoundView: UIView {
             make.leading.trailing.equalToSuperview().inset(12)
             make.bottom.top.equalToSuperview().inset(5)
         }
+    }
+    
+    @objc private func didTapButton() {
+        createHandler?()
     }
 }
 
