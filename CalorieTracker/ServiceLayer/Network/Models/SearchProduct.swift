@@ -22,12 +22,12 @@ struct SearchProduct: Codable {
         case foodID = "foodId"
         case title, info, proteins, fats, carbohydrates, kcal, photo, sourceObject
     }
-    
+    // TODO: - Fix here
     func getConventionalProduct() -> Product? {
-        guard let productDTO = ProductDTO(from: self) else {
+//        guard let productDTO = ProductDTO(from: self) else {
             return nil
-        }
-        return Product(productDTO)
+//        }
+//        return Product(productDTO)
     }
 }
 

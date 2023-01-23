@@ -25,8 +25,9 @@ enum RequestGenerator {
         case ru
         case en
         case de
-        case usa
+        case sp
         case fr
+        case it
         
         static func suggestLanguagePrefix(request: RequestGenerator) -> LinkLanguageCodes {
             let currentLanguageCode = Locale.current.languageCode
@@ -39,14 +40,7 @@ enum RequestGenerator {
                 }
             case .fetchDishesZipped:
                 if let targetCode = LinkLanguageCodes.allCases.first(where: { $0.rawValue == currentLanguageCode }) {
-                    switch (UDM.isGloballyMetric, targetCode == .en) {
-                    case (true, true):
-                        return .en
-                    case (false, true):
-                        return .usa
-                    default:
-                        return targetCode
-                    }
+                    return targetCode
                 } else {
                     return .en
                 }
@@ -111,18 +105,18 @@ enum RequestGenerator {
             prepareSearchUrl(url: &optUrl, by: phrase)
             url = optUrl
         case .fetchProductZipped:
-            guard let optUrl = URL(string: "https://tracker.finanse.space/archive/\(langCode)_products.json.gz") else {
+            guard let optUrl = URL(string: "https://newketo.finanse.space/storage/json/products_\(langCode).json.gz") else {
                 fatalError("wrong url")
             }
             url = optUrl
         case .fetchDishesZipped:
-            guard let optUrl = URL(string: "https://tracker.finanse.space/archive/\(langCode)_dish.json.gz") else {
+            guard let optUrl = URL(string: "https://newketo.finanse.space/storage/json/dish_\(langCode).json.gz") else {
                 fatalError("wrong url")
             }
             url = optUrl
         }
        
-        let request = URLRequest(url: url)
+        let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData)
         return request
     }
 }
@@ -154,7 +148,6 @@ final class NetworkEngine {
                 completion(.success(data))
             }
     }
-    
 }
 
 extension NetworkEngine: NetworkEngineInterface {

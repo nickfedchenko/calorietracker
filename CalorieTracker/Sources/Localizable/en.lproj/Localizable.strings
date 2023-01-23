@@ -707,3 +707,13 @@
 
 "bmi.short" = "BMI";
 "active" = "Active Energy";
+
+"min" = "min";
+"Ingredients" = "Ingredients";
+"servings" = "servings";
+"servings-1" = "serving";
+"servings-2-4" = "servings";
+"servings>4" = "servings";
+"by taste" = "by taste";
+"Instructions" = "Instructions";
+"ByTaste" = "by taste";

@@ -14,7 +14,7 @@ protocol AddFoodPresenterInterface: AnyObject {
     func didTapBackButton()
     func didTapCell(_ type: Food)
     func search(_ request: String, complition: ((Bool) -> Void)?)
-    func getSubInfo(_ food: Food?, _ type: FoodInfoCases) -> Int?
+    func getSubInfo(_ food: Food?, _ type: FoodInfoCases) -> Double?
     func didTapCountControl(_ foods: [Food], complition: @escaping ([Food]) -> Void )
     func didTapScannerButton()
     func saveMeal(_ mealTime: MealTime, foods: [Food])
@@ -183,7 +183,7 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
         complition?(!foods.isEmpty)
     }
     
-    func getSubInfo(_ food: Food?, _ type: FoodInfoCases) -> Int? {
+    func getSubInfo(_ food: Food?, _ type: FoodInfoCases) -> Double? {
         return food?.foodInfo[type]
     }
     

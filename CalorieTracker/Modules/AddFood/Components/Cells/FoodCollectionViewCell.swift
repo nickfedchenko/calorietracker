@@ -42,7 +42,7 @@ final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
         }
     }
     
-    var subInfo: Int? {
+    var subInfo: Double? {
         didSet {
             foodView.subInfo = subInfo
         }

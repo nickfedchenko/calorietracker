@@ -29,7 +29,7 @@ final class HealthKitDataManager {
         }
 
         let syncDate = UDM.dateHealthKitSync
-        let calendar = NSCalendar.current
+        let calendar = Calendar.current
         var interval = DateComponents()
         interval.day = 1
 
