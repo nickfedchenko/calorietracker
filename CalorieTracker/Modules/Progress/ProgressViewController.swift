@@ -132,6 +132,8 @@ final class ProgressViewController: UIViewController {
     private func setupView() {
         view.backgroundColor = R.color.progressScreen.background()
         
+        segmentedControl.layer.zPosition = 10
+        
         view.addSubviews(
             scrollView,
             bottomBackgroundView

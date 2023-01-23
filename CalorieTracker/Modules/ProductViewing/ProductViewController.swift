@@ -306,6 +306,7 @@ final class ProductViewController: UIViewController {
     }
     
     private func configureKeyboardManager() {
+        addTapToHideKeyboardGesture()
         keyboardManager?.bindToKeyboardNotifications(
             superview: view,
             bottomConstraint: contentViewBottomAnchor ?? .init(),

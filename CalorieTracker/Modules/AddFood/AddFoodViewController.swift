@@ -95,6 +95,7 @@ final class AddFoodViewController: UIViewController {
         addSubviews()
         setupConstraints()
         didChangeState()
+        addTapToHideKeyboardGesture()
     }
     
     override func viewDidLayoutSubviews() {
@@ -496,7 +497,7 @@ final class AddFoodViewController: UIViewController {
             case .recent:
                 setupSearchRecentState()
             case .noResults:
-                break
+                setupSearchFoundResultsState()
             case .foundResults:
                 setupSearchFoundResultsState()
             }
@@ -508,28 +509,36 @@ final class AddFoodViewController: UIViewController {
     private func setupDefaultState() {
         collectionViewTopSecondAnchor?.isActive = false
         searchHistoryViewController.view.isHidden = true
-        searchHistoryViewController.view.layer.zPosition = 0
-        foodCollectionViewController.view.layer.zPosition = 0
-        bottomGradientView.layer.zPosition = 0
-        searshTextField.layer.zPosition = 0
-        keyboardHeaderView.layer.zPosition = 0
+        view.sendSubviewToBack(tabBarStackView)
+        view.sendSubviewToBack(searshTextField)
+        view.sendSubviewToBack(microphoneButton)
+        view.sendSubviewToBack(bottomGradientView)
+        view.sendSubviewToBack(searchHistoryViewController.view)
+        view.sendSubviewToBack(foodCollectionViewController.view)
+        view.sendSubviewToBack(keyboardHeaderView)
     }
     
     private func setupSearchRecentState() {
         searchHistoryViewController.view.isHidden = false
-        searchHistoryViewController.view.layer.zPosition = 5
-        bottomGradientView.layer.zPosition = 8
-        searshTextField.layer.zPosition = 10
-        keyboardHeaderView.layer.zPosition = 9
+  
+        view.bringSubviewToFront(searchHistoryViewController.view)
+        view.bringSubviewToFront(bottomGradientView)
+        view.bringSubviewToFront(keyboardHeaderView)
+        view.bringSubviewToFront(searshTextField)
+        view.bringSubviewToFront(microphoneButton)
+        view.bringSubviewToFront(tabBarStackView)
     }
     
     private func setupSearchFoundResultsState() {
         searchHistoryViewController.view.isHidden = true
         collectionViewTopSecondAnchor?.isActive = true
-        foodCollectionViewController.view.layer.zPosition = 7
-        bottomGradientView.layer.zPosition = 8
-        searshTextField.layer.zPosition = 10
-        keyboardHeaderView.layer.zPosition = 9
+
+        view.bringSubviewToFront(foodCollectionViewController.view)
+        view.bringSubviewToFront(bottomGradientView)
+        view.bringSubviewToFront(keyboardHeaderView)
+        view.bringSubviewToFront(searshTextField)
+        view.bringSubviewToFront(microphoneButton)
+        view.bringSubviewToFront(tabBarStackView)
     }
     
     private func showDoneButton(_ flag: Bool) {
@@ -613,6 +622,11 @@ final class AddFoodViewController: UIViewController {
         
         switch microphoneButtonSelected {
         case true:
+            microphoneButton.backgroundColor = R.color.addFood.menu.isSelectedBorder()
+            microphoneButton.imageView?.tintColor = R.color.addFood.menu.isNotSelectedBorder()
+            microphoneButton.layer.borderColor = R.color.addFood.menu.isNotSelectedBorder()?.cgColor
+            
+            state = .search(.foundResults)
             speechRecognitionTask?.cancel()
             speechRecognitionTask = Task {
                 let result = await SpeechRecognitionManager.requestAuthorization()
@@ -632,6 +646,10 @@ final class AddFoodViewController: UIViewController {
                 }
             }
         case false:
+            microphoneButton.backgroundColor = R.color.addFood.menu.isNotSelectedBorder()
+            microphoneButton.imageView?.tintColor = R.color.addFood.menu.isSelectedBorder()
+            microphoneButton.layer.borderColor = R.color.addFood.menu.isSelectedBorder()?.cgColor
+            
             Task {
                 await speechRecognitionManager.finish()
             }

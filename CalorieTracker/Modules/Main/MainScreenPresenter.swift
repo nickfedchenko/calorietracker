@@ -132,13 +132,43 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
         let nutritionDailyGoal = FDS.shared.getNutritionGoals() ?? .zero
         let nutritionToday = FDS.shared.getNutritionToday().nutrition
         let kcalGoal = nutritionDailyGoal.kcal
-        let carbsGoal = nutritionDailyGoal.carbs
-        let proteinGoal = nutritionDailyGoal.protein
-        let fatGoal = nutritionDailyGoal.fat
+        let carbsGoal = NutrientMeasurment.convert(
+            value: nutritionDailyGoal.carbs,
+            type: .carbs,
+            from: .kcal,
+            to: .gram
+        )
+        let proteinGoal = NutrientMeasurment.convert(
+            value: nutritionDailyGoal.protein,
+            type: .protein,
+            from: .kcal,
+            to: .gram
+        )
+        let fatGoal = NutrientMeasurment.convert(
+            value: nutritionDailyGoal.fat,
+            type: .fat,
+            from: .kcal,
+            to: .gram
+        )
+        let carbsToday = NutrientMeasurment.convert(
+            value: nutritionToday.carbs,
+            type: .carbs,
+            from: .kcal,
+            to: .gram
+        )
+        let proteinToday = NutrientMeasurment.convert(
+            value: nutritionToday.protein,
+            type: .protein,
+            from: .kcal,
+            to: .gram
+        )
+        let fatToday = NutrientMeasurment.convert(
+            value: nutritionToday.fat,
+            type: .fat,
+            from: .kcal,
+            to: .gram
+        )
         let kcalToday = nutritionToday.kcal
-        let carbsToday = nutritionToday.carbs
-        let proteinToday = nutritionToday.protein
-        let fatToday = nutritionToday.fat
         let burnedKcalToday = ExerciseWidgetServise.shared.getBurnedKcalToday()
         let model: MainWidgetViewNode.Model = .init(
             text: MainWidgetViewNode.Model.Text(
