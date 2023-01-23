@@ -69,6 +69,7 @@ struct CalorieMeasurment {
         return calorie * activity.factor * goal.factor
     }
     
+    // swiftlint:disable:next function_parameter_count
     static func checkCalorie(
         kcal: Double,
         sex: UserSex,

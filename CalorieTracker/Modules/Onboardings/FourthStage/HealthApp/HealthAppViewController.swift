@@ -63,7 +63,6 @@ class HealthAppViewController: UIViewController {
         titleLabel.textAlignment = .center
         titleLabel.font = UIFont.systemFont(ofSize: 38, weight: .medium)
         
-        // swiftlint:disable:next line_length
         descriptionLabel.text = R.string.localizable.onboardingFourthHealthAppDescription()
         descriptionLabel.numberOfLines = 0
         descriptionLabel.textAlignment = .center

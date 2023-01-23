@@ -10,7 +10,7 @@ import Foundation
 
 final class SubscriptionViewModel {
     
-    //MARK: - Property list
+    // MARK: - Property list
     private var products: [ApphudProduct] = [] {
         didSet {
             reloadHandler?()
@@ -19,7 +19,7 @@ final class SubscriptionViewModel {
     var reloadHandler: (() -> Void)?
     var selectedIndex = 0
     
-    //MARK: - Publick methods
+    // MARK: - Publick methods
     
     func loadProducts() {
         Apphud.paywallsDidLoadCallback { [weak self] paywalls in

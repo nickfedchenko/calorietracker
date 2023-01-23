@@ -14,6 +14,8 @@ protocol MainScreenRouterInterface: AnyObject {
     func openWidget(_ type: WidgetContainerViewController.WidgetType)
     func openSettingsVC()
     func openOnboarding()
+    func openCreateNotesVC()
+    func openAllNotesVC()
 }
 
 class MainScreenRouter: NSObject {
@@ -61,6 +63,23 @@ extension MainScreenRouter: MainScreenRouterInterface {
         viewController?.present(
             UINavigationController(rootViewController: vc),
             animated: false
+        )
+    }
+    
+    func openCreateNotesVC() {
+        let vc = NotesCreateViewController()
+        vc.handlerAllNotes = { [weak self] in
+            self?.openAllNotesVC()
+        }
+        viewController?.present(vc, animated: true)
+    }
+    
+    func openAllNotesVC() {
+        let vc = NotesRouter.setupModule()
+        
+        viewController?.present(
+            TopDownNavigationController(rootViewController: vc),
+            animated: true
         )
     }
 }

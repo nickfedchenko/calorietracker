@@ -19,8 +19,10 @@ protocol MainScreenPresenterInterface: AnyObject {
     func updateMessageWidget()
     func updateActivityWidget()
     func updateExersiceWidget()
+    func updateNoteWidget()
     func checkOnboarding()
     func didTapExerciseWidget()
+    func didTapNotesWidget()
 }
 
 class MainScreenPresenter {
@@ -108,6 +110,21 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
         let message: String = "Have a nice day! Don't forget to track your breakfast "
         
         view.setMessageWidget(message)
+    }
+    
+    func updateNoteWidget() {
+        guard let lastNote = NotesWidgetService.shared.getLastNote() else {
+            return
+        }
+        
+        view.setNoteWidget(.init(
+            estimation: lastNote.estimation,
+            text: lastNote.text,
+            photo: {
+                guard let url = lastNote.imageUrl else { return nil }
+                return UIImage(fileURLWithPath: url)
+            }()
+        ))
     }
     
     // swiftlint:disable:next function_body_length
@@ -198,5 +215,9 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
                 }
             }
         }
+    }
+    
+    func didTapNotesWidget() {
+        router?.openCreateNotesVC()
     }
 }

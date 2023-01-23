@@ -40,8 +40,6 @@ class ViewWithShadow: UIView {
     }
 }
 
-import UIKit
-
 class ControlWithShadow: UIControl {
     
     let shadows: [Shadow]

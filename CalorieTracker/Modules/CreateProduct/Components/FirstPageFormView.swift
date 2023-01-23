@@ -96,6 +96,7 @@ final class FirstPageFormView: UIView {
     
     @objc private func didTapBarcodeButton() {
         complition? { _ in
+
         }
     }
 }

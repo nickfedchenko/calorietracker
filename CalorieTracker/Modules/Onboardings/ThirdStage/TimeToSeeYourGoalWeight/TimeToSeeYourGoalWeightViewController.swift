@@ -63,7 +63,6 @@ final class TimeToSeeYourGoalWeightViewController: UIViewController {
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .medium)
         
-        // swiftlint:disable:next line_length
         descriptionLabel.text = R.string.localizable.onboardingThirdTimeToSeeYourGoalWeightDescription()
         descriptionLabel.textAlignment = .center
         descriptionLabel.numberOfLines = 0

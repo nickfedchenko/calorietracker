@@ -8,12 +8,30 @@
 import AsyncDisplayKit
 
 final class NoteWidgetNode: CTWidgetNode {
+    private lazy var lastNodeView: LastNoteView = .init(frame: .zero)
+    
     private lazy var imageNode: ASImageNode = {
         let node = ASImageNode()
         node.contentMode = UIView.ContentMode.scaleAspectFit
         node.image = R.image.noteWidgetNode.notePlug()
         return node
     }()
+    
+    private lazy var lastNoteNode: ASDisplayNode = {
+        let node = ASDisplayNode { () -> UIView in
+            return self.lastNodeView
+        }
+        
+        return node
+    }()
+    
+    var model: LastNoteView.Model? {
+        didSet {
+            guard let model = model else { return }
+            lastNodeView.configure(model)
+            transitionLayout(withAnimation: true, shouldMeasureAsync: false)
+        }
+    }
     
     override var widgetType: WidgetContainerViewController.WidgetType { .notes }
     
@@ -27,7 +45,10 @@ final class NoteWidgetNode: CTWidgetNode {
     }
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
-        return ASInsetLayoutSpec(insets: UIEdgeInsets.zero, child: imageNode)
+        return ASInsetLayoutSpec(
+            insets: UIEdgeInsets.zero,
+            child: model == nil ? imageNode : lastNoteNode
+        )
     }
     
     private func setupNode() {
