@@ -34,7 +34,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } else if Apphud.hasActiveSubscription() {
             getStartedViewController = CTTabBarController()
         } else {
-            getStartedViewController = PaywallRouter.setupModule()
+            getStartedViewController = CTTabBarController()
+//            getStartedViewController = PaywallRouter.setupModule()
         }
         
         let navigationController = UINavigationController(rootViewController: getStartedViewController)

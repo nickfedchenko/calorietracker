@@ -119,6 +119,28 @@ struct CTWidgetNodeConfiguration: CustomStringConvertible {
             case .custom:
                 return _height
             }
+        case .h19x430:
+            switch type {
+            case .widget:
+                return 218
+            case .large:
+                return 112
+            case .compact:
+                return 64
+            case .custom:
+                return _height
+            }
+        case .h19x393:
+            switch type {
+            case .widget:
+                return 200
+            case .large:
+                return 100
+            case .compact:
+                return 64
+            case .custom:
+                return _height
+            }
         }
     }
     
@@ -139,6 +161,10 @@ struct CTWidgetNodeConfiguration: CustomStringConvertible {
             return 2
         case .unknown:
             return _suggestedTopSafeAreaOffset
+        case .h19x430:
+            return 8
+        case .h19x393:
+            return 8
         }
     }
     
@@ -159,6 +185,10 @@ struct CTWidgetNodeConfiguration: CustomStringConvertible {
             return 10
         case .unknown:
             return _suggestedInterItemSpacing
+        case .h19x430:
+            return 16
+        case .h19x393:
+            return 12
         }
     }
     
@@ -179,6 +209,10 @@ struct CTWidgetNodeConfiguration: CustomStringConvertible {
             return 18
         case .unknown:
             return 18
+        case .h19x430:
+            return 20
+        case .h19x393:
+            return 20
         }
     }
     
@@ -199,6 +233,10 @@ struct CTWidgetNodeConfiguration: CustomStringConvertible {
             return 30
         case .unknown:
             return 30
+        case .h19x430:
+            return 44
+        case .h19x393:
+            return 44
         }
     }
     

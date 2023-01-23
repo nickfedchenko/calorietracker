@@ -33,11 +33,11 @@ final class CTTabItem: UIView {
         var title: String {
             switch self {
             case .myDay:
-                return "MY DAY"
+                return "tabBar.myDay".localized
             case .progress:
-                return "PROGRESS"
+                return "tabBar.progress".localized
             case .food:
-                return "FOOD"
+                return "tabBar.food".localized
                 //            case .cook:
                 //                return "COOK"
             }
@@ -50,7 +50,7 @@ final class CTTabItem: UIView {
             case .progress:
                 return ProgressRouter.setupModule()
             case .food:
-                return MainScreenViewController()
+                return RecipesScreenRouter.setupModule()
             }
         }
     }
@@ -116,6 +116,10 @@ final class CTTabItem: UIView {
         addSubview(title)
         //        iconImage.image = configuration.stateAnimations.deselected
         title.attributedText = NSAttributedString(string: configuration.title)
+        
+//        snp.makeConstraints { make in
+//            make.height.equalTo(64)
+//        }
         
         iconView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()

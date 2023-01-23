@@ -24,6 +24,10 @@ extension Double {
             return self * 0.88889
         case .unknown:
             return self
+        case .h19x430:
+            return self
+        case .h19x393:
+            return self
         }
     }
 }

@@ -14,7 +14,7 @@ final class FoodCellView: UIView {
         let title: String
         let description: String
         let tag: String
-        let kcal: Int
+        let kcal: Double
         let image: Product.Photo?
         let verified: Bool
     }
@@ -33,7 +33,7 @@ final class FoodCellView: UIView {
         }
     }
     
-    var subInfo: Int? {
+    var subInfo: Double? {
         didSet {
             if let info = subInfo {
                 infoLabel.text = "\(info)"
@@ -251,10 +251,10 @@ extension FoodCellView.FoodViewModel {
         self.id = product.id
         self.title = product.title
         self.description = product.servings?
-            .compactMap { $0.title }
+            .compactMap { $0.size }
             .joined(separator: ", ") ?? ""
         self.tag = product.brand ?? ""
-        self.kcal = Int(product.kcal)
+        self.kcal = product.kcal
         self.image = product.isUserProduct ? product.photo : nil
         self.verified = !product.isUserProduct
     }
@@ -263,8 +263,8 @@ extension FoodCellView.FoodViewModel {
         self.id = String(dish.id)
         self.title = dish.title
         self.description = dish.info ?? ""
-        self.tag = dish.tags.first?.tag ?? ""
-        self.kcal = dish.kсal
+        self.tag = dish.eatingTags.first?.title ?? ""
+        self.kcal = dish.kcal
         self.image = nil
         self.verified = true
     }

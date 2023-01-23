@@ -20,4 +20,14 @@ extension UIView {
             }
         }
     }
+    
+    func animateByScaleTransform() {
+        UIView.animate(withDuration: 0.1) {
+            self.transform = .init(scaleX: 0.8, y: 0.8)
+        } completion: { _ in
+            UIView.animate(withDuration: 0.1) {
+                self.transform = .identity
+            }
+        }
+    }
 }

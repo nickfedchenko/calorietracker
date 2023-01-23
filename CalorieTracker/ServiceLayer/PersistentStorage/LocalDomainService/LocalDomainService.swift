@@ -42,7 +42,7 @@ protocol LocalDomainServiceInterface {
 
 final class LocalDomainService {
     // MARK: - Constants
-    
+    private let savingQueue = DispatchQueue(label: "savingQueue", qos: .utility)
     enum Constants {
         static let modelName: String = "CaloireTrackerLocal"
     }
@@ -73,28 +73,31 @@ final class LocalDomainService {
         return context
     }()
     
-//    private lazy var taskContext: NSManagedObjectContext = {
-//        let context = container.newBackgroundContext()
-//        context.mergePolicy = NSMergePolicy(merge: .mergeByPropertyStoreTrumpMergePolicyType)
-//        return context
-//    }()
+    private lazy var taskContext: NSManagedObjectContext = {
+        let context = container.newBackgroundContext()
+        context.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
+        return context
+    }()
     
     // MARK: - Public Methods
     
     private func save() {
-        let taskContext = container.newBackgroundContext()
-        taskContext.automaticallyMergesChangesFromParent = true
         guard taskContext.hasChanges else {
             return
         }
-        taskContext.perform {
+        
+        let workItem = DispatchWorkItem(flags: .barrier) { [weak taskContext] in
             do {
-                try taskContext.save()
+                try taskContext?.save()
             } catch let error {
-                taskContext.rollback()
+                taskContext?.rollback()
                 print(error)
             }
         }
+        
+         taskContext.perform { [weak self] in
+             self?.savingQueue.async(execute: workItem)
+         }
     }
     
     private func deleteObject<T: NSManagedObject> (object: T) {
@@ -143,7 +146,9 @@ extension LocalDomainService: LocalDomainServiceInterface {
     }
     
     func fetchDishes() -> [Dish] {
-        guard let domainDishes = fetchData(for: DomainDish.self) else { return [] }
+        guard let domainDishes = fetchData(for: DomainDish.self) else {
+            return []
+        }
         return domainDishes.compactMap { Dish(from: $0) }
     }
     
@@ -194,20 +199,20 @@ extension LocalDomainService: LocalDomainServiceInterface {
     }
     
     func saveProducts(products: [Product], saveInPriority: Bool) {
+        let backgroundContext = container.newBackgroundContext()
+        backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
         let _: [DomainProduct] = products
-            .map { DomainProduct.prepare(fromPlainModel: $0, context: context) }
+            .map { DomainProduct.prepare(fromPlainModel: $0, context: backgroundContext) }
         
-        if saveInPriority {
-            try? context.save()
-        } else {
-            save()
-        }
+        try? backgroundContext.save()
     }
     
     func saveDishes(dishes: [Dish]) {
+        let backgroundContext = container.newBackgroundContext()
+        backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
         let _: [DomainDish] = dishes
-            .map { DomainDish.prepare(fromPlainModel: $0, context: context) }
-        save()
+            .map { DomainDish.prepare(fromPlainModel: $0, context: backgroundContext) }
+        try? backgroundContext.save()
     }
     
     func saveMeals(meals: [Meal]) {
@@ -423,6 +428,7 @@ extension LocalDomainService: LocalDomainServiceInterface {
         ) else {
             return []
         }
-        return products.compactMap { Dish(from: $0) }.sorted { $0.title.count < $1.title.count }
+//        return products.compactMap { Dish(from: $0) }.sorted { $0.title.count < $1.title.count }
+        return []
     }
 }

@@ -100,6 +100,10 @@ extension String {
 
         return NSAttributedString(attachment: imageAttachment)
     }
+    
+    var localized: String {
+        return NSLocalizedString(self, comment: "\(self)_comment")
+    }
 }
 
 extension Array where Element == StringSettingsModel {

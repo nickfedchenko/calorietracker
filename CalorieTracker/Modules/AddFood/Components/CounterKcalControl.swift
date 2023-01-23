@@ -9,7 +9,7 @@ import UIKit
 
 final class CounterKcalControl: UIControl {
     struct Model {
-        let kcal: Int
+        let kcal: Double
         let count: Int
     }
     

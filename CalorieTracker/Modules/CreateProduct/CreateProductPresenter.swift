@@ -97,7 +97,7 @@ extension CreateProductPresenter: CreateProductPresenterInterface {
             ),
             servings: [
                 .init(
-                    title: servingDescription,
+                    size: servingDescription,
                     weight: servingWeight
                 )
             ]
