@@ -24,6 +24,7 @@ extension UIView {
         of color: CGColor,
         with lineWidth: CGFloat
     ) {
+        layer.sublayers?.first(where: { $0 is CAShapeLayer })?.removeFromSuperlayer()
         let topLeftRadius = CGSize(width: topLeft, height: topLeft)
         let topRightRadius = CGSize(width: topRight, height: topRight)
         let bottomLeftRadius = CGSize(width: bottomLeft, height: bottomLeft)

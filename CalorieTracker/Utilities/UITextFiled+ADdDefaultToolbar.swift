@@ -31,5 +31,8 @@ extension UITextField {
     @objc
     func doneButtonTapped() { self.resignFirstResponder() }
     @objc
-    func cancelButtonTapped() { self.resignFirstResponder() }
+    func cancelButtonTapped() {
+        self.resignFirstResponder()
+        delegate?.textFieldDidEndEditing?(self, reason: .committed)
+    }
 }

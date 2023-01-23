@@ -143,6 +143,73 @@ final class RecipeProgressView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func redrawWithNewData(
+        carbsData: RecipeRoundProgressView.ProgressMode,
+        kcalData: RecipeRoundProgressView.ProgressMode,
+        fatData: RecipeRoundProgressView.ProgressMode,
+        proteinData: RecipeRoundProgressView.ProgressMode
+    ) {
+        self.carbsData = carbsData
+        self.kcalData = kcalData
+        self.fatData = fatData
+        self.proteinData = proteinData
+        updateTextFields()
+        carbsProgressView.update(with: carbsData)
+        kcalProgressView.update(with: kcalData)
+        fatProgressView.update(with: fatData)
+        proteinProgressView.update(with: proteinData)
+    }
+    
+    private func updateTextFields() {
+        if case let .kcal(total: total, possible: possible, eaten: eaten ) = kcalData {
+            let percent = (possible / total) * 100
+            let percentString = String(
+                format: "%.\(percent.truncatingRemainder(dividingBy: 1) >= 0.1 ? "1" : "0")f",
+                (possible / total) * 100
+            ) + "%"
+            kcalPercentageLabel.textColor = possible + eaten <= total
+            ? UIColor(hex: "547771")
+            : UIColor(hex: "FF0000")
+            kcalPercentageLabel.text = percentString
+        }
+        
+        if case let .fat(total: total, possible: possible, eaten: eaten ) = fatData {
+            let percent = (possible / total) * 100
+            let percentString = String(
+                format: "%.\(percent.truncatingRemainder(dividingBy: 1) >= 0.1 ? "1" : "0")f",
+                (possible / total) * 100
+            ) + "%"
+            fatPercentageLabel.textColor = possible + eaten <= total
+            ? UIColor(hex: "547771")
+            : UIColor(hex: "FF0000")
+            fatPercentageLabel.text = percentString
+        }
+        
+        if case let .protein(total: total, possible: possible, eaten: eaten ) = proteinData {
+            let percent = (possible / total) * 100
+            let percentString = String(
+                format: "%.\(percent.truncatingRemainder(dividingBy: 1) >= 0.1 ? "1" : "0")f",
+                (possible / total) * 100
+            ) + "%"
+            proteinPercentageLabel.textColor = possible + eaten <= total
+            ? UIColor(hex: "547771")
+            : UIColor(hex: "FF0000")
+            proteinPercentageLabel.text = percentString
+        }
+        
+        if case let .carbs(total: total, possible: possible, eaten: eaten ) = carbsData {
+            let percent = (possible / total) * 100
+            let percentString = String(
+                format: "%.\(percent.truncatingRemainder(dividingBy: 1) >= 0.1 ? "1" : "0")f",
+                (possible / total) * 100
+            ) + "%"
+            carbsPercentageLabel.text = percentString
+            carbsPercentageLabel.textColor = possible + eaten <= total
+            ? UIColor(hex: "547771")
+            : UIColor(hex: "FF0000")
+        }
+    }
+    
     func animateProgress() {
         [carbsProgressView, proteinProgressView, fatProgressView, kcalProgressView].forEach {
             $0.animateProgress()

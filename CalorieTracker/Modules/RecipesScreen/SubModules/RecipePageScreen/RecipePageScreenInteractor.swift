@@ -23,11 +23,13 @@ protocol RecipePageScreenInteractorInterface: AnyObject {
     func makeModelsForIngredients() -> [RecipeIngredientModel]
     func updateCurrentServingsCount(to count: Int)
     func getInstructions() -> [String]
+    func setCurrentSelectAmountToEat(amount: Int)
+    func addSelectedPortionsToEaten()
     
-    var possibleEatenKcalByOneServing: Double { get }
-    var possibleEatenFatByOneServing: Double { get }
-    var possibleEatenProteinByOneServing: Double { get }
-    var possibleEatenCarbsByOneServing: Double { get }
+    var possibleEatenKcalBySelectedServings: Double { get }
+    var possibleEatenFatBySelectedServings: Double { get }
+    var possibleEatenProteinBySelectedServings: Double { get }
+    var possibleEatenCarbsBySelectedServings: Double { get }
 }
 
 class RecipePageScreenInteractor {
@@ -52,20 +54,24 @@ class RecipePageScreenInteractor {
         )
     )
     
-    var possibleEatenKcalByOneServing: Double {
-        dish.values?.serving.kcal ?? 0
+    var possibleEatenKcalBySelectedServings: Double {
+        let ratio = Double(selectedServingToEat) / Double((dish.totalServings ?? 1))
+        return (dish.values?.serving.kcal ?? 0) * ratio
     }
     
-    var possibleEatenFatByOneServing: Double {
-        dish.values?.serving.fats ?? 0
+    var possibleEatenFatBySelectedServings: Double {
+        let ratio = Double(selectedServingToEat) / Double((dish.totalServings ?? 1))
+        return (dish.values?.serving.fats ?? 0) * ratio
     }
     
-    var possibleEatenProteinByOneServing: Double {
-        dish.values?.serving.proteins ?? 0
+    var possibleEatenProteinBySelectedServings: Double {
+        let ratio = Double(selectedServingToEat) / Double((dish.totalServings ?? 1))
+        return (dish.values?.serving.proteins ?? 0) * ratio
     }
     
-    var possibleEatenCarbsByOneServing: Double {
-        dish.values?.serving.carbohydrates ?? 0
+    var possibleEatenCarbsBySelectedServings: Double {
+        let ratio = Double(selectedServingToEat) / Double((dish.totalServings ?? 1))
+        return (dish.values?.serving.carbohydrates ?? 0) * ratio
     }
     
     init(with dish: Dish) {
@@ -156,6 +162,10 @@ class RecipePageScreenInteractor {
 }
 
 extension RecipePageScreenInteractor: RecipePageScreenInteractorInterface {
+    func setCurrentSelectAmountToEat(amount: Int) {
+        selectedServingToEat = amount
+    }
+    
     func makeModelsForIngredients() -> [RecipeIngredientModel] {
         let ratio = Double(selectedServingsAmount) / Double(dish.totalServings ?? 1)
         print("ratio is \(ratio)")
@@ -226,5 +236,17 @@ extension RecipePageScreenInteractor: RecipePageScreenInteractorInterface {
     
     func getInstructions() -> [String] {
         dish.instructions ?? []
+    }
+    
+    func addSelectedPortionsToEaten() {
+        dataService.addNutrition(
+            day: .init(Date()),
+            nutrition: .init(
+                kcal: possibleEatenKcalBySelectedServings,
+                carbs: possibleEatenCarbsBySelectedServings,
+                protein: possibleEatenProteinBySelectedServings,
+                fat: possibleEatenFatBySelectedServings
+            )
+        )
     }
 }

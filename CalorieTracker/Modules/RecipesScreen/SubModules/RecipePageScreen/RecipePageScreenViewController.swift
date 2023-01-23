@@ -11,6 +11,12 @@ import UIKit
 
 protocol RecipePageScreenViewControllerInterface: AnyObject {
     func shouldUpdateIngredients(with models: [RecipeIngredientModel])
+    func shouldUpdateProgressView(
+        carbsData: RecipeRoundProgressView.ProgressMode,
+        kcalData: RecipeRoundProgressView.ProgressMode,
+        fatData: RecipeRoundProgressView.ProgressMode,
+        proteinData: RecipeRoundProgressView.ProgressMode
+    )
 }
 
 class RecipePageScreenViewController: UIViewController {
@@ -192,6 +198,7 @@ class RecipePageScreenViewController: UIViewController {
         configureContent()
         setupActions()
         setupKeyboardObservers()
+        setupDelegates()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -212,6 +219,10 @@ class RecipePageScreenViewController: UIViewController {
     override func viewSafeAreaInsetsDidChange() {
         super.viewSafeAreaInsetsDidChange()
         contentScrollView.contentInset.bottom = view.safeAreaInsets.bottom + 10
+    }
+    
+    private func setupDelegates() {
+        servingCountField.delegate = self
     }
     
     private func setupAppearance() {
@@ -236,12 +247,12 @@ class RecipePageScreenViewController: UIViewController {
                 )
     }
     
-    @objc private func didSelectTextField() {
-        contentScrollView.scrollRectToVisible(servingCountField.frame, animated: true)
+    @objc private func addToDiaryDidTapped() {
+        presenter?.addToDiaryTapped()
     }
     
     private func setupActions() {
-//        addToCartButton.addTarget(self, action: #selector(addToCartTapped), for: .touchUpInside)
+        addToDiary.addTarget(self, action: #selector(addToDiaryDidTapped), for: .touchUpInside)
     }
     
     private func configureContent() {
@@ -387,6 +398,20 @@ extension RecipePageScreenViewController: RecipeMainImageViewDelegate {
 }
 
 extension RecipePageScreenViewController: RecipePageScreenViewControllerInterface {
+    func shouldUpdateProgressView(
+        carbsData: RecipeRoundProgressView.ProgressMode,
+        kcalData: RecipeRoundProgressView.ProgressMode,
+        fatData: RecipeRoundProgressView.ProgressMode,
+        proteinData: RecipeRoundProgressView.ProgressMode
+    ) {
+        dailyProgressView.redrawWithNewData(
+            carbsData: carbsData,
+            kcalData: kcalData,
+            fatData: fatData,
+            proteinData: proteinData
+        )
+    }
+    
     func shouldUpdateIngredients(with models: [RecipeIngredientModel]) {
         for (index, model) in models.enumerated() {
             guard index < ingredientViews.count else { return }
@@ -434,17 +459,15 @@ extension RecipePageScreenViewController {
         _ notification: NSNotification
     ) {
         let frameKey = UIResponder.keyboardFrameEndUserInfoKey
-        let duration = UIResponder.keyboardAnimationDurationUserInfoKey
         guard
-            let value = notification.userInfo?[frameKey] as? NSValue,
-        let durationValue = notification.userInfo?[duration]  as? NSValue else {
+            let value = notification.userInfo?[frameKey] as? NSValue else {
             return
         }
         defaultOffset = contentScrollView.contentOffset
         defaultContentSize = contentScrollView.contentSize
         let topCoordinate = value.cgRectValue.origin.y
 //        let animationDuration = durationValue.timeValue.seconds
-        var targetFrame = servingCountField.frame
+        let targetFrame = servingCountField.frame
         contentScrollView.setContentOffset(
             CGPoint(x: 0, y: targetFrame.origin.y - topCoordinate + targetFrame.height),
             animated: true
@@ -456,5 +479,25 @@ extension RecipePageScreenViewController {
     ) {
         contentScrollView.setContentOffset(defaultOffset, animated: true)
         contentScrollView.contentSize = defaultContentSize
+    }
+}
+
+extension RecipePageScreenViewController: UITextFieldDelegate {
+    func textField(
+        _ textField: UITextField,
+        shouldChangeCharactersIn range: NSRange,
+        replacementString string: String
+    ) -> Bool {
+        guard let text = textField.text else { return false }
+        let fullText = text + string
+        guard let int = Int(fullText),
+              int <= 15 else { return false }
+        return true
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
+        if reason == .committed {
+            presenter?.didChangeAmountToEat(amount: Int(textField.text ?? "1") ?? 1)
+        }
     }
 }
