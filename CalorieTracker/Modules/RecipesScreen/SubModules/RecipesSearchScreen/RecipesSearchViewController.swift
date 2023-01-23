@@ -28,6 +28,7 @@ class RecipesSearchViewController: UIViewController {
         collectionView.register(RecipeListCell.self, forCellWithReuseIdentifier: RecipeListCell.identifier)
         collectionView.register(SelectedTagsCell.self, forCellWithReuseIdentifier: SelectedTagsCell.identifier)
         collectionView.dataSource = self
+        collectionView.delegate = self
         collectionView.contentInset = UIEdgeInsets(
             top: 0,
             left: 0,
@@ -262,5 +263,11 @@ extension RecipesSearchViewController: SelectedTagsCellDelegate {
 extension RecipesSearchViewController: RecipesSearchFooterDelegate {
     func searchPhraseChanged(to phrase: String) {
         presenter?.performSearch(with: phrase)
+    }
+}
+
+extension RecipesSearchViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        presenter?.didSelectRecipe(at: indexPath)
     }
 }

@@ -73,7 +73,7 @@ final class SearchRecipesSearchField: UITextField {
         backgroundColor = UIColor(hex: "B3EFDE")
         clipsToBounds = false
         attributedPlaceholder = NSAttributedString(
-            string: "SEARCH RECIPE",
+            string: "SEARCH RECIPE".localized,
             attributes: [
                 .font: R.font.sfProRoundedBold(size: 18) ?? .systemFont(ofSize: 18),
                 .foregroundColor: UIColor(hex: "ABABAB")

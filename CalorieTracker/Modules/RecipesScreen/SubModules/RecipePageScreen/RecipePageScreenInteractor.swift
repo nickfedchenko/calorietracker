@@ -43,8 +43,8 @@ class RecipePageScreenInteractor {
     private var selectedServingToEat: Int = 1
     
     // TODO: - По идее данные после онбординга должны быть
-    var dailyGoals: DailyNutrition? = DailyNutrition(kcal: 800, carbs: 32, protein: 70, fat: 25)
-    var currentGoalsData: DailyNutritionData = .init(
+    private lazy var dailyGoals: DailyNutrition? = dataService.getNutritionGoals()
+    private var currentGoalsData: DailyNutritionData = .init(
         day: .init(Date()),
         nutrition: .init(
             kcal: 320,
@@ -95,19 +95,7 @@ class RecipePageScreenInteractor {
     }
     
     private func setCurrentNutritionData() {
-        let mockCurrentNutritions: DailyNutritionData = .init(
-            day: .init(Date()),
-            nutrition: .init(
-                kcal: 350,
-                carbs: 10,
-                protein: 20,
-                fat: 5
-            )
-        )
-        let possibleNutritionsDailyData = dataService.getNutritionToday()
-        currentGoalsData = possibleNutritionsDailyData.nutrition == .zero
-        ? mockCurrentNutritions
-        : possibleNutritionsDailyData
+        currentGoalsData = dataService.getNutritionToday()
     }
     
     private func makeTagsToDisplay() {
@@ -172,7 +160,6 @@ extension RecipePageScreenInteractor: RecipePageScreenInteractorInterface {
         let models: [RecipeIngredientModel] = dish.ingredients.compactMap { ingredient in
             if
                 let referenceUnit = ingredient.product.units.first(where: { $0.id == ingredient.unit?.id }),
-                let gramsInUnits = referenceUnit.value,
                 let referenceKCal = referenceUnit.kcal {
                 let unitAmount = ingredient.quantity * ratio
                 let unitTitle = ingredient.unit?.shortTitle ?? ""
@@ -191,15 +178,15 @@ extension RecipePageScreenInteractor: RecipePageScreenInteractorInterface {
     }
     
     func getTotalFatGoal() -> Double {
-        dailyGoals?.fat ?? 0
+        NutrientMeasurment.convert(value: dailyGoals?.fat ?? 0, type: .fat, from: .kcal, to: .gram)
     }
     
     func getTotalProteinGoal() -> Double {
-        dailyGoals?.protein ?? 0
+        NutrientMeasurment.convert(value: dailyGoals?.protein ?? 0, type: .protein, from: .kcal, to: .gram)
     }
     
     func getTotalCarbsGoal() -> Double {
-        dailyGoals?.carbs ?? 0
+        NutrientMeasurment.convert(value: dailyGoals?.carbs ?? 0, type: .carbs, from: .kcal, to: .gram)
     }
     
     func getCurrentlyEatenKCal() -> Double {
@@ -207,15 +194,15 @@ extension RecipePageScreenInteractor: RecipePageScreenInteractorInterface {
     }
     
     func getCurrentlyEatenFat() -> Double {
-        currentGoalsData.nutrition.fat
+        NutrientMeasurment.convert(value: currentGoalsData.nutrition.fat, type: .fat, from: .kcal, to: .gram)
     }
     
     func getCurrentlyEatenProtein() -> Double {
-        currentGoalsData.nutrition.protein
+        NutrientMeasurment.convert(value: currentGoalsData.nutrition.protein, type: .protein, from: .kcal, to: .gram)
     }
     
     func getCurrentlyEatenCarbs() -> Double {
-        currentGoalsData.nutrition.carbs
+        NutrientMeasurment.convert(value: currentGoalsData.nutrition.carbs, type: .carbs, from: .kcal, to: .gram)
     }
     
     func getDish() -> Dish {
@@ -243,9 +230,24 @@ extension RecipePageScreenInteractor: RecipePageScreenInteractorInterface {
             day: .init(Date()),
             nutrition: .init(
                 kcal: possibleEatenKcalBySelectedServings,
-                carbs: possibleEatenCarbsBySelectedServings,
-                protein: possibleEatenProteinBySelectedServings,
-                fat: possibleEatenFatBySelectedServings
+                carbs: NutrientMeasurment.convert(
+                    value: possibleEatenCarbsBySelectedServings,
+                    type: .carbs,
+                    from: .gram,
+                    to: .kcal
+                ),
+                protein: NutrientMeasurment.convert(
+                    value: possibleEatenProteinBySelectedServings,
+                    type: .protein,
+                    from: .gram,
+                    to: .kcal
+                ),
+                fat: NutrientMeasurment.convert(
+                    value: possibleEatenFatBySelectedServings,
+                    type: .fat,
+                    from: .gram,
+                    to: .kcal
+                )
             )
         )
     }

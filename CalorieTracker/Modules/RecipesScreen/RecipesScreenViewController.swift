@@ -303,29 +303,9 @@ extension RecipesScreenViewController: UICollectionViewDataSource {
 }
 
 extension RecipesScreenViewController: UICollectionViewDelegate {
-//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        guard !isFirstLayout else { return }
-//
-//        currentOffset = scrollView.contentOffset.y
-//        if currentOffset > previousOffset {
-//            if  selectorHeightConstant > 0 && selectorHeightConstant <= 48 {
-//                selectorHeightConstant -= abs(previousOffset - currentOffset)
-//                selectorHeightConstant = selectorHeightConstant < 0 ? 0 : selectorHeightConstant
-//                updateTopViewHeight()
-//            }
-//        } else {
-//            guard currentOffset < -104 else {
-//                previousOffset = currentOffset
-//                return
-//            }
-//            if  selectorHeightConstant >= 0 && selectorHeightConstant < 48 {
-//                selectorHeightConstant += abs(previousOffset - currentOffset)
-//                selectorHeightConstant = selectorHeightConstant > 48 ? 48 : selectorHeightConstant
-//                updateTopViewHeight()
-//            }
-//        }
-//        previousOffset = currentOffset
-//    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        presenter?.didTapRecipe(at: indexPath)
+    }
 }
 
 extension RecipesScreenViewController: RecipesFolderHeaderDelegate {

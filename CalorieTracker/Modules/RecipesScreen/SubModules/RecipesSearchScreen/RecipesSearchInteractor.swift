@@ -15,7 +15,7 @@ protocol RecipesSearchInteractorInterface: AnyObject {
     func removeTagFromSelected(tag: SelectedTagsCell.TagType)
     func getNumberOfItems(in section: Int) -> Int
     func getSelectedTags() -> [SelectedTagsCell.TagType]
-    func getDishModel(at indexPath: IndexPath) -> Dish
+    func getDishModel(at indexPath: IndexPath) -> Dish?
     func setSelectedTags(tags: [SelectedTagsCell.TagType])
 }
 
@@ -85,7 +85,7 @@ extension RecipesSearchInteractor: RecipesSearchInteractorInterface {
             let tagFilteredDishes = self.filterBySelectedTags()
             if !phrase.isEmpty {
                 let filteredDishes = tagFilteredDishes.filter {
-                    return $0.title.contains(phrase)
+                    return $0.title.lowercased().contains(phrase.lowercased())
                 }
                 self.resultArray = filteredDishes
                 self.presenter?.didFinishSearchWork()
@@ -107,16 +107,12 @@ extension RecipesSearchInteractor: RecipesSearchInteractorInterface {
         var filteredDishes: [Dish] = []
         
         for dish in allDishes {
-            if dish.dishTypeTags.contains(where: { $0.id == 15}) {
-                print("We found dish with drink tag of title: \(dish.title)")
-            }
             let allTags = dish.processingTypeTags
             + dish.dietTags
             + dish.eatingTags
             + dish.dishTypeTags
             + dish.additionalTags
             
-            print(dish.dishTypeTags)
             let mappedDishTags = Set(allTags.compactMap { $0.convenientTag })
             if selectedEatingTagFilters.isSubset(of: mappedDishTags) {
                 let dishExceptions = dish.exceptionTags.compactMap { $0.convenientTag }
@@ -245,8 +241,9 @@ extension RecipesSearchInteractor: RecipesSearchInteractorInterface {
         selectedTags
     }
     
-    func getDishModel(at indexPath: IndexPath) -> Dish {
-        resultArray[indexPath.item]
+    func getDishModel(at indexPath: IndexPath) -> Dish? {
+        guard indexPath.item < resultArray.count else { return nil }
+        return resultArray[indexPath.item]
     }
     
     func setSelectedTags(tags: [SelectedTagsCell.TagType]) {

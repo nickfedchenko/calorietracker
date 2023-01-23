@@ -15,6 +15,7 @@ protocol FilterSelectionIncoming {
 
 protocol RecipesSearchRouterInterface: AnyObject {
     func showFiltersScreen()
+    func showRecipeScreen(with dish: Dish)
 }
 
 class RecipesSearchRouter: NSObject {
@@ -45,6 +46,15 @@ extension RecipesSearchRouter: RecipesSearchRouterInterface {
             selectedTags: presenter?.getSelectedTags() ?? []
         )
         navigationController?.pushViewController(filtersVC, animated: true)
+    }
+    
+    func showRecipeScreen(with dish: Dish) {
+        let recipeScreenModule = RecipePageScreenRouter.setupModule(
+            with: dish,
+            backButtonTitle: "Search".localized
+        )
+        recipeScreenModule.modalPresentationStyle = .fullScreen
+        navigationController?.present(recipeScreenModule, animated: true)
     }
 }
 

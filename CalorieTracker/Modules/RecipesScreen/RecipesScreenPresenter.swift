@@ -17,6 +17,7 @@ protocol RecipesScreenPresenterInterface: AnyObject {
     func getDishModel(at index: IndexPath) -> Dish?
     func getSectionModel(at indexPath: IndexPath) -> RecipeSectionModel?
     func didTapSectionHeader(at index: Int)
+    func didTapRecipe(at index: IndexPath)
 }
 
 class RecipesScreenPresenter {
@@ -67,5 +68,10 @@ extension RecipesScreenPresenter: RecipesScreenPresenterInterface {
         if let sectionModel = interactor?.getSectionModel(at: IndexPath(item: 0, section: index)) {
             router?.navigateToRecipesList(for: sectionModel)
         }
+    }
+    
+    func didTapRecipe(at index: IndexPath) {
+        guard let dish = interactor?.getDishModel(at: index) else { return }
+        router?.showRecipeScreen(with: dish)
     }
 }
