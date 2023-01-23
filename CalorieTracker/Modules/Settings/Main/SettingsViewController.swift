@@ -104,10 +104,12 @@ final class SettingsViewController: UIViewController {
     }
     
     @objc private func didTapCloseButton() {
+        Vibration.rigid.vibrate()
         presenter?.didTapCloseButton()
     }
     
     @objc private func didTapShareButton() {
+        Vibration.rigid.vibrate()
         presenter?.didTapShareButton()
     }
     
@@ -154,6 +156,7 @@ extension SettingsViewController: UICollectionViewDelegateFlowLayout {
 
 extension SettingsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        Vibration.selection.vibrate()
         guard let type = viewModel?.getTypeCell(indexPath) else {
             return
         }

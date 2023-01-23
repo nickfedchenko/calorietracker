@@ -263,14 +263,17 @@ final class WeightFullWidgetView: UIView, CTWidgetFullProtocol {
     }
     
     @objc private func didTapAddButton() {
+        Vibration.rigid.vibrate()
         output?.addWeight(self)
     }
     
     @objc private func didTapBottomCloseButton() {
+        Vibration.rigid.vibrate()
         didTapCloseButton?()
     }
     
     @objc private func didTapSettingsButton() {
+        Vibration.rigid.vibrate()
         output?.setGoal(self)
     }
 }

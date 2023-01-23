@@ -51,6 +51,7 @@ final class CalendarFullWidgetView: UIView, CTWidgetFullProtocol {
         }
         
         calendarView.didChangeDate = { date in
+            Vibration.selection.vibrate()
             self.updateDateLabel(date)
         }
     }
@@ -92,10 +93,12 @@ final class CalendarFullWidgetView: UIView, CTWidgetFullProtocol {
     }
     
     @objc private func didTapLeftButton() {
+        Vibration.rigid.vibrate()
         calendarView.didSwipeRight()
     }
     
     @objc private func didTapRightButton() {
+        Vibration.rigid.vibrate()
         calendarView.didSwipeLeft()
     }
 }

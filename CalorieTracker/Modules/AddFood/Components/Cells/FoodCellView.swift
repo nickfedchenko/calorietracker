@@ -253,6 +253,7 @@ final class FoodCellView: UIView {
     }
     
     @objc private func didTapSelectButton() {
+        Vibration.success.vibrate()
         didTapButton?()
     }
 }

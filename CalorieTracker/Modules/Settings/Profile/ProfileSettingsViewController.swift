@@ -130,6 +130,7 @@ final class ProfileSettingsViewController: UIViewController {
     }
     
     @objc private func didTapBackButton() {
+        Vibration.rigid.vibrate()
         presenter?.didTapBackButton()
     }
 }
@@ -180,6 +181,7 @@ extension ProfileSettingsViewController: UICollectionViewDelegateFlowLayout {
 
 extension ProfileSettingsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        Vibration.selection.vibrate()
         guard let type = viewModel?.getTypeCell(indexPath),
                let cell = collectionView.cellForItem(at: indexPath) else {
             return

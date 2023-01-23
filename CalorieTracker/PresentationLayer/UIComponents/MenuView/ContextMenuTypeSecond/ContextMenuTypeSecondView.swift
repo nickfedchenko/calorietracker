@@ -144,6 +144,7 @@ final class ContextMenuTypeSecondView<ID: WithGetDataProtocol>: UIView {
     }
     
     @objc private func didSelectedCell(_ sender: UIControl) {
+        Vibration.selection.vibrate()
         guard let view = sender as? MenuCellTypeSecondView<ID> else { return }
         stackView.arrangedSubviews.forEach {
             ($0 as? MenuCellTypeSecondView<ID>)?.isSelectedCell = false

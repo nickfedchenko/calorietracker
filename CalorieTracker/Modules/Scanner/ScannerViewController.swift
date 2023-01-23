@@ -230,10 +230,12 @@ final class ScannerViewController: UIViewController {
     }
     
     @objc private func didTapCloseButton() {
+        Vibration.rigid.vibrate()
         router?.close()
     }
     
     @objc private func didTapLightButton() {
+        Vibration.rigid.vibrate()
         guard let device = AVCaptureDevice.default(for: .video) else { return }
         
         if device.isTorchActive {
@@ -245,7 +247,9 @@ final class ScannerViewController: UIViewController {
         }
     }
     
-    @objc private func didTapEditButton() {}
+    @objc private func didTapEditButton() {
+        Vibration.selection.vibrate()
+    }
 }
 
 // MARK: - AVCaptureMetadataOutputObjects Delegate

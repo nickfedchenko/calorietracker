@@ -136,6 +136,7 @@ final class SelectView<ID: WithGetTitleProtocol>: UIView {
     }
     
     @objc private func didTapCell(_ sender: UIControl) {
+        Vibration.selection.vibrate()
         guard !isCollapsed else {
             if let type = selectedCellType {
                 didSelectedCell?(type, true)
