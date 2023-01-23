@@ -19,6 +19,7 @@ protocol RecipesSearchPresenterInterface: AnyObject {
     func calculateTopCellHeight() -> CGFloat
     func getSelectedTags() -> [SelectedTagsCell.TagType]
     func getDishModel(at indexPath: IndexPath) -> Dish?
+    func didSelectRecipe(at indexPath: IndexPath)
 }
 
 class RecipesSearchPresenter {
@@ -70,9 +71,9 @@ extension RecipesSearchPresenter: RecipesSearchPresenterInterface {
             !selectedTags.isEmpty
         else { return 0 }
         var currentRows: CGFloat = 1
-        var maxWidth: CGFloat = UIScreen.main.bounds.width - 40
+        let maxWidth: CGFloat = UIScreen.main.bounds.width - 40
         var currentWidth: CGFloat = 0
-        var interItemSpacing: CGFloat = 8
+        let interItemSpacing: CGFloat = 8
         for tag in selectedTags {
             var currentTitle = ""
             switch tag {
@@ -114,5 +115,10 @@ extension RecipesSearchPresenter: RecipesSearchPresenterInterface {
     
     func removeTagFormSelected(tag: SelectedTagsCell.TagType) {
         interactor?.removeTagFromSelected(tag: tag)
+    }
+    
+    func didSelectRecipe(at indexPath: IndexPath) {
+        guard let dish = interactor?.getDishModel(at: indexPath) else { return }
+        router?.showRecipeScreen(with: dish)
     }
 }

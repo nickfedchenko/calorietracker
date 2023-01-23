@@ -61,19 +61,8 @@ extension RecipesScreenInteractor: RecipesScreenInteractorInterface {
         operationalQueue.async { [weak self] in
             guard let self = self else { return }
             var sections: [RecipeSectionModel] = []
-            //        var possibleTags: Set<AdditionalTag.EatingTime> = []
             let dishes = self.requestAllDishes().sorted(by: { $0.title < $1.title })
-            //        dishes.forEach {
-            //            print("Eating tags count \($0.eatingTags.count)")
-            //
-            //            $0.eatingTags.forEach {
-            //                print($0)
-            //                if let type = $0.eatingType {
-            //                    possibleTags.update(with: type)
-            //                }
-            //            }
-            //        }
-            
+         
             let breakFastDishes = dishes.filter { $0.eatingTags.contains(where: { $0.convenientTag == .breakfast }) }
             let dinnerDishes = dishes.filter { $0.eatingTags.contains(where: { $0.convenientTag == .dinner }) }
             let lunchDishes = dishes.filter { $0.eatingTags.contains(where: { $0.convenientTag == .lunch }) }
@@ -83,25 +72,25 @@ extension RecipesScreenInteractor: RecipesScreenInteractorInterface {
                     title: breakFastDishes.first?.eatingTags.first(
                         where: { $0.convenientTag == .breakfast }
                     )?.title ?? "",
-                    dishes: breakFastDishes
+                    dishes: breakFastDishes.shuffled()
                 )
             )
             sections.append(
                 .init(
                     title: lunchDishes.first?.eatingTags.first(where: { $0.convenientTag == .lunch })?.title ?? "",
-                    dishes: lunchDishes
+                    dishes: lunchDishes.shuffled()
                 )
             )
             sections.append(
                 .init(
                     title: dinnerDishes.first?.eatingTags.first(where: { $0.convenientTag == .dinner })?.title ?? "",
-                    dishes: dinnerDishes
+                    dishes: dinnerDishes.shuffled()
                 )
             )
             sections.append(
                 .init(
                     title: snacksDishes.first?.eatingTags.first(where: { $0.convenientTag == .snack })?.title ?? "",
-                    dishes: snacksDishes
+                    dishes: snacksDishes.shuffled()
                 )
             )
             self.sections = sections

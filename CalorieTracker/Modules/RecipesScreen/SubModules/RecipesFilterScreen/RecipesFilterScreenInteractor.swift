@@ -76,7 +76,7 @@ class RecipesFilterScreenInteractor {
             .compactMap { $0.convenientTag }
         
         let exceptionSectionModel: RecipesFiltersSection = .init(
-            title: "Exception".localized,
+            title: "Exceptions".localized,
             sectionType: .exceptionTags(tags: exceptionTags)
         )
         
