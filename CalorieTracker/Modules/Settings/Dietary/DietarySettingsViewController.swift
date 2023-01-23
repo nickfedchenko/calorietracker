@@ -90,6 +90,7 @@ extension DietarySettingsViewController: UICollectionViewDelegateFlowLayout {
 
 extension DietarySettingsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        Vibration.selection.vibrate()
         guard let type = viewModel?.getTypeCell(indexPath),
               type != .title,
               let cell = collectionView.cellForItem(at: indexPath)

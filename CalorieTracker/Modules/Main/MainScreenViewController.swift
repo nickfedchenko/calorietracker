@@ -296,6 +296,8 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
     }
     
     @objc private func didTapWidget(_ sender: ASControlNode) {
+        Vibration.medium.vibrate()
+        
         guard let widget = sender as? CTWidgetProtocol else {
             return
         }
@@ -311,10 +313,12 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
     }
     
     @objc private func didTapMenuButton() {
+        Vibration.medium.vibrate()
         presenter?.didTapMenuButton()
     }
     
     @objc private func didTapButton() {
+        Vibration.medium.vibrate()
         presenter?.didTapAddButton()
     }
 }

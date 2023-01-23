@@ -149,6 +149,7 @@ final class SegmentedControl<ID: Equatable>: UIView {
     }
     
     @objc private func didTapSegmentedButton(_ sender: UIButton) {
+        Vibration.selection.vibrate()
         guard let button = sender as? Button else { return }
         buttons.forEach { $0.isSelected = false }
         button.isSelected = true

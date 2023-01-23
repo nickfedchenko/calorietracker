@@ -234,6 +234,7 @@ final class ProgressViewController: UIViewController {
     }
     
     @objc private func didTapSettingsButton(_ sender: UIButton) {
+        Vibration.rigid.vibrate()
         let vc = ProgressSettingsRouter.setupModule()
         vc.modalPresentationStyle = .fullScreen
         vc.didSaveData = { data in

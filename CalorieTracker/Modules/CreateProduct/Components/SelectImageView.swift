@@ -112,6 +112,7 @@ final class SelectImageView: UIView {
     }
     
     @objc private func didTapImageView() {
+        Vibration.selection.vibrate()
         showAlert()
     }
 }

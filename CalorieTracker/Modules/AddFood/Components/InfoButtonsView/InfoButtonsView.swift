@@ -68,6 +68,7 @@ final class InfoButtonsView<ID: WithGetDataProtocol>: UIView {
     }
     
     @objc private func didSelectedCell(_ sender: UIControl) {
+        Vibration.selection.vibrate()
         guard let button = sender as? InfoButtonView<ID> else { return }
         
         completion? { type in

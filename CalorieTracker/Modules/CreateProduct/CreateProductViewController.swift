@@ -306,10 +306,12 @@ final class CreateProductViewController: UIViewController {
     }
     
     @objc private func didTapCloseButton() {
+        Vibration.rigid.vibrate()
         presenter?.didTapCloseButton()
     }
     
     @objc private func didTapSaveButton() {
+        Vibration.success.vibrate()
         switch currentPage {
         case 0:
             checkFirstPage()
@@ -321,6 +323,7 @@ final class CreateProductViewController: UIViewController {
     }
     
     @objc private func didTapBackButton() {
+        Vibration.rigid.vibrate()
         currentPage = 0
     }
 }

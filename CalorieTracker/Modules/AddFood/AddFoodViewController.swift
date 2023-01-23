@@ -151,6 +151,7 @@ final class AddFoodViewController: UIViewController {
     // swiftlint:disable:next function_body_length
     private func setupHandlers() {
         searshTextField.didBeginEditing = { text in
+            Vibration.selection.vibrate()
             self.isSelectedType = .search
 
             guard !text.isEmpty else {
@@ -552,17 +553,22 @@ final class AddFoodViewController: UIViewController {
     }
     
     @objc private func didTapBackButton() {
+        Vibration.rigid.vibrate()
         presenter?.didTapBackButton()
     }
     
     @objc private func didTapCreateButton() {
+        Vibration.rigid.vibrate()
         showOverlay(true)
         menuCreateView.showAndCloseView(true)
     }
     
-    @objc private func didTapCalorieButton() {}
+    @objc private func didTapCalorieButton() {
+        Vibration.rigid.vibrate()
+    }
     
     @objc private func didTapScanButton() {
+        Vibration.rigid.vibrate()
         presenter?.didTapScannerButton()
     }
     
@@ -574,6 +580,7 @@ final class AddFoodViewController: UIViewController {
     }
     
     @objc private func didTapCounterControl() {
+        Vibration.rigid.vibrate()
         guard let selectedFood = selectedFood, !selectedFood.isEmpty else { return }
         presenter?.didTapCountControl(selectedFood, complition: { newFoods in
             self.selectedFood = newFoods
@@ -620,6 +627,7 @@ final class AddFoodViewController: UIViewController {
 
 extension AddFoodViewController: FoodCollectionViewControllerDelegate {
     func didSelectCell(_ type: Food) {
+        Vibration.selection.vibrate()
         presenter?.didTapCell(type)
     }
 }

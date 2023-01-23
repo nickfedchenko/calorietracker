@@ -100,6 +100,7 @@ final class CalorieGoalSettingsViewController: UIViewController {
     }
     
     @objc private func didTapBackButton() {
+        Vibration.rigid.vibrate()
         presenter?.didTapBackButton()
     }
     
@@ -146,6 +147,7 @@ extension CalorieGoalSettingsViewController: UICollectionViewDelegateFlowLayout 
 
 extension CalorieGoalSettingsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        Vibration.selection.vibrate()
         guard let type = viewModel?.getTypeCell(indexPath) else { return }
         presenter?.didTapCell(type)
     }
