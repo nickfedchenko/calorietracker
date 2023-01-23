@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class SearchView: UIView {
+final class SearchView: ViewWithShadow {
     enum State {
         case smallNotEdit
         case largeNotEdit
@@ -73,8 +73,8 @@ final class SearchView: UIView {
         return button
     }()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init() {
+        super.init(Const.shadows)
         setupView()
         setupConstraints()
         didChangeState()
@@ -116,6 +116,7 @@ final class SearchView: UIView {
     private func didChangeState() {
         switch state {
         case .edit(let editState):
+            self.shadowLayer.isHidden = true
             backgroundColor = .white
             textField.attributedPlaceholder = NSAttributedString(string: placeholderText)
             textField.innerShadowColor = R.color.foodViewing.basicPrimary()
@@ -128,12 +129,14 @@ final class SearchView: UIView {
                 textField.rightViewMode = .never
             }
         case .largeNotEdit:
+            self.shadowLayer.isHidden = false
             textField.attributedPlaceholder = getPlaceholder(placeholderText)
             textField.innerShadowColor = .clear
             textField.textAlignment = .center
             textField.rightViewMode = .never
             backgroundColor = R.color.searchTextField.background()
         case .smallNotEdit:
+            self.shadowLayer.isHidden = false
             textField.attributedPlaceholder = imagePlaceholder?.asAttributedString
             textField.innerShadowColor = .clear
             textField.textAlignment = .center
@@ -184,5 +187,26 @@ extension SearchView: UITextFieldDelegate {
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
         state = .edit(.isEmpty)
         return true
+    }
+}
+
+// MARK: - Const
+
+extension SearchView {
+    struct Const {
+        static let shadows: [Shadow] = [
+            .init(
+                color: R.color.searchTextField.shadowFirst() ?? .black,
+                opacity: 0.25,
+                offset: CGSize(width: 0, height: 0.5),
+                radius: 2
+            ),
+            .init(
+                color: R.color.searchTextField.shadowSecond() ?? .black,
+                opacity: 0.2,
+                offset: CGSize(width: 0, height: 4),
+                radius: 10
+            )
+        ]
     }
 }

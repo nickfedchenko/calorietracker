@@ -115,12 +115,6 @@ extension AddFoodViewController {
                 id: .favorites
             ),
             .init(
-                title: AddFood.myRecipes.getTitle(),
-                normalColor: R.color.addFood.menu.isNotSelectedText(),
-                selectedColor: R.color.addFood.menu.isSelectedText(),
-                id: .myRecipes
-            ),
-            .init(
                 title: AddFood.myFood.getTitle(),
                 normalColor: R.color.addFood.menu.isNotSelectedText(),
                 selectedColor: R.color.addFood.menu.isSelectedText(),

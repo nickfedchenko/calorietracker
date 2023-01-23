@@ -388,13 +388,12 @@ extension LocalDomainService: LocalDomainServiceInterface {
        
         let compoundPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [titlePredicate])
      
-        guard let products = fetchData(
+        guard let dishes = fetchData(
             for: DomainDish.self,
             withPredicate: compoundPredicate
         ) else {
             return []
         }
-//        return products.compactMap { Dish(from: $0) }.sorted { $0.title.count < $1.title.count }
-        return []
+        return dishes.compactMap { Dish(from: $0) }.sorted { $0.title.count < $1.title.count }
     }
 }

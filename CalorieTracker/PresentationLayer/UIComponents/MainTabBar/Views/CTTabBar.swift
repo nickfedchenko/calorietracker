@@ -128,6 +128,7 @@ final class CTTabBar: UIView {
 // MARK: - CTTabItemDelegate
 extension CTTabBar: CTTabItemDelegate {
     func tabSelected(at index: Int) {
+        Vibration.rigid.vibrate()
         delegate?.tabSelected(at: index)
         updateBackground(for: index)
         tabItems.enumerated().forEach { viewIndex, view in
@@ -137,7 +138,7 @@ extension CTTabBar: CTTabItemDelegate {
                 if view.isSelected == false {
                     return
                 } else {
-                view.isSelected = false
+                    view.isSelected = false
                 }
             }
         }

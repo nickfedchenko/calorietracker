@@ -154,8 +154,8 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
         switch type {
         case .product(let product):
             router?.openProductViewController(product)
-        case .dishes:
-            return
+        case .dishes(let dish):
+            router?.openDishViewController(dish)
         case .meal:
             return
         }
