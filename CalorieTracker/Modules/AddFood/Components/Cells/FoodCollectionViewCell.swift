@@ -41,8 +41,6 @@ final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
         }
     }
     
-    var didTapButton: ((Food) -> Void)?
-    
     private lazy var bottomLineView: UIView = {
         let view = UIView()
         view.backgroundColor = R.color.addFood.recipesCell.line()

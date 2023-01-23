@@ -24,7 +24,6 @@ final class UDM {
         case nutrientPercent
         case kcalGoal
         case mealKcalPercent
-<<<<<<< HEAD
         case quickAddWaterModels
         case filterTagsTitles
         case exceptionTagsTitles

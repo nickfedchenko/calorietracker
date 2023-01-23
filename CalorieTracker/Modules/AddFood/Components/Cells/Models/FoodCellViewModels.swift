@@ -11,7 +11,7 @@ struct FoodCellViewModel {
     let cellType: CellType
     let food: Food?
     let buttonType: CellButtonType
-    let subInfo: Int?
+    let subInfo: Double?
     let colorSubInfo: UIColor?
 }
 
