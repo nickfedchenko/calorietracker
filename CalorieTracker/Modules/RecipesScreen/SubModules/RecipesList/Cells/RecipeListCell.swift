@@ -5,8 +5,8 @@
 //  Created by Vladimir Banushkin on 25.12.2022.
 //
 
-import UIKit
 import Kingfisher
+import UIKit
 
 protocol RecipeListCellDelegate: AnyObject {
     func didTapToButProductsAtRecipe(at index: Int)

@@ -17,7 +17,6 @@ protocol RecipesFilterScreenViewControllerInterface: AnyObject {
 class RecipesFilterScreenViewController: UIViewController {
     var presenter: RecipesFilterScreenPresenterInterface?
     
-   
     private let blurView = UIVisualEffectView(effect: nil)
     private var blurRadiusDriver: UIViewPropertyAnimator?
     private let footerContainer: UIView = {

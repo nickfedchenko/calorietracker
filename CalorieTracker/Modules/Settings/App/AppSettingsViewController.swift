@@ -145,7 +145,7 @@ extension AppSettingsViewController: UICollectionViewDelegate {
               let cell = collectionView.cellForItem(at: indexPath) else { return }
         
         let rect = collectionView.convert(cell.frame, to: view)
-        let anchorPoint = CGPoint(x: view.frame.width - 20, y: rect.midY)
+        _ = CGPoint(x: view.frame.width - 20, y: rect.midY)
        
         switch type {
         case .database:

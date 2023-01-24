@@ -10,6 +10,7 @@ import CoreData
 
 @objc(DomainDish)
 public class DomainDish: NSManagedObject {
+    // swiftlint:disable:next cyclomatic_complexity function_body_length
     static func prepare(fromPlainModel model: Dish, context: NSManagedObjectContext) -> DomainDish {
         let dish = DomainDish(context: context)
         dish.id = Int16(model.id)

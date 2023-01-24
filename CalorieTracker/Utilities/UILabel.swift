@@ -10,7 +10,7 @@ import UIKit
 extension UILabel {
     func setMargins(margin: CGFloat = 10) {
         if let textString = self.text {
-            var paragraphStyle = NSMutableParagraphStyle()
+            let paragraphStyle = NSMutableParagraphStyle()
             paragraphStyle.firstLineHeadIndent = margin
             paragraphStyle.headIndent = margin
             paragraphStyle.tailIndent = -margin
@@ -31,10 +31,10 @@ extension UILabel {
         let textSize = text.boundingRect(
             with: maxSize,
             options: .usesLineFragmentOrigin,
-            attributes: [NSAttributedString.Key.font: font],
+            attributes: [NSAttributedString.Key.font: font!],
             context: nil
         )
-        let linesRoundedUp = Int(ceil(textSize.height/charSize))
+        let linesRoundedUp = Int(ceil(textSize.height / charSize))
         return linesRoundedUp
     }
 }

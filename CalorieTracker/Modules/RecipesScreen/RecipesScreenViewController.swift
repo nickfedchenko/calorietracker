@@ -290,8 +290,7 @@ extension RecipesScreenViewController: UICollectionViewDataSource {
             withReuseIdentifier: RecipesFolderHeader.identifier,
             for: indexPath
            ) as? RecipesFolderHeader,
-           let sectionModel = presenter?.getSectionModel(at: indexPath)
-        {
+           let sectionModel = presenter?.getSectionModel(at: indexPath) {
             header.index = indexPath.section
             header.delegate = self
             header.configure(with: sectionModel)

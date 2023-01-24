@@ -70,7 +70,7 @@ struct Dish: Codable {
     var cookTime: Int {
         cookingTime ?? 0
     }
-    /// For use in layout
+
     //    var weight: Double {
     //        return values.
     // Set не нужен вроде
@@ -90,6 +90,7 @@ struct Dish: Codable {
     //        case rawWeight = "weight"
     //    }
     
+    // swiftlint:disable:next function_body_length
     init?(from managedModel: DomainDish) {
         self.id = Int(managedModel.id)
         self.title = managedModel.title

@@ -58,7 +58,7 @@ extension CreateProductViewController {
 }
 
 extension CreateProductViewController.ProductFormSegment: WithGetTitleProtocol {
-    // swiftlint:disable:next function_body_length
+    // swiftlint:disable:next function_body_length cyclomatic_complexity
     func getTitle(_ lenght: Lenght) -> String? {
         switch self {
         case .kcal:

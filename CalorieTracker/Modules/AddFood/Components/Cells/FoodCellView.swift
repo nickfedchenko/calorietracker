@@ -181,6 +181,7 @@ final class FoodCellView: UIView {
         )
     }
     
+    // swiftlint:disable:next function_body_length
     private func setupConstraints() {
         widthImageViewConstraints = imageView.widthAnchor.constraint(equalToConstant: 0)
         imageView.snp.makeConstraints { make in

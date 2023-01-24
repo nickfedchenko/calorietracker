@@ -10,10 +10,6 @@ import UIKit
 final class RecipeRoundProgressView: UIView {
     enum ProgressMode: Equatable {
         
-        static func == (lhs: ProgressMode, rhs: ProgressMode) -> Bool {
-            lhs == rhs
-        }
-        
         case carbs(total: Double, possible: Double, eaten: Double)
         case protein(total: Double, possible: Double, eaten: Double)
         case fat(total: Double, possible: Double, eaten: Double)
@@ -142,7 +138,7 @@ final class RecipeRoundProgressView: UIView {
         let label = UILabel()
         label.font = R.font.sfProTextBold(size: 15)
         label.textColor = UIColor(cgColor: currentMode.possibleEatingProgressColor)
-        label.text = String(format: "%.1f", currentMode.possibleValue) + " " +  "g".localized
+        label.text = String(format: "%.1f", currentMode.possibleValue) + " " + "g".localized
         label.textAlignment = .center
         label.alpha = 0
         switch currentMode {
@@ -188,7 +184,7 @@ final class RecipeRoundProgressView: UIView {
         self.currentMode = data
         makeLayers()
         animateProgress()
-        possibleValue.text = String(format: "%.1f", currentMode.possibleValue) + " " +  "g".localized
+        possibleValue.text = String(format: "%.1f", currentMode.possibleValue) + " " + "g".localized
         switch currentMode {
         case .kcal:
             possibleValue.text?.removeLast(2)
@@ -245,7 +241,6 @@ final class RecipeRoundProgressView: UIView {
         whiteStrokeAnimation.isRemovedOnCompletion = false
         whiteStrokeAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
 
-        
         backgroundLayer.add(backgroundAnimation, forKey: "strokeEnd")
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { [weak self] in
             guard let self = self else { return }
@@ -264,9 +259,9 @@ final class RecipeRoundProgressView: UIView {
         }
     }
     
-    // swiftlint:disable:next function_body_length
+    // swiftlint:disable:next cyclomatic_complexity function_body_length
     private func makeLayers() {
-        var possibleCirclePath: UIBezierPath = circlePath
+        let possibleCirclePath: UIBezierPath = circlePath
         backgroundLayer.frame = bounds
         eatenLayer.frame = bounds
         possibleEatenLayer.frame = bounds
@@ -373,7 +368,7 @@ final class RecipeRoundProgressView: UIView {
         self.possibleEndRatio = possibleEndRatio
         self.possibleStartRatio = possibleStartRatio
         self.eatenRatio = eatenRatio
-        if case let .kcal = currentMode {
+        if case .kcal = currentMode {
             print("possible end ratio = \(possibleEndRatio)")
             print("possible start ratio = \(possibleStartRatio)")
         }

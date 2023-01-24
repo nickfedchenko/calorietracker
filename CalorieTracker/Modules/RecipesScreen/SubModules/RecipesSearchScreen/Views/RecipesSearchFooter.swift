@@ -91,13 +91,13 @@ final class RecipesSearchFooter: UIView {
             self?.backButtonTappedHandler?()
         }
         backButton.addAction(popAction, for: .touchUpInside)
-        textField.filtersButtonTapAction =  { [weak self] in
+        textField.filtersButtonTapAction = { [weak self] in
             self?.filtersButtonTapHandler?()
         }
         
         let mainFilterButtonAction = UIAction { [weak self] _ in
             if self?.state == .expanded {
-                self?.textField.resignFirstResponder()
+                _ = self?.textField.resignFirstResponder()
                 self?.state = .compact
                 self?.updateMainButtonState()
 //                self?.mainFilterButton.tintColor = UIColor(hex: "0C695E")

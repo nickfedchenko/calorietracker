@@ -35,7 +35,7 @@ class RecipesFilterScreenInteractor {
         //        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
         generateTitles()
         makeSections()
-        let selectedItemsIndices = getIndicesOfSelectedTags() ?? []
+        _ = getIndicesOfSelectedTags()
         //            DispatchQueue.main.sync { [weak self] in
         presenter?.shouldUpdateCollection()
         //            }

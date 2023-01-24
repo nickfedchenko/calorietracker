@@ -216,6 +216,7 @@ final class RecipeProgressView: UIView {
         }
     }
     
+    // swiftlint:disable:next function_body_length
     private func setupSubviews() {
         addSubviews(
             mainTitle,

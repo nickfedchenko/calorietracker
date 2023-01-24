@@ -13,7 +13,7 @@ final class PushAnimationTransitioningController: NSObject, UIViewControllerAnim
     private let fromViewController: UIViewController
     private let toViewController: UIViewController
     
-    init(fromViewController: UIViewController, toViewController: UIViewController)  {
+    init(fromViewController: UIViewController, toViewController: UIViewController) {
         self.fromViewController = fromViewController
         self.toViewController = toViewController
     }

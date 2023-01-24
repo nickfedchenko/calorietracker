@@ -33,4 +33,3 @@ extension NotesWidgetService: NotesWidgetServiceInterface {
         localDomainService.delete(note)
     }
 }
-
