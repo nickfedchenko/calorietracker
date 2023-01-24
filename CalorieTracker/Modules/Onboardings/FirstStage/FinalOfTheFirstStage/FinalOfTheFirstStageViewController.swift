@@ -70,7 +70,6 @@ final class FinalOfTheFirstStageViewController: UIViewController {
         titleLabel.attributedText = attributedString
         titleLabel.font = UIFont.systemFont(ofSize: 38, weight: .medium)
         
-        // swiftlint:disable:next line_length
         descriptionLabel.text = R.string.localizable.onboardingFirstFinalDescription()
         descriptionLabel.numberOfLines = 0
         descriptionLabel.textAlignment = .center

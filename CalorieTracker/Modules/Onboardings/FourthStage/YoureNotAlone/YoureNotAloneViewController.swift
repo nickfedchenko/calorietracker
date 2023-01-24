@@ -56,7 +56,6 @@ final class YoureNotAloneViewController: UIViewController {
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.systemFont(ofSize: 30, weight: .medium)
         
-        // swiftlint:disable:next line_length
         descriptionLabel.text = R.string.localizable.onboardingFourthYoureNotAloneDescription()
         descriptionLabel.textColor = R.color.onboardings.basicGray()
         descriptionLabel.textAlignment = .center

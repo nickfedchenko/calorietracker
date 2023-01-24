@@ -131,7 +131,7 @@ final class WidgetContainerViewController: UIViewController {
     
     private func getWeightWidgetInsets() -> UIEdgeInsets {
         switch UIDevice.screenType {
-        case .h19x414, .h19x428, .h19x375, .h19x390:
+        case .h19x414, .h19x428, .h19x375, .h19x390, .h19x393, .h19x430:
             return .init(
                 top: minTopInset,
                 left: self.suggestedSideInset,
@@ -164,7 +164,7 @@ final class WidgetContainerViewController: UIViewController {
             + Size(type: .compact).height
             + suggestedInterItemSpacing
         switch UIDevice.screenType {
-        case .h19x414, .h19x428, .h19x375, .h19x390:
+        case .h19x414, .h19x428, .h19x375, .h19x390, .h19x430, .h19x393:
             return .init(
                 top: minTopInset,
                 left: self.suggestedSideInset,
@@ -206,7 +206,7 @@ final class WidgetContainerViewController: UIViewController {
             + suggestedInterItemSpacing
         
         switch UIDevice.screenType {
-        case .h19x414, .h19x428, .h19x375, .h19x390:
+        case .h19x414, .h19x428, .h19x375, .h19x390, .h19x430, .h19x393:
             let topInset = minTopInset + Size(type: .large).height + suggestedInterItemSpacing
             return .init(
                 top: topInset,
@@ -241,7 +241,7 @@ final class WidgetContainerViewController: UIViewController {
             + suggestedInterItemSpacing
         
         switch UIDevice.screenType {
-        case .h19x414, .h19x428, .h19x375, .h19x390:
+        case .h19x414, .h19x428, .h19x375, .h19x390, .h19x393, .h19x430:
             return .init(
                 top: minTopInset,
                 left: self.suggestedSideInset,

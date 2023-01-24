@@ -48,6 +48,7 @@ extension CreateProductPresenter: CreateProductPresenterInterface {
         }
     }
     
+    // swiftlint:disable:next function_body_length
     func saveProduct() {
         let formValues = view.getFormValues()
         let image = view.getImage()

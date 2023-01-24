@@ -21,6 +21,8 @@ protocol RecipePageScreenPresenterInterface: AnyObject {
     func getModeForProtein() -> RecipeRoundProgressView.ProgressMode
     func getModelsForIngredients() -> [RecipeIngredientModel]
     func didChangeServing(to count: Int)
+    func didChangeAmountToEat(amount: Int)
+    func addToDiaryTapped()
 }
 
 class RecipePageScreenPresenter {
@@ -47,7 +49,7 @@ extension RecipePageScreenPresenter: RecipePageScreenPresenterInterface {
     func getModeForCarbs() -> RecipeRoundProgressView.ProgressMode {
         return .carbs(
             total: interactor?.getTotalCarbsGoal() ?? 0,
-            possible: interactor?.possibleEatenCarbsByOneServing ?? 0 ,
+            possible: interactor?.possibleEatenCarbsBySelectedServings ?? 0 ,
             eaten: interactor?.getCurrentlyEatenCarbs() ?? 0
         )
     }
@@ -55,7 +57,7 @@ extension RecipePageScreenPresenter: RecipePageScreenPresenterInterface {
     func getModeForKcal() -> RecipeRoundProgressView.ProgressMode {
         return .kcal(
             total: interactor?.getTotalKcalGoal() ?? 0,
-            possible: interactor?.possibleEatenKcalByOneServing ?? 0 ,
+            possible: interactor?.possibleEatenKcalBySelectedServings ?? 0 ,
             eaten: interactor?.getCurrentlyEatenKCal() ?? 0
         )
     }
@@ -63,7 +65,7 @@ extension RecipePageScreenPresenter: RecipePageScreenPresenterInterface {
     func getModeForFat() -> RecipeRoundProgressView.ProgressMode {
         return .fat(
             total: interactor?.getTotalFatGoal() ?? 0,
-            possible: interactor?.possibleEatenFatByOneServing ?? 0,
+            possible: interactor?.possibleEatenFatBySelectedServings ?? 0,
             eaten: interactor?.getCurrentlyEatenFat() ?? 0
         )
     }
@@ -71,7 +73,7 @@ extension RecipePageScreenPresenter: RecipePageScreenPresenterInterface {
     func getModeForProtein() -> RecipeRoundProgressView.ProgressMode {
         return .protein(
             total: interactor?.getTotalProteinGoal() ?? 0,
-            possible: interactor?.possibleEatenProteinByOneServing ?? 0,
+            possible: interactor?.possibleEatenProteinBySelectedServings ?? 0,
             eaten: interactor?.getCurrentlyEatenProtein() ?? 0
         )
     }
@@ -105,5 +107,20 @@ extension RecipePageScreenPresenter: RecipePageScreenPresenterInterface {
         interactor?.updateCurrentServingsCount(to: count)
         let updateModels = interactor?.makeModelsForIngredients() ?? []
         view.shouldUpdateIngredients(with: updateModels)
+    }
+    
+    func didChangeAmountToEat(amount: Int) {
+        interactor?.setCurrentSelectAmountToEat(amount: amount)
+        view.shouldUpdateProgressView(
+            carbsData: getModeForCarbs(),
+            kcalData: getModeForKcal(),
+            fatData: getModeForFat(),
+            proteinData: getModeForProtein()
+        )
+    }
+    
+    func addToDiaryTapped() {
+        interactor?.addSelectedPortionsToEaten()
+        router?.dismiss()
     }
 }

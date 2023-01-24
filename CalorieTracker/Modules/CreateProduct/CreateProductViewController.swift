@@ -124,6 +124,7 @@ final class CreateProductViewController: UIViewController {
         )
     }
     
+    // swiftlint:disable:next function_body_length
     private func setupFistPageConstraints() {
         headerView.snp.makeConstraints { make in
             make.leading.trailing.top.equalToSuperview()

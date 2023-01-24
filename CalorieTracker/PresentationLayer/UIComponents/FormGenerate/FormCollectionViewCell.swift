@@ -17,13 +17,13 @@ final class FormCollectionViewCell<T: WithGetTitleProtocol>: UICollectionViewCel
     }
     
     var value: String? {
-        set { formView.value = newValue }
         get {
             guard let value = formView.value, !value.isEmpty else {
                 return nil
             }
             return value
         }
+        set { formView.value = newValue }
     }
     
     override init(frame: CGRect) {

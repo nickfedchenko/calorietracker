@@ -55,6 +55,7 @@ struct AppSettingsViewModel {
         appCategoryType.firstIndex(of: type)
     }
     
+    // swiftlint:disable:next function_body_length
     private func getCategoryCellViewModel(
         _ type: AppSettingsCategoryType
     ) -> SettingsCategoryCellViewModel? {

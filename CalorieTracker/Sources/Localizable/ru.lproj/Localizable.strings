@@ -686,9 +686,9 @@
 "lineChart.right.bottom.first" = "Starting Weight: ";
 "lineChart.right.bottom.second" = "Starting: ";
 
-"tabBar.myDay" = "MY DAY";
-"tabBar.progress" = "PROGRESS";
-"tabBar.food" = "FOOD";
+"tabBar.myDay" = "МОЙ ДЕНЬ";
+"tabBar.progress" = "ПРОГРЕСС";
+"tabBar.food" = "ЕДА";
 
 "widget.main.including.title" = "INCLUDING BURNED";
 "widget.main.excluding.title" = "EXCLUDING BURNED";
@@ -717,3 +717,15 @@
 "by taste" = "по вкусу";
 "Instructions" = "Инструкции";
 "ByTaste" = "по вкусу";
+
+"Recipes" = "Рецепты";
+"Search" = "Поиск";
+"SEARCH RECIPE" = "ИСКАТЬ РЕЦЕПТ";
+
+"Categories" = "Категории";
+"Meals" = "Приемы пищи";
+"Calories" = "Калории";
+"Exceptions" = "Исключения";
+"Complexity" = "Сложность";
+"Apply" = "Применить";
+"Add to diary" = "Добавить в дневник";

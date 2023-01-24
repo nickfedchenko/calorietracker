@@ -73,6 +73,7 @@ struct SettingsСategoriesViewModel {
         )
     }
     
+    // swiftlint:disable:next function_body_length
     private func getCategoryCellViewModel(_ type: SettingsCategoryType) -> SettingsCategoryCellViewModel? {
         switch type {
         case .profile:

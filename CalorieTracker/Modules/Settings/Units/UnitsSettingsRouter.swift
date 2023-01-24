@@ -45,4 +45,3 @@ extension UnitsSettingsRouter: UnitsSettingsRouterInterface {
         viewController?.navigationController?.popViewController(animated: true)
     }
 }
-

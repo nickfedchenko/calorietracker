@@ -17,6 +17,7 @@ protocol MainScreenViewControllerInterface: AnyObject {
     func setActivityWidget(_ model: MainWidgetViewNode.Model)
     func setCalendarWidget(_ model: CalendarWidgetNode.Model)
     func setExersiceWidget(_ model: ExercisesWidgetNode.Model, _ isConnectedAH: Bool)
+    func setNoteWidget(_ model: LastNoteView.Model?)
 }
 //
 class MainScreenViewController: ASDKViewController<ASDisplayNode> {
@@ -204,6 +205,7 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         presenter?.updateMessageWidget()
         presenter?.updateActivityWidget()
         presenter?.updateCalendarWidget(nil)
+        presenter?.updateNoteWidget()
     }
     
     // MARK: - Private methods
@@ -307,6 +309,8 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
             presenter?.didTapWidget(widget.widgetType)
         case .exercises:
             presenter?.didTapExerciseWidget()
+        case .notes:
+            presenter?.didTapNotesWidget()
         default:
             return
         }
@@ -352,5 +356,9 @@ extension MainScreenViewController: MainScreenViewControllerInterface {
     
     func setWeightWidget(weight: CGFloat?) {
         self.weightMeasureWidget.weight = weight
+    }
+    
+    func setNoteWidget(_ model: LastNoteView.Model?) {
+        notesWidget.model = model
     }
 }

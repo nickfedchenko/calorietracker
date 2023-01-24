@@ -58,6 +58,7 @@ extension CreateProductViewController {
 }
 
 extension CreateProductViewController.ProductFormSegment: WithGetTitleProtocol {
+    // swiftlint:disable:next function_body_length
     func getTitle(_ lenght: Lenght) -> String? {
         switch self {
         case .kcal:

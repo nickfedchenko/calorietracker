@@ -127,13 +127,6 @@ final class RecipeRoundProgressView: UIView {
             }
         }
     }
-    private let exclamationIcon: UIImageView = {
-       let image = UIImage(systemName: "exclamationmark.triangle.fill")
-        let imageView = UIImageView(image: image)
-        imageView.tintColor = UIColor(hex: "EC2B2B")
-        imageView.alpha = 0
-        return imageView
-    }()
     
     private lazy var title: UILabel = {
         let label = UILabel()
@@ -189,6 +182,19 @@ final class RecipeRoundProgressView: UIView {
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         makeLayers()
+    }
+    
+    func update(with data: ProgressMode) {
+        self.currentMode = data
+        makeLayers()
+        animateProgress()
+        possibleValue.text = String(format: "%.1f", currentMode.possibleValue) + " " +  "g".localized
+        switch currentMode {
+        case .kcal:
+            possibleValue.text?.removeLast(2)
+        default:
+            return
+        }
     }
     
     private func setupSubviews() {

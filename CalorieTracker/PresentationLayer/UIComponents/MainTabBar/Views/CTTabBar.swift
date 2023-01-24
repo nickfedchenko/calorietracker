@@ -98,14 +98,13 @@ final class CTTabBar: UIView {
         addSubview(rightBackground)
         addSubview(HStack)
         
-        tabItems.forEach {
-            $0.aspectRatio()
-            HStack.addArrangedSubview($0)
-        }
-        
         HStack.snp.makeConstraints { make in
             make.bottom.top.equalToSuperview()
             make.leading.trailing.equalToSuperview().inset(20 + Constants.tabSpacing)
+        }
+        
+        tabItems.forEach {
+            HStack.addArrangedSubview($0)
         }
         
         rightBackground.snp.makeConstraints { make in

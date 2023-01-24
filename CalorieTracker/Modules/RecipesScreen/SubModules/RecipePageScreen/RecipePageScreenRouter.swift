@@ -10,11 +10,12 @@ import Foundation
 import UIKit
 
 protocol RecipePageScreenRouterInterface: AnyObject {
-
+    func dismiss()
 }
 
 class RecipePageScreenRouter: NSObject {
 
+    weak var view: RecipePageScreenViewController?
     weak var presenter: RecipePageScreenPresenterInterface?
 
     static func setupModule(with dish: Dish, backButtonTitle: String) -> RecipePageScreenViewController {
@@ -25,11 +26,14 @@ class RecipePageScreenRouter: NSObject {
 
         vc.presenter = presenter
         router.presenter = presenter
+        router.view = vc
         interactor.presenter = presenter
         return vc
     }
 }
 
 extension RecipePageScreenRouter: RecipePageScreenRouterInterface {
-
+    func dismiss() {
+        view?.dismiss(animated: true)
+    }
 }
