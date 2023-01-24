@@ -341,6 +341,7 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
     // MARK: - Selectors
     
     @objc private func didTapSettingsButton(_ sender: UIButton) {
+        Vibration.rigid.vibrate()
         isSelectedSettingsButton = !isSelectedSettingsButton
         switch isSelectedSettingsButton {
         case true:
@@ -353,15 +354,18 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
     }
     
     @objc private func didTapGoalButton(_ sender: UIButton) {
+        Vibration.rigid.vibrate()
         output?.setGoal(self)
     }
     
     @objc private func didTapTrackButton(_ sender: UIButton) {
+        Vibration.success.vibrate()
         presenter?.addWater(slider.stepVolume * slider.step)
         configureView()
     }
     
     @objc private func didTapBottomCloseButton() {
+        Vibration.rigid.vibrate()
         didTapCloseButton?()
     }
 }

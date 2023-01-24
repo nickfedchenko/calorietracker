@@ -459,8 +459,7 @@ extension RecipePageScreenViewController {
         _ notification: NSNotification
     ) {
         let frameKey = UIResponder.keyboardFrameEndUserInfoKey
-        guard
-            let value = notification.userInfo?[frameKey] as? NSValue else {
+        guard let value = notification.userInfo?[frameKey] as? NSValue else {
             return
         }
         defaultOffset = contentScrollView.contentOffset

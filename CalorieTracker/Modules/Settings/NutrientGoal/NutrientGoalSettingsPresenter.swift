@@ -88,17 +88,20 @@ extension NutrientGoalSettingsPresenter: NutrientGoalSettingsPresenterInterface 
     }
     
     func didTapResetButton() {
+        Vibration.warning.vibrate()
         self.nutrientTypeGoal = UDM.nutrientPercent
         update()
     }
     
     func didTapSaveButton() {
+        Vibration.success.vibrate()
         UDM.nutrientPercent = nutrientTypeGoal
         view.needUpdateParentVC()
         router?.closeViewController()
     }
     
     func didTapBackButton() {
+        Vibration.rigid.vibrate()
         router?.closeViewController()
     }
     

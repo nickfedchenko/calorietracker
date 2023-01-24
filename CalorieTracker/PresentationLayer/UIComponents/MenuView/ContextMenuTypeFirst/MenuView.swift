@@ -121,6 +121,7 @@ final class MenuView<ID: WithGetTitleProtocol
     }
     
     @objc private func didSelectedCell(_ sender: UIControl) {
+        Vibration.selection.vibrate()
         guard let view = sender as? MenuCellView<ID> else { return }
         stackView.arrangedSubviews.forEach {
             ($0 as? MenuCellView<ID>)?.isSelectedCell = false

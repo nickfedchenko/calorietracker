@@ -10,6 +10,7 @@ import UIKit
 final class InstructionView: UIView {
     
     private var shouldHideButton: Bool = false
+
     private let stepNumber: UILabel = {
         let label = UILabel()
         label.backgroundColor = UIColor(hex: "7A948F")
@@ -26,7 +27,6 @@ final class InstructionView: UIView {
         label.font = R.font.sfProTextMedium(size: 14)
         label.textColor = UIColor(hex: "514631")
         label.numberOfLines = 3
-        
         label.lineBreakStrategy = .pushOut
         label.textAlignment = .left
         return label

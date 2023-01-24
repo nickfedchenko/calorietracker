@@ -108,6 +108,7 @@ final class ProductViewController: UIViewController {
         )
         
         headerImageView.didTapLike = { value in
+            Vibration.selection.vibrate()
             if let product = self.presenter?.getProduct() {
                 FDS.shared.foodUpdate(food: .product(product), favorites: value)
             }
@@ -305,6 +306,7 @@ final class ProductViewController: UIViewController {
     }
     
     private func configureKeyboardManager() {
+        addTapToHideKeyboardGesture()
         keyboardManager?.bindToKeyboardNotifications(
             superview: view,
             bottomConstraint: contentViewBottomAnchor ?? .init(),
@@ -318,6 +320,7 @@ final class ProductViewController: UIViewController {
     }
     
     @objc private func didTapCloseButton() {
+        Vibration.rigid.vibrate()
         presenter?.didTapCloseButton()
     }
     
@@ -326,6 +329,7 @@ final class ProductViewController: UIViewController {
     }
     
     @objc private func didTapSaveButton() {
+        Vibration.success.vibrate()
         presenter?.saveNutritionDaily(addNutrition)
         didChangeAddNutrition()
         

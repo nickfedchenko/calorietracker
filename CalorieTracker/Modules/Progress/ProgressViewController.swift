@@ -132,6 +132,8 @@ final class ProgressViewController: UIViewController {
     private func setupView() {
         view.backgroundColor = R.color.progressScreen.background()
         
+        segmentedControl.layer.zPosition = 10
+        
         view.addSubviews(
             scrollView,
             bottomBackgroundView
@@ -234,6 +236,7 @@ final class ProgressViewController: UIViewController {
     }
     
     @objc private func didTapSettingsButton(_ sender: UIButton) {
+        Vibration.rigid.vibrate()
         let vc = ProgressSettingsRouter.setupModule()
         vc.modalPresentationStyle = .fullScreen
         vc.didSaveData = { data in

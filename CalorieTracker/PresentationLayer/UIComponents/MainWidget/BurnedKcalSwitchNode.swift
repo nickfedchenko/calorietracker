@@ -163,6 +163,7 @@ final class BurnedKcalSwitchNode: ASButtonNode {
     }
     
     @objc private func didTapButton(_ sender: UIButton) {
+        Vibration.rigid.vibrate()
         onSelected = !onSelected
     }
 }

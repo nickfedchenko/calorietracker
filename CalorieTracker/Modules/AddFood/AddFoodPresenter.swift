@@ -14,7 +14,7 @@ protocol AddFoodPresenterInterface: AnyObject {
     func didTapBackButton()
     func didTapCell(_ type: Food)
     func search(_ request: String, complition: ((Bool) -> Void)?)
-    func getSubInfo(_ food: Food?, _ type: FoodInfoCases) -> Double?
+    func getSubInfo(_ food: Food?, _ type: FoodInfoCases) -> Int?
     func didTapCountControl(_ foods: [Food], complition: @escaping ([Food]) -> Void )
     func didTapScannerButton()
     func saveMeal(_ mealTime: MealTime, foods: [Food])
@@ -26,6 +26,8 @@ final class AddFoodPresenter {
     unowned var view: AddFoodViewControllerInterface
     let router: AddFoodRouterInterface?
     let interactor: AddFoodInteractorInterface?
+    
+    private let searchGroup = DispatchGroup()
     
     private var foods: [Food]? {
         didSet {
@@ -73,8 +75,13 @@ final class AddFoodPresenter {
         case .myRecipes:
             self.foods = []
         case .myFood:
-            let product = DSF.shared.getAllStoredProducts().filter { $0.isUserProduct }
-            self.foods = product.foods
+            self.foods = []
+            DispatchQueue.global(qos: .userInteractive).async {
+                let product = DSF.shared.getAllStoredProducts().filter { $0.isUserProduct }
+                DispatchQueue.main.async {
+                    self.foods = product.foods
+                }
+            }
         case .search:
             self.foods = []
         }
@@ -109,17 +116,10 @@ final class AddFoodPresenter {
     }
     
     private func searchAmongAll(_ request: String) -> [Food] {
-        let dishes = DSF.shared.getAllStoredDishes()
-        let products = DSF.shared.getAllStoredProducts()
+        let dishes = DSF.shared.searchDishes(by: request)
+        let products = DSF.shared.searchProducts(by: request)
         
-        let smartSearch: SmartSearch = .init(request)
-        
-        let filteredDishes = dishes.filter { smartSearch.matches($0.title) }
-        let filteredProducts = products.filter {
-            smartSearch.matches($0.title) || smartSearch.matches($0.brand ?? "")
-        }
-        
-        return filteredDishes.foods + filteredProducts.foods
+        return dishes.foods + products.foods
     }
     
     private func searchAmongFrequent(_ request: String) -> [Food] {
@@ -154,8 +154,8 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
         switch type {
         case .product(let product):
             router?.openProductViewController(product)
-        case .dishes:
-            return
+        case .dishes(let dish):
+            router?.openDishViewController(dish)
         case .meal:
             return
         }
@@ -172,19 +172,25 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
     }
     
     func search(_ request: String, complition: ((Bool) -> Void)?) {
-        let frequents = searchAmongFrequent(request)
-        let favorites = searchAmongFavorites(request)
-        let recents = searchAmongRecent(request)
-        let basicFood = searchAmongAll(request)
-        let foods = frequents + recents + favorites + basicFood
-        
-        self.foods = foods
-        
-        complition?(!foods.isEmpty)
+        searchGroup.enter()
+        DispatchQueue.global(qos: .userInteractive).async {
+            
+            let frequents = self.searchAmongFrequent(request)
+            let favorites = self.searchAmongFavorites(request)
+            let recents = self.searchAmongRecent(request)
+            let basicFood = self.searchAmongAll(request)
+            let foods = frequents + recents + favorites + basicFood
+            DispatchQueue.main.async {
+                self.foods = foods
+                complition?(!foods.isEmpty)
+                self.searchGroup.leave()
+            }
+        }
     }
     
-    func getSubInfo(_ food: Food?, _ type: FoodInfoCases) -> Double? {
-        return food?.foodInfo[type]
+    func getSubInfo(_ food: Food?, _ type: FoodInfoCases) -> Int? {
+        guard let info = food?.foodInfo[type] else { return nil }
+        return Int(info)
     }
     
     func saveMeal(_ mealTime: MealTime, foods: [Food]) {

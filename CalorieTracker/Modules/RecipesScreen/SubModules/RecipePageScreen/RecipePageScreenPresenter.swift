@@ -43,7 +43,6 @@ class RecipePageScreenPresenter {
 }
 
 extension RecipePageScreenPresenter: RecipePageScreenPresenterInterface {
-
     func getModelsForIngredients() -> [RecipeIngredientModel] {
         interactor?.makeModelsForIngredients() ?? []
     }

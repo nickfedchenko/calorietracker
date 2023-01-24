@@ -102,10 +102,12 @@ final class ProgressSettingsViewController: UIViewController {
     }
     
     @objc private func didTapCloseButton() {
+        Vibration.rigid.vibrate()
         dismiss(animated: true)
     }
     
     @objc private func didTapSaveButton() {
+        Vibration.success.vibrate()
         presenter?.saveWidgetTypes(isSelectedWidgetType)
         didSaveData?(isSelectedWidgetType)
         dismiss(animated: true)
@@ -178,6 +180,7 @@ extension ProgressSettingsViewController: UITableViewDataSource {
 
 extension ProgressSettingsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        Vibration.selection.vibrate()
         guard let cell = tableView.cellForRow(at: indexPath) as? WidgetTypeTableViewCell else {
             return
         }

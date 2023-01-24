@@ -28,6 +28,7 @@ final class UDM {
         case filterTagsTitles
         case exceptionTagsTitles
         case possibleExceptionTags
+        case isHapticEnabled
     }
     
     static var isGloballyMetric: Bool {
@@ -132,6 +133,19 @@ final class UDM {
         }
         set {
             setValue(value: newValue, for: .isAuthorisedHealthKit)
+        }
+    }
+    
+    static var isHapticEnabled: Bool {
+        get {
+            guard let value: Bool = getValue(for: .isHapticEnabled) else {
+                return true
+            }
+            return value
+        }
+        
+        set {
+            setValue(value: newValue, for: .isHapticEnabled)
         }
     }
     

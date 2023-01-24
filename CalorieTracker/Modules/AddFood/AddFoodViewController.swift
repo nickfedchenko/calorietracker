@@ -91,9 +91,11 @@ final class AddFoodViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        setupHandlers()
         addSubviews()
         setupConstraints()
         didChangeState()
+        addTapToHideKeyboardGesture()
     }
     
     override func viewDidLayoutSubviews() {
@@ -120,7 +122,6 @@ final class AddFoodViewController: UIViewController {
     
     // MARK: - Private functions
     
-    // swiftlint:disable:next function_body_length
     private func setupView() {
         presenter?.setFoodType(.frequent)
         
@@ -140,10 +141,20 @@ final class AddFoodViewController: UIViewController {
         self.addChild(foodCollectionViewController)
         self.addChild(searchHistoryViewController)
         
+        counterKcalControl.isHidden = true
+        counterKcalControl.addTarget(
+            self,
+            action: #selector(didTapCounterControl),
+            for: .touchUpInside
+        )
+    }
+    
+    // swiftlint:disable:next function_body_length
+    private func setupHandlers() {
         searshTextField.didBeginEditing = { text in
+            Vibration.selection.vibrate()
             self.isSelectedType = .search
-            self.createTimer()
-            
+
             guard !text.isEmpty else {
                 self.state = .search(.recent)
                 return
@@ -216,12 +227,9 @@ final class AddFoodViewController: UIViewController {
             self.presenter?.createFood(type)
         }
         
-        counterKcalControl.isHidden = true
-        counterKcalControl.addTarget(
-            self,
-            action: #selector(didTapCounterControl),
-            for: .touchUpInside
-        )
+        foodCollectionViewController.createHandler = {
+            self.presenter?.createFood(.food)
+        }
     }
     
     private func addSubviews() {
@@ -246,7 +254,6 @@ final class AddFoodViewController: UIViewController {
             searshTextField,
             doneButton,
             overlayView,
- 
             menuTypeSecondView,
             menuCreateView
         )
@@ -418,10 +425,13 @@ final class AddFoodViewController: UIViewController {
         case .frequent, .recent, .favorites, .search:
             let cell: FoodCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
             let food = foods[safe: indexPath.row]
-            cell.cellType = .table
-            cell.foodType = food
-            cell.colorSubInfo = selectedFoodInfo.getColor()
-            cell.subInfo = presenter?.getSubInfo(food, selectedFoodInfo)
+            cell.viewModel = .init(
+                cellType: .table,
+                food: food,
+                buttonType: .add,
+                subInfo: presenter?.getSubInfo(food, selectedFoodInfo),
+                colorSubInfo: selectedFoodInfo.getColor()
+            )
             cell.didTapButton = { food in
                 self.selectedFood = (self.selectedFood ?? []) + [food]
                 FDS.shared.foodUpdate(food: food, favorites: false)
@@ -434,12 +444,15 @@ final class AddFoodViewController: UIViewController {
             let cell: RecipesColectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
             return cell
         case .myFood:
-            let food = foods[safe: indexPath.row]
             let cell: FoodCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
-            cell.cellType = .withShadow
-            cell.foodType = food
-            cell.colorSubInfo = selectedFoodInfo.getColor()
-            cell.subInfo = presenter?.getSubInfo(food, selectedFoodInfo)
+            let food = foods[safe: indexPath.row]
+            cell.viewModel = .init(
+                cellType: .table,
+                food: food,
+                buttonType: .add,
+                subInfo: presenter?.getSubInfo(food, selectedFoodInfo),
+                colorSubInfo: selectedFoodInfo.getColor()
+            )
             cell.didTapButton = { food in
                 self.selectedFood = (self.selectedFood ?? []) + [food]
             }
@@ -468,7 +481,7 @@ final class AddFoodViewController: UIViewController {
             case .recent:
                 setupSearchRecentState()
             case .noResults:
-                break
+                setupSearchFoundResultsState()
             case .foundResults:
                 setupSearchFoundResultsState()
             }
@@ -480,28 +493,36 @@ final class AddFoodViewController: UIViewController {
     private func setupDefaultState() {
         collectionViewTopSecondAnchor?.isActive = false
         searchHistoryViewController.view.isHidden = true
-        searchHistoryViewController.view.layer.zPosition = 0
-        foodCollectionViewController.view.layer.zPosition = 0
-        bottomGradientView.layer.zPosition = 0
-        searshTextField.layer.zPosition = 0
-        keyboardHeaderView.layer.zPosition = 0
+        view.sendSubviewToBack(tabBarStackView)
+        view.sendSubviewToBack(searshTextField)
+        view.sendSubviewToBack(microphoneButton)
+        view.sendSubviewToBack(bottomGradientView)
+        view.sendSubviewToBack(searchHistoryViewController.view)
+        view.sendSubviewToBack(foodCollectionViewController.view)
+        view.sendSubviewToBack(keyboardHeaderView)
     }
     
     private func setupSearchRecentState() {
         searchHistoryViewController.view.isHidden = false
-        searchHistoryViewController.view.layer.zPosition = 5
-        bottomGradientView.layer.zPosition = 8
-        searshTextField.layer.zPosition = 10
-        keyboardHeaderView.layer.zPosition = 9
+  
+        view.bringSubviewToFront(searchHistoryViewController.view)
+        view.bringSubviewToFront(bottomGradientView)
+        view.bringSubviewToFront(keyboardHeaderView)
+        view.bringSubviewToFront(searshTextField)
+        view.bringSubviewToFront(microphoneButton)
+        view.bringSubviewToFront(tabBarStackView)
     }
     
     private func setupSearchFoundResultsState() {
         searchHistoryViewController.view.isHidden = true
         collectionViewTopSecondAnchor?.isActive = true
-        foodCollectionViewController.view.layer.zPosition = 7
-        bottomGradientView.layer.zPosition = 8
-        searshTextField.layer.zPosition = 10
-        keyboardHeaderView.layer.zPosition = 9
+
+        view.bringSubviewToFront(foodCollectionViewController.view)
+        view.bringSubviewToFront(bottomGradientView)
+        view.bringSubviewToFront(keyboardHeaderView)
+        view.bringSubviewToFront(searshTextField)
+        view.bringSubviewToFront(microphoneButton)
+        view.bringSubviewToFront(tabBarStackView)
     }
     
     private func showDoneButton(_ flag: Bool) {
@@ -519,7 +540,7 @@ final class AddFoodViewController: UIViewController {
     private func createTimer() {
         timer?.invalidate()
         timer = Timer.scheduledTimer(
-            timeInterval: 0.5,
+            timeInterval: 0.1,
             target: self,
             selector: #selector(didEndTimer),
             userInfo: nil,
@@ -541,17 +562,22 @@ final class AddFoodViewController: UIViewController {
     }
     
     @objc private func didTapBackButton() {
+        Vibration.rigid.vibrate()
         presenter?.didTapBackButton()
     }
     
     @objc private func didTapCreateButton() {
+        Vibration.rigid.vibrate()
         showOverlay(true)
         menuCreateView.showAndCloseView(true)
     }
     
-    @objc private func didTapCalorieButton() {}
+    @objc private func didTapCalorieButton() {
+        Vibration.rigid.vibrate()
+    }
     
     @objc private func didTapScanButton() {
+        Vibration.rigid.vibrate()
         presenter?.didTapScannerButton()
     }
     
@@ -563,6 +589,7 @@ final class AddFoodViewController: UIViewController {
     }
     
     @objc private func didTapCounterControl() {
+        Vibration.rigid.vibrate()
         guard let selectedFood = selectedFood, !selectedFood.isEmpty else { return }
         presenter?.didTapCountControl(selectedFood, complition: { newFoods in
             self.selectedFood = newFoods
@@ -579,6 +606,11 @@ final class AddFoodViewController: UIViewController {
         
         switch microphoneButtonSelected {
         case true:
+            microphoneButton.backgroundColor = R.color.addFood.menu.isSelectedBorder()
+            microphoneButton.imageView?.tintColor = R.color.addFood.menu.isNotSelectedBorder()
+            microphoneButton.layer.borderColor = R.color.addFood.menu.isNotSelectedBorder()?.cgColor
+            
+            state = .search(.foundResults)
             speechRecognitionTask?.cancel()
             speechRecognitionTask = Task {
                 let result = await SpeechRecognitionManager.requestAuthorization()
@@ -598,6 +630,10 @@ final class AddFoodViewController: UIViewController {
                 }
             }
         case false:
+            microphoneButton.backgroundColor = R.color.addFood.menu.isNotSelectedBorder()
+            microphoneButton.imageView?.tintColor = R.color.addFood.menu.isSelectedBorder()
+            microphoneButton.layer.borderColor = R.color.addFood.menu.isSelectedBorder()?.cgColor
+            
             Task {
                 await speechRecognitionManager.finish()
             }
@@ -609,6 +645,7 @@ final class AddFoodViewController: UIViewController {
 
 extension AddFoodViewController: FoodCollectionViewControllerDelegate {
     func didSelectCell(_ type: Food) {
+        Vibration.selection.vibrate()
         presenter?.didTapCell(type)
     }
 }

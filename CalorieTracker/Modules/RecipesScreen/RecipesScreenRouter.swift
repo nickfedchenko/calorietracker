@@ -39,7 +39,7 @@ extension RecipesScreenRouter: RecipesScreenRouterInterface {
         let vc = RecipesListRouter.setupModule(with: section, navigationController: navigationController)
         navigationController?.pushViewController(vc, animated: true)
     }
-    
+
     func showRecipeScreen(with dish: Dish) {
         let recipeScreenModule = RecipePageScreenRouter.setupModule(
             with: dish,

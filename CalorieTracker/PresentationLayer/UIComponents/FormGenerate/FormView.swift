@@ -131,6 +131,7 @@ final class FormView<T: WithGetTitleProtocol>: ViewWithShadow, UITextFieldDelega
     // MARK: - TextField Delegate
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
+        Vibration.selection.vibrate()
         self.editingState = .begin
     }
     

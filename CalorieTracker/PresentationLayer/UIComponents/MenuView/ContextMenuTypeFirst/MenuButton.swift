@@ -77,6 +77,7 @@ final class MenuButton<ID: WithGetTitleProtocol & WithGetImageProtocol>: UIContr
     }
     
     @objc private func didTapButton() {
+        Vibration.rigid.vibrate()
         completion? { data in
             self.titleLabel.text = data.getTitle(.long)
             self.leftImageView.image = data.getImage()

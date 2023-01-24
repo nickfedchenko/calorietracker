@@ -209,7 +209,7 @@ final class RecipeProgressView: UIView {
             : UIColor(hex: "FF0000")
         }
     }
-    
+
     func animateProgress() {
         [carbsProgressView, proteinProgressView, fatProgressView, kcalProgressView].forEach {
             $0.animateProgress()

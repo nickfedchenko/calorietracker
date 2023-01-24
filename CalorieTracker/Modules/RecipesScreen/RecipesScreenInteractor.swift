@@ -62,7 +62,6 @@ extension RecipesScreenInteractor: RecipesScreenInteractorInterface {
             guard let self = self else { return }
             var sections: [RecipeSectionModel] = []
             let dishes = self.requestAllDishes().sorted(by: { $0.title < $1.title })
-         
             let breakFastDishes = dishes.filter { $0.eatingTags.contains(where: { $0.convenientTag == .breakfast }) }
             let dinnerDishes = dishes.filter { $0.eatingTags.contains(where: { $0.convenientTag == .dinner }) }
             let lunchDishes = dishes.filter { $0.eatingTags.contains(where: { $0.convenientTag == .lunch }) }

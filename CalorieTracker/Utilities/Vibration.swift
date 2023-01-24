@@ -24,6 +24,8 @@ enum Vibration {
     
     // swiftlint:disable:next cyclomatic_complexity
     func vibrate() {
+        guard UDM.isHapticEnabled else { return }
+        
         switch self {
         case .error:
             UINotificationFeedbackGenerator().notificationOccurred(.error)

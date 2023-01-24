@@ -98,6 +98,7 @@ final class QuickAddStackView: UIView {
     }
     
     @objc private func didTapView(_ sender: UIGestureRecognizer) {
+        Vibration.selection.vibrate()
         guard let view = sender.view as? QuickAddView else { return }
         if isEdit {
             didTapEdit? { model in

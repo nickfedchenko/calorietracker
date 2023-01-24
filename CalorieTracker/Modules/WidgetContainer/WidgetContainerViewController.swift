@@ -147,6 +147,13 @@ final class WidgetContainerViewController: UIViewController {
                 bottom: self.minBottomInset,
                 right: self.suggestedSideInset
             )
+        case .h19x430, .h19x393:
+            return .init(
+                top: minTopInset,
+                left: self.suggestedSideInset,
+                bottom: self.bottomInset,
+                right: self.suggestedSideInset
+            )
         case .unknown:
             return .zero
         }
@@ -169,6 +176,13 @@ final class WidgetContainerViewController: UIViewController {
             let topInsets = screenSize.height - height - bottomInset
             return .init(
                 top: topInsets,
+                left: self.suggestedSideInset,
+                bottom: bottomInset,
+                right: self.suggestedSideInset
+            )
+        case .h19x430, .h19x393:
+            return .init(
+                top: minTopInset,
                 left: self.suggestedSideInset,
                 bottom: bottomInset,
                 right: self.suggestedSideInset
@@ -209,6 +223,13 @@ final class WidgetContainerViewController: UIViewController {
                 bottom: bottomInset,
                 right: self.suggestedSideInset
             )
+        case .h19x430, .h19x393:
+            return .init(
+                top: minTopInset,
+                left: self.suggestedSideInset,
+                bottom: bottomInset,
+                right: self.suggestedSideInset
+            )
         case .unknown:
             return .zero
         }
@@ -232,6 +253,13 @@ final class WidgetContainerViewController: UIViewController {
             let topInsets = screenSize.height - height - bottomInset
             return .init(
                 top: topInsets,
+                left: self.suggestedSideInset,
+                bottom: bottomInset,
+                right: self.suggestedSideInset
+            )
+        case .h19x430, .h19x393:
+            return .init(
+                top: minTopInset,
                 left: self.suggestedSideInset,
                 bottom: bottomInset,
                 right: self.suggestedSideInset

@@ -43,6 +43,7 @@ class RecipePageScreenInteractor {
     private var selectedServingToEat: Int = 1
     
     // TODO: - По идее данные после онбординга должны быть
+
     private lazy var dailyGoals: DailyNutrition? = dataService.getNutritionGoals()
     private var currentGoalsData: DailyNutritionData = .init(
         day: .init(Date()),
@@ -160,6 +161,7 @@ extension RecipePageScreenInteractor: RecipePageScreenInteractorInterface {
         let models: [RecipeIngredientModel] = dish.ingredients.compactMap { ingredient in
             if
                 let referenceUnit = ingredient.product.units.first(where: { $0.id == ingredient.unit?.id }),
+
                 let referenceKCal = referenceUnit.kcal {
                 let unitAmount = ingredient.quantity * ratio
                 let unitTitle = ingredient.unit?.shortTitle ?? ""

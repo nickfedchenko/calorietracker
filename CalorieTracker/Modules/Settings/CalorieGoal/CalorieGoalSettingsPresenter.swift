@@ -74,6 +74,7 @@ extension CalorieGoalSettingsPresenter: CalorieGoalSettingsPresenterInterface {
             goal: goal
         )
         
+        Vibration.warning.vibrate()
         router?.openRecalculateAlert(newKcal)
     }
     
@@ -85,6 +86,7 @@ extension CalorieGoalSettingsPresenter: CalorieGoalSettingsPresenterInterface {
         if kcalGoal == UDM.kcalGoal && mealPercent == UDM.mealKcalPercent {
             router?.closeViewController()
         } else {
+            Vibration.warning.vibrate()
             router?.openDiscardChangesAlert()
         }
     }
