@@ -123,17 +123,36 @@ final class LocalDomainService {
         return fetchedResult
     }
     
-    func getDomainFoodData(_ food: Food) -> DomainFoodData? {
+    private func getDomainFoodData(_ food: Food) -> DomainFoodData? {
         let format = "id == %@"
-        let productRequest = NSFetchRequest<DomainProduct>(entityName: "DomainProduct")
-        productRequest.predicate = NSPredicate(format: format, food.id)
+        let foodData: DomainFoodData
         
-        guard let product = try? context.fetch(productRequest).first,
-                let domainFoodData = product.foodData else {
+        switch food {
+        case .product:
+            let request = NSFetchRequest<DomainProduct>(entityName: "DomainProduct")
+            request.predicate = NSPredicate(format: format, food.id)
+            
+            guard let product = try? context.fetch(request).first,
+                    let domainFoodData = product.foodData else {
+                return nil
+            }
+            
+            foodData = domainFoodData
+        case .dishes:
+            let request = NSFetchRequest<DomainDish>(entityName: "DomainDish")
+            request.predicate = NSPredicate(format: format, food.id)
+            
+            guard let dish = try? context.fetch(request).first,
+                    let domainFoodData = dish.foodData else {
+                return nil
+            }
+            
+            foodData = domainFoodData
+        case .meal:
             return nil
         }
         
-        return domainFoodData
+        return foodData
     }
 }
 
@@ -311,21 +330,34 @@ extension LocalDomainService: LocalDomainServiceInterface {
     }
     
     func setFoodData(favorites: Bool?, date dateLastUse: Date?, numberUses: Int?, food: Food) {
-        guard let foodData = getDomainFoodData(food) else { return }
+        let id = getDomainFoodData(food)?.id
+        let formatId = "id == %@"
+        let predicate = NSPredicate(format: formatId, id ?? "")
+        var propertiesToUpdate: [AnyHashable: Any] = [:]
         
         if let favorites = favorites {
-            foodData.favorites = favorites
+            propertiesToUpdate["favorites"] = favorites
         }
         
         if let dateLastUse = dateLastUse {
-            foodData.dateLastUse = dateLastUse
+            propertiesToUpdate["dateLastUse"] = dateLastUse
         }
         
         if let numberUses = numberUses {
-            foodData.numberUses = Int32(numberUses)
+            propertiesToUpdate["numberUses"] = numberUses
         }
+
+        guard let entity = NSEntityDescription.entity(forEntityName: "DomainFoodData", in: context) else {
+            return
+        }
+
+        let updateRequest = NSBatchUpdateRequest(entity: entity)
+        updateRequest.propertiesToUpdate = propertiesToUpdate
+        updateRequest.resultType = .updatedObjectIDsResultType
+        updateRequest.predicate = predicate
         
-        try? context.save()
+        let result = try? context.execute(updateRequest) as? NSBatchUpdateResult
+        
     }
     
     func getFoodData(_ food: Food) -> FoodData? {

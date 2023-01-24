@@ -23,6 +23,8 @@ protocol RecipePageScreenPresenterInterface: AnyObject {
     func didChangeServing(to count: Int)
     func didChangeAmountToEat(amount: Int)
     func addToDiaryTapped()
+    func addToFavoritesTapped(_ flag: Bool)
+    func createFoodData()
 }
 
 class RecipePageScreenPresenter {
@@ -122,5 +124,13 @@ extension RecipePageScreenPresenter: RecipePageScreenPresenterInterface {
     func addToDiaryTapped() {
         interactor?.addSelectedPortionsToEaten()
         router?.dismiss()
+    }
+    
+    func addToFavoritesTapped(_ flag: Bool) {
+        interactor?.updateFoodData(flag)
+    }
+    
+    func createFoodData() {
+        interactor?.updateFoodData(nil)
     }
 }

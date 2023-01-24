@@ -136,12 +136,12 @@ class RecipePageScreenViewController: UIViewController {
     }()
     
     private lazy var dailyProgressView: RecipeProgressView = {
-       let view = RecipeProgressView(
-        carbsData: presenter?.getModeForCarbs() ?? .undefined,
-        kcalData: presenter?.getModeForKcal() ?? .undefined,
-        fatData: presenter?.getModeForFat() ?? .undefined,
-        proteinData: presenter?.getModeForProtein() ?? .undefined
-       )
+        let view = RecipeProgressView(
+            carbsData: presenter?.getModeForCarbs() ?? .undefined,
+            kcalData: presenter?.getModeForKcal() ?? .undefined,
+            fatData: presenter?.getModeForFat() ?? .undefined,
+            proteinData: presenter?.getModeForProtein() ?? .undefined
+        )
         return view
     }()
     
@@ -199,6 +199,7 @@ class RecipePageScreenViewController: UIViewController {
         setupActions()
         setupKeyboardObservers()
         setupDelegates()
+        presenter?.createFoodData()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -384,8 +385,8 @@ extension RecipePageScreenViewController: RecipePageScreenHeaderDelegate {
 }
 //
 extension RecipePageScreenViewController: RecipeMainImageViewDelegate {
-    func addToFavoritesTapped() {
-        return
+    func addToFavoritesTapped(_ flag: Bool) {
+        presenter?.addToFavoritesTapped(flag)
     }
     
     func shareButtonTapped() {

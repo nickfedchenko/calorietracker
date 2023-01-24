@@ -25,6 +25,7 @@ protocol RecipePageScreenInteractorInterface: AnyObject {
     func getInstructions() -> [String]
     func setCurrentSelectAmountToEat(amount: Int)
     func addSelectedPortionsToEaten()
+    func updateFoodData(_ flag: Bool?)
     
     var possibleEatenKcalBySelectedServings: Double { get }
     var possibleEatenFatBySelectedServings: Double { get }
@@ -151,6 +152,10 @@ class RecipePageScreenInteractor {
 }
 
 extension RecipePageScreenInteractor: RecipePageScreenInteractorInterface {
+    func updateFoodData(_ flag: Bool?) {
+        FDS.shared.foodUpdate(food: .dishes(dish), favorites: flag)
+    }
+    
     func setCurrentSelectAmountToEat(amount: Int) {
         selectedServingToEat = amount
     }

@@ -135,7 +135,7 @@ final class SelectView<ID: WithGetTitleProtocol>: UIView {
             .offset
     }
     
-    @objc private func didTapCell(_ sender: UIControl) {
+    @objc func didTapCell(_ sender: UIControl) {
         Vibration.selection.vibrate()
         guard !isCollapsed else {
             if let type = selectedCellType {
