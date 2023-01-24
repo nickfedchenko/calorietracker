@@ -24,13 +24,17 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Fix Me</string>
+	<string>Wee need an access to your camera roll to let you add photos your custom prodcuts</string>
+	<key>NSHealthClinicalHealthRecordsShareUsageDescription</key>
+	<string>We need an accsess to your health records to track your calorie consuptions more accurately</string>
 	<key>NSHealthShareUsageDescription</key>
 	<string>The healthkit entry isn’t used by WatchKit extensions.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>We need an update Helath records access to make your data entered in our app available for other apps.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Fix Me</string>
+	<string>We need an access to your mac to let you perform search tasks without using a keyboard</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>Fix me</string>
+	<string>We need an access to your mac to let you perform search tasks without using a keyboard</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>SF-Pro-Display-Heavy.otf</string>

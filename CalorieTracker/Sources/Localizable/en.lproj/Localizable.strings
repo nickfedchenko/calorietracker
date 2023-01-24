@@ -701,7 +701,7 @@
 "widget.water.quickAdd.goalbutton.title" = "CHANGE DAILY GOAL";
 
 "widget.weight.title" = "WEIGHT";
-"widget.weight.add" = "ADD WEIGHING";
+"widget.weight.add" = "ADD WEIGHTING";
 
 "ah.connect.title" = "Connect to Apple Health";
 
@@ -714,7 +714,6 @@
 "servings-1" = "serving";
 "servings-2-4" = "servings";
 "servings>4" = "servings";
-"by taste" = "by taste";
 "Instructions" = "Instructions";
 "ByTaste" = "by taste";
 
