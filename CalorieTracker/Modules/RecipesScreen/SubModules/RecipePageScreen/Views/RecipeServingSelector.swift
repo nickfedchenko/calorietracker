@@ -139,4 +139,3 @@ final class RecipeServingSelector: UIView {
         animateBlinking(button: sender)
     }
 }
-

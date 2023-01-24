@@ -63,7 +63,6 @@ final class RecipePreviewCell: UICollectionViewCell {
         return imageView
     }()
     
-    
     func configure(with model: Dish) {
         if let photoUrl = URL(string: model.photo) {
             mainImage.kf.setImage(with: photoUrl)

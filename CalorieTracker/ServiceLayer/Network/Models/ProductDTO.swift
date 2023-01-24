@@ -56,8 +56,6 @@ struct ProductDTO: Codable {
         return carbs.value ?? .zero
     }
     
-    
-    
 //    init?(from searchModel: SearchProduct) {
 //        id = searchModel.productID
 //        barcode = searchModel.sourceObject.barcode
@@ -74,9 +72,6 @@ struct ProductDTO: Codable {
 //        brand = searchModel.sourceObject.brand
 //        servings = searchModel.sourceObject.servings.compactMap { ServingDTO(from: $0) }
 //    }
-//}
-
-
 }
 
 struct UnitElement: Codable {

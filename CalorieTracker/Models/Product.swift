@@ -94,8 +94,8 @@ extension Product: Equatable {
     }
 }
 
-// MARK: - swiftlint:disable:next cyclomatic_complexity
 extension Composition {
+    // swiftlint:disable:next cyclomatic_complexity function_body_length
     init(_ nutritions: [Nutrition]) {
         for nutrition in nutritions {
             switch nutrition.nutritionType {

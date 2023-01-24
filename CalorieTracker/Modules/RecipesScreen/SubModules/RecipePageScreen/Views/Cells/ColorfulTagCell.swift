@@ -52,6 +52,4 @@ final class ColorfulTagCell: UICollectionViewCell {
             make.top.bottom.equalToSuperview().inset(7)
         }
     }
-    
-
 }

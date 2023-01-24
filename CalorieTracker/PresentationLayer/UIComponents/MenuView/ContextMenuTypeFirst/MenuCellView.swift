@@ -7,6 +7,7 @@
 
 import UIKit
 
+// swiftlint:disable:next operator_usage_whitespace
 final class MenuCellView<ID: WithGetTitleProtocol
                             & WithGetImageProtocol
                             & WithGetDescriptionProtocol>: ControlWithShadow {

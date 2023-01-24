@@ -7,7 +7,6 @@
 
 import UIKit
 
-
 final class RecipeMainGreenGradientButton: UIButton {
     private let shapeLayer = CAShapeLayer()
     private let gradientLayer = CAGradientLayer()

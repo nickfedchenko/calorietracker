@@ -125,9 +125,15 @@ final class NotesViewingViewController: UIViewController {
         guard let viewModel = viewModel else {
             return
         }
+        
+        var items: [Any] = [viewModel.text]
+        
+        if let image = viewModel.image {
+            items.append(image)
+        }
 
         let activityVC = UIActivityViewController(
-            activityItems: [viewModel.image, viewModel.text],
+            activityItems: items,
             applicationActivities: nil
         )
         

@@ -34,9 +34,9 @@ extension UIBezierPath {
         if topRightRadius != .zero {
             path.addLine(to: CGPoint(x: topRight.x - topRightRadius.width, y: topRight.y))
             path.addCurve(
-                to:  CGPoint(x: topRight.x, y: topRight.y + topRightRadius.height),
+                to: CGPoint(x: topRight.x, y: topRight.y + topRightRadius.height),
                 control1: CGPoint(x: topRight.x, y: topRight.y),
-                control2:CGPoint(x: topRight.x, y: topRight.y + topRightRadius.height)
+                control2: CGPoint(x: topRight.x, y: topRight.y + topRightRadius.height)
             )
         } else {
              path.addLine(to: CGPoint(x: topRight.x, y: topRight.y))
@@ -82,4 +82,3 @@ extension UIBezierPath {
         cgPath = path
     }
 }
-

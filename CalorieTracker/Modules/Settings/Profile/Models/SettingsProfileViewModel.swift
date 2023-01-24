@@ -24,6 +24,7 @@ struct SettingsProfileViewModel {
         profileCategoryType.count
     }
     
+    // swiftlint:disable:next cyclomatic_complexity
     func getCell(_ collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell? {
         guard let type = profileCategoryType[safe: indexPath.row] else {
             return nil

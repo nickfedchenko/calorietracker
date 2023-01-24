@@ -7,23 +7,13 @@
 
 import UIKit
 
-
-//
-//  PushAnimationTransitioningController.swift
-//  CalorieTracker
-//
-//  Created by Vladimir Banushkin on 26.12.2022.
-//
-
-import UIKit
-
 final class PopAnimationTransitioningController: NSObject, UIViewControllerAnimatedTransitioning {
  
     private var duration = 0.3
     private let fromViewController: UIViewController
     private let toViewController: UIViewController
     
-    init(fromViewController: UIViewController, toViewController: UIViewController)  {
+    init(fromViewController: UIViewController, toViewController: UIViewController) {
         self.fromViewController = fromViewController
         self.toViewController = toViewController
     }

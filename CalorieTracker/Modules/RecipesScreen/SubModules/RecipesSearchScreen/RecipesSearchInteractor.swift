@@ -138,10 +138,10 @@ extension RecipesSearchInteractor: RecipesSearchInteractorInterface {
         return filteredDishes.sorted(by: { $0.title < $1.title })
     }
     
-    // swiftlint:disable:next function_body_length
+    // swiftlint:disable:next function_body_length cyclomatic_complexity
     private func filterByExtraTags(dishes: [Dish]) -> [Dish] {
         guard !specialTags.isEmpty else { return dishes }
-        var filteringDishes = dishes
+        let filteringDishes = dishes
         var cal50to100Dishes: [Dish] = []
         var cal100to200Dishes: [Dish] = []
         var cal200to300Dishes: [Dish] = []
@@ -190,7 +190,7 @@ extension RecipesSearchInteractor: RecipesSearchInteractorInterface {
                 lessThan30Minutes = filteringDishes.filter { $0.cookTime <= 30 }
             }
         }
-        var filteredDishes = cal50to100Dishes +
+        let filteredDishes = cal50to100Dishes +
         cal100to200Dishes +
         cal200to300Dishes +
         cal300to400Dishes +
