@@ -18,6 +18,8 @@ struct Product {
     let composition: Composition?
     let servings: [Serving]?
     
+    var foodDataId: String?
+    
     enum Photo: Codable {
         case url(URL)
         case data(Data)
@@ -47,6 +49,8 @@ extension Product {
         self.kcal = managedModel.kcal
         self.carbs = managedModel.carbs
         self.isUserProduct = managedModel.isUserProduct
+        
+        self.foodDataId = managedModel.foodData?.id
         
         if let photoData = managedModel.photo {
             self.photo = try? JSONDecoder().decode(Photo.self, from: photoData)

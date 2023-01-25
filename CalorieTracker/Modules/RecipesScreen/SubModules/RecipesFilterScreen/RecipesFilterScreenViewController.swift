@@ -314,7 +314,7 @@ extension RecipesFilterScreenViewController: UICollectionViewDataSource, UIColle
             typedHeader.configure(with: title)
             return typedHeader
         default:
-            assert(false, "wrong kind type")
+            return UICollectionReusableView()
         }
     }
     

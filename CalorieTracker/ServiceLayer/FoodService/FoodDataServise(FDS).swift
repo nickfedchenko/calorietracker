@@ -61,7 +61,20 @@ protocol FoodDataServiceInterface {
     /// Возвращает циль на дневное питание
     /// - Returns: массив DailyNutrition
     func getNutritionGoals() -> DailyNutrition?
-    func foodUpdate(food: Food, favorites: Bool?)
+    /// Обновляет данные о продукте или блюде
+    /// - Parameters:
+    ///   - food: Food продукт или блюдо
+    ///   - favorites: избранное
+    /// - Returns: Bool результат обновления
+    @discardableResult func foodUpdate(food: Food, favorites: Bool?) -> Bool
+    /// Возвращает данные о продукте или блюде
+    /// - Parameters:
+    ///   - food: продукт или блюдо
+    /// - Returns: FoodData
+    func getFoodData(_ food: Food) -> FoodData?
+    /// Возвращает все данные о еде сохраненные в локальной ДБ
+    /// - Returns: массив FoodData
+    func getAllStoredFoodData() -> [FoodData]
 }
 
 final class FDS {
@@ -70,11 +83,11 @@ final class FDS {
     private let localPersistentStore: LocalDomainServiceInterface = LocalDomainService()
     
     private func getFavoriteFoods() -> [FoodData] {
-        DSF.shared.getAllStoredFoodData().filter { $0.favorites }
+        localPersistentStore.fetchFoodData().filter { $0.favorites }
     }
     
     private func getFrequentFood(_ count: Int) -> [FoodData] {
-        let allFoods = DSF.shared.getAllStoredFoodData()
+        let allFoods = localPersistentStore.fetchFoodData()
         return Array(allFoods.sorted(by: { $0.numberUses > $1.numberUses })
             .filter { $0.food != nil }
             .prefix(count))
@@ -82,7 +95,7 @@ final class FDS {
 }
 
 extension FDS: FoodDataServiceInterface {
-    func foodUpdate(food: Food, favorites: Bool?) {
+    func foodUpdate(food: Food, favorites: Bool?) -> Bool {
         guard let foodData = localPersistentStore.getFoodData(food) else {
             let foodData = FoodData(
                 dateLastUse: Date(),
@@ -97,18 +110,26 @@ extension FDS: FoodDataServiceInterface {
             case .dishes(let dish):
                 foodData.setChild(dish)
             default:
-                return
+                return false
             }
             
-            return
+            return true
         }
         
-        localPersistentStore.setFoodData(
+        return localPersistentStore.setFoodData(
             favorites: favorites,
             date: Date(),
             numberUses: foodData.numberUses + 1,
             food: food
         )
+    }
+    
+    func getFoodData(_ food: Food) -> FoodData? {
+        return localPersistentStore.getFoodData(food)
+    }
+    
+    func getAllStoredFoodData() -> [FoodData] {
+        return localPersistentStore.fetchFoodData()
     }
     
     func getFavoriteDishes() -> [Dish] {

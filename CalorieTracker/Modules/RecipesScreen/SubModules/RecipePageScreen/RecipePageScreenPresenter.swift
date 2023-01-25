@@ -25,6 +25,8 @@ protocol RecipePageScreenPresenterInterface: AnyObject {
     func addToDiaryTapped()
     func addToFavoritesTapped(_ flag: Bool)
     func createFoodData()
+    
+    var isFavoritesDish: Bool? { get }
 }
 
 class RecipePageScreenPresenter {
@@ -45,6 +47,11 @@ class RecipePageScreenPresenter {
 }
 
 extension RecipePageScreenPresenter: RecipePageScreenPresenterInterface {
+    var isFavoritesDish: Bool? {
+        guard let dish = interactor?.getDish() else { return false }
+        return FDS.shared.getFoodData(.dishes(dish))?.favorites
+    }
+    
     func getModelsForIngredients() -> [RecipeIngredientModel] {
         interactor?.makeModelsForIngredients() ?? []
     }

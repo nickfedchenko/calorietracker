@@ -13,7 +13,7 @@ protocol ProductViewControllerInterface: AnyObject {
     func viewControllerShouldClose()
 }
 
-final class ProductViewController: UIViewController {
+final class ProductViewController: CTViewController {
     enum OpenController {
         case addFood
         case createProduct
@@ -125,7 +125,7 @@ final class ProductViewController: UIViewController {
         headerImageView.configure(
             photo: product.photo,
             check: false,
-            favorite: false
+            favorite: presenter?.isFavoritesProduct ?? false
         )
     }
     

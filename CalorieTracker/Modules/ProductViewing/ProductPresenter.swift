@@ -14,6 +14,8 @@ protocol ProductPresenterInterface: AnyObject {
     func didTapCloseButton()
     func getProduct() -> Product
     func saveNutritionDaily(_ value: DailyNutrition)
+    
+    var isFavoritesProduct: Bool? { get }
 }
 
 class ProductPresenter {
@@ -37,6 +39,10 @@ class ProductPresenter {
 }
 
 extension ProductPresenter: ProductPresenterInterface {
+    var isFavoritesProduct: Bool? {
+        return FDS.shared.getFoodData(.product(product))?.favorites
+    }
+    
     func getNutritionDaily() -> DailyNutrition? {
         return FDS.shared.getNutritionToday().nutrition
     }

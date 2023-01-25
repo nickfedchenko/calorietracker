@@ -19,7 +19,7 @@ protocol RecipePageScreenViewControllerInterface: AnyObject {
     )
 }
 
-class RecipePageScreenViewController: UIViewController {
+class RecipePageScreenViewController: CTViewController {
     var presenter: RecipePageScreenPresenterInterface?
     var defaultOffset: CGPoint = .zero
     var defaultContentSize: CGSize = .zero
@@ -264,6 +264,8 @@ class RecipePageScreenViewController: UIViewController {
             describingLabel.text = dish.description
             print("Dish description is \(dish.description)")
         }
+        
+        mainImageView.setIsFavorite(shouldSetFavorite: presenter?.isFavoritesDish ?? false)
     }
     
     // swiftlint:disable:next function_body_length
