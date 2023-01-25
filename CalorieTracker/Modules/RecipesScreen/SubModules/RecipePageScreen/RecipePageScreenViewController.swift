@@ -229,6 +229,7 @@ class RecipePageScreenViewController: CTViewController {
     private func setupAppearance() {
         view.backgroundColor = UIColor(hex: "E5F5F3")
         mainImageView.setIsFavorite(shouldSetFavorite: false)
+        navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     private func setupKeyboardObservers() {
