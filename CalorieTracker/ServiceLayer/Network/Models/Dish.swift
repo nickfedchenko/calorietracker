@@ -28,6 +28,8 @@ struct Dish: Codable {
     let isDraft: Bool
     let createdAt: String
     
+    var foodDataId: String?
+    
     //    let id: Int
     //    let title: String
     //    let info: String?
@@ -101,6 +103,8 @@ struct Dish: Codable {
         self.dishWeight = managedModel.weight
         self.dishWeightType = Int(managedModel.dishWeightType)
         self.createdAt = managedModel.updatedAt
+        self.foodDataId = managedModel.foodData?.id
+        
         let decoder = JSONDecoder()
         
         if

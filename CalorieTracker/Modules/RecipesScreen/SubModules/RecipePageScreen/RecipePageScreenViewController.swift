@@ -19,7 +19,7 @@ protocol RecipePageScreenViewControllerInterface: AnyObject {
     )
 }
 
-class RecipePageScreenViewController: UIViewController {
+class RecipePageScreenViewController: CTViewController {
     var presenter: RecipePageScreenPresenterInterface?
     var defaultOffset: CGPoint = .zero
     var defaultContentSize: CGSize = .zero
@@ -136,12 +136,12 @@ class RecipePageScreenViewController: UIViewController {
     }()
     
     private lazy var dailyProgressView: RecipeProgressView = {
-       let view = RecipeProgressView(
-        carbsData: presenter?.getModeForCarbs() ?? .undefined,
-        kcalData: presenter?.getModeForKcal() ?? .undefined,
-        fatData: presenter?.getModeForFat() ?? .undefined,
-        proteinData: presenter?.getModeForProtein() ?? .undefined
-       )
+        let view = RecipeProgressView(
+            carbsData: presenter?.getModeForCarbs() ?? .undefined,
+            kcalData: presenter?.getModeForKcal() ?? .undefined,
+            fatData: presenter?.getModeForFat() ?? .undefined,
+            proteinData: presenter?.getModeForProtein() ?? .undefined
+        )
         return view
     }()
     
@@ -199,6 +199,7 @@ class RecipePageScreenViewController: UIViewController {
         setupActions()
         setupKeyboardObservers()
         setupDelegates()
+        presenter?.createFoodData()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -263,6 +264,8 @@ class RecipePageScreenViewController: UIViewController {
             describingLabel.text = dish.description
             print("Dish description is \(dish.description)")
         }
+        
+        mainImageView.setIsFavorite(shouldSetFavorite: presenter?.isFavoritesDish ?? false)
     }
     
     // swiftlint:disable:next function_body_length
@@ -384,8 +387,8 @@ extension RecipePageScreenViewController: RecipePageScreenHeaderDelegate {
 }
 //
 extension RecipePageScreenViewController: RecipeMainImageViewDelegate {
-    func addToFavoritesTapped() {
-        return
+    func addToFavoritesTapped(_ flag: Bool) {
+        presenter?.addToFavoritesTapped(flag)
     }
     
     func shareButtonTapped() {

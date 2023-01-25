@@ -35,7 +35,7 @@ protocol LocalDomainServiceInterface {
     func setChildFoodData(foodDataId: String, dishID: Int)
     func setChildFoodData(foodDataId: String, productID: String)
     func setChildMeal(mealId: String, dishesID: [Int], productsID: [String])
-    func setFoodData(favorites: Bool?, date dateLastUse: Date?, numberUses: Int?, food: Food)
+    func setFoodData(favorites: Bool?, date dateLastUse: Date?, numberUses: Int?, food: Food) -> Bool
     func getFoodData(_ food: Food) -> FoodData?
     @discardableResult func delete<T>(_ object: T) -> Bool
 }
@@ -123,13 +123,13 @@ final class LocalDomainService {
         return fetchedResult
     }
     
-    func getDomainFoodData(_ food: Food) -> DomainFoodData? {
+    private func getDomainFoodData(_ foodDataId: String) -> DomainFoodData? {
         let format = "id == %@"
-        let productRequest = NSFetchRequest<DomainProduct>(entityName: "DomainProduct")
-        productRequest.predicate = NSPredicate(format: format, food.id)
         
-        guard let product = try? context.fetch(productRequest).first,
-                let domainFoodData = product.foodData else {
+        let request = NSFetchRequest<DomainFoodData>(entityName: "DomainFoodData")
+        request.predicate = NSPredicate(format: format, foodDataId)
+        
+        guard let domainFoodData = try? context.fetch(request).first else {
             return nil
         }
         
@@ -277,15 +277,11 @@ extension LocalDomainService: LocalDomainServiceInterface {
     
     func setChildFoodData(foodDataId: String, dishID: Int) {
         let format = "id == %ld"
-        let formatStrId = "id == %@"
         let dishRequest = NSFetchRequest<DomainDish>(entityName: "DomainDish")
-        let foodDataRequest = NSFetchRequest<DomainFoodData>(entityName: "DomainFoodData")
-        
         dishRequest.predicate = NSPredicate(format: format, dishID)
-        foodDataRequest.predicate = NSPredicate(format: formatStrId, foodDataId)
         
         guard let dish = try? context.fetch(dishRequest).first,
-              let foodData = try? context.fetch(foodDataRequest).first else { return }
+              let foodData = getDomainFoodData(foodDataId) else { return }
         
         foodData.dish = dish
         foodData.product = nil
@@ -296,13 +292,10 @@ extension LocalDomainService: LocalDomainServiceInterface {
     func setChildFoodData(foodDataId: String, productID: String) {
         let format = "id == %@"
         let productRequest = NSFetchRequest<DomainProduct>(entityName: "DomainProduct")
-        let foodDataRequest = NSFetchRequest<DomainFoodData>(entityName: "DomainFoodData")
-
         productRequest.predicate = NSPredicate(format: format, productID)
-        foodDataRequest.predicate = NSPredicate(format: format, foodDataId)
         
         guard let product = try? context.fetch(productRequest).first,
-              let foodData = try? context.fetch(foodDataRequest).first else { return }
+              let foodData = getDomainFoodData(foodDataId) else { return }
         
         foodData.product = product
         foodData.dish = nil
@@ -310,26 +303,57 @@ extension LocalDomainService: LocalDomainServiceInterface {
         try? context.save()
     }
     
-    func setFoodData(favorites: Bool?, date dateLastUse: Date?, numberUses: Int?, food: Food) {
-        guard let foodData = getDomainFoodData(food) else { return }
+    func setFoodData(favorites: Bool?, date dateLastUse: Date?, numberUses: Int?, food: Food) -> Bool {
+        let id = food.foodDataId
+        let formatId = "id == %@"
+        let predicate = NSPredicate(format: formatId, id ?? "")
+        var propertiesToUpdate: [AnyHashable: Any] = [:]
         
         if let favorites = favorites {
-            foodData.favorites = favorites
+            propertiesToUpdate["favorites"] = NSNumber(value: favorites)
         }
         
         if let dateLastUse = dateLastUse {
-            foodData.dateLastUse = dateLastUse
+            propertiesToUpdate["dateLastUse"] = dateLastUse
         }
         
         if let numberUses = numberUses {
-            foodData.numberUses = Int32(numberUses)
+            propertiesToUpdate["numberUses"] = numberUses
+        }
+
+        guard let entity = NSEntityDescription.entity(forEntityName: "DomainFoodData", in: context) else {
+            return false
+        }
+
+        let updateRequest = NSBatchUpdateRequest(entity: entity)
+        updateRequest.propertiesToUpdate = propertiesToUpdate
+        updateRequest.resultType = .updatedObjectIDsResultType
+        updateRequest.predicate = predicate
+        updateRequest.affectedStores = container.persistentStoreCoordinator.persistentStores
+
+        guard let batchUpdate = try? context.execute(updateRequest) as? NSBatchUpdateResult,
+               let objectIDArray = batchUpdate.result as? [NSManagedObjectID]else {
+            print("not update foodData ID - \(String(describing: id))")
+            return false
         }
         
-        try? context.save()
+        let changes = [NSUpdatedObjectsKey: objectIDArray]
+        NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes, into: [context])
+        print("update foodData\n\(String(describing: batchUpdate.result))")
+        return true
     }
     
     func getFoodData(_ food: Food) -> FoodData? {
-        guard let domainFoodData = getDomainFoodData(food) else {
+        guard let id = food.foodDataId,
+               let domainFoodData = getDomainFoodData(id) else {
+            return nil
+        }
+        
+        return FoodData(from: domainFoodData)
+    }
+    
+    func getFoodData(_ id: String) -> FoodData? {
+        guard let domainFoodData = getDomainFoodData(id) else {
             return nil
         }
         
@@ -367,21 +391,6 @@ extension LocalDomainService: LocalDomainServiceInterface {
         meal.addToProducts(NSSet(array: products))
         
         try? context.save()
-    }
-    
-    func getFoodData(_ id: String) -> FoodData? {
-        let predicate = NSPredicate(format: "id == %@", id)
-        
-        let domainFoodData = fetchData(
-            for: DomainFoodData.self,
-            withPredicate: NSCompoundPredicate(orPredicateWithSubpredicates: [predicate])
-        )?.first
-        
-        guard let domainFoodData = domainFoodData else {
-            return nil
-        }
-        
-        return FoodData(from: domainFoodData)
     }
     
     func saveFoodData(foods: [FoodData]) {

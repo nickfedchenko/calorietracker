@@ -8,7 +8,7 @@
 import UIKit
 
 protocol RecipeMainImageViewDelegate: AnyObject {
-    func addToFavoritesTapped()
+    func addToFavoritesTapped(_ flag: Bool)
     func shareButtonTapped()
 }
 
@@ -161,7 +161,7 @@ final class RecipeMainImageView: UIView {
     @objc private func addToFavoritesTapped(sender: UIButton) {
         sender.animateByScaleTransform()
         sender.isSelected.toggle()
-        delegate?.addToFavoritesTapped()
+        delegate?.addToFavoritesTapped(sender.isSelected)
     }
     
     @objc private func shareButtonTapped(sender: UIButton) {

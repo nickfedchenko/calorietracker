@@ -22,9 +22,6 @@ protocol DataServiceFacadeInterface {
     /// Возвращает все заметки сохраненные в локальной ДБ
     /// - Returns: массив Note
     func getAllStoredNotes() -> [Note]
-    /// Возвращает все данные о еде сохраненные в локальной ДБ
-    /// - Returns: массив FoodData
-    func getAllStoredFoodData() -> [FoodData]
     /// Возвращает все данные о воде сохраненные в локальной ДБ
     /// - Returns: массив DailyData
     func getAllStoredWater() -> [DailyData]
@@ -74,10 +71,6 @@ final class DSF {
     private let localPersistentStore: LocalDomainServiceInterface = LocalDomainService()
     
     private init() {}
-    
-    private func getFoodData() -> [FoodData] {
-        localPersistentStore.fetchFoodData()
-    }
 }
 
 extension DSF: DataServiceFacadeInterface {
@@ -133,10 +126,6 @@ extension DSF: DataServiceFacadeInterface {
     func getAllStoredDishes() -> [Dish] {
         let dishes = localPersistentStore.fetchDishes()
         return dishes
-    }
-    
-    func getAllStoredFoodData() -> [FoodData] {
-        self.getFoodData()
     }
     
     func getAllStoredWater() -> [DailyData] {

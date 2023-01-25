@@ -112,6 +112,8 @@ final class AddFoodViewController: UIViewController {
         
         navigationController?.setToolbarHidden(true, animated: false)
         navigationController?.isNavigationBarHidden = true
+        
+        presenter?.setFoodType(isSelectedType)
     }
     
     override func viewDidAppear(_ animated: Bool) {
