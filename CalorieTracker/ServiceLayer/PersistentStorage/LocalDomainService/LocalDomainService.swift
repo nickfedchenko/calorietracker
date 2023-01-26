@@ -35,7 +35,7 @@ protocol LocalDomainServiceInterface {
     func setChildFoodData(foodDataId: String, dishID: Int)
     func setChildFoodData(foodDataId: String, productID: String)
     func setChildMeal(mealId: String, dishesID: [Int], productsID: [String])
-    func setFoodData(favorites: Bool?, date dateLastUse: Date?, numberUses: Int?, food: Food) -> Bool
+    @discardableResult func setFoodData(favorites: Bool?, date dateLastUse: Date?, numberUses: Int?, food: Food) -> Bool
     func getFoodData(_ food: Food) -> FoodData?
     @discardableResult func delete<T>(_ object: T) -> Bool
 }
@@ -134,6 +134,32 @@ final class LocalDomainService {
         }
         
         return domainFoodData
+    }
+    
+    private func getDomainProduct(_ id: String) -> DomainProduct? {
+        let format = "id == %@"
+        
+        let request = NSFetchRequest<DomainProduct>(entityName: "DomainProduct")
+        request.predicate = NSPredicate(format: format, id)
+        
+        guard let domainProduct = try? context.fetch(request).first else {
+            return nil
+        }
+        
+        return domainProduct
+    }
+    
+    private func getDomainDish(_ id: Int) -> DomainDish? {
+        let format = "id == %id"
+        
+        let request = NSFetchRequest<DomainDish>(entityName: "DomainDish")
+        request.predicate = NSPredicate(format: format, id)
+        
+        guard let domainDish = try? context.fetch(request).first else {
+            return nil
+        }
+        
+        return domainDish
     }
 }
 
@@ -344,12 +370,24 @@ extension LocalDomainService: LocalDomainServiceInterface {
     }
     
     func getFoodData(_ food: Food) -> FoodData? {
-        guard let id = food.foodDataId,
-               let domainFoodData = getDomainFoodData(id) else {
-            return nil
+        guard let id = food.foodDataId else {
+            switch food {
+            case .product(let product):
+                guard let domainProduct = getDomainProduct(product.id), let domainFoodData = domainProduct.foodData else {
+                    return nil
+                }
+                return FoodData(from: domainFoodData)
+            case .dishes(let dish):
+                guard let domainDish = getDomainDish(dish.id), let domainFoodData = domainDish.foodData else {
+                    return nil
+                }
+                return FoodData(from: domainFoodData)
+            case .meal:
+                return nil
+            }
         }
         
-        return FoodData(from: domainFoodData)
+        return getFoodData(id)
     }
     
     func getFoodData(_ id: String) -> FoodData? {
