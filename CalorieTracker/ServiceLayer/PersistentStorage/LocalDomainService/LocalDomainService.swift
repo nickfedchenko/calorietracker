@@ -37,6 +37,7 @@ protocol LocalDomainServiceInterface {
     func setChildMeal(mealId: String, dishesID: [Int], productsID: [String])
     @discardableResult func setFoodData(favorites: Bool?, date dateLastUse: Date?, numberUses: Int?, food: Food) -> Bool
     func getFoodData(_ food: Food) -> FoodData?
+    func fetchSpecificRecipe(with id: String) -> Dish?
     @discardableResult func delete<T>(_ object: T) -> Bool
 }
 
@@ -476,5 +477,13 @@ extension LocalDomainService: LocalDomainServiceInterface {
             return []
         }
         return dishes.compactMap { Dish(from: $0) }.sorted { $0.title.count < $1.title.count }
+    }
+    
+    func fetchSpecificRecipe(with id: String) -> Dish? {
+        let predicate = NSPredicate(format: "id == %@", id)
+        let dishRequest = NSFetchRequest<DomainDish>(entityName: "DomainDish")
+        dishRequest.predicate = predicate
+        guard let dish = try? context.fetch(dishRequest).first else { return nil }
+        return Dish(from: dish)
     }
 }

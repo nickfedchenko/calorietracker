@@ -19,53 +19,34 @@ import UIKit
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
-    
-    private let localDomainService: LocalDomainServiceInterface = LocalDomainService()
+
+    lazy var coordinator = AppCoordinator(with: window)
     
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
-        
-        var getStartedViewController: UIViewController
-        if UDM.userData == nil {
-            getStartedViewController = WelcomeRouter.setupModule()
-        } else if Apphud.hasActiveSubscription() {
-            getStartedViewController = CTTabBarController()
-        } else {
-            getStartedViewController = PaywallRouter.setupModule()
-        }
-        
-        let navigationController = UINavigationController(rootViewController: getStartedViewController)
-        
-        window?.rootViewController = navigationController
-        window?.makeKeyAndVisible()
-        
-        updateHealthKitData()
-        updateFoodData()
-        
-        let appearance = UINavigationBarAppearance()
-        appearance.backgroundEffect = nil
-        
-        UINavigationBar.appearance().standardAppearance = appearance
+        coordinator.start()
         return true
     }
     
-    private func updateFoodData() {
-        DSF.shared.updateStoredDishes()
-        DSF.shared.updateStoredProducts()
-    }
-    
-    private func updateHealthKitData() {
-        guard UDM.isAuthorisedHealthKit else { return }
-        
-        HealthKitDataManager.shared.getSteps { [weak self] steps in
-            self?.localDomainService.saveSteps(data: steps)
-        }
-        
-        HealthKitDataManager.shared.getWorkouts { [weak self] exercises  in
-            self?.localDomainService.saveExercise(data: exercises)
-        }
+    func application(
+        _ app: UIApplication,
+        open url: URL,
+        options: [UIApplication.OpenURLOptionsKey : Any] = [:]
+    ) -> Bool {
+                if let scheme = url.scheme,
+                        scheme.localizedCaseInsensitiveCompare("com.Calorie.Tracker") == .orderedSame,
+                        let view = url.host,
+                   let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+                   let id = components.queryItems?.first?.value,
+                   let route = AppCoordinator.Route(rawValue: view) {
+                    coordinator.navigateTo(route: route, with: id)
+                } else {
+                    print("Something goes wrong")
+                }
+
+        return true
     }
 }

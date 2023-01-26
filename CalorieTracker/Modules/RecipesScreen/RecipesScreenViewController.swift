@@ -158,6 +158,7 @@ class RecipesScreenViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
+        guard isFirstLayout else { return }
         showActivityIndicator()
         presenter?.askForSections()
     }

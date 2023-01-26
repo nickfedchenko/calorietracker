@@ -229,6 +229,7 @@ class RecipePageScreenViewController: CTViewController {
     private func setupAppearance() {
         view.backgroundColor = UIColor(hex: "E5F5F3")
         mainImageView.setIsFavorite(shouldSetFavorite: false)
+        navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     private func setupKeyboardObservers() {
@@ -392,11 +393,12 @@ extension RecipePageScreenViewController: RecipeMainImageViewDelegate {
     }
     
     func shareButtonTapped() {
-//        let screenshot = containerView.snapshotNewView(with: view.backgroundColor)
-//        DispatchQueue.main.async {
-//            let activityVC = UIActivityViewController(activityItems: [screenshot], applicationActivities: nil)
-//            self.present(activityVC, animated: true)
-//        }
+        guard
+            let id = presenter?.getDish()?.id,
+            let url = URL(string: "com.Calorie.tracker://recipe?id=\(id)")
+        else { return }
+        let activityVC = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        self.present(activityVC, animated: true)
     }
 }
 
