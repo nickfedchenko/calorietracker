@@ -393,11 +393,12 @@ extension RecipePageScreenViewController: RecipeMainImageViewDelegate {
     }
     
     func shareButtonTapped() {
-//        let screenshot = containerView.snapshotNewView(with: view.backgroundColor)
-//        DispatchQueue.main.async {
-//            let activityVC = UIActivityViewController(activityItems: [screenshot], applicationActivities: nil)
-//            self.present(activityVC, animated: true)
-//        }
+        guard
+            let id = presenter?.getDish()?.id,
+            let url = URL(string: "com.Calorie.tracker://recipe?id=\(id)")
+        else { return }
+        let activityVC = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        self.present(activityVC, animated: true)
     }
 }
 
