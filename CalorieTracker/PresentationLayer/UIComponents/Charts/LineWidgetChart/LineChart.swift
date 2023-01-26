@@ -126,7 +126,7 @@ final class LineChart: UIView {
     
     private func drawHorizontalLines() {
         let newHeight = bounds.height - lineSpasingSize.height * 2
-        let spasing = newHeight / CGFloat(titles.count - 1)
+        let spasing = newHeight / max(1, CGFloat(titles.count - 1))
         let labelSize = CGSize(width: 33, height: 16)
         
         for index in 0..<titles.count {
