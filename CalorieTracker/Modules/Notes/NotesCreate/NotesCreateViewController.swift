@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class NotesCreateViewController: UIViewController {
+final class NotesCreateViewController: CTViewController {
     var keyboardManager: KeyboardManagerProtocol = KeyboardManager()
     var handlerAllNotes: (() -> Void)?
     
@@ -30,6 +30,11 @@ final class NotesCreateViewController: UIViewController {
         setupView()
         setupConstraint()
         configureKeyboard()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        headerView.textViewBecomeFirstResponder()
     }
     
     private func setupView() {
@@ -128,7 +133,7 @@ final class NotesCreateViewController: UIViewController {
             date: Date(),
             text: text,
             estimation: estimation,
-            imageUrl: try? headerView.photo?.save(at: .applicationDirectory, pathAndImageName: id)
+            imageUrl: try? headerView.photo?.save(at: .documentDirectory, pathAndImageName: id)
         )
         
         LocalDomainService().saveNotes(data: [note])

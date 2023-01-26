@@ -12,7 +12,7 @@ protocol NotesViewControllerInterface: AnyObject {
     func reload()
 }
 
-final class NotesViewController: UIViewController {
+final class NotesViewController: CTViewController {
     var presenter: NotesPresenterInterface?
     
     private lazy var tableView: UITableView = getTableView()

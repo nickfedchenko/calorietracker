@@ -73,6 +73,10 @@ final class NotesViewingHeaderView: UIView {
         backgroundColor = R.color.notes.background()
         layer.cornerCurve = .continuous
         layer.cornerRadius = 12
+        
+        estimationView.didChangeValue = { estimation in
+            self.smileImageView.image = estimation.getEstimationSmile()
+        }
     }
     
     // swiftlint:disable:next function_body_length
@@ -168,6 +172,7 @@ final class NotesViewingHeaderView: UIView {
             deleteButton.isHidden = false
         case .edit:
             textView.isEditable = true
+            textView.becomeFirstResponder()
             layer.maskedCorners = .topCorners
             estimationView.isHidden = false
             doneButton.isHidden = false

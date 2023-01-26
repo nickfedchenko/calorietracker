@@ -52,6 +52,10 @@ final class NotesCreateHeader: UIView {
         textView.textContainer.exclusionPaths = [imagePath]
     }
     
+    func textViewBecomeFirstResponder() {
+        textView.becomeFirstResponder()
+    }
+    
     private func setupView() {
         backgroundColor = R.color.noteWidgetNode.background()
         layer.cornerCurve = .continuous

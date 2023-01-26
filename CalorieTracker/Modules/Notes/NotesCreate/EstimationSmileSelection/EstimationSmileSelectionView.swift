@@ -11,6 +11,7 @@ final class EstimationSmileSelectionView: UIView {
     private lazy var stackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
+        stack.distribution = .fillEqually
         stack.spacing = 12
         return stack
     }()

@@ -18,7 +18,8 @@ class LastNoteView: UIView {
     private lazy var photoImageView: UIImageView = getPhotoImageView()
     private lazy var estimationImageView: UIImageView = getEstimationImageView()
     
-    private var photoWidthConstraints: NSLayoutConstraint?
+    private var photoWidthConstraintsZero: NSLayoutConstraint?
+    private var photoWidthConstraintsNotZero: NSLayoutConstraint?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -43,10 +44,12 @@ class LastNoteView: UIView {
         if let photo = model.photo {
             photoImageView.image = photo
             photoImageView.isHidden = false
-            photoWidthConstraints?.isActive = false
+            photoWidthConstraintsZero?.isActive = false
+            photoWidthConstraintsNotZero?.isActive = true
         } else {
             photoImageView.isHidden = true
-            photoWidthConstraints?.isActive = true
+            photoWidthConstraintsZero?.isActive = true
+            photoWidthConstraintsNotZero?.isActive = false
         }
         
         setNeedsDisplay()
@@ -75,11 +78,14 @@ class LastNoteView: UIView {
             make.height.width.equalTo(24.fontScale())
         }
         
-        photoWidthConstraints = photoImageView.widthAnchor.constraint(equalToConstant: 0)
+        photoWidthConstraintsZero = photoImageView.widthAnchor.constraint(equalToConstant: 0)
+        photoWidthConstraintsNotZero = photoImageView.widthAnchor.constraint(
+            equalTo: photoImageView.heightAnchor,
+            multiplier: 0.666
+        )
         photoImageView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview().inset(5)
             make.trailing.equalToSuperview().offset(-5)
-            make.width.equalTo(photoImageView.snp.height).multipliedBy(0.666).priority(.medium)
         }
     }
 }
