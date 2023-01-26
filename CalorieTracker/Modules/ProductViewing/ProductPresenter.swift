@@ -12,8 +12,10 @@ protocol ProductPresenterInterface: AnyObject {
     func getNutritionDailyGoal() -> DailyNutrition?
     func getNutritionDaily() -> DailyNutrition?
     func didTapCloseButton()
-    func getProduct() -> Product
+    func getProduct() -> Product?
     func saveNutritionDaily(_ value: DailyNutrition)
+    func createFoodData()
+    func didTapFavoriteButton(_ flag: Bool)
     
     var isFavoritesProduct: Bool? { get }
 }
@@ -23,24 +25,32 @@ class ProductPresenter {
     unowned var view: ProductViewControllerInterface
     let router: ProductRouterInterface?
     let interactor: ProductInteractorInterface?
-    let product: Product
     
     init(
         interactor: ProductInteractorInterface,
         router: ProductRouterInterface,
-        view: ProductViewControllerInterface,
-        product: Product
+        view: ProductViewControllerInterface
     ) {
         self.view = view
         self.interactor = interactor
         self.router = router
-        self.product = product
     }
 }
 
 extension ProductPresenter: ProductPresenterInterface {
     var isFavoritesProduct: Bool? {
+        guard let product = interactor?.getProduct() else { return nil }
         return FDS.shared.getFoodData(.product(product))?.favorites
+    }
+    
+    func didTapFavoriteButton(_ flag: Bool) {
+        interactor?.updateFoodData(flag)
+    }
+    
+    func createFoodData() {
+        if interactor?.getProduct()?.foodDataId == nil {
+            interactor?.updateFoodData(nil)
+        }
     }
     
     func getNutritionDaily() -> DailyNutrition? {
@@ -61,8 +71,8 @@ extension ProductPresenter: ProductPresenterInterface {
         }
     }
     
-    func getProduct() -> Product {
-        return self.product
+    func getProduct() -> Product? {
+        return interactor?.getProduct()
     }
     
     func saveNutritionDaily(_ value: DailyNutrition) {

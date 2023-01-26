@@ -75,6 +75,7 @@ final class ProductViewController: CTViewController {
         setupView()
         addSubviews()
         setupConstraints()
+        presenter?.createFoodData()
     }
     
     override func viewDidLayoutSubviews() {
@@ -109,9 +110,7 @@ final class ProductViewController: CTViewController {
         
         headerImageView.didTapLike = { value in
             Vibration.selection.vibrate()
-            if let product = self.presenter?.getProduct() {
-                FDS.shared.foodUpdate(food: .product(product), favorites: value)
-            }
+            self.presenter?.didTapFavoriteButton(value)
         }
         
         selectView.didSelectedCell = { type, isColapsed in

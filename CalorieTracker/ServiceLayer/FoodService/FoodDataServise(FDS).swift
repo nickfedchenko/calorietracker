@@ -65,8 +65,8 @@ protocol FoodDataServiceInterface {
     /// - Parameters:
     ///   - food: Food продукт или блюдо
     ///   - favorites: избранное
-    /// - Returns: Bool результат обновления
-    @discardableResult func foodUpdate(food: Food, favorites: Bool?) -> Bool
+    /// - Returns: FoodData ID
+    @discardableResult func foodUpdate(food: Food, favorites: Bool?) -> String?
     /// Возвращает данные о продукте или блюде
     /// - Parameters:
     ///   - food: продукт или блюдо
@@ -95,7 +95,7 @@ final class FDS {
 }
 
 extension FDS: FoodDataServiceInterface {
-    func foodUpdate(food: Food, favorites: Bool?) -> Bool {
+    func foodUpdate(food: Food, favorites: Bool?) -> String? {
         guard let foodData = localPersistentStore.getFoodData(food) else {
             let foodData = FoodData(
                 dateLastUse: Date(),
@@ -110,18 +110,20 @@ extension FDS: FoodDataServiceInterface {
             case .dishes(let dish):
                 foodData.setChild(dish)
             default:
-                return false
+                return nil
             }
             
-            return true
+            return foodData.id
         }
         
-        return localPersistentStore.setFoodData(
+        localPersistentStore.setFoodData(
             favorites: favorites,
             date: Date(),
             numberUses: foodData.numberUses + 1,
             food: food
         )
+        
+        return foodData.id
     }
     
     func getFoodData(_ food: Food) -> FoodData? {
