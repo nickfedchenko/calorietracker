@@ -44,7 +44,7 @@ class RecipesFilterScreenInteractor {
     
     private func makeSections() {
         let categoriesSectionTags: [AdditionalTag.ConvenientTag] = [
-            .salad, .microwaving, .soup, .appetiser, .bakery, .pizza, .drink, .bakery, .sandwich, .sauce
+            .salad, .microwaving, .soup, .appetiser, .bakery, .pizza, .drink, .bakery, .sandwich, .sauce, .favorite
         ]
         
         let categoriesSectionModel: RecipesFiltersSection = .init(

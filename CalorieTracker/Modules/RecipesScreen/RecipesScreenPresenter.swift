@@ -12,12 +12,13 @@ import UIKit
 protocol RecipesScreenPresenterInterface: AnyObject {
     func numberOfSections() -> Int
     func numberOfItemsInSection(section: Int) -> Int
-    func notifySectionsUpdated()
+    func notifySectionsUpdated(shouldRemoveActivity: Bool)
     func askForSections()
     func getDishModel(at index: IndexPath) -> Dish?
     func getSectionModel(at indexPath: IndexPath) -> RecipeSectionModel?
     func didTapSectionHeader(at index: Int)
     func didTapRecipe(at index: IndexPath)
+    func updateFavorites()
 }
 
 class RecipesScreenPresenter {
@@ -42,9 +43,9 @@ extension RecipesScreenPresenter: RecipesScreenPresenterInterface {
         interactor?.getSectionModel(at: indexPath)
     }
     
-    func notifySectionsUpdated() {
+    func notifySectionsUpdated(shouldRemoveActivity: Bool) {
         DispatchQueue.main.async { [weak self] in
-            self?.view.shouldReloadDishesCollection()
+            self?.view.shouldReloadDishesCollection(shouldRemoveActivity: shouldRemoveActivity)
         }
     }
     
@@ -73,5 +74,9 @@ extension RecipesScreenPresenter: RecipesScreenPresenterInterface {
     func didTapRecipe(at index: IndexPath) {
         guard let dish = interactor?.getDishModel(at: index) else { return }
         router?.showRecipeScreen(with: dish)
+    }
+    
+    func updateFavorites() {
+        interactor?.updateFavoritesSection()
     }
 }

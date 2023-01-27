@@ -62,7 +62,7 @@ final class CTTabItem: UIView {
     
     private let title: UILabel = {
         let label = UILabel()
-        label.font = R.font.sfProDisplaySemibold(size: 11.fontScale())
+        label.font = R.font.sfProDisplaySemibold(size: 11)
         label.textColor = R.color.tabTitleTextColor()
         return label
     }()

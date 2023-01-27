@@ -19,12 +19,14 @@ protocol RecipesScreenInteractorInterface: AnyObject {
     func getNumberOfSections() -> Int
     func getDishModel(at indexPath: IndexPath) -> Dish
     func getSectionModel(at indexPath: IndexPath) -> RecipeSectionModel
+    func updateFavoritesSection()
 }
 
 class RecipesScreenInteractor {
-    let operationalQueue = DispatchQueue(label: "operations", qos: .userInitiated, attributes: .concurrent)
+    let operationalQueue = DispatchQueue(label: "operations", qos: .userInteractive, attributes: .concurrent)
     weak var presenter: RecipesScreenPresenterInterface?
     var facade: DataServiceFacadeInterface = DSF.shared
+    var foodService: FoodDataServiceInterface = FDS.shared
     var sections: [RecipeSectionModel] = []
 //    private let dataService = DSF.shared
 }
@@ -45,7 +47,7 @@ extension RecipesScreenInteractor: RecipesScreenInteractorInterface {
     
     func requestUpdateSections() {
         makeSections { [weak self] in
-            self?.presenter?.notifySectionsUpdated()
+            self?.presenter?.notifySectionsUpdated(shouldRemoveActivity: true)
         }
     }
     
@@ -93,7 +95,25 @@ extension RecipesScreenInteractor: RecipesScreenInteractorInterface {
                 )
             )
             self.sections = sections
+            self.updateFavoritesSection()
             completion()
         }
+    }
+    
+    func updateFavoritesSection() {
+        let favorites = foodService.getFavoriteDishes()
+        guard !favorites.isEmpty else {
+            if sections.count > 4 {
+                _ = sections.removeFirst()
+            }
+            presenter?.notifySectionsUpdated(shouldRemoveActivity: false)
+            return
+        }
+        if sections.count > 4 {
+            sections[0] = .init(title: "Favorites".localized, dishes: favorites)
+        } else {
+            sections.insert(.init(title: "Favorites".localized, dishes: favorites), at: 0)
+        }
+        presenter?.notifySectionsUpdated(shouldRemoveActivity: false)
     }
 }
