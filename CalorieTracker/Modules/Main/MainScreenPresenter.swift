@@ -23,6 +23,7 @@ protocol MainScreenPresenterInterface: AnyObject {
     func checkOnboarding()
     func didTapExerciseWidget()
     func didTapNotesWidget()
+    func setPointDate(_ date: Date)
 }
 
 class MainScreenPresenter {
@@ -30,6 +31,12 @@ class MainScreenPresenter {
     unowned var view: MainScreenViewControllerInterface
     let router: MainScreenRouterInterface?
     let interactor: MainScreenInteractorInterface?
+    
+    private var pointDate: Date? {
+        didSet {
+            didChangePointDate()
+        }
+    }
 
     init(
         interactor: MainScreenInteractorInterface,
@@ -39,6 +46,15 @@ class MainScreenPresenter {
         self.view = view
         self.interactor = interactor
         self.router = router
+    }
+    
+    private func didChangePointDate() {
+        updateNoteWidget()
+        updateStepsWidget()
+        updateWeightWidget()
+        updateActivityWidget()
+        updateExersiceWidget()
+        updateWaterWidgetModel()
     }
 }
 
@@ -60,13 +76,15 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
     }
     
     func updateWaterWidgetModel() {
+        let date = pointDate ?? Date()
+        
         let goal = BAMeasurement(
             WaterWidgetService.shared.getDailyWaterGoal(),
             .liquid,
             isMetric: true
         ).localized
         let waterNow = BAMeasurement(
-            WaterWidgetService.shared.getWaterNow(),
+            WaterWidgetService.shared.getWaterForDate(date),
             .liquid,
             isMetric: true
         ).localized
@@ -81,14 +99,16 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
     }
     
     func updateStepsWidget() {
+        let date = pointDate ?? Date()
         let goal = StepsWidgetService.shared.getDailyStepsGoal()
-        let now = StepsWidgetService.shared.getStepsNow()
+        let now = StepsWidgetService.shared.getStepsForDate(date)
         
         view.setStepsWidget(now: Int(now), goal: goal)
     }
     
     func updateWeightWidget() {
-        guard let weightNow = WeightWidgetService.shared.getWeightNow() else {
+        let date = pointDate ?? Date()
+        guard let weightNow = WeightWidgetService.shared.getWeightForDate(date) else {
             view.setWeightWidget(weight: nil)
             return
         }
@@ -249,5 +269,9 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
     
     func didTapNotesWidget() {
         router?.openCreateNotesVC()
+    }
+    
+    func setPointDate(_ date: Date) {
+        self.pointDate = date
     }
 }
