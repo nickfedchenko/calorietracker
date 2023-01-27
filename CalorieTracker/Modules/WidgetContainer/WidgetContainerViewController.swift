@@ -299,11 +299,17 @@ extension WidgetContainerViewController: UIViewControllerTransitioningDelegate {
         presenting: UIViewController?,
         source: UIViewController
     ) -> UIPresentationController? {
-        WidgetPresentationController(
+        let presentationController = WidgetPresentationController(
             presentedViewController: presented,
             presenting: presenting,
             insets: widgetInsets
         )
+        
+        presentationController.willCloseController = {
+            self.didTapView()
+        }
+        
+        return presentationController
     }
     
     func animationController(

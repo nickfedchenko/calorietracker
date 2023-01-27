@@ -23,6 +23,9 @@ protocol FoodDataServiceInterface {
     /// Возвращает данные о питание за сегодня
     /// - Returns: массив DailyNutritionData
     func getNutritionToday() -> DailyNutritionData
+    /// Возвращает данные о питание за выбранный день
+    /// - Returns: массив DailyNutritionData
+    func getNutritionForDate(_ date: Date) -> DailyNutritionData
     /// Возвращает недавно использованные продукты
     /// - Parameters:
     ///   - count: количество результатов
@@ -198,6 +201,12 @@ extension FDS: FoodDataServiceInterface {
         let today = Day(Date())
         return localPersistentStore.fetchNutrition()
             .first(where: { $0.day == today }) ?? .init(day: today, nutrition: .zero)
+    }
+    
+    func getNutritionForDate(_ date: Date) -> DailyNutritionData {
+        let day = Day(date)
+        return localPersistentStore.fetchNutrition()
+            .first(where: { $0.day == day }) ?? .init(day: day, nutrition: .zero)
     }
     
     func createMeal(mealTime: MealTime, dishes: [Dish], products: [Product]) {

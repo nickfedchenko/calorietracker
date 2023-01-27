@@ -98,11 +98,20 @@ final class CalendarView: UIView {
     }
     
     @objc func didSwipeLeft() {
+        let nowDate = Date()
         let newDate = calculateDate(date: baseDate, value: 1)
-        
-        if calendar.component(.month, from: newDate) <= calendar.component(.month, from: Date()) &&
-            calendar.component(.year, from: newDate) <= calendar.component(.year, from: Date()) {
+        let newYear = calendar.component(.year, from: newDate)
+        let nowYear = calendar.component(.year, from: nowDate)
+        if newYear == nowYear {
+            let newMonth = calendar.component(.month, from: newDate)
+            let nowMonth = calendar.component(.month, from: nowDate)
+            if newMonth <= nowMonth {
+                baseDate = newDate
+            }
+        } else if newYear < nowYear {
             baseDate = newDate
+        } else if newYear > nowYear {
+            return
         }
     }
     
@@ -367,7 +376,12 @@ extension CalendarView: UICollectionViewDataSource {
 
 extension CalendarView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        Vibration.selection.vibrate()
         let day = days[indexPath.row]
+        let dayNow = Day(Date())
+        
+        guard Day(day.date) <= dayNow else { return }
+        
         let selectedCell = collectionView.cellForItem(at: indexPath) as? CalendarCollectionViewCell
         selectedDate = day.date
         

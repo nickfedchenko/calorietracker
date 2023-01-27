@@ -103,6 +103,8 @@ extension MainScreenRouter: WidgetContainerOutput {
     }
     
     func needUpdateCalendarWidget(_ date: Date?) {
+        guard let date = date else { return }
+        self.presenter?.setPointDate(date)
         self.presenter?.updateCalendarWidget(date)
     }
 }

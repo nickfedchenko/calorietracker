@@ -8,6 +8,8 @@
 import UIKit
 
 final class WidgetPresentationController: UIPresentationController {
+    
+    var willCloseController: (() -> Void)?
 
     private lazy var dimmView: UIView = {
         let view = UIView()
@@ -92,6 +94,7 @@ final class WidgetPresentationController: UIPresentationController {
     }
 
     @objc private func handleTap(_ sender: UITapGestureRecognizer) {
+        willCloseController?()
         presentingViewController.dismiss(animated: true)
     }
 }

@@ -12,6 +12,7 @@ protocol WeightWidgetServiceInterface {
     func addWeight(_ value: Double)
     func setWeightGoal(_ value: Double)
     func getWeightNow() -> Double?
+    func getWeightForDate(_ date: Date) -> Double?
     func getAllWeight() -> [DailyData]
     func getStartWeight() -> Double?
     func getWeeklyGoal() -> Double?
@@ -39,6 +40,16 @@ extension WeightWidgetService: WeightWidgetServiceInterface {
         let weightNow = weightData.first
         
         return weightNow?.value
+    }
+    
+    func getWeightForDate(_ date: Date) -> Double? {
+        let day = Day(date)
+        let weightData = localDomainService.fetchWeight()
+            .compactMap { $0.day <= day ? $0 : nil }
+            .sorted(by: { $0.day > $1.day })
+        let weightForDate = weightData.first
+        
+        return weightForDate?.value
     }
     
     func getStartWeight() -> Double? {

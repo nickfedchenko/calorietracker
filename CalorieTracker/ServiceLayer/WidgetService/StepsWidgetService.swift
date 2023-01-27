@@ -11,6 +11,7 @@ protocol StepsWidgetServiceInterface {
     func getDailyStepsGoal() -> Int?
     func addDailySteps(_ value: Double)
     func getStepsNow() -> Double
+    func getStepsForDate(_ date: Date) -> Double
     func setDailyStepsGoal(_ value: Double)
     func getAllStepsData() -> [DailyData]
 }
@@ -32,11 +33,15 @@ extension StepsWidgetService: StepsWidgetServiceInterface {
     }
     
     func getStepsNow() -> Double {
-        let dayNow = Day(Date())
+        return getStepsForDate(Date())
+    }
+    
+    func getStepsForDate(_ date: Date) -> Double {
+        let day = Day(date)
         let stepsData = localDomainService.fetchSteps()
-        let stepsNow = stepsData.first(where: { dayNow == $0.day })
+        let stepsForDate = stepsData.first(where: { day == $0.day })
         
-        return stepsNow?.value ?? 0
+        return stepsForDate?.value ?? 0
     }
     
     func addDailySteps(_ value: Double) {
