@@ -21,6 +21,7 @@ class BAMenuController: UIViewController {
     private var firstDraw = true
     
     var anchorPoint: CGPoint?
+    var didClose: (() -> Void)?
     
     init(_ view: MenuViewProtocol, width: CGFloat) {
         self.menuView = view
@@ -55,6 +56,11 @@ class BAMenuController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         menuView.showAndCloseView(true)
+    }
+    
+    override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+        super.dismiss(animated: flag, completion: completion)
+        didClose?()
     }
     
     private func setupView() {

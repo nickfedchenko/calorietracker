@@ -13,14 +13,14 @@ final class MenuView<ID: WithGetTitleProtocol
     var complition: ((ID) -> Void)?
     var didClose: (() -> Void)?
     
+    let model: [ID]
+    
     private lazy var stackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
         stack.spacing = 12
         return stack
     }()
-    
-    let model: [ID]
     
     init(_ model: [ID]) {
         self.model = model

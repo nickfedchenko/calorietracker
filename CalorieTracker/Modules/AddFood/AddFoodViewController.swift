@@ -19,7 +19,6 @@ final class AddFoodViewController: UIViewController {
     
     // MARK: - Private Propertys
     
-    private lazy var overlayView: UIView = getOverlayView()
     private lazy var segmentedControl: SegmentedControl<AddFood> = getSegmentedControl()
     private lazy var segmentedScrollView: UIScrollView = getSegmentedScrollView()
     private lazy var tabBarStackView: UIStackView = getTabBarStackView()
@@ -36,7 +35,7 @@ final class AddFoodViewController: UIViewController {
     
     private lazy var bottomGradientView = UIView()
     private lazy var menuMealView = MenuView(Const.menuModels)
-    private lazy var menuTypeSecondView = ContextMenuTypeSecondView(Const.menuTypeSecondModels)
+    private lazy var menuNutrientView = ContextMenuTypeSecondView(Const.menuTypeSecondModels)
     private lazy var menuButton = MenuButton<MealTime>()
     private lazy var searshTextField = SearchView()
     private lazy var foodCollectionViewController = FoodCollectionViewController()
@@ -44,6 +43,8 @@ final class AddFoodViewController: UIViewController {
     private lazy var counterKcalControl = CounterKcalControl()
     
     private var menuMealController: BAMenuController?
+    private var menuCreateController: BAMenuController?
+    private var menuNutrientController: BAMenuController?
     
     private let speechRecognitionManager: SpeechRecognitionManager = .init()
     private var speechRecognitionTask: Task<Void, Error>?
@@ -100,10 +101,21 @@ final class AddFoodViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        guard firstDraw, keyboardHeaderView.frame != .zero else { return }
+        guard firstDraw,
+               keyboardHeaderView.frame != .zero
+        else { return }
+        
         setupShadow()
         configureKeyboardManager()
         menuMealController?.anchorPoint = menuButton.frame.origin
+        menuNutrientController?.anchorPoint = CGPoint(
+            x: infoButtonsView.frame.maxX - 45,
+            y: infoButtonsView.frame.origin.y
+        )
+        menuCreateController?.anchorPoint = CGPoint(
+            x: (view.frame.width - Const.menuCreateViewWidth) / 2.0,
+            y: view.frame.height - 20
+        )
         firstDraw = false
     }
     
@@ -116,12 +128,6 @@ final class AddFoodViewController: UIViewController {
         presenter?.setFoodType(isSelectedType)
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        menuTypeSecondView.closeNotAnimate()
-        menuCreateView.closeNotAnimate()
-    }
-    
     // MARK: - Private functions
     
     private func setupView() {
@@ -129,9 +135,6 @@ final class AddFoodViewController: UIViewController {
         
         view.backgroundColor = .white
         foodCollectionViewController.view.backgroundColor = .white
-        
-        menuTypeSecondView.isHidden = true
-        menuCreateView.isHidden = true
         
         searshTextField.textField.keyboardAppearance = .light
         searshTextField.textField.keyboardType = .webSearch
@@ -181,7 +184,9 @@ final class AddFoodViewController: UIViewController {
             FDS.shared.rememberSearchQuery(text)
         }
         
-        menuMealController = .init(menuMealView, width: 200)
+        menuMealController = .init(menuMealView, width: Const.menuMealViewWidth)
+        menuCreateController = .init(menuCreateView, width: Const.menuCreateViewWidth)
+        menuNutrientController = .init(menuNutrientView, width: Const.menulNutrientViewWidth)
         
         menuButton.configure(Const.menuModels.first)
         menuButton.completion = { [weak self] complition in
@@ -192,10 +197,8 @@ final class AddFoodViewController: UIViewController {
         }
         
         infoButtonsView.completion = { [weak self] complition in
-            self?.showOverlay(true)
-            self?.menuTypeSecondView.showAndCloseView(true)
-            self?.menuTypeSecondView.complition = { model in
-                self?.showOverlay(false)
+            self?.showNutrientMenu()
+            self?.menuNutrientView.complition = { model in
                 switch model {
                 case .carb, .fat, .kcal, .protein:
                     complition(.configurable(model))
@@ -224,8 +227,10 @@ final class AddFoodViewController: UIViewController {
             self?.didEndTimer()
         }
         
+        menuCreateController?.didClose = {
+            self.presenter?.createFood()
+        }
         menuCreateView.complition = { type in
-            self.showOverlay(false)
             self.presenter?.createFood(type)
         }
         
@@ -254,10 +259,7 @@ final class AddFoodViewController: UIViewController {
             microphoneButton,
             keyboardHeaderView,
             searshTextField,
-            doneButton,
-            overlayView,
-            menuTypeSecondView,
-            menuCreateView
+            doneButton
         )
     }
     
@@ -279,18 +281,6 @@ final class AddFoodViewController: UIViewController {
             make.top.equalTo(view.safeAreaLayoutGuide).offset(2)
             make.height.equalTo(40)
             make.width.equalTo(143)
-        }
-        
-        menuTypeSecondView.snp.makeConstraints { make in
-            make.width.equalTo(187)
-            make.top.equalTo(infoButtonsView.snp.top)
-            make.trailing.equalTo(infoButtonsView.snp.trailing)
-        }
-        
-        menuCreateView.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-20)
-            make.width.equalToSuperview().multipliedBy(0.69)
         }
         
         segmentedScrollView.snp.makeConstraints { make in
@@ -363,10 +353,6 @@ final class AddFoodViewController: UIViewController {
             make.height.equalTo(searshTextField).offset(50)
         }
         
-        overlayView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        
         counterKcalControl.snp.makeConstraints { make in
             make.trailing.equalToSuperview().offset(-20)
             make.height.equalTo(40)
@@ -403,22 +389,28 @@ final class AddFoodViewController: UIViewController {
         )
     }
     
-    private func showOverlay(_ flag: Bool) {
-        overlayView.isHidden = false
-        
-        UIView.animate(withDuration: 0.2) {
-            self.overlayView.layer.opacity = flag ? 1 : 0
-        } completion: { _ in
-            self.overlayView.isHidden = !flag
-        }
-    }
-    
     private func showMealMenu() {
         guard let menuMealController = menuMealController else {
             return
         }
 
         present(menuMealController, animated: true)
+    }
+    
+    private func showCreateMenu() {
+        guard let menuCreateController = menuCreateController else {
+            return
+        }
+
+        present(menuCreateController, animated: true)
+    }
+    
+    private func showNutrientMenu() {
+        guard let menuNutrientController = menuNutrientController else {
+            return
+        }
+
+        present(menuNutrientController, animated: true)
     }
     
     private func getCell(collectionView: UICollectionView,
@@ -570,8 +562,7 @@ final class AddFoodViewController: UIViewController {
     
     @objc private func didTapCreateButton() {
         Vibration.rigid.vibrate()
-        showOverlay(true)
-        menuCreateView.showAndCloseView(true)
+        showCreateMenu()
     }
     
     @objc private func didTapCalorieButton() {
@@ -680,14 +671,6 @@ extension AddFoodViewController: AddFoodViewControllerInterface {
 // MARK: - Factory
 
 private extension AddFoodViewController {
-    func getOverlayView() -> UIView {
-        let view = UIView()
-        view.backgroundColor = R.color.addFood.overlay()
-        view.isHidden = true
-        view.layer.opacity = 0
-        return view
-    }
-    
     func getSegmentedControl() -> SegmentedControl<AddFood> {
         let view = SegmentedControl<AddFood>(Const.segmentedModels)
         view.backgroundColor = R.color.addFood.menu.background()

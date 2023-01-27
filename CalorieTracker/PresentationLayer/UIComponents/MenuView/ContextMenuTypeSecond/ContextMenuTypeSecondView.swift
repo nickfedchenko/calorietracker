@@ -7,9 +7,11 @@
 
 import UIKit
 
-final class ContextMenuTypeSecondView<ID: WithGetDataProtocol>: UIView {
-  
+final class ContextMenuTypeSecondView<ID: WithGetDataProtocol>: ViewWithShadow, MenuViewProtocol {
+    var didClose: (() -> Void)?
     var complition: ((ID) -> Void)?
+    
+    let model: [ID]
     
     private lazy var stackView: UIStackView = {
         let stack = UIStackView()
@@ -18,16 +20,12 @@ final class ContextMenuTypeSecondView<ID: WithGetDataProtocol>: UIView {
         return stack
     }()
     
-    private var firstDraw = true
     private var zeroHeightAnchor: NSLayoutConstraint?
     private var zeroHeightAnchors: [NSLayoutConstraint] = []
-    private var shadowLayer = CALayer()
-    
-    let model: [ID]
     
     init(_ model: [ID]) {
         self.model = model
-        super.init(frame: .zero)
+        super.init([ShadowConst.firstShadow, ShadowConst.secondShadow])
         setupView()
         addSubviews()
         setupConstraints()
@@ -36,13 +34,6 @@ final class ContextMenuTypeSecondView<ID: WithGetDataProtocol>: UIView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        guard firstDraw else { return }
-        setupShadow()
-        firstDraw = false
     }
     
     func closeNotAnimate() {
@@ -67,6 +58,7 @@ final class ContextMenuTypeSecondView<ID: WithGetDataProtocol>: UIView {
         shadowLayer.isHidden = true
         if index == -1 {
             isHidden = true
+            didClose?()
             return
         } else {
             UIView.animate(withDuration: 0.08, delay: 0, options: .curveEaseInOut) {
@@ -97,7 +89,6 @@ final class ContextMenuTypeSecondView<ID: WithGetDataProtocol>: UIView {
     }
     
     private func setupView() {
-        layer.insertSublayer(shadowLayer, at: 0)
         layer.cornerCurve = .continuous
         layer.cornerRadius = 22
         backgroundColor = .white
@@ -127,20 +118,6 @@ final class ContextMenuTypeSecondView<ID: WithGetDataProtocol>: UIView {
             stackView.addArrangedSubview(menuCellView)
             zeroHeightAnchors.append(menuCellView.heightAnchor.constraint(equalToConstant: 0))
         }
-    }
-    
-    private func setupShadow() {
-        shadowLayer.frame = bounds
-        shadowLayer.addShadow(
-            shadow: ShadowConst.firstShadow,
-            rect: bounds,
-            cornerRadius: layer.cornerRadius
-        )
-        shadowLayer.addShadow(
-            shadow: ShadowConst.secondShadow,
-            rect: bounds,
-            cornerRadius: layer.cornerRadius
-        )
     }
     
     @objc private func didSelectedCell(_ sender: UIControl) {

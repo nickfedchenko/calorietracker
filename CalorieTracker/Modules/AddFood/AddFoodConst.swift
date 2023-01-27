@@ -68,6 +68,10 @@ enum FoodCreate: WithGetTitleProtocol, WithGetImageProtocol, WithGetDescriptionP
 
 extension AddFoodViewController {
     struct Const {
+        static let menuCreateViewWidth: CGFloat = 280
+        static let menuMealViewWidth: CGFloat = 200
+        static let menulNutrientViewWidth: CGFloat = 187
+        
         static let hideKeyboardShadow: Shadow = .init(
             color: R.color.addFood.hideKeyboardShadow() ?? .black,
             opacity: 1,
