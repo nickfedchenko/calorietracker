@@ -202,5 +202,6 @@ extension DSF: DataServiceFacadeInterface {
             guard let convTag = tag.convenientTag else { continue }
             UDM.titlesForExceptionTags[convTag] = tag.title
         }
+        UDM.titlesForFilterTags[.favorite] = "Favorites".localized
     }
 }

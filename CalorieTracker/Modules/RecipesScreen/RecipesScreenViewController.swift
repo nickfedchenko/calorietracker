@@ -10,7 +10,7 @@ import NVActivityIndicatorView
 import UIKit
 
 protocol RecipesScreenViewControllerInterface: AnyObject {
-    func shouldReloadDishesCollection()
+    func shouldReloadDishesCollection(shouldRemoveActivity: Bool)
 }
 
 class RecipesScreenViewController: UIViewController {
@@ -158,6 +158,7 @@ class RecipesScreenViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
+        presenter?.updateFavorites()
         guard isFirstLayout else { return }
         showActivityIndicator()
         presenter?.askForSections()
@@ -249,8 +250,10 @@ class RecipesScreenViewController: UIViewController {
 }
 
 extension RecipesScreenViewController: RecipesScreenViewControllerInterface {
-    func shouldReloadDishesCollection() {
-        hideActivityIndicator()
+    func shouldReloadDishesCollection(shouldRemoveActivity: Bool) {
+        if shouldRemoveActivity {
+            hideActivityIndicator()
+        }
         collectionView.reloadData()
     }
 }

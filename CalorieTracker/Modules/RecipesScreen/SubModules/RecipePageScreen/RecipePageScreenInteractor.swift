@@ -162,17 +162,15 @@ extension RecipePageScreenInteractor: RecipePageScreenInteractorInterface {
     
     func makeModelsForIngredients() -> [RecipeIngredientModel] {
         let ratio = Double(selectedServingsAmount) / Double(dish.totalServings ?? 1)
-        print("ratio is \(ratio)")
         let models: [RecipeIngredientModel] = dish.ingredients.compactMap { ingredient in
             if
                 let referenceUnit = ingredient.product.units.first(where: { $0.id == ingredient.unit?.id }),
-
                 let referenceKCal = referenceUnit.kcal {
                 let unitAmount = ingredient.quantity * ratio
                 let unitTitle = ingredient.unit?.shortTitle ?? ""
                 let kcal = unitAmount * referenceKCal
                 let title = ingredient.product.title
-                return .init(title: title, unitTitle: unitTitle, unitsAmount: unitAmount, kcal: kcal)
+                return RecipeIngredientModel(title: title, unitTitle: unitTitle, unitsAmount: unitAmount, kcal: kcal)
             } else {
                 return nil
             }
