@@ -18,6 +18,7 @@ protocol AddFoodPresenterInterface: AnyObject {
     func didTapCountControl(_ foods: [Food], complition: @escaping ([Food]) -> Void )
     func didTapScannerButton()
     func saveMeal(_ mealTime: MealTime, foods: [Food])
+    func createFood()
     func createFood(_ type: FoodCreate)
 }
 
@@ -28,6 +29,7 @@ final class AddFoodPresenter {
     let interactor: AddFoodInteractorInterface?
     
     private let searchGroup = DispatchGroup()
+    private var createFoodType: FoodCreate?
     
     private var foods: [Food]? {
         didSet {
@@ -201,7 +203,8 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
         )
     }
     
-    func createFood(_ type: FoodCreate) {
+    func createFood() {
+        guard let type = self.createFoodType else { return }
         switch type {
         case .food:
             router?.openCreateProduct()
@@ -210,5 +213,11 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
         case .meal:
             return
         }
+        
+        self.createFoodType = nil
+    }
+    
+    func createFood(_ type: FoodCreate) {
+        self.createFoodType = type
     }
 }
