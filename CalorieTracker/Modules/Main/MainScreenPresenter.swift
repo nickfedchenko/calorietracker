@@ -149,8 +149,9 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
     
     // swiftlint:disable:next function_body_length
     func updateActivityWidget() {
+        let date = pointDate ?? Date()
         let nutritionDailyGoal = FDS.shared.getNutritionGoals() ?? .zero
-        let nutritionToday = FDS.shared.getNutritionToday().nutrition
+        let nutritionToday = FDS.shared.getNutritionForDate(date).nutrition
         let kcalGoal = nutritionDailyGoal.kcal
         let carbsGoal = NutrientMeasurment.convert(
             value: nutritionDailyGoal.carbs,
@@ -189,7 +190,7 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
             to: .gram
         )
         let kcalToday = nutritionToday.kcal
-        let burnedKcalToday = ExerciseWidgetServise.shared.getBurnedKcalToday()
+        let burnedKcalToday = ExerciseWidgetServise.shared.getBurnedKcalForDate(date)
         let model: MainWidgetViewNode.Model = .init(
             text: MainWidgetViewNode.Model.Text(
                 firstLine: "\(Int(kcalToday)) / \(Int(kcalGoal)) kcal",
@@ -237,8 +238,9 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
     }
     
     func updateExersiceWidget() {
-        let exercises = ExerciseWidgetServise.shared.getExercisesToday()
-        let burnedKcal = ExerciseWidgetServise.shared.getBurnedKcalToday()
+        let date = pointDate ?? Date()
+        let exercises = ExerciseWidgetServise.shared.getExercisesForDate(date)
+        let burnedKcal = ExerciseWidgetServise.shared.getBurnedKcalForDate(date)
         let burnedKcalGoal: Int? = {
             guard let goal = ExerciseWidgetServise.shared.getBurnedKclaGoal() else {
                 return nil

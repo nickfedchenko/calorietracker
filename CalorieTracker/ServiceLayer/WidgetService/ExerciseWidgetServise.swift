@@ -13,7 +13,9 @@ protocol ExerciseWidgetServiseInterface {
     func addExercise(type: ExerciseType, burnedKcal: Double)
     func setBurnedKcalGoal(_ value: Double)
     func getExercisesToday() -> [Exercise]
+    func getExercisesForDate(_ date: Date) -> [Exercise]
     func getBurnedKcalToday() -> Double
+    func getBurnedKcalForDate(_ date: Date) -> Double
     func saveExercises(_ exercises: [Exercise])
     func syncWithHealthKit(_ comlition: @escaping () -> Void)
 }
@@ -30,9 +32,13 @@ extension ExerciseWidgetServise: ExerciseWidgetServiseInterface {
     }
     
     func getExercisesToday() -> [Exercise] {
-        let today = Date().day
+        getExercisesForDate(Date())
+    }
+    
+    func getExercisesForDate(_ date: Date) -> [Exercise] {
+        let day = date.day
         return localDomainService.fetchExercise().filter {
-            $0.date.day == today
+            $0.date.day == day
         }
     }
     
@@ -42,6 +48,10 @@ extension ExerciseWidgetServise: ExerciseWidgetServiseInterface {
     
     func getBurnedKcalToday() -> Double {
         getExercisesToday().map { $0.burnedKcal }.sum()
+    }
+    
+    func getBurnedKcalForDate(_ date: Date) -> Double {
+        getExercisesForDate(date).map { $0.burnedKcal }.sum()
     }
     
     func setBurnedKcalGoal(_ value: Double) {
