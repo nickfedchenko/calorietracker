@@ -36,6 +36,7 @@ final class FoodCellView: UIView {
     var subInfo: Int? {
         didSet {
             if let info = subInfo {
+                print("subinfo is \(info)")
                 infoLabel.text = "\(info)"
             } else {
                 infoLabel.text = nil
@@ -277,7 +278,7 @@ extension FoodCellView.FoodViewModel {
         self.title = dish.title
         self.description = dish.info ?? ""
         self.tag = dish.eatingTags.first?.title ?? ""
-        self.kcal = dish.kcal
+        self.kcal = dish.values?.serving.kcal ?? 1
         self.image = nil
         self.verified = true
     }

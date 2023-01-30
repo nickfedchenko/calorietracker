@@ -468,7 +468,7 @@ extension LocalDomainService: LocalDomainServiceInterface {
     func searchDishes(by phrase: String) -> [Dish] {
         let titlePredicate = NSPredicate(format: "title CONTAINS[cd] %@", phrase)
        
-        let compoundPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [titlePredicate])
+        let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [titlePredicate])
      
         guard let dishes = fetchData(
             for: DomainDish.self,

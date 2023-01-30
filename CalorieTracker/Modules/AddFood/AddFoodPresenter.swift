@@ -114,14 +114,16 @@ final class AddFoodPresenter {
             smartSearch.matches($0.title) || smartSearch.matches($0.brand ?? "")
         }
         
-        return filteredDishes.foods + filteredProducts.foods
+        return filteredProducts.foods + filteredDishes.foods
     }
     
     private func searchAmongAll(_ request: String) -> [Food] {
         let dishes = DSF.shared.searchDishes(by: request)
-        let products = DSF.shared.searchProducts(by: request)
-        
-        return dishes.foods + products.foods
+        var products = DSF.shared.searchProducts(by: request)
+        let genericProducts = products.filter { $0.brand == nil }
+        let brandProducts = products.filter { $0.brand != nil }
+        let userProducts = products.filter { $0.isUserProduct }
+        return genericProducts.foods + userProducts.foods + dishes.foods + brandProducts.foods
     }
     
     private func searchAmongFrequent(_ request: String) -> [Food] {
@@ -177,11 +179,11 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
         searchGroup.enter()
         DispatchQueue.global(qos: .userInteractive).async {
             
-            let frequents = self.searchAmongFrequent(request)
-            let favorites = self.searchAmongFavorites(request)
-            let recents = self.searchAmongRecent(request)
+//            let frequents = self.searchAmongFrequent(request)
+//            let favorites = self.searchAmongFavorites(request)
+//            let recents = self.searchAmongRecent(request)
             let basicFood = self.searchAmongAll(request)
-            let foods = frequents + recents + favorites + basicFood
+            let foods = basicFood
             DispatchQueue.main.async {
                 self.foods = foods
                 complition?(!foods.isEmpty)

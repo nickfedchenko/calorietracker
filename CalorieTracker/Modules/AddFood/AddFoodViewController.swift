@@ -534,7 +534,7 @@ final class AddFoodViewController: UIViewController {
     private func createTimer() {
         timer?.invalidate()
         timer = Timer.scheduledTimer(
-            timeInterval: 0.1,
+            timeInterval: 0.3,
             target: self,
             selector: #selector(didEndTimer),
             userInfo: nil,
