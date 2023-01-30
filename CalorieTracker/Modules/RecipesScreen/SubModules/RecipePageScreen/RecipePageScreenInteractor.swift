@@ -57,23 +57,19 @@ class RecipePageScreenInteractor {
     )
     
     var possibleEatenKcalBySelectedServings: Double {
-        let ratio = Double(selectedServingToEat) / Double((dish.totalServings ?? 1))
-        return (dish.values?.serving.kcal ?? 0) * ratio
+        return (dish.values?.serving.kcal ?? 0) * Double(selectedServingToEat)
     }
     
     var possibleEatenFatBySelectedServings: Double {
-        let ratio = Double(selectedServingToEat) / Double((dish.totalServings ?? 1))
-        return (dish.values?.serving.fats ?? 0) * ratio
+        return (dish.values?.serving.fats ?? 0) * Double(selectedServingToEat)
     }
     
     var possibleEatenProteinBySelectedServings: Double {
-        let ratio = Double(selectedServingToEat) / Double((dish.totalServings ?? 1))
-        return (dish.values?.serving.proteins ?? 0) * ratio
+        return (dish.values?.serving.proteins ?? 0) * Double(selectedServingToEat)
     }
     
     var possibleEatenCarbsBySelectedServings: Double {
-        let ratio = Double(selectedServingToEat) / Double((dish.totalServings ?? 1))
-        return (dish.values?.serving.carbohydrates ?? 0) * ratio
+        return (dish.values?.serving.carbohydrates ?? 0) * Double(selectedServingToEat)
     }
     
     init(with dish: Dish) {
