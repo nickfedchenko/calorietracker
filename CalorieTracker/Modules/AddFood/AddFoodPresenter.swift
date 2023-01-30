@@ -27,6 +27,12 @@ final class AddFoodPresenter {
     unowned var view: AddFoodViewControllerInterface
     let router: AddFoodRouterInterface?
     let interactor: AddFoodInteractorInterface?
+    let searchQueue: OperationQueue =  {
+        let queue = OperationQueue()
+        queue.maxConcurrentOperationCount = 1
+        return queue
+    }()
+    
     
     private let searchGroup = DispatchGroup()
     private var createFoodType: FoodCreate?
@@ -176,20 +182,21 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
     }
     
     func search(_ request: String, complition: ((Bool) -> Void)?) {
-        searchGroup.enter()
-        DispatchQueue.global(qos: .userInteractive).async {
-            
 //            let frequents = self.searchAmongFrequent(request)
 //            let favorites = self.searchAmongFavorites(request)
 //            let recents = self.searchAmongRecent(request)
+        searchQueue.cancelAllOperations()
+        let operation = BlockOperation { [weak self] in
+            guard let self = self else { return }
             let basicFood = self.searchAmongAll(request)
             let foods = basicFood
             DispatchQueue.main.async {
                 self.foods = foods
                 complition?(!foods.isEmpty)
-                self.searchGroup.leave()
             }
         }
+        operation.queuePriority = .high
+        searchQueue.addOperation(operation)
     }
     
     func getSubInfo(_ food: Food?, _ type: FoodInfoCases) -> Int? {
