@@ -25,6 +25,7 @@ extension DomainProduct {
     @NSManaged public var brand: String?
     @NSManaged public var composition: Data?
     @NSManaged public var servings: Data?
+    @NSManaged public var units: Data?
     
     @NSManaged public var foodData: DomainFoodData?
 }

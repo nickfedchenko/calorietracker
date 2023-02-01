@@ -46,6 +46,8 @@ final class DailyFoodIntakeView: UIView {
     }
     
     func configure(from: DailyNutrition, to: DailyNutrition, goal: DailyNutrition) {
+        let from = NutrientMeasurment.convertNutrition(nutrition: from, from: .kcal, to: .gram)
+        let goal = NutrientMeasurment.convertNutrition(nutrition: goal, from: .kcal, to: .gram)
         fatCircleView.configure(.init(
             percent: String(format: "%.1f", (from.fat + to.fat) / goal.fat * 100) + "%",
             value: String(format: "%.1f g", from.fat + to.fat),

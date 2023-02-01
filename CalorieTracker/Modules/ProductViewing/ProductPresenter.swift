@@ -76,6 +76,13 @@ extension ProductPresenter: ProductPresenterInterface {
     }
     
     func saveNutritionDaily(_ value: DailyNutrition) {
-        FDS.shared.addNutrition(day: Date().day, nutrition: value)
+        FDS.shared.addNutrition(
+            day: Date().day,
+            nutrition: NutrientMeasurment.convertNutrition(
+                nutrition: value,
+                from: .gram,
+                to: .kcal
+            )
+        )
     }
 }

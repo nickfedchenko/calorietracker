@@ -78,13 +78,115 @@ struct UnitElement: Codable {
     let id: Int?
     let productUnitID: Int?
     let title: String
+    let shortTitle: String?
     let value, kcal: Double?
     let isNamed, isReference, isDefault: Bool
     
     enum CodingKeys: String, CodingKey {
         case id
         case productUnitID = "productUnitId"
-        case title, value, kcal, isNamed, isReference, isDefault
+        case title, shortTitle, value, kcal, isNamed, isReference, isDefault
+    }
+    
+    enum ConvenientUnit: WithGetTitleProtocol {
+        func getTitle(_ lenght: Lenght) -> String? {
+            switch self {
+            case .gram(title: let title, shortTitle: let shortTitle, coefficient: _):
+                return lenght == .short ? shortTitle ?? title : title
+            case .oz(title: let title, shortTitle: let shortTitle, coefficient: _):
+                return lenght == .short ? shortTitle ?? title : title
+            case .portion(title: let title, shortTitle: let shortTitle, coefficient: _):
+                return lenght == .short ? shortTitle ?? title : title
+            case .cup(title: let title, shortTitle: let shortTitle, coefficient: _):
+                return lenght == .short ? shortTitle ?? title : title
+            case .cupGrated(title: let title, shortTitle: let shortTitle, coefficient: _):
+                return lenght == .short ? shortTitle ?? title : title
+            case .cupSliced(title: let title, shortTitle: let shortTitle, coefficient: _):
+                return lenght == .short ? shortTitle ?? title : title
+            case .teaSpoon(title: let title, shortTitle: let shortTitle, coefficient: _):
+                return lenght == .short ? shortTitle ?? title : title
+            case .tableSpoon(title: let title, shortTitle: let shortTitle, coefficient: _):
+                return lenght == .short ? shortTitle ?? title : title
+            case .piece(title: let title, shortTitle: let shortTitle, coefficient: _):
+                return lenght == .short ? shortTitle ?? title : title
+            case .smallSize(title: let title, shortTitle: let shortTitle, coefficient: _):
+                return lenght == .short ? shortTitle ?? title : title
+            case .middleSize(title: let title, shortTitle: let shortTitle, coefficient: _):
+                return lenght == .short ? shortTitle ?? title : title
+            case .hugeSize(title: let title, shortTitle: let shortTitle, coefficient: _):
+                return lenght == .short ? shortTitle ?? title : title
+            case .pack(title: let title, shortTitle: let shortTitle, coefficient: _):
+                return lenght == .short ? shortTitle ?? title : title
+            case .ml(title: let title, shortTitle: let shortTitle, coefficient: _):
+                return lenght == .short ? shortTitle ?? title : title
+            case .floz(title: let title, shortTitle: let shortTitle, coefficient: _):
+                return lenght == .short ? shortTitle ?? title : title
+            case .custom(title: let title, shortTitle: let shortTitle, coefficient: _):
+                return lenght == .short ? shortTitle ?? title : title
+            }
+        }
+        
+        case gram(title: String, shortTitle: String?, coefficient: Double?)
+        case oz(title: String, shortTitle: String?, coefficient: Double?)
+        case portion(title: String, shortTitle: String?, coefficient: Double?)
+        case cup(title: String, shortTitle: String?, coefficient: Double?)
+        case cupGrated(title: String, shortTitle: String?, coefficient: Double?)
+        case cupSliced(title: String, shortTitle: String?, coefficient: Double?)
+        case teaSpoon(title: String, shortTitle: String?, coefficient: Double?)
+        case tableSpoon(title: String, shortTitle: String?, coefficient: Double?)
+        case piece(title: String, shortTitle: String?, coefficient: Double?)
+        case smallSize(title: String, shortTitle: String?, coefficient: Double?)
+        case middleSize(title: String, shortTitle: String?, coefficient: Double?)
+        case hugeSize(title: String, shortTitle: String?, coefficient: Double?)
+        case pack(title: String, shortTitle: String?, coefficient: Double?)
+        case ml(title: String, shortTitle: String?, coefficient: Double?)
+        case floz(title: String, shortTitle: String?, coefficient: Double?)
+        case custom(title: String, shortTitle: String?, coefficient: Double?)
+    }
+    
+    func getTitle(_ lenght: Lenght) -> String? {
+        if lenght == .short {
+            return shortTitle ?? title
+        } else {
+            return title
+        }
+    }
+    
+    var convenientUnit: ConvenientUnit  {
+        switch id {
+        case 1:
+            return .gram(title: title, shortTitle: shortTitle, coefficient: value)
+        case 2:
+            return .oz(title: title, shortTitle: shortTitle, coefficient: value)
+        case 3:
+            return .portion(title: title, shortTitle: shortTitle, coefficient: value)
+        case 4:
+            return .cup(title: title, shortTitle: shortTitle, coefficient: value)
+        case 5:
+            return .cupGrated(title: title, shortTitle: shortTitle, coefficient: value)
+        case 6:
+            return .cupSliced(title: title, shortTitle: shortTitle, coefficient: value)
+        case 7:
+            return .teaSpoon(title: title, shortTitle: shortTitle, coefficient: value)
+        case 8:
+            return .tableSpoon(title: title, shortTitle: shortTitle, coefficient: value)
+        case 9:
+            return .piece(title: title, shortTitle: shortTitle, coefficient: value)
+        case 10:
+            return .smallSize(title: title, shortTitle: shortTitle, coefficient: value)
+        case 11:
+            return .middleSize(title: title, shortTitle: shortTitle, coefficient: value)
+        case 12:
+            return .hugeSize(title: title, shortTitle: shortTitle, coefficient: value)
+        case 13:
+            return .pack(title: title, shortTitle: shortTitle, coefficient: value)
+        case 14:
+            return .ml(title: title, shortTitle: shortTitle, coefficient: value)
+        case 15:
+            return .floz(title: title, shortTitle: shortTitle, coefficient: value)
+        default:
+            return .custom(title: title, shortTitle: shortTitle, coefficient: value)
+        }
     }
 }
 

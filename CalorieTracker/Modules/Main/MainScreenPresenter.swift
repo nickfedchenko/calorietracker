@@ -11,6 +11,7 @@ import UIKit
 protocol MainScreenPresenterInterface: AnyObject {
     func didTapAddButton()
     func didTapMenuButton()
+    func didTapBarcodeScannerButton()
     func didTapWidget(_ type: WidgetContainerViewController.WidgetType)
     func updateWaterWidgetModel()
     func updateStepsWidget()
@@ -275,5 +276,9 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
     
     func setPointDate(_ date: Date) {
         self.pointDate = date
+    }
+    
+    func didTapBarcodeScannerButton() {
+        router?.openBarcodeScannerVC()
     }
 }

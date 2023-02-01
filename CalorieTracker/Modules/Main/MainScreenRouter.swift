@@ -16,6 +16,7 @@ protocol MainScreenRouterInterface: AnyObject {
     func openOnboarding()
     func openCreateNotesVC()
     func openAllNotesVC()
+    func openBarcodeScannerVC()
 }
 
 class MainScreenRouter: NSObject {
@@ -106,5 +107,10 @@ extension MainScreenRouter: WidgetContainerOutput {
         guard let date = date else { return }
         self.presenter?.setPointDate(date)
         self.presenter?.updateCalendarWidget(date)
+    }
+    
+    func openBarcodeScannerVC() {
+        let vc = ScannerRouter.setupModule()
+        viewController?.present(TopDownNavigationController(rootViewController: vc), animated: true)
     }
 }

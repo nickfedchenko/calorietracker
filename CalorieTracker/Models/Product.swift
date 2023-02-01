@@ -17,6 +17,7 @@ struct Product {
     let photo: Photo?
     let composition: Composition?
     let servings: [Serving]?
+    var units: [UnitElement]?
     
     var foodDataId: String?
     
@@ -69,6 +70,12 @@ extension Product {
         } else {
             self.composition = nil
         }
+        
+        if let unitsData = managedModel.units {
+            self.units = try? JSONDecoder().decode([UnitElement].self, from: unitsData)
+        } else {
+            self.units = nil
+        }
     }
     
     init(_ product: ProductDTO) {
@@ -82,7 +89,8 @@ extension Product {
         self.carbs = product.carbs
         self.isUserProduct = false
         self.servings = [product.serving]
-       
+        self.units = product.units
+      
         self.composition = Composition(product.nutritions)
         
         self.photo = {

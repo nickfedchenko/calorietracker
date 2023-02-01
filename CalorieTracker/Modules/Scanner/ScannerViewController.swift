@@ -55,7 +55,7 @@ final class ScannerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupCamera()
+//        setupCamera()
         setupView()
         setupConstraints()
     }
@@ -67,12 +67,7 @@ final class ScannerViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
-        DispatchQueue.global(qos: .userInitiated).async {
-            if !self.captureSession.isRunning {
-                self.captureSession.startRunning()
-            }
-        }
+        setupCamera()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -102,6 +97,15 @@ final class ScannerViewController: UIViewController {
         }
 
         DispatchQueue.global(qos: .userInitiated).async {
+            self.captureSession.beginConfiguration()
+            if let currentInput = self.captureSession.inputs.first {
+                self.captureSession.removeInput(currentInput)
+            }
+            
+            if let currentOutput = self.captureSession.outputs.first {
+                self.captureSession.removeOutput(currentOutput)
+            }
+            
             if self.captureSession.canAddInput(input) {
                 self.captureSession.addInput(input)
             }
@@ -120,10 +124,13 @@ final class ScannerViewController: UIViewController {
             } else {
                 print("Could not add metadata output")
             }
+            self.captureSession.commitConfiguration()
 
             self.previewLayer = AVCaptureVideoPreviewLayer(session: self.captureSession)
             self.previewLayer.videoGravity = .resizeAspectFill
-
+            if !self.captureSession.isRunning {
+                self.captureSession.startRunning()
+            }
             DispatchQueue.main.async {
                 self.previewLayer.frame = self.view.bounds
                 self.view.layer.insertSublayer(self.previewLayer, at: 0)
