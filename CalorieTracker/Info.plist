@@ -44,6 +44,8 @@
 	<string>We need an update Helath records access to make your data entered in our app available for other apps.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>We need an access to your mac to let you perform search tasks without using a keyboard</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need an access to your photo library to let you add images to your custom food</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>We need an access to your mac to let you perform search tasks without using a keyboard</string>
 	<key>UIAppFonts</key>

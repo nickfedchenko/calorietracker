@@ -76,7 +76,7 @@ final class SelectView<ID: WithGetTitleProtocol>: UIView {
         print(models)
         models.forEach {
             let cell = SelectViewCell($0)
-            cell.addTarget(self, action: #selector(didTapCell), for: .touchUpInside)
+            cell.addTarget(self, action: #selector(cellDidTapped), for: .touchUpInside)
             stackView.addArrangedSubview(cell)
         }
     }
@@ -139,7 +139,7 @@ final class SelectView<ID: WithGetTitleProtocol>: UIView {
             .offset
     }
     
-    @objc func didTapCell(_ sender: UIControl) {
+    @objc func cellDidTapped(_ sender: UIControl) {
         Vibration.selection.vibrate()
         guard !isCollapsed else {
             if let type = selectedCellType {

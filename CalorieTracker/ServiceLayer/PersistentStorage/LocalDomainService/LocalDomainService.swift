@@ -426,7 +426,7 @@ extension LocalDomainService: LocalDomainServiceInterface {
         )?.first else { return }
         
         meal.addToDishes(NSSet(array: dishes))
-        meal.addToProducts(NSSet(array: products))
+        meal.addToProductsSet(NSSet(array: products))
         
         try? context.save()
     }
