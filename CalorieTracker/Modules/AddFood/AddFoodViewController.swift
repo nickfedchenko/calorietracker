@@ -613,6 +613,7 @@ final class AddFoodViewController: UIViewController {
                     break
                 case .authorized:
                     let request = SpeechAudioBufferRecognitionRequest()
+        
                     for try await result in await speechRecognitionManager.start(request: request) {
                         await MainActor.run {
                             let text = result.bestTranscription.formattedString

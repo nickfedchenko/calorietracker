@@ -89,7 +89,7 @@ actor SpeechRecognitionManager {
     private var audioEngine: AVAudioEngine?
     private var recognitionTask: SFSpeechRecognitionTask?
 
-    private var locale: Locale = Locale(identifier: "en-US")
+    private var locale: Locale = Locale.current
 
     private func configureAudioSession() -> Bool {
         do {

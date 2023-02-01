@@ -24,7 +24,7 @@ public class DomainProduct: NSManagedObject {
         product.photo = try? JSONEncoder().encode(model.photo)
         product.composition = try? JSONEncoder().encode(model.composition)
         product.servings = try? JSONEncoder().encode(model.servings)
-        
+        product.units = try? JSONEncoder().encode(model.units)
         return product
     }
 }

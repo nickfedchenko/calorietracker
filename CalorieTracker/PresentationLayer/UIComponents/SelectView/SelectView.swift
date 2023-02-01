@@ -39,12 +39,15 @@ final class SelectView<ID: WithGetTitleProtocol>: UIView {
     
     private let models: [ID]
     
-    init(_ models: [ID]) {
+    init(_ models: [ID], shouldHideAtStartup: Bool = false) {
         self.models = models
         super.init(frame: .zero)
         setupView()
         setupConstraints()
         configureStack()
+        if shouldHideAtStartup {
+            didTapCell(stackView.arrangedSubviews[0] as! UIControl)
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -70,6 +73,7 @@ final class SelectView<ID: WithGetTitleProtocol>: UIView {
     }
     
     private func configureStack() {
+        print(models)
         models.forEach {
             let cell = SelectViewCell($0)
             cell.addTarget(self, action: #selector(didTapCell), for: .touchUpInside)
@@ -95,7 +99,7 @@ final class SelectView<ID: WithGetTitleProtocol>: UIView {
         } else if let selectedIndex = getSelectedCellIndex(), index == selectedIndex {
             self.close(index - 1)
         } else {
-            UIView.animate(withDuration: 0.1, delay: 0, options: .curveEaseInOut) {
+            UIView.animate(withDuration: 0.02, delay: 0, options: .curveEaseInOut) {
                 self.stackView.arrangedSubviews[safe: index]?.layer.opacity = 0
                 self.stackView.arrangedSubviews[safe: index]?.isHidden = true
             } completion: { _ in
@@ -113,7 +117,7 @@ final class SelectView<ID: WithGetTitleProtocol>: UIView {
         } else if let selectedIndex = getSelectedCellIndex(), index == selectedIndex {
             self.show(index + 1)
         } else {
-            UIView.animate(withDuration: 0.1, delay: 0, options: .curveEaseInOut) {
+            UIView.animate(withDuration: 0.02, delay: 0, options: .curveEaseInOut) {
                 self.stackView.arrangedSubviews[safe: index]?.layer.opacity = 1
                 self.stackView.arrangedSubviews[safe: index]?.isHidden = false
             } completion: { _ in

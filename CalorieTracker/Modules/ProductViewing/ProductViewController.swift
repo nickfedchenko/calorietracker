@@ -51,7 +51,12 @@ final class ProductViewController: CTViewController {
         }
     }
     
-    private var selectedWeightType: FoodViewingWeightType = .gram {
+    private lazy var selectedWeightType: UnitElement.ConvenientUnit = presenter?
+        .getProduct()?
+        .units?
+        .first?
+        .convenientUnit
+    ?? .custom(title: "Undefined", shortTitle: "Undefined", coefficient: 1) {
         didSet {
             didChangeWeight()
         }
@@ -76,6 +81,7 @@ final class ProductViewController: CTViewController {
         addSubviews()
         setupConstraints()
         presenter?.createFoodData()
+        
     }
     
     override func viewDidLayoutSubviews() {
@@ -94,6 +100,7 @@ final class ProductViewController: CTViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         hideNavBar()
+        didChangeWeight()
     }
     
     // MARK: - Private Functions
@@ -113,9 +120,12 @@ final class ProductViewController: CTViewController {
             self.presenter?.didTapFavoriteButton(value)
         }
         
-        selectView.didSelectedCell = { type, isColapsed in
-            self.showOverlayView(isColapsed)
-            self.selectedWeightType = type
+        selectView.didSelectedCell = { [weak self] type, isColapsed in
+            self?.showOverlayView(isColapsed)
+            self?.selectedWeightType = type
+            if !isColapsed {
+                self?.valueTextField.selectAll(nil)
+            }
         }
         
         guard let product = presenter?.getProduct() else { return }
@@ -265,33 +275,116 @@ final class ProductViewController: CTViewController {
         bottomGradientView.layer.addSublayer(gradientLayer)
     }
     
+    // swiftlint:disable:next cyclomatic_complexity
     private func didChangeWeight() {
         guard let textValue = valueTextField.text,
-               let product = presenter?.getProduct() else { return }
+              let product = presenter?.getProduct() else {
+            return
+        }
         let value = Double(textValue) ?? 0
         
         switch selectedWeightType {
-        case .ounce:
+        case .gram(_, _, coefficient: let coefficient):
+            setAddNutrition(from: product, with: value, using: coefficient)
+        case .oz(_, _, coefficient: let coefficient):
+            setAddNutrition(from: product, with: value, using: coefficient, isOz: true)
+        case .portion(_, _, coefficient: let coefficient):
+            setAddNutrition(from: product, with: value, using: coefficient)
+        case .cup(_, _, coefficient: let coefficient):
+            setAddNutrition(from: product, with: value, using: coefficient)
+        case .cupGrated(_, _, coefficient: let coefficient):
+            setAddNutrition(from: product, with: value, using: coefficient)
+        case .cupSliced(_, _, coefficient: let coefficient):
+            setAddNutrition(from: product, with: value, using: coefficient)
+        case .teaSpoon(_, _, coefficient: let coefficient):
+            setAddNutrition(from: product, with: value, using: coefficient)
+        case .tableSpoon(_, _, coefficient: let coefficient):
+            setAddNutrition(from: product, with: value, using: coefficient)
+        case .piece(_, _, coefficient: let coefficient):
+            setAddNutrition(from: product, with: value, using: coefficient)
+        case .smallSize(_, _, coefficient: let coefficient):
+            setAddNutrition(from: product, with: value, using: coefficient)
+        case .middleSize(_, _, coefficient: let coefficient):
+            setAddNutrition(from: product, with: value, using: coefficient)
+        case .hugeSize(_, _, coefficient: let coefficient):
+            setAddNutrition(from: product, with: value, using: coefficient)
+        case .pack(_, _, coefficient: let coefficient):
+            setAddNutrition(from: product, with: value, using: coefficient)
+        case .ml(_, _, coefficient: let coefficient):
+            setAddNutrition(from: product, with: value, using: coefficient)
+        case .floz(_, _, coefficient: let coefficient):
+            setAddNutrition(from: product, with: value, using: coefficient)
+        case .custom(_, _, coefficient: let coefficient):
+            setAddNutrition(from: product, with: value, using: coefficient)
+        }
+    }
+    
+    // swiftlint:disable:next function_body_length
+    private func setAddNutrition(
+        from product: Product,
+        with value: Double,
+        using coefficient: Double?,
+        isOz: Bool = false
+    ) {
+        guard let coefficient = coefficient else {
+            return
+        }
+        
+        if !isOz {
+            let kcal = Double(product.kcal) / 100.0 * (value * coefficient)
+            let carbs = //NutrientMeasurment.convert(
+            product.carbs / 100 * (coefficient * value)
+            //                type: .carbs,
+            //                from: .gram,
+            //                to: .kcal
+            //            )
+            
+            let protein = // NutrientMeasurment.convert(
+            product.protein / 100.0 * (value * coefficient)
+            //                type: .protein,
+            //                from: .gram,
+            //                to: .kcal
+            //            )
+            
+            let fat = //NutrientMeasurment.convert(
+            product.fat / 100.0 * (value * coefficient)
+            //                type: .fat,
+            //                from: .gram,
+            //                to: .kcal
+            //            )
             addNutrition = .init(
-                kcal: Double(product.kcal) / 100.0 * 29.8 * value,
-                carbs: product.carbs / 100.0 * 29.8 * value,
-                protein: product.protein / 100.0 * 29.8 * value,
-                fat: product.fat / 100.0 * 29.8 * value
+                kcal: kcal,
+                carbs: carbs,
+                protein: protein,
+                fat: fat
             )
-        case .gram:
+        } else {
+            let kcal = Double(product.kcal) / 100.0 * (value / coefficient)
+            let carbs = // NutrientMeasurment.convert(
+            product.carbs / 100 * (value / coefficient)
+            //                type: .carbs,
+            //                from: .gram,
+            //                to: .kcal
+            //            )
+            
+            let protein = // NutrientMeasurment.convert(
+            product.protein / 100.0 * (value / coefficient)
+            //                type: .protein,
+            //                from: .gram,
+            //                to: .kcal
+            //            )
+            
+            let fat = // NutrientMeasurment.convert(
+            product.fat / 100.0 * (value / coefficient)
+            //                type: .fat,
+            //                from: .gram,
+            //                to: .kcal
+            //            )
             addNutrition = .init(
-                kcal: Double(product.kcal) / 100.0 * value,
-                carbs: product.carbs / 100.0 * value,
-                protein: product.protein / 100.0 * value,
-                fat: product.fat / 100.0 * value
-            )
-        case .piece:
-            let weight = product.servings?.first?.weight ?? 0
-            addNutrition = .init(
-                kcal: Double(product.kcal) / 100.0 * weight * value,
-                carbs: product.carbs / 100.0 * weight * value,
-                protein: product.protein / 100.0 * weight * value,
-                fat: product.fat / 100.0 * weight * value
+                kcal: kcal,
+                carbs: carbs,
+                protein: protein,
+                fat: fat
             )
         }
     }
@@ -409,6 +502,7 @@ extension ProductViewController {
             action: #selector(didChangeTextFieldValue),
             for: .editingChanged
         )
+        textField.text = "100"
         return textField
     }
     
@@ -422,8 +516,8 @@ extension ProductViewController {
         return button
     }
     
-    func getSelectView() -> SelectView<FoodViewingWeightType> {
-        SelectView(FoodViewingWeightType.allCases)
+    func getSelectView() -> SelectView<UnitElement.ConvenientUnit> {
+        SelectView(presenter?.getProduct()?.units?.compactMap { $0.convenientUnit } ?? [], shouldHideAtStartup: true)
     }
     
     func getOverlayView() -> UIView {

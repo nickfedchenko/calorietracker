@@ -20,7 +20,7 @@ final class SelectViewCell<ID: WithGetTitleProtocol>: UIControl {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = R.font.sfProTextMedium(size: 22)
+        label.font = R.font.sfProRoundedMedium(size: 22)
         return label
     }()
     

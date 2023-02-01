@@ -91,8 +91,9 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         return node
     }()
     
-    private let barCodeScannerButton: ScanButtonNode = {
+    private lazy var barCodeScannerButton: ScanButtonNode = {
         let node = ScanButtonNode(with: CTWidgetNodeConfiguration(type: .compact))
+        node.addTarget(self, action: #selector(barcodeScanButtonTapped), forControlEvents: .touchUpInside)
         return node
     }()
     
@@ -282,12 +283,14 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
     }
     
     private func addTapGestureRecognizer() {
-        [calendarWidget,
-         waterBalanceWidget,
-         weightMeasureWidget,
-         notesWidget, stepsWidget,
-         exercisesWidget,
-         mainActivityWidget]
+        [
+            calendarWidget,
+            waterBalanceWidget,
+            weightMeasureWidget,
+            notesWidget, stepsWidget,
+            exercisesWidget,
+            mainActivityWidget
+        ]
             .forEach {
                 $0.addTarget(
                     self,
@@ -324,6 +327,10 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
     @objc private func didTapButton() {
         Vibration.medium.vibrate()
         presenter?.didTapAddButton()
+    }
+    
+    @objc private func barcodeScanButtonTapped() {
+        presenter?.didTapBarcodeScannerButton()
     }
 }
 

@@ -230,7 +230,6 @@ extension LocalDomainService: LocalDomainServiceInterface {
         backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
         let _: [DomainProduct] = products
             .map { DomainProduct.prepare(fromPlainModel: $0, context: backgroundContext) }
-        
         try? backgroundContext.save()
     }
     

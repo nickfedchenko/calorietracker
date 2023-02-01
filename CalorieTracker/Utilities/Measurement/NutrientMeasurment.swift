@@ -38,4 +38,11 @@ struct NutrientMeasurment {
             return value
         }
     }
+    
+    static func convertNutrition(nutrition: DailyNutrition, from: NutrientUnit, to: NutrientUnit) -> DailyNutrition {
+        let protein: Double = convert(value: nutrition.protein, type: .protein, from: from, to: to)
+        let fat: Double = convert(value: nutrition.fat, type: .fat, from: from, to: to)
+        let carbs: Double = convert(value: nutrition.carbs, type: .carbs, from: from, to: to)
+        return .init(kcal: nutrition.kcal, carbs: carbs, protein: protein, fat: fat)
+    }
 }
