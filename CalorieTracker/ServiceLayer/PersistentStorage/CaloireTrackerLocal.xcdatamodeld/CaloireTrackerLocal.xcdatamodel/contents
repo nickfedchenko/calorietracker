@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21513" systemVersion="22A400" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21F79" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="DomainDailyMeals" representedClassName="DomainDailyMeals" syncable="YES">
+        <attribute name="day" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="mealTime" attributeType="String"/>
+        <attribute name="month" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="year" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="dishes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DomainDish" inverseName="dailyMeals" inverseEntity="DomainDish"/>
+        <relationship name="product" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DomainProduct" inverseName="dailyMeals" inverseEntity="DomainProduct"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="day"/>
+                <constraint value="month"/>
+                <constraint value="year"/>
+                <constraint value="mealTime"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
     <entity name="DomainDish" representedClassName="DomainDish" syncable="YES">
         <attribute name="additionalTags" optional="YES" attributeType="Binary"/>
         <attribute name="carbs" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -26,6 +42,7 @@
         <attribute name="title" attributeType="String"/>
         <attribute name="updatedAt" attributeType="String"/>
         <attribute name="weight" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="dailyMeals" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainDailyMeals" inverseName="dishes" inverseEntity="DomainDailyMeals"/>
         <relationship name="foodData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainFoodData" inverseName="dish" inverseEntity="DomainFoodData"/>
         <relationship name="meal" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainMeal" inverseName="dishes" inverseEntity="DomainMeal"/>
         <uniquenessConstraints>
@@ -109,6 +126,7 @@
         <attribute name="protein" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="servings" optional="YES" attributeType="Binary"/>
         <attribute name="title" attributeType="String"/>
+        <relationship name="dailyMeals" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainDailyMeals" inverseName="product" inverseEntity="DomainDailyMeals"/>
         <attribute name="units" optional="YES" attributeType="Binary"/>
         <relationship name="foodData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainFoodData" inverseName="product" inverseEntity="DomainFoodData"/>
         <relationship name="meal" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainMeal" inverseName="products" inverseEntity="DomainMeal"/>
@@ -157,4 +175,17 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
+    <elements>
+        <element name="DomainDish" positionX="-54" positionY="108" width="128" height="449"/>
+        <element name="DomainExercise" positionX="-54" positionY="153" width="128" height="74"/>
+        <element name="DomainFoodData" positionX="-54" positionY="153" width="128" height="119"/>
+        <element name="DomainMeal" positionX="-36" positionY="162" width="128" height="89"/>
+        <element name="DomainNote" positionX="-45" positionY="252" width="128" height="104"/>
+        <element name="DomainNutrition" positionX="-54" positionY="153" width="128" height="134"/>
+        <element name="DomainProduct" positionX="-54" positionY="153" width="128" height="254"/>
+        <element name="DomainSteps" positionX="-45" positionY="162" width="128" height="89"/>
+        <element name="DomainWater" positionX="-54" positionY="153" width="128" height="89"/>
+        <element name="DomainWeight" positionX="-36" positionY="171" width="128" height="89"/>
+        <element name="DomainDailyMeals" positionX="-45" positionY="270" width="128" height="119"/>
+    </elements>
 </model>
