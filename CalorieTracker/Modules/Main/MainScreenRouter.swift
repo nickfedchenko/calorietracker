@@ -86,6 +86,14 @@ extension MainScreenRouter: MainScreenRouterInterface {
             animated: true
         )
     }
+    
+    func openOpenMainWidget() {
+        let vc = OpenMainWidgetRouter.setupModule(Date())
+        viewController?.present(
+            vc,
+            animated: true
+        )
+    }
 }
 
 extension MainScreenRouter: WidgetContainerOutput {

@@ -17,11 +17,16 @@ class OpenMainWidgetRouter: NSObject {
 
     weak var presenter: OpenMainWidgetPresenterInterface?
 
-    static func setupModule() -> OpenMainWidgetViewController {
+    static func setupModule(_ date: Date) -> OpenMainWidgetViewController {
         let vc = OpenMainWidgetViewController()
         let interactor = OpenMainWidgetInteractor()
         let router = OpenMainWidgetRouter()
-        let presenter = OpenMainWidgetPresenter(interactor: interactor, router: router, view: vc)
+        let presenter = OpenMainWidgetPresenter(
+            interactor: interactor,
+            router: router,
+            view: vc,
+            date: date
+        )
 
         vc.presenter = presenter
         router.presenter = presenter

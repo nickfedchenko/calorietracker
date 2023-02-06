@@ -78,6 +78,8 @@ protocol FoodDataServiceInterface {
     /// Возвращает все данные о еде сохраненные в локальной ДБ
     /// - Returns: массив FoodData
     func getAllStoredFoodData() -> [FoodData]
+    func getAllStoredDailyMeals() -> [DailyMeal]
+    func addFoodsMeal(mealTime: MealTime, date: Day, foods: [Food])
 }
 
 final class FDS {
@@ -98,6 +100,27 @@ final class FDS {
 }
 
 extension FDS: FoodDataServiceInterface {
+    func addFoodsMeal(mealTime: MealTime, date: Day, foods: [Food]) {
+        let productsID = foods.products.map { $0.id }
+        let dishesID = foods.dishes.map { $0.id }
+        
+        guard localPersistentStore.setChildDailyMeal(
+            mealTime: mealTime.rawValue,
+            date: date,
+            dishesID: dishesID,
+            productsID: productsID
+        ) else {
+            let dailyMeal = DailyMeal(
+                date: date,
+                mealTime: mealTime,
+                foods: foods
+            )
+            
+            localPersistentStore.saveDailyMeals(data: [dailyMeal])
+            return
+        }
+    }
+    
     func foodUpdate(food: Food, favorites: Bool?) -> String? {
         guard let foodData = localPersistentStore.getFoodData(food) else {
             let foodData = FoodData(
@@ -134,6 +157,10 @@ extension FDS: FoodDataServiceInterface {
     
     func getAllStoredFoodData() -> [FoodData] {
         return localPersistentStore.fetchFoodData()
+    }
+    
+    func getAllStoredDailyMeals() -> [DailyMeal] {
+        localPersistentStore.fetchDailyMeals()
     }
     
     func getFavoriteDishes() -> [Dish] {

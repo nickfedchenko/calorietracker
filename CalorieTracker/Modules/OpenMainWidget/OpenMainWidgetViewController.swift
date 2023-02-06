@@ -9,18 +9,18 @@
 import UIKit
 
 protocol OpenMainWidgetViewControllerInterface: AnyObject {
-
+    func setDailyMeals(_ dailyMeals: [DailyMeal])
 }
 
 class OpenMainWidgetViewController: UIViewController {
     var presenter: OpenMainWidgetPresenterInterface?
     
     private lazy var collectionView: UICollectionView = getCollectionViewCell()
-    private var products: [Product]?
+    private var dailyMeals: [DailyMeal]?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        products = Array(DSF.shared.getAllStoredProducts()[0...3])
+        presenter?.updateDailyMeals()
         setupView()
         setupConstraints()
         registerCells()
@@ -48,7 +48,9 @@ class OpenMainWidgetViewController: UIViewController {
 }
 
 extension OpenMainWidgetViewController: OpenMainWidgetViewControllerInterface {
-
+    func setDailyMeals(_ dailyMeals: [DailyMeal]) {
+        self.dailyMeals = dailyMeals
+    }
 }
 
 // MARK: - CollectionView Delegate
@@ -89,7 +91,7 @@ extension OpenMainWidgetViewController: UICollectionViewDataSource {
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int
     ) -> Int {
-        4
+        dailyMeals?.count ?? 0
     }
     
     func collectionView(
@@ -97,10 +99,10 @@ extension OpenMainWidgetViewController: UICollectionViewDataSource {
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
         let cell: MealTimeCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
-        
+        let dailyMeal = dailyMeals?[safe: indexPath.row]
         cell.viewModel = .init(
-            foods: products?.foods ?? [],
-            mealtime: .breakfast
+            foods: dailyMeal?.foods ?? [],
+            mealtime: dailyMeal?.mealTime ?? .breakfast
         )
         
         return cell

@@ -23,7 +23,8 @@ extension DailyMeal {
         
         self.mealTime = .init(rawValue: managedModel.mealTime) ?? .breakfast
         
-        if let products = managedModel.products, let dishes = managedModel.dishes {
+        if let products = managedModel.products?.compactMap({ $0 as? DomainProduct }),
+           let dishes = managedModel.dishes?.compactMap({ $0 as? DomainDish }) {
             let productFoods = products.compactMap { Product(from: $0) }.foods
             let dishFoods = dishes.compactMap { Dish(from: $0) }.foods
             self.foods = productFoods + dishFoods
