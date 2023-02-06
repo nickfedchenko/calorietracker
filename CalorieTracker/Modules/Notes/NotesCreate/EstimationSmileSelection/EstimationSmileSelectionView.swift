@@ -12,7 +12,7 @@ final class EstimationSmileSelectionView: UIView {
         let stack = UIStackView()
         stack.axis = .horizontal
         stack.distribution = .fillEqually
-        stack.spacing = 12
+        stack.spacing = 4
         return stack
     }()
     

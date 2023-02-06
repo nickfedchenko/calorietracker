@@ -10,6 +10,7 @@ import UIKit
 enum StringSettings {
     case color(UIColor?)
     case font(UIFont?)
+    case lineHeightMultiple(CGFloat?)
 }
 
 struct StringSettingsModel {
@@ -52,6 +53,13 @@ extension String {
                         .font,
                         value: font ?? .init(),
                         range: NSRange(location: 0, length: world.element.count)
+                    )
+                case .lineHeightMultiple(let heightMultiple):
+                    let paragraphStyle = NSMutableParagraphStyle()
+                    paragraphStyle.lineHeightMultiple = heightMultiple ?? 1
+                    attributedString.addAttribute(.paragraphStyle,
+                                                  value: paragraphStyle,
+                                                  range: NSRange(location: 0, length: world.element.count)
                     )
                 }
             }

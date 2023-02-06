@@ -47,7 +47,8 @@ final class EstimationSmileButton: UIControl {
         self.aspectRatio()
         
         imageView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.width.height.equalTo(32)
+            make.center.equalToSuperview()
         }
     }
     
@@ -56,9 +57,17 @@ final class EstimationSmileButton: UIControl {
         case true:
             layer.opacity = 1
             layer.borderWidth = 3
+            imageView.snp.remakeConstraints { make in
+                make.width.height.equalTo(40)
+                make.center.equalToSuperview()
+            }
         case false:
             layer.opacity = 0.3
             layer.borderWidth = 0
+            imageView.snp.remakeConstraints { make in
+                make.width.height.equalTo(32)
+                make.center.equalToSuperview()
+            }
         }
     }
 }

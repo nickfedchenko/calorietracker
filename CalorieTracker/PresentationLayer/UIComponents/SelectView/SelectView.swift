@@ -46,7 +46,7 @@ final class SelectView<ID: WithGetTitleProtocol>: UIView {
         setupConstraints()
         configureStack()
         if shouldHideAtStartup {
-            didTapCell(stackView.arrangedSubviews[0] as! UIControl)
+            self.cellDidTapped(stackView.arrangedSubviews[0] as! UIControl)
         }
     }
     

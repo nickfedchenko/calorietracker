@@ -81,11 +81,10 @@ final class NotesCreateHeader: UIView {
             estimationView
         )
         
-        allNotesButton.aspectRatio(0.248)
         allNotesButton.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(16)
             make.centerX.equalToSuperview()
-            make.width.equalToSuperview().multipliedBy(0.388)
+            make.height.equalTo(40)
         }
         
         closeButton.aspectRatio()
@@ -112,7 +111,7 @@ final class NotesCreateHeader: UIView {
             make.trailing.equalToSuperview().offset(-20)
             make.top.equalTo(textView.snp.bottom).offset(13)
             make.bottom.equalToSuperview().offset(-16)
-            make.height.equalTo(allNotesButton)
+            make.height.equalTo(40)
         }
         
         estimationView.snp.makeConstraints { make in
@@ -197,13 +196,15 @@ extension NotesCreateHeader {
     
     private func getDoneButton() -> UIButton {
         let button = UIButton()
-        button.setTitle("DONE", for: .normal)
+        button.setTitle(R.string.localizable.notesDone(), for: .normal)
         button.setTitleColor(R.color.notes.noteGray(), for: .normal)
+        button.titleLabel?.font = R.font.sfProRoundedBold(size: 18)
         button.addTarget(self, action: #selector(didTapDoneButton), for: .touchUpInside)
         button.layer.cornerCurve = .continuous
         button.layer.cornerRadius = 8
         button.layer.borderWidth = 1
         button.layer.borderColor = R.color.notes.noteGray()?.cgColor
+        button.contentEdgeInsets = .init(top: 0, left: 16, bottom: 0, right: 16)
         button.isEnabled = false
         return button
     }
@@ -218,9 +219,10 @@ extension NotesCreateHeader {
     
     private func getAllNotesButton() -> UIButton {
         let button = UIButton()
-        let font = R.font.sfProDisplaySemibold(size: 18.fontScale())
+        let font = R.font.sfProRoundedBold(size: 18.fontScale())
+        let titleString = R.string.localizable.notesAllNotes()
         button.setAttributedTitle(
-            "ALL NOTES".attributedSring(
+            titleString.attributedSring(
                 [.init(worldIndex: [0, 1], attributes: [.color(.white), .font(font)])],
                 image: .init(
                     image: R.image.notes.note(),
@@ -230,6 +232,7 @@ extension NotesCreateHeader {
             ),
             for: .normal
         )
+        button.contentEdgeInsets = .init(top: 0, left: 8, bottom: 0, right: 8)
         button.addTarget(self, action: #selector(didTapAllNotesButton), for: .touchUpInside)
         button.backgroundColor = R.color.notes.noteAccent()
         button.layer.cornerCurve = .continuous

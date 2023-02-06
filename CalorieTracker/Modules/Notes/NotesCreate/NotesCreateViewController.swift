@@ -24,7 +24,9 @@ final class NotesCreateViewController: CTViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
+    // MARK: - Init
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -36,7 +38,9 @@ final class NotesCreateViewController: CTViewController {
         super.viewDidAppear(animated)
         headerView.textViewBecomeFirstResponder()
     }
-    
+
+    // MARK: - SetupUI
+
     private func setupView() {
         headerView.complitionPhotoButton = { [weak self] in
             self?.showAlert()
@@ -144,6 +148,8 @@ final class NotesCreateViewController: CTViewController {
     }
 }
 
+// MARK: - UIViewControllerTransitioningDelegate
+
 extension NotesCreateViewController: UIViewControllerTransitioningDelegate {
     func presentationController(
         forPresented presented: UIViewController,
@@ -157,6 +163,8 @@ extension NotesCreateViewController: UIViewControllerTransitioningDelegate {
         )
     }
 }
+
+// MARK: - UIImagePickerControllerDelegate&UINavigationControllerDelegate
 
 extension NotesCreateViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController,
