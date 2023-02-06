@@ -113,10 +113,16 @@ extension FDS: FoodDataServiceInterface {
             let dailyMeal = DailyMeal(
                 date: date,
                 mealTime: mealTime,
-                foods: foods
+                foods: []
             )
             
             localPersistentStore.saveDailyMeals(data: [dailyMeal])
+            localPersistentStore.setChildDailyMeal(
+                mealTime: mealTime.rawValue,
+                date: date,
+                dishesID: dishesID,
+                productsID: productsID
+            )
             return
         }
     }

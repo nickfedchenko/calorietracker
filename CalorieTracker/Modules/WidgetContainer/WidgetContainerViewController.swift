@@ -26,6 +26,7 @@ final class WidgetContainerViewController: UIViewController {
         case notes
         case weight
         case exercises
+        case main
         case `default`
     }
     
@@ -64,6 +65,8 @@ final class WidgetContainerViewController: UIViewController {
             return getStepsWidgetInsets()
         case .water:
             return getWaterWidgetInsets()
+        case .main:
+            return .zero
         case .default:
             return .zero
         }
@@ -341,6 +344,8 @@ extension WidgetContainerViewController.WidgetType {
         case .weight:
             return WeightFullWidgetView()
         case .exercises:
+            return UIView()
+        case .main:
             return UIView()
         case .default:
             return UIView()

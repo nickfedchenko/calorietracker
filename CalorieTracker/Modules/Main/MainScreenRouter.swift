@@ -17,6 +17,7 @@ protocol MainScreenRouterInterface: AnyObject {
     func openCreateNotesVC()
     func openAllNotesVC()
     func openBarcodeScannerVC()
+    func openOpenMainWidget(_ date: Date)
 }
 
 class MainScreenRouter: NSObject {
@@ -87,8 +88,8 @@ extension MainScreenRouter: MainScreenRouterInterface {
         )
     }
     
-    func openOpenMainWidget() {
-        let vc = OpenMainWidgetRouter.setupModule(Date())
+    func openOpenMainWidget(_ date: Date) {
+        let vc = OpenMainWidgetRouter.setupModule(date)
         viewController?.present(
             vc,
             animated: true

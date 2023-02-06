@@ -16,9 +16,6 @@ public class DomainDailyMeals: NSManagedObject {
         dailyMeal.month = Int32(model.date.month)
         dailyMeal.year = Int32(model.date.year)
         dailyMeal.mealTime = model.mealTime.rawValue
-        dailyMeal.products = NSSet(array: model.foods.products)
-        dailyMeal.dishes = NSSet(array: model.foods.dishes)
         return dailyMeal
     }
 }
-

@@ -25,6 +25,7 @@ protocol MainScreenPresenterInterface: AnyObject {
     func didTapExerciseWidget()
     func didTapNotesWidget()
     func setPointDate(_ date: Date)
+    func didTapMainWidget()
 }
 
 class MainScreenPresenter {
@@ -70,6 +71,10 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
     
     func didTapAddButton() {
         router?.openAddFoodVC()
+    }
+    
+    func didTapMainWidget() {
+        router?.openOpenMainWidget(pointDate ?? Date())
     }
     
     func didTapWidget(_ type: WidgetContainerViewController.WidgetType) {

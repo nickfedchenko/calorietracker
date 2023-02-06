@@ -61,6 +61,10 @@ final class MainWidgetViewNode: CTWidgetNode {
         }
     }
     
+    override var widgetType: WidgetContainerViewController.WidgetType {
+        .main
+    }
+    
     override init(with configuration: CTWidgetNodeConfiguration) {
         super.init(with: configuration)
         setupView()

@@ -459,9 +459,9 @@ extension LocalDomainService: LocalDomainServiceInterface {
         let formatId = "id == %ld"
         let formatStrId = "id == %@"
         let formatMealTime = "mealTime == %@"
-        let formatMealDay = "day == %day"
-        let formatMealMonth = "month == %month"
-        let formatMealYear = "year == %year"
+        let formatMealDay = "day == %ld"
+        let formatMealMonth = "month == %ld"
+        let formatMealYear = "year == %ld"
         
         let dishPredicates = dishesID.map { NSPredicate(format: formatId, $0) }
         let productPredicates = productsID.map { NSPredicate(format: formatStrId, $0) }
