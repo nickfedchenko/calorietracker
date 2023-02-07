@@ -10,7 +10,7 @@ import Foundation
 struct DailyMeal {
     let date: Day
     let mealTime: MealTime
-    let foods: [Food]
+    let mealData: [MealData]
 }
 
 extension DailyMeal {
@@ -23,13 +23,10 @@ extension DailyMeal {
         
         self.mealTime = .init(rawValue: managedModel.mealTime) ?? .breakfast
         
-        if let products = managedModel.products?.compactMap({ $0 as? DomainProduct }),
-           let dishes = managedModel.dishes?.compactMap({ $0 as? DomainDish }) {
-            let productFoods = products.compactMap { Product(from: $0) }.foods
-            let dishFoods = dishes.compactMap { Dish(from: $0) }.foods
-            self.foods = productFoods + dishFoods
+        if let domainMealData = managedModel.mealData {
+            self.mealData = domainMealData.compactMap { MealData(from: $0) }
         } else {
-            self.foods = []
+            self.mealData = []
         }
     }
 }

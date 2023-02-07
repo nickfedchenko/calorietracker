@@ -48,7 +48,7 @@ class OpenMainWidgetPresenter {
             let emptyDailyMeal = DailyMeal(
                 date: day,
                 mealTime: mealTime,
-                foods: []
+                mealData: []
             )
             return emptyDailyMeal
         }

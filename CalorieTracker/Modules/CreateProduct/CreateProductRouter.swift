@@ -51,7 +51,7 @@ extension CreateProductRouter: CreateProductRouterInterface {
     }
     
     func openProductViewController(_ product: Product) {
-        let vc = ProductRouter.setupModule(product, .createProduct)
+        let vc = ProductRouter.setupModule(product, .createProduct, .breakfast)
         vc.modalPresentationStyle = .overFullScreen
         
         vc.shouldClose = {

@@ -56,11 +56,6 @@ protocol FoodDataServiceInterface {
     ///   - count: количество результатов
     /// - Returns: массив Product
     func getFrequentProducts(_ count: Int) -> [Product]
-    /// Обновляет данные за день
-    /// - Parameters:
-    ///   - day: дата
-    ///   - nutrition: данные
-    func addNutrition(day: Day, nutrition: DailyNutrition)
     /// Возвращает циль на дневное питание
     /// - Returns: массив DailyNutrition
     func getNutritionGoals() -> DailyNutrition?
@@ -79,7 +74,7 @@ protocol FoodDataServiceInterface {
     /// - Returns: массив FoodData
     func getAllStoredFoodData() -> [FoodData]
     func getAllStoredDailyMeals() -> [DailyMeal]
-    func addFoodsMeal(mealTime: MealTime, date: Day, foods: [Food])
+    func addFoodsMeal(mealTime: MealTime, date: Day, mealData: [MealData])
 }
 
 final class FDS {
@@ -97,32 +92,85 @@ final class FDS {
             .filter { $0.food != nil }
             .prefix(count))
     }
+    
+    private func dailyMealConverNutrients(_ dailyMeal: [DailyMeal]) -> DailyNutrition {
+        let mealData = dailyMeal.flatMap { $0.mealData }
+        
+        var protein: Double = 0
+        var fat: Double = 0
+        var carbs: Double = 0
+        var kcal: Double = 0
+        
+        mealData.forEach {
+            switch $0.food {
+            case .product(let product):
+                protein += product.protein / 100 * $0.weight
+                fat += product.fat / 100 * $0.weight
+                carbs += product.carbs / 100 * $0.weight
+                kcal += product.kcal / 100 * $0.weight
+            case  .dishes(let dish):
+                protein += dish.protein / 100 * $0.weight
+                fat += dish.fat / 100 * $0.weight
+                carbs += dish.carbs / 100 * $0.weight
+                kcal += dish.kcal / 100 * $0.weight
+            default:
+                break
+            }
+        }
+        
+        return .init(
+            kcal: kcal,
+            carbs: carbs,
+            protein: protein,
+            fat: fat
+        )
+    }
 }
 
 extension FDS: FoodDataServiceInterface {
-    func addFoodsMeal(mealTime: MealTime, date: Day, foods: [Food]) {
-        let productsID = foods.products.map { $0.id }
-        let dishesID = foods.dishes.map { $0.id }
+    
+    func addFoodsMeal(mealTime: MealTime, date: Day, mealData: [MealData]) {
+        let mealDataId = mealData.map { $0.id }
+        
+        localPersistentStore.saveMealData(data: mealData)
+        mealData.forEach {
+            var dishId: Int?
+            var productId: String?
+            
+            switch $0.food {
+            case .dishes(let dish):
+                dishId = dish.id
+            case .product(let product):
+                productId = product.id
+            default:
+                break
+            }
+            
+            localPersistentStore.setChildMealData(
+                mealDataId: $0.id,
+                dishID: dishId,
+                productID: productId
+            )
+        }
         
         guard localPersistentStore.setChildDailyMeal(
             mealTime: mealTime.rawValue,
             date: date,
-            dishesID: dishesID,
-            productsID: productsID
+            mealDataId: mealDataId
         ) else {
             let dailyMeal = DailyMeal(
                 date: date,
                 mealTime: mealTime,
-                foods: []
+                mealData: []
             )
             
             localPersistentStore.saveDailyMeals(data: [dailyMeal])
             localPersistentStore.setChildDailyMeal(
                 mealTime: mealTime.rawValue,
                 date: date,
-                dishesID: dishesID,
-                productsID: productsID
+                mealDataId: mealDataId
             )
+            
             return
         }
     }
@@ -225,19 +273,31 @@ extension FDS: FoodDataServiceInterface {
     }
     
     func getAllNutrition() -> [DailyNutritionData] {
-        localPersistentStore.fetchNutrition()
+        let dailyMeals = localPersistentStore.fetchDailyMeals()
+        
+        return dailyMeals.map {
+            DailyNutritionData(
+                day: $0.date,
+                nutrition: dailyMealConverNutrients([$0])
+            )
+        }
     }
     
     func getNutritionToday() -> DailyNutritionData {
-        let today = Day(Date())
-        return localPersistentStore.fetchNutrition()
-            .first(where: { $0.day == today }) ?? .init(day: today, nutrition: .zero)
+        let today = Date()
+        return getNutritionForDate(today)
     }
     
     func getNutritionForDate(_ date: Date) -> DailyNutritionData {
         let day = Day(date)
-        return localPersistentStore.fetchNutrition()
-            .first(where: { $0.day == day }) ?? .init(day: day, nutrition: .zero)
+        let nutrients = dailyMealConverNutrients(
+            localPersistentStore.fetchDailyMeals().filter { $0.date == day }
+        )
+        
+        return .init(
+            day: day,
+            nutrition: nutrients
+        )
     }
     
     func createMeal(mealTime: MealTime, dishes: [Dish], products: [Product]) {
@@ -293,16 +353,6 @@ extension FDS: FoodDataServiceInterface {
             ? Array(searchHistory[0..<countSearchQuery])
             : searchHistory
         ))
-    }
-    
-    func addNutrition(day: Day, nutrition: DailyNutrition) {
-        let oldNutrition = localPersistentStore.fetchNutrition()
-            .first(where: { $0.day == day }) ?? .init(day: day, nutrition: .zero)
-        let newNutrition: DailyNutritionData = .init(
-            day: day,
-            nutrition: oldNutrition.nutrition + nutrition
-        )
-        localPersistentStore.saveNutrition(data: [newNutrition])
     }
     
     func getNutritionGoals() -> DailyNutrition? {

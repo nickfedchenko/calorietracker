@@ -18,26 +18,15 @@ extension DomainDailyMeals {
     @NSManaged public var year: Int32
     @NSManaged public var mealTime: String
     
-    @NSManaged public var products: NSSet?
-    @NSManaged public var dishes: NSSet?
+    @NSManaged public var mealData: [DomainMealData]?
 }
 
 extension DomainDailyMeals {
     
-    @objc(addProducts:)
-    @NSManaged public func addToProducts(_ values: NSSet)
+    @objc(addMealData:)
+    @NSManaged public func addToMealData(_ values: NSSet)
     
     @objc(removeProducts:)
-    @NSManaged public func removeFromProducts(_ values: NSSet)
-    
-}
-
-extension DomainDailyMeals {
-    
-    @objc(addDishes:)
-    @NSManaged public func addToDishes(_ values: NSSet)
-    
-    @objc(removeDishes:)
-    @NSManaged public func removeFromDishes(_ values: NSSet)
+    @NSManaged public func removeFromMealData(_ values: NSSet)
     
 }

@@ -14,6 +14,7 @@ protocol AddFoodViewControllerInterface: AnyObject {
     func updateState(for state: AddFoodVCState)
     func setSearchField(to text: String)
     func updateSelectedFood(_ food: Food)
+    func getMealTime() -> MealTime?
 }
 
 final class AddFoodViewController: UIViewController {
@@ -63,7 +64,7 @@ final class AddFoodViewController: UIViewController {
     
     private var firstDraw = true
     private var microphoneButtonSelected = false
-    
+    private var mealTime: MealTime = .breakfast
     private var foods: [Food] = []
     
     private var selectedFood: [Food]? {
@@ -222,6 +223,7 @@ final class AddFoodViewController: UIViewController {
         menuButton.completion = { [weak self] complition in
             self?.showMealMenu()
             self?.menuMealView.complition = { model in
+                self?.mealTime = model
                 complition(model)
             }
         }
@@ -759,6 +761,10 @@ extension AddFoodViewController: AddFoodViewControllerInterface {
         self.selectedFoodInfo
     }
     
+    func getMealTime() -> MealTime? {
+        self.mealTime
+}
+
     func updateState(for state: AddFoodVCState) {
         self.state = state
     }

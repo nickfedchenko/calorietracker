@@ -19,7 +19,8 @@ class ProductRouter: NSObject {
 
     static func setupModule(
         _ product: Product,
-        _ openController: ProductViewController.OpenController
+        _ openController: ProductViewController.OpenController,
+        _ mealTime: MealTime
     ) -> ProductViewController {
         let vc = ProductViewController(openController)
         let interactor = ProductInteractor()
@@ -35,6 +36,7 @@ class ProductRouter: NSObject {
         router.viewController = vc
         interactor.presenter = presenter
         interactor.product = product
+        interactor.mealTime = mealTime
         return vc
     }
 }

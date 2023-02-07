@@ -16,7 +16,6 @@ protocol LocalDomainServiceInterface {
     func fetchWater() -> [DailyData]
     func fetchSteps() -> [DailyData]
     func fetchWeight() -> [DailyData]
-    func fetchNutrition() -> [DailyNutritionData]
     func fetchExercise() -> [Exercise]
     func fetchNotes() -> [Note]
     func fetchDailyMeals() -> [DailyMeal]
@@ -27,21 +26,23 @@ protocol LocalDomainServiceInterface {
     func saveWater(data: [DailyData])
     func saveSteps(data: [DailyData])
     func saveWeight(data: [DailyData])
-    func saveNutrition(data: [DailyNutritionData])
     func saveExercise(data: [Exercise])
     func saveNotes(data: [Note])
     func saveDailyMeals(data: [DailyMeal])
+    func saveMealData(data: [MealData])
     func searchProducts(by phrase: String) -> [Product]
     func searchProducts(barcode: String) -> [Product]
     func searchDishes(by phrase: String) -> [Dish]
     func setChildFoodData(foodDataId: String, dishID: Int)
     func setChildFoodData(foodDataId: String, productID: String)
     func setChildMeal(mealId: String, dishesID: [Int], productsID: [String])
+    func getFoodData(_ food: Food) -> FoodData?
+    func fetchSpecificRecipe(with id: String) -> Dish?
+    @discardableResult func delete<T>(_ object: T) -> Bool
     @discardableResult func setChildDailyMeal(
         mealTime: String,
         date: Day,
-        dishesID: [Int],
-        productsID: [String]
+        mealDataId: [String]
     ) -> Bool
     @discardableResult func setFoodData(
         favorites: Bool?,
@@ -49,9 +50,11 @@ protocol LocalDomainServiceInterface {
         numberUses: Int?,
         food: Food
     ) -> Bool
-    func getFoodData(_ food: Food) -> FoodData?
-    func fetchSpecificRecipe(with id: String) -> Dish?
-    @discardableResult func delete<T>(_ object: T) -> Bool
+    @discardableResult func setChildMealData(
+        mealDataId: String,
+        dishID: Int?,
+        productID: String?
+    ) -> Bool
 }
 
 final class LocalDomainService {
@@ -222,13 +225,6 @@ extension LocalDomainService: LocalDomainServiceInterface {
         return domainWeight.compactMap { DailyData(from: $0) }
     }
     
-    func fetchNutrition() -> [DailyNutritionData] {
-        guard let domainNutrition = fetchData(for: DomainNutrition.self) else {
-            return []
-        }
-        return domainNutrition.compactMap { DailyNutritionData(from: $0) }
-    }
-    
     func fetchExercise() -> [Exercise] {
         guard let domainExercise = fetchData(for: DomainExercise.self) else {
             return []
@@ -246,6 +242,7 @@ extension LocalDomainService: LocalDomainServiceInterface {
     func saveProducts(products: [Product], saveInPriority: Bool) {
         let backgroundContext = container.newBackgroundContext()
         backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
+        
         let _: [DomainProduct] = products
             .map { DomainProduct.prepare(fromPlainModel: $0, context: backgroundContext) }
         try? backgroundContext.save()
@@ -262,6 +259,12 @@ extension LocalDomainService: LocalDomainServiceInterface {
     func saveDailyMeals(data: [DailyMeal]) {
         let _: [DomainDailyMeals] = data
             .map { DomainDailyMeals.prepare(fromPlainModel: $0, context: context) }
+        try? context.save()
+    }
+    
+    func saveMealData(data: [MealData]) {
+        let _: [DomainMealData] = data
+            .map { DomainMealData.prepare(fromPlainModel: $0, context: context) }
         try? context.save()
     }
     
@@ -286,12 +289,6 @@ extension LocalDomainService: LocalDomainServiceInterface {
     func saveWeight(data: [DailyData]) {
         let _: [DomainWeight] = data
             .map { DomainWeight.prepare(fromPlainModel: $0, context: context) }
-        try? context.save()
-    }
-    
-    func saveNutrition(data: [DailyNutritionData]) {
-        let _: [DomainNutrition] = data
-            .map { DomainNutrition.prepare(fromPlainModel: $0, context: context) }
         try? context.save()
     }
     
@@ -455,31 +452,22 @@ extension LocalDomainService: LocalDomainServiceInterface {
         try? context.save()
     }
     
-    func setChildDailyMeal(mealTime: String, date: Day, dishesID: [Int], productsID: [String]) -> Bool {
-        let formatId = "id == %ld"
+    func setChildDailyMeal(mealTime: String, date: Day, mealDataId: [String]) -> Bool {
         let formatStrId = "id == %@"
         let formatMealTime = "mealTime == %@"
         let formatMealDay = "day == %ld"
         let formatMealMonth = "month == %ld"
         let formatMealYear = "year == %ld"
         
-        let dishPredicates = dishesID.map { NSPredicate(format: formatId, $0) }
-        let productPredicates = productsID.map { NSPredicate(format: formatStrId, $0) }
+        let mealDataPredicates = mealDataId.map { NSPredicate(format: formatStrId, $0) }
         let mealTimePredicate = NSPredicate(format: formatMealTime, mealTime)
         let mealDayPredicate = NSPredicate(format: formatMealDay, date.day)
         let mealMonthPredicate = NSPredicate(format: formatMealMonth, date.month)
         let mealYearPredicate = NSPredicate(format: formatMealYear, date.year)
         
-        let products = productPredicates.compactMap {
+        let mealData = mealDataPredicates.compactMap {
             fetchData(
                 for: DomainProduct.self,
-                withPredicate: NSCompoundPredicate(orPredicateWithSubpredicates: [$0])
-            )?.first
-        }
-        
-        let dishes = dishPredicates.compactMap {
-            fetchData(
-                for: DomainDish.self,
                 withPredicate: NSCompoundPredicate(orPredicateWithSubpredicates: [$0])
             )?.first
         }
@@ -494,8 +482,52 @@ extension LocalDomainService: LocalDomainServiceInterface {
             ])
         )?.first else { return false }
         
-        meal.addToDishes(NSSet(array: dishes))
-        meal.addToProducts(NSSet(array: products))
+        meal.addToMealData(NSSet(array: mealData))
+        
+        do {
+            try context.save()
+            return true
+        } catch {
+            return false
+        }
+    }
+    
+    func setChildMealData(mealDataId: String, dishID: Int?, productID: String?) -> Bool {
+        let formatId = "id == %ld"
+        let formatStrId = "id == %@"
+        
+        var dishPredicate: NSPredicate?
+        var productPredicate: NSPredicate?
+        let mealDataPredicate = NSPredicate(format: formatStrId, mealDataId)
+        
+        if let dishID = dishID {
+            dishPredicate = NSPredicate(format: formatId, dishID)
+        } else if let productID = productID {
+            productPredicate = NSPredicate(format: formatStrId, productID)
+        }
+        
+        guard let mealData = fetchData(
+            for: DomainMealData.self,
+            withPredicate: NSCompoundPredicate(orPredicateWithSubpredicates: [
+                mealDataPredicate
+            ])
+        )?.first else { return false }
+        
+        if let product = fetchData(
+            for: DomainProduct.self,
+            withPredicate: NSCompoundPredicate(
+                orPredicateWithSubpredicates: [productPredicate].compactMap { $0 }
+            )
+        )?.first {
+            mealData.product = product
+        } else if let dish = fetchData(
+            for: DomainDish.self,
+            withPredicate: NSCompoundPredicate(
+                orPredicateWithSubpredicates: [dishPredicate].compactMap { $0 }
+            )
+        )?.first {
+            mealData.dish = dish
+        }
         
         do {
             try context.save()

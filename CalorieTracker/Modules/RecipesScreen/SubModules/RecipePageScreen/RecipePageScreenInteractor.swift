@@ -39,6 +39,7 @@ class RecipePageScreenInteractor {
     weak var presenter: RecipePageScreenPresenterInterface?
     
     private let dataService: FoodDataServiceInterface = FDS.shared
+    var mealTime: MealTime?
     var dish: Dish
     var tags: [RecipeTagModel] = []
     private var selectedServingsAmount: Int = 0
@@ -232,29 +233,17 @@ extension RecipePageScreenInteractor: RecipePageScreenInteractorInterface {
     }
     
     func addSelectedPortionsToEaten() {
-        dataService.addNutrition(
-            day: .init(Date()),
-            nutrition: .init(
-                kcal: possibleEatenKcalBySelectedServings,
-                carbs: NutrientMeasurment.convert(
-                    value: possibleEatenCarbsBySelectedServings,
-                    type: .carbs,
-                    from: .gram,
-                    to: .kcal
-                ),
-                protein: NutrientMeasurment.convert(
-                    value: possibleEatenProteinBySelectedServings,
-                    type: .protein,
-                    from: .gram,
-                    to: .kcal
-                ),
-                fat: NutrientMeasurment.convert(
-                    value: possibleEatenFatBySelectedServings,
-                    type: .fat,
-                    from: .gram,
-                    to: .kcal
+        guard let mealTime = mealTime else { return }
+
+        FDS.shared.addFoodsMeal(
+            mealTime: mealTime,
+            date: Date().day,
+            mealData: [
+                MealData(
+                    weight: (dish.values?.serving.weight ?? 0) * Double(selectedServingToEat),
+                    food: .dishes(dish)
                 )
-            )
+            ]
         )
     }
 }

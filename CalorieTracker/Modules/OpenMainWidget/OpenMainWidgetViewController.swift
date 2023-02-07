@@ -101,7 +101,7 @@ extension OpenMainWidgetViewController: UICollectionViewDataSource {
         let cell: MealTimeCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
         let dailyMeal = dailyMeals?[safe: indexPath.row]
         cell.viewModel = .init(
-            foods: dailyMeal?.foods ?? [],
+            foods: dailyMeal?.mealData.compactMap { $0.food } ?? [],
             mealtime: dailyMeal?.mealTime ?? .breakfast
         )
         

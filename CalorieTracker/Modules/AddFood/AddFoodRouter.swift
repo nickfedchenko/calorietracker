@@ -52,7 +52,11 @@ extension AddFoodRouter: AddFoodRouterInterface {
     }
     
     func openProductViewController(_ product: Product) {
-        let productVC = ProductRouter.setupModule(product, .addFood)
+        let productVC = ProductRouter.setupModule(
+            product,
+            .addFood,
+            presenter?.getMealTime() ?? .breakfast
+        )
         productVC.modalPresentationStyle = .fullScreen
         viewController?.present(productVC, animated: true)
     }

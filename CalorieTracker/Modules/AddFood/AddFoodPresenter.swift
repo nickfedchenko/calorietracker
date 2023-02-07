@@ -20,6 +20,7 @@ protocol AddFoodPresenterInterface: AnyObject {
     func saveMeal(_ mealTime: MealTime, foods: [Food])
     func createFood()
     func createFood(_ type: FoodCreate)
+    func getMealTime() -> MealTime?
     func scannerDidRecognized(barcode: String)
     func updateSelectedFood(food: Food)
 }
@@ -252,6 +253,10 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
         self.createFoodType = type
     }
     
+    func getMealTime() -> MealTime? {
+        view.getMealTime()
+ }
+
     func updateSelectedFood(food: Food) {
         view.updateSelectedFood(food)
     }

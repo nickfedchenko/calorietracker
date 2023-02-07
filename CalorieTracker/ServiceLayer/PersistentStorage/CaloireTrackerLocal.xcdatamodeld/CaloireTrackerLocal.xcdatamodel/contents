@@ -5,8 +5,7 @@
         <attribute name="mealTime" attributeType="String"/>
         <attribute name="month" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="year" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="dishes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DomainDish" inverseName="dailyMeals" inverseEntity="DomainDish"/>
-        <relationship name="products" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DomainProduct" inverseName="dailyMeals" inverseEntity="DomainProduct"/>
+        <relationship name="mealData" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DomainMealData" inverseName="dailyMeal" inverseEntity="DomainMealData"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="day"/>
@@ -42,9 +41,9 @@
         <attribute name="title" attributeType="String"/>
         <attribute name="updatedAt" attributeType="String"/>
         <attribute name="weight" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="dailyMeals" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainDailyMeals" inverseName="dishes" inverseEntity="DomainDailyMeals"/>
         <relationship name="foodData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainFoodData" inverseName="dish" inverseEntity="DomainFoodData"/>
         <relationship name="meal" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainMeal" inverseName="dishes" inverseEntity="DomainMeal"/>
+        <relationship name="mealsData" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DomainMealData" inverseName="dish" inverseEntity="DomainMealData"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="id"/>
@@ -84,6 +83,13 @@
                 <constraint value="id"/>
             </uniquenessConstraint>
         </uniquenessConstraints>
+    </entity>
+    <entity name="DomainMealData" representedClassName="DomainMealData" syncable="YES">
+        <attribute name="id" attributeType="String"/>
+        <attribute name="weight" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="dailyMeal" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainDailyMeals" inverseName="mealData" inverseEntity="DomainDailyMeals"/>
+        <relationship name="dish" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainDish" inverseName="mealsData" inverseEntity="DomainDish"/>
+        <relationship name="product" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainProduct" inverseName="mealsData" inverseEntity="DomainProduct"/>
     </entity>
     <entity name="DomainNote" representedClassName="DomainNote" syncable="YES">
         <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
@@ -127,9 +133,9 @@
         <attribute name="servings" optional="YES" attributeType="Binary"/>
         <attribute name="title" attributeType="String"/>
         <attribute name="units" optional="YES" attributeType="Binary"/>
-        <relationship name="dailyMeals" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainDailyMeals" inverseName="products" inverseEntity="DomainDailyMeals"/>
         <relationship name="foodData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainFoodData" inverseName="product" inverseEntity="DomainFoodData"/>
         <relationship name="meal" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainMeal" inverseName="products" inverseEntity="DomainMeal"/>
+        <relationship name="mealsData" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DomainMealData" inverseName="product" inverseEntity="DomainMealData"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="id"/>
@@ -175,17 +181,20 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
+    <entity name="Entity" representedClassName="Entity" syncable="YES" codeGenerationType="class"/>
     <elements>
-        <element name="DomainDailyMeals" positionX="-45" positionY="270" width="128" height="119"/>
+        <element name="DomainDailyMeals" positionX="-45" positionY="270" width="128" height="104"/>
         <element name="DomainDish" positionX="-54" positionY="108" width="128" height="449"/>
         <element name="DomainExercise" positionX="-54" positionY="153" width="128" height="74"/>
         <element name="DomainFoodData" positionX="-54" positionY="153" width="128" height="119"/>
         <element name="DomainMeal" positionX="-36" positionY="162" width="128" height="89"/>
         <element name="DomainNote" positionX="-45" positionY="252" width="128" height="104"/>
         <element name="DomainNutrition" positionX="-54" positionY="153" width="128" height="134"/>
-        <element name="DomainProduct" positionX="-54" positionY="153" width="128" height="254"/>
+        <element name="DomainProduct" positionX="-54" positionY="153" width="128" height="269"/>
         <element name="DomainSteps" positionX="-45" positionY="162" width="128" height="89"/>
         <element name="DomainWater" positionX="-54" positionY="153" width="128" height="89"/>
         <element name="DomainWeight" positionX="-36" positionY="171" width="128" height="89"/>
+        <element name="DomainMealData" positionX="-36" positionY="279" width="128" height="104"/>
+        <element name="Entity" positionX="-27" positionY="288" width="128" height="29"/>
     </elements>
 </model>
