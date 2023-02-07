@@ -24,7 +24,7 @@ final class ExercisesWidgetNode: CTWidgetNode {
     
     private lazy var exercisesTextNode: ASTextNode = {
         let node = ASTextNode()
-        node.attributedText = "EXERCISES".attributedSring([
+        node.attributedText = "EXERCISES".attributedString([
             .init(
                 worldIndex: [0],
                 attributes: [
@@ -38,7 +38,7 @@ final class ExercisesWidgetNode: CTWidgetNode {
     
     private lazy var connectAHTextNode: ASTextNode = {
         let node = ASTextNode()
-        node.attributedText = "Connect to\napple health".attributedSring([
+        node.attributedText = "Connect to\napple health".attributedString([
             .init(
                 worldIndex: Array(0...5),
                 attributes: [
@@ -221,7 +221,7 @@ final class ExercisesWidgetNode: CTWidgetNode {
             progressBar.progress = CGFloat(model.burnedKcal) / CGFloat(goalBurnedKcal)
         }
         
-        burnedTextNode.attributedText = string.attributedSring([
+        burnedTextNode.attributedText = string.attributedString([
             .init(worldIndex: [0], attributes: leftAttributes),
             .init(worldIndex: [1, 2], attributes: rightAttributes)
         ])

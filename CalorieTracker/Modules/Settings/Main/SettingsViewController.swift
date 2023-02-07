@@ -212,7 +212,7 @@ extension SettingsViewController {
         let button = UIButton()
         button.addTarget(self, action: #selector(didTapShareButton), for: .touchUpInside)
         button.setAttributedTitle(
-            "Share".attributedSring(
+            "Share".attributedString(
                 [
                     StringSettingsModel(
                         worldIndex: [0],

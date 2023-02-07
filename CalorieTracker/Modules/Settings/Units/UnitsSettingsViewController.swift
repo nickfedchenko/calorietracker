@@ -144,7 +144,7 @@ extension UnitsSettingsViewController {
         let button = UIButton()
         button.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
         button.setAttributedTitle(
-            "APP SETTINGS".attributedSring(
+            "APP SETTINGS".attributedString(
                 [
                     StringSettingsModel(
                         worldIndex: [0, 1],

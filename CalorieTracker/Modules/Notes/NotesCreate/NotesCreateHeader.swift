@@ -69,7 +69,6 @@ final class NotesCreateHeader: UIView {
         }
     }
     
-    // swiftlint:disable:next function_body_length
     private func setupConstraints() {
         addSubviews(
             allNotesButton,
@@ -105,13 +104,12 @@ final class NotesCreateHeader: UIView {
             make.height.greaterThanOrEqualTo(100)
             make.height.lessThanOrEqualTo(300)
         }
-        
-        doneButton.aspectRatio(0.482)
+
         doneButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().offset(-20)
             make.top.equalTo(textView.snp.bottom).offset(13)
             make.bottom.equalToSuperview().offset(-16)
-            make.height.equalTo(40)
+            make.height.equalTo(allNotesButton)
         }
         
         estimationView.snp.makeConstraints { make in
@@ -178,12 +176,22 @@ final class NotesCreateHeader: UIView {
 extension NotesCreateHeader {
     private func getTextView() -> SLTextView {
         let textView = SLTextView()
-        textView.font = R.font.sfProTextMedium(size: 16.fontScale())
         textView.backgroundColor = .clear
         textView.isScrollEnabled = false
         textView.textColor = R.color.notes.text()
-        textView.tintColor = R.color.notes.noteAccent()
+        textView.tintColor = R.color.notes.noteCursor()
+        textView.textContainer.lineBreakMode = .byWordWrapping
+        textView.lineHeightMultiple = 1.52
         textView.separatorLinesColor = R.color.notes.noteGray()
+        textView.lineHeight = 28
+        textView.textContainerInset = .init(top: 0, left: -4, bottom: 0, right: -4)
+        var attributes = [NSAttributedString.Key: Any]()
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineHeightMultiple = 1.52
+        attributes[.paragraphStyle] = paragraphStyle
+        attributes[.foregroundColor] = R.color.notes.text()
+        attributes[.font] = R.font.sfProTextRegular(size: 16)
+        textView.typingAttributes = attributes
         return textView
     }
     
@@ -219,11 +227,12 @@ extension NotesCreateHeader {
     
     private func getAllNotesButton() -> UIButton {
         let button = UIButton()
-        let font = R.font.sfProRoundedBold(size: 18.fontScale())
+        let font = R.font.sfProRoundedBold(size: 18)
         let titleString = R.string.localizable.notesAllNotes()
+        button.contentEdgeInsets = .init(top: 0, left: 8, bottom: 0, right: 16)
         button.setAttributedTitle(
-            titleString.attributedSring(
-                [.init(worldIndex: [0, 1], attributes: [.color(.white), .font(font)])],
+            titleString.attributedString(
+                [.init(worldIndex: [0, 1], attributes: [.color(.white), .font(font), .lineHeightMultiple(1.12)])],
                 image: .init(
                     image: R.image.notes.note(),
                     font: font,
@@ -232,7 +241,6 @@ extension NotesCreateHeader {
             ),
             for: .normal
         )
-        button.contentEdgeInsets = .init(top: 0, left: 8, bottom: 0, right: 8)
         button.addTarget(self, action: #selector(didTapAllNotesButton), for: .touchUpInside)
         button.backgroundColor = R.color.notes.noteAccent()
         button.layer.cornerCurve = .continuous

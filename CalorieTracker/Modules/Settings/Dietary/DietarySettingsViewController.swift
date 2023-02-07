@@ -143,7 +143,7 @@ extension DietarySettingsViewController {
         let button = UIButton()
         button.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
         button.setAttributedTitle(
-            "PROFILE".attributedSring(
+            "PROFILE".attributedString(
                 [
                     StringSettingsModel(
                         worldIndex: [0],

@@ -16,7 +16,7 @@ final class CalendarWidgetNode: CTWidgetNode {
     
     private lazy var topTextNode: ASTextNode = {
         let node = ASTextNode()
-        node.attributedText = Text.today.attributedSring([
+        node.attributedText = Text.today.attributedString([
             .init(
                 worldIndex: [0],
                 attributes: [
@@ -111,7 +111,7 @@ final class CalendarWidgetNode: CTWidgetNode {
     
     private func didChangeModel() {
         guard let model = model else { return }
-        dateTextNode.attributedText = model.dateString.attributedSring([
+        dateTextNode.attributedText = model.dateString.attributedString([
             .init(
                 worldIndex: [0, 1],
                 attributes: [
@@ -133,7 +133,7 @@ final class CalendarWidgetNode: CTWidgetNode {
         let rightAttributes: [StringSettings] = [.color(rightColor), .font(font)]
         let string = "\(days) \(Text.streak)"
 
-        return string.attributedSring(
+        return string.attributedString(
             [
                 .init(worldIndex: [0], attributes: leftAttributes),
                 .init(worldIndex: Array(1...4), attributes: rightAttributes)

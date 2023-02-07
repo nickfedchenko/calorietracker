@@ -10,7 +10,7 @@ import AsyncDisplayKit
 final class WeightWidgetNode: CTWidgetNode {
     private lazy var titleLabel: ASTextNode = {
         let node = ASTextNode()
-        node.attributedText = "WEIGHT".attributedSring([
+        node.attributedText = "WEIGHT".attributedString([
             .init(
                 worldIndex: [0],
                 attributes: [
@@ -44,7 +44,7 @@ final class WeightWidgetNode: CTWidgetNode {
     var weight: CGFloat? {
         didSet {
             guard let weight = weight else { return }
-            valueLabel.attributedText = Double(weight).clean.attributedSring([
+            valueLabel.attributedText = Double(weight).clean.attributedString([
                 .init(
                     worldIndex: [0],
                     attributes: [

@@ -55,7 +55,7 @@ extension NutrientGoalType: WithGetDescriptionProtocol {
         
         let font = R.font.sfProTextMedium(size: 14.fontScale())
         
-        return str.attributedSring([
+        return str.attributedString([
             .init(
                 worldIndex: [1, 3, 5],
                 attributes: [

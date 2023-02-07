@@ -22,7 +22,7 @@ final class AppMessageWidgetNode: CTWidgetNode {
         get { textNode.attributedText?.string }
         set {
             let string = newValue ?? ""
-            textNode.attributedText = string.attributedSring([
+            textNode.attributedText = string.attributedString([
                 .init(
                     worldIndex: Array(0...string.split(separator: " ").count),
                     attributes: [

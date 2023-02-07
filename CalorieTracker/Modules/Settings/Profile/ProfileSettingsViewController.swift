@@ -235,7 +235,7 @@ extension ProfileSettingsViewController {
         let button = UIButton()
         button.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
         button.setAttributedTitle(
-            "PREFERENCES".attributedSring(
+            "PREFERENCES".attributedString(
                 [
                     StringSettingsModel(
                         worldIndex: [0],

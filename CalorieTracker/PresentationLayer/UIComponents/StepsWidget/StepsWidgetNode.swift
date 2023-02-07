@@ -16,7 +16,7 @@ final class StepsWidgetNode: CTWidgetNode {
         let color = R.color.stepsWidget.secondGradientColor()
         let image = R.image.stepsWidget.foot()
         
-        node.attributedText = string.attributedSring(
+        node.attributedText = string.attributedString(
             [.init(
                 worldIndex: [0],
                 attributes: [.color(color), .font(font)]
@@ -94,7 +94,7 @@ final class StepsWidgetNode: CTWidgetNode {
     }
     
     private func didChangeSteps() {
-        bottomTextNode.attributedText = String(steps).attributedSring([
+        bottomTextNode.attributedText = String(steps).attributedString([
             .init(
                 worldIndex: [0],
                 attributes: [

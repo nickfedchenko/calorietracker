@@ -149,7 +149,7 @@ final class SearchView: ViewWithShadow {
         let image = R.image.searchTextField.search()!
         let font = R.font.sfProDisplaySemibold(size: 18)
         
-        return text.attributedSring(
+        return text.attributedString(
             [
                 .init(
                     worldIndex: Array(0...text.split(separator: " ").count),

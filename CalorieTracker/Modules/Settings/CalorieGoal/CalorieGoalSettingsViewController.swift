@@ -184,7 +184,7 @@ extension CalorieGoalSettingsViewController {
         let button = UIButton()
         button.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
         button.setAttributedTitle(
-            R.string.localizable.settingsMyGoalsTitle().attributedSring(
+            R.string.localizable.settingsMyGoalsTitle().attributedString(
                 [
                     StringSettingsModel(
                         worldIndex: [0, 1],

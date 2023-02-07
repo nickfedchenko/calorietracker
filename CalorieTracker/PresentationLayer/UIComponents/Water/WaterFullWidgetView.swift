@@ -319,12 +319,12 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
         let rightAttributes: [StringSettings] = [.color(colorRight), .font(font)]
         
         if goal != nil {
-            waterValueLabel.attributedText = string.attributedSring([
+            waterValueLabel.attributedText = string.attributedString([
                 .init(worldIndex: [0], attributes: leftAttributes),
                 .init(worldIndex: [1, 2, 3, 4], attributes: rightAttributes)
             ])
         } else {
-            waterValueLabel.attributedText = string.attributedSring(
+            waterValueLabel.attributedText = string.attributedString(
                 [
                     .init(worldIndex: [0, 1], attributes: leftAttributes),
                     .init(worldIndex: [2, 3], attributes: rightAttributes)

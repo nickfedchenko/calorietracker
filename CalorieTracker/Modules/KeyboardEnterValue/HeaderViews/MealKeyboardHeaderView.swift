@@ -120,7 +120,7 @@ final class MealKeyboardHeaderView: UIView, KeyboardHeaderProtocol {
         }
         let str = "\(title) (\(description))"
         let font = R.font.sfProDisplaySemibold(size: 22.fontScale())
-        titleLabel.attributedText = str.attributedSring([
+        titleLabel.attributedText = str.attributedString([
             .init(
                 worldIndex: [0],
                 attributes: [

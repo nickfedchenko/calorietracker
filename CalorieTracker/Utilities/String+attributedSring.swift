@@ -30,9 +30,9 @@ struct StringImageModel {
 }
 
 extension String {
-    func attributedSring(_ settings: [StringSettingsModel],
-                         separator: String.Element = " ",
-                         image: StringImageModel? = nil) -> NSAttributedString {
+    func attributedString(_ settings: [StringSettingsModel],
+                          separator: String.Element = " ",
+                          image: StringImageModel? = nil) -> NSAttributedString {
         let finalAttributedString = NSMutableAttributedString()
         let worlds = self.split(separator: separator).map { String($0) }
         
@@ -100,7 +100,7 @@ extension String {
         let imageAttachment = NSTextAttachment()
         imageAttachment.image = image
         imageAttachment.bounds = CGRect(
-            x: 0,
+            x: 20,
             y: (font.capHeight - image.size.height).rounded() / 2,
             width: image.size.width,
             height: image.size.height

@@ -127,7 +127,7 @@ final class WaterWidgetNode: CTWidgetNode {
             .font(font)
         ]
         
-        bottomTitleLabel.attributedText = model.waterMl.attributedSring([
+        bottomTitleLabel.attributedText = model.waterMl.attributedString([
             .init(worldIndex: [0], attributes: leftAttributes),
             .init(worldIndex: [1, 2, 3, 4], attributes: rightAttributes)
         ])

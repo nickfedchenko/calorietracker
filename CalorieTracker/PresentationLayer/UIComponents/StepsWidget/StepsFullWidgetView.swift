@@ -170,12 +170,12 @@ final class StepsFullWidgetView: UIView, CTWidgetFullProtocol {
             : "STEPS \(value)"
         
         if goal == nil {
-            topLabel.attributedText = string.attributedSring(
+            topLabel.attributedText = string.attributedString(
                 [.init(worldIndex: [0, 1], attributes: leftAtributes)],
                 image: .init(image: image, font: font, position: .left)
             )
         } else {
-            topLabel.attributedText = string.attributedSring(
+            topLabel.attributedText = string.attributedString(
                 [
                     .init(worldIndex: [0, 1], attributes: leftAtributes),
                     .init(worldIndex: [3, 4], attributes: rightAtributes)

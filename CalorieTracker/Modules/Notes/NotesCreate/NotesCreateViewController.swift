@@ -70,6 +70,7 @@ final class NotesCreateViewController: CTViewController {
         bottomLayoutConstraint?.isActive = true
         headerView.snp.makeConstraints({ make in
             make.leading.trailing.equalToSuperview()
+            make.height.equalTo(253)
         })
     }
     
@@ -94,7 +95,17 @@ final class NotesCreateViewController: CTViewController {
                 title: R.string.localizable.galary(),
                 style: .default,
                 handler: { [weak self] _ in
-                    self?.showImagePicker()
+                    self?.showImagePicker(sourceType: .photoLibrary)
+                }
+            )
+        )
+
+        alert.addAction(
+            .init(
+                title: R.string.localizable.notesCamera(),
+                style: .default,
+                handler: { [weak self] _ in
+                    self?.showImagePicker(sourceType: .camera)
                 }
             )
         )
@@ -119,8 +130,9 @@ final class NotesCreateViewController: CTViewController {
         present(alert, animated: true)
     }
     
-    private func showImagePicker() {
+    private func showImagePicker(sourceType: UIImagePickerController.SourceType) {
         let imagePicker = UIImagePickerController()
+        imagePicker.sourceType = sourceType
         imagePicker.delegate = self
         imagePicker.allowsEditing = true
         present(imagePicker, animated: true)
