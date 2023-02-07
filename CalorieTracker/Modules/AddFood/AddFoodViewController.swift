@@ -11,6 +11,9 @@ import UIKit
 protocol AddFoodViewControllerInterface: AnyObject {
     func setFoods(_ foods: [Food])
     func getFoodInfoType() -> FoodInfoCases
+    func updateState(for state: AddFoodVCState)
+    func setSearchField(to text: String)
+    func updateSelectedFood(_ food: Food)
 }
 
 final class AddFoodViewController: UIViewController {
@@ -37,10 +40,11 @@ final class AddFoodViewController: UIViewController {
     private lazy var menuMealView = MenuView(Const.menuModels)
     private lazy var menuNutrientView = ContextMenuTypeSecondView(Const.menuTypeSecondModels)
     private lazy var menuButton = MenuButton<MealTime>()
-    private lazy var searshTextField = SearchView()
+    private lazy var searchTextField = SearchView()
     private lazy var foodCollectionViewController = FoodCollectionViewController()
     private lazy var searchHistoryViewController = SearchHistoryViewController()
     private lazy var counterKcalControl = CounterKcalControl()
+    private let addToEatenButton = AddFoodFromBufferButton()
     
     private var menuMealController: BAMenuController?
     private var menuCreateController: BAMenuController?
@@ -128,7 +132,18 @@ final class AddFoodViewController: UIViewController {
         presenter?.setFoodType(isSelectedType)
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        turnOffSpeechRecognitionIfNeed()
+    }
+    
     // MARK: - Private functions
+    
+    private func turnOffSpeechRecognitionIfNeed() {
+        if microphoneButtonSelected {
+            didTapMicrophoneButton()
+        }
+    }
     
     private func setupView() {
         presenter?.setFoodType(.frequent)
@@ -136,9 +151,9 @@ final class AddFoodViewController: UIViewController {
         view.backgroundColor = .white
         foodCollectionViewController.view.backgroundColor = .white
         
-        searshTextField.textField.keyboardAppearance = .light
-        searshTextField.textField.keyboardType = .webSearch
-        searshTextField.placeholderText = R.string.localizable.addFoodPlaceholder()
+        searchTextField.textField.keyboardAppearance = .light
+        searchTextField.textField.keyboardType = .webSearch
+        searchTextField.placeholderText = "Search".localized
     
         foodCollectionViewController.dataSource = self
         foodCollectionViewController.delegate = self
@@ -156,7 +171,22 @@ final class AddFoodViewController: UIViewController {
     
     // swiftlint:disable:next function_body_length
     private func setupHandlers() {
-        searshTextField.didBeginEditing = { text in
+        addToEatenButton.addAction(
+            UIAction { [weak self] _ in
+                Vibration.success.vibrate()
+                guard let mealTime = self?.menuButton.model else {
+                    return
+                }
+                self?.presenter?.saveMeal(mealTime, foods: self?.selectedFood ?? [])
+                DispatchQueue.main.async {
+                    self?.selectedFood = []
+                    self?.presenter?.setFoodType(self?.isSelectedType ?? .myFood)
+                }
+            },
+            for: .touchUpInside
+        )
+        
+        searchTextField.didBeginEditing = { text in
             Vibration.selection.vibrate()
             self.isSelectedType = .search
 
@@ -166,7 +196,7 @@ final class AddFoodViewController: UIViewController {
             }
         }
         
-        searshTextField.didChangeValue = { text in
+        searchTextField.didChangeValue = { text in
             self.createTimer()
             guard !text.isEmpty else {
                 self.state = .search(.recent)
@@ -174,7 +204,7 @@ final class AddFoodViewController: UIViewController {
             }
         }
         
-        searshTextField.didEndEditing = { text in
+        searchTextField.didEndEditing = { text in
             guard !text.isEmpty else {
                 self.isSelectedType = .frequent
                 self.state = .default
@@ -223,7 +253,7 @@ final class AddFoodViewController: UIViewController {
         }
         
         searchHistoryViewController.complition = { [weak self] search in
-            self?.searshTextField.text = search
+            self?.searchTextField.text = search
             self?.didEndTimer()
         }
         
@@ -258,14 +288,15 @@ final class AddFoodViewController: UIViewController {
             bottomGradientView,
             microphoneButton,
             keyboardHeaderView,
-            searshTextField,
-            doneButton
+            searchTextField,
+//            doneButton,
+            addToEatenButton
         )
     }
     
     // swiftlint:disable:next function_body_length
     private func setupConstraints() {
-        searchTextFieldBottomAnchor = searshTextField.bottomAnchor.constraint(
+        searchTextFieldBottomAnchor = searchTextField.bottomAnchor.constraint(
             equalTo: tabBarStackView.topAnchor,
             constant: -12
         )
@@ -309,7 +340,7 @@ final class AddFoodViewController: UIViewController {
         foodCollectionViewController.view.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.top.equalTo(infoButtonsView.snp.bottom).offset(4).priority(.low)
-            make.bottom.equalTo(searshTextField.snp.top)
+            make.bottom.equalTo(searchTextField.snp.top)
         }
         
         searchHistoryViewController.view.snp.makeConstraints { make in
@@ -321,24 +352,25 @@ final class AddFoodViewController: UIViewController {
             make.top.equalTo(segmentedScrollView.snp.bottom).offset(16)
         }
         
-        searshTextField.snp.makeConstraints { make in
+        searchTextField.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(20)
             make.height.equalToSuperview().multipliedBy(0.07)
-            make.width.equalTo(searshTextField.snp.height).multipliedBy(4.66)
+            make.width.equalTo(searchTextField.snp.height).multipliedBy(4.66)
             make.bottom.lessThanOrEqualTo(keyboardHeaderView.snp.bottom).offset(-20)
             make.bottom.equalTo(tabBarStackView.snp.top).offset(-12).priority(.low)
         }
         
         microphoneButton.aspectRatio()
         microphoneButton.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().offset(-20)
-            make.leading.greaterThanOrEqualTo(searshTextField.snp.trailing).offset(12)
+            make.width.height.equalTo(searchTextField.snp.height)
+//            make.trailing.equalToSuperview().offset(-20)
+            make.leading.equalTo(searchTextField.snp.trailing).offset(12)
             make.bottom.equalTo(tabBarStackView.snp.top).offset(-12)
         }
         
         keyboardHeaderView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(searshTextField).offset(40)
+            make.height.equalTo(searchTextField).offset(40)
         }
         
         hideKeyboardButton.aspectRatio()
@@ -350,7 +382,7 @@ final class AddFoodViewController: UIViewController {
         bottomGradientView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.bottom.equalTo(tabBarStackView.snp.top)
-            make.height.equalTo(searshTextField).offset(50)
+            make.height.equalTo(searchTextField).offset(50)
         }
         
         counterKcalControl.snp.makeConstraints { make in
@@ -359,15 +391,23 @@ final class AddFoodViewController: UIViewController {
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
         }
         
-        doneButtonWidthAnchor = doneButton
-            .widthAnchor
-            .constraint(equalTo: view.widthAnchor, multiplier: 0.71)
-        doneButton.snp.makeConstraints { make in
-            make.trailing.equalTo(microphoneButton)
-            make.bottom.top.equalTo(searshTextField)
-            make.leading.greaterThanOrEqualTo(searshTextField.snp.trailing).offset(12)
-            make.width.equalTo(0).priority(.low)
+//        doneButtonWidthAnchor = doneButton
+//            .widthAnchor
+//            .constraint(equalTo: view.widthAnchor, multiplier: 0.71)
+//        doneButton.snp.makeConstraints { make in
+//            make.trailing.equalTo(microphoneButton)
+//            make.bottom.top.equalTo(searchTextField)
+//            make.leading.greaterThanOrEqualTo(searchTextField.snp.trailing).offset(12)
+//            make.width.equalTo(0).priority(.low)
+//        }
+        
+        addToEatenButton.snp.makeConstraints { make in
+            make.leading.equalTo(microphoneButton.snp.trailing).offset(12)
+            make.width.equalTo(0)
+            make.height.equalTo(microphoneButton.snp.height)
+            make.top.equalTo(searchTextField)
         }
+        addToEatenButton.alpha = 0
     }
     
     private func setupShadow() {
@@ -422,12 +462,16 @@ final class AddFoodViewController: UIViewController {
             cell.viewModel = .init(
                 cellType: .table,
                 food: food,
-                buttonType: .add,
+                buttonType: (selectedFood ?? []).contains(food ?? .meal(.init(mealTime: .breakfast))) ? .delete : .add,
                 subInfo: presenter?.getSubInfo(food, selectedFoodInfo),
                 colorSubInfo: selectedFoodInfo.getColor()
             )
-            cell.didTapButton = { food in
-                self.selectedFood = (self.selectedFood ?? []) + [food]
+            cell.didTapButton = { food, buttonType in
+                if buttonType == .add {
+                    self.selectedFood = (self.selectedFood ?? []) + [food]
+                } else {
+                    self.selectedFood?.removeAll(where: { $0.id == food.id })
+                }
                 FDS.shared.foodUpdate(food: food, favorites: false)
             }
             return cell
@@ -447,8 +491,12 @@ final class AddFoodViewController: UIViewController {
                 subInfo: presenter?.getSubInfo(food, selectedFoodInfo),
                 colorSubInfo: selectedFoodInfo.getColor()
             )
-            cell.didTapButton = { food in
-                self.selectedFood = (self.selectedFood ?? []) + [food]
+            cell.didTapButton = { food, buttonType in
+                if buttonType == .add {
+                    self.selectedFood = (self.selectedFood ?? []) + [food]
+                } else {
+                    self.selectedFood?.removeAll(where: { $0.id == food.id })
+                }
             }
             return cell
         }
@@ -462,6 +510,7 @@ final class AddFoodViewController: UIViewController {
         }
         let sumKcal = selectedFood.compactMap { $0.foodInfo[.kcal] }.sum()
         counterKcalControl.isHidden = false
+        showDoneButton(true)
         counterKcalControl.configure(.init(
             kcal: sumKcal,
             count: selectedFood.count
@@ -479,7 +528,9 @@ final class AddFoodViewController: UIViewController {
             case .foundResults:
                 setupSearchFoundResultsState()
             }
+            showDoneButton(false)
         case .default:
+            showDoneButton((selectedFood ?? []).isEmpty ? false : true)
             setupDefaultState()
         }
     }
@@ -488,7 +539,7 @@ final class AddFoodViewController: UIViewController {
         collectionViewTopSecondAnchor?.isActive = false
         searchHistoryViewController.view.isHidden = true
         view.sendSubviewToBack(tabBarStackView)
-        view.sendSubviewToBack(searshTextField)
+        view.sendSubviewToBack(searchTextField)
         view.sendSubviewToBack(microphoneButton)
         view.sendSubviewToBack(bottomGradientView)
         view.sendSubviewToBack(searchHistoryViewController.view)
@@ -502,7 +553,7 @@ final class AddFoodViewController: UIViewController {
         view.bringSubviewToFront(searchHistoryViewController.view)
         view.bringSubviewToFront(bottomGradientView)
         view.bringSubviewToFront(keyboardHeaderView)
-        view.bringSubviewToFront(searshTextField)
+        view.bringSubviewToFront(searchTextField)
         view.bringSubviewToFront(microphoneButton)
         view.bringSubviewToFront(tabBarStackView)
     }
@@ -514,20 +565,60 @@ final class AddFoodViewController: UIViewController {
         view.bringSubviewToFront(foodCollectionViewController.view)
         view.bringSubviewToFront(bottomGradientView)
         view.bringSubviewToFront(keyboardHeaderView)
-        view.bringSubviewToFront(searshTextField)
+        view.bringSubviewToFront(searchTextField)
         view.bringSubviewToFront(microphoneButton)
         view.bringSubviewToFront(tabBarStackView)
     }
     
     private func showDoneButton(_ flag: Bool) {
-        microphoneButton.isHidden = true
-        doneButton.isHidden = false
-        doneButtonWidthAnchor?.isActive = flag
-        UIView.animate(withDuration: 0.2) {
-            self.view.layoutIfNeeded()
-        } completion: { _ in
-            self.doneButton.isHidden = !flag
-            self.microphoneButton.isHidden = flag
+        addToEatenButton.updateCount(to: selectedFood?.count ?? 0)
+        if flag {
+            if case .search(_) = state {
+                return
+            }
+            searchTextField.placeholderText = ""
+            searchTextField.snp.remakeConstraints { make in
+                make.leading.equalToSuperview().offset(20)
+                make.height.equalToSuperview().multipliedBy(0.07)
+                make.width.equalTo(searchTextField.snp.height).multipliedBy(1)
+                make.bottom.lessThanOrEqualTo(keyboardHeaderView.snp.bottom).offset(-20)
+                make.bottom.equalTo(tabBarStackView.snp.top).offset(-12).priority(.low)
+            }
+            
+            addToEatenButton.snp.remakeConstraints { make in
+                make.leading.equalTo(microphoneButton.snp.trailing).offset(12)
+                make.trailing.equalToSuperview().inset(20)
+                make.top.equalTo(searchTextField)
+                make.height.equalTo(microphoneButton.snp.height)
+            }
+        } else {
+            searchTextField.snp.remakeConstraints { make in
+                make.leading.equalToSuperview().offset(20)
+                make.height.equalToSuperview().multipliedBy(0.07)
+                make.width.equalTo(searchTextField.snp.height).multipliedBy(4.66)
+                make.bottom.lessThanOrEqualTo(keyboardHeaderView.snp.bottom).offset(-20)
+                make.bottom.equalTo(tabBarStackView.snp.top).offset(-12).priority(.low)
+            }
+            
+            addToEatenButton.snp.remakeConstraints { make in
+                make.leading.equalTo(microphoneButton.snp.trailing).offset(12)
+                make.width.equalTo(0)
+                make.height.equalTo(microphoneButton.snp.height)
+                make.top.equalTo(searchTextField)
+            }
+            searchTextField.placeholderText = "Search".localized
+        }
+        addToEatenButton.setNeedsDisplay()
+        
+        UIView.animate(withDuration: 0.3) {
+            if !self.firstDraw {
+                self.view.layoutIfNeeded()
+            }
+            if flag {
+                self.addToEatenButton.alpha = 1
+            } else {
+                self.addToEatenButton.alpha = 0
+            }
         }
     }
     
@@ -575,7 +666,7 @@ final class AddFoodViewController: UIViewController {
     }
     
     @objc private func didEndTimer() {
-        guard let searchText = searshTextField.text, !searchText.isEmpty else { return }
+        guard let searchText = searchTextField.text, !searchText.isEmpty else { return }
         presenter?.search(searchText, complition: { flag in
             self.state = flag ? .search(.foundResults) : .search(.noResults)
         })
@@ -617,7 +708,7 @@ final class AddFoodViewController: UIViewController {
                     for try await result in await speechRecognitionManager.start(request: request) {
                         await MainActor.run {
                             let text = result.bestTranscription.formattedString
-                            searshTextField.text = text
+                            searchTextField.text = text
                             presenter?.search(text, complition: nil)
                         }
                     }
@@ -666,6 +757,18 @@ extension AddFoodViewController: AddFoodViewControllerInterface {
     
     func getFoodInfoType() -> FoodInfoCases {
         self.selectedFoodInfo
+    }
+    
+    func updateState(for state: AddFoodVCState) {
+        self.state = state
+    }
+    
+    func setSearchField(to text: String) {
+        searchTextField.text = text
+    }
+    
+    func updateSelectedFood(_ food: Food) {
+        selectedFood = (selectedFood ?? []) + [food]
     }
 }
 
@@ -796,6 +899,7 @@ private extension AddFoodViewController {
         let button = UIButton()
         button.isHidden = true
         button.contentMode = .right
+        button.layer.cornerCurve = .continuous
         button.layer.cornerCurve = .continuous
         button.layer.cornerRadius = 16
         button.layer.borderWidth = 1

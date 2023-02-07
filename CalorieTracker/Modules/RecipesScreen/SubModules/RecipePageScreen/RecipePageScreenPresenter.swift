@@ -25,6 +25,7 @@ protocol RecipePageScreenPresenterInterface: AnyObject {
     func addToDiaryTapped()
     func addToFavoritesTapped(_ flag: Bool)
     func createFoodData()
+    func getPossibleEatenAmount() -> Double?
     
     var isFavoritesDish: Bool? { get }
 }
@@ -49,7 +50,7 @@ class RecipePageScreenPresenter {
 extension RecipePageScreenPresenter: RecipePageScreenPresenterInterface {
     var isFavoritesDish: Bool? {
         guard let dish = interactor?.getDish() else { return false }
-        return FDS.shared.getFoodData(.dishes(dish))?.favorites
+        return FDS.shared.getFoodData(.dishes(dish, customAmount: nil))?.favorites
     }
     
     func getModelsForIngredients() -> [RecipeIngredientModel] {
@@ -129,7 +130,7 @@ extension RecipePageScreenPresenter: RecipePageScreenPresenterInterface {
     }
     
     func addToDiaryTapped() {
-        interactor?.addSelectedPortionsToEaten()
+//        interactor?.addSelectedPortionsToEaten()
         router?.dismiss()
     }
     
@@ -139,5 +140,9 @@ extension RecipePageScreenPresenter: RecipePageScreenPresenterInterface {
     
     func createFoodData() {
         interactor?.updateFoodData(nil)
+    }
+    
+    func getPossibleEatenAmount() -> Double? {
+        interactor?.possibleEatenWeight
     }
 }

@@ -20,6 +20,8 @@ protocol AddFoodPresenterInterface: AnyObject {
     func saveMeal(_ mealTime: MealTime, foods: [Food])
     func createFood()
     func createFood(_ type: FoodCreate)
+    func scannerDidRecognized(barcode: String)
+    func updateSelectedFood(food: Food)
 }
 
 final class AddFoodPresenter {
@@ -145,9 +147,29 @@ final class AddFoodPresenter {
         
         return filteredDishes.foods + filteredProducts.foods
     }
+    
+    private func search(byBarcode: String) -> [Food] {
+        let products = DSF.shared.searchProducts(barcode: byBarcode)
+        return products.foods
+    }
 }
 
 extension AddFoodPresenter: AddFoodPresenterInterface {
+    func scannerDidRecognized(barcode: String) {
+        searchQueue.cancelAllOperations()
+        let operation = BlockOperation { [weak self] in
+            guard let self = self else { return }
+            let foundFood = self.search(byBarcode: barcode)
+            DispatchQueue.main.async {
+                self.foods = foundFood
+                self.view.updateState(for: .search(foundFood.isEmpty ? .noResults : .foundResults))
+                self.view.setSearchField(to: barcode)
+            }
+        }
+        operation.queuePriority = .high
+        searchQueue.addOperation(operation)
+    }
+    
     func setFoodType(_ type: AddFood) {
         self.foodType = type
     }
@@ -164,7 +186,7 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
         switch type {
         case .product(let product):
             router?.openProductViewController(product)
-        case .dishes(let dish):
+        case .dishes(let dish, _):
             router?.openDishViewController(dish)
         case .meal:
             return
@@ -189,7 +211,8 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
         let operation = BlockOperation { [weak self] in
             guard let self = self else { return }
             let basicFood = self.searchAmongAll(request)
-            let foods = basicFood
+            let searchByBarcode = self.search(byBarcode: request)
+            let foods = basicFood + searchByBarcode
             DispatchQueue.main.async {
                 self.foods = foods
                 complition?(!foods.isEmpty)
@@ -228,5 +251,9 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
     
     func createFood(_ type: FoodCreate) {
         self.createFoodType = type
+    }
+    
+    func updateSelectedFood(food: Food) {
+        view.updateSelectedFood(food)
     }
 }

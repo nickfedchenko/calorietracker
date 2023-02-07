@@ -22,7 +22,8 @@ class AddFoodRouter: NSObject {
     weak var presenter: AddFoodPresenterInterface?
     weak var viewController: UIViewController?
 
-    static func setupModule() -> AddFoodViewController {
+    static func setupModule(shouldInitiallyPerformSearchWith barcode: String? = nil) -> AddFoodViewController {
+      
         let vc = AddFoodViewController()
         let interactor = AddFoodInteractor()
         let router = AddFoodRouter()
@@ -34,6 +35,13 @@ class AddFoodRouter: NSObject {
         router.presenter = presenter
         router.viewController = vc
         interactor.presenter = presenter
+        defer {
+            if let barcode = barcode {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                    presenter.scannerDidRecognized(barcode: barcode)
+                }
+            }
+        }
         return vc
     }
 }
@@ -63,7 +71,9 @@ extension AddFoodRouter: AddFoodRouterInterface {
     }
     
     func openScanner() {
-        let vc = ScannerRouter.setupModule()
+        let vc = ScannerRouter.setupModule() { [weak self] barcode in
+            self?.presenter?.scannerDidRecognized(barcode: barcode)
+        }
         vc.modalPresentationStyle = .fullScreen
         viewController?.present(vc, animated: true)
     }
@@ -77,8 +87,10 @@ extension AddFoodRouter: AddFoodRouterInterface {
     func openDishViewController(_ dish: Dish) {
         let vc = RecipePageScreenRouter.setupModule(
             with: dish,
-            backButtonTitle: ""
-        )
+            backButtonTitle: "Add food".localized
+        ) { [weak self] food in
+            self?.presenter?.updateSelectedFood(food: food)
+        }
         vc.modalPresentationStyle = .fullScreen
         viewController?.present(vc, animated: true)
     }

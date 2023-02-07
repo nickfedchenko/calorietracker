@@ -19,7 +19,7 @@ final class FoodCellView: UIView {
         let verified: Bool
     }
     
-    var didTapButton: (() -> Void)?
+    var didTapButton: ((CellButtonType) -> Void)?
     
     var color: UIColor? {
         didSet {
@@ -256,7 +256,8 @@ final class FoodCellView: UIView {
     
     @objc private func didTapSelectButton() {
         Vibration.success.vibrate()
-        didTapButton?()
+        didTapButton?(cellButtonType)
+        cellButtonType = cellButtonType == .add ? .delete : .add
     }
 }
 
@@ -287,7 +288,7 @@ extension FoodCellView.FoodViewModel {
         switch food {
         case .product(let product):
             self.init(product)
-        case .dishes(let dish):
+        case .dishes(let dish, _):
             self.init(dish)
         default:
             return nil

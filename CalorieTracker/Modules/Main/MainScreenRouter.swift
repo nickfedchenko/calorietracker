@@ -110,7 +110,14 @@ extension MainScreenRouter: WidgetContainerOutput {
     }
     
     func openBarcodeScannerVC() {
-        let vc = ScannerRouter.setupModule()
+        let vc = ScannerRouter.setupModule() { [weak self] barcode in
+            self?.openAddFoodVCandPerformSearch(with: barcode)
+        }
         viewController?.present(TopDownNavigationController(rootViewController: vc), animated: true)
+    }
+    
+    private func openAddFoodVCandPerformSearch(with barcode: String) {
+        let vc = AddFoodRouter.setupModule(shouldInitiallyPerformSearchWith: barcode)
+        viewController?.navigationController?.pushViewController(vc, animated: true)
     }
 }

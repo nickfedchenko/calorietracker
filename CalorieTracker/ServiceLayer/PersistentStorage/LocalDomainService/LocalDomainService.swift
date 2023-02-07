@@ -377,7 +377,7 @@ extension LocalDomainService: LocalDomainServiceInterface {
                     return nil
                 }
                 return FoodData(from: domainFoodData)
-            case .dishes(let dish):
+            case .dishes(let dish, _):
                 guard let domainDish = getDomainDish(dish.id), let domainFoodData = domainDish.foodData else {
                     return nil
                 }

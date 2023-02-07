@@ -31,6 +31,7 @@ protocol RecipePageScreenInteractorInterface: AnyObject {
     var possibleEatenFatBySelectedServings: Double { get }
     var possibleEatenProteinBySelectedServings: Double { get }
     var possibleEatenCarbsBySelectedServings: Double { get }
+    var possibleEatenWeight: Double { get }
 }
 
 class RecipePageScreenInteractor {
@@ -55,6 +56,10 @@ class RecipePageScreenInteractor {
             fat: 3.2
         )
     )
+    
+    var possibleEatenWeight: Double {
+        ((dish.dishWeight ?? 1) / Double(dish.totalServings ?? 1)) * Double(selectedServingToEat)
+    }
     
     var possibleEatenKcalBySelectedServings: Double {
         return (dish.values?.serving.kcal ?? 0) * Double(selectedServingToEat)
@@ -149,7 +154,7 @@ class RecipePageScreenInteractor {
 
 extension RecipePageScreenInteractor: RecipePageScreenInteractorInterface {
     func updateFoodData(_ flag: Bool?) {
-        dish.foodDataId = FDS.shared.foodUpdate(food: .dishes(dish), favorites: flag)
+        dish.foodDataId = FDS.shared.foodUpdate(food: .dishes(dish, customAmount: nil), favorites: flag)
     }
     
     func setCurrentSelectAmountToEat(amount: Int) {

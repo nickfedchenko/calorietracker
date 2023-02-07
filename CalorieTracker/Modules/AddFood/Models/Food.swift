@@ -9,7 +9,7 @@ import Foundation
 
 enum Food {
     case product(Product)
-    case dishes(Dish)
+    case dishes(Dish, customAmount: Double?)
     case meal(Meal)
 }
 
@@ -23,13 +23,23 @@ extension Food {
                 .fat: product.fat,
                 .protein: product.protein
             ]
-        case .dishes(let dish):
-            return [
-                .kcal: dish.kcal,
-                .carb: dish.carbs,
-                .fat: dish.fat,
-                .protein: dish.protein
-            ]
+        case .dishes(let dish, let amount):
+            if let amount = amount {
+                let ratio = amount / Double(dish.dishWeight ?? 1)
+                return [
+                    .kcal: dish.kcal * ratio,
+                    .carb: dish.carbs * ratio,
+                    .fat: dish.fat * ratio,
+                    .protein: dish.protein * ratio
+                ]
+            } else {
+                return [
+                    .kcal: dish.kcal,
+                    .carb: dish.carbs,
+                    .fat: dish.fat,
+                    .protein: dish.protein
+                ]
+            }
         case .meal:
             return [:]
         }
@@ -39,7 +49,7 @@ extension Food {
         switch self {
         case .product(let product):
             return product.id
-        case .dishes(let dish):
+        case .dishes(let dish, _):
             return String(dish.id)
         case .meal(let meal):
             return meal.id
@@ -50,7 +60,7 @@ extension Food {
         switch self {
         case .product(let product):
             return product.foodDataId
-        case .dishes(let dish):
+        case .dishes(let dish, _):
             return dish.foodDataId
         case .meal(let meal):
             return nil
@@ -63,7 +73,7 @@ extension Food: Equatable {
         switch (lhs, rhs) {
         case let (.product(productLhs), .product(productRhs)):
             return productLhs == productRhs
-        case let (.dishes(dishLhs), .dishes(dishRhs)):
+        case let (.dishes(dishLhs, _), .dishes(dishRhs, _)):
             return dishLhs == dishRhs
         default:
             return false
