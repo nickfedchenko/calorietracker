@@ -15,7 +15,7 @@ extension Array where Element == Product {
 
 extension Array where Element == Dish {
     var foods: [Food] {
-        self.map { .dishes($0) }
+        self.map { .dishes($0, customAmount: nil) }
     }
 }
 
@@ -40,7 +40,7 @@ extension Array where Element == Food {
     var dishes: [Dish] {
         self.compactMap { food in
             switch food {
-            case .dishes(let dish):
+            case .dishes(let dish, _):
                 return dish
             default:
                 return nil

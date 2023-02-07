@@ -73,7 +73,7 @@ final class CounterKcalControl: UIControl {
     
     func configure(_ model: Model) {
         countLabel.text = String(model.count)
-        kcalLabel.text = String(model.kcal)
+        kcalLabel.text = String(format: "%.1f", model.kcal)
     }
     
     private func setupView() {

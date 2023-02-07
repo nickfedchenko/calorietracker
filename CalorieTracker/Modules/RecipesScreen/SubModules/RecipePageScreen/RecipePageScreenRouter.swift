@@ -17,16 +17,21 @@ class RecipePageScreenRouter: NSObject {
 
     weak var view: RecipePageScreenViewController?
     weak var presenter: RecipePageScreenPresenterInterface?
-
-    static func setupModule(with dish: Dish, backButtonTitle: String) -> RecipePageScreenViewController {
+    var addToDiaryHandler: ((Food) -> Void)?
+    
+    static func setupModule(
+        with dish: Dish,
+        backButtonTitle: String,
+        addToDiaryHandler: ((Food) -> Void)? = nil
+    ) -> RecipePageScreenViewController {
         let vc = RecipePageScreenViewController(backButtonTitle: backButtonTitle)
         let interactor = RecipePageScreenInteractor(with: dish)
         let router = RecipePageScreenRouter()
         let presenter = RecipePageScreenPresenter(interactor: interactor, router: router, view: vc)
-
         vc.presenter = presenter
         router.presenter = presenter
         router.view = vc
+        router.addToDiaryHandler = addToDiaryHandler
         interactor.presenter = presenter
         return vc
     }
@@ -34,6 +39,10 @@ class RecipePageScreenRouter: NSObject {
 
 extension RecipePageScreenRouter: RecipePageScreenRouterInterface {
     func dismiss() {
+        // TODO: //
+        if let dish = presenter?.getDish() {
+            addToDiaryHandler?(.dishes(dish, customAmount: presenter?.getPossibleEatenAmount()))
+        }
         view?.dismiss(animated: true)
     }
 }

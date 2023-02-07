@@ -23,7 +23,11 @@ final class SearchView: ViewWithShadow {
     var didBeginEditing: ((String) -> Void)?
     var didChangeValue: ((String) -> Void)?
     
-    var placeholderText: String = "Search"
+    var placeholderText: String = "Search" {
+        didSet {
+            didChangeState()
+        }
+    }
     
     var text: String? {
         get { textField.text }

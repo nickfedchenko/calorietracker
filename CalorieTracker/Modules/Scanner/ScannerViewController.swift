@@ -14,7 +14,7 @@ final class ScannerViewController: UIViewController {
     
     enum ScannerState {
         case barcodeRecognized
-        case barcodeExists(Product)
+        case barcodeExists
         case `default`
     }
     
@@ -182,9 +182,14 @@ final class ScannerViewController: UIViewController {
             Vibration.success.vibrate()
             didRecognizedBarcode?(barcode ?? "")
             maskView.layer.borderWidth = 2
-        case .barcodeExists(let product):
+        case .barcodeExists:
+            guard let barcode = barcode else { return }
             Vibration.warning.vibrate()
-            showAlert(product)
+            UIView.animate(withDuration: 0.7, delay: .zero) {
+                self.maskView.layer.borderWidth = 2
+            } completion: { [weak self] _ in
+                self?.router?.barCodeSuccessfullyRecognized(barcode: barcode)
+            }
         case .default:
             maskView.layer.borderWidth = 0
         }
@@ -192,37 +197,37 @@ final class ScannerViewController: UIViewController {
     
     private func didChangeBarcodeValue() {
         guard let barcode = barcode else { return }
-        guard let product = DSF.shared.searchProducts(barcode: barcode).first else {
-            self.scannerState = .barcodeRecognized
-            self.complition?(barcode)
-            return
-        }
+        scannerState = .barcodeExists
+//        guard let product = DSF.shared.searchProducts(barcode: barcode).first else {
+//            self.scannerState = .barcodeRecognized
+//            self.complition?(barcode)
+//            return
+//        }
         
-        scannerState = .barcodeExists(product)
     }
     
-    private func showAlert(_ product: Product) {
-        let alertVC = UIAlertController(
-            title: R.string.localizable.scanAlertTitle(),
-            message: R.string.localizable.scanAlertDescription(),
-            preferredStyle: .alert
-        )
-        
-        alertVC.addAction(UIAlertAction(
-            title: R.string.localizable.cancel(),
-            style: .cancel
-        ))
-        
-        alertVC.addAction(UIAlertAction(
-            title: R.string.localizable.viewing(),
-            style: .default,
-            handler: { [weak self] _ in
-                self?.router?.openProductViewController(product)
-            }
-        ))
-        
-        present(alertVC, animated: true)
-    }
+//    private func showAlert(_ product: Product) {
+//        let alertVC = UIAlertController(
+//            title: R.string.localizable.scanAlertTitle(),
+//            message: R.string.localizable.scanAlertDescription(),
+//            preferredStyle: .alert
+//        )
+//        
+//        alertVC.addAction(UIAlertAction(
+//            title: R.string.localizable.cancel(),
+//            style: .cancel
+//        ))
+//        
+//        alertVC.addAction(UIAlertAction(
+//            title: R.string.localizable.viewing(),
+//            style: .default,
+//            handler: { [weak self] _ in
+//                self?.router?.openProductViewController(product)
+//            }
+//        ))
+//        
+//        present(alertVC, animated: true)
+//    }
     
     private func setMask(with hole: CGRect, in view: UIView) {
         let mutablePath = CGMutablePath()
@@ -265,6 +270,7 @@ extension ScannerViewController: AVCaptureMetadataOutputObjectsDelegate {
     func metadataOutput(_ output: AVCaptureMetadataOutput,
                         didOutput metadataObjects: [AVMetadataObject],
                         from connection: AVCaptureConnection) {
+        print("somethimg happened")
         for metadata in metadataObjects {
             if let readableObject = metadata as? AVMetadataMachineReadableCodeObject,
                 let code = readableObject.stringValue {

@@ -149,14 +149,13 @@ extension SelectedFoodCellsViewController: FoodCollectionViewControllerDataSourc
     
     func cell(collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell {
         let cell: FoodCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
-
-        cell.didTapButton = { food in
+        cell.viewModel = foodCellModel(indexPath)
+        cell.didTapButton = { food, _ in
             guard let index = self.foods.firstIndex(where: { $0 == food }) else { return }
             self.foods.remove(at: index)
             self.foodCollectionViewController.collectionView
                 .deleteItems(at: [IndexPath(row: index, section: 0)])
         }
-        
         return cell
     }
     

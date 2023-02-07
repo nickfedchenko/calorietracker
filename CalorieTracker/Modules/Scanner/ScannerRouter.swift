@@ -9,27 +9,29 @@ import UIKit
 
 protocol ScannerRouterInterface: AnyObject {
     func close()
-    func openProductViewController(_ product: Product)
+    func barCodeSuccessfullyRecognized(barcode: String)
 }
 
 class ScannerRouter: NSObject {
     weak var viewController: UIViewController?
+    var foundBarCodeHandler: ((String) -> Void)?
 
-    static func setupModule() -> ScannerViewController {
+    static func setupModule(foundBarcodeHandler: ((String) -> Void)? = nil) -> ScannerViewController {
         let vc = ScannerViewController()
         let router = ScannerRouter()
-
+        router.foundBarCodeHandler = foundBarcodeHandler
         vc.router = router
+        router.foundBarCodeHandler = foundBarcodeHandler
         router.viewController = vc
         return vc
     }
 }
 
 extension ScannerRouter: ScannerRouterInterface {
-    func openProductViewController(_ product: Product) {
-        let productVC = ProductRouter.setupModule(product, .addFood)
-        productVC.modalPresentationStyle = .fullScreen
-        viewController?.present(productVC, animated: true)
+    
+    func barCodeSuccessfullyRecognized(barcode: String) {
+        close()
+        foundBarCodeHandler?(barcode)
     }
     
     func close() {

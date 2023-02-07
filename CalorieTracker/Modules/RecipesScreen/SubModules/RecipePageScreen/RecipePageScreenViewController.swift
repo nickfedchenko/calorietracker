@@ -250,6 +250,7 @@ class RecipePageScreenViewController: CTViewController {
     }
     
     @objc private func addToDiaryDidTapped() {
+        Vibration.success.vibrate()
         presenter?.addToDiaryTapped()
     }
     

@@ -110,12 +110,11 @@ extension FDS: FoodDataServiceInterface {
             switch food {
             case .product(let product):
                 foodData.setChild(product)
-            case .dishes(let dish):
+            case .dishes(let dish, _):
                 foodData.setChild(dish)
             default:
                 return nil
             }
-            
             return foodData.id
         }
         
@@ -140,7 +139,7 @@ extension FDS: FoodDataServiceInterface {
     func getFavoriteDishes() -> [Dish] {
         let dishes: [Dish] = getFavoriteFoods().compactMap { food in
             switch food.food {
-            case .dishes(let dish):
+            case .dishes(let dish, _):
                 return dish
             default:
                 return nil
@@ -159,14 +158,13 @@ extension FDS: FoodDataServiceInterface {
                 return nil
             }
         }
-        
         return products
     }
     
     func getFrequentDishes(_ count: Int) -> [Dish] {
         let dishes: [Dish] = getFrequentFood(count).compactMap { food in
             switch food.food {
-            case .dishes(let dish):
+            case .dishes(let dish, _):
                 return dish
             default:
                 return nil
@@ -243,7 +241,7 @@ extension FDS: FoodDataServiceInterface {
         
         return foodData.compactMap {
             switch $0.food {
-            case .dishes(let dish):
+            case .dishes(let dish, _):
                 return dish
             default:
                 return nil
