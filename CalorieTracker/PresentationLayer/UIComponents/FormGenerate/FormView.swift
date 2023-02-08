@@ -13,9 +13,11 @@ final class FormView<T: WithGetTitleProtocol>: ViewWithShadow, UITextFieldDelega
         case end
     }
     
+    private var keyboardType:  UIKeyboardType = .default
     private lazy var textField: UITextField = {
         let textField = UITextField()
         textField.textAlignment = .right
+        textField.keyboardType = keyboardType
         textField.tintColor = R.color.foodViewing.basicPrimary()
         textField.textColor = R.color.foodViewing.basicPrimary()
         textField.delegate = self
@@ -44,6 +46,12 @@ final class FormView<T: WithGetTitleProtocol>: ViewWithShadow, UITextFieldDelega
         setupView()
         setupConstraints()
         setupTextFieldRightView()
+    }
+    
+    convenience init(_ shadows: [Shadow] = Const.shadows, keyboardType: UIKeyboardType) {
+        self.init(shadows)
+        self.keyboardType = keyboardType
+        textField.keyboardType = keyboardType
     }
     
     required init?(coder: NSCoder) {
@@ -97,7 +105,9 @@ final class FormView<T: WithGetTitleProtocol>: ViewWithShadow, UITextFieldDelega
     
     private func didChangeModel() {
         guard let model = model else { return }
-        
+        if model.type is CreateProductViewController.ProductFormSegment {
+            textField.keyboardType = .decimalPad
+        }
         textField.placeholder = model.value.getTitle(.long)
         if model.type.getTitle(.long) != nil {
             textField.textAlignment = .right
@@ -111,7 +121,6 @@ final class FormView<T: WithGetTitleProtocol>: ViewWithShadow, UITextFieldDelega
     
     private func didChangeState() {
         guard let model = model else { return }
-        
         switch editingState {
         case .begin:
             layer.borderWidth = 1
