@@ -13,11 +13,9 @@ final class FormView<T: WithGetTitleProtocol>: ViewWithShadow, UITextFieldDelega
         case end
     }
     
-    private var keyboardType:  UIKeyboardType = .default
     private lazy var textField: UITextField = {
         let textField = UITextField()
         textField.textAlignment = .right
-        textField.keyboardType = keyboardType
         textField.tintColor = R.color.foodViewing.basicPrimary()
         textField.textColor = R.color.foodViewing.basicPrimary()
         textField.delegate = self
@@ -46,12 +44,6 @@ final class FormView<T: WithGetTitleProtocol>: ViewWithShadow, UITextFieldDelega
         setupView()
         setupConstraints()
         setupTextFieldRightView()
-    }
-    
-    convenience init(_ shadows: [Shadow] = Const.shadows, keyboardType: UIKeyboardType) {
-        self.init(shadows)
-        self.keyboardType = keyboardType
-        textField.keyboardType = keyboardType
     }
     
     required init?(coder: NSCoder) {
