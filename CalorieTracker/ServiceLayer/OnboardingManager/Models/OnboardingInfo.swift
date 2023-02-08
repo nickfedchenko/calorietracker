@@ -53,6 +53,7 @@ struct OnboardingInfo {
     var lifestyleOfOthers: LifestyleOfOthers?
     var emotionalSupportSystem: EmotionalSupportSystem?
     var weightGoal: WeightGoal?
+    var mail: String?
     
     private var firstStageData: [Any?] {
         return [

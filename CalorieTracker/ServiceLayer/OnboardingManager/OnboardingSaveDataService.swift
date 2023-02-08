@@ -25,7 +25,8 @@ struct OnboardingSaveDataService {
             sex: onboardingInfo.whatsYourGender?.userSex ?? .male,
             dateOfBirth: onboardingInfo.dateOfBirth ?? Date(),
             height: onboardingInfo.yourHeight ?? 0,
-            dietary: .classic
+            dietary: .classic,
+            email: onboardingInfo.mail
         )
         
         UDM.userData = userData

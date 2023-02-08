@@ -22,7 +22,17 @@ final class AppCoordinator {
     }
     
     func start() {
+      
         var getStartedViewController: UIViewController
+//        let trueFlag = true
+//        guard !trueFlag else {
+//            getStartedViewController = CalorieTrackingViaKcalcRouter.setupModule()
+//            let navigationController = UINavigationController(rootViewController: getStartedViewController)
+//            window?.rootViewController = navigationController
+//            window?.makeKeyAndVisible()
+//            return
+//        }
+        
         if UDM.userData == nil {
             getStartedViewController = WelcomeRouter.setupModule()
         } else if Apphud.hasActiveSubscription() {
@@ -64,6 +74,7 @@ final class AppCoordinator {
     
     func navigateTo(route: Route?, with id: String) {
         guard let route = route else { return }
+        let finalOnb = CalorieTrackingViaKcalcRouter.setupModule()
         switch route {
         case .recipe:
             if let dish = localDomainService.fetchSpecificRecipe(with: id),
