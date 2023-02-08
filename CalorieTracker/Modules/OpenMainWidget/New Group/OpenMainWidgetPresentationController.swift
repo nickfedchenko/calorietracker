@@ -16,7 +16,7 @@ final class OpenMainWidgetPresentController: UIPresentationController {
     
     var handleTapView: (() -> Void)?
     
-    private var state: State = .modal {
+    var state: State = .modal {
         didSet {
             didChangeState()
         }
@@ -73,7 +73,9 @@ final class OpenMainWidgetPresentController: UIPresentationController {
         topConstraint = presentedView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 0)
         presentedView.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
+            make.top.equalToSuperview().offset(40)
         }
+        didChangeState()
     }
 
     override func presentationTransitionDidEnd(_ completed: Bool) {
@@ -104,7 +106,7 @@ final class OpenMainWidgetPresentController: UIPresentationController {
     
     private func didChangeState() {
         guard let presentedView = presentedView else { return }
-        
+        presentedView.layer.maskedCorners = .topCorners
         performAlongsideTransitionIfPossible {
             switch self.state {
             case .modal:
