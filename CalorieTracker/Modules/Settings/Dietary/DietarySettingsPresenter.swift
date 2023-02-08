@@ -45,7 +45,8 @@ extension DietarySettingsPresenter: DietarySettingsPresenterInterface {
             sex: oldUserData?.sex ?? .male,
             dateOfBirth: oldUserData?.dateOfBirth ?? Date(),
             height: oldUserData?.height ?? 0,
-            dietary: dietary
+            dietary: dietary,
+            email: oldUserData?.email
         )
     }
 }

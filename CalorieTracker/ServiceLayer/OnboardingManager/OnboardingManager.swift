@@ -132,6 +132,7 @@ protocol OnboardingManagerInterface {
     func set(emotionalSupportSystem: EmotionalSupportSystem)
     
     func getOnboardingInfo() -> OnboardingInfo
+    func setEmail(mail: String)
 }
 
 class OnboardingManager {
@@ -462,5 +463,9 @@ extension OnboardingManager: OnboardingManagerInterface {
     
     func set(weightGoal: WeightGoal) {
         onboardingInfo.weightGoal = weightGoal
+    }
+    
+    func setEmail(mail: String) {
+        onboardingInfo.mail = mail
     }
 }

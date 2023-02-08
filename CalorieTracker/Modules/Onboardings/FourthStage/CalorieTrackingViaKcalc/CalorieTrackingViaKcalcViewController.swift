@@ -5,6 +5,7 @@
 //  Created by Алексей on 31.08.2022.
 //
 
+import AuthenticationServices
 import Foundation
 import UIKit
 
@@ -25,6 +26,16 @@ final class CalorieTrackingViaKcalcViewController: UIViewController {
     private let titleLabel: UILabel = .init()
     private let getStartedSignInAppleButton: SignInAppleButton = .init()
     private let continueWithoutRegistrationButton: UIButton = .init()
+    
+    private lazy var signInButton: ASAuthorizationAppleIDButton = {
+        let button = ASAuthorizationAppleIDButton(type: .signIn, style: .white)
+        button.tintColor = .red
+        button.layer.borderWidth = 2
+        button.layer.cornerRadius = 16
+        button.layer.borderColor = UIColor.black.cgColor
+        button.addTarget(self, action: #selector(didTapGetStartedSignInAppleButton), for: .touchUpInside)
+        return button
+    }()
     
     // MARK: - Lifecycle methods
     
@@ -88,7 +99,7 @@ final class CalorieTrackingViaKcalcViewController: UIViewController {
         
         contentView.addSubview(titleLabel)
         
-        contentView.addSubview(getStartedSignInAppleButton)
+        contentView.addSubview(signInButton)
         
         contentView.addSubview(continueWithoutRegistrationButton)
         
@@ -121,7 +132,7 @@ final class CalorieTrackingViaKcalcViewController: UIViewController {
             $0.centerY.equalTo(contentView.snp.centerY)
         }
         
-        getStartedSignInAppleButton.snp.makeConstraints {
+        signInButton.snp.makeConstraints {
             $0.top.greaterThanOrEqualTo(titleLabel.snp.bottom).offset(40)
             $0.left.equalTo(contentView.snp.left).offset(40)
             $0.right.equalTo(contentView.snp.right).offset(-40)
@@ -129,7 +140,7 @@ final class CalorieTrackingViaKcalcViewController: UIViewController {
         }
         
         continueWithoutRegistrationButton.snp.makeConstraints {
-            $0.top.equalTo(getStartedSignInAppleButton.snp.bottom).offset(30)
+            $0.top.equalTo(signInButton.snp.bottom).offset(30)
             $0.left.equalTo(contentView.snp.left).offset(40)
             $0.right.equalTo(contentView.snp.right).offset(-40)
             $0.bottom.equalTo(contentView.snp.bottom).offset(-35)
@@ -137,7 +148,17 @@ final class CalorieTrackingViaKcalcViewController: UIViewController {
     }
     
     @objc private func didTapGetStartedSignInAppleButton() {
-        print("didTapGetStartedSignInAppleButton")
+        let appleIDProvider = ASAuthorizationAppleIDProvider()
+        
+        let request = appleIDProvider.createRequest()
+        request.requestedScopes = [.email]
+        
+        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+        
+        authorizationController.delegate = self
+//        authorizationController.presentationContextProvider = self
+        
+        authorizationController.performRequests()
     }
     
     @objc private func didTapContinueWithoutRegistrationButton() {
@@ -158,3 +179,16 @@ final class CalorieTrackingViaKcalcViewController: UIViewController {
 // MARK: - CalorieTrackingViaKcalcViewControllerInterface
 
 extension CalorieTrackingViaKcalcViewController: CalorieTrackingViaKcalcViewControllerInterface {}
+
+extension CalorieTrackingViaKcalcViewController: ASAuthorizationControllerDelegate {
+    func authorizationController(
+         controller: ASAuthorizationController,
+         didCompleteWithAuthorization authorization: ASAuthorization
+     ) {
+         guard let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential else { return }
+         if let email = appleIDCredential.email {
+             OnboardingManager.shared.setEmail(mail: email)
+         }
+         presenter?.successfullyGotCredentials()
+     }
+}

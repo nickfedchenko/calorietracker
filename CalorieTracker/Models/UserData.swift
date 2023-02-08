@@ -15,6 +15,7 @@ struct UserData: Codable {
     let dateOfBirth: Date
     let height: Double
     let dietary: UserDietary
+    let email: String?
 }
 
 enum UserSex: String, Codable {

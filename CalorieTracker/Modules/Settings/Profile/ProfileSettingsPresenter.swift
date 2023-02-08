@@ -79,7 +79,8 @@ class ProfileSettingsPresenter {
             sex: newSex ?? oldUserData.sex,
             dateOfBirth: newDate ?? oldUserData.dateOfBirth,
             height: newHeight ?? oldUserData.height,
-            dietary: oldUserData.dietary
+            dietary: oldUserData.dietary,
+            email: UDM.userData?.email
         )
 
         UDM.userData = newUserData
