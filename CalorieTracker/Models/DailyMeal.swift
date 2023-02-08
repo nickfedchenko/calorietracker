@@ -24,7 +24,9 @@ extension DailyMeal {
         self.mealTime = .init(rawValue: managedModel.mealTime) ?? .breakfast
         
         if let domainMealData = managedModel.mealData {
-            self.mealData = domainMealData.compactMap { MealData(from: $0) }
+            self.mealData = domainMealData
+                .compactMap { $0 as? DomainMealData }
+                .compactMap { MealData(from: $0) }
         } else {
             self.mealData = []
         }

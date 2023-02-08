@@ -467,7 +467,7 @@ extension LocalDomainService: LocalDomainServiceInterface {
         
         let mealData = mealDataPredicates.compactMap {
             fetchData(
-                for: DomainProduct.self,
+                for: DomainMealData.self,
                 withPredicate: NSCompoundPredicate(orPredicateWithSubpredicates: [$0])
             )?.first
         }

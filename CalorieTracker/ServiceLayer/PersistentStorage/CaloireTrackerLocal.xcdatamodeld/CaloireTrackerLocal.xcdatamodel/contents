@@ -90,6 +90,11 @@
         <relationship name="dailyMeal" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainDailyMeals" inverseName="mealData" inverseEntity="DomainDailyMeals"/>
         <relationship name="dish" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainDish" inverseName="mealsData" inverseEntity="DomainDish"/>
         <relationship name="product" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainProduct" inverseName="mealsData" inverseEntity="DomainProduct"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
     </entity>
     <entity name="DomainNote" representedClassName="DomainNote" syncable="YES">
         <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
