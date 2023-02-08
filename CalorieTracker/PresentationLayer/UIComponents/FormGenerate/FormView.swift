@@ -97,7 +97,9 @@ final class FormView<T: WithGetTitleProtocol>: ViewWithShadow, UITextFieldDelega
     
     private func didChangeModel() {
         guard let model = model else { return }
-        
+        if model.type is CreateProductViewController.ProductFormSegment {
+            textField.keyboardType = .decimalPad
+        }
         textField.placeholder = model.value.getTitle(.long)
         if model.type.getTitle(.long) != nil {
             textField.textAlignment = .right
@@ -111,7 +113,6 @@ final class FormView<T: WithGetTitleProtocol>: ViewWithShadow, UITextFieldDelega
     
     private func didChangeState() {
         guard let model = model else { return }
-        
         switch editingState {
         case .begin:
             layer.borderWidth = 1
