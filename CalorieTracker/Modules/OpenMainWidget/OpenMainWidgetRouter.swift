@@ -6,16 +6,16 @@
 //  Copyright © 2023 Mov4D. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
 protocol OpenMainWidgetRouterInterface: AnyObject {
-
+    func closeVC()
 }
 
 class OpenMainWidgetRouter: NSObject {
 
     weak var presenter: OpenMainWidgetPresenterInterface?
+    weak var viewController: UIViewController?
 
     static func setupModule(_ date: Date) -> OpenMainWidgetViewController {
         let vc = OpenMainWidgetViewController()
@@ -30,11 +30,14 @@ class OpenMainWidgetRouter: NSObject {
 
         vc.presenter = presenter
         router.presenter = presenter
+        router.viewController = vc
         interactor.presenter = presenter
         return vc
     }
 }
 
 extension OpenMainWidgetRouter: OpenMainWidgetRouterInterface {
-
+    func closeVC() {
+        viewController?.dismiss(animated: true)
+    }
 }

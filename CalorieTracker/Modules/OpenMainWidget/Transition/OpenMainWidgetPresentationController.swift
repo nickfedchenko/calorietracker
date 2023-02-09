@@ -21,7 +21,7 @@ final class OpenMainWidgetPresentController: UIPresentationController {
             didChangeState()
         }
     }
-    
+    private let topInset: CGFloat
     private var topZeroConstraint: NSLayoutConstraint?
     private var topConstraint: NSLayoutConstraint?
 
@@ -42,10 +42,12 @@ final class OpenMainWidgetPresentController: UIPresentationController {
         return recognizer
     }()
     
-    override init(
+    init(
         presentedViewController: UIViewController,
-        presenting: UIViewController?
+        presenting: UIViewController?,
+        topInset: CGFloat
     ) {
+        self.topInset = topInset
         super.init(
             presentedViewController: presentedViewController,
             presenting: presenting
@@ -70,12 +72,12 @@ final class OpenMainWidgetPresentController: UIPresentationController {
         }
         
         topZeroConstraint = presentedView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 0)
-        topConstraint = presentedView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 0)
+        topConstraint = presentedView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: topInset)
         presentedView.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
-            make.top.equalToSuperview().offset(40)
         }
-        didChangeState()
+        
+        topConstraint?.isActive = true
     }
 
     override func presentationTransitionDidEnd(_ completed: Bool) {
@@ -107,13 +109,21 @@ final class OpenMainWidgetPresentController: UIPresentationController {
     private func didChangeState() {
         guard let presentedView = presentedView else { return }
         presentedView.layer.maskedCorners = .topCorners
+        
+        switch self.state {
+        case .modal:
+            presentedView.layer.cornerRadius = 40
+            self.topConstraint?.isActive = true
+            self.topZeroConstraint?.isActive = false
+        case .full:
+            presentedView.layer.cornerRadius = 0
+            self.topConstraint?.isActive = false
+            self.topZeroConstraint?.isActive = true
+        }
+
         performAlongsideTransitionIfPossible {
-            switch self.state {
-            case .modal:
-                presentedView.layer.cornerRadius = 40
-            case .full:
-                presentedView.layer.cornerRadius = 0
-            }
+            self.presentedView?.layoutIfNeeded()
+            self.containerView?.layoutIfNeeded()
         }
     }
 

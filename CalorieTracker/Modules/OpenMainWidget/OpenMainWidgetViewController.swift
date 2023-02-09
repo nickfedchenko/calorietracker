@@ -13,16 +13,31 @@ protocol OpenMainWidgetViewControllerInterface: AnyObject {
 }
 
 class OpenMainWidgetViewController: UIViewController {
+    typealias Size = CTWidgetNodeConfiguration
+    
     var presenter: OpenMainWidgetPresenterInterface?
     
     private lazy var collectionView: UICollectionView = getCollectionViewCell()
+    private lazy var closeButton: UIButton = getCloseButton()
 
-    private var dailyMeals: [DailyMeal]?
     private var sideInset: CGFloat { CTWidgetNode(with: .init(type: .widget)).constants.suggestedSideInset }
-    private var topInsets: [OpenMainWidgetPresentController.State: CGFloat] = [
+    private let mainWidgetTopInsets: [OpenMainWidgetPresentController.State: CGFloat] = [
         .full: 42,
         .modal: 19
     ]
+    
+    private var viewControllerTopInset: CGFloat {
+        WidgetContainerViewController.safeAreaTopInset
+        + WidgetContainerViewController.suggestedTopSafeAreaOffset
+        + Size(type: .compact).height
+        + WidgetContainerViewController.suggestedInterItemSpacing
+    }
+    
+    private var dailyMeals: [DailyMeal]? {
+        didSet {
+            collectionView.reloadData()
+        }
+    }
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -48,7 +63,7 @@ class OpenMainWidgetViewController: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.contentInset = .init(
-            top: topInsets[.modal] ?? 0,
+            top: mainWidgetTopInsets[.modal] ?? 0,
             left: 0,
             bottom: 0,
             right: 0
@@ -56,10 +71,16 @@ class OpenMainWidgetViewController: UIViewController {
     }
     
     private func setupConstraints() {
-        view.addSubviews(collectionView)
+        view.addSubviews(collectionView, closeButton)
         
         collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+        }
+        
+        closeButton.snp.makeConstraints { make in
+            make.width.height.equalTo(64)
+            make.centerX.equalToSuperview()
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
     }
     
@@ -72,11 +93,15 @@ class OpenMainWidgetViewController: UIViewController {
     private func changeStateVC() {
         (presentationController as? OpenMainWidgetPresentController)?.state = .full
         collectionView.contentInset = .init(
-            top: topInsets[.full] ?? 0,
+            top: mainWidgetTopInsets[.full] ?? 0,
             left: 0,
             bottom: 0,
             right: 0
         )
+    }
+    
+    @objc private func didTapCloseButton() {
+        presenter?.didTapCloseButton()
     }
 }
 
@@ -145,7 +170,7 @@ extension OpenMainWidgetViewController: UICollectionViewDataSource {
             return cell
         default:
             let cell: MealTimeCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
-            let dailyMeal = dailyMeals?[safe: indexPath.row]
+            let dailyMeal = dailyMeals?[safe: indexPath.row - 1]
             cell.viewModel = .init(
                 foods: dailyMeal?.mealData.compactMap { $0.food } ?? [],
                 mealtime: dailyMeal?.mealTime ?? .breakfast
@@ -164,8 +189,23 @@ extension OpenMainWidgetViewController: UIViewControllerTransitioningDelegate {
     ) -> UIPresentationController? {
         OpenMainWidgetPresentController(
             presentedViewController: presented,
-            presenting: presenting
+            presenting: presenting,
+            topInset: viewControllerTopInset - (mainWidgetTopInsets[.modal] ?? 0)
         )
+    }
+    
+    func animationController(
+        forPresented presented: UIViewController,
+        presenting: UIViewController,
+        source: UIViewController
+    ) -> UIViewControllerAnimatedTransitioning? {
+        OpenMainWidgetPresentTransition()
+    }
+    
+    func animationController(
+        forDismissed dismissed: UIViewController
+    ) -> UIViewControllerAnimatedTransitioning? {
+        OpenMainWidgetDismissTransition()
     }
 }
 
@@ -179,6 +219,18 @@ extension OpenMainWidgetViewController {
         layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
+        collectionView.backgroundColor = .clear
         return collectionView
+    }
+    
+    private func getCloseButton() -> UIButton {
+        let button = UIButton()
+        button.setImage(R.image.chevronDown(), for: .normal)
+        button.addTarget(
+            self,
+            action: #selector(didTapCloseButton),
+            for: .touchUpInside
+        )
+        return button
     }
 }

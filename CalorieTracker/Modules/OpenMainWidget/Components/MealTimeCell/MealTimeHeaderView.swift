@@ -35,6 +35,11 @@ final class MealTimeHeaderView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        addButton.layer.cornerRadius = addButton.frame.height / 2.0
+    }
+    
     private func didChangeViewModel() {
         guard let viewModel = viewModel else { return }
         mealTimeImageView.image = viewModel.mealTime.getImage()
@@ -51,10 +56,39 @@ final class MealTimeHeaderView: UIView {
         case .snack:
             leftBottomChevron.tintColor = R.color.openMainWidget.snack()
         }
+        
+        carbsLabel.attributedText = getAttributedString(
+            nutrient: .carbs,
+            value: viewModel.carbs
+        )
+        fatLabel.attributedText = getAttributedString(
+            nutrient: .fat,
+            value: viewModel.fat
+        )
+        proteinLabel.attributedText = getAttributedString(
+            nutrient: .protein,
+            value: viewModel.protein
+        )
+    }
+    
+    private func getAttributedString(nutrient: NutrientType, value: Int) -> NSAttributedString? {
+        let font = R.font.sfProDisplayBold(size: 15)
+        return "\(nutrient.getTitle(.short) ?? "") \(value)".attributedSring(
+            [
+                .init(
+                    worldIndex: [0],
+                    attributes: [.font(font), .color(nutrient.getColor())]
+                ),
+                .init(
+                    worldIndex: [0],
+                    attributes: [.font(font), .color(R.color.openMainWidget.dark())]
+                )
+            ]
+        )
     }
     
     private func setupView() {
-        
+        addButton.layer.cornerCurve = .circular
     }
     
     private func setupConstraints() {
@@ -62,6 +96,7 @@ final class MealTimeHeaderView: UIView {
             let view = UIStackView()
             view.spacing = 16
             view.axis = .horizontal
+            view.distribution = .equalSpacing
             return view
         }()
         
@@ -76,7 +111,7 @@ final class MealTimeHeaderView: UIView {
             rightBottomChevron
         )
         
-        stack.addSubviews(
+        stack.addArrangedSubviews(
             carbsLabel,
             proteinLabel,
             fatLabel
@@ -113,10 +148,24 @@ final class MealTimeHeaderView: UIView {
         }
         
         stack.snp.makeConstraints { make in
-            make.top.equalTo(mealTimeImageView.snp.bottom).offset(5.5)
-            make.bottom.equalToSuperview().offset(-11.5)
+            make.centerY.equalTo(leftBottomChevron)
+            make.height.equalTo(24)
             make.leading.equalTo(mealTimeLabel.snp.leading)
-            make.trailing.lessThanOrEqualToSuperview()
+            make.trailing.lessThanOrEqualTo(rightBottomChevron.snp.trailing)
+        }
+        
+        leftBottomChevron.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(16)
+            make.width.height.equalTo(24)
+            make.top.equalTo(mealTimeImageView.snp.bottom).offset(4)
+            make.bottom.equalToSuperview().offset(-7)
+        }
+        
+        rightBottomChevron.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().offset(-16)
+            make.width.height.equalTo(24)
+            make.top.equalTo(addButton.snp.bottom).offset(4)
+            make.bottom.equalToSuperview().offset(-7)
         }
     }
 }
@@ -175,6 +224,7 @@ extension MealTimeHeaderView {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit
         view.image = R.image.openMainWidget.downChevron()
+        view.contentMode = .center
         return view
     }
     
@@ -183,6 +233,7 @@ extension MealTimeHeaderView {
         view.contentMode = .scaleAspectFit
         view.image = R.image.openMainWidget.downChevron()
         view.tintColor = R.color.openMainWidget.background()
+        view.contentMode = .center
         return view
     }
 }

@@ -60,7 +60,7 @@ class MealTimeCollectionViewCell: UICollectionViewCell {
     private func setupView() {
         collectionView.dataSource = self
         collectionView.delegate = self
-        
+        shadowView.backgroundColor = .white
         shadowView.layer.cornerCurve = .continuous
         shadowView.layer.cornerRadius = 12
         

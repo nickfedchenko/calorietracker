@@ -33,23 +33,23 @@ final class WidgetContainerViewController: UIViewController {
     var presenter: WidgetContainerPresenterInterface?
     var output: WidgetContainerOutput?
     
-    var suggestedSideInset: CGFloat { Size(type: .widget).suggestedSideInset }
-    var suggestedTopSafeAreaOffset: CGFloat { Size(type: .widget).suggestedTopSafeAreaOffset }
-    var safeAreaTopInset: CGFloat { Size(type: .widget).safeAreaTopInset }
-    var suggestedInterItemSpacing: CGFloat { Size(type: .widget).suggestedInterItemSpacing }
-    var tabBarHeight: CGFloat { Size(type: .widget).tabBarHeight + bottomInset }
-    var bottomInset: CGFloat { CTTabBarController.Constants.bottomInset }
-    var screenSize: CGSize { UIScreen.main.bounds.size }
+    static var suggestedSideInset: CGFloat { Size(type: .widget).suggestedSideInset }
+    static var suggestedTopSafeAreaOffset: CGFloat { Size(type: .widget).suggestedTopSafeAreaOffset }
+    static var safeAreaTopInset: CGFloat { Size(type: .widget).safeAreaTopInset }
+    static var suggestedInterItemSpacing: CGFloat { Size(type: .widget).suggestedInterItemSpacing }
+    static var tabBarHeight: CGFloat { Size(type: .widget).tabBarHeight + bottomInset }
+    static var bottomInset: CGFloat { CTTabBarController.Constants.bottomInset }
+    static var screenSize: CGSize { UIScreen.main.bounds.size }
     
     var minTopInset: CGFloat {
-        safeAreaTopInset
-        + suggestedTopSafeAreaOffset
+        Self.safeAreaTopInset
+        + Self.suggestedTopSafeAreaOffset
         + Size(type: .compact).height
-        + 2 * suggestedInterItemSpacing
+        + 2 * Self.suggestedInterItemSpacing
         + Size(type: .widget).height
     }
     
-    var minBottomInset: CGFloat { tabBarHeight + suggestedInterItemSpacing }
+    var minBottomInset: CGFloat { Self.tabBarHeight + Self.suggestedInterItemSpacing }
     
     var widgetInsets: UIEdgeInsets {
         switch widgetType {
@@ -137,18 +137,18 @@ final class WidgetContainerViewController: UIViewController {
         case .h19x414, .h19x428, .h19x375, .h19x390, .h19x393, .h19x430:
             return .init(
                 top: minTopInset,
-                left: self.suggestedSideInset,
-                bottom: self.bottomInset,
-                right: self.suggestedSideInset
+                left: Self.suggestedSideInset,
+                bottom: Self.bottomInset,
+                right: Self.suggestedSideInset
             )
         case .h16x414, .h16x375:
-            let height = (screenSize.width - 2 * suggestedSideInset) * 1.361
-            let topInsets = screenSize.height - height - minBottomInset
+            let height = (Self.screenSize.width - 2 * Self.suggestedSideInset) * 1.361
+            let topInsets = Self.screenSize.height - height - minBottomInset
             return .init(
                 top: topInsets,
-                left: self.suggestedSideInset,
-                bottom: self.minBottomInset,
-                right: self.suggestedSideInset
+                left: Self.suggestedSideInset,
+                bottom: minBottomInset,
+                right: Self.suggestedSideInset
             )
         case .unknown:
             return .zero
@@ -158,23 +158,23 @@ final class WidgetContainerViewController: UIViewController {
     private func getCalendarWidgetInsets() -> UIEdgeInsets {
         let bottomInset = minBottomInset
             + Size(type: .compact).height
-            + suggestedInterItemSpacing
+        + Self.suggestedInterItemSpacing
         switch UIDevice.screenType {
         case .h19x414, .h19x428, .h19x375, .h19x390, .h19x430, .h19x393:
             return .init(
                 top: minTopInset,
-                left: self.suggestedSideInset,
+                left: Self.suggestedSideInset,
                 bottom: bottomInset,
-                right: self.suggestedSideInset
+                right: Self.suggestedSideInset
             )
         case .h16x414, .h16x375:
-            let height = (screenSize.width - 2 * suggestedSideInset) * 0.947
-            let topInsets = screenSize.height - height - bottomInset
+            let height = (Self.screenSize.width - 2 * Self.suggestedSideInset) * 0.947
+            let topInsets = Self.screenSize.height - height - bottomInset
             return .init(
                 top: topInsets,
-                left: self.suggestedSideInset,
+                left: Self.suggestedSideInset,
                 bottom: bottomInset,
-                right: self.suggestedSideInset
+                right: Self.suggestedSideInset
             )
         case .unknown:
             return .zero
@@ -192,25 +192,25 @@ final class WidgetContainerViewController: UIViewController {
     private func getStepsWidgetInsets() -> UIEdgeInsets {
         let bottomInset = minBottomInset
             + Size(type: .compact).height
-            + suggestedInterItemSpacing
+        + Self.suggestedInterItemSpacing
         
         switch UIDevice.screenType {
         case .h19x414, .h19x428, .h19x375, .h19x390, .h19x430, .h19x393:
-            let topInset = minTopInset + Size(type: .large).height + suggestedInterItemSpacing
+            let topInset = minTopInset + Size(type: .large).height + Self.suggestedInterItemSpacing
             return .init(
                 top: topInset,
-                left: self.suggestedSideInset,
+                left: Self.suggestedSideInset,
                 bottom: bottomInset,
-                right: self.suggestedSideInset
+                right: Self.suggestedSideInset
             )
         case .h16x414, .h16x375:
-            let height = (screenSize.width - 2 * suggestedSideInset) * 0.638
-            let topInsets = screenSize.height - height - bottomInset
+            let height = (Self.screenSize.width - 2 * Self.suggestedSideInset) * 0.638
+            let topInsets = Self.screenSize.height - height - bottomInset
             return .init(
                 top: topInsets,
-                left: self.suggestedSideInset,
+                left: Self.suggestedSideInset,
                 bottom: bottomInset,
-                right: self.suggestedSideInset
+                right: Self.suggestedSideInset
             )
         case .unknown:
             return .zero
@@ -220,24 +220,24 @@ final class WidgetContainerViewController: UIViewController {
     private func getWaterWidgetInsets() -> UIEdgeInsets {
         let bottomInset = minBottomInset
             + Size(type: .compact).height
-            + suggestedInterItemSpacing
+        + Self.suggestedInterItemSpacing
         
         switch UIDevice.screenType {
         case .h19x414, .h19x428, .h19x375, .h19x390, .h19x393, .h19x430:
             return .init(
                 top: minTopInset,
-                left: self.suggestedSideInset,
+                left: Self.suggestedSideInset,
                 bottom: bottomInset,
-                right: self.suggestedSideInset
+                right: Self.suggestedSideInset
             )
         case .h16x414, .h16x375:
-            let height = (screenSize.width - 2 * suggestedSideInset) * 0.963
-            let topInsets = screenSize.height - height - bottomInset
+            let height = (Self.screenSize.width - 2 * Self.suggestedSideInset) * 0.963
+            let topInsets = Self.screenSize.height - height - bottomInset
             return .init(
                 top: topInsets,
-                left: self.suggestedSideInset,
+                left: Self.suggestedSideInset,
                 bottom: bottomInset,
-                right: self.suggestedSideInset
+                right: Self.suggestedSideInset
             )
         case .unknown:
             return .zero

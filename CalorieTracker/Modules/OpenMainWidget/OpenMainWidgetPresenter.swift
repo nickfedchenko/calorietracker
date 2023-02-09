@@ -11,6 +11,7 @@ import Foundation
 protocol OpenMainWidgetPresenterInterface: AnyObject {
     func updateDailyMeals()
     func getMainWidgetWidget() -> MainWidgetViewNode.Model
+    func didTapCloseButton()
 }
 
 class OpenMainWidgetPresenter {
@@ -40,7 +41,7 @@ class OpenMainWidgetPresenter {
         self.date = date
     }
     
-    private func getTodayDailyMeal(_ mealTime: MealTime) -> DailyMeal {
+    private func getDailyMeal(_ mealTime: MealTime) -> DailyMeal {
         let day = self.date.day
         
         guard let dailyMeal = FDS.shared.getAllStoredDailyMeals().first(
@@ -59,9 +60,13 @@ class OpenMainWidgetPresenter {
 }
 
 extension OpenMainWidgetPresenter: OpenMainWidgetPresenterInterface {
+    func didTapCloseButton() {
+        router?.closeVC()
+    }
+    
     func updateDailyMeals() {
         let dailyMeals = mealTimes.map { mealTime in
-            getTodayDailyMeal(mealTime)
+            getDailyMeal(mealTime)
         }
         
         view.setDailyMeals(dailyMeals)
