@@ -64,7 +64,6 @@ final class AddFoodViewController: UIViewController {
     
     private var firstDraw = true
     private var microphoneButtonSelected = false
-    private var mealTime: MealTime = .breakfast
     private var foods: [Food] = []
     
     private var selectedFood: [Food]? {
@@ -91,6 +90,8 @@ final class AddFoodViewController: UIViewController {
             didChangeState()
         }
     }
+    
+    var mealTime: MealTime = .breakfast
     
     // MARK: - Override
     
@@ -219,7 +220,7 @@ final class AddFoodViewController: UIViewController {
         menuCreateController = .init(menuCreateView, width: Const.menuCreateViewWidth)
         menuNutrientController = .init(menuNutrientView, width: Const.menulNutrientViewWidth)
         
-        menuButton.configure(Const.menuModels.first)
+        menuButton.configure(mealTime)
         menuButton.completion = { [weak self] complition in
             self?.showMealMenu()
             self?.menuMealView.complition = { model in

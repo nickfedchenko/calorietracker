@@ -21,14 +21,12 @@ class MealTimeCollectionViewCell: UICollectionViewCell {
     private var headerBottomEqualToViewConstraints: NSLayoutConstraint?
     private var collectionViewHeightConstraints: NSLayoutConstraint?
     
+    var addButtonhandler: ((MealTime) -> Void)?
+    
     var viewModel: MealTimeCellViewModel? {
         didSet {
+            guard oldValue != self.viewModel else { return }
             didChangeViewModel()
-        }
-    }
-    
-    var sizeState: SizeState = .close {
-        didSet {
             didChangeSizeState()
         }
     }
@@ -65,6 +63,10 @@ class MealTimeCollectionViewCell: UICollectionViewCell {
         shadowView.layer.cornerRadius = 12
         
         collectionView.clipsToBounds = true
+        
+        header.addButtonHandler = {
+            self.addButtonhandler?(self.viewModel?.mealtime ?? .breakfast)
+        }
     }
     
     private func setupConstraints() {
@@ -101,9 +103,8 @@ class MealTimeCollectionViewCell: UICollectionViewCell {
     }
     
     private func didChangeSizeState() {
-        switch self.sizeState {
+        switch self.viewModel?.sizeState {
         case .open:
-            guard let viewModel = self.viewModel, !viewModel.foods.isEmpty else { return }
             self.headerBottomEqualToSuperviewConstraints?.isActive = false
             self.headerBottomEqualToViewConstraints?.isActive = true
             self.collectionViewHeightConstraints?.isActive = false
@@ -113,6 +114,8 @@ class MealTimeCollectionViewCell: UICollectionViewCell {
             self.headerBottomEqualToViewConstraints?.isActive = false
             self.collectionViewHeightConstraints?.isActive = true
             self.collectionView.isHidden = true
+        default:
+            break
         }
     }
     

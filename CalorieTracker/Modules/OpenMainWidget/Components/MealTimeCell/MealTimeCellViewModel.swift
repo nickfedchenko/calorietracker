@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct MealTimeCellViewModel {
+struct MealTimeCellViewModel: Equatable {
     let foods: [Food]
     let mealtime: MealTime
     
@@ -15,6 +15,8 @@ struct MealTimeCellViewModel {
     var carbs: Int { return calculateNutrient(.carb) }
     var protein: Int { return calculateNutrient(.protein) }
     var fats: Int { return calculateNutrient(.fat) }
+    
+    var sizeState: MealTimeCollectionViewCell.SizeState = .close
     
     private func calculateNutrient(_ type: FoodInfoCases) -> Int {
         foods

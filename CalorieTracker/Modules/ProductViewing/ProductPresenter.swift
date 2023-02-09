@@ -41,7 +41,7 @@ extension ProductPresenter: ProductPresenterInterface {
     
     var isFavoritesProduct: Bool? {
         guard let product = interactor?.getProduct() else { return nil }
-        return FDS.shared.getFoodData(.product(product))?.favorites
+        return FDS.shared.getFoodData(.product(product, customAmount: nil))?.favorites
     }
     
     func didTapFavoriteButton(_ flag: Bool) {
@@ -77,18 +77,8 @@ extension ProductPresenter: ProductPresenterInterface {
     }
     
     func saveNutritionDaily(_ weight: Double) {
-        guard let product = interactor?.getProduct(),
-               let mealTime = interactor?.getMealTime() else { return }
+        guard let product = interactor?.getProduct() else { return }
         
-        FDS.shared.addFoodsMeal(
-            mealTime: mealTime,
-            date: Date().day,
-            mealData: [
-                MealData(
-                    weight: weight,
-                    food: .product(product)
-                )
-            ]
-        )
+        router?.addToDiary(.product(product, customAmount: weight))
     }
 }

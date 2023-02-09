@@ -429,7 +429,7 @@ final class ProductViewController: CTViewController {
         didChangeAddNutrition()
         
         if let product = presenter?.getProduct() {
-            FDS.shared.foodUpdate(food: .product(product), favorites: nil)
+            FDS.shared.foodUpdate(food: .product(product, customAmount: nil), favorites: nil)
         }
     }
 }

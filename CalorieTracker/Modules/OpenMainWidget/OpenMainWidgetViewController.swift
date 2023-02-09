@@ -21,33 +21,25 @@ class OpenMainWidgetViewController: UIViewController {
     private lazy var closeButton: UIButton = getCloseButton()
 
     private var sideInset: CGFloat { CTWidgetNode(with: .init(type: .widget)).constants.suggestedSideInset }
+    
     private let mainWidgetTopInsets: [OpenMainWidgetPresentController.State: CGFloat] = [
         .full: 42,
         .modal: 19
     ]
-    
-    private var viewControllerTopInset: CGFloat {
-        WidgetContainerViewController.safeAreaTopInset
-        + WidgetContainerViewController.suggestedTopSafeAreaOffset
-        + Size(type: .compact).height
-        + WidgetContainerViewController.suggestedInterItemSpacing
-    }
-    
+
     private var dailyMeals: [DailyMeal]? {
         didSet {
             collectionView.reloadData()
+            viewModels = dailyMeals?.map { dailyMeal in
+                MealTimeCellViewModel(
+                    foods: dailyMeal.mealData.compactMap { $0.food },
+                    mealtime: dailyMeal.mealTime
+                )
+            } ?? []
         }
     }
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        transitioningDelegate = self
-        modalPresentationStyle = .custom
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    private var viewModels: [MealTimeCellViewModel] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,6 +50,8 @@ class OpenMainWidgetViewController: UIViewController {
     }
     
     private func setupView() {
+        navigationController?.setToolbarHidden(true, animated: false)
+        navigationController?.navigationBar.isHidden = true
         view.backgroundColor = R.color.openMainWidget.background()
         
         collectionView.delegate = self
@@ -90,10 +84,10 @@ class OpenMainWidgetViewController: UIViewController {
         collectionView.register(MainWidgetCollectionViewCell.self)
     }
     
-    private func changeStateVC() {
-        (presentationController as? OpenMainWidgetPresentController)?.state = .full
+    private func changeStateVC(_ state: OpenMainWidgetPresentController.State) {
+        (navigationController?.presentationController as? OpenMainWidgetPresentController)?.state = state
         collectionView.contentInset = .init(
-            top: mainWidgetTopInsets[.full] ?? 0,
+            top: mainWidgetTopInsets[state] ?? 0,
             left: 0,
             bottom: 0,
             right: 0
@@ -101,6 +95,7 @@ class OpenMainWidgetViewController: UIViewController {
     }
     
     @objc private func didTapCloseButton() {
+        changeStateVC(.modal)
         presenter?.didTapCloseButton()
     }
 }
@@ -133,16 +128,17 @@ extension OpenMainWidgetViewController: UICollectionViewDelegate {
             return
         }
         
-        cell.sizeState = cell.sizeState == .close
-            ? .open
-            : .close
-        
-        if cell.sizeState == .open {
-            changeStateVC()
+        if let viewModel = viewModels[safe: indexPath.row - 1], !viewModel.foods.isEmpty {
+            viewModels[indexPath.row - 1].sizeState = viewModel.sizeState == .close
+                ? .open
+                : .close
+            if viewModels[indexPath.row - 1].sizeState == .open {
+                changeStateVC(.full)
+            }
+            
+            cell.invalidateIntrinsicContentSize()
+            collectionView.reloadItems(at: [indexPath])
         }
-        
-        cell.invalidateIntrinsicContentSize()
-        collectionView.reloadItems(at: [indexPath])
     }
 }
 
@@ -153,7 +149,7 @@ extension OpenMainWidgetViewController: UICollectionViewDataSource {
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int
     ) -> Int {
-        (dailyMeals?.count ?? 0) + 1
+        viewModels.count + 1
     }
     
     func collectionView(
@@ -170,42 +166,23 @@ extension OpenMainWidgetViewController: UICollectionViewDataSource {
             return cell
         default:
             let cell: MealTimeCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
-            let dailyMeal = dailyMeals?[safe: indexPath.row - 1]
-            cell.viewModel = .init(
-                foods: dailyMeal?.mealData.compactMap { $0.food } ?? [],
-                mealtime: dailyMeal?.mealTime ?? .breakfast
-            )
+            
+            cell.viewModel = viewModels[safe: indexPath.row - 1]
+            cell.addButtonhandler = { mealTime in
+                self.changeStateVC(.full)
+                self.presenter?.didTapAddButton(mealTime)
+            }
             
             return cell
         }
     }
-}
-
-extension OpenMainWidgetViewController: UIViewControllerTransitioningDelegate {
-    func presentationController(
-        forPresented presented: UIViewController,
-        presenting: UIViewController?,
-        source: UIViewController
-    ) -> UIPresentationController? {
-        OpenMainWidgetPresentController(
-            presentedViewController: presented,
-            presenting: presenting,
-            topInset: viewControllerTopInset - (mainWidgetTopInsets[.modal] ?? 0)
-        )
-    }
     
-    func animationController(
-        forPresented presented: UIViewController,
-        presenting: UIViewController,
-        source: UIViewController
-    ) -> UIViewControllerAnimatedTransitioning? {
-        OpenMainWidgetPresentTransition()
-    }
-    
-    func animationController(
-        forDismissed dismissed: UIViewController
-    ) -> UIViewControllerAnimatedTransitioning? {
-        OpenMainWidgetDismissTransition()
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumInteritemSpacingForSectionAt section: Int
+    ) -> CGFloat {
+        return 12
     }
 }
 
@@ -225,7 +202,8 @@ extension OpenMainWidgetViewController {
     
     private func getCloseButton() -> UIButton {
         let button = UIButton()
-        button.setImage(R.image.chevronDown(), for: .normal)
+        button.setImage(R.image.foodViewing.topChevron(), for: .normal)
+        button.imageView?.tintColor = R.color.foodViewing.basicGrey()
         button.addTarget(
             self,
             action: #selector(didTapCloseButton),

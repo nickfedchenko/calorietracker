@@ -126,7 +126,7 @@ final class SelectedFoodCellsViewController: UIViewController {
 extension SelectedFoodCellsViewController: FoodCollectionViewControllerDelegate {
     func didSelectCell(_ type: Food) {
         switch type {
-        case .product(let product):
+        case .product(let product, _):
             router?.openProductViewController(product)
         default:
             return

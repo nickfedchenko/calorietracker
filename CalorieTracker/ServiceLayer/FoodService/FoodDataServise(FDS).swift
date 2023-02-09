@@ -103,7 +103,7 @@ final class FDS {
         
         mealData.forEach {
             switch $0.food {
-            case .product(let product):
+            case .product(let product, _):
                 protein += product.protein / 100 * $0.weight
                 fat += product.fat / 100 * $0.weight
                 carbs += product.carbs / 100 * $0.weight
@@ -140,7 +140,7 @@ extension FDS: FoodDataServiceInterface {
             switch $0.food {
             case .dishes(let dish):
                 dishId = dish.id
-            case .product(let product):
+            case .product(let product, _):
                 productId = product.id
             default:
                 break
@@ -233,7 +233,7 @@ extension FDS: FoodDataServiceInterface {
     func getFavoriteProducts() -> [Product] {
         let products: [Product] = getFavoriteFoods().compactMap { food in
             switch food.food {
-            case .product(let product):
+            case .product(let product, _):
                 return product
             default:
                 return nil
@@ -258,7 +258,7 @@ extension FDS: FoodDataServiceInterface {
     func getFrequentProducts(_ count: Int) -> [Product] {
         let products: [Product] = getFrequentFood(count).compactMap { food in
             switch food.food {
-            case .product(let product):
+            case .product(let product, _):
                 return product
             default:
                 return nil
@@ -316,7 +316,7 @@ extension FDS: FoodDataServiceInterface {
         
         return foodData.compactMap {
             switch $0.food {
-            case .product(let product):
+            case .product(let product, _):
                 return product
             default:
                 return nil

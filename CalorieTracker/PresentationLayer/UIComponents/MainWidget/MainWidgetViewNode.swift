@@ -74,8 +74,8 @@ final class MainWidgetViewNode: CTWidgetNode {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutDidFinish() {
-        super.layoutDidFinish()
+    override func layout() {
+        super.layout()
         gradientLayer.frame = CGRect(origin: CGPoint.zero, size: frame.size)
 //        backgroundColor = gradientLayer.gradientColor()
         drawGradient()
@@ -158,7 +158,10 @@ final class MainWidgetViewNode: CTWidgetNode {
     private func setupView() {
         circleActivityNode.colorBackCircles = R.color.mainWidgetViewNode.circleBackgroundColor()
         circleActivityNode.dataSource = self
-        
+        gradientLayer.cornerCurve = .continuous
+        gradientLayer.cornerRadius = 16
+        gradientLayer.zPosition = -10
+        layer.insertSublayer(gradientLayer, at: 0)
         layer.cornerRadius = 16
         layer.cornerCurve = .continuous
         automaticallyManagesSubnodes = true

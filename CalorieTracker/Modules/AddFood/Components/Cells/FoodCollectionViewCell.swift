@@ -79,8 +79,8 @@ final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
         foodView.didTapButton = { buttonType in
             guard let foodType = self.viewModel?.food else { return }
             switch foodType {
-            case .product(let product):
-                self.didTapButton?(.product(product), buttonType)
+            case .product(let product, _):
+                self.didTapButton?(.product(product, customAmount: nil), buttonType)
             case .dishes(let dish, _):
                 self.didTapButton?(
                     .dishes(dish, customAmount: (dish.dishWeight ?? 0) / Double(dish.totalServings ?? 1)),

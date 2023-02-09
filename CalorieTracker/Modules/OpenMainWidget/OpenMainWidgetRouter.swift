@@ -10,6 +10,7 @@ import UIKit
 
 protocol OpenMainWidgetRouterInterface: AnyObject {
     func closeVC()
+    func openAddFoodVC(_ mealTime: MealTime)
 }
 
 class OpenMainWidgetRouter: NSObject {
@@ -39,5 +40,10 @@ class OpenMainWidgetRouter: NSObject {
 extension OpenMainWidgetRouter: OpenMainWidgetRouterInterface {
     func closeVC() {
         viewController?.dismiss(animated: true)
+    }
+    
+    func openAddFoodVC(_ mealTime: MealTime) {
+        let vc = AddFoodRouter.setupModule(mealTime: mealTime)
+        viewController?.navigationController?.pushViewController(vc, animated: true)
     }
 }

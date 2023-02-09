@@ -22,6 +22,8 @@ class CTWidgetNode: ASControlNode, CTWidgetProtocol {
         case rectangle(radius: CGFloat)
     }
     
+    private var shadowLayer = CALayer()
+    
     private var shadows: [Shadow] = [
         .init(
             color: R.color.widgetShadowColorSecondaryLayer()!,
@@ -74,22 +76,20 @@ class CTWidgetNode: ASControlNode, CTWidgetProtocol {
     override func didLoad() {
         super.didLoad()
         setupCorners()
-       
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func willEnterHierarchy() {
-        super.willEnterHierarchy()
-        guard isFirstDraw else { return }
+    override func layout() {
+        super.layout()
         drawShadows()
-        isFirstDraw = false
     }
     
     private func drawShadows() {
-        shadows.forEach { addShadowLayer(shadow: $0) }
+        shadowLayer.sublayers?.forEach { $0.removeFromSuperlayer() }
+        shadows.forEach { shadowLayer.addSublayer(addShadowLayer(shadow: $0)) }
     }
     
     fileprivate func extractedFunc(_ shadowLayer: CALayer, _ path: UIBezierPath, _ shadow: CTWidgetNode.Shadow) {
@@ -100,7 +100,7 @@ class CTWidgetNode: ASControlNode, CTWidgetProtocol {
         shadowLayer.shadowRadius = shadow.radius
     }
     
-    private func addShadowLayer(shadow: Shadow) {
+    private func addShadowLayer(shadow: Shadow) -> CALayer {
         var path: UIBezierPath
         switch shadow.shape {
         case .circle:
@@ -126,7 +126,7 @@ class CTWidgetNode: ASControlNode, CTWidgetProtocol {
         mask.path = path.cgPath
         mask.fillRule = .evenOdd
         shadowLayer.mask = mask
-        layer.insertSublayer(shadowLayer, at: 0)
+        return shadowLayer
     }
     
     // MARK: - Public methods
@@ -148,6 +148,7 @@ class CTWidgetNode: ASControlNode, CTWidgetProtocol {
     private func setupView() {
         style.height = ASDimension(unit: .points, value: constants.height)
         style.minWidth = style.height
+        layer.addSublayer(shadowLayer)
     }
     
     private func setupCorners() {

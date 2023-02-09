@@ -22,7 +22,10 @@ class AddFoodRouter: NSObject {
     weak var presenter: AddFoodPresenterInterface?
     weak var viewController: UIViewController?
 
-    static func setupModule(shouldInitiallyPerformSearchWith barcode: String? = nil) -> AddFoodViewController {
+    static func setupModule(
+        shouldInitiallyPerformSearchWith barcode: String? = nil,
+        mealTime: MealTime = .breakfast
+    ) -> AddFoodViewController {
       
         let vc = AddFoodViewController()
         let interactor = AddFoodInteractor()
@@ -32,6 +35,7 @@ class AddFoodRouter: NSObject {
 
         vc.presenter = presenter
         vc.keyboardManager = keyboardManager
+        vc.mealTime = mealTime
         router.presenter = presenter
         router.viewController = vc
         interactor.presenter = presenter
@@ -56,7 +60,9 @@ extension AddFoodRouter: AddFoodRouterInterface {
             product,
             .addFood,
             presenter?.getMealTime() ?? .breakfast
-        )
+        ) { [weak self] food in
+            self?.presenter?.updateSelectedFood(food: food)
+        }
         productVC.modalPresentationStyle = .fullScreen
         viewController?.present(productVC, animated: true)
     }

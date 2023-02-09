@@ -91,7 +91,7 @@ extension MainScreenRouter: MainScreenRouterInterface {
     func openOpenMainWidget(_ date: Date) {
         let vc = OpenMainWidgetRouter.setupModule(date)
         viewController?.present(
-            vc,
+            OpenMainWidgetNavigationController(rootViewController: vc),
             animated: true
         )
     }

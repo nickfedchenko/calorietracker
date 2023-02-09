@@ -19,6 +19,8 @@ final class MealTimeHeaderView: UIView {
     private lazy var leftBottomChevron: UIImageView = getLeftBottomChevron()
     private lazy var rightBottomChevron: UIImageView = getRightBottomChevron()
     
+    var addButtonHandler: (() -> Void)?
+    
     var viewModel: MealTimeHeaderViewModel? {
         didSet {
             didChangeViewModel()
@@ -168,6 +170,10 @@ final class MealTimeHeaderView: UIView {
             make.bottom.equalToSuperview().offset(-7)
         }
     }
+    
+    @objc private func didTapAddButton() {
+        addButtonHandler?()
+    }
 }
 
 // MARK: - Factory
@@ -205,6 +211,7 @@ extension MealTimeHeaderView {
         button.layer.cornerCurve = .circular
         button.setImage(R.image.openMainWidget.add(), for: .normal)
         button.backgroundColor = R.color.openMainWidget.background()
+        button.addTarget(self, action: #selector(didTapAddButton), for: .touchUpInside)
         return button
     }
     

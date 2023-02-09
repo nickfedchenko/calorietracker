@@ -393,7 +393,7 @@ extension LocalDomainService: LocalDomainServiceInterface {
     func getFoodData(_ food: Food) -> FoodData? {
         guard let id = food.foodDataId else {
             switch food {
-            case .product(let product):
+            case .product(let product, _):
                 guard let domainProduct = getDomainProduct(product.id), let domainFoodData = domainProduct.foodData else {
                     return nil
                 }
