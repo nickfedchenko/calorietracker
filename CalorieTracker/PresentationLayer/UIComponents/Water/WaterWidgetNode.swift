@@ -169,7 +169,9 @@ final class WaterWidgetNode: CTWidgetNode {
             .font(font)
         ]
         
-        let percentageString = String(format: "%.0f", model.progress * 100)
+        let percentageString = model.progress > 0 && model.progress != .infinity
+        ? String(format: "%.0f", model.progress * 100)
+        : "0"
         percentageValueLabel.attributedText = NSAttributedString(
             string: percentageString,
             attributes: [

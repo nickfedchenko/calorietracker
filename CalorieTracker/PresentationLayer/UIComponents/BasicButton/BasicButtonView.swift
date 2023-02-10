@@ -38,6 +38,10 @@ final class BasicButtonView: UIControl {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    func updateNode(type: BasicButtonType) {
+        buttonNode.updateType(type: type)
+    }
 
     private func setupView() {
         addSubview(buttonNode.view)

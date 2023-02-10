@@ -11,6 +11,7 @@ enum BasicButtonType {
     case add
     case save
     case apply
+    case next
     case custom(CustomType)
 }
 
