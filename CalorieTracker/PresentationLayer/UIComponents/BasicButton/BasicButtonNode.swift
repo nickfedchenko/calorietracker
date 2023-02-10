@@ -13,7 +13,7 @@ final class BasicButtonNode: CTWidgetButtonNode {
         switch type {
         case .custom(let model):
             layer.colors = model.gradientColors?.map { ($0 ?? .white).cgColor }
-        case .add, .apply, .save:
+        case .add, .apply, .save, .next:
             layer.colors = Color.gradientColors.compactMap { $0?.cgColor }
         }
         layer.startPoint = CGPoint(x: 0, y: 0)
@@ -65,6 +65,8 @@ final class BasicButtonNode: CTWidgetButtonNode {
             children = [iconNode]
         case .save:
             children = [iconNode, textNode]
+        case .next:
+            children = [textNode]
         case .apply:
             children = [textNode]
         case .custom:
@@ -92,7 +94,7 @@ final class BasicButtonNode: CTWidgetButtonNode {
         gradientLayer.frame = frame
         if active {
             switch type {
-            case .add, .save, .apply:
+            case .add, .save, .apply, .next:
                 backgroundColor = gradientLayer.gradientColor()
             case .custom(let model):
                 if model.gradientColors != nil {
@@ -100,6 +102,11 @@ final class BasicButtonNode: CTWidgetButtonNode {
                 }
             }
         }
+    }
+    
+    func updateType(type: BasicButtonType) {
+        self.type = type
+        setupView()
     }
     
     private func setupView() {
@@ -122,6 +129,8 @@ final class BasicButtonNode: CTWidgetButtonNode {
             textNode.attributedText = getAttributedString(string: Text.save, color: .white)
         case .apply:
             textNode.attributedText = getAttributedString(string: Text.apply, color: .white)
+        case .next:
+            textNode.attributedText = getAttributedString(string: Text.next, color: .white)
         case .custom(let model):
             iconNode.image = model.image?.inactiveImage
             textNode.attributedText = getAttributedString(string: defaultTitle ?? "", color: .white)
@@ -143,6 +152,11 @@ final class BasicButtonNode: CTWidgetButtonNode {
         case .apply:
             textNode.attributedText = getAttributedString(
                 string: Text.apply,
+                color: isPress ? Color.borderColor : UIColor.white
+            )
+        case .next:
+            textNode.attributedText = getAttributedString(
+                string: Text.next,
                 color: isPress ? Color.borderColor : UIColor.white
             )
         case .custom(let model):
@@ -169,7 +183,8 @@ final class BasicButtonNode: CTWidgetButtonNode {
         attributedString.addAttributes(
             [
                 .foregroundColor: color ?? .black,
-                .font: UIFont.roundedFont(ofSize: 20, weight: .semibold)
+                .font: R.font.sfProRoundedBold(size: 22),
+                .kern: 0.38
             ],
             range: NSRange(location: 0, length: string.count)
         )
@@ -198,6 +213,7 @@ extension BasicButtonNode {
     struct Text {
         static let save = "SAVE"
         static let apply = "APPLY"
+        static let next = "Next".localized
     }
     
     struct Color {

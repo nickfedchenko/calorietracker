@@ -40,7 +40,7 @@ final class CreateProductViewController: UIViewController {
     private lazy var formsView: FormsView = .init(Const.formModels)
     private lazy var firstPageFormView = FirstPageFormView()
     private lazy var secondPageFormView = SecondPageFormView()
-    private lazy var saveButton = BasicButtonView(type: .save)
+    private lazy var saveButton = BasicButtonView(type: .next)
     
     private var firstDraw = true
     
@@ -263,6 +263,7 @@ final class CreateProductViewController: UIViewController {
         backButton.isHidden = true
         titleHeaderLabel.text = R.string.localizable.createTitle()
         titleHeaderLabel.isHidden = checkTitleIsHidden(leftScrollView)
+        saveButton.updateNode(type: .next)
     }
     
     private func setupSecondPage() {
@@ -270,6 +271,7 @@ final class CreateProductViewController: UIViewController {
         titleSecondPageLabel.text = firstPageFormView.name
         titleHeaderLabel.text = firstPageFormView.name
         titleHeaderLabel.isHidden = checkTitleIsHidden(rightScrollView)
+        saveButton.updateNode(type: .save)
     }
     
     private func checkFirstPage() {
