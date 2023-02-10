@@ -25,7 +25,9 @@ extension NotesWidgetService: NotesWidgetServiceInterface {
     }
     
     func getLastNote() -> Note? {
-        let notes = localDomainService.fetchNotes().sorted(by: { $0.date < $1.date })
+        let notes = localDomainService.fetchNotes()
+            .filter { Date().day == $0.date.day }
+            .sorted(by: { $0.date < $1.date })
         return notes.last
     }
     

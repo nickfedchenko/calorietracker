@@ -72,6 +72,9 @@ extension MainScreenRouter: MainScreenRouterInterface {
         vc.handlerAllNotes = { [weak self] in
             self?.openAllNotesVC()
         }
+        vc.needUpdate = { [weak self] in
+            self?.presenter?.updateNoteWidget()
+        }
         viewController?.present(vc, animated: true)
     }
     
