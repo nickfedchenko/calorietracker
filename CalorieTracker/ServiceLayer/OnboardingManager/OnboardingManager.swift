@@ -133,6 +133,7 @@ protocol OnboardingManagerInterface {
     
     func getOnboardingInfo() -> OnboardingInfo
     func setEmail(mail: String)
+    func setActivityLevel(level: ActivityLevel)
 }
 
 class OnboardingManager {
@@ -467,5 +468,9 @@ extension OnboardingManager: OnboardingManagerInterface {
     
     func setEmail(mail: String) {
         onboardingInfo.mail = mail
+    }
+    
+    func setActivityLevel(level: ActivityLevel) {
+        onboardingInfo.activityLevel = level
     }
 }

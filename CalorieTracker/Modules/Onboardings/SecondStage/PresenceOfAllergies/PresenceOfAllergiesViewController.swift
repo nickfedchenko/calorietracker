@@ -63,6 +63,8 @@ final class PresenceOfAllergiesViewController: UIViewController {
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
+        attributedString.append(.init(string: " "))
+        
         attributedString.append(NSAttributedString(
             string: R.string.localizable.onboardingSecondPresenceOfAllergiesTitleThird(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]

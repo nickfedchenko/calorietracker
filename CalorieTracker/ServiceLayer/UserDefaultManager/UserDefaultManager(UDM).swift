@@ -353,7 +353,7 @@ final class UDM {
     static var dailyWaterGoal: Double? {
         get {
             guard let value: Double = getValue(for: .dailyWaterGoal) else {
-                return nil
+                return 2000
             }
             return value
         }

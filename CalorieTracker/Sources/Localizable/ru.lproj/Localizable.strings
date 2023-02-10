@@ -44,7 +44,7 @@
 
 "onboarding.first.final.button" = "продолжай в том же духе!";
 "onboarding.first.final.description" = "Мы рады, что вы здесь. Мы проведем вас через эти шаги, чтобы настроить вас на успех в потере веса: ";
-"onboarding.first.final.title.first" = "1 вниз ";
+"onboarding.first.final.title.first" = "1 готов ";
 "onboarding.first.final.title.second" = ", осталось 3!";
 "onboarding.first.final.history" = "История";
 "onboarding.first.final.user.data" = "Данные пользователя";
@@ -180,8 +180,8 @@
 "onboarding.second.enterYourName.title" = "Введите свое имя";
 
 "onboarding.second.final.button" = "продолжай в том же духе!";
-"onboarding.second.final.title.first" = "2 вниз ";
-"onboarding.second.final.title.second" = ", 2 идти!";
+"onboarding.second.final.title.first" = "2 готов ";
+"onboarding.second.final.title.second" = ", 2 осталось!";
 "onboarding.second.final.description" = "We’re happy to have you here. We’ll walk you through these steps to get you set up for weight loss success:";
 "onboarding.second.final.history" = "History";
 "onboarding.second.final.user.data" = "User data";
@@ -234,8 +234,8 @@
 "onboarding.third.deficitAndSurplusCalorie.deficit" = "Дефицит калорий";
 
 "onboarding.third.final.button" = "продолжай в том же духе!";
-"onboarding.third.final.title.first" = "3 низ ";
-"onboarding.third.final.title.second" = ", 1 идти!";
+"onboarding.third.final.title.first" = "3 готово";
+"onboarding.third.final.title.second" = ", 1 остался!";
 "onboarding.third.final.description" = "Мы рады, что вы здесь. Мы проведем вас через эти шаги, чтобы настроить вас на успех в потере веса:";
 "onboarding.third.final.history" = "История";
 "onboarding.third.final.user.data" = "Данные польхователя";
@@ -342,6 +342,15 @@
 "onboarding.fourth.emotionalSupportSystem.knowWhereCanGoForsupportWhenNeedIt" = "Я знаю, куда я могу обратиться за поддержкой, когда мне это нужно";
 "onboarding.fourth.emotionalSupportSystem.wishMySupportSystemWasBetter" = "Я бы хотел, чтобы моя система поддержки была лучше";
 "onboarding.fourth.emotionalSupportSystem.dontUsuallyNeedSupportSystem" = "Обычно мне не нужна система поддержки";
+
+"onboarding.fourth.activityLevel.description.low" = "Ежедневная активность практически отсутствует. Банковский служащий, офисная работа. Чтение, игра в видеоигры или просмотр телевизора в свободное время.";
+"onboarding.fourth.activityLevel.description.moderate" = "Легкая повседневная активность. Учитель, продавец. Ходите пешком или ездите на велосипеде на работу и занимайтесь легкой работой в свободное время.";
+"onboarding.fourth.activityLevel.description.high" = "Физическая активность в течение дня. Почтальон, официант. Активности в свободное время";
+"onboarding.fourth.activityLevel.description.verHigh" = "Любые упражнения или тренировки, выходящие за рамки повседневной деятельности, должны отслеживаться вручную в дневнике. Не забудьте синхронизироваться с партнерским устройством для более точного отслеживания.";
+"onboarding.fourth.activityLevel.keepInMind" = "Помните";
+"onboarding.fourth.activityLevel.keepInMindAwareness" = "Любые упражнения или тренировки, выходящие за рамки повседневной деятельности, должны отслеживаться вручную в дневнике.";
+"onboarding.fourth.activityLevel.title.firstPart" = "Ваш повседневный";
+"onboarding.fourth.activityLevel.title.secondPart" = "активный образ жизни";
 
 "onboarding.fourth.environmentInfluencesTheChoice.button" = "Продолжить";
 "onboarding.fourth.environmentInfluencesTheChoice.title" = "Привычки";

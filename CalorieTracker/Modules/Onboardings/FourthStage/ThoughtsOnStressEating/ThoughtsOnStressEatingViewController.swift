@@ -54,6 +54,8 @@ final class ThoughtsOnStressEatingViewController: UIViewController {
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
+        attributedString.append(.init(string: " "))
+        
         attributedString.append(NSAttributedString(
             string: R.string.localizable.onboardingFourthThoughtsOnStressEatingTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]

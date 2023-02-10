@@ -55,7 +55,7 @@ struct OnboardingSaveDataService {
     private func saveValueData() {
         UDM.weightGoal = onboardingInfo.whatIsYourGoalWeight
         WeightWidgetService.shared.addWeight(onboardingInfo.yourWeight ?? 0)
-        UDM.activityLevel = .moderate
+        UDM.activityLevel = onboardingInfo.activityLevel
         
         switch onboardingInfo.weightGoal {
         case .gain(let value):
