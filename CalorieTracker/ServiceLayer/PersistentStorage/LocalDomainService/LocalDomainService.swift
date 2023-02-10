@@ -38,6 +38,7 @@ protocol LocalDomainServiceInterface {
     func setChildMeal(mealId: String, dishesID: [Int], productsID: [String])
     func getFoodData(_ food: Food) -> FoodData?
     func fetchSpecificRecipe(with id: String) -> Dish?
+    @discardableResult func deleteMealData(_ id: String) -> Bool
     @discardableResult func delete<T>(_ object: T) -> Bool
     @discardableResult func setChildDailyMeal(
         mealTime: String,
@@ -322,6 +323,19 @@ extension LocalDomainService: LocalDomainServiceInterface {
         }
     }
     
+    func deleteMealData(_ id: String) -> Bool {
+        let format = "id == %@"
+
+        guard let mealData = fetchData(
+            for: DomainMealData.self,
+            withPredicate: NSCompoundPredicate(
+                orPredicateWithSubpredicates: [NSPredicate(format: format, id)]
+            )
+        )?.first else { return false }
+        deleteObject(object: mealData)
+        return true
+    }
+    
     func setChildFoodData(foodDataId: String, dishID: Int) {
         let format = "id == %ld"
         let dishRequest = NSFetchRequest<DomainDish>(entityName: "DomainDish")
@@ -474,7 +488,7 @@ extension LocalDomainService: LocalDomainServiceInterface {
 
         guard let meal = fetchData(
             for: DomainDailyMeals.self,
-            withPredicate: NSCompoundPredicate(orPredicateWithSubpredicates: [
+            withPredicate: NSCompoundPredicate(andPredicateWithSubpredicates: [
                 mealTimePredicate,
                 mealDayPredicate,
                 mealMonthPredicate,

@@ -22,8 +22,6 @@ class CTWidgetNode: ASControlNode, CTWidgetProtocol {
         case rectangle(radius: CGFloat)
     }
     
-    private var shadowLayer = CALayer()
-    
     private var shadows: [Shadow] = [
         .init(
             color: R.color.widgetShadowColorSecondaryLayer()!,
@@ -50,6 +48,8 @@ class CTWidgetNode: ASControlNode, CTWidgetProtocol {
     
     // MARK: - Public properties
     
+    var widgetType: WidgetContainerViewController.WidgetType { .default }
+    
     var constants: CTConstants {
         .init(
             height: configuration.height,
@@ -59,11 +59,11 @@ class CTWidgetNode: ASControlNode, CTWidgetProtocol {
         )
     }
     
+    var shadowLayer = CALayer()
+    
     // MARK: - Private properties
     private var configuration: CTWidgetNodeConfiguration!
     private var isFirstDraw = true
-    
-    var widgetType: WidgetContainerViewController.WidgetType { .default }
     
     // MARK: - Init
     init(with configuration: CTWidgetNodeConfiguration) {

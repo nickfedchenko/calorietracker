@@ -13,6 +13,7 @@ protocol OpenMainWidgetPresenterInterface: AnyObject {
     func getMainWidgetWidget() -> MainWidgetViewNode.Model
     func didTapCloseButton()
     func didTapAddButton(_ mealTime: MealTime)
+    func didTapFoodCell(_ food: Food)
 }
 
 class OpenMainWidgetPresenter {
@@ -61,6 +62,10 @@ class OpenMainWidgetPresenter {
 }
 
 extension OpenMainWidgetPresenter: OpenMainWidgetPresenterInterface {
+    func didTapFoodCell(_ food: Food) {
+        router?.openFoodVC(food)
+    }
+    
     func didTapAddButton(_ mealTime: MealTime) {
         router?.openAddFoodVC(mealTime)
     }

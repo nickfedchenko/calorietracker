@@ -89,7 +89,9 @@ extension MainScreenRouter: MainScreenRouterInterface {
     }
     
     func openOpenMainWidget(_ date: Date) {
-        let vc = OpenMainWidgetRouter.setupModule(date)
+        let vc = OpenMainWidgetRouter.setupModule(date) { [weak self] in
+            self?.presenter?.updateActivityWidget()
+        }
         viewController?.present(
             OpenMainWidgetNavigationController(rootViewController: vc),
             animated: true
@@ -122,7 +124,7 @@ extension MainScreenRouter: WidgetContainerOutput {
     }
     
     func openBarcodeScannerVC() {
-        let vc = ScannerRouter.setupModule() { [weak self] barcode in
+        let vc = ScannerRouter.setupModule { [weak self] barcode in
             self?.openAddFoodVCandPerformSearch(with: barcode)
         }
         viewController?.present(TopDownNavigationController(rootViewController: vc), animated: true)

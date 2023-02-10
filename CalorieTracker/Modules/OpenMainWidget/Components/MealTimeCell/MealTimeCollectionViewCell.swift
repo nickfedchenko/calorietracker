@@ -22,6 +22,8 @@ class MealTimeCollectionViewCell: UICollectionViewCell {
     private var collectionViewHeightConstraints: NSLayoutConstraint?
     
     var addButtonhandler: ((MealTime) -> Void)?
+    var deleteFoodHandler: ((Food, MealTime) -> Void)?
+    var tapedCellHandler: ((Food) -> Void)?
     
     var viewModel: MealTimeCellViewModel? {
         didSet {
@@ -117,6 +119,8 @@ class MealTimeCollectionViewCell: UICollectionViewCell {
         default:
             break
         }
+        
+        collectionView.reloadData()
     }
     
     private func didChangeViewModel() {
@@ -131,6 +135,11 @@ class MealTimeCollectionViewCell: UICollectionViewCell {
         )
         
         collectionView.reloadData()
+    }
+    
+    private func deleteCell(indexPath: IndexPath, food: Food) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        deleteFoodHandler?(food, viewModel?.mealtime ?? .breakfast)
     }
 }
 
@@ -154,7 +163,11 @@ extension MealTimeCollectionViewCell: UICollectionViewDelegateFlowLayout {
 // MARK: - CollectionView Delegate
 
 extension MealTimeCollectionViewCell: UICollectionViewDelegate {
-    
+    func collectionView(_ collectionView: UICollectionView,
+                        didSelectItemAt indexPath: IndexPath) {
+        guard let food = viewModel?.foods[safe: indexPath.row] else { return }
+        tapedCellHandler?(food)
+    }
 }
 
 // MARK: - CollectionView DataSource
@@ -177,6 +190,7 @@ extension MealTimeCollectionViewCell: UICollectionViewDataSource {
         }
         
         let cell: FoodCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
+        cell.bottomLineIsHidden = viewModel.foods.count - 1 == indexPath.row
         cell.viewModel = .init(
             cellType: .table,
             food: viewModel.foods[safe: indexPath.row],
@@ -184,6 +198,9 @@ extension MealTimeCollectionViewCell: UICollectionViewDataSource {
             subInfo: nil,
             colorSubInfo: nil
         )
+        cell.didTapButton = { [weak self] food, _ in
+            self?.deleteCell(indexPath: indexPath, food: food)
+        }
         return cell
     }
 }

@@ -14,6 +14,11 @@ final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
         }
     }
     
+    var bottomLineIsHidden: Bool {
+        get { bottomLineView.isHidden }
+        set { bottomLineView.isHidden = newValue }
+    }
+    
     var foodType: Food?
     var didTapButton: ((Food, CellButtonType) -> Void)?
     
@@ -119,7 +124,6 @@ final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
         switch cellType {
         case .table:
             shadowView.isHidden = true
-            bottomLineView.isHidden = false
             foodView.layer.cornerRadius = 0
         case .withShadow:
             shadowView.isHidden = false

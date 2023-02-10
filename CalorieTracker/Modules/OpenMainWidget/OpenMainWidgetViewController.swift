@@ -29,13 +29,7 @@ class OpenMainWidgetViewController: UIViewController {
 
     private var dailyMeals: [DailyMeal]? {
         didSet {
-            collectionView.reloadData()
-            viewModels = dailyMeals?.map { dailyMeal in
-                MealTimeCellViewModel(
-                    foods: dailyMeal.mealData.compactMap { $0.food },
-                    mealtime: dailyMeal.mealTime
-                )
-            } ?? []
+            didChnageDailyMeals()
         }
     }
     
@@ -94,6 +88,35 @@ class OpenMainWidgetViewController: UIViewController {
         )
     }
     
+    private func deleteFood(food: Food, mealTime: MealTime) -> Bool {
+        guard let mealDataId = dailyMeals?
+            .first(where: { $0.mealTime == mealTime })?.mealData
+            .first(where: { $0.food == food })?.id
+        else { return false }
+        return FDS.shared.deleteMealData(mealDataId)
+    }
+    
+    private func didChnageDailyMeals() {
+        guard let dailyMeals = dailyMeals else { return }
+
+        viewModels = dailyMeals.map { dailyMeal in
+            var newViewModel = MealTimeCellViewModel(
+                foods: dailyMeal.mealData.compactMap { $0.food },
+                mealtime: dailyMeal.mealTime
+            )
+            
+            if newViewModel.foods.isEmpty {
+                newViewModel.sizeState = .close
+            } else {
+                newViewModel.sizeState = viewModels.first(
+                    where: { $0.mealtime == dailyMeal.mealTime }
+                )?.sizeState ?? .close
+            }
+            
+            return newViewModel
+        }
+    }
+    
     @objc private func didTapCloseButton() {
         changeStateVC(.modal)
         presenter?.didTapCloseButton()
@@ -103,6 +126,9 @@ class OpenMainWidgetViewController: UIViewController {
 extension OpenMainWidgetViewController: OpenMainWidgetViewControllerInterface {
     func setDailyMeals(_ dailyMeals: [DailyMeal]) {
         self.dailyMeals = dailyMeals
+        guard let model = presenter?.getMainWidgetWidget() else { return }
+        (self.collectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? MainWidgetCollectionViewCell)?
+            .configure(model)
     }
 }
 
@@ -171,6 +197,15 @@ extension OpenMainWidgetViewController: UICollectionViewDataSource {
             cell.addButtonhandler = { mealTime in
                 self.changeStateVC(.full)
                 self.presenter?.didTapAddButton(mealTime)
+            }
+            cell.deleteFoodHandler = { [weak self] food, mealTime in
+                if self?.deleteFood(food: food, mealTime: mealTime) == true {
+                    self?.presenter?.updateDailyMeals()
+                    collectionView.reloadItems(at: [indexPath])
+                }
+            }
+            cell.tapedCellHandler = { [weak self] food in
+                self?.presenter?.didTapFoodCell(food)
             }
             
             return cell

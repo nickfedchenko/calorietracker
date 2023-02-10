@@ -74,7 +74,7 @@ final class MealTimeHeaderView: UIView {
     }
     
     private func getAttributedString(nutrient: NutrientType, value: Int) -> NSAttributedString? {
-        let font = R.font.sfProDisplayBold(size: 15)
+        let font = R.font.sfProDisplayBold(size: 15.fontScale())
         return "\(nutrient.getTitle(.short) ?? "") \(value)".attributedSring(
             [
                 .init(
@@ -188,7 +188,7 @@ extension MealTimeHeaderView {
     private func getMealTimeLabel() -> UILabel {
         let label = UILabel()
         label.textColor = R.color.openMainWidget.dark()
-        label.font = R.font.sfProRoundedSemibold(size: 18)
+        label.font = R.font.sfProRoundedSemibold(size: 18.fontScale())
         return label
     }
     
@@ -202,7 +202,7 @@ extension MealTimeHeaderView {
     private func getBurnKcalLabel() -> UILabel {
         let label = UILabel()
         label.textColor = R.color.openMainWidget.dark()
-        label.font = R.font.sfProRoundedSemibold(size: 18)
+        label.font = R.font.sfProRoundedSemibold(size: 18.fontScale())
         return label
     }
     

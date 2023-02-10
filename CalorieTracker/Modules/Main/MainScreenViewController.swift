@@ -32,6 +32,7 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         node.style.preferredSize = CGSize(width: 308, height: node.constants.height)
         node.style.flexShrink = 0.75
         node.backgroundColor = .clear
+        node.shadowLayer.isHidden = true
         return node
     }()
     

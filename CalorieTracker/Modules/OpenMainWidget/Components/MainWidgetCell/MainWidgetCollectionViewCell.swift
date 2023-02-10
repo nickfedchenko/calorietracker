@@ -34,9 +34,9 @@ class MainWidgetCollectionViewCell: UICollectionViewCell {
     private func setupConstraints() {
         contentView.addSubview(mainWidgetView)
         
-        mainWidgetView.aspectRatio(0.556)
         mainWidgetView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+            make.height.equalTo(mainWidgetNode.constants.height)
         }
     }
 }

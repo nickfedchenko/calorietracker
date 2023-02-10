@@ -176,7 +176,7 @@ final class AddFoodViewController: UIViewController {
         addToEatenButton.addAction(
             UIAction { [weak self] _ in
                 Vibration.success.vibrate()
-                guard let mealTime = self?.menuButton.model else {
+                guard let mealTime = self?.mealTime else {
                     return
                 }
                 self?.presenter?.saveMeal(mealTime, foods: self?.selectedFood ?? [])

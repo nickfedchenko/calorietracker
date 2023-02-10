@@ -72,6 +72,7 @@ protocol FoodDataServiceInterface {
     func getFoodData(_ food: Food) -> FoodData?
     /// Возвращает все данные о еде сохраненные в локальной ДБ
     /// - Returns: массив FoodData
+    @discardableResult func deleteMealData(_ id: String) -> Bool
     func getAllStoredFoodData() -> [FoodData]
     func getAllStoredDailyMeals() -> [DailyMeal]
     func addFoodsMeal(mealTime: MealTime, date: Day, mealData: [MealData])
@@ -129,6 +130,10 @@ final class FDS {
 
 extension FDS: FoodDataServiceInterface {
     
+    func deleteMealData(_ id: String) -> Bool {
+        localPersistentStore.deleteMealData(id)
+    }
+    
     func addFoodsMeal(mealTime: MealTime, date: Day, mealData: [MealData]) {
         let mealDataId = mealData.map { $0.id }
         
@@ -138,7 +143,7 @@ extension FDS: FoodDataServiceInterface {
             var productId: String?
             
             switch $0.food {
-            case .dishes(let dish):
+            case .dishes(let dish, _):
                 dishId = dish.id
             case .product(let product, _):
                 productId = product.id
@@ -185,7 +190,7 @@ extension FDS: FoodDataServiceInterface {
             localPersistentStore.saveFoodData(foods: [foodData])
             
             switch food {
-            case .product(let product):
+            case .product(let product, _):
                 foodData.setChild(product)
             case .dishes(let dish, _):
                 foodData.setChild(dish)
