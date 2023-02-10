@@ -234,7 +234,7 @@ final class CircleActivityNode: ASDisplayNode {
         attributedString.addAttributes(
             [
                 .foregroundColor: color ?? .black,
-                .font: UIFont.roundedFont(ofSize: 10, weight: .bold),
+                .font: R.font.sfProRoundedHeavy(size: 10) ?? .systemFont(ofSize: 10),
                 .paragraphStyle: NSTextAlignment.center
             ],
             range: NSRange(location: 0, length: string.count)

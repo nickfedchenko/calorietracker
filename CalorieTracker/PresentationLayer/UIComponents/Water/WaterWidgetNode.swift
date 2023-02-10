@@ -19,7 +19,7 @@ final class WaterWidgetNode: CTWidgetNode {
     private lazy var topTitleLabel: ASTextNode = {
         let node = ASTextNode()
         node.attributedText = getAttributedString(
-            string: "Water",
+            string: "Water".localized.uppercased(),
             size: 18.fontScale(),
             color: R.color.waterWidget.firstGradientColor()
         )
@@ -30,6 +30,31 @@ final class WaterWidgetNode: CTWidgetNode {
         let node = ASImageNode()
         node.image = R.image.waterWidget.waterLogo()
         node.contentMode = UIView.ContentMode.scaleAspectFit
+        return node
+    }()
+    
+    private lazy var percentageValueLabel: ASTextNode = {
+        let node = ASTextNode()
+        
+        node.attributedText = NSAttributedString(
+            string: "5",
+            attributes: [
+                .font: R.font.sfProRoundedBold(size: 24) ?? .systemFont(ofSize: 24),
+                .foregroundColor: UIColor.white,
+            ]
+        )
+        return node
+    }()
+    
+    private lazy var percentageTitleLabel: ASTextNode = {
+        let node = ASTextNode()
+        node.attributedText = NSAttributedString(
+            string: "%",
+            attributes: [
+                .font: R.font.sfProRoundedBold(size: 13) ?? .systemFont(ofSize: 13),
+                .foregroundColor: UIColor.white
+            ]
+        )
         return node
     }()
     
@@ -63,24 +88,41 @@ final class WaterWidgetNode: CTWidgetNode {
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         let firstStack = ASStackLayoutSpec.vertical()
+        firstStack.spacing = 20
+        
         firstStack.children = [
             topTitleLabel,
             bottomTitleLabel
         ]
         
+        let percentageStack = ASStackLayoutSpec.vertical()
+        percentageStack.spacing = -5
+        percentageStack.alignItems = .center
+        percentageStack.justifyContent = .end
+        percentageStack.children = [
+            percentageValueLabel,
+            percentageTitleLabel
+        ]
+        
+        let percentageInsets = ASInsetLayoutSpec(
+            insets: .init(top: 0, left: 13, bottom: 3, right: 0),
+            child: percentageStack
+        )
+        
+        let overlay = ASOverlayLayoutSpec(child: iconNode, overlay: percentageInsets)
         let secondStack = ASStackLayoutSpec.horizontal()
         secondStack.justifyContent = .spaceBetween
         secondStack.children = [
             ASInsetLayoutSpec(
                 insets: UIEdgeInsets(
-                    top: 8,
+                    top: 0,
                     left: 0,
                     bottom: 0,
                     right: 0
                 ),
                 child: firstStack
             ),
-            iconNode
+            overlay
         ]
         
         progressNode.style.height = ASDimension(unit: .points, value: 12)
@@ -113,9 +155,9 @@ final class WaterWidgetNode: CTWidgetNode {
 
         progressNode.progress = model.progress
         
-        let font = R.font.sfProDisplaySemibold(size: 18.fontScale())
+        let font = R.font.sfProRoundedBold(size: 18)
         let leftColor = R.color.waterWidget.secondGradientColor()
-        let rightColor = R.color.waterWidget.firstGradientColor()
+        let rightColor = UIColor(hex: "A7F0ED")
         
         let leftAttributes: [StringSettings] = [
             .color(leftColor),
@@ -126,6 +168,15 @@ final class WaterWidgetNode: CTWidgetNode {
             .color(rightColor),
             .font(font)
         ]
+        
+        let percentageString = String(format: "%.0f", model.progress * 100)
+        percentageValueLabel.attributedText = NSAttributedString(
+            string: percentageString,
+            attributes: [
+                .font: R.font.sfProRoundedBold(size: 24) ?? .systemFont(ofSize: 24),
+                .foregroundColor: UIColor.white
+            ]
+        )
         
         bottomTitleLabel.attributedText = model.waterMl.attributedSring([
             .init(worldIndex: [0], attributes: leftAttributes),
@@ -138,7 +189,8 @@ final class WaterWidgetNode: CTWidgetNode {
         attributedString.addAttributes(
             [
                 .foregroundColor: color ?? .black,
-                .font: UIFont.roundedFont(ofSize: size, weight: .semibold)
+                .font: R.font.sfProRoundedBold(size: size) ?? .systemFont(ofSize: size),
+                .kern: 0.38
             ],
             range: NSRange(location: 0, length: string.count)
         )

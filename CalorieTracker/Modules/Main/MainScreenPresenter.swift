@@ -120,10 +120,9 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM d"
         let calendarModel: CalendarWidgetNode.Model = .init(
-            dateString: dateFormatter.string(from: date ?? Date()),
+            dateString: dateFormatter.string(from: date ?? Date()).uppercased(),
             daysStreak: CalendarWidgetService.shared.getStreakDays()
         )
-        
         view.setCalendarWidget(calendarModel)
     }
     
@@ -205,28 +204,28 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
                 rings: [
                     MainWidgetViewNode.Model.CircleData.RingData(
                         progress: fatGoal != 0 ? fatToday / fatGoal : 0,
-                        color: R.color.addFood.menu.fat(),
+                        color: UIColor(hex: "4BE9FF"),
                         title: "F",
-                        titleColor: nil,
+                        titleColor: UIColor(hex: "00899C"),
                         image: nil
                     ),
                     MainWidgetViewNode.Model.CircleData.RingData(
                         progress: proteinGoal != 0 ? proteinToday / proteinGoal : 0,
-                        color: R.color.addFood.menu.protein(),
+                        color: UIColor(hex: "4BFF52"),
                         title: "P",
-                        titleColor: nil,
+                        titleColor: UIColor(hex: "03B50A"),
                         image: nil
                     ),
                     MainWidgetViewNode.Model.CircleData.RingData(
                         progress: carbsGoal != 0 ? carbsToday / carbsGoal : 0,
-                        color: R.color.addFood.menu.carb(),
+                        color: UIColor(hex: "FFE769"),
                         title: "C",
-                        titleColor: .blue,
+                        titleColor: UIColor(hex: "B89F1B"),
                         image: nil
                     ),
                     MainWidgetViewNode.Model.CircleData.RingData(
                         progress: kcalGoal != 0 ? kcalToday / kcalGoal : 0,
-                        color: R.color.addFood.menu.kcal(),
+                        color: UIColor(hex: "FF764B"),
                         title: nil,
                         titleColor: nil,
                         image: R.image.mainWidgetViewNode.burned()

@@ -43,7 +43,7 @@ extension DomainMeal {
     @objc(removeProductsObject:)
     @NSManaged public func removeFromProducts(_ value: DomainProduct)
     
-    @objc(addToProductsSet:)
+    @objc(addProducts:)
     @NSManaged public func addToProductsSet(_ values: NSSet)
     
     @objc(removeProducts:)

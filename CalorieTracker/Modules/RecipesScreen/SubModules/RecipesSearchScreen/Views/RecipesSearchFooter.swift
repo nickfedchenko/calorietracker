@@ -123,7 +123,8 @@ final class RecipesSearchFooter: UIView {
     }
     
     private func drawGradient() {
-        layer.cornerRadius = state == .compact ? 0 : 16
+        layer.cornerRadius = state == .compact ? 0 : 32
+        layer.cornerCurve = .continuous
         gradientLayer.frame = bounds
         gradientLayer.colors = colorsForGradient
         gradientLayer.startPoint = startPoint

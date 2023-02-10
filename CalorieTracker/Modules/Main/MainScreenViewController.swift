@@ -37,7 +37,7 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
     
     private let mainActivityWidget: MainWidgetViewNode = {
         let node = MainWidgetViewNode(with: CTWidgetNodeConfiguration(type: .widget))
-        node.backgroundColor = R.color.mainDarkGreen()
+//        node.backgroundColor = R.color.mainDarkGreen()
         node.style.preferredSize = CGSize(
             width: 388,
             height: node.constants.height
