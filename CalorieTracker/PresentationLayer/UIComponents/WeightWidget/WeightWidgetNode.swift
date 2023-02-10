@@ -15,7 +15,7 @@ final class WeightWidgetNode: CTWidgetNode {
                 worldIndex: [0],
                 attributes: [
                     .color(R.color.weightWidget.weightTextColor()),
-                    .font(R.font.sfProDisplaySemibold(size: 18.fontScale()))
+                    .font(R.font.sfProRoundedBold(size: 18)),
                 ]
             )
         ])
@@ -38,6 +38,7 @@ final class WeightWidgetNode: CTWidgetNode {
     private lazy var iconNode: ASImageNode = {
         let node = ASImageNode()
         node.image = R.image.weightWidget.scale()
+        node.contentMode = .scaleAspectFit
         return node
     }()
     
@@ -49,7 +50,7 @@ final class WeightWidgetNode: CTWidgetNode {
                     worldIndex: [0],
                     attributes: [
                         .color(R.color.weightWidget.textColor()),
-                        .font(R.font.sfProDisplaySemibold(size: 18.fontScale()))
+                        .font(R.font.sfProRoundedBold(size: 18))
                     ]
                 )
             ])
@@ -69,6 +70,7 @@ final class WeightWidgetNode: CTWidgetNode {
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         labelBackgroundNode.addSubnode(valueLabel)
+        iconNode.style.preferredSize = CGSize(width: 106, height: 20)
         labelBackgroundNode.layoutSpecBlock = { _, _ in
             return ASInsetLayoutSpec(
                 insets: UIEdgeInsets(
@@ -94,9 +96,9 @@ final class WeightWidgetNode: CTWidgetNode {
         return ASInsetLayoutSpec(
             insets: UIEdgeInsets(
                 top: 11,
-                left: 3,
+                left: 0,
                 bottom: 12,
-                right: 3
+                right: 0
             ),
             child: stack
         )

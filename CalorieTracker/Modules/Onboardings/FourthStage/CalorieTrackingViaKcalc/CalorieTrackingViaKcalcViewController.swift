@@ -6,7 +6,6 @@
 //
 
 import AuthenticationServices
-import Foundation
 import UIKit
 
 protocol CalorieTrackingViaKcalcViewControllerInterface: AnyObject {}

@@ -96,7 +96,7 @@ class CTWidgetButtonNode: ASButtonNode {
     
     private func setupView() {
         style.height = ASDimension(unit: .points, value: constants.height)
-        style.minWidth = style.height
+        style.width = style.height
         
         layer.insertSublayer(shadowLayer, at: 0)
     }

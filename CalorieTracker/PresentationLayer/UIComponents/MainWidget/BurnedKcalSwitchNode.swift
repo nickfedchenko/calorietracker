@@ -21,6 +21,12 @@ final class BurnedKcalSwitchNode: ASButtonNode {
         }
     }
     var includingBurned: String?
+    var offGradientStartPoint = CGPoint(x: -0.5, y: 0)
+    var offGradientEndPoint = CGPoint(x: 0.7, y: 0.5)
+    var onGradientStartPoint = CGPoint(x: -0.5, y: 2)
+    var onGradientEndPoint = CGPoint(x: 0.5, y: 0)
+    private var textNodeLeftInset: CGFloat = 8
+    private var textNodeRightInset: CGFloat = 14
     
     private(set) var onSelected = false {
         didSet {
@@ -31,8 +37,9 @@ final class BurnedKcalSwitchNode: ASButtonNode {
     private lazy var gradientLayer: CAGradientLayer = {
         let layer = CAGradientLayer()
         layer.colors = colors.compactMap { $0?.cgColor }
-        layer.startPoint = CGPoint(x: 0, y: 0)
-        layer.endPoint = CGPoint(x: 1, y: 0)
+        layer.startPoint = CGPoint(x: -0.5, y: 0)
+        layer.endPoint = CGPoint(x: 0.7, y: 0.5)
+        layer.locations = [0, 1]
         return layer
     }()
     
@@ -75,9 +82,9 @@ final class BurnedKcalSwitchNode: ASButtonNode {
         let insetLayoutLabel = ASInsetLayoutSpec(
             insets: UIEdgeInsets(
                 top: 0,
-                left: 16,
+                left: textNodeLeftInset,
                 bottom: 0,
-                right: 16
+                right: textNodeRightInset
             ),
             child: valueLabelNode
         )
@@ -128,6 +135,8 @@ final class BurnedKcalSwitchNode: ASButtonNode {
     }
     
     private func didChangeSelected() {
+        textNodeLeftInset = onSelected ? 16 : 8
+        textNodeRightInset = onSelected ? 8 : 14
         transitionLayout(withAnimation: true, shouldMeasureAsync: false)
         switch onSelected {
         case true:
@@ -137,6 +146,8 @@ final class BurnedKcalSwitchNode: ASButtonNode {
                 string: includingBurned,
                 color: R.color.burnedKcalSwitch.labelSecondState()
             )
+            gradientLayer.startPoint = onGradientStartPoint
+            gradientLayer.endPoint = onGradientEndPoint
         case false:
             backgroundColor = R.color.burnedKcalSwitch.backgroundColorFirstState()
             roundImageNode.image = R.image.burnedKcalSwitch.runPersonFirstState()
@@ -144,6 +155,8 @@ final class BurnedKcalSwitchNode: ASButtonNode {
                 string: excludingBurned,
                 color: .white
             )
+            gradientLayer.startPoint = offGradientStartPoint
+            gradientLayer.endPoint = offGradientEndPoint
         }
     }
     
@@ -154,7 +167,7 @@ final class BurnedKcalSwitchNode: ASButtonNode {
         attributedString.addAttributes(
             [
                 .foregroundColor: color ?? .black,
-                .font: UIFont.roundedFont(ofSize: 16, weight: .bold)
+                .font: R.font.sfProRoundedBold(size: 16) ?? .systemFont(ofSize: 16)
             ],
             range: NSRange(location: 0, length: string?.count ?? 0)
         )

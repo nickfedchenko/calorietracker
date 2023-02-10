@@ -35,7 +35,6 @@ final class AddFoodPresenter {
         return queue
     }()
     
-    
     private let searchGroup = DispatchGroup()
     private var createFoodType: FoodCreate?
     

@@ -52,9 +52,6 @@ final class MainWidgetViewNode: CTWidgetNode {
     
     private lazy var gradientLayer: CAGradientLayer = {
         let layer = CAGradientLayer()
-        layer.colors = Color.gradientColors.compactMap { $0?.cgColor }
-        layer.startPoint = CGPoint(x: 0, y: 0)
-        layer.endPoint = CGPoint(x: 1, y: 0)
         return layer
     }()
     
@@ -76,10 +73,11 @@ final class MainWidgetViewNode: CTWidgetNode {
     override func layoutDidFinish() {
         super.layoutDidFinish()
         gradientLayer.frame = CGRect(origin: CGPoint.zero, size: frame.size)
-        backgroundColor = gradientLayer.gradientColor()
+//        backgroundColor = gradientLayer.gradientColor()
+        drawGradient()
     }
     
-    override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {        
+    override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         let topLabelStack = ASStackLayoutSpec.vertical()
         topLabelStack.spacing = 8
         topLabelStack.children = [
@@ -107,7 +105,7 @@ final class MainWidgetViewNode: CTWidgetNode {
             insets: UIEdgeInsets(
                 top: 17,
                 left: 0,
-                bottom: 0,
+                bottom: 4,
                 right: 0
             ),
             child: mainLabelStack
@@ -119,6 +117,7 @@ final class MainWidgetViewNode: CTWidgetNode {
         let rightStack = ASStackLayoutSpec.vertical()
         rightStack.justifyContent = .spaceBetween
         rightStack.horizontalAlignment = .middle
+        rightStack.spacing = 16
         rightStack.children = [
             ASBackgroundLayoutSpec(child: circleActivityNode, background: shadowNode),
             burnedKcalSwitchNode
@@ -126,15 +125,30 @@ final class MainWidgetViewNode: CTWidgetNode {
 
         let mainStack = ASStackLayoutSpec.horizontal()
         mainStack.justifyContent = .spaceBetween
+        
         mainStack.children = [
             insetLayoutLabel,
             rightStack
         ]
 
         return ASInsetLayoutSpec(
-            insets: UIEdgeInsets(top: 12, left: 20, bottom: 12, right: 12),
+            insets: UIEdgeInsets(top: 16, left: 24, bottom: 22, right: 24),
             child: mainStack
         )
+    }
+    
+    private func drawGradient() {
+        gradientLayer.colors = Color.gradientColors.compactMap { $0?.cgColor }
+        gradientLayer.startPoint = CGPoint(x: 0, y: 0.5)
+        gradientLayer.endPoint = CGPoint(x: 1, y: 0.6)
+        gradientLayer.locations = [0, 1]
+//        clipsToBounds = true
+        let maskLayer = CAShapeLayer()
+        maskLayer.path = UIBezierPath(roundedRect: bounds, cornerRadius: 16).cgPath
+        maskLayer.fillColor = UIColor.white.cgColor
+        gradientLayer.zPosition = -1
+        gradientLayer.mask = maskLayer
+        layer.cornerCurve = .continuous
     }
     
     private func setupView() {
@@ -159,6 +173,8 @@ final class MainWidgetViewNode: CTWidgetNode {
             action: #selector(didTapSwitch),
             forControlEvents: .touchUpInside
         )
+        
+        view.layer.insertSublayer(gradientLayer, at: 0)
     }
     
     private func didChangeModel() {
@@ -166,19 +182,19 @@ final class MainWidgetViewNode: CTWidgetNode {
         circleActivityNode.reloadData()
         
         firstLabel.attributedText = getAttributedString(
-            string: model.text.firstLine,
+            string: model.text.firstLine.uppercased(),
             color: R.color.mainWidgetViewNode.kcalColor()
         )
         secondLabel.attributedText = getAttributedString(
-            string: model.text.secondLine,
+            string: model.text.secondLine.uppercased(),
             color: R.color.mainWidgetViewNode.carbsColor()
         )
         thirdLabel.attributedText = getAttributedString(
-            string: model.text.thirdLine,
+            string: model.text.thirdLine.uppercased(),
             color: R.color.mainWidgetViewNode.proteinColor()
         )
         fourthLabel.attributedText = getAttributedString(
-            string: model.text.fourthLine,
+            string: model.text.fourthLine.uppercased(),
             color: R.color.mainWidgetViewNode.fatColor()
         )
         
@@ -186,12 +202,21 @@ final class MainWidgetViewNode: CTWidgetNode {
         burnedKcalSwitchNode.includingBurned = model.text.includingBurned
     }
     
-    private func getAttributedString(string: String, color: UIColor?) -> NSMutableAttributedString {
+    private func getAttributedString(
+        string: String,
+        color: UIColor?,
+        maxLineHeight: CGFloat = 19
+    ) -> NSMutableAttributedString {
+        let paragraph = NSMutableParagraphStyle()
+//        paragraph.minimumLineHeight = 19
+        paragraph.maximumLineHeight = maxLineHeight
         let attributedString = NSMutableAttributedString(string: string)
         attributedString.addAttributes(
             [
                 .foregroundColor: color ?? .black,
-                .font: UIFont.roundedFont(ofSize: 16, weight: .semibold)
+                .font: R.font.sfProRoundedBold(size: 16) ?? .systemFont(ofSize: 16),
+                .paragraphStyle: paragraph,
+                .kern: 0.38
             ],
             range: NSRange(location: 0, length: string.count)
         )

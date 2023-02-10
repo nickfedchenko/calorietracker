@@ -12,7 +12,7 @@ final class StepsWidgetNode: CTWidgetNode {
     private lazy var topTextNode: ASTextNode = {
         let node = ASTextNode()
         let string = Text.steps
-        let font = R.font.sfProDisplaySemibold(size: 16.fontScale())
+        let font = R.font.sfProRoundedBold(size: 18)
         let color = R.color.stepsWidget.secondGradientColor()
         let image = R.image.stepsWidget.foot()
         
@@ -27,7 +27,6 @@ final class StepsWidgetNode: CTWidgetNode {
                 position: .left
             )
         )
-        
         return node
     }()
     
@@ -99,7 +98,7 @@ final class StepsWidgetNode: CTWidgetNode {
                 worldIndex: [0],
                 attributes: [
                     .color(R.color.stepsWidget.secondGradientColor()),
-                    .font(R.font.sfProDisplaySemibold(size: 16.fontScale()))
+                    .font(R.font.sfProRoundedBold(size: 18))
                 ]
             )
         ])

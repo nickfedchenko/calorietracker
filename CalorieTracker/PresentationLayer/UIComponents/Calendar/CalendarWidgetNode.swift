@@ -21,7 +21,7 @@ final class CalendarWidgetNode: CTWidgetNode {
                 worldIndex: [0],
                 attributes: [
                     .color(.white),
-                    .font(R.font.sfProDisplaySemibold(size: 16.fontScale()))
+                    .font(R.font.sfProRoundedBold(size: 18))
                 ]
             )
         ])
@@ -116,7 +116,7 @@ final class CalendarWidgetNode: CTWidgetNode {
                 worldIndex: [0, 1],
                 attributes: [
                     .color(R.color.calendarWidget.dateText()),
-                    .font(R.font.sfProDisplayBold(size: 16.fontScale()))
+                    .font(R.font.sfProRoundedBold(size: 18))
                 ]
             )
         ])
@@ -125,7 +125,7 @@ final class CalendarWidgetNode: CTWidgetNode {
     }
     
     private func getDaysStreakString(days: Int) -> NSAttributedString {
-        let font = R.font.sfProDisplaySemibold(size: 12.fontScale())
+        let font = R.font.sfProTextSemibold(size: 13)
         let image = R.image.calendarWidget.star()
         let leftColor = R.color.calendarWidget.header()
         let rightColor = R.color.calendarWidget.streak()
