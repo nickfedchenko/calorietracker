@@ -194,7 +194,7 @@ extension MealTimeHeaderView {
     
     private func getBurnKcalImageView() -> UIImageView {
         let view = UIImageView()
-        view.contentMode = .scaleAspectFit
+        view.contentMode = .center
         view.image = R.image.openMainWidget.burn()
         return view
     }
