@@ -343,6 +343,15 @@
 "onboarding.fourth.emotionalSupportSystem.wishMySupportSystemWasBetter" = "I wish my support system was better";
 "onboarding.fourth.emotionalSupportSystem.dontUsuallyNeedSupportSystem" = "I don’t usually need a support system";
 
+"onboarding.fourth.activityLevel.description.low" = "Little to no daily activity. Bank teller, desk job. Reading, playing video games or watching tv in spare time.";
+"onboarding.fourth.activityLevel.description.moderate" = "Light daily activity. Teacher, sales clerk. Walking or cycling to work and do light chores in spare time.";
+"onboarding.fourth.activityLevel.description.high" = "Physical activity throughout the day. Postal worker, waitstaff. Being active in spare time.";
+"onboarding.fourth.activityLevel.description.verHigh" = "Any exercise or training that is beyong everyday activities should be tracked manually in the diary.  Don't forget to sync with a partner device for more accurate tracking.";
+"onboarding.fourth.activityLevel.keepInMind" = "Keep in mind";
+"onboarding.fourth.activityLevel.keepInMindAwareness" = "Any exercise or training that is beyond everyday activities should be tracked manually in the diary.";
+"onboarding.fourth.activityLevel.title.firstPart" = "Your everyday";
+"onboarding.fourth.activityLevel.title.secondPart" = "activity lifestyle";
+
 "onboarding.fourth.environmentInfluencesTheChoice.button" = "continue";
 "onboarding.fourth.environmentInfluencesTheChoice.title" = "Habits";
 "onboarding.fourth.environmentInfluencesTheChoice.title.first" = "Our environment ";

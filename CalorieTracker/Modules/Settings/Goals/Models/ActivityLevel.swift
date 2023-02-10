@@ -7,7 +7,7 @@
 
 import UIKit
 
-enum ActivityLevel: Codable {
+enum ActivityLevel: Codable, CaseIterable {
     case low
     case moderate
     case high
@@ -27,6 +27,19 @@ extension ActivityLevel: WithGetTitleProtocol {
             return R.string.localizable.veryHigh()
         }
     }
+    
+    var onboardingDescription: String {
+        switch self {
+        case .low:
+            return R.string.localizable.onboardingFourthActivityLevelDescriptionLow()
+        case .moderate:
+            return R.string.localizable.onboardingFourthActivityLevelDescriptionModerate()
+        case .high:
+            return R.string.localizable.onboardingFourthActivityLevelDescriptionHigh()
+        case .veryHigh:
+            return R.string.localizable.onboardingFourthActivityLevelDescriptionVerHigh()
+        }
+    }
 }
 
 extension ActivityLevel: WithGetImageProtocol, WithGetDescriptionProtocol {
@@ -38,3 +51,5 @@ extension ActivityLevel: WithGetImageProtocol, WithGetDescriptionProtocol {
         return nil
     }
 }
+
+

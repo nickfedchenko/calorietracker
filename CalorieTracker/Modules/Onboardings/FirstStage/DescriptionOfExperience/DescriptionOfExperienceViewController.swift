@@ -64,6 +64,8 @@ final class DescriptionOfExperienceViewController: UIViewController {
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
+        attributedString.append(.init(string: " "))
+        
         attributedString.append(NSAttributedString(
             string: R.string.localizable.onboardingFirstDescriptionOfExperienceTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]

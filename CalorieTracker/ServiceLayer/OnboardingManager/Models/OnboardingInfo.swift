@@ -54,6 +54,7 @@ struct OnboardingInfo {
     var emotionalSupportSystem: EmotionalSupportSystem?
     var weightGoal: WeightGoal?
     var mail: String?
+    var activityLevel: ActivityLevel?
     
     private var firstStageData: [Any?] {
         return [
@@ -115,7 +116,8 @@ struct OnboardingInfo {
             timeForYourself,
             jointWeightLoss,
             lifestyleOfOthers,
-            emotionalSupportSystem
+            emotionalSupportSystem,
+            activityLevel
         ]
     }
 }

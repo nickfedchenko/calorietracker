@@ -54,6 +54,7 @@ final class QuestionOfLosingWeightViewController: UIViewController {
             string: R.string.localizable.onboardingFirstQuestionOfLosingWeightTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
+        attributedString.append(NSAttributedString(string: " "))
         attributedString.append(NSAttributedString(
             string: R.string.localizable.onboardingFirstQuestionOfLosingWeightTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]

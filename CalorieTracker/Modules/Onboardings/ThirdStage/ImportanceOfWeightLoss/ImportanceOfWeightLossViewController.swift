@@ -68,6 +68,8 @@ final class ImportanceOfWeightLossViewController: UIViewController {
             string: R.string.localizable.onboardingThirdImportanceOfWeightLossTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
+        
+        attributedString.append(.init(string: " "))
         attributedString.append(NSAttributedString(
             string: R.string.localizable.onboardingThirdImportanceOfWeightLossTitleThird(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]

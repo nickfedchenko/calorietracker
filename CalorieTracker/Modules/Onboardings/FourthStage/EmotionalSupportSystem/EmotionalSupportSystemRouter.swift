@@ -42,10 +42,9 @@ class EmotionalSupportSystemRouter {
 
 extension EmotionalSupportSystemRouter: EmotionalSupportSystemRouterInterface {
     func openHealthApp() {
-        let healthAppRouter = HealthAppRouter.setupModule()
-        
+        let activitySelector = ActivityLevelSelectionRouter.setupModule()
         viewController?.navigationController?.pushViewController(
-            healthAppRouter,
+            activitySelector,
             animated: true
         )
     }
