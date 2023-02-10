@@ -80,5 +80,6 @@ extension ProductPresenter: ProductPresenterInterface {
         guard let product = interactor?.getProduct() else { return }
         
         router?.addToDiary(.product(product, customAmount: weight))
+        router?.closeViewController(true)
     }
 }

@@ -109,11 +109,13 @@ final class FDS {
                 fat += product.fat / 100 * $0.weight
                 carbs += product.carbs / 100 * $0.weight
                 kcal += product.kcal / 100 * $0.weight
-            case  .dishes(let dish):
-                protein += dish.protein / 100 * $0.weight
-                fat += dish.fat / 100 * $0.weight
-                carbs += dish.carbs / 100 * $0.weight
-                kcal += dish.kcal / 100 * $0.weight
+            case  .dishes(let dish, _):
+                if let dishWeight = dish.dishWeight {
+                    protein += dish.protein / dishWeight * $0.weight
+                    fat += dish.fat / dishWeight * $0.weight
+                    carbs += dish.carbs / dishWeight * $0.weight
+                    kcal += dish.kcal / dishWeight * $0.weight
+                }
             default:
                 break
             }

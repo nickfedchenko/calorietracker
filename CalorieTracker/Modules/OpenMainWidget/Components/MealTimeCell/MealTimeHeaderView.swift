@@ -188,7 +188,7 @@ extension MealTimeHeaderView {
     private func getMealTimeLabel() -> UILabel {
         let label = UILabel()
         label.textColor = R.color.openMainWidget.dark()
-        label.font = R.font.sfProRoundedSemibold(size: 18.fontScale())
+        label.font = R.font.sfProRoundedBold(size: 18.fontScale())
         return label
     }
     
@@ -202,7 +202,7 @@ extension MealTimeHeaderView {
     private func getBurnKcalLabel() -> UILabel {
         let label = UILabel()
         label.textColor = R.color.openMainWidget.dark()
-        label.font = R.font.sfProRoundedSemibold(size: 18.fontScale())
+        label.font = R.font.sfProRoundedBold(size: 18.fontScale())
         return label
     }
     

@@ -104,24 +104,9 @@ extension OpenMainWidgetPresenter: OpenMainWidgetPresenterInterface {
             from: .kcal,
             to: .gram
         )
-        let carbsToday = NutrientMeasurment.convert(
-            value: nutritionToday.carbs,
-            type: .carbs,
-            from: .kcal,
-            to: .gram
-        )
-        let proteinToday = NutrientMeasurment.convert(
-            value: nutritionToday.protein,
-            type: .protein,
-            from: .kcal,
-            to: .gram
-        )
-        let fatToday = NutrientMeasurment.convert(
-            value: nutritionToday.fat,
-            type: .fat,
-            from: .kcal,
-            to: .gram
-        )
+        let carbsToday = nutritionToday.carbs
+        let proteinToday = nutritionToday.protein
+        let fatToday = nutritionToday.fat
         let kcalToday = nutritionToday.kcal
         let burnedKcalToday = ExerciseWidgetServise.shared.getBurnedKcalForDate(date)
         let model: MainWidgetViewNode.Model = .init(

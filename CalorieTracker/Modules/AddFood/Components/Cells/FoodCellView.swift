@@ -65,7 +65,7 @@ final class FoodCellView: UIView {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = R.font.sfProTextMedium(size: 15)
+        label.font = R.font.sfProTextRegular(size: 15.fontScale())
         label.textColor = .black
         label.numberOfLines = 0
         return label
@@ -73,7 +73,7 @@ final class FoodCellView: UIView {
     
     private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
-        label.font = R.font.sfProTextRegular(size: 15)
+        label.font = R.font.sfProTextRegular(size: 15.fontScale())
         label.textColor = R.color.addFood.recipesCell.basicGray()
         label.textAlignment = .right
         return label
@@ -81,7 +81,7 @@ final class FoodCellView: UIView {
     
     private lazy var tagLabel: UILabel = {
         let label = UILabel()
-        label.font = R.font.sfProTextMedium(size: 15)
+        label.font = R.font.sfProTextRegular(size: 15.fontScale())
         label.textColor = .white
         return label
     }()
@@ -96,7 +96,7 @@ final class FoodCellView: UIView {
     
     private lazy var kalorieLabel: UILabel = {
         let label = UILabel()
-        label.font = R.font.sfProDisplayBold(size: 15)
+        label.font = R.font.sfProTextSemibold(size: 15.fontScale())
         label.textColor = R.color.addFood.menu.kcal()
         label.textAlignment = .right
         return label
@@ -104,7 +104,7 @@ final class FoodCellView: UIView {
     
     private lazy var infoLabel: UILabel = {
         let label = UILabel()
-        label.font = R.font.sfProDisplayBold(size: 15)
+        label.font = R.font.sfProTextSemibold(size: 15.fontScale())
         label.textAlignment = .right
         return label
     }()
@@ -128,7 +128,7 @@ final class FoodCellView: UIView {
         guard let model = model else { return }
         titleLabel.text = model.title
         descriptionLabel.text = model.description
-        kalorieLabel.text = "\(model.kcal)"
+        kalorieLabel.text = "\(Int(model.kcal))"
         checkImageView.isHidden = !model.verified
         
         if model.tag.isEmpty {
@@ -262,34 +262,52 @@ final class FoodCellView: UIView {
 }
 
 extension FoodCellView.FoodViewModel {
-    private init(_ product: Product) {
+    private init(_ product: Product, weight: Double?) {
         self.id = product.id
         self.title = product.title
-        self.description = product.servings?
-            .compactMap { $0.size }
-            .joined(separator: ", ") ?? ""
         self.tag = product.brand ?? ""
-        self.kcal = product.kcal
         self.image = product.isUserProduct ? product.photo : nil
         self.verified = !product.isUserProduct
+        
+        if let weight = weight {
+            self.kcal = product.kcal / 100 * weight
+            self.description = "\(Int(weight)) g"
+        } else {
+            self.kcal = product.kcal
+            self.description = product.servings?
+                .compactMap { $0.size }
+                .joined(separator: ", ") ?? ""
+        }
     }
     
-    private init(_ dish: Dish) {
+    private init(_ dish: Dish, weight: Double?) {
         self.id = String(dish.id)
         self.title = dish.title
-        self.description = dish.info ?? ""
         self.tag = dish.eatingTags.first?.title ?? ""
-        self.kcal = dish.values?.serving.kcal ?? 1
         self.image = nil
         self.verified = true
+        
+        if let weight = weight {
+            let servingText = "Порций"
+            if let servingWeight = dish.values?.serving.weight {
+                self.kcal = weight / servingWeight
+                self.description = "\(Int(weight / servingWeight)) \(servingText)"
+            } else {
+                self.kcal = dish.kcal
+                self.description = "\(Int(weight)) g"
+            }
+        } else {
+            self.kcal = dish.values?.serving.kcal ?? 1
+            self.description = dish.info ?? ""
+        }
     }
     
     init?(_ food: Food?) {
         switch food {
-        case .product(let product, _):
-            self.init(product)
-        case .dishes(let dish, _):
-            self.init(dish)
+        case .product(let product, let value):
+            self.init(product, weight: value)
+        case .dishes(let dish, let value):
+            self.init(dish, weight: value)
         default:
             return nil
         }
