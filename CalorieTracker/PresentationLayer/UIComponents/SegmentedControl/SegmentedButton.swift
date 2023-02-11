@@ -17,7 +17,7 @@ import UIKit
 
      let model: Model
      
-     var font: UIFont? = R.font.sfProDisplaySemibold(size: 16.fontScale()) {
+     var font: UIFont? = R.font.sfProRoundedBold(size: 16){
          didSet {
              titleLabel?.font = font
          }
