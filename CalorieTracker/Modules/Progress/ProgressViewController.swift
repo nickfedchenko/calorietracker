@@ -105,7 +105,6 @@ final class ProgressViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        scrollView.delegate = self
         setupView()
         
         segmentedControl.onSegmentChanged = { model in
@@ -127,6 +126,16 @@ final class ProgressViewController: UIViewController {
         configureStack(presenter?.getWidgetTypes() ?? [])
         getWidgetContainers().forEach { $0.view.setChartFormat(.daily) }
         flag = false
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        openWidgets()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        closeWidgets()
     }
     
     private func setupView() {
@@ -210,6 +219,23 @@ final class ProgressViewController: UIViewController {
         widgetContainersStack.arrangedSubviews.compactMap { $0 as? WidgetContainerView }
     }
     
+    private func openWidgets() {
+        let containers = getWidgetContainers()
+        containers.forEach { $0.blackout = false }
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {
+            self.widgetContainersStack.spacing = 12
+        }
+    }
+    
+    private func closeWidgets() {
+        let containers = getWidgetContainers()
+        containers.reversed().enumerated().forEach {
+            $0.element.blackout = $0.offset != 0
+        }
+  
+        self.widgetContainersStack.spacing = (containers.first?.frame.height ?? 0) / -2.0
+    }
+    
     private func createWidget(_ type: WidgetType) -> WidgetChart {
         switch type {
         case .weight:
@@ -246,26 +272,4 @@ final class ProgressViewController: UIViewController {
     }
 }
 
-extension ProgressViewController: ProgressViewControllerInterface {
-
-}
-
-extension ProgressViewController: UIScrollViewDelegate {
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        let containers = getWidgetContainers()
-        if scrollView.contentOffset.y < -50 {
-            containers.reversed().enumerated().forEach {
-                $0.element.blackout = $0.offset != 0
-            }
-      
-            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {
-                self.widgetContainersStack.spacing = (containers.first?.frame.height ?? 0) / -2.0
-            }
-        } else if scrollView.contentOffset.y > 80 {
-            containers.forEach { $0.blackout = false }
-            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {
-                self.widgetContainersStack.spacing = 12
-            }
-        }
-    }
-}
+extension ProgressViewController: ProgressViewControllerInterface {}
