@@ -14,9 +14,8 @@ public class DomainNote: NSManagedObject {
         note.id = model.id
         note.text = model.text
         note.imageUrl = model.imageUrl
-        note.estimation = Int16(model.estimation.rawValue)
+        note.estimation = Int16(model.estimation?.rawValue ?? -1)
         note.date = model.date
-        
         return note
     }
 }

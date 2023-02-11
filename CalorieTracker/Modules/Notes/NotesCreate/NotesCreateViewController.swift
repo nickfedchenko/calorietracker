@@ -7,9 +7,10 @@
 
 import UIKit
 
-final class NotesCreateViewController: CTViewController {
+final class NotesCreateViewController: UIViewController {
     var keyboardManager: KeyboardManagerProtocol = KeyboardManager()
     var handlerAllNotes: (() -> Void)?
+    var needUpdate: (() -> Void)?
     
     private var bottomLayoutConstraint: NSLayoutConstraint?
     
@@ -35,6 +36,11 @@ final class NotesCreateViewController: CTViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         headerView.textViewBecomeFirstResponder()
+    }
+    
+    override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+        needUpdate?()
+        super.dismiss(animated: flag, completion: completion)
     }
     
     private func setupView() {
@@ -123,10 +129,10 @@ final class NotesCreateViewController: CTViewController {
     }
     
     private func saveNote() {
-        guard let text = headerView.text,
-              let estimation = headerView.selectedEstimation else {
+        guard let text = headerView.text else {
             return
         }
+        let estimation = headerView.selectedEstimation
         let id = UUID().uuidString
         let note = Note(
             id: id,

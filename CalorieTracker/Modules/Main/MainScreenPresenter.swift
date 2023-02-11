@@ -134,6 +134,7 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
     
     func updateNoteWidget() {
         guard let lastNote = NotesWidgetService.shared.getLastNote() else {
+            view.setNoteWidget(nil)
             return
         }
         
