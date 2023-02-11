@@ -33,9 +33,9 @@ final class WidgetContainerView: UIView {
         ),
         .init(
             color: R.color.progressScreen.secondShadow()!,
-            opacity: 0.3,
-            offset: .init(width: 0, height: 8),
-            radius: 16
+            opacity: 0.23,
+            offset: .init(width: 0, height: 5),
+            radius: 14
         )
     ]
     
