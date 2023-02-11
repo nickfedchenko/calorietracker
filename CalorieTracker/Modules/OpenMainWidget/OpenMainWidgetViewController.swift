@@ -43,6 +43,12 @@ class OpenMainWidgetViewController: UIViewController {
         registerCells()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        presenter?.updateDailyMeals()
+        collectionView.reloadData()
+    }
+    
     private func setupView() {
         navigationController?.setToolbarHidden(true, animated: false)
         navigationController?.navigationBar.isHidden = true

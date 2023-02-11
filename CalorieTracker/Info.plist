@@ -50,6 +50,7 @@
 	<string>We need an access to your mac to let you perform search tasks without using a keyboard</string>
 	<key>UIAppFonts</key>
 	<array>
+		<string>SF-Compact-Display-Medium.otf</string>
 		<string>SF-Pro-Display-Heavy.otf</string>
 		<string>SF-Pro-Display-Bold.otf</string>
 		<string>SF-Pro-Text-Medium.otf</string>

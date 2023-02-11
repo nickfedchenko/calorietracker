@@ -74,7 +74,7 @@ final class MealTimeHeaderView: UIView {
     }
     
     private func getAttributedString(nutrient: NutrientType, value: Int) -> NSAttributedString? {
-        let font = R.font.sfProDisplayBold(size: 15.fontScale())
+        let font = R.font.sfCompactDisplayMedium(size: 15.fontScale())
         return "\(nutrient.getTitle(.short) ?? "") \(value)".attributedSring(
             [
                 .init(

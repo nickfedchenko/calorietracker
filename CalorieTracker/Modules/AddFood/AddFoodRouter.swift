@@ -63,7 +63,7 @@ extension AddFoodRouter: AddFoodRouterInterface {
         ) { [weak self] food in
             self?.presenter?.updateSelectedFood(food: food)
         }
-        productVC.modalPresentationStyle = .fullScreen
+        productVC.modalPresentationStyle = .overFullScreen
         viewController?.present(productVC, animated: true)
     }
     
@@ -101,7 +101,7 @@ extension AddFoodRouter: AddFoodRouterInterface {
         ) { [weak self] food in
             self?.presenter?.updateSelectedFood(food: food)
         }
-        vc.modalPresentationStyle = .fullScreen
+        vc.modalPresentationStyle = .overFullScreen
         viewController?.present(vc, animated: true)
     }
 }
