@@ -9,7 +9,7 @@ import UIKit
 
 class LastNoteView: UIView {
     struct Model {
-        let estimation: Estimation
+        let estimation: Estimation?
         let text: String
         let photo: UIImage?
     }
@@ -39,7 +39,7 @@ class LastNoteView: UIView {
     
     func configure(_ model: Model) {
         textView.text = model.text
-        estimationImageView.image = model.estimation.getEstimationSmile()
+        estimationImageView.image = model.estimation?.getEstimationSmile()
         
         if let photo = model.photo {
             photoImageView.image = photo

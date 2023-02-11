@@ -37,7 +37,7 @@ final class NotesCellView: UIView {
     private func didChangeModel() {
         guard let model = model else { return }
 
-        smileImageView.image = model.estimation.getEstimationSmile()
+        smileImageView.image = model.estimation?.getEstimationSmile()
         textLabel.text = model.text
         dateLabel.text = getDateString(model.date)
         weightLabel.text = BAMeasurement(model.weight, .weight, isMetric: true).string

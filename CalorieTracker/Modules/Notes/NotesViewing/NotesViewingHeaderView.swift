@@ -185,7 +185,7 @@ final class NotesViewingHeaderView: UIView {
     private func didChangeModel() {
         guard let model = viewModel else { return }
 
-        smileImageView.image = model.estimation.getEstimationSmile()
+        smileImageView.image = model.estimation?.getEstimationSmile()
         textView.text = model.text
         dateLabel.text = getDateString(model.date)
         weightLabel.text = BAMeasurement(model.weight, .weight, isMetric: true).string

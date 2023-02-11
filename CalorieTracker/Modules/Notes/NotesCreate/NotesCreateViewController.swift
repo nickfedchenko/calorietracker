@@ -129,10 +129,10 @@ final class NotesCreateViewController: UIViewController {
     }
     
     private func saveNote() {
-        guard let text = headerView.text,
-              let estimation = headerView.selectedEstimation else {
+        guard let text = headerView.text else {
             return
         }
+        let estimation = headerView.selectedEstimation
         let id = UUID().uuidString
         let note = Note(
             id: id,

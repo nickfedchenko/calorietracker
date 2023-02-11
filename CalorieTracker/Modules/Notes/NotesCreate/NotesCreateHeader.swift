@@ -198,13 +198,13 @@ extension NotesCreateHeader {
     private func getDoneButton() -> UIButton {
         let button = UIButton()
         button.setTitle("DONE", for: .normal)
-        button.setTitleColor(R.color.notes.noteGray(), for: .normal)
         button.addTarget(self, action: #selector(didTapDoneButton), for: .touchUpInside)
         button.layer.cornerCurve = .continuous
         button.layer.cornerRadius = 8
         button.layer.borderWidth = 1
-        button.layer.borderColor = R.color.notes.noteGray()?.cgColor
-        button.isEnabled = false
+        button.layer.borderColor = R.color.notes.noteAccent()?.cgColor
+        button.setTitleColor(R.color.notes.noteAccent(), for: .normal)
+//        button.isEnabled = false
         return button
     }
     
