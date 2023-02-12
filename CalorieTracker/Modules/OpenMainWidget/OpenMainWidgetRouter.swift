@@ -47,7 +47,9 @@ extension OpenMainWidgetRouter: OpenMainWidgetRouterInterface {
     }
     
     func openAddFoodVC(_ mealTime: MealTime) {
-        let vc = AddFoodRouter.setupModule(mealTime: mealTime)
+        let vc = AddFoodRouter.setupModule(mealTime: mealTime) {
+            self.presenter?.updateDailyMeals()
+        }
         viewController?.navigationController?.pushViewController(vc, animated: true)
     }
     

@@ -21,10 +21,12 @@ class AddFoodRouter: NSObject {
 
     weak var presenter: AddFoodPresenterInterface?
     weak var viewController: UIViewController?
+    var needUpdate: (() -> Void)?
 
     static func setupModule(
         shouldInitiallyPerformSearchWith barcode: String? = nil,
-        mealTime: MealTime = .breakfast
+        mealTime: MealTime = .breakfast,
+        needUpdate: (() -> Void)? = nil
     ) -> AddFoodViewController {
       
         let vc = AddFoodViewController()
@@ -38,6 +40,7 @@ class AddFoodRouter: NSObject {
         vc.mealTime = mealTime
         router.presenter = presenter
         router.viewController = vc
+        router.needUpdate = needUpdate
         interactor.presenter = presenter
         defer {
             if let barcode = barcode {
@@ -52,6 +55,7 @@ class AddFoodRouter: NSObject {
 
 extension AddFoodRouter: AddFoodRouterInterface {
     func closeViewController() {
+        needUpdate?()
         viewController?.navigationController?.popViewController(animated: true)
     }
     

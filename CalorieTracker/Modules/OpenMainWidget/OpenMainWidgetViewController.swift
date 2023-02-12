@@ -43,10 +43,9 @@ class OpenMainWidgetViewController: UIViewController {
         registerCells()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        presenter?.updateDailyMeals()
-        collectionView.reloadData()
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        changeStateVC(.modal)
     }
     
     private func setupView() {
@@ -86,12 +85,14 @@ class OpenMainWidgetViewController: UIViewController {
     
     private func changeStateVC(_ state: OpenMainWidgetPresentController.State) {
         (navigationController?.presentationController as? OpenMainWidgetPresentController)?.state = state
-        collectionView.contentInset = .init(
-            top: mainWidgetTopInsets[state] ?? 0,
-            left: 0,
-            bottom: 0,
-            right: 0
-        )
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {
+            self.collectionView.contentInset = .init(
+                top: self.mainWidgetTopInsets[state] ?? 0,
+                left: 0,
+                bottom: 0,
+                right: 0
+            )
+        }
     }
     
     private func deleteFood(food: Food, mealTime: MealTime) -> Bool {
@@ -113,14 +114,12 @@ class OpenMainWidgetViewController: UIViewController {
             
             if newViewModel.foods.isEmpty {
                 newViewModel.sizeState = .close
-            } else {
-                newViewModel.sizeState = viewModels.first(
-                    where: { $0.mealtime == dailyMeal.mealTime }
-                )?.sizeState ?? .close
             }
             
             return newViewModel
         }
+
+        collectionView.reloadData()
     }
     
     @objc private func didTapCloseButton() {

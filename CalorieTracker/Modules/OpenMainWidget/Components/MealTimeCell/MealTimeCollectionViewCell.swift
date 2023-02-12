@@ -27,9 +27,9 @@ class MealTimeCollectionViewCell: UICollectionViewCell {
     
     var viewModel: MealTimeCellViewModel? {
         didSet {
-            guard oldValue != self.viewModel else { return }
             didChangeViewModel()
             didChangeSizeState()
+            collectionView.reloadData()
         }
     }
     
@@ -119,8 +119,8 @@ class MealTimeCollectionViewCell: UICollectionViewCell {
         default:
             break
         }
-        
-        collectionView.reloadData()
+        collectionView.invalidateIntrinsicContentSize()
+        self.invalidateIntrinsicContentSize()
     }
     
     private func didChangeViewModel() {
@@ -133,8 +133,6 @@ class MealTimeCollectionViewCell: UICollectionViewCell {
             protein: viewModel.protein,
             fat: viewModel.fats
         )
-        
-        collectionView.reloadData()
     }
     
     private func deleteCell(indexPath: IndexPath, food: Food) {

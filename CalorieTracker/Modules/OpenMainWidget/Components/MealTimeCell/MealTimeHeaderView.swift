@@ -75,15 +75,16 @@ final class MealTimeHeaderView: UIView {
     
     private func getAttributedString(nutrient: NutrientType, value: Int) -> NSAttributedString? {
         let font = R.font.sfCompactDisplayMedium(size: 15.fontScale())
-        return "\(nutrient.getTitle(.short) ?? "") \(value)".attributedSring(
+        let fontSecond = R.font.sfProTextRegular(size: 15.fontScale())
+        return "\(nutrient.getTitle(.short) ?? ""): \(value)".attributedSring(
             [
                 .init(
                     worldIndex: [0],
                     attributes: [.font(font), .color(nutrient.getColor())]
                 ),
                 .init(
-                    worldIndex: [0],
-                    attributes: [.font(font), .color(R.color.openMainWidget.dark())]
+                    worldIndex: [1],
+                    attributes: [.font(fontSecond), .color(R.color.openMainWidget.dark())]
                 )
             ]
         )
