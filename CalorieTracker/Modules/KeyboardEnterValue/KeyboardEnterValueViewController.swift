@@ -12,7 +12,7 @@ protocol KeyboardHeaderProtocol: UIView {
     var didChangeValue: ((Double) -> Void)? { get set }
 }
 
-final class KeyboardEnterValueViewController: UIViewController {
+final class KeyboardEnterValueViewController: TouchPassingViewController {
     enum KeyboardEnterValueType {
         case weight(WeightKeyboardHeaderView.ActionType)
         case steps
