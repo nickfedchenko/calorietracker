@@ -71,6 +71,8 @@ final class NotesCreateViewController: TouchPassingViewController {
         bottomLayoutConstraint?.isActive = true
         headerView.snp.makeConstraints({ make in
             make.leading.trailing.equalToSuperview()
+            make.height.greaterThanOrEqualTo(view.snp.height).multipliedBy(0.282)
+            make.top.greaterThanOrEqualTo(view.safeAreaLayoutGuide.snp.top).offset(5)
         })
     }
     
@@ -102,6 +104,16 @@ final class NotesCreateViewController: TouchPassingViewController {
         
         alert.addAction(
             .init(
+                title: "Camera",
+                style: .default,
+                handler: { [weak self] _ in
+                    self?.showCameraVC()
+                }
+            )
+        )
+        
+        alert.addAction(
+            .init(
                 title: R.string.localizable.delete(),
                 style: .destructive,
                 handler: { [weak self] _ in
@@ -123,7 +135,16 @@ final class NotesCreateViewController: TouchPassingViewController {
     private func showImagePicker() {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
-        imagePicker.allowsEditing = true
+        imagePicker.allowsEditing = false
+        present(imagePicker, animated: true)
+    }
+    
+    private func showCameraVC() {
+        let imagePicker = UIImagePickerController()
+        imagePicker.sourceType = .camera
+        imagePicker.allowsEditing = false
+        imagePicker.delegate = self
+        imagePicker.modalPresentationStyle = .overFullScreen
         present(imagePicker, animated: true)
     }
     
@@ -162,7 +183,7 @@ extension NotesCreateViewController: UIViewControllerTransitioningDelegate {
 extension NotesCreateViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-        guard let image = info[.editedImage] as? UIImage else {
+        guard let image = info[.originalImage] as? UIImage else {
             picker.dismiss(animated: true)
             return
         }
