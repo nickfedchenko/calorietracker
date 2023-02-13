@@ -74,6 +74,10 @@ final class NotesViewingHeaderView: UIView {
         layer.cornerCurve = .continuous
         layer.cornerRadius = 12
         
+        photoView.layer.masksToBounds = true
+        photoView.layer.cornerCurve = .continuous
+        photoView.layer.cornerRadius = 12
+        
         estimationView.didChangeValue = { estimation in
             self.smileImageView.image = estimation.getEstimationSmile()
         }
@@ -195,8 +199,10 @@ final class NotesViewingHeaderView: UIView {
             photoView.isHidden = false
             photoView.snp.makeConstraints { make in
                 make.top.equalTo(weightBackgroundView.snp.bottom).offset(16)
-                make.leading.trailing.greaterThanOrEqualToSuperview().inset(20)
+                make.leading.greaterThanOrEqualToSuperview().offset(20)
+                make.trailing.lessThanOrEqualToSuperview().offset(-20)
                 make.height.lessThanOrEqualTo(self.snp.width).multipliedBy(0.6)
+                make.width.equalTo(photoView.snp.height).multipliedBy(photo.size.width / photo.size.height)
                 make.centerX.equalToSuperview()
             }
             
@@ -208,6 +214,7 @@ final class NotesViewingHeaderView: UIView {
                 make.height.equalTo(0)
             }
         }
+        photoView.setNeedsDisplay()
     }
     
     private func getDateString(_ date: Date) -> String {
@@ -248,7 +255,13 @@ final class NotesViewingHeaderView: UIView {
 extension NotesViewingHeaderView {
     private func getTextView() -> UITextView {
         let textView = UITextView()
-        textView.font = R.font.sfProTextMedium(size: 16.fontScale())
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.minimumLineHeight = 22.fontScale()
+        paragraphStyle.maximumLineHeight = 22.fontScale()
+        textView.typingAttributes = [
+            .font: R.font.sfProTextRegular(size: 16.fontScale())!,
+            .paragraphStyle: paragraphStyle
+        ]
         textView.backgroundColor = .clear
         textView.isScrollEnabled = false
         textView.textColor = R.color.notes.text()

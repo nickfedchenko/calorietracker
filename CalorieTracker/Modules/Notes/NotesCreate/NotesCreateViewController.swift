@@ -71,6 +71,8 @@ final class NotesCreateViewController: TouchPassingViewController {
         bottomLayoutConstraint?.isActive = true
         headerView.snp.makeConstraints({ make in
             make.leading.trailing.equalToSuperview()
+            make.height.greaterThanOrEqualTo(view.snp.height).multipliedBy(0.282)
+            make.top.greaterThanOrEqualTo(view.safeAreaLayoutGuide.snp.top).offset(5)
         })
     }
     

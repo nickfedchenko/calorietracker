@@ -104,7 +104,6 @@ final class NotesCreateHeader: UIView {
             make.leading.trailing.equalToSuperview().inset(20)
             make.top.equalTo(allNotesButton.snp.bottom).offset(13)
             make.height.greaterThanOrEqualTo(100)
-            make.height.lessThanOrEqualTo(300)
         }
         
         doneButton.aspectRatio(0.482)
@@ -179,7 +178,13 @@ final class NotesCreateHeader: UIView {
 extension NotesCreateHeader {
     private func getTextView() -> SLTextView {
         let textView = SLTextView()
-        textView.font = R.font.sfProTextMedium(size: 16.fontScale())
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.minimumLineHeight = 29.fontScale()
+        paragraphStyle.maximumLineHeight = 29.fontScale()
+        textView.typingAttributes = [
+            .font: R.font.sfProTextRegular(size: 16.fontScale())!,
+            .paragraphStyle: paragraphStyle
+        ]
         textView.backgroundColor = .clear
         textView.isScrollEnabled = false
         textView.textColor = R.color.notes.text()

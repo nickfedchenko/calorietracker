@@ -18,9 +18,6 @@ class LastNoteView: UIView {
     private lazy var photoImageView: UIImageView = getPhotoImageView()
     private lazy var estimationImageView: UIImageView = getEstimationImageView()
     
-    private var photoWidthConstraintsZero: NSLayoutConstraint?
-    private var photoWidthConstraintsNotZero: NSLayoutConstraint?
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -44,12 +41,32 @@ class LastNoteView: UIView {
         if let photo = model.photo {
             photoImageView.image = photo
             photoImageView.isHidden = false
-            photoWidthConstraintsZero?.isActive = false
-            photoWidthConstraintsNotZero?.isActive = true
+            
+            if photo.size.height > photo.size.width {
+                photoImageView.snp.remakeConstraints { make in
+                    make.trailing.equalToSuperview().offset(-5)
+                    make.top.bottom.equalToSuperview().inset(5)
+                    make.width.equalTo(self.snp.height).multipliedBy(0.607)
+                }
+            } else {
+                photoImageView.snp.remakeConstraints { make in
+                    make.trailing.equalToSuperview().offset(-5)
+                    make.top.greaterThanOrEqualToSuperview().offset(5)
+                    make.bottom.lessThanOrEqualToSuperview().offset(-5)
+                    make.width.equalTo(self.snp.height).multipliedBy(0.607)
+                    make.height.equalTo(photoImageView.snp.width)
+                    make.centerY.equalToSuperview()
+                }
+            }
+            
         } else {
             photoImageView.isHidden = true
-            photoWidthConstraintsZero?.isActive = true
-            photoWidthConstraintsNotZero?.isActive = false
+            
+            photoImageView.snp.remakeConstraints { make in
+                make.width.equalTo(0)
+                make.trailing.equalToSuperview().offset(-5)
+                make.top.bottom.equalToSuperview().inset(5)
+            }
         }
         
         setNeedsDisplay()
@@ -78,14 +95,10 @@ class LastNoteView: UIView {
             make.height.width.equalTo(24.fontScale())
         }
         
-        photoWidthConstraintsZero = photoImageView.widthAnchor.constraint(equalToConstant: 0)
-        photoWidthConstraintsNotZero = photoImageView.widthAnchor.constraint(
-            equalTo: photoImageView.heightAnchor,
-            multiplier: 0.666
-        )
         photoImageView.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview().inset(5)
+            make.width.equalTo(0)
             make.trailing.equalToSuperview().offset(-5)
+            make.top.bottom.equalToSuperview().inset(5)
         }
     }
 }
@@ -95,7 +108,13 @@ class LastNoteView: UIView {
 extension LastNoteView {
     private func getTextView() -> SLTextView {
         let textView = SLTextView()
-        textView.font = R.font.sfProTextMedium(size: 11.fontScale())
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.minimumLineHeight = 17.fontScale()
+        paragraphStyle.maximumLineHeight = 17.fontScale()
+        textView.typingAttributes = [
+            .font: R.font.sfProTextMedium(size: 11.fontScale())!,
+            .paragraphStyle: paragraphStyle
+        ]
         textView.backgroundColor = .clear
         textView.isScrollEnabled = false
         textView.textColor = R.color.notes.text()

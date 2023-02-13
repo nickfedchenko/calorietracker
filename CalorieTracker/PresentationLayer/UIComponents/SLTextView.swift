@@ -29,7 +29,8 @@ class SLTextView: UITextView {
     
     override func draw(_ rect: CGRect) {
         super.draw(rect)
-        guard let fontHeight = font?.lineHeight else { return }
+        let lineHeightAttribute = (self.typingAttributes[.paragraphStyle] as? NSParagraphStyle)?.minimumLineHeight
+        guard let fontHeight = lineHeightAttribute ?? font?.lineHeight else { return }
         let path = UIBezierPath()
         let topInset = textContainerInset.top
         for i in 1...Int(rect.height / fontHeight) {
