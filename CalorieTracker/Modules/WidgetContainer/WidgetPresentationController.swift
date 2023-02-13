@@ -40,6 +40,7 @@ final class WidgetPresentationController: UIPresentationController {
             presentedViewController: presentedViewController,
             presenting: presenting
         )
+        dimmView.addGestureRecognizer(tapRecognizer)
     }
 
     override func presentationTransitionWillBegin() {

@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class NotesCreateViewController: UIViewController {
+final class NotesCreateViewController: TouchPassingViewController {
     var keyboardManager: KeyboardManagerProtocol = KeyboardManager()
     var handlerAllNotes: (() -> Void)?
     var needUpdate: (() -> Void)?
@@ -66,7 +66,6 @@ final class NotesCreateViewController: UIViewController {
     
     private func setupConstraint() {
         view.addSubview(headerView)
-        
         bottomLayoutConstraint = headerView.bottomAnchor
             .constraint(equalTo: view.bottomAnchor)
         bottomLayoutConstraint?.isActive = true
@@ -143,10 +142,6 @@ final class NotesCreateViewController: UIViewController {
         )
         
         LocalDomainService().saveNotes(data: [note])
-    }
-    
-    @objc private func handleTap(_ sender: UITapGestureRecognizer) {
-        dismiss(animated: true)
     }
 }
 

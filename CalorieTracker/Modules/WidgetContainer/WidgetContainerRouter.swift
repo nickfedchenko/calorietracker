@@ -37,7 +37,6 @@ extension WidgetContainerRouter: WidgetContainerRouterInterface {
     
     func openChangeWeightViewController(_ type: WeightKeyboardHeaderView.ActionType) {
         let vc = KeyboardEnterValueViewController(.weight(type))
-        vc.modalPresentationStyle = .overFullScreen
         vc.needUpdate = {
             self.presenter?.updateView()
         }
@@ -47,7 +46,6 @@ extension WidgetContainerRouter: WidgetContainerRouterInterface {
     
     func openChangeStepsViewController() {
         let vc = KeyboardEnterValueViewController(.steps)
-        vc.modalPresentationStyle = .overFullScreen
         vc.needUpdate = {
             self.presenter?.updateView()
         }
