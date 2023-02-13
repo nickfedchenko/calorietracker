@@ -93,11 +93,11 @@ extension NutrientType: WithGetTitleProtocol {
     func getTitle(_ lenght: Lenght) -> String? {
         switch self {
         case .fat:
-            return R.string.localizable.fatShort()
+            return R.string.localizable.fatShort().capitalized
         case .protein:
-            return R.string.localizable.protein()
+            return R.string.localizable.protein().capitalized
         case .carbs:
-            return R.string.localizable.carbsShort()
+            return R.string.localizable.carbsShort().capitalized
         }
     }
 }

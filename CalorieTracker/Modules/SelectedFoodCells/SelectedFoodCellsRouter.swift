@@ -27,7 +27,7 @@ class SelectedFoodCellsRouter: NSObject {
 
 extension SelectedFoodCellsRouter: SelectedFoodCellsRouterInterface {
     func openProductViewController(_ product: Product) {
-        let productVC = ProductRouter.setupModule(product, .addFood)
+        let productVC = ProductRouter.setupModule(product, .addFood, .breakfast)
         productVC.modalPresentationStyle = .fullScreen
         viewController?.present(productVC, animated: true)
     }

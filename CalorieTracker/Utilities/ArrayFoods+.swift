@@ -9,7 +9,7 @@ import Foundation
 
 extension Array where Element == Product {
     var foods: [Food] {
-        self.map { .product($0) }
+        self.map { .product($0, customAmount: nil) }
     }
 }
 
@@ -29,7 +29,7 @@ extension Array where Element == Food {
     var products: [Product] {
         self.compactMap { food in
             switch food {
-            case .product(let product):
+            case .product(let product, _):
                 return product
             default:
                 return nil

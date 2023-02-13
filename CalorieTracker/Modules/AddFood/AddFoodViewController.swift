@@ -14,6 +14,7 @@ protocol AddFoodViewControllerInterface: AnyObject {
     func updateState(for state: AddFoodVCState)
     func setSearchField(to text: String)
     func updateSelectedFood(_ food: Food)
+    func getMealTime() -> MealTime?
 }
 
 final class AddFoodViewController: UIViewController {
@@ -63,7 +64,6 @@ final class AddFoodViewController: UIViewController {
     
     private var firstDraw = true
     private var microphoneButtonSelected = false
-    
     private var foods: [Food] = []
     
     private var selectedFood: [Food]? {
@@ -90,6 +90,8 @@ final class AddFoodViewController: UIViewController {
             didChangeState()
         }
     }
+    
+    var mealTime: MealTime = .breakfast
     
     // MARK: - Override
     
@@ -174,7 +176,7 @@ final class AddFoodViewController: UIViewController {
         addToEatenButton.addAction(
             UIAction { [weak self] _ in
                 Vibration.success.vibrate()
-                guard let mealTime = self?.menuButton.model else {
+                guard let mealTime = self?.mealTime else {
                     return
                 }
                 self?.presenter?.saveMeal(mealTime, foods: self?.selectedFood ?? [])
@@ -218,10 +220,11 @@ final class AddFoodViewController: UIViewController {
         menuCreateController = .init(menuCreateView, width: Const.menuCreateViewWidth)
         menuNutrientController = .init(menuNutrientView, width: Const.menulNutrientViewWidth)
         
-        menuButton.configure(Const.menuModels.first)
+        menuButton.configure(mealTime)
         menuButton.completion = { [weak self] complition in
             self?.showMealMenu()
             self?.menuMealView.complition = { model in
+                self?.mealTime = model
                 complition(model)
             }
         }
@@ -759,6 +762,10 @@ extension AddFoodViewController: AddFoodViewControllerInterface {
         self.selectedFoodInfo
     }
     
+    func getMealTime() -> MealTime? {
+        self.mealTime
+}
+
     func updateState(for state: AddFoodVCState) {
         self.state = state
     }

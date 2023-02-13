@@ -25,7 +25,7 @@ struct FoodData {
         if let domainDish = managedModel.dish, let dish = Dish(from: domainDish) {
             food = .dishes(dish, customAmount: nil)
         } else if let domainProduct = managedModel.product, let product = Product(from: domainProduct) {
-            food = .product(product)
+            food = .product(product, customAmount: nil)
         } else {
             food = nil
         }

@@ -8,8 +8,11 @@
 import UIKit
 
 class CTViewController: UIViewController {
+    var callViewWillAppear: Bool = true
+    
     override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
         super.dismiss(animated: flag, completion: completion)
+        guard callViewWillAppear else { return }
         presentingViewController?.viewWillAppear(false)
     }
 }

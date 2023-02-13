@@ -21,8 +21,13 @@ class AddFoodRouter: NSObject {
 
     weak var presenter: AddFoodPresenterInterface?
     weak var viewController: UIViewController?
+    var needUpdate: (() -> Void)?
 
-    static func setupModule(shouldInitiallyPerformSearchWith barcode: String? = nil) -> AddFoodViewController {
+    static func setupModule(
+        shouldInitiallyPerformSearchWith barcode: String? = nil,
+        mealTime: MealTime = .breakfast,
+        needUpdate: (() -> Void)? = nil
+    ) -> AddFoodViewController {
       
         let vc = AddFoodViewController()
         let interactor = AddFoodInteractor()
@@ -32,8 +37,10 @@ class AddFoodRouter: NSObject {
 
         vc.presenter = presenter
         vc.keyboardManager = keyboardManager
+        vc.mealTime = mealTime
         router.presenter = presenter
         router.viewController = vc
+        router.needUpdate = needUpdate
         interactor.presenter = presenter
         defer {
             if let barcode = barcode {
@@ -48,12 +55,19 @@ class AddFoodRouter: NSObject {
 
 extension AddFoodRouter: AddFoodRouterInterface {
     func closeViewController() {
+        needUpdate?()
         viewController?.navigationController?.popViewController(animated: true)
     }
     
     func openProductViewController(_ product: Product) {
-        let productVC = ProductRouter.setupModule(product, .addFood)
-        productVC.modalPresentationStyle = .fullScreen
+        let productVC = ProductRouter.setupModule(
+            product,
+            .addFood,
+            presenter?.getMealTime() ?? .breakfast
+        ) { [weak self] food in
+            self?.presenter?.updateSelectedFood(food: food)
+        }
+        productVC.modalPresentationStyle = .overFullScreen
         viewController?.present(productVC, animated: true)
     }
     
@@ -91,7 +105,7 @@ extension AddFoodRouter: AddFoodRouterInterface {
         ) { [weak self] food in
             self?.presenter?.updateSelectedFood(food: food)
         }
-        vc.modalPresentationStyle = .fullScreen
+        vc.modalPresentationStyle = .overFullScreen
         viewController?.present(vc, animated: true)
     }
 }

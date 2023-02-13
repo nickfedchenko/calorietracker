@@ -14,6 +14,11 @@ final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
         }
     }
     
+    var bottomLineIsHidden: Bool {
+        get { bottomLineView.isHidden }
+        set { bottomLineView.isHidden = newValue }
+    }
+    
     var foodType: Food?
     var didTapButton: ((Food, CellButtonType) -> Void)?
     
@@ -44,6 +49,10 @@ final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func turnIntoOpenMainWidgetState() {
+        foodView.backgroundColor = .clear
     }
     
     override func preferredLayoutAttributesFitting(
@@ -79,8 +88,8 @@ final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
         foodView.didTapButton = { buttonType in
             guard let foodType = self.viewModel?.food else { return }
             switch foodType {
-            case .product(let product):
-                self.didTapButton?(.product(product), buttonType)
+            case .product(let product, _):
+                self.didTapButton?(.product(product, customAmount: nil), buttonType)
             case .dishes(let dish, _):
                 self.didTapButton?(
                     .dishes(dish, customAmount: (dish.dishWeight ?? 0) / Double(dish.totalServings ?? 1)),
@@ -119,7 +128,6 @@ final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
         switch cellType {
         case .table:
             shadowView.isHidden = true
-            bottomLineView.isHidden = false
             foodView.layer.cornerRadius = 0
         case .withShadow:
             shadowView.isHidden = false

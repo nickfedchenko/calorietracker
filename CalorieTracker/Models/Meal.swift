@@ -15,25 +15,13 @@ struct Meal {
     
     init?(from managedModel: DomainMeal) {
         self.id = managedModel.id
+        self.mealTime = MealTime(rawValue: managedModel.mealTime) ?? .breakfast
         self.products = managedModel.products?
             .compactMap { $0 as? DomainProduct }
             .compactMap { Product(from: $0) } ?? []
         self.dishes = managedModel.dishes?
             .compactMap { $0 as? DomainDish }
             .compactMap { Dish(from: $0) } ?? []
-        
-        switch managedModel.mealTime {
-        case MealTime.breakfast.rawValue:
-            self.mealTime = .breakfast
-        case MealTime.dinner.rawValue:
-            self.mealTime = .dinner
-        case MealTime.launch.rawValue:
-            self.mealTime = .launch
-        case MealTime.snack.rawValue:
-            self.mealTime = .snack
-        default:
-            self.mealTime = .breakfast
-        }
     }
     
     init(mealTime: MealTime) {

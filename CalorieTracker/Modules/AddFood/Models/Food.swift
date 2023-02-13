@@ -8,7 +8,7 @@
 import Foundation
 
 enum Food {
-    case product(Product)
+    case product(Product, customAmount: Double?)
     case dishes(Dish, customAmount: Double?)
     case meal(Meal)
 }
@@ -16,7 +16,7 @@ enum Food {
 extension Food {
     var foodInfo: [FoodInfoCases: Double] {
         switch self {
-        case .product(let product):
+        case .product(let product, _):
             return [
                 .kcal: product.kcal,
                 .carb: product.carbs,
@@ -47,7 +47,7 @@ extension Food {
     
     var id: String {
         switch self {
-        case .product(let product):
+        case .product(let product, _):
             return product.id
         case .dishes(let dish, _):
             return String(dish.id)
@@ -58,11 +58,22 @@ extension Food {
     
     var foodDataId: String? {
         switch self {
-        case .product(let product):
+        case .product(let product, _):
             return product.foodDataId
         case .dishes(let dish, _):
             return dish.foodDataId
-        case .meal(let meal):
+        case .meal:
+            return nil
+        }
+    }
+    
+    var weight: Double? {
+        switch self {
+        case .product(_, let customAmount):
+            return customAmount
+        case .dishes(_, let customAmount):
+            return customAmount
+        case .meal:
             return nil
         }
     }
@@ -71,7 +82,7 @@ extension Food {
 extension Food: Equatable {
     static func == (lhs: Food, rhs: Food) -> Bool {
         switch (lhs, rhs) {
-        case let (.product(productLhs), .product(productRhs)):
+        case let (.product(productLhs, _), .product(productRhs, _)):
             return productLhs == productRhs
         case let (.dishes(dishLhs, _), .dishes(dishRhs, _)):
             return dishLhs == dishRhs

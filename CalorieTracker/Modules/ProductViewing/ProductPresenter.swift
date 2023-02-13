@@ -13,7 +13,7 @@ protocol ProductPresenterInterface: AnyObject {
     func getNutritionDaily() -> DailyNutrition?
     func didTapCloseButton()
     func getProduct() -> Product?
-    func saveNutritionDaily(_ value: DailyNutrition)
+    func saveNutritionDaily(_ weight: Double)
     func createFoodData()
     func didTapFavoriteButton(_ flag: Bool)
     
@@ -38,9 +38,10 @@ class ProductPresenter {
 }
 
 extension ProductPresenter: ProductPresenterInterface {
+    
     var isFavoritesProduct: Bool? {
         guard let product = interactor?.getProduct() else { return nil }
-        return FDS.shared.getFoodData(.product(product))?.favorites
+        return FDS.shared.getFoodData(.product(product, customAmount: nil))?.favorites
     }
     
     func didTapFavoriteButton(_ flag: Bool) {
@@ -75,14 +76,10 @@ extension ProductPresenter: ProductPresenterInterface {
         return interactor?.getProduct()
     }
     
-    func saveNutritionDaily(_ value: DailyNutrition) {
-        FDS.shared.addNutrition(
-            day: Date().day,
-            nutrition: NutrientMeasurment.convertNutrition(
-                nutrition: value,
-                from: .gram,
-                to: .kcal
-            )
-        )
+    func saveNutritionDaily(_ weight: Double) {
+        guard let product = interactor?.getProduct() else { return }
+        
+        router?.addToDiary(.product(product, customAmount: weight))
+        router?.closeViewController(true)
     }
 }

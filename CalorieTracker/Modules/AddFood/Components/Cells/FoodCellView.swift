@@ -20,7 +20,7 @@ final class FoodCellView: UIView {
     }
     
     var didTapButton: ((CellButtonType) -> Void)?
-    
+    var model: FoodViewModel?
     var color: UIColor? {
         didSet {
             infoLabel.textColor = color
@@ -65,7 +65,7 @@ final class FoodCellView: UIView {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = R.font.sfProTextMedium(size: 15)
+        label.font = R.font.sfProTextRegular(size: 15.fontScale())
         label.textColor = .black
         label.numberOfLines = 0
         return label
@@ -73,7 +73,7 @@ final class FoodCellView: UIView {
     
     private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
-        label.font = R.font.sfProTextRegular(size: 15)
+        label.font = R.font.sfProTextRegular(size: 15.fontScale())
         label.textColor = R.color.addFood.recipesCell.basicGray()
         label.textAlignment = .right
         return label
@@ -81,7 +81,7 @@ final class FoodCellView: UIView {
     
     private lazy var tagLabel: UILabel = {
         let label = UILabel()
-        label.font = R.font.sfProTextMedium(size: 15)
+        label.font = R.font.sfProTextRegular(size: 15.fontScale())
         label.textColor = .white
         return label
     }()
@@ -96,7 +96,7 @@ final class FoodCellView: UIView {
     
     private lazy var kalorieLabel: UILabel = {
         let label = UILabel()
-        label.font = R.font.sfProDisplayBold(size: 15)
+        label.font = R.font.sfProTextSemibold(size: 15.fontScale())
         label.textColor = R.color.addFood.menu.kcal()
         label.textAlignment = .right
         return label
@@ -104,7 +104,7 @@ final class FoodCellView: UIView {
     
     private lazy var infoLabel: UILabel = {
         let label = UILabel()
-        label.font = R.font.sfProDisplayBold(size: 15)
+        label.font = R.font.sfProTextSemibold(size: 15.fontScale())
         label.textAlignment = .right
         return label
     }()
@@ -126,18 +126,31 @@ final class FoodCellView: UIView {
     
     func configure(_ model: FoodViewModel?) {
         guard let model = model else { return }
+        self.model = model
         titleLabel.text = model.title
         descriptionLabel.text = model.description
-        kalorieLabel.text = "\(model.kcal)"
+        kalorieLabel.text = "\(Int(model.kcal))"
         checkImageView.isHidden = !model.verified
         
         if model.tag.isEmpty {
             tagBackgroundView.isHidden = true
-            widthBackgroundTagViewConstraint?.isActive = true
+            widthBackgroundTagViewConstraint?.isActive = false
+            checkImageView.snp.remakeConstraints { make in
+                make.centerY.equalTo(tagBackgroundView)
+                make.leading.lessThanOrEqualTo(tagLabel.snp.trailing)
+                make.trailing.lessThanOrEqualTo(descriptionLabel.snp.leading).offset(-6)
+                make.height.equalTo(18)
+            }
         } else {
             tagBackgroundView.isHidden = false
             tagLabel.text = model.tag
             widthBackgroundTagViewConstraint?.isActive = false
+            checkImageView.snp.remakeConstraints { make in
+                make.centerY.equalTo(tagBackgroundView)
+                make.leading.lessThanOrEqualTo(tagLabel.snp.trailing).offset(12)
+                make.trailing.lessThanOrEqualTo(descriptionLabel.snp.leading).offset(-6)
+                make.height.equalTo(18)
+            }
         }
         
         if let image = model.image {
@@ -201,20 +214,21 @@ final class FoodCellView: UIView {
         widthBackgroundTagViewConstraint = tagBackgroundView.widthAnchor.constraint(equalToConstant: 0)
         tagBackgroundView.snp.makeConstraints { make in
             make.height.equalTo(18)
-            make.leading.equalTo(imageView.snp.trailing).offset(4)
+            make.leading.equalTo(tagLabel.snp.leading).offset(-5)
+            make.trailing.equalTo(tagLabel.snp.trailing).offset(5)
             make.top.equalTo(titleLabel.snp.bottom).offset(5)
             make.bottom.equalToSuperview().offset(-7)
         }
         
         tagLabel.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview()
-            make.leading.trailing.equalToSuperview().inset(5)
+            make.bottom.equalToSuperview()
+            make.leading.equalTo(imageView.snp.trailing).offset(6)
         }
         
         checkImageView.aspectRatio()
         checkImageView.snp.makeConstraints { make in
             make.centerY.equalTo(tagBackgroundView)
-            make.leading.equalTo(tagBackgroundView.snp.trailing).offset(6)
+            make.leading.lessThanOrEqualTo(tagLabel.snp.trailing).offset(12)
             make.trailing.lessThanOrEqualTo(descriptionLabel.snp.leading).offset(-6)
             make.height.equalTo(18)
         }
@@ -262,34 +276,61 @@ final class FoodCellView: UIView {
 }
 
 extension FoodCellView.FoodViewModel {
-    private init(_ product: Product) {
+    private init(_ product: Product, weight: Double?) {
         self.id = product.id
         self.title = product.title
-        self.description = product.servings?
-            .compactMap { $0.size }
-            .joined(separator: ", ") ?? ""
         self.tag = product.brand ?? ""
-        self.kcal = product.kcal
         self.image = product.isUserProduct ? product.photo : nil
         self.verified = !product.isUserProduct
+        
+        if let weight = weight {
+            self.kcal = product.kcal / 100 * weight
+            self.description = "\(Int(weight)) g"
+        } else {
+            self.kcal = product.kcal
+            self.description = product.servings?
+                .compactMap { $0.size }
+                .joined(separator: ", ") ?? ""
+        }
     }
     
-    private init(_ dish: Dish) {
+    private init(_ dish: Dish, weight: Double?) {
         self.id = String(dish.id)
         self.title = dish.title
-        self.description = dish.info ?? ""
         self.tag = dish.eatingTags.first?.title ?? ""
-        self.kcal = dish.values?.serving.kcal ?? 1
         self.image = nil
         self.verified = true
+        
+        if let weight = weight,
+           let totalWeight = dish.dishWeight {
+            
+            let portionWeight = (dish.dishWeight ?? 1) / Double(dish.totalServings ?? 1)
+            let portions = Int(weight / portionWeight)
+            let servingText: String = {
+                switch portions {
+                case 1:
+                    return R.string.localizable.servings1()
+                    
+                case 2...4:
+                    return R.string.localizable.servings24()
+                default:
+                    return R.string.localizable.servings4()
+                }
+            }()
+             self.kcal = (weight / (totalWeight)) * dish.kcal
+            self.description = "\(portions) \(servingText)"
+        } else {
+            self.kcal = dish.values?.serving.kcal ?? 1
+            self.description = dish.info ?? ""
+        }
     }
     
     init?(_ food: Food?) {
         switch food {
-        case .product(let product):
-            self.init(product)
-        case .dishes(let dish, _):
-            self.init(dish)
+        case .product(let product, let value):
+            self.init(product, weight: value)
+        case .dishes(let dish, let value):
+            self.init(dish, weight: value)
         default:
             return nil
         }

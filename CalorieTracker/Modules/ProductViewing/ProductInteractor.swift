@@ -11,16 +11,22 @@ import Foundation
 protocol ProductInteractorInterface: AnyObject {
     func updateFoodData(_ flag: Bool?)
     func getProduct() -> Product?
+    func getMealTime() -> MealTime?
 }
 
 class ProductInteractor {
     weak var presenter: ProductPresenterInterface?
     var product: Product?
+    var mealTime: MealTime?
 }
 
 extension ProductInteractor: ProductInteractorInterface {
     func getProduct() -> Product? {
         return product
+    }
+    
+    func getMealTime() -> MealTime? {
+        return mealTime
     }
     
     func updateFoodData(_ flag: Bool?) {
@@ -29,7 +35,7 @@ extension ProductInteractor: ProductInteractorInterface {
         }
         
         self.product?.foodDataId = FDS.shared.foodUpdate(
-            food: .product(product),
+            food: .product(product, customAmount: nil),
             favorites: flag
         )
     }

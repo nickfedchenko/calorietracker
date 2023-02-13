@@ -77,7 +77,6 @@ public class DomainDish: NSManagedObject {
         if let exceptionTags = try? JSONEncoder().encode(model.exceptionTags) {
             dish.exceptionTags = exceptionTags
         }
-        
         return dish
     }
 }

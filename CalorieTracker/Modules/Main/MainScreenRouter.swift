@@ -17,6 +17,7 @@ protocol MainScreenRouterInterface: AnyObject {
     func openCreateNotesVC()
     func openAllNotesVC()
     func openBarcodeScannerVC()
+    func openOpenMainWidget(_ date: Date)
 }
 
 class MainScreenRouter: NSObject {
@@ -86,6 +87,16 @@ extension MainScreenRouter: MainScreenRouterInterface {
             animated: true
         )
     }
+    
+    func openOpenMainWidget(_ date: Date) {
+        let vc = OpenMainWidgetRouter.setupModule(date) { [weak self] in
+            self?.presenter?.updateActivityWidget()
+        }
+        viewController?.present(
+            OpenMainWidgetNavigationController(rootViewController: vc),
+            animated: true
+        )
+    }
 }
 
 extension MainScreenRouter: WidgetContainerOutput {
@@ -113,7 +124,7 @@ extension MainScreenRouter: WidgetContainerOutput {
     }
     
     func openBarcodeScannerVC() {
-        let vc = ScannerRouter.setupModule() { [weak self] barcode in
+        let vc = ScannerRouter.setupModule { [weak self] barcode in
             self?.openAddFoodVCandPerformSearch(with: barcode)
         }
         viewController?.present(TopDownNavigationController(rootViewController: vc), animated: true)

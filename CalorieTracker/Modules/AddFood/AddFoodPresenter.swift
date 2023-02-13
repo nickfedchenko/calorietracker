@@ -20,6 +20,7 @@ protocol AddFoodPresenterInterface: AnyObject {
     func saveMeal(_ mealTime: MealTime, foods: [Food])
     func createFood()
     func createFood(_ type: FoodCreate)
+    func getMealTime() -> MealTime?
     func scannerDidRecognized(barcode: String)
     func updateSelectedFood(food: Food)
 }
@@ -183,7 +184,7 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
     
     func didTapCell(_ type: Food) {
         switch type {
-        case .product(let product):
+        case .product(let product, _):
             router?.openProductViewController(product)
         case .dishes(let dish, _):
             router?.openDishViewController(dish)
@@ -227,10 +228,12 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
     }
     
     func saveMeal(_ mealTime: MealTime, foods: [Food]) {
-        FDS.shared.createMeal(
+        FDS.shared.addFoodsMeal(
             mealTime: mealTime,
-            dishes: foods.dishes,
-            products: foods.products
+            date: Date().day,
+            mealData: foods.map { food in
+                MealData(weight: food.weight ?? 0, food: food)
+            }
         )
     }
     
@@ -252,6 +255,10 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
         self.createFoodType = type
     }
     
+    func getMealTime() -> MealTime? {
+        view.getMealTime()
+ }
+
     func updateSelectedFood(food: Food) {
         view.updateSelectedFood(food)
     }
