@@ -8,6 +8,10 @@
 import UIKit
 
 final class MealTimeHeaderView: UIView {
+    enum HeaderState {
+        case collapsed, expanded
+    }
+    
     private lazy var mealTimeImageView: UIImageView = getMealTimeImageView()
     private lazy var mealTimeLabel: UILabel = getMealTimeLabel()
     private lazy var burnKcalImageView: UIImageView = getBurnKcalImageView()
@@ -20,6 +24,18 @@ final class MealTimeHeaderView: UIView {
     private lazy var rightBottomChevron: UIImageView = getRightBottomChevron()
     
     var addButtonHandler: (() -> Void)?
+    
+    private let shadowView = ViewWithShadow([
+        .init(color: .black, opacity: 0.03, offset: CGSize(width: 0, height: 6), radius: 8),
+        .init(color: .black, opacity: 0.03, offset: CGSize(width: 0, height: 1), radius: 16)
+    ])
+    
+    var state: HeaderState = .collapsed {
+        didSet {
+            updateCorners()
+            updateChevrons()
+        }
+    }
     
     var viewModel: MealTimeHeaderViewModel? {
         didSet {
@@ -40,6 +56,24 @@ final class MealTimeHeaderView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         addButton.layer.cornerRadius = addButton.frame.height / 2.0
+    }
+    
+    func updateChevrons() {
+        if state == .expanded {
+            UIView.animate(withDuration: 0.3, delay: 0) {
+                self.leftBottomChevron.transform = CGAffineTransform(rotationAngle: .pi / 180 * 180)
+                self.rightBottomChevron.transform = CGAffineTransform(rotationAngle: .pi / 180 * 180)
+            }
+        } else {
+            UIView.animate(withDuration: 0.3, delay: 0) {
+                self.leftBottomChevron.transform = .identity
+                self.rightBottomChevron.transform = .identity
+            }
+        }
+    }
+    
+    private func updateCorners() {
+        shadowView.layer.maskedCorners = state == .collapsed ? [.allCorners] : [.topCorners]
     }
     
     private func didChangeViewModel() {
@@ -63,6 +97,7 @@ final class MealTimeHeaderView: UIView {
             nutrient: .carbs,
             value: viewModel.carbs
         )
+        
         fatLabel.attributedText = getAttributedString(
             nutrient: .fat,
             value: viewModel.fat
@@ -75,7 +110,7 @@ final class MealTimeHeaderView: UIView {
     
     private func getAttributedString(nutrient: NutrientType, value: Int) -> NSAttributedString? {
         let font = R.font.sfCompactDisplayMedium(size: 15.fontScale())
-        let fontSecond = R.font.sfProTextRegular(size: 15.fontScale())
+        let fontSecond = R.font.sfProTextMedium(size: 15.fontScale())
         return "\(nutrient.getTitle(.short) ?? ""): \(value)".attributedSring(
             [
                 .init(
@@ -91,6 +126,9 @@ final class MealTimeHeaderView: UIView {
     }
     
     private func setupView() {
+        shadowView.backgroundColor = .white
+        shadowView.layer.cornerRadius = 12
+        shadowView.layer.maskedCorners = [.allCorners]
         addButton.layer.cornerCurve = .circular
     }
     
@@ -104,6 +142,7 @@ final class MealTimeHeaderView: UIView {
         }()
         
         addSubviews(
+            shadowView,
             mealTimeImageView,
             mealTimeLabel,
             burnKcalImageView,
@@ -120,6 +159,10 @@ final class MealTimeHeaderView: UIView {
             fatLabel
         )
         
+        shadowView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
         mealTimeImageView.snp.makeConstraints { make in
             make.width.height.equalTo(40)
             make.leading.equalToSuperview().offset(8)
@@ -135,7 +178,7 @@ final class MealTimeHeaderView: UIView {
         addButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().offset(-11)
             make.centerY.equalTo(mealTimeImageView)
-            make.top.greaterThanOrEqualToSuperview()
+//            make.top.greaterThanOrEqualToSuperview()
             make.width.height.equalTo(34)
         }
         
@@ -160,15 +203,16 @@ final class MealTimeHeaderView: UIView {
         leftBottomChevron.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(16)
             make.width.height.equalTo(24)
-            make.top.equalTo(mealTimeImageView.snp.bottom).offset(4)
-            make.bottom.equalToSuperview().offset(-7)
+            make.top.equalTo(mealTimeImageView.snp.bottom).offset(1)
+            make.bottom.equalToSuperview().inset(7)
         }
         
         rightBottomChevron.snp.makeConstraints { make in
             make.trailing.equalToSuperview().offset(-16)
             make.width.height.equalTo(24)
-            make.top.equalTo(addButton.snp.bottom).offset(4)
-            make.bottom.equalToSuperview().offset(-7)
+//            make.top.equalTo(addButton.snp.bottom).offset(4)
+            make.centerY.equalTo(leftBottomChevron)
+//            make.bottom.equalToSuperview().offset(-7)
         }
     }
     

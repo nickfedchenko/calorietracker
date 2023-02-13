@@ -51,6 +51,10 @@ final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func turnIntoOpenMainWidgetState() {
+        foodView.backgroundColor = .clear
+    }
+    
     override func preferredLayoutAttributesFitting(
         _ layoutAttributes: UICollectionViewLayoutAttributes
     ) -> UICollectionViewLayoutAttributes {

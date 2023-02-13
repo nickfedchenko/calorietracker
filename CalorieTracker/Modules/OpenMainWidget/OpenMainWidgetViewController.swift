@@ -146,7 +146,7 @@ extension OpenMainWidgetViewController: UICollectionViewDelegateFlowLayout {
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
         let width = view.frame.width - 2 * sideInset
-        let height: CGFloat = 64
+        let height: CGFloat = 80
         return CGSize(width: width, height: height)
     }
 }

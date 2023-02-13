@@ -97,7 +97,9 @@ final class OpenMainWidgetPresentController: UIPresentationController {
 
     private func performAlongsideTransitionIfPossible(_ animation: @escaping () -> Void ) {
         guard let coordinator = presentedViewController.transitionCoordinator else {
-            animation()
+            UIView.animate(withDuration: 0.4, delay: 0) {
+                animation()
+            }
             return
         }
 

@@ -12,6 +12,7 @@ class MealTimeCollectionViewCell: UICollectionViewCell {
         case open
         case close
     }
+    private var isFirstDraw: Bool = true
     
     private lazy var header: MealTimeHeaderView = .init(frame: .zero)
     private lazy var shadowView: ViewWithShadow = .init(Const.shadows)
@@ -60,7 +61,7 @@ class MealTimeCollectionViewCell: UICollectionViewCell {
     private func setupView() {
         collectionView.dataSource = self
         collectionView.delegate = self
-        shadowView.backgroundColor = .white
+        shadowView.backgroundColor = .clear
         shadowView.layer.cornerCurve = .continuous
         shadowView.layer.cornerRadius = 12
         
@@ -72,12 +73,12 @@ class MealTimeCollectionViewCell: UICollectionViewCell {
     }
     
     private func setupConstraints() {
-        contentView.addSubviews(shadowView)
+//        contentView.addSubviews(shadowView)
         contentView.addSubviews(header, collectionView)
         
-        shadowView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+//        shadowView.snp.makeConstraints { make in
+//            make.edges.equalToSuperview()
+//        }
         
         header.snp.makeConstraints { make in
             make.leading.trailing.top.equalToSuperview()
@@ -90,6 +91,7 @@ class MealTimeCollectionViewCell: UICollectionViewCell {
         headerBottomEqualToSuperviewConstraints = header.bottomAnchor.constraint(
             equalTo: contentView.bottomAnchor
         )
+        
         headerBottomEqualToViewConstraints = header.bottomAnchor.constraint(
             equalTo: collectionView.topAnchor,
             constant: -5
@@ -111,16 +113,25 @@ class MealTimeCollectionViewCell: UICollectionViewCell {
             self.headerBottomEqualToViewConstraints?.isActive = true
             self.collectionViewHeightConstraints?.isActive = false
             self.collectionView.isHidden = false
+            header.state = .expanded
         case .close:
             self.headerBottomEqualToSuperviewConstraints?.isActive = true
             self.headerBottomEqualToViewConstraints?.isActive = false
             self.collectionViewHeightConstraints?.isActive = true
             self.collectionView.isHidden = true
+            header.state = .collapsed
         default:
             break
         }
-        collectionView.invalidateIntrinsicContentSize()
-        self.invalidateIntrinsicContentSize()
+//        self.collectionView.invalidateIntrinsicContentSize()
+//        self.invalidateIntrinsicContentSize()
+
+        if !isFirstDraw {
+            UIView.animate(withDuration: 0.3) {
+                self.collectionView.layoutIfNeeded()
+            }
+        }
+        isFirstDraw = false
     }
     
     private func didChangeViewModel() {
@@ -196,6 +207,7 @@ extension MealTimeCollectionViewCell: UICollectionViewDataSource {
             subInfo: nil,
             colorSubInfo: nil
         )
+        cell.turnIntoOpenMainWidgetState()
         cell.didTapButton = { [weak self] food, _ in
             self?.deleteCell(indexPath: indexPath, food: food)
         }
@@ -214,6 +226,7 @@ extension MealTimeCollectionViewCell {
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.isScrollEnabled = false
+        collectionView.backgroundColor = .clear
         return collectionView
     }
 }

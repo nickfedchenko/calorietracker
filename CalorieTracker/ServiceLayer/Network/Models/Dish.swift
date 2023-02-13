@@ -122,6 +122,7 @@ struct Dish: Codable {
             let dishValues = try? decoder.decode(DishValues.self, from: dishValuesData),
             let servingValues = try? decoder.decode(DishValues.self, from: servingValuesData),
             let hundredValues = try? decoder.decode(DishValues.self, from: hundredValuesData) {
+            
             self.values = Values(
                 dish: dishValues,
                 serving: servingValues,

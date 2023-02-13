@@ -27,6 +27,18 @@ class MainWidgetCollectionViewCell: UICollectionViewCell {
         mainWidgetNode.model = model
     }
     
+    override func preferredLayoutAttributesFitting(
+        _ layoutAttributes: UICollectionViewLayoutAttributes
+    ) -> UICollectionViewLayoutAttributes {
+        let targetSize = CGSize(width: layoutAttributes.frame.width, height: mainWidgetNode.constants.height)
+        layoutAttributes.frame.size = contentView.systemLayoutSizeFitting(
+            targetSize,
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .defaultHigh
+        )
+        return layoutAttributes
+    }
+    
     private func setupView() {
         
     }

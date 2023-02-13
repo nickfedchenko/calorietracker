@@ -20,7 +20,7 @@ final class FoodCellView: UIView {
     }
     
     var didTapButton: ((CellButtonType) -> Void)?
-    
+    var model: FoodViewModel?
     var color: UIColor? {
         didSet {
             infoLabel.textColor = color
@@ -126,6 +126,7 @@ final class FoodCellView: UIView {
     
     func configure(_ model: FoodViewModel?) {
         guard let model = model else { return }
+        self.model = model
         titleLabel.text = model.title
         descriptionLabel.text = model.description
         kalorieLabel.text = "\(Int(model.kcal))"
@@ -133,11 +134,23 @@ final class FoodCellView: UIView {
         
         if model.tag.isEmpty {
             tagBackgroundView.isHidden = true
-            widthBackgroundTagViewConstraint?.isActive = true
+            widthBackgroundTagViewConstraint?.isActive = false
+            checkImageView.snp.remakeConstraints { make in
+                make.centerY.equalTo(tagBackgroundView)
+                make.leading.lessThanOrEqualTo(tagLabel.snp.trailing)
+                make.trailing.lessThanOrEqualTo(descriptionLabel.snp.leading).offset(-6)
+                make.height.equalTo(18)
+            }
         } else {
             tagBackgroundView.isHidden = false
             tagLabel.text = model.tag
             widthBackgroundTagViewConstraint?.isActive = false
+            checkImageView.snp.remakeConstraints { make in
+                make.centerY.equalTo(tagBackgroundView)
+                make.leading.lessThanOrEqualTo(tagLabel.snp.trailing).offset(12)
+                make.trailing.lessThanOrEqualTo(descriptionLabel.snp.leading).offset(-6)
+                make.height.equalTo(18)
+            }
         }
         
         if let image = model.image {
@@ -201,20 +214,21 @@ final class FoodCellView: UIView {
         widthBackgroundTagViewConstraint = tagBackgroundView.widthAnchor.constraint(equalToConstant: 0)
         tagBackgroundView.snp.makeConstraints { make in
             make.height.equalTo(18)
-            make.leading.equalTo(imageView.snp.trailing).offset(4)
+            make.leading.equalTo(tagLabel.snp.leading).offset(-5)
+            make.trailing.equalTo(tagLabel.snp.trailing).offset(5)
             make.top.equalTo(titleLabel.snp.bottom).offset(5)
             make.bottom.equalToSuperview().offset(-7)
         }
         
         tagLabel.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview()
-            make.leading.trailing.equalToSuperview().inset(5)
+            make.bottom.equalToSuperview()
+            make.leading.equalTo(imageView.snp.trailing).offset(6)
         }
         
         checkImageView.aspectRatio()
         checkImageView.snp.makeConstraints { make in
             make.centerY.equalTo(tagBackgroundView)
-            make.leading.equalTo(tagBackgroundView.snp.trailing).offset(6)
+            make.leading.lessThanOrEqualTo(tagLabel.snp.trailing).offset(12)
             make.trailing.lessThanOrEqualTo(descriptionLabel.snp.leading).offset(-6)
             make.height.equalTo(18)
         }
@@ -287,15 +301,24 @@ extension FoodCellView.FoodViewModel {
         self.image = nil
         self.verified = true
         
-        if let weight = weight {
-            let servingText = "Порций"
-            if let servingWeight = dish.values?.serving.weight {
-                self.kcal = weight / servingWeight
-                self.description = "\(Int(weight / servingWeight)) \(servingText)"
-            } else {
-                self.kcal = dish.kcal
-                self.description = "\(Int(weight)) g"
-            }
+        if let weight = weight,
+           let totalWeight = dish.dishWeight {
+            
+            let portionWeight = (dish.dishWeight ?? 1) / Double(dish.totalServings ?? 1)
+            let portions = Int(weight / portionWeight)
+            let servingText: String = {
+                switch portions {
+                case 1:
+                    return R.string.localizable.servings1()
+                    
+                case 2...4:
+                    return R.string.localizable.servings24()
+                default:
+                    return R.string.localizable.servings4()
+                }
+            }()
+             self.kcal = (weight / (totalWeight)) * dish.kcal
+            self.description = "\(portions) \(servingText)"
         } else {
             self.kcal = dish.values?.serving.kcal ?? 1
             self.description = dish.info ?? ""
