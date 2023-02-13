@@ -12,6 +12,7 @@ protocol PaywallPresenterInterface: AnyObject {
     func didTapPrivacyPolicy()
     func didTapTermOfUse()
     func productPurchase(_ product: ApphudProduct)
+    func continueToAppNonConditionally()
 }
 
 class PaywallPresenter {
@@ -63,5 +64,9 @@ extension PaywallPresenter: PaywallPresenterInterface {
                 }
             }
         }
+    }
+    
+    func continueToAppNonConditionally() {
+        router?.navigateToApp()
     }
 }

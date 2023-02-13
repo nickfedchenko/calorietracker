@@ -199,10 +199,12 @@ final class PaywallViewController: UIViewController {
     }
     
     @objc private func didTapStartNow() {
+        
         guard let product = subscriptionViewModel?.getProductToPurchase() else {
+            presenter?.continueToAppNonConditionally()
             return
         }
-        
+
         presenter?.productPurchase(product)
     }
     

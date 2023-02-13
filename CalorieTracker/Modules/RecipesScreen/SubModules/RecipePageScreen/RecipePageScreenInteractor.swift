@@ -241,7 +241,7 @@ extension RecipePageScreenInteractor: RecipePageScreenInteractorInterface {
             mealData: [
                 MealData(
                     weight: (dish.values?.serving.weight ?? 0) * Double(selectedServingToEat),
-                    food: .dishes(dish)
+                    food: .dishes(dish, customAmount: nil)
                 )
             ]
         )

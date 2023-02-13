@@ -29,7 +29,7 @@ extension MealData {
             self.food = .product(product, customAmount: managedModel.weight)
         } else if let domainDish = managedModel.dish,
                   let dish = Dish(from: domainDish) {
-            self.food = .dishes(dish)
+            self.food = .dishes(dish, customAmount: managedModel.weight)
         } else {
             self.food = nil
         }
