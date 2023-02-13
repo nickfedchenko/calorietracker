@@ -133,7 +133,10 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
     }
     
     func updateNoteWidget() {
-        guard let lastNote = NotesWidgetService.shared.getLastNote() else {
+        let calendar = Calendar.current
+        
+        guard let lastNote = NotesWidgetService.shared.getLastNote(),
+              calendar.isDateInToday(lastNote.date) else {
             view.setNoteWidget(nil)
             return
         }
