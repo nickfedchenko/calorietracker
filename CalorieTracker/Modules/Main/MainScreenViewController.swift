@@ -309,8 +309,10 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         }
         
         switch widget.widgetType {
-        case .weight, .water, .steps, .calendar:
+        case .weight, .steps, .calendar:
             presenter?.didTapWidget(widget.widgetType)
+        case .water:
+            presenter?.didTapWidget(.water(specificDate: presenter?.getPointDate() ?? Date()))
         case .exercises:
             presenter?.didTapExerciseWidget()
         case .notes:

@@ -20,7 +20,7 @@ final class WidgetContainerViewController: UIViewController {
     typealias Size = CTWidgetNodeConfiguration
     
     enum WidgetType {
-        case water
+        case water(specificDate: Date)
         case steps
         case calendar
         case notes
@@ -333,8 +333,8 @@ extension WidgetContainerViewController: UIViewControllerTransitioningDelegate {
 extension WidgetContainerViewController.WidgetType {
     func getWidget() -> UIView {
         switch self {
-        case .water:
-            return WaterFullWidgetView()
+        case .water(let date):
+            return WaterFullWidgetView(with: date)
         case .steps:
             return StepsFullWidgetView()
         case .calendar:

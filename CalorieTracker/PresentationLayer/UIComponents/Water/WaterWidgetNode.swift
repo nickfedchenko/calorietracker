@@ -75,7 +75,7 @@ final class WaterWidgetNode: CTWidgetNode {
         }
     }
     
-    override var widgetType: WidgetContainerViewController.WidgetType { .water }
+    override var widgetType: WidgetContainerViewController.WidgetType { .water(specificDate: Date()) }
     
     override init(with configuration: CTWidgetNodeConfiguration) {
         super.init(with: configuration)
