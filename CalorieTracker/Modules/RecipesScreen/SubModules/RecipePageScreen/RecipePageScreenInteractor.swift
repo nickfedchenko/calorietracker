@@ -233,15 +233,32 @@ extension RecipePageScreenInteractor: RecipePageScreenInteractorInterface {
     }
     
     func addSelectedPortionsToEaten() {
-        guard let mealTime = mealTime else { return }
-
+        if dish.eatingTags.contains(where: { $0.convenientTag == .breakfast }) {
+            mealTime = .breakfast
+        } else if dish.eatingTags.contains(where: { $0.convenientTag == .lunch || $0.convenientTag == .dinner }) {
+            let date = Date()
+            let components = Calendar.current.dateComponents([.hour], from: date)
+            if components.hour ?? 18 < 10 {
+                mealTime = .launch
+            } else {
+                mealTime = .dinner
+            }
+        } else {
+            mealTime = .snack
+        }
+        
+        guard let mealTime = mealTime else {
+            return
+        }
+        
+        let mealTimeId = dish.dishTypeTags
         FDS.shared.addFoodsMeal(
             mealTime: mealTime,
             date: Date().day,
             mealData: [
                 MealData(
-                    weight: (dish.values?.serving.weight ?? 0) * Double(selectedServingToEat),
-                    food: .dishes(dish, customAmount: nil)
+                    weight: possibleEatenWeight,
+                    food: .dishes(dish, customAmount: possibleEatenWeight)
                 )
             ]
         )

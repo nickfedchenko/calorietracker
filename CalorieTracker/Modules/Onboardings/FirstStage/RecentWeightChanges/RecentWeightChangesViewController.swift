@@ -58,6 +58,9 @@ final class RecentWeightChangesViewController: UIViewController {
             string: R.string.localizable.onboardingFirstRecentWeightChangesTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
+        
+        attributedString.append(.init(string: " "))
+        
         attributedString.append(NSAttributedString(
             string: R.string.localizable.onboardingFirstRecentWeightChangesTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]

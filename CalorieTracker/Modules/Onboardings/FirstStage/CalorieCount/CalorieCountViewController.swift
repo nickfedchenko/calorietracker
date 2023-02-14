@@ -59,6 +59,7 @@ final class CalorieCountViewController: UIViewController {
             string: R.string.localizable.onboardingFirstCalorieCountTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
+        attributedString.append(.init(string: " "))
         attributedString.append(NSAttributedString(
             string: R.string.localizable.onboardingFirstCalorieCountTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]

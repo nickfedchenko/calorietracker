@@ -44,7 +44,7 @@
 
 "onboarding.first.final.button" = "продолжай в том же духе!";
 "onboarding.first.final.description" = "Мы рады, что вы здесь. Мы проведем вас через эти шаги, чтобы настроить вас на успех в потере веса: ";
-"onboarding.first.final.title.first" = "1 готов ";
+"onboarding.first.final.title.first" = "1 готов";
 "onboarding.first.final.title.second" = ", осталось 3!";
 "onboarding.first.final.history" = "История";
 "onboarding.first.final.user.data" = "Данные пользователя";
@@ -180,7 +180,7 @@
 "onboarding.second.enterYourName.title" = "Введите свое имя";
 
 "onboarding.second.final.button" = "продолжай в том же духе!";
-"onboarding.second.final.title.first" = "2 готов ";
+"onboarding.second.final.title.first" = "2 готово";
 "onboarding.second.final.title.second" = ", 2 осталось!";
 "onboarding.second.final.description" = "We’re happy to have you here. We’ll walk you through these steps to get you set up for weight loss success:";
 "onboarding.second.final.history" = "History";
