@@ -206,7 +206,7 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         presenter?.updateExersiceWidget()
         presenter?.updateMessageWidget()
         presenter?.updateActivityWidget()
-        presenter?.updateCalendarWidget(nil)
+        presenter?.updateCalendarWidget(UDM.currentlyWorkingDay.date)
         presenter?.updateNoteWidget()
     }
     

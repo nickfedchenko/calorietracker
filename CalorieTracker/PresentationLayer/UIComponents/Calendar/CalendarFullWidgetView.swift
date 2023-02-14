@@ -13,7 +13,11 @@ protocol CalendarFullWidgetViewInterface: AnyObject {
 
 final class CalendarFullWidgetView: UIView, CTWidgetFullProtocol {
     var didTapCloseButton: (() -> Void)?
-    var date: Date?
+    var date: Date? {
+        didSet {
+            UDM.currentlyWorkingDay = Day(date ?? Date())
+        }
+    }
     
     private var presenter: CalendarFullWidgetPresenterInterface?
     
@@ -111,7 +115,7 @@ extension CalendarFullWidgetView: CalendarFullWidgetViewInterface {
 
 extension CalendarFullWidgetView {
     func getCalendarView() -> CalendarView {
-        return CalendarView(baseDate: Date()) { date in
+        return CalendarView(baseDate: UDM.currentlyWorkingDay.date ?? Date()) { date in
             self.date = date
         }
     }

@@ -22,7 +22,7 @@ final class AppCoordinator {
     }
     
     func start() {
-      
+        UDM.currentlyWorkingDay = Day(Date())
         var getStartedViewController: UIViewController
 //        let trueFlag = true
 //        guard !trueFlag else {

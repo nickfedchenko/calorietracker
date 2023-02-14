@@ -34,13 +34,13 @@ extension CalendarWidgetService: CalendarWidgetServiceInterface {
     func getStreakDays() -> Int {
         let nutrition = FDS.shared.getAllNutrition().sorted(by: { $0.day > $1.day })
         var count = 0
+        var days: Set<Day> = []
         nutrition.forEach {
-            if $0.nutrition.kcal > 0 {
-                count += 1
-            } else {
-                return
-            }
+            days.update(with: $0.day)
         }
+        count = days.count
+        print("Got streak count of \(count)")
+        print("With nutritions \(nutrition)")
         return count
     }
 }

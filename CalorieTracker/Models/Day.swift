@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Day: Hashable, Comparable {
+struct Day: Hashable, Comparable, Codable {
     
     let date: Date?
     

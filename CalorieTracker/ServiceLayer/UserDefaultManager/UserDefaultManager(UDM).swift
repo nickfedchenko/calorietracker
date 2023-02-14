@@ -29,6 +29,22 @@ final class UDM {
         case exceptionTagsTitles
         case possibleExceptionTags
         case isHapticEnabled
+        case currentWorkingDay
+    }
+    
+    static var currentlyWorkingDay: Day {
+        get {
+            guard let data: Data = getValue(for: .currentWorkingDay),
+                   let userData = try? JSONDecoder().decode(Day.self, from: data) else {
+                return Day(Date())
+            }
+            return userData
+        }
+        
+        set {
+            let data = try? JSONEncoder().encode(newValue)
+            setValue(value: data, for: .currentWorkingDay)
+        }
     }
     
     static var isGloballyMetric: Bool {

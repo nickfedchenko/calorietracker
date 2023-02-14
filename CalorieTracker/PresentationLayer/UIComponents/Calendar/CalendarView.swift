@@ -67,11 +67,11 @@ final class CalendarView: UIView {
     // MARK: - Initializers
     
     init(baseDate: Date, selectedDateChanged: @escaping ((Date) -> Void)) {
+        print("god base date \(baseDate)")
         self.selectedDate = baseDate
         self.baseDate = baseDate
         self.selectedDateChanged = selectedDateChanged
         super.init(frame: .zero)
-
         setupView()
         setGestureRecognizer()
     }
@@ -385,10 +385,10 @@ extension CalendarView: UICollectionViewDelegateFlowLayout {
         let selectedCell = collectionView.cellForItem(at: indexPath) as? CalendarCollectionViewCell
         selectedDate = day.date
         
-        if selectedFlag {
+//        if selectedFlag {
             collectionView.visibleCells.map { $0 as? CalendarCollectionViewCell }.forEach { $0?.isSelectedCell = false }
             selectedFlag = false
-        }
+//        }
         selectedCell?.isSelectedCell = true
         selectedDateChanged(day.date)
     }
