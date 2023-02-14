@@ -23,6 +23,7 @@ protocol AddFoodPresenterInterface: AnyObject {
     func getMealTime() -> MealTime?
     func scannerDidRecognized(barcode: String)
     func updateSelectedFood(food: Food)
+    func didTapCalorieButton()
     func stopSearchQuery()
     func didTapCalorieButton()
 }
