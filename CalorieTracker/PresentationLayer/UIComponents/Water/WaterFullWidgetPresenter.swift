@@ -20,6 +20,7 @@ protocol WaterFullWidgetPresenterInterface: AnyObject {
 class WaterFullWidgetPresenter {
     unowned var view: WaterFullWidgetInterface
     
+    private var specificDate: Date
     private let countSliderParts = 15
     private let stepMl: Double = 50
     
@@ -28,8 +29,9 @@ class WaterFullWidgetPresenter {
         .init(type: .cup, value: 50)
     ]
     
-    init(view: WaterFullWidgetInterface) {
+    init(view: WaterFullWidgetInterface, specificDate: Date = Date()) {
         self.view = view
+        self.specificDate = specificDate
         if let models = UDM.quickAddWaterModels {
             quickAddTypes = models
         }
@@ -43,13 +45,13 @@ extension WaterFullWidgetPresenter: WaterFullWidgetPresenterInterface {
     }
     
     func getValueNow() -> Int {
-        let value = WaterWidgetService.shared.getWaterNow()
+        let value = WaterWidgetService.shared.getWaterForDate(specificDate)
         return Int(BAMeasurement(value, .liquid, isMetric: true).localized)
     }
     
     func addWater(_ value: Int) {
         let addValue = BAMeasurement(Double(value), .liquid).value
-        WaterWidgetService.shared.addDailyWater(addValue)
+        WaterWidgetService.shared.addWaterToSpecificDate(addValue, date: specificDate)
     }
     
     func getQuickAddTypes() -> [QuickAddModel] {

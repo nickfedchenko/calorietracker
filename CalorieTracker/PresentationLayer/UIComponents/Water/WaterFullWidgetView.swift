@@ -153,9 +153,10 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
     private var isSelectedSettingsButton = false
     private var presenter: WaterFullWidgetPresenterInterface?
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        presenter = WaterFullWidgetPresenter(view: self)
+    
+    init(with pointDate: Date) {
+        super.init(frame: .zero)
+        presenter = WaterFullWidgetPresenter(view: self, specificDate: pointDate)
         setupView()
         setupConstraints()
         configureView()
@@ -176,6 +177,29 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
             quickAddStack.viewsType = viewsType
         }
     }
+//    override init(frame: CGRect) {
+//        super.init(frame: frame)
+//        presenter = WaterFullWidgetPresenter(view: self)
+//        setupView()
+//        setupConstraints()
+//        configureView()
+//
+//        quickAddStack.didTapQuickAdd = { value in
+//            self.presenter?.addWater(value)
+//            self.configureView()
+//        }
+//
+//        quickAddStack.didTapEdit = { complition in
+//            self.output?.setQuickAdd(self, complition: { model in
+//                self.presenter?.addQuickAddTypes(model)
+//                complition(model)
+//            })
+//        }
+//
+//        if let viewsType = presenter?.getQuickAddTypes() {
+//            quickAddStack.viewsType = viewsType
+//        }
+//    }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

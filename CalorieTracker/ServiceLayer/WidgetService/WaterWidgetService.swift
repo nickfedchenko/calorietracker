@@ -14,6 +14,7 @@ protocol WaterWidgetServiceInterface {
     func setDailyWaterGoal(_ value: Double)
     func getWaterNow() -> Double
     func getWaterForDate(_ date: Date) -> Double
+    func addWaterToSpecificDate(_ value: Double, date: Date)
 }
 
 final class WaterWidgetService {
@@ -35,7 +36,6 @@ extension WaterWidgetService: WaterWidgetServiceInterface {
         let day = Day(date)
         let waterData = localDomainService.fetchWater()
         let waterForDate = waterData.first(where: { day == $0.day })
-        
         return waterForDate?.value ?? 0
     }
     
@@ -43,6 +43,7 @@ extension WaterWidgetService: WaterWidgetServiceInterface {
         return getWaterForDate(Date())
     }
     
+    // Добавить на сегодняшний день
     func addDailyWater(_ value: Double) {
         let dayNow = Day(Date())
         let waterData = localDomainService.fetchWater()
@@ -51,6 +52,20 @@ extension WaterWidgetService: WaterWidgetServiceInterface {
             data: [
                 DailyData(
                     day: dayNow,
+                    value: (waterNow?.value ?? 0) + value
+                )
+            ]
+        )
+    }
+    
+    func addWaterToSpecificDate(_ value: Double, date: Date) {
+        let targetDay = Day(date)
+        let waterData = localDomainService.fetchWater()
+        let waterNow = waterData.first(where: { targetDay == $0.day })
+        localDomainService.saveWater(
+            data: [
+                DailyData(
+                    day: targetDay,
                     value: (waterNow?.value ?? 0) + value
                 )
             ]

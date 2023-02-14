@@ -26,6 +26,7 @@ protocol MainScreenPresenterInterface: AnyObject {
     func didTapNotesWidget()
     func setPointDate(_ date: Date)
     func didTapMainWidget()
+    func getPointDate() -> Date
 }
 
 class MainScreenPresenter {
@@ -270,5 +271,9 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
     
     func didTapBarcodeScannerButton() {
         router?.openBarcodeScannerVC()
+    }
+    
+    func getPointDate() -> Date {
+        pointDate ?? Date()
     }
 }
