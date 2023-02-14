@@ -34,6 +34,18 @@ class LastNoteView: UIView {
         textView.textContainer.exclusionPaths = [imagePath]
     }
     
+    func clearNode() {
+        textView.text = ""
+        estimationImageView.image = nil
+        photoImageView.image = nil
+        photoImageView.isHidden = true
+        photoImageView.snp.remakeConstraints { make in
+            make.width.equalTo(0)
+            make.trailing.equalToSuperview().offset(-5)
+            make.top.bottom.equalToSuperview().inset(5)
+        }
+    }
+    
     func configure(_ model: Model) {
         textView.text = model.text
         estimationImageView.image = model.estimation?.getEstimationSmile()

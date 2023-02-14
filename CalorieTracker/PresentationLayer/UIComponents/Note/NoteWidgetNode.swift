@@ -27,7 +27,10 @@ final class NoteWidgetNode: CTWidgetNode {
     
     var model: LastNoteView.Model? {
         didSet {
-            guard let model = model else { return }
+            guard let model = model else {
+                lastNodeView.clearNode()
+                return
+            }
             lastNodeView.configure(model)
             transitionLayout(withAnimation: true, shouldMeasureAsync: false)
         }

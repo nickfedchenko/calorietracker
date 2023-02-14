@@ -156,7 +156,7 @@ final class NotesCreateViewController: TouchPassingViewController {
         let id = UUID().uuidString
         let note = Note(
             id: id,
-            date: Date(),
+            date: UDM.currentlyWorkingDay.date ?? Date(),
             text: text,
             estimation: estimation,
             imageUrl: try? headerView.photo?.save(at: .documentDirectory, pathAndImageName: id)

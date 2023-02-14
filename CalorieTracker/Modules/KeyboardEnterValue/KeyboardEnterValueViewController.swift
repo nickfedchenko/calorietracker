@@ -80,7 +80,7 @@ final class KeyboardEnterValueViewController: TouchPassingViewController {
                 let weight = BAMeasurement(value, .weight).value
                 switch actionType {
                 case .add:
-                    WeightWidgetService.shared.addWeight(weight)
+                    WeightWidgetService.shared.addWeight(weight, to: UDM.currentlyWorkingDay.date)
                 case .set:
                     WeightWidgetService.shared.setWeightGoal(weight)
                 }

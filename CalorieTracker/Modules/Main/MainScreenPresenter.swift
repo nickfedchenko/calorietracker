@@ -122,7 +122,7 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
         view.setWeightWidget(weight: CGFloat(BAMeasurement(weightNow, .weight, isMetric: true).localized))
     }
     
-    func updateCalendarWidget(_ date: Date?) {
+    func updateCalendarWidget(_ date: Date? = UDM.currentlyWorkingDay.date) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM d"
         let calendarModel: CalendarWidgetNode.Model = .init(

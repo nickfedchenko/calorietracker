@@ -251,10 +251,9 @@ extension RecipePageScreenInteractor: RecipePageScreenInteractorInterface {
             return
         }
         
-        let mealTimeId = dish.dishTypeTags
         FDS.shared.addFoodsMeal(
             mealTime: mealTime,
-            date: Date().day,
+            date: UDM.currentlyWorkingDay,
             mealData: [
                 MealData(
                     weight: possibleEatenWeight,

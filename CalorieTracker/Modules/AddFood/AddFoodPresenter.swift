@@ -230,7 +230,7 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
     func saveMeal(_ mealTime: MealTime, foods: [Food]) {
         FDS.shared.addFoodsMeal(
             mealTime: mealTime,
-            date: Date().day,
+            date: UDM.currentlyWorkingDay,
             mealData: foods.map { food in
                 MealData(weight: food.weight ?? 0, food: food)
             }
