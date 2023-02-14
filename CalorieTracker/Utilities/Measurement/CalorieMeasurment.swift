@@ -104,13 +104,13 @@ private extension ActivityLevel {
     var factor: Double {
         switch self {
         case .low:
-            return 1.375
+            return 1.2
         case .moderate:
-            return 1.55
+            return 1.375
         case .high:
-            return 1.7
+            return 1.55
         case .veryHigh:
-            return 1.9
+            return 1.7
         }
     }
 }
