@@ -23,6 +23,7 @@ protocol AddFoodPresenterInterface: AnyObject {
     func getMealTime() -> MealTime?
     func scannerDidRecognized(barcode: String)
     func updateSelectedFood(food: Food)
+    func didTapCalorieButton()
 }
 
 final class AddFoodPresenter {
@@ -201,6 +202,10 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
     
     func didTapScannerButton() {
         router?.openScanner()
+    }
+    
+    func didTapCalorieButton() {
+        router?.openCustomEntryViewController()
     }
     
     func search(_ request: String, complition: ((Bool) -> Void)?) {
