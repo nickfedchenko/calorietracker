@@ -54,7 +54,7 @@ final class QuestionAboutTheChangeViewController: UIViewController {
     
     private func configureViews() {
         title = R.string.localizable.onboardingFirstQuestionAboutTheChangeTitle()
-        
+        descriptionLabel.numberOfLines = 0
         view.backgroundColor = R.color.mainBackground()
         
         scrolView.showsVerticalScrollIndicator = false

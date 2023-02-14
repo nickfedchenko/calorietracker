@@ -64,11 +64,13 @@ final class LastCalorieCountViewController: UIViewController {
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
+        attributedString.append(.init(string: " "))
+        
         attributedString.append(NSAttributedString(
             string: R.string.localizable.onboardingFirstLastCalorieCountTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
-        
+        attributedString.append(.init(string: " "))
         attributedString.append(NSAttributedString(
             string: R.string.localizable.onboardingFirstLastCalorieCountTitleThird(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]

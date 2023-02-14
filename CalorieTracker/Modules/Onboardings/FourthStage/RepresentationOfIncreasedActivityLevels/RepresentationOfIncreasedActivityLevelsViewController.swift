@@ -74,6 +74,8 @@ final class RepresentationOfIncreasedActivityLevelsViewController: UIViewControl
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
+        attributedString.append(.init(string: " "))
+        
         attributedString.append(NSAttributedString(
             string: R.string.localizable.onboardingFourthRepresentationOfIncreasedActivityLevelsTitleThird(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]

@@ -63,7 +63,7 @@ final class ObsessingOverFoodViewController: UIViewController {
             string: R.string.localizable.onboardingFirstObsessingOverFoodTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
-        
+        attributedString.append(.init(string: " "))
         attributedString.append(NSAttributedString(
             string: R.string.localizable.onboardingFirstObsessingOverFoodTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]

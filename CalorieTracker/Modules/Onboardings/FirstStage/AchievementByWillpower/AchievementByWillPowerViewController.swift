@@ -59,6 +59,8 @@ final class AchievementByWillPowerViewController: UIViewController {
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
+        attributedString.append(.init(string: " "))
+        
         attributedString.append(NSAttributedString(
             string: R.string.localizable.onboardingFirstAchievementByWillPowerTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]

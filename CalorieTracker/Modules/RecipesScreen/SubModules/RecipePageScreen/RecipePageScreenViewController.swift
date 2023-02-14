@@ -264,9 +264,7 @@ class RecipePageScreenViewController: CTViewController {
             servingSelector.setCountInitially(to: dish.totalServings ?? 0)
             header.setTitle(title: dish.title.uppercased())
             describingLabel.text = dish.description
-            print("Dish description is \(dish.description)")
         }
-        
         mainImageView.setIsFavorite(shouldSetFavorite: presenter?.isFavoritesDish ?? false)
     }
     

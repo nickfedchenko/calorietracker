@@ -26,6 +26,7 @@ protocol RecipePageScreenPresenterInterface: AnyObject {
     func addToFavoritesTapped(_ flag: Bool)
     func createFoodData()
     func getPossibleEatenAmount() -> Double?
+    func shouldAddToEatenSelectedPortions()
     
     var isFavoritesDish: Bool? { get }
 }
@@ -144,5 +145,9 @@ extension RecipePageScreenPresenter: RecipePageScreenPresenterInterface {
     
     func getPossibleEatenAmount() -> Double? {
         interactor?.possibleEatenWeight
+    }
+    
+    func shouldAddToEatenSelectedPortions() {
+        interactor?.addSelectedPortionsToEaten()
     }
 }
