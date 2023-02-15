@@ -13,7 +13,7 @@ final class FormView<T: WithGetTitleProtocol>: ViewWithShadow, UITextFieldDelega
         case end
     }
     
-    private lazy var textField: UITextField = {
+    lazy var textField: UITextField = {
         let textField = UITextField()
         textField.textAlignment = .right
         textField.tintColor = R.color.foodViewing.basicPrimary()

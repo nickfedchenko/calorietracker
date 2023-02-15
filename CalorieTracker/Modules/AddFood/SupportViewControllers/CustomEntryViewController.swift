@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CustomEntryViewController: UIViewController {
+final class CustomEntryViewController: UIViewController, UIScrollViewDelegate {
     
     private lazy var titleHeaderLabel: UILabel = getTitleHeaderLabel()
     private lazy var descriptionLabel: UILabel = getDescriptionLabel()
@@ -22,12 +22,14 @@ class CustomEntryViewController: UIViewController {
     private lazy var fatForm: FormView = getFatForm()
     private lazy var addEntryButton: BasicButtonView = getAddEntryButton()
     private lazy var closeButton: UIButton = getCloseButton()
+    private lazy var contentView: UIView = getContentView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         addSubviews()
         setupConstraints()
+        setupKeyboardManager()
     }
     
     private func setupView() {
@@ -36,6 +38,11 @@ class CustomEntryViewController: UIViewController {
     
     private func addSubviews() {
         view.addSubviews(
+            contentView,
+            closeButton
+        )
+        
+        contentView.addSubviews(
             titleHeaderLabel,
             descriptionLabel,
             descriptionForm,
@@ -47,11 +54,11 @@ class CustomEntryViewController: UIViewController {
             proteinLabel,
             fatLabel,
             fatForm,
-            addEntryButton,
-            closeButton
+            addEntryButton
         )
     }
     
+    // swiftlint:disable:next function_body_length
     private func setupConstraints() {
         titleHeaderLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(226)
@@ -128,6 +135,25 @@ class CustomEntryViewController: UIViewController {
             make.centerX.equalToSuperview()
             make.bottom.equalToSuperview().offset(-24)
         }
+        
+        contentView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.top.equalToSuperview()
+            make.bottom.equalTo(addEntryButton.snp.bottom).offset(16)
+        }
+    }
+    
+    private func setupKeyboardManager() {
+        addTapToHideKeyboardGesture()
+    }
+    
+    private func animateViewMoving(up: Bool, moveValue: CGFloat) {
+        let movementDuration: TimeInterval = 0.3
+        let movement: CGFloat = up ? -moveValue : moveValue
+        
+        UIView.animate(withDuration: movementDuration) {
+            self.contentView.frame = self.contentView.frame.offsetBy(dx: 0, dy: movement)
+        }
     }
     
     @objc private func didTapCloseButton() {
@@ -163,6 +189,8 @@ extension CustomEntryViewController {
     private func getDescriptionForm() -> FormView<EmptyGetTitle> {
         let form = FormView<EmptyGetTitle>()
         form.model = .init(width: .large, value: .required("Required"))
+        form.textField.becomeFirstResponder()
+        form.textField.delegate = self
         return form
     }
     
@@ -177,6 +205,8 @@ extension CustomEntryViewController {
     private func getCaloriesForm() -> FormView<EmptyGetTitle> {
         let form = FormView<EmptyGetTitle>()
         form.model = .init(width: .large, value: .required("Required"))
+        form.textField.keyboardType = .decimalPad
+        form.textField.delegate = self
         return form
     }
     
@@ -191,6 +221,8 @@ extension CustomEntryViewController {
     private func getCarbsForm() -> FormView<EmptyGetTitle> {
         let form = FormView<EmptyGetTitle>()
         form.model = .init(width: .large, value: .optional)
+        form.textField.keyboardType = .decimalPad
+        form.textField.delegate = self
         return form
     }
     
@@ -205,6 +237,8 @@ extension CustomEntryViewController {
     private func getProteinForm() -> FormView<EmptyGetTitle> {
         let form = FormView<EmptyGetTitle>()
         form.model = .init(width: .large, value: .optional)
+        form.textField.keyboardType = .decimalPad
+        form.textField.delegate = self
         return form
     }
     
@@ -219,12 +253,15 @@ extension CustomEntryViewController {
     private func getFatForm() -> FormView<EmptyGetTitle> {
         let form = FormView<EmptyGetTitle>()
         form.model = .init(width: .large, value: .optional)
+        form.textField.keyboardType = .decimalPad
+        form.textField.delegate = self
         return form
     }
     
     private func getAddEntryButton() -> BasicButtonView {
         let button = BasicButtonView(type: .add)
         button.addTarget(self, action: #selector(didTapCustomEntryButton), for: .touchUpInside)
+        button.active = false
         return button
     }
     
@@ -234,5 +271,24 @@ extension CustomEntryViewController {
         button.imageView?.tintColor = R.color.foodViewing.basicGrey()
         button.addTarget(self, action: #selector(didTapCloseButton), for: .touchUpInside)
         return button
+    }
+    
+    private func getContentView() -> UIView {
+        let view = UIView()
+        return view
+    }
+}
+
+extension CustomEntryViewController: UITextFieldDelegate {
+
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        animateViewMoving(up: true, moveValue: 140)
+        
+        guard textField == caloriesForm.textField else { return }
+        addEntryButton.active = textField.text != "" ? true : false
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        animateViewMoving(up: false, moveValue: 140)
     }
 }
