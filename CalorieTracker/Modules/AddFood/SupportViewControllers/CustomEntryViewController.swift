@@ -23,6 +23,7 @@ final class CustomEntryViewController: UIViewController, UIScrollViewDelegate {
     private lazy var addEntryButton: BasicButtonView = getAddEntryButton()
     private lazy var closeButton: UIButton = getCloseButton()
     private lazy var contentView: UIView = getContentView()
+    private lazy var scrollView: UIScrollView = getScrollView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,11 +39,15 @@ final class CustomEntryViewController: UIViewController, UIScrollViewDelegate {
     
     private func addSubviews() {
         view.addSubviews(
-            contentView,
-            closeButton
+            scrollView
         )
         
+        scrollView.addSubview(
+            contentView
+        )
+    
         contentView.addSubviews(
+            closeButton,
             titleHeaderLabel,
             descriptionLabel,
             descriptionForm,
@@ -61,26 +66,26 @@ final class CustomEntryViewController: UIViewController, UIScrollViewDelegate {
     // swiftlint:disable:next function_body_length
     private func setupConstraints() {
         titleHeaderLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(226)
-            make.leading.trailing.equalToSuperview().inset(20)
+            make.leading.trailing.equalTo(contentView).inset(20)
+            make.bottom.equalTo(descriptionForm.snp.top).offset(-36)
         }
         
         descriptionForm.snp.makeConstraints { make in
             make.height.equalTo(48)
-            make.top.equalTo(titleHeaderLabel.snp.bottom).offset(36)
-            make.leading.trailing.equalToSuperview().inset(20)
+            make.leading.trailing.equalTo(contentView).inset(20)
+            make.bottom.equalTo(caloriesForm.snp.top).offset(-12)
         }
         
         descriptionLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().inset(20)
+            make.leading.equalTo(contentView).inset(20)
             make.bottom.equalTo(descriptionForm.snp.top).offset(-4)
         }
         
         caloriesForm.snp.makeConstraints { make in
             make.height.equalTo(48)
-            make.top.equalTo(descriptionForm.snp.bottom).offset(12)
-            make.leading.equalToSuperview().inset(108)
-            make.trailing.equalToSuperview().inset(20)
+            make.leading.equalTo(contentView).inset(108)
+            make.trailing.equalTo(contentView).inset(20)
+            make.bottom.equalTo(carbsForm.snp.top).offset(-12)
         }
         
         caloriesLabel.snp.makeConstraints { make in
@@ -90,9 +95,9 @@ final class CustomEntryViewController: UIViewController, UIScrollViewDelegate {
 
         carbsForm.snp.makeConstraints { make in
             make.height.equalTo(48)
-            make.top.equalTo(caloriesForm.snp.bottom).offset(12)
-            make.leading.equalToSuperview().inset(108)
-            make.trailing.equalToSuperview().inset(20)
+            make.leading.equalTo(contentView).inset(108)
+            make.trailing.equalTo(contentView).inset(20)
+            make.bottom.equalTo(proteinForm.snp.top).offset(-12)
         }
         
         carbsLabel.snp.makeConstraints { make in
@@ -102,9 +107,9 @@ final class CustomEntryViewController: UIViewController, UIScrollViewDelegate {
         
         proteinForm.snp.makeConstraints { make in
             make.height.equalTo(48)
-            make.top.equalTo(carbsForm.snp.bottom).offset(12)
-            make.leading.equalToSuperview().inset(108)
-            make.trailing.equalToSuperview().inset(20)
+            make.leading.equalTo(contentView).inset(108)
+            make.trailing.equalTo(contentView).inset(20)
+            make.bottom.equalTo(fatForm.snp.top).offset(-12)
         }
         
         proteinLabel.snp.makeConstraints { make in
@@ -114,9 +119,9 @@ final class CustomEntryViewController: UIViewController, UIScrollViewDelegate {
         
         fatForm.snp.makeConstraints { make in
             make.height.equalTo(48)
-            make.top.equalTo(proteinForm.snp.bottom).offset(12)
-            make.leading.equalToSuperview().inset(108)
-            make.trailing.equalToSuperview().inset(20)
+            make.leading.equalTo(contentView).inset(108)
+            make.trailing.equalTo(contentView).inset(20)
+            make.bottom.equalTo(addEntryButton.snp.top).offset(-24)
         }
         
         fatLabel.snp.makeConstraints { make in
@@ -126,20 +131,24 @@ final class CustomEntryViewController: UIViewController, UIScrollViewDelegate {
         
         addEntryButton.snp.makeConstraints { make in
             make.height.equalTo(64)
-            make.top.equalTo(fatForm.snp.bottom).offset(24)
-            make.leading.trailing.equalToSuperview().inset(20)
+            make.leading.trailing.equalTo(contentView).inset(20)
+            make.bottom.equalTo(contentView.snp.bottom).offset(-226)
         }
         
         closeButton.snp.makeConstraints { make in
             make.height.width.equalTo(64)
-            make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-24)
+            make.centerX.equalTo(contentView)
+            make.bottom.equalTo(contentView).offset(-24)
         }
         
         contentView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview()
-            make.top.equalToSuperview()
-            make.bottom.equalTo(addEntryButton.snp.bottom).offset(16)
+            make.top.bottom.equalTo(scrollView)
+            make.left.right.equalTo(view)
+            make.width.height.equalTo(scrollView)
+        }
+        
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalTo(view)
         }
     }
     
@@ -147,13 +156,44 @@ final class CustomEntryViewController: UIViewController, UIScrollViewDelegate {
         addTapToHideKeyboardGesture()
     }
     
-    private func animateViewMoving(up: Bool, moveValue: CGFloat) {
-        let movementDuration: TimeInterval = 0.3
-        let movement: CGFloat = up ? -moveValue : moveValue
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        registerNotifications()
+    }
+    
+    private func registerNotifications() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillBeShown),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
         
-        UIView.animate(withDuration: movementDuration) {
-            self.contentView.frame = self.contentView.frame.offsetBy(dx: 0, dy: movement)
-        }
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillBeHidden),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil
+        )
+    }
+    
+    @objc private func keyboardWillBeShown(notification: NSNotification) {
+        let key = UIResponder.keyboardFrameEndUserInfoKey
+        guard let keyboardFrameValue = notification.userInfo?[key] as? NSValue else { return }
+        let keyboardFrame = view.convert(keyboardFrameValue.cgRectValue, from: nil)
+        
+        scrollView.contentInset.bottom = keyboardFrame.height
+        scrollView.scrollIndicatorInsets = scrollView.contentInset
+        
+        let heightDiferenceOfView = view.frame.size.height - keyboardFrame.size.height
+        let heightDiferenceOfButton = addEntryButton.frame.origin.y - heightDiferenceOfView
+        let offsetPoint = heightDiferenceOfButton + addEntryButton.frame.height + 16
+        scrollView.contentOffset = CGPoint(x: 0, y: offsetPoint)
+    }
+    
+    @objc private func keyboardWillBeHidden() {
+        scrollView.contentInset = .zero
+        scrollView.scrollIndicatorInsets = .zero
     }
     
     @objc private func didTapCloseButton() {
@@ -163,6 +203,10 @@ final class CustomEntryViewController: UIViewController, UIScrollViewDelegate {
     
     @objc private func didTapCustomEntryButton() {
         Vibration.rigid.vibrate()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 }
 
@@ -190,7 +234,6 @@ extension CustomEntryViewController {
         let form = FormView<EmptyGetTitle>()
         form.model = .init(width: .large, value: .required("Required"))
         form.textField.becomeFirstResponder()
-        form.textField.delegate = self
         return form
     }
     
@@ -222,7 +265,6 @@ extension CustomEntryViewController {
         let form = FormView<EmptyGetTitle>()
         form.model = .init(width: .large, value: .optional)
         form.textField.keyboardType = .decimalPad
-        form.textField.delegate = self
         return form
     }
     
@@ -238,7 +280,6 @@ extension CustomEntryViewController {
         let form = FormView<EmptyGetTitle>()
         form.model = .init(width: .large, value: .optional)
         form.textField.keyboardType = .decimalPad
-        form.textField.delegate = self
         return form
     }
     
@@ -254,12 +295,28 @@ extension CustomEntryViewController {
         let form = FormView<EmptyGetTitle>()
         form.model = .init(width: .large, value: .optional)
         form.textField.keyboardType = .decimalPad
-        form.textField.delegate = self
         return form
     }
     
     private func getAddEntryButton() -> BasicButtonView {
-        let button = BasicButtonView(type: .add)
+        let button = BasicButtonView(
+            type: .custom(
+                .init(
+                    image: .init(isPressImage: R.image.basicButton.addPressed(),
+                                 defaultImage: R.image.basicButton.addDefault(),
+                                 inactiveImage: R.image.basicButton.addInactive()),
+                    title: nil,
+                    backgroundColorInactive: R.color.basicButton.inactiveColor(),
+                    backgroundColorDefault: R.color.basicButton.gradientFirstColor(),
+                    backgroundColorPress: R.color.basicButton.gradientFirstColor(),
+                    gradientColors: nil,
+                    borderColorInactive: R.color.basicButton.inactiveColor(),
+                    borderColorDefault: R.color.foodViewing.basicSecondaryDark(),
+                    borderColorPress: R.color.foodViewing.basicSecondary()
+                )
+            )
+        )
+        
         button.addTarget(self, action: #selector(didTapCustomEntryButton), for: .touchUpInside)
         button.active = false
         return button
@@ -277,18 +334,27 @@ extension CustomEntryViewController {
         let view = UIView()
         return view
     }
+    
+    private func getScrollView() -> UIScrollView {
+        let scrollView = UIScrollView()
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.delegate = self
+        return scrollView
+    }
 }
 
 extension CustomEntryViewController: UITextFieldDelegate {
-
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        animateViewMoving(up: true, moveValue: 140)
-        
-        guard textField == caloriesForm.textField else { return }
-        addEntryButton.active = textField.text != "" ? true : false
-    }
     
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        animateViewMoving(up: false, moveValue: 140)
+    func textField(_ textField: UITextField,
+                   shouldChangeCharactersIn range: NSRange,
+                   replacementString string: String) -> Bool {
+        
+        let currentText = textField.text as NSString?
+        let replacedText = currentText?.replacingCharacters(in: range, with: string)
+        let resultText = replacedText ?? string
+        addEntryButton.active = resultText.isEmpty ? false : true
+        
+        return true
     }
 }
