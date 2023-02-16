@@ -66,14 +66,14 @@ final class CustomEntryViewController: UIViewController, UIScrollViewDelegate {
     // swiftlint:disable:next function_body_length
     private func setupConstraints() {
         titleHeaderLabel.snp.makeConstraints { make in
+            make.top.equalTo(contentView).inset(145)
             make.leading.trailing.equalTo(contentView).inset(20)
-            make.bottom.equalTo(descriptionForm.snp.top).offset(-36)
         }
         
         descriptionForm.snp.makeConstraints { make in
+            make.top.equalTo(titleHeaderLabel.snp.bottom).inset(-36)
             make.height.equalTo(48)
             make.leading.trailing.equalTo(contentView).inset(20)
-            make.bottom.equalTo(caloriesForm.snp.top).offset(-12)
         }
         
         descriptionLabel.snp.makeConstraints { make in
@@ -82,22 +82,22 @@ final class CustomEntryViewController: UIViewController, UIScrollViewDelegate {
         }
         
         caloriesForm.snp.makeConstraints { make in
+            make.top.equalTo(descriptionForm.snp.bottom).inset(-12)
             make.height.equalTo(48)
             make.leading.equalTo(contentView).inset(108)
             make.trailing.equalTo(contentView).inset(20)
-            make.bottom.equalTo(carbsForm.snp.top).offset(-12)
         }
         
         caloriesLabel.snp.makeConstraints { make in
             make.centerY.equalTo(caloriesForm)
             make.trailing.equalTo(caloriesForm.snp.leading).offset(-8)
         }
-
+        
         carbsForm.snp.makeConstraints { make in
+            make.top.equalTo(caloriesForm.snp.bottom).inset(-12)
             make.height.equalTo(48)
             make.leading.equalTo(contentView).inset(108)
             make.trailing.equalTo(contentView).inset(20)
-            make.bottom.equalTo(proteinForm.snp.top).offset(-12)
         }
         
         carbsLabel.snp.makeConstraints { make in
@@ -106,10 +106,10 @@ final class CustomEntryViewController: UIViewController, UIScrollViewDelegate {
         }
         
         proteinForm.snp.makeConstraints { make in
+            make.top.equalTo(carbsForm.snp.bottom).inset(-12)
             make.height.equalTo(48)
             make.leading.equalTo(contentView).inset(108)
             make.trailing.equalTo(contentView).inset(20)
-            make.bottom.equalTo(fatForm.snp.top).offset(-12)
         }
         
         proteinLabel.snp.makeConstraints { make in
@@ -118,10 +118,10 @@ final class CustomEntryViewController: UIViewController, UIScrollViewDelegate {
         }
         
         fatForm.snp.makeConstraints { make in
+            make.top.equalTo(proteinForm.snp.bottom).inset(-12)
             make.height.equalTo(48)
             make.leading.equalTo(contentView).inset(108)
             make.trailing.equalTo(contentView).inset(20)
-            make.bottom.equalTo(addEntryButton.snp.top).offset(-24)
         }
         
         fatLabel.snp.makeConstraints { make in
@@ -130,9 +130,9 @@ final class CustomEntryViewController: UIViewController, UIScrollViewDelegate {
         }
         
         addEntryButton.snp.makeConstraints { make in
+            make.top.equalTo(fatForm.snp.bottom).inset(-24)
             make.height.equalTo(64)
             make.leading.trailing.equalTo(contentView).inset(20)
-            make.bottom.equalTo(contentView.snp.bottom).offset(-226)
         }
         
         closeButton.snp.makeConstraints { make in
