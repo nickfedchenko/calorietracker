@@ -508,6 +508,7 @@
 "addFood.calories" = "CALORIES";
 "addFood.done" = "DONE";
 "addFood.title.recent" = "recent searches";
+"addFood.customEntry" = "CUSTOM ENTRY";
 
 "breakfast" = "BREAKFAST";
 "lunch" = "LUNCH";
@@ -524,9 +525,11 @@
 "myFood" = "My Food";
 "nutrition" = "Nutrition";
 
+"description" = "Description";
 "kcal.short" = "kcal";
-"carbs.short" = "carbs";
-"fat.short" = "fat";
+"carbs.short" = "Carbs";
+"fat.short" = "Fat";
+"proteins" = "Proteins";
 "kcal" = "Calories";
 "fat" = "Total Fat";
 "satFat" = "Saturated Fat";
@@ -601,6 +604,9 @@
 "track" = "TRACK";
 
 "exercises" = "exercises";
+
+"textField.required" = "Required";
+"textField.optional" = "Optional";
 
 "create.title" = "Food Creation";
 "create.description.first" = "Step";

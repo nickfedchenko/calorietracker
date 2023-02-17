@@ -225,7 +225,7 @@ extension CustomEntryViewController {
     
     private func getTitleHeaderLabel() -> UILabel {
         let label = UILabel()
-        label.text = "CUSTOM ENTRY"
+        label.text = R.string.localizable.addFoodCustomEntry()
         label.font = R.font.sfProRoundedBold(size: 24)
         label.textColor = R.color.folderTitleText()
         return label
@@ -235,7 +235,7 @@ extension CustomEntryViewController {
         let label = UILabel()
         label.font = R.font.sfProTextMedium(size: 17)
         label.textColor = R.color.grayBasicGray()
-        label.text = "Description"
+        label.text = R.string.localizable.description()
         return label
     }
     
@@ -244,10 +244,12 @@ extension CustomEntryViewController {
         form.model = .init(width: .large, value: .required(nil))
         form.textField.font = R.font.sfProTextMedium(size: 17)
         form.textField.attributedPlaceholder = NSAttributedString(
-            string: "Required",
+            string: R.string.localizable.textFieldRequired(),
             attributes: placeholderAttributes
         )
         
+        form.textField.autocorrectionType = .no
+        form.textField.spellCheckingType = .no
         form.textField.delegate = self
         form.textField.becomeFirstResponder()
         return form
@@ -257,7 +259,7 @@ extension CustomEntryViewController {
         let label = UILabel()
         label.font = R.font.sfProTextMedium(size: 17)
         label.textColor = R.color.addFood.menu.kcal()
-        label.text = "Calories"
+        label.text = R.string.localizable.calories()
         return label
     }
     
@@ -266,7 +268,7 @@ extension CustomEntryViewController {
         form.model = .init(width: .large, value: .required(nil))
         form.textField.font = R.font.sfProTextMedium(size: 17)
         form.textField.attributedPlaceholder = NSAttributedString(
-            string: "Required",
+            string: R.string.localizable.textFieldRequired(),
             attributes: placeholderAttributes
         )
         
@@ -279,7 +281,7 @@ extension CustomEntryViewController {
         let label = UILabel()
         label.font = R.font.sfProTextMedium(size: 17)
         label.textColor = R.color.addFood.menu.carb()
-        label.text = "Carbs"
+        label.text = R.string.localizable.carbsShort()
         return label
     }
     
@@ -288,7 +290,7 @@ extension CustomEntryViewController {
         form.model = .init(width: .large, value: .optional)
         form.textField.font = R.font.sfProTextMedium(size: 17)
         form.textField.attributedPlaceholder = NSAttributedString(
-            string: "optional",
+            string: R.string.localizable.textFieldOptional(),
             attributes: placeholderAttributes
         )
         
@@ -300,7 +302,7 @@ extension CustomEntryViewController {
         let label = UILabel()
         label.font = R.font.sfProTextMedium(size: 17)
         label.textColor = R.color.addFood.menu.protein()
-        label.text = "Protein"
+        label.text = R.string.localizable.proteins()
         return label
     }
     
@@ -309,7 +311,7 @@ extension CustomEntryViewController {
         form.model = .init(width: .large, value: .optional)
         form.textField.font = R.font.sfProTextMedium(size: 17)
         form.textField.attributedPlaceholder = NSAttributedString(
-            string: "optional",
+            string: R.string.localizable.textFieldOptional(),
             attributes: placeholderAttributes
         )
         
@@ -321,7 +323,7 @@ extension CustomEntryViewController {
         let label = UILabel()
         label.font = R.font.sfProTextMedium(size: 17)
         label.textColor = R.color.addFood.menu.fat()
-        label.text = "Fat"
+        label.text = R.string.localizable.fatShort()
         return label
     }
     
@@ -330,7 +332,7 @@ extension CustomEntryViewController {
         form.model = .init(width: .large, value: .optional)
         form.textField.font = R.font.sfProTextMedium(size: 17)
         form.textField.attributedPlaceholder = NSAttributedString(
-            string: "optional",
+            string: R.string.localizable.textFieldOptional(),
             attributes: placeholderAttributes
         )
         

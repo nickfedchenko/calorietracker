@@ -17,6 +17,41 @@ class AddCustomEntryButton: UIButton {
     private let buttonImage: UIImage? = R.image.basicButton.addDefault()
     private let buttonImagePressed: UIImage? = R.image.basicButton.addPressed()
     
+    private lazy var firstShadowLayer: CALayer = {
+        let layer = CALayer()
+        layer.name = "firstShadowLayer"
+        layer.shadowColor = R.color.addFood.menu.secondShadow()?.cgColor
+        layer.shadowOffset = CGSize(width: 0, height: 0.5)
+        layer.shadowOpacity = 0.25
+        layer.shadowRadius = 2
+        return layer
+    }()
+    
+    private lazy var secondShadowLayer: CALayer = {
+        let layer = CALayer()
+        layer.name = "secondShadowLayer"
+        layer.shadowColor = R.color.addFood.menu.firstShadow()?.cgColor
+        layer.shadowOffset = CGSize(width: 0, height: 4)
+        layer.shadowOpacity = 0.2
+        layer.shadowRadius = 10
+        return layer
+    }()
+    
+    private lazy var gradientLayer: CAGradientLayer = {
+        let gradient = CAGradientLayer()
+        gradient.name = "gradientLayer"
+        
+        guard let firstColor = R.color.basicButton.gradientFirstColor(),
+              let secondColor = R.color.basicButton.gradientSecondColor()
+        else { return gradient }
+        
+        gradient.colors = [firstColor.cgColor, secondColor.cgColor]
+        gradient.startPoint = CGPoint(x: 0.0, y: 0.5)
+        gradient.endPoint = CGPoint(x: 1.0, y: 0.5)
+        
+        return gradient
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setState(.active)
@@ -51,33 +86,38 @@ class AddCustomEntryButton: UIButton {
     func setState(_ state: ButtonState) {
         switch state {
         case .active:
-            layer.cornerRadius = 16
-            layer.borderWidth = 1
-            layer.borderColor = R.color.foodViewing.basicSecondary()?.cgColor
             setImage(buttonImage, for: .normal)
             setImage(buttonImagePressed, for: .highlighted)
             
-            let gradient = CAGradientLayer()
-            gradient.frame = self.bounds
-            gradient.cornerRadius = layer.cornerRadius
+            layer.cornerRadius = 16
+            layer.cornerCurve = .continuous
+            layer.borderWidth = 2
+            layer.borderColor = R.color.foodViewing.basicSecondary()?.cgColor
             
-            if let firstColor = R.color.basicButton.gradientFirstColor(),
-               let secondColor = R.color.basicButton.gradientSecondColor() {
-                gradient.colors = [firstColor.cgColor, secondColor.cgColor]
-                gradient.startPoint = CGPoint(x: 0.0, y: 0.5)
-                gradient.endPoint = CGPoint(x: 1.0, y: 0.5)
+            let path = UIBezierPath(roundedRect: bounds, cornerRadius: 16).cgPath
+            firstShadowLayer.shadowPath = path
+            secondShadowLayer.shadowPath = path
+            
+            gradientLayer.frame = bounds
+            gradientLayer.cornerRadius = layer.cornerRadius
+            gradientLayer.cornerCurve = layer.cornerCurve
+            
+            let layers = [firstShadowLayer, secondShadowLayer, gradientLayer]
+            
+            for index in 0..<layers.count {
+                let layer = layers[index]
+                guard self.layer.sublayers?.filter({ $0.name == layer.name }) != nil else { return }
+                self.layer.insertSublayer(layer, at: UInt32(index))
             }
-            
-            layer.insertSublayer(gradient, at: 0)
             
         case .inactive:
             backgroundColor = R.color.basicButton.inactiveColor()
             layer.borderColor = UIColor.white.cgColor
-            layer.borderWidth = 1
             setImage(buttonImage?.withTintColor(.white), for: .normal)
-            layer.sublayers = layer.sublayers?.filter { theLayer in
-                !theLayer.isKind(of: CAGradientLayer.classForCoder())
-            }
+            
+            layer.sublayers?.filter {
+                ["firstShadowLayer", "secondShadowLayer", "gradientLayer"].contains($0.name)
+            }.forEach { $0.removeFromSuperlayer() }
         }
     }
 }
