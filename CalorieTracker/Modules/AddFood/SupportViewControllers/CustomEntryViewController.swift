@@ -20,11 +20,16 @@ final class CustomEntryViewController: UIViewController, UIScrollViewDelegate {
     private lazy var proteinForm: FormView = getProteinForm()
     private lazy var fatLabel: UILabel = getFatLabel()
     private lazy var fatForm: FormView = getFatForm()
-    private lazy var addEntryButton: BasicButtonView = getAddEntryButton()
+    private lazy var addEntryButton: AddCustomEntryButton = getAddEntryButton()
     private lazy var closeButton: UIButton = getCloseButton()
     private lazy var contentView: UIView = getContentView()
     private lazy var scrollView: UIScrollView = getScrollView()
-
+    
+    private let placeholderAttributes = [
+        NSAttributedString.Key.foregroundColor: R.color.grayBasicGray(),
+        .font: R.font.sfProTextMedium(size: 17)
+    ].mapValues { $0 as Any }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -45,7 +50,7 @@ final class CustomEntryViewController: UIViewController, UIScrollViewDelegate {
         scrollView.addSubview(
             contentView
         )
-    
+        
         contentView.addSubviews(
             closeButton,
             titleHeaderLabel,
@@ -77,7 +82,7 @@ final class CustomEntryViewController: UIViewController, UIScrollViewDelegate {
         }
         
         descriptionLabel.snp.makeConstraints { make in
-            make.leading.equalTo(contentView).inset(20)
+            make.leading.equalTo(contentView).inset(28)
             make.bottom.equalTo(descriptionForm.snp.top).offset(-4)
         }
         
@@ -182,18 +187,22 @@ final class CustomEntryViewController: UIViewController, UIScrollViewDelegate {
         guard let keyboardFrameValue = notification.userInfo?[key] as? NSValue else { return }
         let keyboardFrame = view.convert(keyboardFrameValue.cgRectValue, from: nil)
         
-        scrollView.contentInset.bottom = keyboardFrame.height
-        scrollView.scrollIndicatorInsets = scrollView.contentInset
-        
         let heightDiferenceOfView = view.frame.size.height - keyboardFrame.size.height
         let heightDiferenceOfButton = addEntryButton.frame.origin.y - heightDiferenceOfView
         let offsetPoint = heightDiferenceOfButton + addEntryButton.frame.height + 16
-        scrollView.contentOffset = CGPoint(x: 0, y: offsetPoint)
+        
+        UIView.animate(withDuration: 0.6, delay: 0, options: .curveEaseInOut) {
+            self.scrollView.contentInset.bottom = keyboardFrame.height
+            self.scrollView.scrollIndicatorInsets = self.scrollView.contentInset
+            self.scrollView.contentOffset = CGPoint(x: 0, y: offsetPoint)
+        }
     }
     
     @objc private func keyboardWillBeHidden() {
-        scrollView.contentInset = .zero
-        scrollView.scrollIndicatorInsets = .zero
+        UIView.animate(withDuration: 0.6, delay: 0, options: .curveEaseInOut) {
+            self.scrollView.contentInset = .zero
+            self.scrollView.scrollIndicatorInsets = .zero
+        }
     }
     
     @objc private func didTapCloseButton() {
@@ -217,29 +226,36 @@ extension CustomEntryViewController {
     private func getTitleHeaderLabel() -> UILabel {
         let label = UILabel()
         label.text = "CUSTOM ENTRY"
-        label.font = R.font.sfProDisplaySemibold(size: 24.fontScale())
-        label.textColor = R.color.foodViewing.basicPrimary()
+        label.font = R.font.sfProRoundedBold(size: 24)
+        label.textColor = R.color.folderTitleText()
         return label
     }
     
     private func getDescriptionLabel() -> UILabel {
         let label = UILabel()
-        label.font = R.font.sfProTextRegular(size: 17)
-        label.textColor = R.color.addFood.menu.isNotSelectedText()
+        label.font = R.font.sfProTextMedium(size: 17)
+        label.textColor = R.color.grayBasicGray()
         label.text = "Description"
         return label
     }
     
     private func getDescriptionForm() -> FormView<EmptyGetTitle> {
         let form = FormView<EmptyGetTitle>()
-        form.model = .init(width: .large, value: .required("Required"))
+        form.model = .init(width: .large, value: .required(nil))
+        form.textField.font = R.font.sfProTextMedium(size: 17)
+        form.textField.attributedPlaceholder = NSAttributedString(
+            string: "Required",
+            attributes: placeholderAttributes
+        )
+        
+        form.textField.delegate = self
         form.textField.becomeFirstResponder()
         return form
     }
     
     private func getCaloriesLabel() -> UILabel {
         let label = UILabel()
-        label.font = R.font.sfProTextRegular(size: 17)
+        label.font = R.font.sfProTextMedium(size: 17)
         label.textColor = R.color.addFood.menu.kcal()
         label.text = "Calories"
         return label
@@ -247,7 +263,13 @@ extension CustomEntryViewController {
     
     private func getCaloriesForm() -> FormView<EmptyGetTitle> {
         let form = FormView<EmptyGetTitle>()
-        form.model = .init(width: .large, value: .required("Required"))
+        form.model = .init(width: .large, value: .required(nil))
+        form.textField.font = R.font.sfProTextMedium(size: 17)
+        form.textField.attributedPlaceholder = NSAttributedString(
+            string: "Required",
+            attributes: placeholderAttributes
+        )
+        
         form.textField.keyboardType = .decimalPad
         form.textField.delegate = self
         return form
@@ -255,7 +277,7 @@ extension CustomEntryViewController {
     
     private func getCarbsLabel() -> UILabel {
         let label = UILabel()
-        label.font = R.font.sfProTextRegular(size: 17)
+        label.font = R.font.sfProTextMedium(size: 17)
         label.textColor = R.color.addFood.menu.carb()
         label.text = "Carbs"
         return label
@@ -264,13 +286,19 @@ extension CustomEntryViewController {
     private func getCarbsForm() -> FormView<EmptyGetTitle> {
         let form = FormView<EmptyGetTitle>()
         form.model = .init(width: .large, value: .optional)
+        form.textField.font = R.font.sfProTextMedium(size: 17)
+        form.textField.attributedPlaceholder = NSAttributedString(
+            string: "optional",
+            attributes: placeholderAttributes
+        )
+        
         form.textField.keyboardType = .decimalPad
         return form
     }
     
     private func getProteinLabel() -> UILabel {
         let label = UILabel()
-        label.font = R.font.sfProTextRegular(size: 17)
+        label.font = R.font.sfProTextMedium(size: 17)
         label.textColor = R.color.addFood.menu.protein()
         label.text = "Protein"
         return label
@@ -279,13 +307,19 @@ extension CustomEntryViewController {
     private func getProteinForm() -> FormView<EmptyGetTitle> {
         let form = FormView<EmptyGetTitle>()
         form.model = .init(width: .large, value: .optional)
+        form.textField.font = R.font.sfProTextMedium(size: 17)
+        form.textField.attributedPlaceholder = NSAttributedString(
+            string: "optional",
+            attributes: placeholderAttributes
+        )
+        
         form.textField.keyboardType = .decimalPad
         return form
     }
     
     private func getFatLabel() -> UILabel {
         let label = UILabel()
-        label.font = R.font.sfProTextRegular(size: 17)
+        label.font = R.font.sfProTextMedium(size: 17)
         label.textColor = R.color.addFood.menu.fat()
         label.text = "Fat"
         return label
@@ -294,31 +328,20 @@ extension CustomEntryViewController {
     private func getFatForm() -> FormView<EmptyGetTitle> {
         let form = FormView<EmptyGetTitle>()
         form.model = .init(width: .large, value: .optional)
+        form.textField.font = R.font.sfProTextMedium(size: 17)
+        form.textField.attributedPlaceholder = NSAttributedString(
+            string: "optional",
+            attributes: placeholderAttributes
+        )
+        
         form.textField.keyboardType = .decimalPad
         return form
     }
     
-    private func getAddEntryButton() -> BasicButtonView {
-        let button = BasicButtonView(
-            type: .custom(
-                .init(
-                    image: .init(isPressImage: R.image.basicButton.addPressed(),
-                                 defaultImage: R.image.basicButton.addDefault(),
-                                 inactiveImage: R.image.basicButton.addInactive()),
-                    title: nil,
-                    backgroundColorInactive: R.color.basicButton.inactiveColor(),
-                    backgroundColorDefault: R.color.basicButton.gradientFirstColor(),
-                    backgroundColorPress: R.color.basicButton.gradientFirstColor(),
-                    gradientColors: nil,
-                    borderColorInactive: R.color.basicButton.inactiveColor(),
-                    borderColorDefault: R.color.foodViewing.basicSecondaryDark(),
-                    borderColorPress: R.color.foodViewing.basicSecondary()
-                )
-            )
-        )
-        
+    private func getAddEntryButton() -> AddCustomEntryButton {
+        let button = AddCustomEntryButton()
+        button.setState(.inactive)
         button.addTarget(self, action: #selector(didTapCustomEntryButton), for: .touchUpInside)
-        button.active = false
         return button
     }
     
@@ -339,6 +362,7 @@ extension CustomEntryViewController {
         let scrollView = UIScrollView()
         scrollView.showsVerticalScrollIndicator = false
         scrollView.showsHorizontalScrollIndicator = false
+        scrollView.keyboardDismissMode = .interactive
         scrollView.delegate = self
         return scrollView
     }
@@ -346,15 +370,37 @@ extension CustomEntryViewController {
 
 extension CustomEntryViewController: UITextFieldDelegate {
     
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        [caloriesForm, descriptionForm].forEach {
+            guard textField == $0.textField else { return }
+            $0.layer.borderWidth = 1
+            $0.layer.borderColor = R.color.folderTitleText()?.cgColor
+        }
+    }
+    
     func textField(_ textField: UITextField,
                    shouldChangeCharactersIn range: NSRange,
                    replacementString string: String) -> Bool {
-        
         let currentText = textField.text as NSString?
         let replacedText = currentText?.replacingCharacters(in: range, with: string)
         let resultText = replacedText ?? string
-        addEntryButton.active = resultText.isEmpty ? false : true
+        
+        if (textField == caloriesForm.textField && descriptionForm.textField.text != "")
+            || (textField == descriptionForm.textField && caloriesForm.textField.text != "") {
+            addEntryButton.setState(resultText.isEmpty ? .inactive : .active)
+        }
         
         return true
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        let borderColor = R.color.foodViewing.basicSecondaryDark()?.cgColor
+        let borderWidth: CGFloat = textField.text == "" ? 2 : 1
+        
+        [caloriesForm, descriptionForm].forEach {
+            guard textField == $0.textField else { return }
+            $0.layer.borderColor = borderColor
+            $0.layer.borderWidth = borderWidth
+        }
     }
 }
