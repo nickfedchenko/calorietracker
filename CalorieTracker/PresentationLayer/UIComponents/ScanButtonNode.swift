@@ -12,6 +12,7 @@ final class ScanButtonNode: CTWidgetButtonNode {
         let node = ASImageNode()
         node.image = R.image.scanButton.buttonNotPressed()
         node.isUserInteractionEnabled = false
+        node.contentMode = .center
         return node
     }()
     
@@ -25,14 +26,13 @@ final class ScanButtonNode: CTWidgetButtonNode {
     }
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
-        let spasing = constrainedSize.min.height / 5.33
         
         return ASInsetLayoutSpec(
             insets: UIEdgeInsets(
-                top: spasing,
-                left: spasing,
-                bottom: spasing,
-                right: spasing
+                top: 0,
+                left: 0,
+                bottom: 0,
+                right: 0
             ),
             child: scanImageNode
         )

@@ -27,15 +27,15 @@ class AddFoodRouter: NSObject {
     static func setupModule(
         shouldInitiallyPerformSearchWith barcode: String? = nil,
         mealTime: MealTime = .breakfast,
+        addFoodYCoordinate: CGFloat,
         needUpdate: (() -> Void)? = nil
     ) -> AddFoodViewController {
       
-        let vc = AddFoodViewController()
+        let vc = AddFoodViewController(searchFieldYCoordinate: addFoodYCoordinate)
         let interactor = AddFoodInteractor()
         let router = AddFoodRouter()
         let presenter = AddFoodPresenter(interactor: interactor, router: router, view: vc)
         let keyboardManager = KeyboardManager()
-
         vc.presenter = presenter
         vc.keyboardManager = keyboardManager
         vc.mealTime = mealTime
@@ -57,6 +57,7 @@ class AddFoodRouter: NSObject {
 extension AddFoodRouter: AddFoodRouterInterface {
     func closeViewController() {
         needUpdate?()
+        print("Nav controller contains \(viewController?.navigationController?.viewControllers)")
         viewController?.navigationController?.popViewController(animated: true)
     }
     

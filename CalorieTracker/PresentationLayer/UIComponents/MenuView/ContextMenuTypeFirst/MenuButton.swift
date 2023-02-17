@@ -28,7 +28,7 @@ final class MenuButton<ID: WithGetTitleProtocol & WithGetImageProtocol>: UIContr
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = R.font.sfProDisplaySemibold(size: 18)
+        label.font = R.font.sfProRoundedBold(size: 18)
         label.textColor = R.color.addFood.menu.isSelectedText()
         return label
     }()

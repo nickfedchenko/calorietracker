@@ -30,6 +30,40 @@ final class UDM {
         case possibleExceptionTags
         case isHapticEnabled
         case currentWorkingDay
+        case mainScreenAddButtonOriginY
+        case tempAddButtonImage
+        case tempScannerImage
+    }
+    
+    
+    static var tempAddButtonImage: Data? {
+        get {
+            return getValue(for: .tempAddButtonImage)
+        }
+        
+        set {
+            setValue(value: newValue, for: .tempAddButtonImage)
+        }
+    }
+    
+    static var tempScannerImage: Data? {
+        get {
+            return getValue(for: .tempScannerImage)
+        }
+        
+        set {
+            setValue(value: newValue, for: .tempScannerImage)
+        }
+    }
+    
+    static var mainScreenAddButtonOriginY: CGFloat {
+        get {
+            return getValue(for: .mainScreenAddButtonOriginY) ?? 724
+        }
+        
+        set {
+            setValue(value: newValue, for: .mainScreenAddButtonOriginY)
+        }
     }
     
     static var currentlyWorkingDay: Day {

@@ -745,3 +745,14 @@
 "Apply" = "Применить";
 "Add to diary" = "Добавить в дневник";
 "Back" = "Назад";
+
+"measurement.kg" = "кг";
+"measurement.lb" = "фт";
+"measurement.cm" = "см";
+"measurement.in" = "дюйм";
+"measurement.kcal" = "ккал";
+"measurement.kj" = "кдж";
+"measurement.ml" = "мл";
+"measurement.floz" = "ж. унц";
+"measurement.g" = "г";
+"measurement.oz" = "унц";

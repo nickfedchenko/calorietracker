@@ -27,7 +27,6 @@ struct Dish: Codable {
     let photo: String
     let isDraft: Bool
     let createdAt: String
-    
     var foodDataId: String?
     
     //    let id: Int

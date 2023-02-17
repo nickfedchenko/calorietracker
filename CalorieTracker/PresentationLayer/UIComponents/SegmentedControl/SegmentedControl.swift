@@ -48,7 +48,7 @@ final class SegmentedControl<ID: Equatable>: UIView {
     var onSegmentChanged: ((Button.Model) -> Void)?
     var textNormalColor: UIColor? = .black
     var textSelectedColor: UIColor? = .green
-    var font: UIFont? = R.font.sfProDisplaySemibold(size: 16.fontScale()) {
+    var font: UIFont? = R.font.sfProTextSemibold(size: 16) {
         didSet {
             buttons.forEach { button in
                 button.font = font

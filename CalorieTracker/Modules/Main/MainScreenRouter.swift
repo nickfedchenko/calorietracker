@@ -49,7 +49,8 @@ extension MainScreenRouter: MainScreenRouterInterface {
     }
     
     func openAddFoodVC() {
-        let vc = AddFoodRouter.setupModule()
+        let vc = AddFoodRouter.setupModule(addFoodYCoordinate: UDM.mainScreenAddButtonOriginY)
+        viewController?.navigationController?.delegate = self
         viewController?.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -131,7 +132,35 @@ extension MainScreenRouter: WidgetContainerOutput {
     }
     
     private func openAddFoodVCandPerformSearch(with barcode: String) {
-        let vc = AddFoodRouter.setupModule(shouldInitiallyPerformSearchWith: barcode)
+        let vc = AddFoodRouter.setupModule(
+            shouldInitiallyPerformSearchWith: barcode, 
+            addFoodYCoordinate: UDM.mainScreenAddButtonOriginY
+        )
         viewController?.navigationController?.pushViewController(vc, animated: true)
+    }
+}
+
+
+extension MainScreenRouter: UINavigationControllerDelegate {
+    func navigationController(
+        _ navigationController: UINavigationController,
+        animationControllerFor operation: UINavigationController.Operation,
+        from fromVC: UIViewController,
+        to toVC: UIViewController
+    ) -> UIViewControllerAnimatedTransitioning? {
+        print("from vc is \(fromVC)")
+        if operation == .push {
+            if fromVC is CTTabBarController {
+                return AddFoodControllerPushAnimationController()
+            } else {
+                return nil
+            }
+        } else {
+            if toVC is CTTabBarController {
+                return AddFoodControllerPopAnimationController()
+            } else {
+                return nil
+            }
+        }
     }
 }

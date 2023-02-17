@@ -23,7 +23,7 @@ final class SearchView: ViewWithShadow {
     var didBeginEditing: ((String) -> Void)?
     var didChangeValue: ((String) -> Void)?
     
-    var placeholderText: String = "Search" {
+    var placeholderText: String = R.string.localizable.addFoodPlaceholder() {
         didSet {
             didChangeState()
         }
@@ -51,7 +51,7 @@ final class SearchView: ViewWithShadow {
     
     private(set) lazy var textField: InnerShadowTextField = {
         let textField = InnerShadowTextField()
-        textField.font = R.font.sfProDisplaySemibold(size: 18)
+        textField.font = R.font.sfProTextMedium(size: 17)
         textField.layer.cornerRadius = 16
         textField.layer.cornerCurve = .continuous
         textField.tintColor = R.color.foodViewing.basicPrimary()
@@ -151,7 +151,7 @@ final class SearchView: ViewWithShadow {
     
     private func getPlaceholder(_ text: String) -> NSAttributedString {
         let image = R.image.searchTextField.search()!
-        let font = R.font.sfProDisplaySemibold(size: 18)
+        let font = R.font.sfProRoundedBold(size: 18)
         
         return text.attributedSring(
             [
