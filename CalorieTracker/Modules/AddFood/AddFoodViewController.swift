@@ -661,6 +661,7 @@ final class AddFoodViewController: UIViewController {
     
     @objc private func didTapCalorieButton() {
         Vibration.rigid.vibrate()
+        presenter?.didTapCalorieButton()
     }
     
     @objc private func didTapScanButton() {

@@ -508,6 +508,7 @@
 "addFood.calories" = "КАЛОРИИ";
 "addFood.done" = "ГОТОВО";
 "addFood.title.recent" = "недавние поиски";
+"addFood.customEntry" = "КАСТОМНЫЙ ВВОД";
 
 "breakfast" = "ЗАВТРАК";
 "lunch" = "ОБЕД";
@@ -524,9 +525,11 @@
 "myFood" = "Моя еда";
 "nutrition" = "Питание";
 
+"description" = "Описание";
 "kcal.short" = "ккал";
-"carbs.short" = "углеводы";
-"fat.short" = "жиры";
+"carbs.short" = "Углеводы";
+"fat.short" = "Жиры";
+"proteins" = "Белки";
 "kcal" = "Калории";
 "fat" = "Общее количество жира";
 "satFat" = "Насыщенный жир";
@@ -601,6 +604,9 @@
 "track" = "Отслеживать";
 
 "exercises" = "упражнения";
+
+"textField.required" = "Обязательное";
+"textField.optional" = "Опциональное";
 
 "create.title" = "Создание продуктов питания";
 "create.description.first" = "Шаг";
