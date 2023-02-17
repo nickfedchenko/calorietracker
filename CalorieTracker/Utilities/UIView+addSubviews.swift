@@ -60,4 +60,30 @@ extension UIView {
         shape.path = maskPath.cgPath
         layer.mask = shape
     }
+    
+    public func snapshotNewView(scale: CGFloat = 0, isOpaque: Bool = false) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(self.bounds.size, isOpaque, scale)
+        self.layer.render(in: UIGraphicsGetCurrentContext()!)
+        let img = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return img
+    }
+    
+    public func snapshotNewViewWithDraw(scale: CGFloat = 0.0, isOpaque: Bool = true) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(bounds.size, isOpaque, scale)
+        drawHierarchy(in: bounds, afterScreenUpdates: true)
+        if let image = UIGraphicsGetImageFromCurrentImageContext() {
+            UIGraphicsEndImageContext()
+            return image
+        } else {
+            return UIImage()
+        }
+    }
+    
+    public func snapshotFrameView(frame: CGRect, scale: CGFloat = 0.0, isOpaque: Bool = true) -> UIImage {
+        let image = UIGraphicsImageRenderer(bounds: frame).image { context in
+            layer.render(in: context.cgContext)
+        }
+        return image
+    }
 }

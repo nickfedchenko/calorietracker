@@ -284,16 +284,22 @@ extension FoodCellView.FoodViewModel {
         self.verified = !product.isUserProduct
         
         if let weight = weight {
-            self.kcal = product.kcal / 100 * weight
-            self.description = "\(Int(weight)) g"
+            self.kcal = BAMeasurement(product.kcal / 100 * weight, .energy, isMetric: true).localized
+            let description = BAMeasurement(weight, .serving, isMetric: true).string
+            self.description = description
         } else {
-            self.kcal = product.kcal
-            self.description = product.servings?
-                .compactMap { $0.size }
-                .joined(separator: ", ") ?? ""
+            self.kcal = BAMeasurement(product.kcal, .energy, isMetric: true).localized
+            if let serving = product.servings?.first {
+                let description = "\(serving.size?.capitalized ?? "") "
+                + "(\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string))"
+                self.description = description
+            } else {
+                self.description = ""
+            }
         }
     }
     
+    // MARK: - Model for food cells
     private init(_ dish: Dish, weight: Double?) {
         self.id = String(dish.id)
         self.title = dish.title
@@ -310,18 +316,29 @@ extension FoodCellView.FoodViewModel {
                 switch portions {
                 case 1:
                     return R.string.localizable.servings1()
-                    
                 case 2...4:
                     return R.string.localizable.servings24()
                 default:
                     return R.string.localizable.servings4()
                 }
             }()
-             self.kcal = (weight / (totalWeight)) * dish.kcal
+            self.kcal = BAMeasurement((weight / totalWeight) * dish.kcal, .energy, isMetric: true).localized
             self.description = "\(portions) \(servingText)"
         } else {
-            self.kcal = dish.values?.serving.kcal ?? 1
-            self.description = dish.info ?? ""
+            var servingWeight: Double = 0
+            if let servingDishWeight = dish.values?.serving.weight {
+                servingWeight = servingDishWeight
+            } else {
+                let dishWeight = dish.dishWeight ?? 1
+                let totalServing = dish.totalServings ?? 1
+                servingWeight = dishWeight / Double(totalServing)
+            }
+            self.kcal = BAMeasurement(dish.values?.serving.kcal ?? 1, .energy, isMetric: true).localized
+            print("Default serving weight = \(servingWeight)")
+            print("Localized serving weight = \(BAMeasurement(servingWeight, .serving, isMetric: true).localized)")
+            self.description = "1 "
+            + R.string.localizable.servings1()
+            + " (\(BAMeasurement(servingWeight, .serving, isMetric: true).string ))"
         }
     }
     
@@ -335,4 +352,6 @@ extension FoodCellView.FoodViewModel {
             return nil
         }
     }
+    
+    
 }

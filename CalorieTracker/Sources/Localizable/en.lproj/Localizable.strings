@@ -738,3 +738,14 @@
 "Apply" = "Apply";
 "Add to diary" = "Add to diary";
 "Back" = "Back";
+
+"measurement.kg" = "kg";
+"measurement.lb" = "lb";
+"measurement.cm" = "cm";
+"measurement.in" = "in";
+"measurement.kcal" = "kcal";
+"measurement.kj" = "kj";
+"measurement.ml" = "ml";
+"measurement.floz" = "floz";
+"measurement.g" = "g";
+"measurement.oz" = "oz";

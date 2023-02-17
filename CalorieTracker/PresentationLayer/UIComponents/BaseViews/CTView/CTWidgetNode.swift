@@ -87,6 +87,10 @@ class CTWidgetNode: ASControlNode, CTWidgetProtocol {
         drawShadows()
     }
     
+    func getTopSafeAreaInset() -> CGFloat {
+        configuration.safeAreaTopInset
+    }
+    
     private func drawShadows() {
         shadowLayer.sublayers?.forEach { $0.removeFromSuperlayer() }
         shadows.forEach { shadowLayer.addSublayer(addShadowLayer(shadow: $0)) }

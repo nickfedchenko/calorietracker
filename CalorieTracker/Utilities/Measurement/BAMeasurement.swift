@@ -47,24 +47,24 @@ struct BAMeasurement {
         switch measurement {
         case .weight:
             return isMetric
-                ? "kg"
-                : "lb"
+                ? "measurement.kg".localized
+                : "measurement.lb".localized
         case .lenght:
             return isMetric
-                ? "cm"
-                : "in"
+                ? "measurement.cm".localized
+                : "measurement.in".localized
         case .energy:
             return isMetric
-                ? "kcal"
-                : "kj"
+                ? "measurement.kcal".localized
+                : "measurement.kj".localized
         case .liquid:
             return isMetric
-                ? "ml"
-                : "fl oz"
+                ? "measurement.ml".localized
+                : "measurement.floz".localized
         case .serving:
             return isMetric
-                ? "g"
-                : "oz"
+                ? "measurement.g".localized
+                : "measurement.oz".localized
         }
     }
     
@@ -137,12 +137,12 @@ struct BAMeasurement {
 extension Double {
     var clean: String {
         if self.isNaN { return "0" }
-        var string = self.truncatingRemainder(dividingBy: 1) == 0
+        var string = self.truncatingRemainder(dividingBy: 1) < 0.1
         ? String(format: "%.0f", self)
         : String(format: "%.1f", self)
-        if string.hasSuffix(".00") { string = string.replacingOccurrences(of: ".00", with: "") }
+        if string.hasSuffix(".0") { string = string.replacingOccurrences(of: ".00", with: "") }
         if string != "0" && string.contains(".") && string.hasSuffix("0") {
-            string = String(string.dropLast())
+            string = String(string.dropLast(2))
         }
         return string
     }

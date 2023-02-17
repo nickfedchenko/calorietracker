@@ -91,7 +91,17 @@ final class AddFoodViewController: UIViewController {
         }
     }
     
+    private var searchFieldYCoordinate: CGFloat
     var mealTime: MealTime = .breakfast
+    
+    init(searchFieldYCoordinate: CGFloat) {
+        self.searchFieldYCoordinate = searchFieldYCoordinate
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Override
     
@@ -103,6 +113,7 @@ final class AddFoodViewController: UIViewController {
         setupConstraints()
         didChangeState()
         addTapToHideKeyboardGesture()
+        transitioningDelegate = self
     }
     
     override func viewDidLayoutSubviews() {
@@ -155,7 +166,7 @@ final class AddFoodViewController: UIViewController {
         
         searchTextField.textField.keyboardAppearance = .light
         searchTextField.textField.keyboardType = .webSearch
-        searchTextField.placeholderText = "Search".localized
+        searchTextField.placeholderText = R.string.localizable.addFoodPlaceholder()
     
         foodCollectionViewController.dataSource = self
         foodCollectionViewController.delegate = self
@@ -309,7 +320,7 @@ final class AddFoodViewController: UIViewController {
         )
         
         contentViewBottomAnchor?.isActive = true
-        
+    
         menuButton.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(20)
             make.top.equalTo(view.safeAreaLayoutGuide).offset(2)
@@ -333,7 +344,7 @@ final class AddFoodViewController: UIViewController {
             make.centerX.equalToSuperview()
             make.leading.trailing.greaterThanOrEqualToSuperview().inset(40)
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
-            make.height.equalTo(tabBarStackView.snp.width).multipliedBy(0.155)
+            make.height.equalTo(64)
         }
         
         collectionViewTopSecondAnchor = foodCollectionViewController
@@ -357,18 +368,21 @@ final class AddFoodViewController: UIViewController {
         
         searchTextField.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(20)
-            make.height.equalToSuperview().multipliedBy(0.07)
-            make.width.equalTo(searchTextField.snp.height).multipliedBy(4.66)
+            make.height.equalTo(64)
+            make.leading.equalToSuperview().offset(Constants.searchFieldSideInset)
+            make.trailing.equalTo(microphoneButton.snp.leading).inset(12)
             make.bottom.lessThanOrEqualTo(keyboardHeaderView.snp.bottom).offset(-20)
-            make.bottom.equalTo(tabBarStackView.snp.top).offset(-12).priority(.low)
+            make.bottom.lessThanOrEqualTo(tabBarStackView.snp.top).offset(-12).priority(.low)
+            make.top.equalTo(bottomGradientView.snp.top).offset(33)
         }
         
         microphoneButton.aspectRatio()
         microphoneButton.snp.makeConstraints { make in
             make.width.height.equalTo(searchTextField.snp.height)
 //            make.trailing.equalToSuperview().offset(-20)
-            make.leading.equalTo(searchTextField.snp.trailing).offset(12)
-            make.bottom.equalTo(tabBarStackView.snp.top).offset(-12)
+//            make.leading.equalTo(searchTextField.snp.trailing).offset(12)
+            make.trailing.equalToSuperview().inset(Constants.searchFieldSideInset)
+            make.bottom.equalTo(searchTextField)
         }
         
         keyboardHeaderView.snp.makeConstraints { make in
@@ -384,8 +398,8 @@ final class AddFoodViewController: UIViewController {
         
         bottomGradientView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            make.bottom.equalTo(tabBarStackView.snp.top)
-            make.height.equalTo(searchTextField).offset(50)
+            make.bottom.equalToSuperview()
+            make.height.equalTo(204)
         }
         
         counterKcalControl.snp.makeConstraints { make in
@@ -405,7 +419,7 @@ final class AddFoodViewController: UIViewController {
 //        }
         
         addToEatenButton.snp.makeConstraints { make in
-            make.leading.equalTo(microphoneButton.snp.trailing).offset(12)
+//            make.leading.equalTo(microphoneButton.snp.trailing).offset(12)
             make.width.equalTo(0)
             make.height.equalTo(microphoneButton.snp.height)
             make.top.equalTo(searchTextField)
@@ -575,41 +589,66 @@ final class AddFoodViewController: UIViewController {
     
     private func showDoneButton(_ flag: Bool) {
         addToEatenButton.updateCount(to: selectedFood?.count ?? 0)
+        let widget = CTWidgetNode(with: .init(type: .compact))
+        let inset = widget.constants.suggestedTopSafeAreaOffset
+        let interIteminset = widget.constants.suggestedInterItemSpacing
         if flag {
-            if case .search(_) = state {
+            if case .search = state {
                 return
             }
             searchTextField.placeholderText = ""
             searchTextField.snp.remakeConstraints { make in
-                make.leading.equalToSuperview().offset(20)
-                make.height.equalToSuperview().multipliedBy(0.07)
+                make.leading.equalToSuperview().offset(Constants.searchFieldSideInset)
+                make.height.equalTo(64)
                 make.width.equalTo(searchTextField.snp.height).multipliedBy(1)
                 make.bottom.lessThanOrEqualTo(keyboardHeaderView.snp.bottom).offset(-20)
                 make.bottom.equalTo(tabBarStackView.snp.top).offset(-12).priority(.low)
             }
             
+            microphoneButton.snp.makeConstraints { make in
+                make.leading.equalTo(searchTextField.snp.trailing).offset(inset)
+                make.height.equalTo(addToEatenButton)
+                make.top.equalTo(addToEatenButton)
+                make.trailing.equalTo(addToEatenButton.snp.leading).offset(-inset)
+            }
+            
             addToEatenButton.snp.remakeConstraints { make in
-                make.leading.equalTo(microphoneButton.snp.trailing).offset(12)
+//                make.leading.equalTo(microphoneButton.snp.trailing).offset(12)
                 make.trailing.equalToSuperview().inset(20)
                 make.top.equalTo(searchTextField)
                 make.height.equalTo(microphoneButton.snp.height)
             }
+            
+            
         } else {
+           
             searchTextField.snp.remakeConstraints { make in
                 make.leading.equalToSuperview().offset(20)
-                make.height.equalToSuperview().multipliedBy(0.07)
-                make.width.equalTo(searchTextField.snp.height).multipliedBy(4.66)
-                make.bottom.lessThanOrEqualTo(keyboardHeaderView.snp.bottom).offset(-20)
+                make.height.equalTo(64)
+                make.trailing.equalTo(microphoneButton.snp.leading).inset(-interIteminset)
+//                make.width.equalTo(searchTextField.snp.height).multipliedBy(4.66)
+//                make.bottom.lessThanOrEqualTo(keyboardHeaderView.snp.bottom).offset(-20)
                 make.bottom.equalTo(tabBarStackView.snp.top).offset(-12).priority(.low)
+                if case .search = state {
+                    make.bottom.equalTo(keyboardHeaderView.snp.bottom).offset(-20)
+                } else {
+                    make.top.equalToSuperview().offset(searchFieldYCoordinate)
+                }
             }
             
             addToEatenButton.snp.remakeConstraints { make in
-                make.leading.equalTo(microphoneButton.snp.trailing).offset(12)
+                make.trailing.equalToSuperview().inset(Constants.searchFieldSideInset)
                 make.width.equalTo(0)
                 make.height.equalTo(microphoneButton.snp.height)
-                make.top.equalTo(searchTextField)
+                make.top.equalTo(searchFieldYCoordinate)
             }
-            searchTextField.placeholderText = "Search".localized
+            
+            microphoneButton.snp.remakeConstraints { make in
+                make.trailing.equalTo(addToEatenButton.snp.leading)
+                make.width.height.equalTo(searchTextField.snp.height)
+    //            make.trailing.equalToSuperview().offset(-20)
+                make.bottom.equalTo(addToEatenButton)
+            }
         }
         addToEatenButton.setNeedsDisplay()
         
@@ -785,6 +824,7 @@ private extension AddFoodViewController {
     func getSegmentedControl() -> SegmentedControl<AddFood> {
         let view = SegmentedControl<AddFood>(Const.segmentedModels)
         view.backgroundColor = R.color.addFood.menu.background()
+        view.font = R.font.sfProTextSemibold(size: 16)
         view.selectedButtonType = .frequent
         return view
     }
@@ -916,5 +956,81 @@ private extension AddFoodViewController {
         button.setTitle(R.string.localizable.addFoodDone(), for: .normal)
         button.titleLabel?.font = R.font.sfProDisplaySemibold(size: 18)
         return button
+    }
+}
+
+extension AddFoodViewController: UIViewControllerTransitioningDelegate {
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return nil
+    }
+    
+    func animationController(
+        forPresented presented: UIViewController,
+        presenting: UIViewController,
+        source: UIViewController
+    ) -> UIViewControllerAnimatedTransitioning? {
+//        AddFoodAppearingTransitionController()
+        return nil
+    }
+    
+    func setToStartTransitionState() {
+        searchTextField.alpha = 0
+        microphoneButton.alpha = 0
+    }
+    
+    func setToEndTransitionState() {
+//        UIView.animate(withDuration: 0.1) {
+            self.searchTextField.alpha = 1
+            self.microphoneButton.alpha = 1
+//        }
+    }
+    
+    func getCurrentSearchFieldFrame() -> CGRect {
+//        searchTextField.layoutIfNeeded()
+        return searchTextField.frame
+    }
+    
+    func getCurrentSearchFieldSnapshot() -> UIView {
+        searchTextField.layoutIfNeeded()
+        let view = UIImageView(image: searchTextField.snapshotNewView(scale: 0, isOpaque: false))
+        return view
+    }
+    
+    func getCurrentMicrophoneButtonSnapshot() -> UIView {
+        microphoneButton.layoutIfNeeded()
+        let view = UIImageView(image: microphoneButton.snapshotNewView(isOpaque: false))
+        return view
+    }
+    
+    func getCurrentMicrophoneButtonFrame() -> CGRect {
+        microphoneButton.layoutIfNeeded()
+        return microphoneButton.frame
+    }
+}
+
+extension AddFoodViewController {
+    enum Constants {
+        static var searchFieldSideInset: CGFloat {
+            switch UIDevice.screenType {
+            case .h19x430:
+                return 20
+            case .h19x428:
+                return 20
+            case .h19x414:
+                return 20
+            case .h19x393:
+                return 18
+            case .h19x390:
+                return 18
+            case .h19x375:
+                return 18
+            case .h16x414:
+                return 20
+            case .h16x375:
+                return 18
+            case .unknown:
+                return 20
+            }
+        }
     }
 }

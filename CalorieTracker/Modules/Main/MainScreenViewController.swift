@@ -134,7 +134,7 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         node.addTarget(
             self,
             action: #selector(didTapButton),
-            forControlEvents: .touchUpInside
+            forControlEvents: .touchDown
         )
         return node
     }()
@@ -208,6 +208,14 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         presenter?.updateActivityWidget()
         presenter?.updateCalendarWidget(UDM.currentlyWorkingDay.date)
         presenter?.updateNoteWidget()
+        if let tabBarController = tabBarController {
+            print("Found tab bar controller \(tabBarController)")
+            print(tabBarController.view)
+            print("alpha is \(tabBarController.view.alpha)")
+            print("Navigation controlelr contains \(navigationController?.viewControllers)")
+        } else {
+            print("Didnt found tabbar")
+        }
     }
     
     // MARK: - Private methods
@@ -331,6 +339,7 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
     
     @objc private func didTapButton() {
         Vibration.medium.vibrate()
+        UDM.mainScreenAddButtonOriginY = addWidgetButton.frame.origin.y
         presenter?.didTapAddButton()
     }
     
@@ -372,5 +381,58 @@ extension MainScreenViewController: MainScreenViewControllerInterface {
     
     func setNoteWidget(_ model: LastNoteView.Model?) {
         notesWidget.model = model
+    }
+}
+
+// MARK: - transition helpers
+extension MainScreenViewController {
+    // MARK: - Public methods
+    func setToBeginningTransition() {
+        addWidgetButton.alpha = 0
+        barCodeScannerButton.alpha = 0
+    }
+    
+    func setToEndedTransition() {
+        addWidgetButton.alpha = 1
+        barCodeScannerButton.alpha = 1
+    }
+    
+    func getAddButtonSnapshot() -> UIView {
+        let snapshot = addWidgetButton.view.snapshotNewView(isOpaque: false)
+        UDM.tempAddButtonImage = snapshot?.pngData()
+        let view = UIImageView(image: snapshot)
+        return view
+    }
+    
+    func makeAddButtonCopy() -> UIView {
+        return addWidgetButton.view
+    }
+    
+    func getScannerButtonSnapshot() -> UIView {
+        barCodeScannerButton.layoutIfNeeded()
+        let snapshot = barCodeScannerButton.view.snapshotNewView(isOpaque: false)
+        UDM.tempScannerImage = snapshot?.pngData()
+        let view = UIImageView(image: snapshot)
+        return view
+    }
+    
+    func getCurrentAddButtonFrame() -> CGRect {
+        addWidgetButton.frame
+    }
+    
+    func getCurrentScannerFrame() -> CGRect {
+        barCodeScannerButton.frame
+    }
+    
+    func getTabBarSnapshot() -> UIView {
+        guard let tabBarController = tabBarController as? CTTabBarController else { return UIView() }
+        return tabBarController.getTabBarSnapshot()
+    }
+    
+    func getTabBarTargetFrame() -> CGRect {
+        guard let tabBarController = tabBarController as? CTTabBarController else {
+            return .zero
+        }
+        return tabBarController.getTabBarFrame()
     }
 }
