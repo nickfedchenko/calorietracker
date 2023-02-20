@@ -23,6 +23,7 @@ protocol AddFoodPresenterInterface: AnyObject {
     func getMealTime() -> MealTime?
     func scannerDidRecognized(barcode: String)
     func updateSelectedFood(food: Food)
+    func stopSearchQuery()
 }
 
 final class AddFoodPresenter {
@@ -32,6 +33,7 @@ final class AddFoodPresenter {
     let interactor: AddFoodInteractorInterface?
     let searchQueue: OperationQueue =  {
         let queue = OperationQueue()
+        queue.qualityOfService = .userInteractive
         queue.maxConcurrentOperationCount = 1
         return queue
     }()
@@ -93,7 +95,7 @@ final class AddFoodPresenter {
                 }
             }
         case .search:
-            self.foods = []
+            return
         }
     }
     
@@ -261,5 +263,9 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
 
     func updateSelectedFood(food: Food) {
         view.updateSelectedFood(food)
+    }
+    
+    func stopSearchQuery() {
+        searchQueue.cancelAllOperations()
     }
 }

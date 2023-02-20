@@ -189,6 +189,7 @@ class RecipePageScreenViewController: CTViewController {
     init(backButtonTitle: String) {
         self.backButtonTitle = backButtonTitle
         super.init(nibName: nil, bundle: nil)
+        transitioningDelegate = self
     }
     
     override func viewDidLoad() {
@@ -502,5 +503,20 @@ extension RecipePageScreenViewController: UITextFieldDelegate {
         if reason == .committed {
             presenter?.didChangeAmountToEat(amount: Int(textField.text ?? "1") ?? 1)
         }
+    }
+}
+
+
+extension RecipePageScreenViewController: UIViewControllerTransitioningDelegate {
+    func animationController(
+        forPresented presented: UIViewController,
+        presenting: UIViewController,
+        source: UIViewController
+    ) -> UIViewControllerAnimatedTransitioning? {
+   return ModalSideTransitionAppearing()
+    }
+    
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return ModalSideTransitionDissapearing()
     }
 }
