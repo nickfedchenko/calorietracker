@@ -35,7 +35,14 @@ final class RecipesSearchFooter: UIView {
     }()
     
     let textField = SearchRecipesSearchField()
-    var state: RecipesFooterState = .compact {
+    
+    func hideRecipeSearchElements() {
+        mainFilterButton.alpha = 0
+        backButton.alpha = 0
+        textField.alpha = 0
+    }
+    
+    var state: RecipesFooterState = .expanded {
         didSet {
             setNeedsDisplay()
             updateMainButtonState()
@@ -45,7 +52,7 @@ final class RecipesSearchFooter: UIView {
     var colorsForGradient: [CGColor] {
         state == .compact
         ? [UIColor.white.cgColor, UIColor.white.withAlphaComponent(0.1).cgColor]
-        : [UIColor(hex: "CACDD4").cgColor, UIColor(hex: "E5EAF1").cgColor]
+        : [UIColor(hex: "D1D5DB").cgColor, UIColor(hex: "E5EAF1").cgColor]
     }
     
     var startPoint: CGPoint {
@@ -124,6 +131,7 @@ final class RecipesSearchFooter: UIView {
     
     private func drawGradient() {
         layer.cornerRadius = state == .compact ? 0 : 32
+        layer.maskedCorners = [.topCorners]
         layer.cornerCurve = .continuous
         gradientLayer.frame = bounds
         gradientLayer.colors = colorsForGradient

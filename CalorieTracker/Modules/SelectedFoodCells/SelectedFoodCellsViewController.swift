@@ -137,6 +137,10 @@ extension SelectedFoodCellsViewController: FoodCollectionViewControllerDelegate 
 // MARK: - FoodCollection DataSource
 
 extension SelectedFoodCellsViewController: FoodCollectionViewControllerDataSource {
+    func foodsOverAll() -> [Food] {
+        foods
+    }
+    
     func foodCellModel(_ indexPath: IndexPath) -> FoodCellViewModel? {
         return .init(
             cellType: .table,

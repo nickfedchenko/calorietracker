@@ -208,14 +208,6 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         presenter?.updateActivityWidget()
         presenter?.updateCalendarWidget(UDM.currentlyWorkingDay.date)
         presenter?.updateNoteWidget()
-        if let tabBarController = tabBarController {
-            print("Found tab bar controller \(tabBarController)")
-            print(tabBarController.view)
-            print("alpha is \(tabBarController.view.alpha)")
-            print("Navigation controlelr contains \(navigationController?.viewControllers)")
-        } else {
-            print("Didnt found tabbar")
-        }
     }
     
     // MARK: - Private methods

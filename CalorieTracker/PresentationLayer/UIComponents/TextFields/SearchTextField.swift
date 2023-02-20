@@ -8,6 +8,11 @@
 import UIKit
 
 final class SearchView: ViewWithShadow {
+    enum Mode {
+        case disabled
+        case enabled
+    }
+    
     enum State {
         case smallNotEdit
         case largeNotEdit
@@ -52,6 +57,8 @@ final class SearchView: ViewWithShadow {
     private(set) lazy var textField: InnerShadowTextField = {
         let textField = InnerShadowTextField()
         textField.font = R.font.sfProTextMedium(size: 17)
+        textField.autocorrectionType = .no
+        textField.spellCheckingType = .no
         textField.layer.cornerRadius = 16
         textField.layer.cornerCurve = .continuous
         textField.tintColor = R.color.foodViewing.basicPrimary()
@@ -88,6 +95,13 @@ final class SearchView: ViewWithShadow {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Public methods
+    func turnOffTextFieldInteractions() {
+        textField.isUserInteractionEnabled = false
+    }
+    
+    // MARK: - Private methods
+    
     private func setupView() {
         layer.cornerRadius = 16
         layer.cornerCurve = .continuous
@@ -123,7 +137,7 @@ final class SearchView: ViewWithShadow {
             self.shadowLayer.isHidden = true
             backgroundColor = .white
             textField.attributedPlaceholder = NSAttributedString(string: placeholderText)
-            textField.innerShadowColor = R.color.foodViewing.basicPrimary()
+            textField.innerShadowColors = [UIColor(hex: "0C695E"), UIColor(hex: "0C695E")]
             textField.textAlignment = .left
             
             switch editState {
@@ -135,14 +149,14 @@ final class SearchView: ViewWithShadow {
         case .largeNotEdit:
             self.shadowLayer.isHidden = false
             textField.attributedPlaceholder = getPlaceholder(placeholderText)
-            textField.innerShadowColor = .clear
+            textField.innerShadowColors = []
             textField.textAlignment = .center
             textField.rightViewMode = .never
             backgroundColor = R.color.searchTextField.background()
         case .smallNotEdit:
             self.shadowLayer.isHidden = false
             textField.attributedPlaceholder = imagePlaceholder?.asAttributedString
-            textField.innerShadowColor = .clear
+            textField.innerShadowColors = []
             textField.textAlignment = .center
             textField.rightViewMode = .never
             backgroundColor = R.color.searchTextField.background()
@@ -200,16 +214,16 @@ extension SearchView {
     struct Const {
         static let shadows: [Shadow] = [
             .init(
-                color: R.color.searchTextField.shadowFirst() ?? .black,
-                opacity: 0.25,
+                color: UIColor(hex: "0C695E"),
+                opacity: 0.35,
                 offset: CGSize(width: 0, height: 0.5),
                 radius: 2
             ),
             .init(
-                color: R.color.searchTextField.shadowSecond() ?? .black,
-                opacity: 0.2,
-                offset: CGSize(width: 0, height: 4),
-                radius: 10
+                color: UIColor(hex: "0C695E"),
+                opacity: 0.05,
+                offset: CGSize(width: 0, height: 1),
+                radius: 16
             )
         ]
     }

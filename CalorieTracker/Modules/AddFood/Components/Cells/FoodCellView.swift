@@ -137,8 +137,8 @@ final class FoodCellView: UIView {
             widthBackgroundTagViewConstraint?.isActive = false
             checkImageView.snp.remakeConstraints { make in
                 make.centerY.equalTo(tagBackgroundView)
-                make.leading.lessThanOrEqualTo(tagLabel.snp.trailing)
-                make.trailing.lessThanOrEqualTo(descriptionLabel.snp.leading).offset(-6)
+                make.leading.equalTo(titleLabel.snp.leading)
+//                make.trailing.lessThanOrEqualTo(descriptionLabel.snp.leading).offset(-6)
                 make.height.equalTo(18)
             }
         } else {
@@ -173,11 +173,12 @@ final class FoodCellView: UIView {
             imageView.image = nil
             widthImageViewConstraints?.isActive = true
         }
+
     }
     
     private func setupView() {
         backgroundColor = .white
-        layer.masksToBounds = true
+        layer.masksToBounds = false
     }
     
     private func addSubviews() {
@@ -208,7 +209,7 @@ final class FoodCellView: UIView {
         titleLabel.snp.makeConstraints { make in
             make.leading.equalTo(imageView.snp.trailing).offset(4)
             make.trailing.lessThanOrEqualTo(infoLabel.snp.leading).offset(-6)
-            make.top.equalToSuperview().offset(4)
+            make.top.equalToSuperview().offset(9)
         }
         
         widthBackgroundTagViewConstraint = tagBackgroundView.widthAnchor.constraint(equalToConstant: 0)
@@ -216,8 +217,8 @@ final class FoodCellView: UIView {
             make.height.equalTo(18)
             make.leading.equalTo(tagLabel.snp.leading).offset(-5)
             make.trailing.equalTo(tagLabel.snp.trailing).offset(5)
-            make.top.equalTo(titleLabel.snp.bottom).offset(5)
-            make.bottom.equalToSuperview().offset(-7)
+            make.top.equalTo(titleLabel.snp.bottom).offset(9)
+            make.bottom.equalToSuperview().offset(-8)
         }
         
         tagLabel.snp.makeConstraints { make in
@@ -237,7 +238,7 @@ final class FoodCellView: UIView {
         selectButton.snp.makeConstraints { make in
             make.centerY.equalTo(tagBackgroundView)
             make.trailing.equalToSuperview()
-            make.height.equalTo(20)
+            make.height.equalTo(24)
         }
         
         descriptionLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
@@ -262,7 +263,14 @@ final class FoodCellView: UIView {
     private func didChangeButtonType() {
         switch cellButtonType {
         case .delete:
-            selectButton.setImage(R.image.addFood.recipesCell.delete(), for: .normal)
+            selectButton.setImage(R.image.addFood.recipesCell.addedCheckmark(), for: .normal)
+            UIView.animate(withDuration: 0.2) {
+                self.selectButton.transform = CGAffineTransform(scaleX: 1.3, y: 1.3)
+            } completion: { _ in
+                UIView.animate(withDuration: 0.2) {
+                    self.selectButton.transform = .identity
+                }
+            }
         case .add:
             selectButton.setImage(R.image.addFood.recipesCell.add(), for: .normal)
         }
@@ -290,7 +298,7 @@ extension FoodCellView.FoodViewModel {
         } else {
             self.kcal = BAMeasurement(product.kcal, .energy, isMetric: true).localized
             if let serving = product.servings?.first {
-                let description = "\(serving.size?.capitalized ?? "") "
+                let description = "\(serving.size ?? "") "
                 + "(\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string))"
                 self.description = description
             } else {

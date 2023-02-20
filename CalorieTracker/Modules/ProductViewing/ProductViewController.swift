@@ -68,6 +68,7 @@ final class ProductViewController: CTViewController {
     init(_ openController: OpenController) {
         self.openController = openController
         super.init(nibName: nil, bundle: nil)
+        transitioningDelegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -490,7 +491,7 @@ extension ProductViewController {
     
     func getValueTextField() -> InnerShadowTextField {
         let textField = InnerShadowTextField()
-        textField.innerShadowColor = R.color.foodViewing.basicSecondaryDark()
+        textField.innerShadowColors = [R.color.foodViewing.basicSecondaryDark() ?? .clear]
         textField.layer.borderWidth = 1
         textField.layer.borderColor = R.color.foodViewing.basicSecondaryDark()?.cgColor
         textField.layer.cornerCurve = .continuous
@@ -558,5 +559,19 @@ extension ProductViewController {
                 radius: 2
             )
         ]
+    }
+}
+
+extension ProductViewController: UIViewControllerTransitioningDelegate {
+    func animationController(
+        forPresented presented: UIViewController,
+        presenting: UIViewController,
+        source: UIViewController
+    ) -> UIViewControllerAnimatedTransitioning? {
+        return ModalSideTransitionAppearing()
+    }
+    
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return ModalSideTransitionDissapearing()
     }
 }

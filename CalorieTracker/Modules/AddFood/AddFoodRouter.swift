@@ -58,7 +58,8 @@ extension AddFoodRouter: AddFoodRouterInterface {
     func closeViewController() {
         needUpdate?()
         print("Nav controller contains \(viewController?.navigationController?.viewControllers)")
-        viewController?.navigationController?.popViewController(animated: true)
+        print("Nav delegate is \(viewController?.navigationController?.delegate)")
+        viewController?.navigationController?.popToRootViewController(animated: true)
     }
     
     func openProductViewController(_ product: Product) {
@@ -69,8 +70,8 @@ extension AddFoodRouter: AddFoodRouterInterface {
         ) { [weak self] food in
             self?.presenter?.updateSelectedFood(food: food)
         }
-        productVC.modalPresentationStyle = .overFullScreen
-        viewController?.present(productVC, animated: true)
+        productVC.modalPresentationStyle = .fullScreen
+        viewController?.navigationController?.present(productVC, animated: true)
     }
     
     func openSelectedFoodCellsVC(
@@ -78,7 +79,7 @@ extension AddFoodRouter: AddFoodRouterInterface {
         complition: @escaping ([Food]) -> Void
     ) {
         let vc = SelectedFoodCellsRouter.setupModule(foods)
-        vc.modalPresentationStyle = .overFullScreen
+        vc.modalPresentationStyle = .fullScreen
         vc.didChangeSeletedFoods = { newFoods in
             complition(newFoods)
         }
@@ -107,8 +108,8 @@ extension AddFoodRouter: AddFoodRouterInterface {
         ) { [weak self] food in
             self?.presenter?.updateSelectedFood(food: food)
         }
-        vc.modalPresentationStyle = .overFullScreen
-        viewController?.present(vc, animated: true)
+        vc.modalPresentationStyle = .fullScreen
+        viewController?.navigationController?.present(vc, animated: true)
     }
     
     func openCustomEntryViewController() {

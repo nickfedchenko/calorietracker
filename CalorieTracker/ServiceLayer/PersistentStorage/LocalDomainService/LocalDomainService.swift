@@ -203,6 +203,7 @@ extension LocalDomainService: LocalDomainServiceInterface {
     
     func fetchFoodData() -> [FoodData] {
         guard let domainFoodData = fetchData(for: DomainFoodData.self) else { return [] }
+        print("Domain food data ")
         return domainFoodData.compactMap { FoodData(from: $0) }
     }
     
