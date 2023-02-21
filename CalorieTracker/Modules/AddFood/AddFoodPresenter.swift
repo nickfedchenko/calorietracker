@@ -64,7 +64,9 @@ final class AddFoodPresenter {
     }
     
     private func configureView() {
-        guard let foodType = foodType else { return }
+        guard let foodType = foodType else {
+            return
+        }
         
         switch foodType {
         case .frequent:
@@ -74,7 +76,7 @@ final class AddFoodPresenter {
             self.foods = products.foods + dishes.foods
         case .recent:
             let dishes = FDS.shared.getRecentDishes(10)
-            let products = FDS.shared.getRecentProducts(10)
+              let products = FDS.shared.getRecentProducts(10)
             
             self.foods = products.foods + dishes.foods
         case .favorites:

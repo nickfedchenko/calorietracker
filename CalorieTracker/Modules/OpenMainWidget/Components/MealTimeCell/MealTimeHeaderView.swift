@@ -73,7 +73,7 @@ final class MealTimeHeaderView: UIView {
     }
     
     private func updateCorners() {
-        shadowView.layer.maskedCorners = state == .collapsed ? [.allCorners] : [.topCorners]
+//        shadowView.layer.maskedCorners = state == .collapsed ? [.allCorners] : [.topCorners]
     }
     
     private func didChangeViewModel() {
@@ -106,6 +106,8 @@ final class MealTimeHeaderView: UIView {
             nutrient: .protein,
             value: viewModel.protein
         )
+        leftBottomChevron.isHidden = !viewModel.shouldShowChevrons
+        rightBottomChevron.isHidden = !viewModel.shouldShowChevrons
     }
     
     private func getAttributedString(nutrient: NutrientType, value: Int) -> NSAttributedString? {
@@ -142,7 +144,7 @@ final class MealTimeHeaderView: UIView {
         }()
         
         addSubviews(
-            shadowView,
+//            shadowView,
             mealTimeImageView,
             mealTimeLabel,
             burnKcalImageView,
@@ -159,9 +161,9 @@ final class MealTimeHeaderView: UIView {
             fatLabel
         )
         
-        shadowView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+//        shadowView.snp.makeConstraints { make in
+//            make.edges.equalToSuperview()
+//        }
         
         mealTimeImageView.snp.makeConstraints { make in
             make.width.height.equalTo(40)

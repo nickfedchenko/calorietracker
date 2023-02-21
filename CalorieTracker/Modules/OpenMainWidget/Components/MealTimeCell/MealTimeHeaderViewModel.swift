@@ -13,4 +13,5 @@ struct MealTimeHeaderViewModel {
     let carbs: Int
     let protein: Int
     let fat: Int
+    let shouldShowChevrons: Bool
 }

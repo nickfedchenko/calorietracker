@@ -91,6 +91,9 @@ final class AddFoodViewController: UIViewController {
     
     private var isSelectedType: AddFood = .recent {
         didSet {
+            if oldValue != isSelectedType && oldValue != .search {
+                previousSelectedType = oldValue
+            }
             self.foodCollectionViewController.isSelectedType = self.isSelectedType
             presenter?.setFoodType(isSelectedType)
         }
@@ -102,13 +105,10 @@ final class AddFoodViewController: UIViewController {
         }
     }
     
-    private var previousState: AddFoodVCState = .search(.recent)
+    private var previousSelectedType: AddFood?
     
     private var state: AddFoodVCState = .default {
         didSet {
-            if oldValue != state {
-            
-            }
             didChangeState(shouldAnimate: oldValue != state)
         }
     }
@@ -217,7 +217,7 @@ final class AddFoodViewController: UIViewController {
                 self?.presenter?.saveMeal(mealTime, foods: self?.selectedFood ?? [])
                 DispatchQueue.main.async {
                     self?.selectedFood = []
-                    self?.presenter?.setFoodType(self?.isSelectedType ?? .myFood)
+                    self?.presenter?.setFoodType(self?.previousSelectedType ?? .recent)
                 }
             },
             for: .touchUpInside
@@ -488,16 +488,16 @@ final class AddFoodViewController: UIViewController {
             )
         )
         
-        bottomGradientViewExtended.layer.addSublayer(
-            GradientLayer(
-                .init(
-                    bounds: bottomGradientView.bounds,
-                    colors: [.white, .white.withAlphaComponent(0)],
-                    axis: .vertical(.bottom),
-                    locations: [0.7, 1]
-                )
-            )
-        )
+//        bottomGradientViewExtended.layer.addSublayer(
+//            GradientLayer(
+//                .init(
+//                    bounds: bottomGradientView.bounds,
+//                    colors: [.white, .white.withAlphaComponent(0)],
+//                    axis: .vertical(.bottom),
+//                    locations: [0.7, 1]
+//                )
+//            )
+//        )
     }
     
     private func showMealMenu() {
@@ -667,6 +667,8 @@ final class AddFoodViewController: UIViewController {
         let widget = CTWidgetNode(with: .init(type: .compact))
         let inset = widget.constants.suggestedTopSafeAreaOffset
         let interIteminset = widget.constants.suggestedInterItemSpacing
+        let sideInset = widget.constants.suggestedSideInset
+        let height = widget.constants.height
         if flag {
             if case .search = state {
                 return
@@ -674,8 +676,8 @@ final class AddFoodViewController: UIViewController {
             staticSearchTextField.placeholderText = ""
             staticSearchTextField.text = ""
             staticSearchTextField.snp.remakeConstraints { make in
-                make.leading.equalToSuperview().offset(20)
-                make.height.equalTo(64)
+                make.leading.equalToSuperview().offset(sideInset)
+                make.height.equalTo(height)
                 make.width.equalTo(staticSearchTextField.snp.height).multipliedBy(1)
 //                make.bottom.lessThanOrEqualTo(keyboardHeaderView.snp.bottom).offset(-20)
                 make.bottom.equalTo(tabBarStackView.snp.top).offset(-12).priority(.low)
@@ -685,7 +687,7 @@ final class AddFoodViewController: UIViewController {
                 make.leading.equalTo(staticSearchTextField.snp.trailing).offset(12)
                 make.height.equalTo(addToEatenButton)
                 make.top.equalTo(addToEatenButton)
-                make.width.equalTo(64)
+                make.width.equalTo(height)
                 make.trailing.equalTo(addToEatenButton.snp.leading).inset(-12)
             }
             
@@ -698,11 +700,11 @@ final class AddFoodViewController: UIViewController {
         } else {
             staticSearchTextField.placeholderText = R.string.localizable.addFoodPlaceholder()
             staticSearchTextField.snp.remakeConstraints { make in
-                make.height.equalTo(64)
+                make.height.equalTo(height)
                 make.bottom.equalTo(tabBarStackView.snp.top).offset(-12).priority(.low)
                 make.trailing.equalTo(microphoneButton.snp.leading).inset(-interIteminset)
                 make.top.equalToSuperview().offset(searchFieldYCoordinate)
-                make.leading.equalToSuperview().offset(20)
+                make.leading.equalToSuperview().offset(sideInset)
             }
             
             addToEatenButton.snp.remakeConstraints { make in
@@ -994,7 +996,7 @@ private extension AddFoodViewController {
         let button = VerticalButton()
         button.addTarget(self, action: #selector(didTapCalorieButton), for: .touchUpInside)
         button.setImage(R.image.addFood.tabBar.calories(), .normal)
-        button.setTitle(R.string.localizable.kcal(), .normal)
+        button.setTitle(R.string.localizable.kcal().uppercased(), .normal)
         button.setTitleColor(R.color.addFood.recipesCell.basicGray(), .normal)
         button.titleLabel.font = R.font.sfProDisplaySemibold(size: 9)
         button.titleLabel.textAlignment = .center

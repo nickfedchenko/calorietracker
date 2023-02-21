@@ -61,7 +61,7 @@ class MealTimeCollectionViewCell: UICollectionViewCell {
     private func setupView() {
         collectionView.dataSource = self
         collectionView.delegate = self
-        shadowView.backgroundColor = .clear
+        shadowView.backgroundColor = .white
         shadowView.layer.cornerCurve = .continuous
         shadowView.layer.cornerRadius = 12
         
@@ -73,19 +73,20 @@ class MealTimeCollectionViewCell: UICollectionViewCell {
     }
     
     private func setupConstraints() {
-//        contentView.addSubviews(shadowView)
+        contentView.addSubviews(shadowView)
         contentView.addSubviews(header, collectionView)
         
-//        shadowView.snp.makeConstraints { make in
-//            make.edges.equalToSuperview()
-//        }
+        shadowView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         
         header.snp.makeConstraints { make in
             make.leading.trailing.top.equalToSuperview()
         }
         
         collectionView.snp.makeConstraints { make in
-            make.leading.trailing.bottom.equalToSuperview().inset(11)
+            make.leading.trailing.equalToSuperview().inset(11)
+            make.bottom.equalToSuperview()
         }
         
         headerBottomEqualToSuperviewConstraints = header.bottomAnchor.constraint(
@@ -142,7 +143,8 @@ class MealTimeCollectionViewCell: UICollectionViewCell {
             burnKcal: viewModel.kcal,
             carbs: viewModel.carbs,
             protein: viewModel.protein,
-            fat: viewModel.fats
+            fat: viewModel.fats,
+            shouldShowChevrons: !viewModel.foods.isEmpty
         )
     }
     
@@ -199,6 +201,9 @@ extension MealTimeCollectionViewCell: UICollectionViewDataSource {
         }
         
         let cell: FoodCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
+        print("should show bottom line \(viewModel.foods.count - 1 == indexPath.row)")
+        print("viewmodel foods count \(viewModel.foods.count)")
+        print("index path row now \(indexPath.row)")
         cell.bottomLineIsHidden = viewModel.foods.count - 1 == indexPath.row
         cell.viewModel = .init(
             cellType: .table,
