@@ -52,10 +52,11 @@ final class FoodCollectionViewController: UIViewController {
             }
         }()
         
-        view.clipsToBounds = false
+        view.clipsToBounds = true
         view.showsVerticalScrollIndicator = false
         view.backgroundColor = .clear
         view.contentInset = .init(top: 0, left: 0, bottom: 20, right: 0)
+        view.keyboardDismissMode = .onDrag
         return view
     }()
     

@@ -265,7 +265,7 @@ final class FoodCellView: UIView {
         case .delete:
             selectButton.setImage(R.image.addFood.recipesCell.addedCheckmark(), for: .normal)
             UIView.animate(withDuration: 0.2) {
-                self.selectButton.transform = CGAffineTransform(scaleX: 1.3, y: 1.3)
+                self.selectButton.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
             } completion: { _ in
                 UIView.animate(withDuration: 0.2) {
                     self.selectButton.transform = .identity

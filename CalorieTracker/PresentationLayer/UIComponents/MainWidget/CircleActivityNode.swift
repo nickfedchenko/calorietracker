@@ -203,7 +203,7 @@ final class CircleActivityNode: ASDisplayNode {
             shape.zPosition = -1
             return shape
         }()
-        
+        shapeLayer.cornerCurve = .continuous
         return shapeLayer
     }
     
@@ -225,7 +225,7 @@ final class CircleActivityNode: ASDisplayNode {
             shape.zPosition = -1
             return shape
         }()
-        
+        shapeLayer.cornerCurve = .continuous
         return shapeLayer
     }
     

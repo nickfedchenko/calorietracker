@@ -504,7 +504,7 @@
 
 "addFood.placeholder" = "ПОИСК ПИЩИ";
 "addFood.create" = "СОЗДАТЬ";
-"addFood.scan" = "СКАНИРОВАТЬ";
+"addFood.scan" = "ШТРИХ-КОД";
 "addFood.calories" = "КАЛОРИИ";
 "addFood.done" = "ГОТОВО";
 "addFood.title.recent" = "недавние поиски";

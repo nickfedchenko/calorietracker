@@ -15,6 +15,7 @@ final class VerticalButton: UIControl {
     
     let imageView: UIImageView = {
         let view = UIImageView()
+        view.contentMode = .center
         return view
     }()
     
