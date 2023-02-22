@@ -34,7 +34,7 @@ final class AddFoodViewController: UIViewController {
     private lazy var keyboardHeaderView: UIView = getKeyboardHeaderView()
     private lazy var hideKeyboardButton: UIButton = getHideKeyboardButton()
     private lazy var menuCreateView: MenuView = getMenuCreateView()
-    private lazy var microphoneButton: UIButton = getMicrophoneButton()
+    private lazy var microphoneButton: MicrophoneButton = getMicrophoneButton()
     private lazy var doneButton: UIButton = getDoneButton()
     
     private lazy var bottomGradientView = UIView()
@@ -52,6 +52,7 @@ final class AddFoodViewController: UIViewController {
     private lazy var staticSearchTextField: SearchView = {
         let view = SearchView()
         view.turnOffTextFieldInteractions()
+        view.isStatic = true
         return view
     }()
     private lazy var actualSearchTextField: SearchView = {
@@ -114,6 +115,7 @@ final class AddFoodViewController: UIViewController {
     }
     
     private var searchFieldYCoordinate: CGFloat
+    private var isFirstAppear = true
     var mealTime: MealTime = .breakfast
     
     init(searchFieldYCoordinate: CGFloat) {
@@ -163,7 +165,10 @@ final class AddFoodViewController: UIViewController {
         
         navigationController?.setToolbarHidden(true, animated: false)
         navigationController?.isNavigationBarHidden = true
-        
+        guard !isFirstAppear else {
+            isFirstAppear.toggle()
+            return
+        }
         presenter?.setFoodType(isSelectedType)
     }
     
@@ -238,6 +243,7 @@ final class AddFoodViewController: UIViewController {
         actualSearchTextField.didChangeValue = { [weak self] text in
             guard let self = self else { return }
             guard !text.isEmpty else {
+                self.staticSearchTextField.text = text
                 self.state = .search(.recent)
                 return
             }
@@ -247,13 +253,25 @@ final class AddFoodViewController: UIViewController {
             
         }
         
+        staticSearchTextField.didChangeValue = { [weak self] text in
+            self?.actualSearchTextField.text = text
+        }
+        
         actualSearchTextField.didEndEditing = { text in
             guard !text.isEmpty else {
-                self.isSelectedType = .frequent
-                self.state = .default
-                return
+                self.isSelectedType = self.previousSelectedType ?? .recent
+                if self.state == .search(.recent)  {
+                    self.staticSearchTextField.endEditing(true)
+                    return
+                } else {
+                    self.staticSearchTextField.endEditing(true)
+                    self.state = .default
+                    return
+                }
+                
             }
-            
+            self.staticSearchTextField.endEditing(true)
+            self.staticSearchTextField.text = text
             FDS.shared.rememberSearchQuery(text)
         }
         
@@ -298,6 +316,7 @@ final class AddFoodViewController: UIViewController {
         
         searchHistoryViewController.complition = { [weak self] search in
             self?.actualSearchTextField.text = search
+            self?.staticSearchTextField.text = search
             self?.didEndTimer()
         }
         
@@ -533,7 +552,10 @@ final class AddFoodViewController: UIViewController {
             cell.viewModel = .init(
                 cellType: .table,
                 food: food,
-                buttonType: (selectedFood ?? []).contains(food ?? .meal(.init(mealTime: .breakfast))) ? .delete : .add,
+                buttonType: (selectedFood ?? [])
+                    .contains(food ?? .meal(.init(mealTime: .breakfast))) && state != .default
+                ? .delete
+                : .add,
                 subInfo: presenter?.getSubInfo(food, selectedFoodInfo),
                 colorSubInfo: selectedFoodInfo.getColor()
             )
@@ -614,14 +636,25 @@ final class AddFoodViewController: UIViewController {
     
     private func setupDefaultState() {
         collectionViewTopSecondAnchor?.isActive = false
-        searchHistoryViewController.view.isHidden = true
+        
         view.sendSubviewToBack(tabBarStackView)
         view.sendSubviewToBack(staticSearchTextField)
         view.sendSubviewToBack(microphoneButton)
         view.sendSubviewToBack(bottomGradientView)
-        view.sendSubviewToBack(searchHistoryViewController.view)
+        if isFirstAppear {
+            view.sendSubviewToBack(searchHistoryViewController.view)
+        }
+        
         view.sendSubviewToBack(foodCollectionViewController.view)
         view.sendSubviewToBack(keyboardHeaderView)
+        UIView.animate(withDuration: 0.3) {
+            self.searchHistoryViewController.view.alpha = 0
+        } completion: { [weak self] _ in
+            guard let self = self else { return }
+            if !self.isFirstAppear {
+                self.view.sendSubviewToBack(self.searchHistoryViewController.view)
+            }
+        }
     }
     
     private func setupSearchRecentState() {
@@ -673,8 +706,12 @@ final class AddFoodViewController: UIViewController {
             if case .search = state {
                 return
             }
-            staticSearchTextField.placeholderText = ""
+            
             staticSearchTextField.text = ""
+            staticSearchTextField.placeholderText = ""
+          
+            staticSearchTextField.textField.endEditing(true)
+
             staticSearchTextField.snp.remakeConstraints { make in
                 make.leading.equalToSuperview().offset(sideInset)
                 make.height.equalTo(height)
@@ -771,10 +808,8 @@ final class AddFoodViewController: UIViewController {
                     self.menuButton.alpha = 0
                     UIView.animate(withDuration: 0.3) {
                         self.counterKcalControl.alpha = 1
-                        
                         self.view.layoutIfNeeded()
                     }
-                    
                 }
             }
         }
@@ -787,6 +822,8 @@ final class AddFoodViewController: UIViewController {
     @objc private func hideKeyboard() {
         view.endEditing(true)
         presenter?.stopSearchQuery()
+        state = .default
+        isSelectedType = previousSelectedType ?? .recent
     }
     
     @objc private func didTapBackButton() {
@@ -837,13 +874,9 @@ final class AddFoodViewController: UIViewController {
     
     @objc private func didTapMicrophoneButton() {
         microphoneButtonSelected = !microphoneButtonSelected
-        
+        microphoneButton.isSelected = !microphoneButton.isSelected
         switch microphoneButtonSelected {
         case true:
-            microphoneButton.backgroundColor = R.color.addFood.menu.isSelectedBorder()
-            microphoneButton.imageView?.tintColor = R.color.addFood.menu.isNotSelectedBorder()
-            microphoneButton.layer.borderColor = R.color.addFood.menu.isNotSelectedBorder()?.cgColor
-            
             state = .search(.foundResults)
             speechRecognitionTask?.cancel()
             speechRecognitionTask = Task {
@@ -854,7 +887,6 @@ final class AddFoodViewController: UIViewController {
                     break
                 case .authorized:
                     let request = SpeechAudioBufferRecognitionRequest()
-        
                     for try await result in await speechRecognitionManager.start(request: request) {
                         await MainActor.run {
                             let text = result.bestTranscription.formattedString
@@ -865,10 +897,6 @@ final class AddFoodViewController: UIViewController {
                 }
             }
         case false:
-            microphoneButton.backgroundColor = R.color.addFood.menu.isNotSelectedBorder()
-            microphoneButton.imageView?.tintColor = R.color.addFood.menu.isSelectedBorder()
-            microphoneButton.layer.borderColor = R.color.addFood.menu.isSelectedBorder()?.cgColor
-            
             Task {
                 await speechRecognitionManager.finish()
             }
@@ -1042,15 +1070,17 @@ private extension AddFoodViewController {
         return button
     }
     
-    func getMicrophoneButton() -> UIButton {
-        let button = UIButton()
+    func getMicrophoneButton() -> MicrophoneButton {
+        let button = MicrophoneButton()
         button.addTarget(self, action: #selector(didTapMicrophoneButton), for: .touchUpInside)
-        button.setImage(R.image.addFood.menu.micro(), for: .normal)
-        button.backgroundColor = R.color.addFood.menu.isNotSelectedBorder()
-        button.imageView?.tintColor = R.color.addFood.menu.isSelectedBorder()
-        button.layer.cornerRadius = 16
-        button.layer.borderWidth = 1
-        button.layer.borderColor = R.color.addFood.menu.isSelectedBorder()?.cgColor
+//        let button = UIButton()
+//        button.addTarget(self, action: #selector(didTapMicrophoneButton), for: .touchUpInside)
+//        button.setImage(R.image.addFood.menu.micro(), for: .normal)
+//        button.backgroundColor = UIColor(hex: "B3EFDE")
+//        button.imageView?.tintColor = R.color.addFood.menu.isSelectedBorder()
+//        button.layer.cornerRadius = 16
+//        button.layer.borderWidth = 1
+//        button.layer.borderColor = R.color.addFood.menu.isSelectedBorder()?.cgColor
         return button
     }
     
@@ -1058,7 +1088,6 @@ private extension AddFoodViewController {
         let button = UIButton()
         button.isHidden = true
         button.contentMode = .right
-        button.layer.cornerCurve = .continuous
         button.layer.cornerCurve = .continuous
         button.layer.cornerRadius = 16
         button.layer.borderWidth = 1

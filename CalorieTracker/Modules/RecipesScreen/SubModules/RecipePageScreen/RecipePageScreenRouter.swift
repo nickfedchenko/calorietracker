@@ -41,11 +41,15 @@ extension RecipePageScreenRouter: RecipePageScreenRouterInterface {
     func dismiss() {
         // TODO: //
         if let dish = presenter?.getDish(),
-        let handler = addToDiaryHandler {
+           let handler = addToDiaryHandler {
             handler(.dishes(dish, customAmount: presenter?.getPossibleEatenAmount()))
         } else {
             presenter?.shouldAddToEatenSelectedPortions()
         }
-        view?.dismiss(animated: true)
+        if view?.navigationController != nil {
+            view?.navigationController?.popViewController(animated: true)
+        } else {
+            view?.dismiss(animated: true)
+        }
     }
 }

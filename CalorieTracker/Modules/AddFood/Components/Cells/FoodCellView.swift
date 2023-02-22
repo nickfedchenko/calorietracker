@@ -53,6 +53,7 @@ final class FoodCellView: UIView {
     
     private lazy var selectButton: UIButton = {
         let button = UIButton()
+        button.imageView?.contentMode = .scaleAspectFit
         button.addTarget(self, action: #selector(didTapSelectButton), for: .touchUpInside)
         return button
     }()
@@ -65,23 +66,23 @@ final class FoodCellView: UIView {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = R.font.sfProTextRegular(size: 15.fontScale())
-        label.textColor = .black
+        label.font = R.font.sfProTextMedium(size: 15)
+        label.textColor = UIColor(hex: "111111")
         label.numberOfLines = 0
         return label
     }()
     
     private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
-        label.font = R.font.sfProTextRegular(size: 15.fontScale())
-        label.textColor = R.color.addFood.recipesCell.basicGray()
+        label.font = R.font.sfProTextRegular(size: 15)
+        label.textColor = UIColor(hex: "547771")
         label.textAlignment = .right
         return label
     }()
     
     private lazy var tagLabel: UILabel = {
         let label = UILabel()
-        label.font = R.font.sfProTextRegular(size: 15.fontScale())
+        label.font = R.font.sfProTextMedium(size: 15)
         label.textColor = .white
         return label
     }()
@@ -90,13 +91,13 @@ final class FoodCellView: UIView {
         let view = UIView()
         view.layer.cornerCurve = .continuous
         view.layer.cornerRadius = 5
-        view.backgroundColor = R.color.addFood.recipesCell.basicGray()
+        view.backgroundColor = UIColor(hex: "AFBEB8")
         return view
     }()
     
     private lazy var kalorieLabel: UILabel = {
         let label = UILabel()
-        label.font = R.font.sfProTextSemibold(size: 15.fontScale())
+        label.font = R.font.sfProTextBold(size: 15)
         label.textColor = R.color.addFood.menu.kcal()
         label.textAlignment = .right
         return label
@@ -249,7 +250,7 @@ final class FoodCellView: UIView {
         
         kalorieLabel.setContentCompressionResistancePriority(.init(rawValue: 753), for: .horizontal)
         kalorieLabel.snp.makeConstraints { make in
-            make.trailing.equalToSuperview()
+            make.trailing.equalToSuperview().inset(1)
             make.centerY.equalTo(titleLabel)
         }
         

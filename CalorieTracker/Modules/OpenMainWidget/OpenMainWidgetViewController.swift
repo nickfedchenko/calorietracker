@@ -14,7 +14,7 @@ protocol OpenMainWidgetViewControllerInterface: AnyObject {
 
 class OpenMainWidgetViewController: UIViewController {
     typealias Size = CTWidgetNodeConfiguration
-    
+    var isFirstAppear = true
     var presenter: OpenMainWidgetPresenterInterface?
     
     private lazy var collectionView: UICollectionView = getCollectionViewCell()
@@ -45,7 +45,9 @@ class OpenMainWidgetViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        guard isFirstAppear else { return }
         changeStateVC(.modal)
+        isFirstAppear.toggle()
     }
     
     private func setupView() {

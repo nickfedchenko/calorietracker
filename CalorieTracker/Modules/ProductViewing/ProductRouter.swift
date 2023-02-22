@@ -47,7 +47,11 @@ class ProductRouter: NSObject {
 
 extension ProductRouter: ProductRouterInterface {
     func closeViewController(_ animated: Bool) {
-        viewController?.dismiss(animated: true)
+        if viewController?.navigationController != nil {
+            viewController?.navigationController?.popViewController(animated: true)
+        } else {
+            viewController?.dismiss(animated: true)
+        }
     }
     
     func addToDiary(_ food: Food) {

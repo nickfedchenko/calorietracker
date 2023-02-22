@@ -16,11 +16,11 @@ enum Food {
 extension Food {
     var foodInfo: [FoodInfoCases: Double] {
         switch self {
-        case .product(let product, _):
+        case .product(let product, let customAmount):
             return [
-                .kcal: product.kcal,
-                .carb: product.carbs,
-                .fat: product.fat,
+                .kcal: product.kcal * ((customAmount ?? 100) / 100),
+                .carb: product.carbs * ((customAmount ?? 100) / 100),
+                .fat: product.fat * ((customAmount ?? 100) / 100),
                 .protein: product.protein
             ]
         case .dishes(let dish, let amount):

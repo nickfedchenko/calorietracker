@@ -45,6 +45,7 @@ final class ProductViewController: CTViewController {
     private var contentViewBottomAnchor: NSLayoutConstraint?
     private var firstDraw = true
     private var weight: Double = 0
+    var shouldUseCustomTransition = true
     
     private var addNutrition: DailyNutrition = .zero {
         didSet {
@@ -568,10 +569,19 @@ extension ProductViewController: UIViewControllerTransitioningDelegate {
         presenting: UIViewController,
         source: UIViewController
     ) -> UIViewControllerAnimatedTransitioning? {
-        return ModalSideTransitionAppearing()
+       
+        if shouldUseCustomTransition {
+            return ModalSideTransitionAppearing()
+        } else {
+            return nil
+        }
     }
     
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return ModalSideTransitionDissapearing()
+        if shouldUseCustomTransition {
+            return ModalSideTransitionDissapearing()
+        } else {
+            return nil
+        }
     }
 }

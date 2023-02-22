@@ -513,7 +513,7 @@ extension RecipePageScreenViewController: UIViewControllerTransitioningDelegate 
         presenting: UIViewController,
         source: UIViewController
     ) -> UIViewControllerAnimatedTransitioning? {
-   return ModalSideTransitionAppearing()
+        return ModalSideTransitionAppearing()
     }
     
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
