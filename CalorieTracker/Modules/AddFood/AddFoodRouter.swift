@@ -78,12 +78,12 @@ extension AddFoodRouter: AddFoodRouterInterface {
         complition: @escaping ([Food]) -> Void
     ) {
         let vc = SelectedFoodCellsRouter.setupModule(foods)
-        vc.modalPresentationStyle = .fullScreen
+//        vc.modalPresentationStyle = .fullScreen
         vc.didChangeSeletedFoods = { newFoods in
             complition(newFoods)
         }
-        
-        viewController?.present(vc, animated: true)
+        vc.modalPresentationStyle = .overFullScreen
+        viewController?.navigationController?.present(vc, animated: true)
     }
     
     func openScanner() {

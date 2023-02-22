@@ -53,19 +53,16 @@ final class VerticalButton: UIControl {
     }
     
     private func setupConstraints() {
-        titleLabel.setContentHuggingPriority(.init(rawValue: 200), for: .vertical)
-        titleLabel.setContentCompressionResistancePriority(.init(rawValue: 700), for: .vertical)
-        imageView.aspectRatio()
         imageView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalToSuperview()
+            make.height.width.equalTo(40)
         }
         
-        titleLabel.setContentHuggingPriority(.init(rawValue: 251), for: .vertical)
-        titleLabel.setContentCompressionResistancePriority(.init(rawValue: 751), for: .vertical)
         titleLabel.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
-            make.top.equalTo(imageView.snp.bottom)
+            make.height.equalTo(13)
+            make.top.equalTo(imageView.snp.bottom).offset(1)
+            make.bottom.equalToSuperview().inset(6)
         }
     }
 }

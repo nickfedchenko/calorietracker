@@ -52,16 +52,7 @@ class AddFoodControllerPopAnimationController: NSObject, UIViewControllerAnimate
         let targetAddButtonFrame = toViewController.getCurrentAddButtonFrame()
         let targetScannerFrame = toViewController.getCurrentScannerFrame()
         let searchView = SearchView()
-        let microButton = {
-            let button = UIButton()
-            button.setImage(R.image.addFood.menu.micro(), for: .normal)
-            button.backgroundColor = R.color.addFood.menu.isNotSelectedBorder()
-            button.imageView?.tintColor = R.color.addFood.menu.isSelectedBorder()
-            button.layer.cornerRadius = 16
-            button.layer.borderWidth = 1
-            button.layer.borderColor = R.color.addFood.menu.isSelectedBorder()?.cgColor
-            return button
-        }()
+        let microButton = MicrophoneButton()
         searchView.frame = targetAddButtonFrame
         microButton.frame = targetScannerFrame
        

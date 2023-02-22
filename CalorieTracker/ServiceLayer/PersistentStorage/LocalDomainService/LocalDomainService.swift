@@ -559,9 +559,22 @@ extension LocalDomainService: LocalDomainServiceInterface {
     }
     
     func searchProducts(by phrase: String) -> [Product] {
-        let titlePredicate = NSPredicate(format: "title CONTAINS[cd] %@", phrase)
-        let brandPredicate = NSPredicate(format: "brand CONTAINS[cd] %@", phrase)
-        let compoundPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [titlePredicate, brandPredicate])
+        var phrases = phrase.split(whereSeparator: { $0.isWhitespace }).map { $0.lowercased() }.map { string in
+            var newString = string
+            newString.removeAll(where: { $0.isPunctuation || $0.isNumber || $0.isMathSymbol})
+            return newString
+        }
+        let predicates: [NSCompoundPredicate] = phrases.compactMap { string in
+            guard string.count > 2 else { return nil }
+            let titlePredicate = NSPredicate(format: "title CONTAINS[cd] %@", string)
+            let brandPredicate = NSPredicate(format: "brand CONTAINS[cd] %@", string)
+            let compoundPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [titlePredicate, brandPredicate])
+            return compoundPredicate
+        }
+        
+//        let titlePredicate = NSPredicate(format: "title CONTAINS[cd] %@", phrase)
+//        let brandPredicate = NSPredicate(format: "brand CONTAINS[cd] %@", phrase)
+        let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
      
         guard let products = fetchData(
             for: DomainProduct.self,
@@ -586,9 +599,19 @@ extension LocalDomainService: LocalDomainServiceInterface {
     }
     
     func searchDishes(by phrase: String) -> [Dish] {
-        let titlePredicate = NSPredicate(format: "title CONTAINS[cd] %@", phrase)
-       
-        let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [titlePredicate])
+        var phrases = phrase.split(whereSeparator: { $0.isWhitespace }).map { $0.lowercased() }.map { string in
+            var newString = string
+            newString.removeAll(where: { $0.isPunctuation || $0.isNumber || $0.isMathSymbol})
+            return newString
+        }
+        
+        let predicates: [NSPredicate] = phrases.compactMap { string in
+            guard string.count > 2 else { return nil }
+            let predicate = NSPredicate(format: "title CONTAINS[cd] %@", string)
+            return predicate
+        }
+
+        let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
      
         guard let dishes = fetchData(
             for: DomainDish.self,
