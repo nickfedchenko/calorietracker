@@ -23,7 +23,7 @@ protocol AddFoodPresenterInterface: AnyObject {
     func getMealTime() -> MealTime?
     func scannerDidRecognized(barcode: String)
     func updateSelectedFood(food: Food)
-    func didTapCalorieButton()
+    func didTapCalorieButton(mealTime: MealTime)
     func stopSearchQuery()
     func didTapCalorieButton()
 }
@@ -133,7 +133,7 @@ final class AddFoodPresenter {
     
     private func searchAmongAll(_ request: String) -> [Food] {
         let dishes = DSF.shared.searchDishes(by: request)
-        var products = DSF.shared.searchProducts(by: request)
+        let products = DSF.shared.searchProducts(by: request)
         let genericProducts = products.filter { $0.brand == nil }
         let brandProducts = products.filter { $0.brand != nil }
         let userProducts = products.filter { $0.isUserProduct }
@@ -196,6 +196,8 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
             router?.openDishViewController(dish)
         case .meal:
             return
+        case .customEntry:
+            return
         }
     }
     
@@ -209,8 +211,8 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
         router?.openScanner()
     }
     
-    func didTapCalorieButton() {
-        router?.openCustomEntryViewController()
+    func didTapCalorieButton(mealTime: MealTime) {
+        router?.openCustomEntryViewController(mealTime: mealTime)
     }
     
     func search(_ request: String, complition: ((Bool) -> Void)?) {
@@ -238,6 +240,21 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
     }
     
     func saveMeal(_ mealTime: MealTime, foods: [Food]) {
+        foods.forEach {
+            if case .customEntry(let customEntry) = $0 {
+                FDS.shared.createCustomEntry(
+                    mealTime: mealTime,
+                    title: customEntry.title,
+                    nutrients: .init(
+                        kcal: customEntry.nutrients.kcal,
+                        carbs: customEntry.nutrients.carbs,
+                        proteins: customEntry.nutrients.proteins,
+                        fats: customEntry.nutrients.fats
+                    )
+                )
+            }
+        }
+        
         FDS.shared.addFoodsMeal(
             mealTime: mealTime,
             date: UDM.currentlyWorkingDay,

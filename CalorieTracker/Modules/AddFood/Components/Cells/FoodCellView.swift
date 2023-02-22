@@ -351,12 +351,24 @@ extension FoodCellView.FoodViewModel {
         }
     }
     
+    private init(_ customEntry: CustomEntry, weight: Double?) {
+        self.id = customEntry.id
+        self.title = customEntry.title
+        self.kcal = customEntry.nutrients.kcal
+        self.tag = R.string.localizable.addFoodCustomEntry()
+        self.image = nil
+        self.verified = false
+        self.description = ""
+    }
+    
     init?(_ food: Food?) {
         switch food {
         case .product(let product, let value):
             self.init(product, weight: value)
         case .dishes(let dish, let value):
             self.init(dish, weight: value)
+        case .customEntry(let customEntry):
+            self.init(customEntry, weight: nil)
         default:
             return nil
         }

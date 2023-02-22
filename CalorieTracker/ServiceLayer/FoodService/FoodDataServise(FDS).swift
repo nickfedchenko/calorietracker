@@ -13,7 +13,7 @@ protocol FoodDataServiceInterface {
     ///   - mealTime: время приема еды
     ///   - dishes: массив блюд
     ///   - products: массив продуктов
-    func createMeal(mealTime: MealTime, dishes: [Dish], products: [Product])
+    func createMeal(mealTime: MealTime, dishes: [Dish], products: [Product], customEntries: [CustomEntry])
     /// Возвращает все приемы пищи
     /// - Returns: массив Meal
     func getAllMeals() -> [Meal]
@@ -76,6 +76,9 @@ protocol FoodDataServiceInterface {
     func getAllStoredFoodData() -> [FoodData]
     func getAllStoredDailyMeals() -> [DailyMeal]
     func addFoodsMeal(mealTime: MealTime, date: Day, mealData: [MealData])
+    func createCustomEntry(mealTime: MealTime, title: String, nutrients: CustomEntryNutrients)
+    func getAllCustomEntries() -> [CustomEntry]
+    func deleteCustomEntry(_ id: String)
 }
 
 final class FDS {
@@ -116,6 +119,12 @@ final class FDS {
                     carbs += dish.carbs / dishWeight * $0.weight
                     kcal += dish.kcal / dishWeight * $0.weight
                 }
+            case .customEntry(let customEntry):
+                protein += customEntry.nutrients.proteins
+                fat += customEntry.nutrients.fats
+                carbs += customEntry.nutrients.carbs
+                kcal += customEntry.nutrients.kcal
+                
             default:
                 break
             }
@@ -143,12 +152,15 @@ extension FDS: FoodDataServiceInterface {
         mealData.forEach {
             var dishId: Int?
             var productId: String?
+            var customEntryId: String?
             
             switch $0.food {
             case .dishes(let dish, _):
                 dishId = dish.id
             case .product(let product, _):
                 productId = product.id
+            case .customEntry(let customEntry):
+                customEntryId = customEntry.id
             default:
                 break
             }
@@ -156,7 +168,8 @@ extension FDS: FoodDataServiceInterface {
             localPersistentStore.setChildMealData(
                 mealDataId: $0.id,
                 dishID: dishId,
-                productID: productId
+                productID: productId,
+                customEntryID: customEntryId
             )
         }
         
@@ -196,6 +209,8 @@ extension FDS: FoodDataServiceInterface {
                 foodData.setChild(product)
             case .dishes(let dish, _):
                 foodData.setChild(dish)
+            case .customEntry(let customEntry):
+                foodData.setChild(customEntry)
             default:
                 return nil
             }
@@ -307,10 +322,26 @@ extension FDS: FoodDataServiceInterface {
         )
     }
     
-    func createMeal(mealTime: MealTime, dishes: [Dish], products: [Product]) {
+    func createMeal(mealTime: MealTime, dishes: [Dish], products: [Product], customEntries: [CustomEntry]) {
         let meal = Meal(mealTime: mealTime)
         localPersistentStore.saveMeals(meals: [meal])
-        meal.setChild(dishes: dishes, products: products)
+        meal.setChild(dishes: dishes, products: products, customEntries: customEntries)
+    }
+    
+    func createCustomEntry(mealTime: MealTime, title: String, nutrients: CustomEntryNutrients) {
+        let customEntry = CustomEntry(title: title, nutrients: nutrients, mealTime: mealTime)
+        localPersistentStore.saveCustomEntries(entries: [customEntry])
+        
+        let mealData = MealData(weight: 0.0, food: .customEntry(customEntry))
+        addFoodsMeal(mealTime: mealTime, date: UDM.currentlyWorkingDay, mealData: [mealData])
+    }
+    
+    func getAllCustomEntries() -> [CustomEntry] {
+        localPersistentStore.fetchCustomEntries()
+    }
+    
+    func deleteCustomEntry(_ id: String) {
+        localPersistentStore.deleteCustomEntry(id)
     }
     
     func getRecentProducts(_ count: Int) -> [Product] {

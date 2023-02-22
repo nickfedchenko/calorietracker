@@ -25,6 +25,12 @@ extension Array where Element == Meal {
     }
 }
 
+extension Array where Element == CustomEntry {
+    var foods: [Food] {
+        self.map { .customEntry($0) }
+    }
+}
+
 extension Array where Element == Food {
     var products: [Product] {
         self.compactMap { food in

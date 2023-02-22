@@ -30,6 +30,19 @@ final class CustomEntryViewController: UIViewController, UIScrollViewDelegate {
         .font: R.font.sfProTextMedium(size: 17)
     ].mapValues { $0 as Any }
     
+    var onSavedCustomEntry: ((CustomEntry) -> Void)?
+    
+    let mealTime: MealTime
+    
+    init(mealTime: MealTime) {
+        self.mealTime = mealTime
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -212,6 +225,30 @@ final class CustomEntryViewController: UIViewController, UIScrollViewDelegate {
     
     @objc private func didTapCustomEntryButton() {
         Vibration.rigid.vibrate()
+        
+        guard let title = descriptionForm.textField.text,
+              let kcal = Double(caloriesForm.textField.text ?? "")
+        else { return }
+        
+        let carbs = Double(carbsForm.textField.text ?? "")
+        let proteins = Double(proteinForm.textField.text ?? "")
+        let fats = Double(fatForm.textField.text ?? "")
+        
+        self.dismiss(animated: true) {
+            
+            let customEntry = CustomEntry(
+                title: title,
+                nutrients: .init(
+                    kcal: kcal,
+                    carbs: carbs ?? 0.0,
+                    proteins: proteins ?? 0.0,
+                    fats: fats ?? 0.0
+                ),
+                mealTime: self.mealTime
+            )
+            
+            self.onSavedCustomEntry?(customEntry)
+        }
     }
     
     deinit {
@@ -225,7 +262,7 @@ extension CustomEntryViewController {
     
     private func getTitleHeaderLabel() -> UILabel {
         let label = UILabel()
-        label.text = R.string.localizable.addFoodCustomEntry()
+        label.text = R.string.localizable.addFoodCustomEntry().uppercased()
         label.font = R.font.sfProRoundedBold(size: 24)
         label.textColor = R.color.folderTitleText()
         return label

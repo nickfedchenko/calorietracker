@@ -97,6 +97,8 @@ final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
                 )
             case .meal(let meal):
                 self.didTapButton?(.meal(meal), buttonType)
+            case .customEntry(let customEntry):
+                self.didTapButton?(.customEntry(customEntry), buttonType)
             }
         }
     }

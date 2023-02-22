@@ -54,6 +54,7 @@ class OpenMainWidgetPresenter {
                 mealTime: mealTime,
                 mealData: []
             )
+            
             return emptyDailyMeal
         }
         

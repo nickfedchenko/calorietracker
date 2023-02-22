@@ -508,7 +508,7 @@
 "addFood.calories" = "КАЛОРИИ";
 "addFood.done" = "ГОТОВО";
 "addFood.title.recent" = "недавние поиски";
-"addFood.customEntry" = "КАСТОМНЫЙ ВВОД";
+"addFood.customEntry" = "Кастомный ввод";
 
 "breakfast" = "ЗАВТРАК";
 "lunch" = "ОБЕД";

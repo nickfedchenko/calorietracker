@@ -15,7 +15,7 @@ protocol AddFoodRouterInterface: AnyObject {
     func openScanner()
     func openCreateProduct()
     func openDishViewController(_ dish: Dish)
-    func openCustomEntryViewController()
+    func openCustomEntryViewController(mealTime: MealTime)
 }
 
 class AddFoodRouter: NSObject {
@@ -112,8 +112,13 @@ extension AddFoodRouter: AddFoodRouterInterface {
         viewController?.navigationController?.present(vc, animated: true)
     }
     
-    func openCustomEntryViewController() {
-        let vc = CustomEntryViewController()
+    func openCustomEntryViewController(mealTime: MealTime) {
+        let vc = CustomEntryViewController(mealTime: mealTime)
+        
+        vc.onSavedCustomEntry = { [weak self] customEntry in
+            self?.presenter?.updateSelectedFood(food: .customEntry(customEntry))
+        }
+        
         vc.modalPresentationStyle = .overFullScreen
         viewController?.present(vc, animated: true)
     }

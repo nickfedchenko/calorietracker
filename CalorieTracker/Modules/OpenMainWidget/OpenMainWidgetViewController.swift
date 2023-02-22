@@ -102,6 +102,11 @@ class OpenMainWidgetViewController: UIViewController {
             .first(where: { $0.mealTime == mealTime })?.mealData
             .first(where: { $0.food == food })?.id
         else { return false }
+        
+        if case let .customEntry(customEntry) = food {
+            FDS.shared.deleteCustomEntry(customEntry.id)
+        }
+        
         return FDS.shared.deleteMealData(mealDataId)
     }
     

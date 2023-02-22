@@ -11,6 +11,7 @@ enum Food {
     case product(Product, customAmount: Double?)
     case dishes(Dish, customAmount: Double?)
     case meal(Meal)
+    case customEntry(CustomEntry)
 }
 
 extension Food {
@@ -42,6 +43,13 @@ extension Food {
             }
         case .meal:
             return [:]
+        case .customEntry(let customEntry):
+            return [
+                .kcal: customEntry.nutrients.kcal,
+                .carb: customEntry.nutrients.carbs,
+                .fat: customEntry.nutrients.fats,
+                .protein: customEntry.nutrients.proteins
+            ]
         }
     }
     
@@ -53,6 +61,8 @@ extension Food {
             return String(dish.id)
         case .meal(let meal):
             return meal.id
+        case .customEntry(let customEntry):
+            return customEntry.id
         }
     }
     
@@ -63,6 +73,8 @@ extension Food {
         case .dishes(let dish, _):
             return dish.foodDataId
         case .meal:
+            return nil
+        case .customEntry:
             return nil
         }
     }
@@ -75,6 +87,8 @@ extension Food {
             return customAmount
         case .meal:
             return nil
+        case .customEntry:
+            return nil
         }
     }
 }
@@ -86,6 +100,8 @@ extension Food: Equatable {
             return productLhs == productRhs
         case let (.dishes(dishLhs, _), .dishes(dishRhs, _)):
             return dishLhs == dishRhs
+        case let (.customEntry(customentryLhs), .customEntry(customEntryRhs)):
+            return customentryLhs == customEntryRhs
         default:
             return false
         }

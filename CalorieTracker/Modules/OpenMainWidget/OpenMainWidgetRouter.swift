@@ -77,6 +77,8 @@ extension OpenMainWidgetRouter: OpenMainWidgetRouterInterface {
             viewController?.navigationController?.pushViewController(vc, animated: true)
         case .meal:
             break
+        case .customEntry:
+            break
         }
     }
 }
