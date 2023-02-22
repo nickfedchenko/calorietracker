@@ -13,6 +13,8 @@ struct CustomEntry {
     let nutrients: CustomEntryNutrients
     let mealTime: MealTime
     
+    var foodDataId: String?
+    
     init?(from managedModel: DomainCustomEntry) {
         self.id = managedModel.id
         self.title = managedModel.title
@@ -27,6 +29,7 @@ struct CustomEntry {
             rawValue: managedModel.mealTime
         ) ?? .breakfast
         
+        self.foodDataId = managedModel.foodData?.id
     }
     
     init(title: String,

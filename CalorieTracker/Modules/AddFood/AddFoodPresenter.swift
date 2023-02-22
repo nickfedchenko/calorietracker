@@ -26,6 +26,7 @@ protocol AddFoodPresenterInterface: AnyObject {
     func didTapCalorieButton(mealTime: MealTime)
     func stopSearchQuery()
     func didTapCalorieButton()
+    func updateCustomFood(food: Food)
 }
 
 final class AddFoodPresenter {
@@ -74,13 +75,15 @@ final class AddFoodPresenter {
         case .frequent:
             let dishes = FDS.shared.getFrequentDishes(10)
             let products = FDS.shared.getFrequentProducts(10)
+            let customEntries = FDS.shared.getFrequentCustomEntries(10)
             
-            self.foods = products.foods + dishes.foods
+            self.foods = products.foods + dishes.foods + customEntries.foods
         case .recent:
             let dishes = FDS.shared.getRecentDishes(10)
-              let products = FDS.shared.getRecentProducts(10)
+            let products = FDS.shared.getRecentProducts(10)
+            let customEntries = FDS.shared.getRecentCustomEntries(10)
             
-            self.foods = products.foods + dishes.foods
+            self.foods = products.foods + dishes.foods + customEntries.foods
         case .favorites:
             let dishes = FDS.shared.getFavoriteDishes()
             let products = FDS.shared.getFavoriteProducts()
@@ -290,6 +293,11 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
         view.updateSelectedFood(food)
     }
     
+    func updateCustomFood(food: Food) {
+        FDS.shared.foodUpdate(food: food, favorites: false)
+        self.foods?.append(food)
+	}
+
     func stopSearchQuery() {
         searchQueue.cancelAllOperations()
     }

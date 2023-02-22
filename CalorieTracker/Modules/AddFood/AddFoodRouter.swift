@@ -117,6 +117,7 @@ extension AddFoodRouter: AddFoodRouterInterface {
         
         vc.onSavedCustomEntry = { [weak self] customEntry in
             self?.presenter?.updateSelectedFood(food: .customEntry(customEntry))
+            self?.presenter?.updateCustomFood(food: .customEntry(customEntry))
         }
         
         vc.modalPresentationStyle = .overFullScreen

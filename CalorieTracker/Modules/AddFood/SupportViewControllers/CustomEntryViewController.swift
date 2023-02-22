@@ -102,7 +102,7 @@ final class CustomEntryViewController: UIViewController, UIScrollViewDelegate {
         caloriesForm.snp.makeConstraints { make in
             make.top.equalTo(descriptionForm.snp.bottom).inset(-12)
             make.height.equalTo(48)
-            make.leading.equalTo(contentView).inset(108)
+            make.width.equalTo(descriptionForm.snp.width).dividedBy(2)
             make.trailing.equalTo(contentView).inset(20)
         }
         
@@ -114,7 +114,7 @@ final class CustomEntryViewController: UIViewController, UIScrollViewDelegate {
         carbsForm.snp.makeConstraints { make in
             make.top.equalTo(caloriesForm.snp.bottom).inset(-12)
             make.height.equalTo(48)
-            make.leading.equalTo(contentView).inset(108)
+            make.width.equalTo(descriptionForm.snp.width).dividedBy(2)
             make.trailing.equalTo(contentView).inset(20)
         }
         
@@ -126,7 +126,7 @@ final class CustomEntryViewController: UIViewController, UIScrollViewDelegate {
         proteinForm.snp.makeConstraints { make in
             make.top.equalTo(carbsForm.snp.bottom).inset(-12)
             make.height.equalTo(48)
-            make.leading.equalTo(contentView).inset(108)
+            make.width.equalTo(descriptionForm.snp.width).dividedBy(2)
             make.trailing.equalTo(contentView).inset(20)
         }
         
@@ -138,7 +138,7 @@ final class CustomEntryViewController: UIViewController, UIScrollViewDelegate {
         fatForm.snp.makeConstraints { make in
             make.top.equalTo(proteinForm.snp.bottom).inset(-12)
             make.height.equalTo(48)
-            make.leading.equalTo(contentView).inset(108)
+            make.width.equalTo(descriptionForm.snp.width).dividedBy(2)
             make.trailing.equalTo(contentView).inset(20)
         }
         

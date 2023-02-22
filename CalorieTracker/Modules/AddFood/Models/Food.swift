@@ -74,8 +74,8 @@ extension Food {
             return dish.foodDataId
         case .meal:
             return nil
-        case .customEntry:
-            return nil
+        case .customEntry(let customEntry):
+            return customEntry.foodDataId
         }
     }
     

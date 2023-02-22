@@ -36,6 +36,11 @@ protocol FoodDataServiceInterface {
     ///   - count: количество результатов
     /// - Returns: массив Dish
     func getRecentDishes(_ count: Int) -> [Dish]
+    /// Возвращает недавно использованный кастомный ввод
+    /// - Parameters:
+    ///   - count: количество результатов
+    /// - Returns: массив CustomEntry
+    func getRecentCustomEntries(_ count: Int) -> [CustomEntry]
     /// Записывает в UDM поисковой запрос
     /// - Parameters:
     ///   - query: поисковой запрос
@@ -56,6 +61,11 @@ protocol FoodDataServiceInterface {
     ///   - count: количество результатов
     /// - Returns: массив Product
     func getFrequentProducts(_ count: Int) -> [Product]
+    /// Возвращает часто используемый кастомный ввод
+    /// - Parameters:
+    ///   - count: количество результатов
+    /// - Returns: массив CustomEntry
+    func getFrequentCustomEntries(_ count: Int) -> [CustomEntry]
     /// Возвращает циль на дневное питание
     /// - Returns: массив DailyNutrition
     func getNutritionGoals() -> DailyNutrition?
@@ -79,6 +89,7 @@ protocol FoodDataServiceInterface {
     func createCustomEntry(mealTime: MealTime, title: String, nutrients: CustomEntryNutrients)
     func getAllCustomEntries() -> [CustomEntry]
     func deleteCustomEntry(_ id: String)
+    func saveFoodData(foods: [FoodData])
 }
 
 final class FDS {
@@ -195,6 +206,10 @@ extension FDS: FoodDataServiceInterface {
         }
     }
     
+    func saveFoodData(foods: [FoodData]) {
+        localPersistentStore.saveFoodData(foods: foods)
+    }
+    
     func foodUpdate(food: Food, favorites: Bool?) -> String? {
         guard let foodData = localPersistentStore.getFoodData(food) else {
             let foodData = FoodData(
@@ -290,6 +305,19 @@ extension FDS: FoodDataServiceInterface {
         return products
     }
     
+    func getFrequentCustomEntries(_ count: Int) -> [CustomEntry] {
+        let customEntries: [CustomEntry] = getFrequentFood(count) .compactMap { food in
+            switch food.food {
+            case .customEntry(let customEntry):
+                return customEntry
+            default:
+                return nil
+            }
+        }
+        
+        return customEntries
+    }
+    
     func getAllMeals() -> [Meal] {
         localPersistentStore.fetchMeals()
     }
@@ -374,6 +402,24 @@ extension FDS: FoodDataServiceInterface {
             switch $0.food {
             case .dishes(let dish, _):
                 return dish
+            default:
+                return nil
+            }
+        }
+    }
+    
+    func getRecentCustomEntries(_ count: Int) -> [CustomEntry] {
+        let allFoodData = localPersistentStore.fetchFoodData()
+            .sorted(by: { $0.dateLastUse <= $1.dateLastUse })
+            .filter { $0.food != nil }
+        let foodData = allFoodData.count >= count
+            ? Array(allFoodData[0..<count])
+            : allFoodData
+        
+        return foodData.compactMap {
+            switch $0.food {
+            case .customEntry(let customEntry):
+                return customEntry
             default:
                 return nil
             }

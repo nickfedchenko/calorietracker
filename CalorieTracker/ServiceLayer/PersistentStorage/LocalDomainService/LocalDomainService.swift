@@ -333,9 +333,12 @@ extension LocalDomainService: LocalDomainServiceInterface {
     }
     
     func saveCustomEntries(entries: [CustomEntry]) {
+        let backgroundContext = container.newBackgroundContext()
+        backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
+        
         let _: [DomainCustomEntry] = entries
-            .map { DomainCustomEntry.prepare(fromPlainModel: $0, context: context) }
-        try? context.save()
+            .map { DomainCustomEntry.prepare(fromPlainModel: $0, context: backgroundContext) }
+        try? backgroundContext.save()
     }
     
     @discardableResult
@@ -487,7 +490,6 @@ extension LocalDomainService: LocalDomainServiceInterface {
                       let domainFoodData = domainCustomEntry.foodData else {
                     return nil
                 }
-                
                 return FoodData(from: domainFoodData)
                 
             }
@@ -510,7 +512,7 @@ extension LocalDomainService: LocalDomainServiceInterface {
         
         let dishPredicates = dishesID.map { NSPredicate(format: format, $0) }
         let productPredicates = productsID.map { NSPredicate(format: formatMeal, $0) }
-        let customEntryPredicates = customEntriesID.map { NSPredicate(format: format, $0) }
+        let customEntryPredicates = customEntriesID.map { NSPredicate(format: formatMeal, $0) }
         let mealPredicate = NSPredicate(format: formatMeal, mealId)
         
         let products = productPredicates.compactMap {
