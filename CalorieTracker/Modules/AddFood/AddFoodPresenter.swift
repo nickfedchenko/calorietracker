@@ -22,7 +22,8 @@ protocol AddFoodPresenterInterface: AnyObject {
     func createFood(_ type: FoodCreate)
     func getMealTime() -> MealTime?
     func scannerDidRecognized(barcode: String)
-    func updateSelectedFood(food: Food)
+    func updateSelectedFoodFromSearch(food: Food)
+    func updateSelectedFoodFromCustomEntry(food: Food)
     func didTapCalorieButton(mealTime: MealTime)
     func stopSearchQuery()
     func didTapCalorieButton()
@@ -164,6 +165,7 @@ final class AddFoodPresenter {
 }
 
 extension AddFoodPresenter: AddFoodPresenterInterface {
+    
     func scannerDidRecognized(barcode: String) {
         searchQueue.cancelAllOperations()
         let operation = BlockOperation { [weak self] in
@@ -289,8 +291,12 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
         view.getMealTime()
     }
     
-    func updateSelectedFood(food: Food) {
-        view.updateSelectedFood(food)
+    func updateSelectedFoodFromSearch(food: Food) {
+        view.updateSelectedFoodFromSearch(food)
+    }
+    
+    func updateSelectedFoodFromCustomEntry(food: Food) {
+        view.updateSelectedFoodFromCustomEntry(food)
     }
     
     func updateCustomFood(food: Food) {

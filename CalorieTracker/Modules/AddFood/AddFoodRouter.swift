@@ -68,7 +68,7 @@ extension AddFoodRouter: AddFoodRouterInterface {
             .addFood,
             presenter?.getMealTime() ?? .breakfast
         ) { [weak self] food in
-            self?.presenter?.updateSelectedFood(food: food)
+            self?.presenter?.updateSelectedFoodFromSearch(food: food)
         }
         productVC.modalPresentationStyle = .fullScreen
         viewController?.navigationController?.present(productVC, animated: true)
@@ -106,7 +106,7 @@ extension AddFoodRouter: AddFoodRouterInterface {
             with: dish,
             backButtonTitle: "Add food".localized
         ) { [weak self] food in
-            self?.presenter?.updateSelectedFood(food: food)
+            self?.presenter?.updateSelectedFoodFromSearch(food: food)
         }
         vc.modalPresentationStyle = .fullScreen
         viewController?.navigationController?.present(vc, animated: true)
@@ -116,7 +116,7 @@ extension AddFoodRouter: AddFoodRouterInterface {
         let vc = CustomEntryViewController(mealTime: mealTime)
         
         vc.onSavedCustomEntry = { [weak self] customEntry in
-            self?.presenter?.updateSelectedFood(food: .customEntry(customEntry))
+            self?.presenter?.updateSelectedFoodFromCustomEntry(food: .customEntry(customEntry))
             self?.presenter?.updateCustomFood(food: .customEntry(customEntry))
         }
         

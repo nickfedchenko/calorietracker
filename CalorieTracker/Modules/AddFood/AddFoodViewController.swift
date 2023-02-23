@@ -13,7 +13,8 @@ protocol AddFoodViewControllerInterface: AnyObject {
     func getFoodInfoType() -> FoodInfoCases
     func updateState(for state: AddFoodVCState)
     func setSearchField(to text: String)
-    func updateSelectedFood(_ food: Food)
+    func updateSelectedFoodFromSearch(_ food: Food)
+    func updateSelectedFoodFromCustomEntry(_ food: Food)
     func getMealTime() -> MealTime?
 }
 
@@ -932,6 +933,8 @@ extension AddFoodViewController: FoodCollectionViewControllerDataSource {
 // MARK: - AddFoodViewController Interface
 
 extension AddFoodViewController: AddFoodViewControllerInterface {
+
+    
     func setFoods(_ foods: [Food]) {
         self.foods = foods
         self.foodCollectionViewController.reloadData()
@@ -953,9 +956,20 @@ extension AddFoodViewController: AddFoodViewControllerInterface {
         staticSearchTextField.text = text
     }
     
-    func updateSelectedFood(_ food: Food) {
+    func updateSelectedFromCustomEntry(_ food: Food) {
+        selectedFood = (selectedFood ?? []) + [food]
+        foodCollectionViewController.reloadData()
+    }
+    
+    func updateSelectedFoodFromSearch(_ food: Food) {
         selectedFood = (selectedFood ?? []) + [food]
         state = .search(.foundResults)
+        foodCollectionViewController.reloadData()
+    }
+    
+    func updateSelectedFoodFromCustomEntry(_ food: Food) {
+        selectedFood = (selectedFood ?? []) + [food]
+        state = .default
         foodCollectionViewController.reloadData()
     }
 }

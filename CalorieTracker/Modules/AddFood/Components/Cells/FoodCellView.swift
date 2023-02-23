@@ -298,9 +298,15 @@ extension FoodCellView.FoodViewModel {
             self.description = description
         } else {
             self.kcal = BAMeasurement(product.kcal, .energy, isMetric: true).localized
-            if let serving = product.servings?.first {
-                let description = "\(serving.size ?? "") "
-                + "(\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string))"
+            if let serving = product.servings?.first,
+               let unit = product.units?.first(where: { $0.isReference }) {
+                var description = ""
+                if unit.id == 1 {
+                    description = "\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string)"
+                } else {
+                    description = "\(unit.title ?? "") "
+                    + "(\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string))"
+                }
                 self.description = description
             } else {
                 self.description = ""
