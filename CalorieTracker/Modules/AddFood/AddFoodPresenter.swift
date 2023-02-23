@@ -287,14 +287,13 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
     
     func getMealTime() -> MealTime? {
         view.getMealTime()
- }
-
+    }
+    
     func updateSelectedFood(food: Food) {
         view.updateSelectedFood(food)
     }
     
     func updateCustomFood(food: Food) {
-        FDS.shared.foodUpdate(food: food, favorites: false)
         self.foods?.append(food)
 	}
 

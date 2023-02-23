@@ -357,11 +357,13 @@ extension FDS: FoodDataServiceInterface {
     }
     
     func createCustomEntry(mealTime: MealTime, title: String, nutrients: CustomEntryNutrients) {
-        let customEntry = CustomEntry(title: title, nutrients: nutrients, mealTime: mealTime)
+        var customEntry = CustomEntry(title: title, nutrients: nutrients, mealTime: mealTime)
         localPersistentStore.saveCustomEntries(entries: [customEntry])
         
         let mealData = MealData(weight: 0.0, food: .customEntry(customEntry))
         addFoodsMeal(mealTime: mealTime, date: UDM.currentlyWorkingDay, mealData: [mealData])
+        
+        customEntry.foodDataId = foodUpdate(food: .customEntry(customEntry), favorites: false)
     }
     
     func getAllCustomEntries() -> [CustomEntry] {
