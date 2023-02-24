@@ -303,7 +303,7 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
         case .recipe:
             return
         case .meal:
-            return
+            router?.openCreateMeal()
         }
         
         self.createFoodType = nil

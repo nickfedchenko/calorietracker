@@ -519,7 +519,8 @@
 "addFood.calories" = "КАЛОРИИ";
 "addFood.done" = "ГОТОВО";
 "addFood.title.recent" = "недавние поиски";
-"addFood.customEntry" = "Кастомный ввод";
+"addFood.customEntry" = "КАСТОМНЫЙ ВВОД";
+"addFood.mealCreation" = "СОЗДАНИЕ ПРИЕМА ПИЩИ";
 
 "breakfast" = "ЗАВТРАК";
 "lunch" = "ОБЕД";
@@ -623,8 +624,8 @@
 
 "exercises" = "упражнения";
 
-"textField.required" = "Обязательное";
-"textField.optional" = "Опциональное";
+"textField.required" = "обязательно";
+"textField.optional" = "опционально";
 
 "create.title" = "Создание продуктов питания";
 "create.description.first" = "Шаг";

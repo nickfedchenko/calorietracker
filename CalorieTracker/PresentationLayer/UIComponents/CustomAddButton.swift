@@ -1,5 +1,5 @@
 //
-//  AddCustomEntryButton.swift
+//  CustomAddButton.swift
 //  CalorieTracker
 //
 //  Created by Alexandru Jdanov on 16.02.2023.
@@ -12,10 +12,10 @@ enum ButtonState {
     case inactive
 }
 
-class AddCustomEntryButton: UIButton {
+class CustomAddButton: UIButton {
     
-    private let buttonImage: UIImage? = R.image.basicButton.addDefault()
-    private let buttonImagePressed: UIImage? = R.image.basicButton.addPressed()
+    var buttonImage: UIImage? = R.image.basicButton.addDefault()
+    var buttonImagePressed: UIImage? = R.image.basicButton.addPressed()
     
     private lazy var firstShadowLayer: CALayer = {
         let layer = CALayer()
@@ -86,6 +86,8 @@ class AddCustomEntryButton: UIButton {
     func setState(_ state: ButtonState) {
         switch state {
         case .active:
+            isUserInteractionEnabled = true
+            
             setImage(buttonImage, for: .normal)
             setImage(buttonImagePressed, for: .highlighted)
             
@@ -111,6 +113,8 @@ class AddCustomEntryButton: UIButton {
             }
             
         case .inactive:
+            isUserInteractionEnabled = false
+            
             backgroundColor = R.color.basicButton.inactiveColor()
             layer.borderColor = UIColor.white.cgColor
             setImage(buttonImage?.withTintColor(.white), for: .normal)

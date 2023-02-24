@@ -519,7 +519,8 @@
 "addFood.calories" = "CALORIES";
 "addFood.done" = "DONE";
 "addFood.title.recent" = "recent searches";
-"addFood.customEntry" = "Custom entry";
+"addFood.customEntry" = "CUSTOM ENTRY";
+"addFood.mealCreation" = "MEAL CREATION";
 
 "breakfast" = "BREAKFAST";
 "lunch" = "LUNCH";
@@ -623,8 +624,8 @@
 
 "exercises" = "exercises";
 
-"textField.required" = "Required";
-"textField.optional" = "Optional";
+"textField.required" = "required";
+"textField.optional" = "optional";
 
 "create.title" = "Food Creation";
 "create.description.first" = "Step";

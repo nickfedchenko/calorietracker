@@ -15,6 +15,7 @@ protocol AddFoodRouterInterface: AnyObject {
     func openScanner()
     func openCreateProduct()
     func openDishViewController(_ dish: Dish)
+    func openCreateMeal()
     func openCustomEntryViewController(mealTime: MealTime)
     
 }
@@ -127,5 +128,11 @@ extension AddFoodRouter: AddFoodRouterInterface {
         
         vc.modalPresentationStyle = .overFullScreen
         viewController?.navigationController?.present(vc, animated: true)
+    }
+    
+    func openCreateMeal() {
+        let vc = CreateMealViewController()
+        vc.modalPresentationStyle = .overFullScreen
+        viewController?.present(vc, animated: true)
     }
 }
