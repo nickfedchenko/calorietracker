@@ -527,11 +527,17 @@
 
 "description" = "Описание";
 "kcal.short" = "ккал";
-"carbs.short" = "Углеводы";
+"carbs.short" = "углев.";
 "fat.short" = "Жиры";
 "proteins" = "Белки";
 "kcal" = "Калории";
 "fat" = "Общее количество жира";
+"carbs.long" = "Углеводы";
+"protein.long" = "Белки";
+"protein.short" = "белки";
+"fat.short" = "жиры";
+"fat.long" = "Жиры";
+"off" = "Отключено";
 "satFat" = "Насыщенный жир";
 "transFat" = "Транс-жиры";
 "polyFat" = "Полиненасыщенные жиры";

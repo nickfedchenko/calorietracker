@@ -21,6 +21,11 @@ final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
     
     var foodType: Food?
     var didTapButton: ((Food, CellButtonType) -> Void)?
+    var infoCenterX: CGFloat = 0 {
+        didSet {
+            foodView.infoCenterX = infoCenterX
+        }
+    }
     
     private var cellType: CellType = .table {
         didSet {

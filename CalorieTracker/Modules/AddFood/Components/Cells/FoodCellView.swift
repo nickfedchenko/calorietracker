@@ -27,6 +27,12 @@ final class FoodCellView: UIView {
         }
     }
     
+    var infoCenterX: CGFloat = 0 {
+        didSet {
+            updateInfoLabelLayout()
+        }
+    }
+    
     var cellButtonType: CellButtonType = .add {
         didSet {
             didChangeButtonType()
@@ -105,7 +111,7 @@ final class FoodCellView: UIView {
     
     private lazy var infoLabel: UILabel = {
         let label = UILabel()
-        label.font = R.font.sfProTextSemibold(size: 15.fontScale())
+        label.font = R.font.sfProTextBold(size: 15)
         label.textAlignment = .right
         return label
     }()
@@ -256,7 +262,7 @@ final class FoodCellView: UIView {
         
         infoLabel.setContentCompressionResistancePriority(.init(rawValue: 753), for: .horizontal)
         infoLabel.snp.makeConstraints { make in
-            make.trailing.equalTo(kalorieLabel.snp.leading).offset(-8)
+            make.trailing.equalToSuperview().inset(66)
             make.centerY.equalTo(titleLabel)
         }
     }
@@ -281,6 +287,13 @@ final class FoodCellView: UIView {
         Vibration.success.vibrate()
         didTapButton?(cellButtonType)
         cellButtonType = cellButtonType == .add ? .delete : .add
+    }
+    
+    private func updateInfoLabelLayout() {
+        infoLabel.snp.remakeConstraints { make in
+            make.centerY.equalTo(titleLabel)
+            make.centerX.equalTo(infoCenterX)
+        }
     }
 }
 

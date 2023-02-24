@@ -20,7 +20,9 @@ final class SegmentedControl<ID: Equatable>: UIView {
                     guard let selectedButtonFrame = self.selectedButton?.superview?.frame else {
                         return .zero
                     }
-                    
+                    print("selected button frame \(selectedButtonFrame)")
+                    let frame = self.stack.convert(selectedButtonFrame, to: self)
+                    print("selection frame is \(self.stack.convert(selectedButtonFrame, to: self))")
                     return self.stack.convert(selectedButtonFrame, to: self)
                 }()
             }
@@ -30,8 +32,8 @@ final class SegmentedControl<ID: Equatable>: UIView {
     private lazy var selectorView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
-        view.layer.cornerRadius = 8
-        view.layer.cornerCurve = .circular
+        view.layer.cornerRadius = 10
+        view.layer.cornerCurve = .continuous
         return view
     }()
     
@@ -39,6 +41,7 @@ final class SegmentedControl<ID: Equatable>: UIView {
         let stack = UIStackView()
         stack.axis = .horizontal
         stack.distribution = .fill
+        stack.spacing = 1
         return stack
     }()
     
@@ -115,7 +118,7 @@ final class SegmentedControl<ID: Equatable>: UIView {
             view.addSubview(button)
             button.snp.makeConstraints { make in
                 make.top.bottom.equalToSuperview()
-                make.leading.trailing.equalToSuperview().inset(25.5)
+                make.leading.trailing.equalToSuperview().inset(26.5)
             }
             stack.addArrangedSubview(view)
             button.addTarget(
@@ -137,12 +140,12 @@ final class SegmentedControl<ID: Equatable>: UIView {
     private func setupShadow() {
         selectorView.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
         selectorView.layer.addShadow(
-            shadow: ShadowConst.firstShadow,
+            shadow: ShadowConst.secondShadow,
             rect: selectorView.bounds,
             cornerRadius: selectorRadius
         )
         selectorView.layer.addShadow(
-            shadow: ShadowConst.secondShadow,
+            shadow: ShadowConst.firstShadow,
             rect: selectorView.bounds,
             cornerRadius: selectorRadius
         )

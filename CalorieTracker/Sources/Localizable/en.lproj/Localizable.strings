@@ -526,12 +526,18 @@
 "nutrition" = "Nutrition";
 
 "description" = "Description";
-"kcal.short" = "kcal";
+"kcal.short" = "Kcal";
 "carbs.short" = "Carbs";
 "fat.short" = "Fat";
 "proteins" = "Proteins";
 "kcal" = "Calories";
 "fat" = "Total Fat";
+"carbs.long" = "Carbs";
+"protein.long" = "Protein";
+"protein.short" = "Prot.";
+"fat.short" = "Fat";
+"fat.long" = "Fat";
+"off" = "Off";
 "satFat" = "Saturated Fat";
 "transFat" = "Trans Fat";
 "polyFat" = "Polyunsaturated Fat";

@@ -14,24 +14,24 @@ enum FoodInfoCases: WithGetDataProtocol {
         switch self {
         case .carb:
             return lenght == .long
-                ? R.string.localizable.carb()
-                : R.string.localizable.carbsShort().capitalized
+            ? R.string.localizable.carbsLong()
+            : R.string.localizable.carbsShort()
         case .fat:
             return lenght == .long
-                ? R.string.localizable.fat()
-                : R.string.localizable.fat()
+            ? R.string.localizable.fatLong()
+            : R.string.localizable.fatShort()
         case .kcal:
             return lenght == .long
-                ? R.string.localizable.kcalShort().capitalized
-                : R.string.localizable.kcalShort().capitalized
+            ? R.string.localizable.kcalShort()
+            : R.string.localizable.kcalShort()
         case .off:
             return lenght == .long
-                ? "Off"
-                : "Off"
+            ? R.string.localizable.off()
+            : R.string.localizable.off()
         case .protein:
             return lenght == .long
-                ? R.string.localizable.protein().capitalized
-                : "Prot"
+            ? R.string.localizable.proteinLong()
+            : R.string.localizable.proteinShort()
         }
     }
     

@@ -8,6 +8,7 @@
 
 import UIKit
 
+// swiftlint:disable file_length
 protocol AddFoodViewControllerInterface: AnyObject {
     func setFoods(_ foods: [Food])
     func getFoodInfoType() -> FoodInfoCases
@@ -224,6 +225,7 @@ final class AddFoodViewController: UIViewController {
                 DispatchQueue.main.async {
                     self?.selectedFood = []
                     self?.presenter?.setFoodType(self?.previousSelectedType ?? .recent)
+                    self?.presenter?.didTapBackButton()
                 }
             },
             for: .touchUpInside
@@ -297,6 +299,9 @@ final class AddFoodViewController: UIViewController {
                     complition(.configurable(model))
                 case .off:
                     complition(.settings)
+                }
+                UIView.animate(withDuration: 0.3) {
+                    self?.infoButtonsView.tryToShowView(at: 0)
                 }
                 self?.selectedFoodInfo = model
             }
@@ -540,7 +545,9 @@ final class AddFoodViewController: UIViewController {
         guard let menuNutrientController = menuNutrientController else {
             return
         }
-
+        UIView.animate(withDuration: 0.3) {
+            self.infoButtonsView.tryToHideView(at: 0)
+        }
         present(menuNutrientController, animated: true)
     }
     
@@ -569,6 +576,11 @@ final class AddFoodViewController: UIViewController {
                 
                 FDS.shared.foodUpdate(food: food, favorites: false)
             }
+            let frame = view.convert(infoButtonsView.getInfoButtonFrame(), from: infoButtonsView)
+            print("Получил фрейм \(frame)")
+            let targetFrame = cell.convert(frame, from: view)
+            print("Таргет фрейм \(targetFrame)")
+            cell.infoCenterX = targetFrame.midX
             return cell
         case .myMeals:
             let cell: RecipesColectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
@@ -979,7 +991,7 @@ extension AddFoodViewController: AddFoodViewControllerInterface {
 private extension AddFoodViewController {
     func getSegmentedControl() -> SegmentedControl<AddFood> {
         let view = SegmentedControl<AddFood>(Const.segmentedModels)
-        view.backgroundColor = R.color.addFood.menu.background()
+        view.backgroundColor = UIColor(hex: "E4FFF7")
         view.font = R.font.sfProTextSemibold(size: 16)
         view.selectedButtonType = .recent
         return view

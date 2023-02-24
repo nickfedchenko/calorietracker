@@ -88,7 +88,7 @@ extension AddFoodViewController {
         
         static let menuCreateModels: [FoodCreate] = [
             .food,
-            .recipe,
+//            .recipe,
             .meal
         ]
         

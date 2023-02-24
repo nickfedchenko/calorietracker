@@ -98,7 +98,7 @@ extension AddFoodRouter: AddFoodRouterInterface {
     func openCreateProduct() {
         let vc = CreateProductRouter.setupModule()
         vc.modalPresentationStyle = .overFullScreen
-        viewController?.present(vc, animated: true)
+        viewController?.navigationController?.present(vc, animated: true)
     }
     
     func openDishViewController(_ dish: Dish) {
@@ -121,6 +121,6 @@ extension AddFoodRouter: AddFoodRouterInterface {
         }
         
         vc.modalPresentationStyle = .overFullScreen
-        viewController?.present(vc, animated: true)
+        viewController?.navigationController?.present(vc, animated: true)
     }
 }

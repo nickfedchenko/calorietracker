@@ -522,7 +522,10 @@ extension ProductViewController {
     }
     
     func getSelectView() -> SelectView<UnitElement.ConvenientUnit> {
-        SelectView(presenter?.getProduct()?.units?.compactMap { $0.convenientUnit } ?? [], shouldHideAtStartup: true)
+        SelectView(presenter?.getProduct()?.units?.compactMap { $0.convenientUnit } ?? [
+            .gram(title: R.string.localizable.gram(), shortTitle: R.string.localizable.gram(), coefficient: 1)],
+                   shouldHideAtStartup: true
+        )
     }
     
     func getOverlayView() -> UIView {
