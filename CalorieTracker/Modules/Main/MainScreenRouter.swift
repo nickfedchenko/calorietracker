@@ -148,7 +148,6 @@ extension MainScreenRouter: UINavigationControllerDelegate {
         from fromVC: UIViewController,
         to toVC: UIViewController
     ) -> UIViewControllerAnimatedTransitioning? {
-        print("from vc is \(fromVC)")
         if operation == .push {
             if fromVC is CTTabBarController {
                 return AddFoodControllerPushAnimationController()

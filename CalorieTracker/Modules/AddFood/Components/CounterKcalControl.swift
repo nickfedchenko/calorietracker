@@ -13,11 +13,13 @@ final class CounterKcalControl: UIControl {
         let count: Int
     }
     
+    private var model: Model = .init(kcal: 0, count: 0)
     private lazy var countLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
         label.font = R.font.sfProDisplaySemibold(size: 18)
         label.textAlignment = .center
+        label.clipsToBounds = true
         label.isUserInteractionEnabled = false
         return label
     }()
@@ -27,6 +29,7 @@ final class CounterKcalControl: UIControl {
         label.textColor = R.color.addFood.recipesCell.kalories()
         label.font = R.font.sfProDisplaySemibold(size: 18)
         label.isUserInteractionEnabled = false
+        label.clipsToBounds = true
         return label
     }()
     
@@ -60,6 +63,7 @@ final class CounterKcalControl: UIControl {
         setupView()
         addSubviews()
         setupConstraints()
+        clipsToBounds = true
     }
     
     required init?(coder: NSCoder) {
@@ -72,8 +76,15 @@ final class CounterKcalControl: UIControl {
     }
     
     func configure(_ model: Model) {
+        let transition = CATransition()
+        transition.type = .push
+        transition.duration = 0.4
+        transition.subtype = self.model.count < model.count ? .fromBottom : .fromTop
+        countLabel.layer.add(transition, forKey: nil)
+        kcalLabel.layer.add(transition, forKey: nil)
         countLabel.text = String(model.count)
         kcalLabel.text = String(format: "%.0f", model.kcal)
+        self.model = model
     }
     
     private func setupView() {

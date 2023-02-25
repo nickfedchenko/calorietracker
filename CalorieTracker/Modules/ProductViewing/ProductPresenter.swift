@@ -65,9 +65,9 @@ extension ProductPresenter: ProductPresenterInterface {
     func didTapCloseButton() {
         switch view.getOpenController() {
         case .addFood:
-            router?.closeViewController(true)
+            router?.closeViewController(true, completion: nil)
         case .createProduct:
-            router?.closeViewController(false)
+            router?.closeViewController(false, completion: nil)
             view.viewControllerShouldClose()
         }
     }
@@ -78,8 +78,8 @@ extension ProductPresenter: ProductPresenterInterface {
     
     func saveNutritionDaily(_ weight: Double) {
         guard let product = interactor?.getProduct() else { return }
-        
-        router?.addToDiary(.product(product, customAmount: weight))
-        router?.closeViewController(true)
+        router?.closeViewController(true) { [weak self] in
+            self?.router?.addToDiary(.product(product, customAmount: weight))
+        }
     }
 }

@@ -508,6 +508,7 @@ extension ProductViewController {
             for: .editingChanged
         )
         textField.text = "100"
+        textField.delegate = self
         return textField
     }
     
@@ -586,5 +587,16 @@ extension ProductViewController: UIViewControllerTransitioningDelegate {
         } else {
             return nil
         }
+    }
+}
+
+extension ProductViewController: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        guard textField === valueTextField else { return }
+        textField.selectAll(textField)
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        print("didEnd")
     }
 }

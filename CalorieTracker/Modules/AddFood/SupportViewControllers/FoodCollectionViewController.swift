@@ -71,6 +71,8 @@ final class FoodCollectionViewController: UIViewController {
     
     private let collectionViewLayput: CollectionViewLayout
     
+    var shouldShowNothingFound: Bool = false
+    
     init(_ layout: CollectionViewLayout = .default) {
         self.collectionViewLayput = layout
         super.init(nibName: nil, bundle: nil)
@@ -96,6 +98,7 @@ final class FoodCollectionViewController: UIViewController {
         } else {
             collectionView.reloadData()
         }
+        guard shouldShowNothingFound else { return }
         nothingWasFoundView.isHidden = (dataSource?.foodsCount() ?? 0) != 0
     }
     

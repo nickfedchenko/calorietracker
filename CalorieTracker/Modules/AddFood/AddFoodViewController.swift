@@ -84,7 +84,19 @@ final class AddFoodViewController: UIViewController {
     
     private var firstDraw = true
     private var microphoneButtonSelected = false
-    private var foods: [Food] = []
+    private var foods: [Food] = [] {
+        didSet {
+            if foods.isEmpty {
+                UIView.animate(withDuration: 0.3) {
+                    self.infoButtonsView.alpha = 0
+                }
+            } else {
+                UIView.animate(withDuration: 0.3) {
+                    self.infoButtonsView.alpha = 1
+                }
+            }
+        }
+    }
     
     private var selectedFood: [Food]? {
         didSet {
@@ -97,8 +109,10 @@ final class AddFoodViewController: UIViewController {
             if oldValue != isSelectedType && oldValue != .search {
                 previousSelectedType = oldValue
             }
+            foodCollectionViewController.shouldShowNothingFound = isSelectedType == .search ? true : false
             self.foodCollectionViewController.isSelectedType = self.isSelectedType
             presenter?.setFoodType(isSelectedType)
+           
         }
     }
     
@@ -160,6 +174,7 @@ final class AddFoodViewController: UIViewController {
             y: view.frame.height - 20
         )
         firstDraw = false
+        print("static search frame \(staticSearchTextField.frame)")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -236,7 +251,7 @@ final class AddFoodViewController: UIViewController {
             guard let self = self else { return }
             self.isSelectedType = .search
 
-            guard !text.isEmpty else {
+            guard !text.isEmpty && text.count > 2 else {
                 self.state = .search(.recent)
                 return
             }
@@ -245,7 +260,7 @@ final class AddFoodViewController: UIViewController {
         
         actualSearchTextField.didChangeValue = { [weak self] text in
             guard let self = self else { return }
-            guard !text.isEmpty else {
+            guard !text.isEmpty && text.count > 2 else {
                 self.staticSearchTextField.text = text
                 self.state = .search(.recent)
                 return
@@ -253,11 +268,13 @@ final class AddFoodViewController: UIViewController {
             
             self.staticSearchTextField.textField.text = text
             self.createTimer()
-            
         }
         
         staticSearchTextField.didChangeValue = { [weak self] text in
             self?.actualSearchTextField.text = text
+            if text == "" {
+                self?.state = .search(.recent)
+            }
         }
         
         actualSearchTextField.didEndEditing = { text in
@@ -289,6 +306,10 @@ final class AddFoodViewController: UIViewController {
                 self?.mealTime = model
                 complition(model)
             }
+        }
+        
+        menuNutrientController?.didClose = {
+            self.infoButtonsView.tryToShowView(at: 0)
         }
         
         infoButtonsView.completion = { [weak self] complition in
@@ -366,6 +387,11 @@ final class AddFoodViewController: UIViewController {
     
     // swiftlint:disable:next function_body_length
     private func setupConstraints() {
+        let widget = CTWidgetNode(with: .init(type: .compact))
+        let inset = widget.constants.suggestedTopSafeAreaOffset
+        let interIteminset = widget.constants.suggestedInterItemSpacing
+        let sideInset = widget.constants.suggestedSideInset
+        let height = widget.constants.height
         searchTextFieldBottomAnchor = staticSearchTextField.bottomAnchor.constraint(
             equalTo: tabBarStackView.topAnchor,
             constant: -12
@@ -423,23 +449,21 @@ final class AddFoodViewController: UIViewController {
         }
         
         staticSearchTextField.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(20)
-            make.height.equalTo(64)
-            make.leading.equalToSuperview().offset(Constants.searchFieldSideInset)
-            make.trailing.equalTo(microphoneButton.snp.leading).inset(12)
-            make.bottom.lessThanOrEqualTo(keyboardHeaderView.snp.bottom).offset(-20)
-            make.bottom.lessThanOrEqualTo(tabBarStackView.snp.top).offset(-12).priority(.low)
-            make.top.equalTo(bottomGradientView.snp.top).offset(33)
+            make.height.equalTo(height)
+            make.bottom.equalTo(tabBarStackView.snp.top).offset(-12).priority(.low)
+            make.trailing.equalTo(microphoneButton.snp.leading).inset(-interIteminset)
+            make.top.equalToSuperview().offset(searchFieldYCoordinate)
+            make.leading.equalToSuperview().offset(sideInset)
         }
         
         microphoneButton.aspectRatio()
-        microphoneButton.snp.makeConstraints { make in
-            make.width.height.equalTo(staticSearchTextField.snp.height)
-//            make.trailing.equalToSuperview().offset(-20)
-//            make.leading.equalTo(searchTextField.snp.trailing).offset(12)
-            make.trailing.equalToSuperview().inset(Constants.searchFieldSideInset)
-            make.bottom.equalTo(staticSearchTextField)
-        }
+//        microphoneButton.snp.makeConstraints { make in
+//            make.width.height.equalTo(staticSearchTextField.snp.height)
+////            make.trailing.equalToSuperview().offset(-20)
+////            make.leading.equalTo(searchTextField.snp.trailing).offset(12)
+//            make.trailing.equalToSuperview().inset(Constants.searchFieldSideInset)
+//            make.bottom.equalTo(staticSearchTextField)
+//        }
         
         keyboardHeaderView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
@@ -486,12 +510,21 @@ final class AddFoodViewController: UIViewController {
 //            make.width.equalTo(0).priority(.low)
 //        }
         
-        addToEatenButton.snp.makeConstraints { make in
-//            make.leading.equalTo(microphoneButton.snp.trailing).offset(12)
+        microphoneButton.snp.remakeConstraints { make in
+            make.trailing.equalTo(addToEatenButton.snp.leading)
+            make.width.height.equalTo(staticSearchTextField.snp.height)
+            //            make.trailing.equalToSuperview().offset(-20)
+            make.bottom.equalTo(addToEatenButton)
+        }
+        
+        print("side inset is\(sideInset)")
+        addToEatenButton.snp.remakeConstraints { make in
+            make.trailing.equalToSuperview().inset(sideInset)
             make.width.equalTo(0)
             make.height.equalTo(microphoneButton.snp.height)
-            make.top.equalTo(staticSearchTextField)
+            make.top.equalTo(searchFieldYCoordinate)
         }
+        
         addToEatenButton.alpha = 0
     }
     
@@ -577,9 +610,7 @@ final class AddFoodViewController: UIViewController {
                 FDS.shared.foodUpdate(food: food, favorites: false)
             }
             let frame = view.convert(infoButtonsView.getInfoButtonFrame(), from: infoButtonsView)
-            print("Получил фрейм \(frame)")
             let targetFrame = cell.convert(frame, from: view)
-            print("Таргет фрейм \(targetFrame)")
             cell.infoCenterX = targetFrame.midX
             return cell
         case .myMeals:
@@ -692,7 +723,12 @@ final class AddFoodViewController: UIViewController {
         menuButton.alpha = 0
       
         collectionViewTopSecondAnchor?.isActive = true
-
+        if shouldAnimate {
+            UIView.animate(withDuration: 0.3) {
+                self.searchHistoryViewController.view.alpha = 0
+                self.foodCollectionViewController.view.alpha = 1
+            }
+        }
         view.bringSubviewToFront(foodCollectionViewController.view)
         view.bringSubviewToFront(bottomGradientView)
         view.bringSubviewToFront(bottomGradientViewExtended)
@@ -700,12 +736,7 @@ final class AddFoodViewController: UIViewController {
         view.bringSubviewToFront(staticSearchTextField)
         view.bringSubviewToFront(microphoneButton)
         view.bringSubviewToFront(tabBarStackView)
-        if shouldAnimate {
-            UIView.animate(withDuration: 0.3) {
-                self.searchHistoryViewController.view.isHidden = true
-                self.foodCollectionViewController.view.alpha = 1
-            }
-        }
+       
     }
     
     private func showDoneButton(_ flag: Bool) {
@@ -758,7 +789,7 @@ final class AddFoodViewController: UIViewController {
             }
             
             addToEatenButton.snp.remakeConstraints { make in
-                make.trailing.equalToSuperview().inset(Constants.searchFieldSideInset)
+                make.trailing.equalToSuperview().inset(sideInset)
                 make.width.equalTo(0)
                 make.height.equalTo(microphoneButton.snp.height)
                 make.top.equalTo(searchFieldYCoordinate)
@@ -837,14 +868,20 @@ final class AddFoodViewController: UIViewController {
         presenter?.stopSearchQuery()
         state = .default
         isSelectedType = previousSelectedType ?? .recent
+        staticSearchTextField.text = ""
+        actualSearchTextField.text = ""
+        staticSearchTextField.state = .largeNotEdit
     }
     
     @objc private func didTapBackButton() {
         Vibration.rigid.vibrate()
         guard state == .default else {
             state = .default
-            presenter?.setFoodType(.recent)
-            segmentedControl.selectedButtonType = isSelectedType
+            presenter?.setFoodType(previousSelectedType ?? .recent)
+            segmentedControl.selectedButtonType = previousSelectedType
+            staticSearchTextField.text = ""
+            staticSearchTextField.state = .largeNotEdit
+            actualSearchTextField.text = ""
             return
         }
         presenter?.didTapBackButton()
@@ -1153,7 +1190,7 @@ extension AddFoodViewController: UIViewControllerTransitioningDelegate {
     }
     
     func getCurrentSearchFieldFrame() -> CGRect {
-//        searchTextField.layoutIfNeeded()
+        staticSearchTextField.layoutIfNeeded()
         return staticSearchTextField.frame
     }
     

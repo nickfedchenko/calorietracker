@@ -23,9 +23,6 @@ class AddFoodControllerPushAnimationController: NSObject, UIViewControllerAnimat
         else {
             return
         }
-        print("Successfully got controllers")
-        // Берем снапшоты так как это ASDK ноды, что-то адекватное родить сильно сложно тут. Отдельно рендерим снапшот
-        // таббара так как он лежит в отдельной от fromView контроллере.
         let addButtonSnapshot = BasicButtonView(type: .add)
         let scannerSnapshot = BasicButtonView(
             type: .custom(
@@ -55,7 +52,7 @@ class AddFoodControllerPushAnimationController: NSObject, UIViewControllerAnimat
         let microButton = MicrophoneButton()
         searchView.frame = targetAddButtonFrame
         microButton.frame = targetScannerFrame
-       
+       print("target serchView frame \(targetAddButtonFrame)")
         fromController.setToBeginningTransition()
         toViewController.setToStartTransitionState()
         

@@ -27,6 +27,5 @@ final class GradientNode: ASDisplayNode {
         gradientLayer.startPoint = CGPoint(x: 0, y: 1)
         gradientLayer.endPoint = CGPoint(x: 0, y: 0)
         gradientLayer.locations = [0.95, 1]
-        print("gradient frame \(bounds)")
     }
 }

@@ -38,7 +38,7 @@ final class AddFoodPresenter {
     let searchQueue: OperationQueue =  {
         let queue = OperationQueue()
         queue.qualityOfService = .userInteractive
-        queue.maxConcurrentOperationCount = 1
+        queue.maxConcurrentOperationCount = 4
         return queue
     }()
     
@@ -224,13 +224,40 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
 //            let frequents = self.searchAmongFrequent(request)
 //            let favorites = self.searchAmongFavorites(request)
 //            let recents = self.searchAmongRecent(request)
+        print("operations currenly performing\(searchQueue.operationCount)")
         searchQueue.cancelAllOperations()
-        let operation = BlockOperation { [weak self] in
+        print("operations performing after cancelling\(searchQueue.operationCount)")
+        print(searchQueue.operationCount)
+        let operation = BlockOperation()
+        operation.addExecutionBlock { [weak self] in
+            guard !operation.isCancelled else {
+                print("Search for \(request) is cancelled")
+                return
+            }
+            let current = Date().timeIntervalSince1970
             guard let self = self else { return }
+            guard !operation.isCancelled else {
+                print("Search for \(request) is cancelled before finish")
+                return
+            }
             let basicFood = self.searchAmongAll(request)
+            guard !operation.isCancelled else {
+                print("Search for \(request) is cancelled before finish")
+                return
+            }
             let searchByBarcode = self.search(byBarcode: request)
+            guard !operation.isCancelled else {
+                print("Search for \(request) is cancelled before finish")
+                return
+            }
             let foods = basicFood + searchByBarcode
+            let done = Date().timeIntervalSince1970 - current
+            print("Search time is \(done)")
             DispatchQueue.main.async {
+                guard !operation.isCancelled else {
+                    print("Search for \(request) is cancelled before finish")
+                    return
+                }
                 self.foods = foods
                 complition?(!foods.isEmpty)
             }

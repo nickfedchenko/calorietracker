@@ -42,7 +42,6 @@ final class FoodCellView: UIView {
     var subInfo: Int? {
         didSet {
             if let info = subInfo {
-                print("subinfo is \(info)")
                 infoLabel.text = "\(info)"
             } else {
                 infoLabel.text = nil
@@ -362,8 +361,6 @@ extension FoodCellView.FoodViewModel {
                 servingWeight = dishWeight / Double(totalServing)
             }
             self.kcal = BAMeasurement(dish.values?.serving.kcal ?? 1, .energy, isMetric: true).localized
-            print("Default serving weight = \(servingWeight)")
-            print("Localized serving weight = \(BAMeasurement(servingWeight, .serving, isMetric: true).localized)")
             self.description = "1 "
             + R.string.localizable.servings1()
             + " (\(BAMeasurement(servingWeight, .serving, isMetric: true).string ))"

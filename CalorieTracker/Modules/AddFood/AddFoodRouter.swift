@@ -56,10 +56,8 @@ class AddFoodRouter: NSObject {
 
 extension AddFoodRouter: AddFoodRouterInterface {
     func closeViewController() {
-        needUpdate?()
-        print("Nav controller contains \(viewController?.navigationController?.viewControllers)")
-        print("Nav delegate is \(viewController?.navigationController?.delegate)")
         viewController?.navigationController?.popToRootViewController(animated: true)
+        needUpdate?()
     }
     
     func openProductViewController(_ product: Product) {

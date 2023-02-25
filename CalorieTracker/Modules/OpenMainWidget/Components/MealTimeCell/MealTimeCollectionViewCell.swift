@@ -201,9 +201,6 @@ extension MealTimeCollectionViewCell: UICollectionViewDataSource {
         }
         
         let cell: FoodCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
-        print("should show bottom line \(viewModel.foods.count - 1 == indexPath.row)")
-        print("viewmodel foods count \(viewModel.foods.count)")
-        print("index path row now \(indexPath.row)")
         cell.bottomLineIsHidden = viewModel.foods.count - 1 == indexPath.row
         cell.viewModel = .init(
             cellType: .table,

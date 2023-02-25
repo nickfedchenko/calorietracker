@@ -23,9 +23,7 @@ class AddFoodControllerPopAnimationController: NSObject, UIViewControllerAnimate
         else {
             return
         }
-        print("Successfully got controllers")
-        // Берем снапшоты так как это ASDK ноды, что-то адекватное родить сильно сложно тут. Отдельно рендерим снапшот
-        // таббара так как он лежит в отдельной от fromView контроллере.
+
         let addButtonSnapshot = BasicButtonView(type: .add)
         let scannerSnapshot = BasicButtonView(
             type: .custom(

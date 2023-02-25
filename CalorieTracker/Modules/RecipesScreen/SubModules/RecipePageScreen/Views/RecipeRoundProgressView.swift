@@ -167,8 +167,6 @@ final class RecipeRoundProgressView: UIView {
         layer.addSublayer(whiteStroke)
         layer.addSublayer(possibleEatenLayer)
         setupSubviews()
-        print("start angle is \(startAngle)")
-        print("end angle is \(endAngle)")
     }
     
     required init?(coder: NSCoder) {
@@ -301,10 +299,6 @@ final class RecipeRoundProgressView: UIView {
             possibleStartRatio = eatenRatio
             possibleRatio = possible / total
             possibleEndRatio = possibleStartRatio + possibleRatio
-            print("total \(total)")
-            print("eaten \(eaten)")
-            print("possible \(possible)")
-            print("possible ratio \(possibleRatio)")
         case .undefined:
             eatenRatio = 0
             possibleStartRatio = 0
@@ -368,10 +362,7 @@ final class RecipeRoundProgressView: UIView {
         self.possibleEndRatio = possibleEndRatio
         self.possibleStartRatio = possibleStartRatio
         self.eatenRatio = eatenRatio
-        if case .kcal = currentMode {
-            print("possible end ratio = \(possibleEndRatio)")
-            print("possible start ratio = \(possibleStartRatio)")
-        }
+
         
         initiallyDrawLayer(
             circleLayer: eatenLayer,

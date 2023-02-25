@@ -186,7 +186,7 @@ struct CTWidgetNodeConfiguration: CustomStringConvertible {
         case .unknown:
             return _suggestedInterItemSpacing
         case .h19x430:
-            return 16
+            return 18
         case .h19x393:
             return 12
         }

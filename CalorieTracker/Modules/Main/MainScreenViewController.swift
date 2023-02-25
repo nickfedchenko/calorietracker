@@ -27,6 +27,7 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
     
     // MARK: - Private properties
     
+    private let generator = UIImpactFeedbackGenerator(style: .medium)
     private let messageNode: AppMessageWidgetNode = {
         let node = AppMessageWidgetNode(with: CTWidgetNodeConfiguration(type: .compact))
         node.style.preferredSize = CGSize(width: 308, height: node.constants.height)
@@ -184,7 +185,6 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
                     child: scrollNode
                 )
                 self.undercoverNode.layoutSpecBlock = { _, size in
-                    print("got node with size \(size)")
                     let stack = ASStackLayoutSpec(
                         direction: .horizontal,
                         spacing: self.calendarWidget.constants.suggestedInterItemSpacing,
@@ -253,10 +253,10 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         super.viewDidLoad()
         addTapGestureRecognizer()
         presenter?.checkOnboarding()
+        generator.prepare()
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         navigationController?.setToolbarHidden(true, animated: true)
         navigationController?.navigationBar.isHidden = true
         presenter?.updateWaterWidgetModel()
@@ -267,7 +267,23 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         presenter?.updateActivityWidget()
         presenter?.updateCalendarWidget(UDM.currentlyWorkingDay.date)
         presenter?.updateNoteWidget()
-        print("content inset is \(scrollNode?.view.contentInset)")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        let now = Date().timeIntervalSince1970
+//        navigationController?.setToolbarHidden(true, animated: true)
+//        navigationController?.navigationBar.isHidden = true
+//        presenter?.updateWaterWidgetModel()
+//        presenter?.updateStepsWidget()
+//        presenter?.updateWeightWidget()
+//        presenter?.updateExersiceWidget()
+//        presenter?.updateMessageWidget()
+//        presenter?.updateActivityWidget()
+//        presenter?.updateCalendarWidget(UDM.currentlyWorkingDay.date)
+//        presenter?.updateNoteWidget()
+        let new = Date().timeIntervalSince1970
+        print("main screen time passed \(new - now)")
     }
     
     // MARK: - Private methods
@@ -322,7 +338,6 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
 //        )
         
         var mainVStackChilds = [firstHStack, secondHStack, thirdHStack, fourthHStack, fifthHStack]
-        print(UIDevice.screenType)
         if UIDevice.screenType != .h16x414 && UIDevice.screenType != .h16x375 {
             let sixthHStack = ASStackLayoutSpec(
                 direction: .horizontal,
