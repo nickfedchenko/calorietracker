@@ -593,9 +593,20 @@ final class AddFoodViewController: UIViewController {
         case .frequent, .recent, .favorites, .search:
             let cell: FoodCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
             let food = foods[safe: indexPath.row]
+            var finalFoodModel: Food?
+            if let selectedFood = selectedFood,
+               selectedFood.contains(food!) {
+                if isSelectedType == .search {
+                    finalFoodModel = selectedFood.first(where: { $0.foodDataId == food?.foodDataId }) ?? food
+                } else {
+                    finalFoodModel = food
+                }
+            } else {
+                finalFoodModel = food
+            }
             cell.viewModel = .init(
                 cellType: .table,
-                food: food,
+                food: finalFoodModel,
                 buttonType: (selectedFood ?? [])
                     .contains(food ?? .meal(.init(mealTime: .breakfast))) && state != .default
                 ? .delete
@@ -1014,8 +1025,8 @@ extension AddFoodViewController: AddFoodViewControllerInterface {
     }
     
     func updateSelectedFoodFromSearch(_ food: Food) {
+        isSelectedType = previousSelectedType ?? .recent
         selectedFood = (selectedFood ?? []) + [food]
-        state = .search(.foundResults)
         foodCollectionViewController.reloadData()
     }
     

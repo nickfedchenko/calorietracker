@@ -142,6 +142,43 @@ struct UnitElement: Codable {
         case ml(title: String, shortTitle: String?, coefficient: Double?)
         case floz(title: String, shortTitle: String?, coefficient: Double?)
         case custom(title: String, shortTitle: String?, coefficient: Double?)
+        
+        var id: Int {
+            switch self {
+            case .gram:
+                return 1
+            case .oz:
+                return 2
+            case .portion:
+                return 3
+            case .cup:
+                return 4
+            case .cupGrated:
+                return 5
+            case .cupSliced:
+                return 6
+            case .teaSpoon:
+                return 7
+            case .tableSpoon:
+                return 8
+            case .piece:
+                return 9
+            case .smallSize:
+                return 10
+            case .middleSize:
+                return 11
+            case .hugeSize:
+                return 12
+            case .pack:
+                return 13
+            case .ml:
+                return 14
+            case .floz:
+                return 15
+            default:
+                return -1
+            }
+        }
     }
     
     func getTitle(_ lenght: Lenght) -> String? {

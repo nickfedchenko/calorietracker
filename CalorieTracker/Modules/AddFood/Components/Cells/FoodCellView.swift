@@ -338,7 +338,7 @@ extension FoodCellView.FoodViewModel {
            let totalWeight = dish.dishWeight {
             
             let portionWeight = (dish.dishWeight ?? 1) / Double(dish.totalServings ?? 1)
-            let portions = Int(weight / portionWeight)
+            let portions = weight / portionWeight
             let servingText: String = {
                 switch portions {
                 case 1:
@@ -350,7 +350,8 @@ extension FoodCellView.FoodViewModel {
                 }
             }()
             self.kcal = BAMeasurement((weight / totalWeight) * dish.kcal, .energy, isMetric: true).localized
-            self.description = "\(portions) \(servingText)"
+            self.description = "\(portions) \(servingText) "
+            + "(\(BAMeasurement(portionWeight * Double(portions), .serving, isMetric: true).string))"
         } else {
             var servingWeight: Double = 0
             if let servingDishWeight = dish.values?.serving.weight {
@@ -377,10 +378,47 @@ extension FoodCellView.FoodViewModel {
         self.description = ""
     }
     
+    private init(product: Product, weight: Double?, unitData: FoodUnitData) {
+        self.id = product.id
+        self.title = product.title
+        self.tag = product.brand ?? ""
+        self.image = product.isUserProduct ? product.photo : nil
+        self.verified = !product.isUserProduct
+        
+        if let weight = weight {
+            self.kcal = BAMeasurement(product.kcal / 100 * weight, .energy, isMetric: true).localized
+            let descriptionWeight = BAMeasurement(weight, .serving, isMetric: true).string
+            let unit = unitData.unit
+            let unitCount = unitData.count
+            let unitTitle = unit.getTitle(.short) ?? "error geting title"
+            self.description = "\(unitCount) \(unitTitle) (\(descriptionWeight))"
+            
+        } else {
+            self.kcal = BAMeasurement(product.kcal, .energy, isMetric: true).localized
+            if let serving = product.servings?.first,
+               let unit = product.units?.first(where: { $0.isReference }) {
+                var description = ""
+                if unit.id == 1 {
+                    description = "\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string)"
+                } else {
+                    description = "\(unit.title) "
+                    + "(\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string))"
+                }
+                self.description = description
+            } else {
+                self.description = ""
+            }
+        }
+    }
+    
     init?(_ food: Food?) {
         switch food {
-        case .product(let product, let value, _):
-            self.init(product, weight: value)
+        case .product(let product, let value, let unitData):
+            if let unitData = unitData {
+                self.init(product: product, weight: value, unitData: unitData)
+            } else {
+                self.init(product, weight: value)
+            }
         case .dishes(let dish, let value):
             self.init(dish, weight: value)
         case .customEntry(let customEntry):
