@@ -26,7 +26,6 @@ protocol AddFoodPresenterInterface: AnyObject {
     func updateSelectedFoodFromCustomEntry(food: Food)
     func didTapCalorieButton(mealTime: MealTime)
     func stopSearchQuery()
-    func didTapCalorieButton()
     func updateCustomFood(food: Food)
 }
 
@@ -165,7 +164,7 @@ final class AddFoodPresenter {
 }
 
 extension AddFoodPresenter: AddFoodPresenterInterface {
-    
+
     func scannerDidRecognized(barcode: String) {
         searchQueue.cancelAllOperations()
         let operation = BlockOperation { [weak self] in
