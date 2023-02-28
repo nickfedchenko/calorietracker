@@ -186,7 +186,10 @@ final class AddFoodViewController: UIViewController {
             isFirstAppear.toggle()
             return
         }
-        presenter?.setFoodType(isSelectedType)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+            guard let self = self else { return }
+            self.presenter?.setFoodType(self.isSelectedType)
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {

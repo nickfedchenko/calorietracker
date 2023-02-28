@@ -379,7 +379,7 @@ extension FoodCellView.FoodViewModel {
     
     init?(_ food: Food?) {
         switch food {
-        case .product(let product, let value):
+        case .product(let product, let value, _):
             self.init(product, weight: value)
         case .dishes(let dish, let value):
             self.init(dish, weight: value)

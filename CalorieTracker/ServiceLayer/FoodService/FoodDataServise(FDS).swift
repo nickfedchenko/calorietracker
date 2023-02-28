@@ -118,7 +118,7 @@ final class FDS {
         
         mealData.forEach {
             switch $0.food {
-            case .product(let product, _):
+            case .product(let product, _, _):
                 protein += product.protein / 100 * $0.weight
                 fat += product.fat / 100 * $0.weight
                 carbs += product.carbs / 100 * $0.weight
@@ -168,7 +168,7 @@ extension FDS: FoodDataServiceInterface {
             switch $0.food {
             case .dishes(let dish, _):
                 dishId = dish.id
-            case .product(let product, _):
+            case .product(let product, _, _):
                 productId = product.id
             case .customEntry(let customEntry):
                 customEntryId = customEntry.id
@@ -220,7 +220,7 @@ extension FDS: FoodDataServiceInterface {
             localPersistentStore.saveFoodData(foods: [foodData])
             
             switch food {
-            case .product(let product, _):
+            case .product(let product, _, _):
                 foodData.setChild(product)
             case .dishes(let dish, _):
                 foodData.setChild(dish)
@@ -270,7 +270,7 @@ extension FDS: FoodDataServiceInterface {
     func getFavoriteProducts() -> [Product] {
         let products: [Product] = getFavoriteFoods().compactMap { food in
             switch food.food {
-            case .product(let product, _):
+            case .product(let product, _, _):
                 return product
             default:
                 return nil
@@ -295,7 +295,7 @@ extension FDS: FoodDataServiceInterface {
     func getFrequentProducts(_ count: Int) -> [Product] {
         let products: [Product] = getFrequentFood(count).compactMap { food in
             switch food.food {
-            case .product(let product, _):
+            case .product(let product, _, _):
                 return product
             default:
                 return nil
@@ -384,7 +384,7 @@ extension FDS: FoodDataServiceInterface {
         
         return foodData.compactMap {
             switch $0.food {
-            case .product(let product, _):
+            case .product(let product, _, _):
                 return product
             default:
                 return nil

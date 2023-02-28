@@ -55,7 +55,7 @@ extension OpenMainWidgetRouter: OpenMainWidgetRouterInterface {
     
     func openFoodVC(_ food: Food) {
         switch food {
-        case .product(let product, _):
+        case .product(let product, _, _):
             let productVC = ProductRouter.setupModule(
                 product,
                 .createProduct,

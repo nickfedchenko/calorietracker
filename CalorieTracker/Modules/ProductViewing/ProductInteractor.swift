@@ -35,7 +35,7 @@ extension ProductInteractor: ProductInteractorInterface {
         }
         
         self.product?.foodDataId = FDS.shared.foodUpdate(
-            food: .product(product, customAmount: nil),
+            food: .product(product, customAmount: nil, unit: nil),
             favorites: flag
         )
     }

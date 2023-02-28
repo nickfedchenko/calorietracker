@@ -45,6 +45,7 @@ final class ProductViewController: CTViewController {
     private var contentViewBottomAnchor: NSLayoutConstraint?
     private var firstDraw = true
     private var weight: Double = 0
+    private var valueCount: Double = 100
     var shouldUseCustomTransition = true
     
     private var addNutrition: DailyNutrition = .zero {
@@ -285,7 +286,7 @@ final class ProductViewController: CTViewController {
             return
         }
         let value = Double(textValue) ?? 0
-        
+        valueCount = value
         switch selectedWeightType {
         case .gram(_, _, coefficient: let coefficient):
             setAddNutrition(from: product, with: value, using: coefficient)
@@ -427,11 +428,11 @@ final class ProductViewController: CTViewController {
     
     @objc private func didTapSaveButton() {
         Vibration.success.vibrate()
-        presenter?.saveNutritionDaily(weight)
+        presenter?.saveNutritionDaily(weight, unit: selectedWeightType, unitCount: valueCount)
         didChangeAddNutrition()
         
         if let product = presenter?.getProduct() {
-            FDS.shared.foodUpdate(food: .product(product, customAmount: nil), favorites: nil)
+            FDS.shared.foodUpdate(food: .product(product, customAmount: nil, unit: nil), favorites: nil)
         }
     }
 }

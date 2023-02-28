@@ -6,9 +6,9 @@
 //
 
 import Foundation
-
+typealias FoodUnitData = (unit: UnitElement.ConvenientUnit, count: Double)
 enum Food {
-    case product(Product, customAmount: Double?)
+    case product(Product, customAmount: Double?, unit: FoodUnitData?)
     case dishes(Dish, customAmount: Double?)
     case meal(Meal)
     case customEntry(CustomEntry)
@@ -17,7 +17,7 @@ enum Food {
 extension Food {
     var foodInfo: [FoodInfoCases: Double] {
         switch self {
-        case .product(let product, let customAmount):
+        case .product(let product, let customAmount, let foodUnitData):
             return [
                 .kcal: product.kcal * ((customAmount ?? 100) / 100),
                 .carb: product.carbs * ((customAmount ?? 100) / 100),
@@ -55,7 +55,7 @@ extension Food {
     
     var id: String {
         switch self {
-        case .product(let product, _):
+        case .product(let product, _, _):
             return product.id
         case .dishes(let dish, _):
             return String(dish.id)
@@ -68,7 +68,7 @@ extension Food {
     
     var foodDataId: String? {
         switch self {
-        case .product(let product, _):
+        case .product(let product, _, _):
             return product.foodDataId
         case .dishes(let dish, _):
             return dish.foodDataId
@@ -81,7 +81,7 @@ extension Food {
     
     var weight: Double? {
         switch self {
-        case .product(_, let customAmount):
+        case .product(_, let customAmount, _):
             return customAmount
         case .dishes(_, let customAmount):
             return customAmount
@@ -96,7 +96,7 @@ extension Food {
 extension Food: Equatable {
     static func == (lhs: Food, rhs: Food) -> Bool {
         switch (lhs, rhs) {
-        case let (.product(productLhs, _), .product(productRhs, _)):
+        case let (.product(productLhs, _, _), .product(productRhs, _, _)):
             return productLhs == productRhs
         case let (.dishes(dishLhs, _), .dishes(dishRhs, _)):
             return dishLhs == dishRhs

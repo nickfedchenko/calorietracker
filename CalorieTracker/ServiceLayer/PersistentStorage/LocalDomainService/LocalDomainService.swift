@@ -92,6 +92,7 @@ final class LocalDomainService {
     
     private lazy var context: NSManagedObjectContext = {
         let context = container.viewContext
+        context.automaticallyMergesChangesFromParent = true
         context.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
         return context
     }()
@@ -269,7 +270,7 @@ extension LocalDomainService: LocalDomainServiceInterface {
     
     func saveProducts(products: [Product], saveInPriority: Bool) {
         let backgroundContext = container.newBackgroundContext()
-        backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
+        backgroundContext.mergePolicy = NSMergePolicy.safeMergePolicy
         
         let _: [DomainProduct] = products
             .map { DomainProduct.prepare(fromPlainModel: $0, context: backgroundContext) }
@@ -278,10 +279,12 @@ extension LocalDomainService: LocalDomainServiceInterface {
     
     func saveDishes(dishes: [Dish]) {
         let backgroundContext = container.newBackgroundContext()
-        backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
+        backgroundContext.mergePolicy = NSMergePolicy.safeMergePolicy
         let _: [DomainDish] = dishes
             .map { DomainDish.prepare(fromPlainModel: $0, context: backgroundContext) }
-        try? backgroundContext.save()
+        backgroundContext.perform({
+            try? backgroundContext.save()
+        })
     }
     
     func saveDailyMeals(data: [DailyMeal]) {
@@ -473,7 +476,7 @@ extension LocalDomainService: LocalDomainServiceInterface {
     func getFoodData(_ food: Food) -> FoodData? {
         guard let id = food.foodDataId else {
             switch food {
-            case .product(let product, _):
+            case .product(let product, _, _):
                 guard let domainProduct = getDomainProduct(product.id), let domainFoodData = domainProduct.foodData else {
                     return nil
                 }

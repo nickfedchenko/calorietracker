@@ -195,7 +195,7 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
     
     func didTapCell(_ type: Food) {
         switch type {
-        case .product(let product, _):
+        case .product(let product, _, _):
             router?.openProductViewController(product)
         case .dishes(let dish, _):
             router?.openDishViewController(dish)
