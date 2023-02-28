@@ -522,6 +522,10 @@
 "addFood.customEntry" = "КАСТОМНЫЙ ВВОД";
 "addFood.mealCreation" = "СОЗДАНИЕ ПРИЕМА ПИЩИ";
 
+"mealCreation.addFoodButton" = "ДОБАВИТЬ ЕДУ";
+"mealCreation.accessToPhotosTitle" = "Доступ к фотографиям";
+"mealCreation.accessToPhotosMesage" = "Предоставьте доступ к своим фотографиям в настройках";
+
 "breakfast" = "ЗАВТРАК";
 "lunch" = "ОБЕД";
 "dinner" = "УЖИН";
@@ -661,6 +665,7 @@
 "scan.alert.title" = "Штрих-код уже существует";
 "scan.alert.description" = "Продукт с этим штрих-кодом уже существует. Ты хочешь это увидеть?";
 
+"settings" = "Настройки";
 "settings.app" = "Настройки приложения";
 "settings.preferences.title" = "ПРЕДПОЧТЕНИЯ";
 "settings.units.title" = "ЕДИНИЦЫ";

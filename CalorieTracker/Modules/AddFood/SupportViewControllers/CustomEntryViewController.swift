@@ -378,7 +378,14 @@ extension CustomEntryViewController: UIScrollViewDelegate {
     }
     
     private func getAddEntryButton() -> CustomAddButton {
-        let button = CustomAddButton()
+        let button = CustomAddButton(
+            buttonImage: R.image.basicButton.addDefault(),
+            buttonImagePressed: R.image.basicButton.addPressed(),
+            gradientFirstColor: R.color.basicButton.gradientFirstColor(),
+            gradientSecondColor: R.color.basicButton.gradientSecondColor(),
+            borderColorActive: R.color.foodViewing.basicSecondary(),
+            borderWidth: 2
+        )
         button.setState(.inactive)
         button.addTarget(self, action: #selector(didTapCustomEntryButton), for: .touchUpInside)
         return button
