@@ -106,7 +106,7 @@ final class WaterWidgetNode: CTWidgetNode {
         
         let percentageInsets = ASInsetLayoutSpec(
             insets: .init(top: 0, left: 13, bottom: 3, right: 0),
-            child: percentageStack
+            child: percentageStack 
         )
         
         let overlay = ASOverlayLayoutSpec(child: iconNode, overlay: percentageInsets)

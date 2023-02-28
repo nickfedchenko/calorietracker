@@ -9,7 +9,7 @@ import UIKit
 
 struct Shadow {
     let color: UIColor
-    let opacity: Float
+    let opacity: CGFloat
     let offset: CGSize
     let radius: CGFloat
 }

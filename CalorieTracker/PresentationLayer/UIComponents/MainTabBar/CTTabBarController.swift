@@ -60,6 +60,7 @@ final class CTTabBarController: ASTabBarController {
         setupSubviews()
         let viewControllers = customTabBar.tabItems.map { $0.configuration.viewControler }
         setViewControllers(viewControllers, animated: false)
+        makeBlurTransperent()
     }
     
     func hideTabBar() {
@@ -97,6 +98,15 @@ final class CTTabBarController: ASTabBarController {
         shouldHideBlur = false
         reinitBlurView()
         footer.alpha = 1
+    }
+    
+    func getTabBarSnapshot() -> UIView {
+        let snapshot = blurView.contentView.snapshotNewView(isOpaque: false)
+        return UIImageView(image: snapshot)
+    }
+    
+    func getTabBarFrame() -> CGRect {
+        return blurView.frame
     }
     
     private func setupSubviews() {

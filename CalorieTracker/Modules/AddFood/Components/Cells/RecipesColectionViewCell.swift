@@ -76,7 +76,7 @@ final class RecipesColectionViewCell: UICollectionViewCell, FoodCellProtocol {
         layer.borderWidth = 1
         layer.borderColor = UIColor.white.cgColor
         contentView.backgroundColor = .white
-        containerView.clipsToBounds = true
+        containerView.clipsToBounds = false
         containerView.layer.cornerRadius = 8
         
     }

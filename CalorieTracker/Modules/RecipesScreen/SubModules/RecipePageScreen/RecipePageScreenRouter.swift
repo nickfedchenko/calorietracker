@@ -39,13 +39,18 @@ class RecipePageScreenRouter: NSObject {
 
 extension RecipePageScreenRouter: RecipePageScreenRouterInterface {
     func dismiss() {
-        // TODO: //
         if let dish = presenter?.getDish(),
-        let handler = addToDiaryHandler {
-            handler(.dishes(dish, customAmount: presenter?.getPossibleEatenAmount()))
+           let handler = addToDiaryHandler {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { [weak self] in
+                handler(.dishes(dish, customAmount: self?.presenter?.getPossibleEatenAmount()))
+            }
         } else {
             presenter?.shouldAddToEatenSelectedPortions()
         }
-        view?.dismiss(animated: true)
+        if view?.navigationController != nil {
+            view?.navigationController?.popViewController(animated: true)
+        } else {
+            view?.dismiss(animated: true)
+        }
     }
 }

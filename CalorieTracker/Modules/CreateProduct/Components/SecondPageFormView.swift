@@ -107,7 +107,7 @@ extension SecondPageFormView {
     
     func getValueTextField() -> InnerShadowTextField {
         let textField = InnerShadowTextField()
-        textField.innerShadowColor = R.color.foodViewing.basicSecondaryDark()
+        textField.innerShadowColors = [R.color.foodViewing.basicSecondaryDark() ?? .clear]
         textField.layer.borderWidth = 1
         textField.layer.borderColor = R.color.foodViewing.basicSecondaryDark()?.cgColor
         textField.layer.cornerCurve = .continuous

@@ -60,7 +60,7 @@ final class MenuView<ID: WithGetTitleProtocol
             didClose?()
             return
         } else {
-            UIView.animate(withDuration: 0.08, delay: 0, options: .curveEaseInOut) {
+            UIView.animate(withDuration: 0.02, delay: 0, options: .curveEaseInOut) {
                 self.stackView.arrangedSubviews[index].layer.opacity = 0
                 self.stackView.arrangedSubviews[index].isHidden = true
             } completion: { _ in
@@ -73,7 +73,7 @@ final class MenuView<ID: WithGetTitleProtocol
         shadowLayer.isHidden = true
         isHidden = false
         if index == model.count {
-            UIView.animate(withDuration: 0.08, delay: 0, options: .curveEaseInOut) {
+            UIView.animate(withDuration: 0.02, delay: 0, options: .curveEaseInOut) {
                 self.shadowLayer.isHidden = false
             }
             return

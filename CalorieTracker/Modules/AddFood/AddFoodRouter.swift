@@ -15,7 +15,7 @@ protocol AddFoodRouterInterface: AnyObject {
     func openScanner()
     func openCreateProduct()
     func openDishViewController(_ dish: Dish)
-    func openCustomEntryViewController()
+    func openCustomEntryViewController(mealTime: MealTime)
 }
 
 class AddFoodRouter: NSObject {
@@ -27,15 +27,15 @@ class AddFoodRouter: NSObject {
     static func setupModule(
         shouldInitiallyPerformSearchWith barcode: String? = nil,
         mealTime: MealTime = .breakfast,
+        addFoodYCoordinate: CGFloat,
         needUpdate: (() -> Void)? = nil
     ) -> AddFoodViewController {
       
-        let vc = AddFoodViewController()
+        let vc = AddFoodViewController(searchFieldYCoordinate: addFoodYCoordinate)
         let interactor = AddFoodInteractor()
         let router = AddFoodRouter()
         let presenter = AddFoodPresenter(interactor: interactor, router: router, view: vc)
         let keyboardManager = KeyboardManager()
-
         vc.presenter = presenter
         vc.keyboardManager = keyboardManager
         vc.mealTime = mealTime
@@ -56,8 +56,8 @@ class AddFoodRouter: NSObject {
 
 extension AddFoodRouter: AddFoodRouterInterface {
     func closeViewController() {
+        viewController?.navigationController?.popToRootViewController(animated: true)
         needUpdate?()
-        viewController?.navigationController?.popViewController(animated: true)
     }
     
     func openProductViewController(_ product: Product) {
@@ -66,10 +66,10 @@ extension AddFoodRouter: AddFoodRouterInterface {
             .addFood,
             presenter?.getMealTime() ?? .breakfast
         ) { [weak self] food in
-            self?.presenter?.updateSelectedFood(food: food)
+            self?.presenter?.updateSelectedFoodFromSearch(food: food)
         }
-        productVC.modalPresentationStyle = .overFullScreen
-        viewController?.present(productVC, animated: true)
+        productVC.modalPresentationStyle = .fullScreen
+        viewController?.navigationController?.present(productVC, animated: true)
     }
     
     func openSelectedFoodCellsVC(
@@ -77,12 +77,12 @@ extension AddFoodRouter: AddFoodRouterInterface {
         complition: @escaping ([Food]) -> Void
     ) {
         let vc = SelectedFoodCellsRouter.setupModule(foods)
-        vc.modalPresentationStyle = .overFullScreen
+//        vc.modalPresentationStyle = .fullScreen
         vc.didChangeSeletedFoods = { newFoods in
             complition(newFoods)
         }
-        
-        viewController?.present(vc, animated: true)
+        vc.modalPresentationStyle = .overFullScreen
+        viewController?.navigationController?.present(vc, animated: true)
     }
     
     func openScanner() {
@@ -96,7 +96,7 @@ extension AddFoodRouter: AddFoodRouterInterface {
     func openCreateProduct() {
         let vc = CreateProductRouter.setupModule()
         vc.modalPresentationStyle = .overFullScreen
-        viewController?.present(vc, animated: true)
+        viewController?.navigationController?.present(vc, animated: true)
     }
     
     func openDishViewController(_ dish: Dish) {
@@ -104,15 +104,21 @@ extension AddFoodRouter: AddFoodRouterInterface {
             with: dish,
             backButtonTitle: "Add food".localized
         ) { [weak self] food in
-            self?.presenter?.updateSelectedFood(food: food)
+            self?.presenter?.updateSelectedFoodFromSearch(food: food)
         }
-        vc.modalPresentationStyle = .overFullScreen
-        viewController?.present(vc, animated: true)
+        vc.modalPresentationStyle = .fullScreen
+        viewController?.navigationController?.present(vc, animated: true)
     }
     
-    func openCustomEntryViewController() {
-        let vc = CustomEntryViewController()
+    func openCustomEntryViewController(mealTime: MealTime) {
+        let vc = CustomEntryViewController(mealTime: mealTime)
+        
+        vc.onSavedCustomEntry = { [weak self] customEntry in
+            self?.presenter?.updateSelectedFoodFromCustomEntry(food: .customEntry(customEntry))
+            self?.presenter?.updateCustomFood(food: .customEntry(customEntry))
+        }
+        
         vc.modalPresentationStyle = .overFullScreen
-        viewController?.present(vc, animated: true)
+        viewController?.navigationController?.present(vc, animated: true)
     }
 }

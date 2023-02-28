@@ -27,6 +27,7 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
     
     // MARK: - Private properties
     
+    private let generator = UIImpactFeedbackGenerator(style: .medium)
     private let messageNode: AppMessageWidgetNode = {
         let node = AppMessageWidgetNode(with: CTWidgetNodeConfiguration(type: .compact))
         node.style.preferredSize = CGSize(width: 308, height: node.constants.height)
@@ -39,6 +40,7 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
     private let mainActivityWidget: MainWidgetViewNode = {
         let node = MainWidgetViewNode(with: CTWidgetNodeConfiguration(type: .widget))
 //        node.backgroundColor = R.color.mainDarkGreen()
+        node.allowsEdgeAntialiasing = true
         node.style.preferredSize = CGSize(
             width: 388,
             height: node.constants.height
@@ -98,17 +100,36 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         return node
     }()
     
+    private lazy var undercoverNode: GradientNode = {
+        let node = GradientNode()
+        node.style.preferredSize = CGSize(
+            width: view.bounds.width, height: 140
+            )
+        node.style.flexGrow = 1
+        return node
+    }()
+    
     private let scrollNode: ASScrollNode? = {
         guard UIDevice.screenType == .h16x375 || UIDevice.screenType == .h16x414 else {
             return nil
         }
+  
+        let sampleNode = CTWidgetNode(with: CTWidgetNodeConfiguration(type: .compact))
+        let safeAreaInset = sampleNode.constants.suggestedTopSafeAreaOffset
+
         let scrollNode = ASScrollNode()
         scrollNode.view.showsVerticalScrollIndicator = false
         scrollNode.view.showsHorizontalScrollIndicator = false
         scrollNode.automaticallyManagesSubnodes = true
         scrollNode.automaticallyRelayoutOnSafeAreaChanges = true
         scrollNode.automaticallyManagesContentSize = true
-        scrollNode.view.contentInset = .init(top: 0, left: 0, bottom: 64, right: 0)
+        scrollNode.view.contentInsetAdjustmentBehavior = .never
+        scrollNode.view.contentInset = .init(
+            top: 0,
+            left: 0,
+            bottom: 140 - safeAreaInset - CTWidgetNodeConfiguration(type: .widget).safeAreaTopInset,
+            right: 0
+        )
         scrollNode.view.contentInsetAdjustmentBehavior = .never
         return scrollNode
     }()
@@ -134,7 +155,7 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         node.addTarget(
             self,
             action: #selector(didTapButton),
-            forControlEvents: .touchUpInside
+            forControlEvents: .touchDown
         )
         return node
     }()
@@ -150,6 +171,7 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
     }()
     
     // MARK: - Init
+    // swiftlint:disable:next function_body_length
     override init() {
         super.init(node: ASDisplayNode())
         node.automaticallyRelayoutOnSafeAreaChanges = true
@@ -160,9 +182,46 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
             if let scrollNode = self.scrollNode {
                 let insetSpecs = ASInsetLayoutSpec(
                     insets: .zero,
-                    child: scrollNode)
+                    child: scrollNode
+                )
+                self.undercoverNode.layoutSpecBlock = { _, size in
+                    let stack = ASStackLayoutSpec(
+                        direction: .horizontal,
+                        spacing: self.calendarWidget.constants.suggestedInterItemSpacing,
+                        justifyContent: .center,
+                        alignItems: .stretch,
+                        children: [self.addWidgetButton, self.barCodeScannerButton]
+                        )
+                    let inset = ASInsetLayoutSpec(
+                        insets: .init(
+                            top: 8,
+                            left: self.addWidgetButton.constants.suggestedSideInset,
+                            bottom: 0,
+                            right: self.addWidgetButton.constants.suggestedSideInset
+                        ),
+                        child: stack
+                    )
+                    return inset
+                }
+
+                let overlayStack = ASStackLayoutSpec(
+                    direction: .vertical,
+                    spacing: .zero,
+                    justifyContent: .start,
+                    alignItems: .start, children: [self.undercoverNode]
+                )
+                let overlayInset = ASInsetLayoutSpec(
+                    insets: .init(
+                        top: self.view.bounds.height - 140,
+                        left: 0,
+                        bottom: 0,
+                        right: 0
+                    ),
+                    child: overlayStack
+                )
+                let overlay = ASOverlayLayoutSpec(child: insetSpecs, overlay: overlayInset)
                 
-                return insetSpecs
+                return overlay
             } else {
                 return self.setupStacks(node: node, size: size)
             }
@@ -175,7 +234,7 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
                     insets: UIEdgeInsets(
                         top: 0,
                         left: 0,
-                        bottom: CTWidgetNodeConfiguration(type: .widget).suggestedInterItemSpacing,
+                        bottom: 0,
                         right: 0
                     ),
                     child: containerNode
@@ -194,10 +253,10 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         super.viewDidLoad()
         addTapGestureRecognizer()
         presenter?.checkOnboarding()
+        generator.prepare()
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         navigationController?.setToolbarHidden(true, animated: true)
         navigationController?.navigationBar.isHidden = true
         presenter?.updateWaterWidgetModel()
@@ -208,6 +267,23 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         presenter?.updateActivityWidget()
         presenter?.updateCalendarWidget(UDM.currentlyWorkingDay.date)
         presenter?.updateNoteWidget()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        let now = Date().timeIntervalSince1970
+//        navigationController?.setToolbarHidden(true, animated: true)
+//        navigationController?.navigationBar.isHidden = true
+//        presenter?.updateWaterWidgetModel()
+//        presenter?.updateStepsWidget()
+//        presenter?.updateWeightWidget()
+//        presenter?.updateExersiceWidget()
+//        presenter?.updateMessageWidget()
+//        presenter?.updateActivityWidget()
+//        presenter?.updateCalendarWidget(UDM.currentlyWorkingDay.date)
+//        presenter?.updateNoteWidget()
+        let new = Date().timeIntervalSince1970
+        print("main screen time passed \(new - now)")
     }
     
     // MARK: - Private methods
@@ -253,20 +329,32 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
             children: [self.weightMeasureWidget, self.notesWidget]
         )
         
-        let sixthHStack = ASStackLayoutSpec(
-            direction: .horizontal,
-            spacing: self.calendarWidget.constants.suggestedInterItemSpacing,
-            justifyContent: .start,
-            alignItems: .stretch,
-            children: [self.addWidgetButton, self.barCodeScannerButton]
-        )
+//        let sixthHStack = ASStackLayoutSpec(
+//            direction: .horizontal,
+//            spacing: self.calendarWidget.constants.suggestedInterItemSpacing,
+//            justifyContent: .start,
+//            alignItems: .stretch,
+//            children: [self.addWidgetButton, self.barCodeScannerButton]
+//        )
+        
+        var mainVStackChilds = [firstHStack, secondHStack, thirdHStack, fourthHStack, fifthHStack]
+        if UIDevice.screenType != .h16x414 && UIDevice.screenType != .h16x375 {
+            let sixthHStack = ASStackLayoutSpec(
+                direction: .horizontal,
+                spacing: self.calendarWidget.constants.suggestedInterItemSpacing,
+                justifyContent: .start,
+                alignItems: .stretch,
+                children: [self.addWidgetButton, self.barCodeScannerButton]
+            )
+            mainVStackChilds.append(sixthHStack)
+        }
         
         let VStack = ASStackLayoutSpec(
             direction: .vertical,
             spacing: self.menuButton.constants.suggestedInterItemSpacing,
             justifyContent: .start,
             alignItems: .start,
-            children: [firstHStack, secondHStack, thirdHStack, fourthHStack, fifthHStack, sixthHStack]
+            children: mainVStackChilds
         )
         
         let stackInset = ASInsetLayoutSpec(
@@ -331,6 +419,11 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
     
     @objc private func didTapButton() {
         Vibration.medium.vibrate()
+        if scrollNode != nil {
+            UDM.mainScreenAddButtonOriginY = undercoverNode.convert(addWidgetButton.frame, to: node).origin.y
+        } else {
+            UDM.mainScreenAddButtonOriginY = addWidgetButton.frame.origin.y
+        }
         presenter?.didTapAddButton()
     }
     
@@ -372,5 +465,66 @@ extension MainScreenViewController: MainScreenViewControllerInterface {
     
     func setNoteWidget(_ model: LastNoteView.Model?) {
         notesWidget.model = model
+    }
+}
+
+// MARK: - transition helpers
+extension MainScreenViewController {
+    // MARK: - Public methods
+    func setToBeginningTransition() {
+        addWidgetButton.alpha = 0
+        barCodeScannerButton.alpha = 0
+    }
+    
+    func setToEndedTransition() {
+        addWidgetButton.alpha = 1
+        barCodeScannerButton.alpha = 1
+    }
+    
+    func getAddButtonSnapshot() -> UIView {
+        let snapshot = addWidgetButton.view.snapshotNewView(isOpaque: false)
+        UDM.tempAddButtonImage = snapshot?.pngData()
+        let view = UIImageView(image: snapshot)
+        return view
+    }
+    
+    func makeAddButtonCopy() -> UIView {
+        return addWidgetButton.view
+    }
+    
+    func getScannerButtonSnapshot() -> UIView {
+        barCodeScannerButton.layoutIfNeeded()
+        let snapshot = barCodeScannerButton.view.snapshotNewView(isOpaque: false)
+        UDM.tempScannerImage = snapshot?.pngData()
+        let view = UIImageView(image: snapshot)
+        return view
+    }
+    
+    func getCurrentAddButtonFrame() -> CGRect {
+        if scrollNode != nil {
+            return undercoverNode.convert(addWidgetButton.frame, to: node)
+        } else {
+            return addWidgetButton.frame
+        }
+    }
+    
+    func getCurrentScannerFrame() -> CGRect {
+        if scrollNode != nil {
+            return undercoverNode.convert(barCodeScannerButton.frame, to: node)
+        } else {
+            return barCodeScannerButton.frame
+        }
+    }
+    
+    func getTabBarSnapshot() -> UIView {
+        guard let tabBarController = tabBarController as? CTTabBarController else { return UIView() }
+        return tabBarController.getTabBarSnapshot()
+    }
+    
+    func getTabBarTargetFrame() -> CGRect {
+        guard let tabBarController = tabBarController as? CTTabBarController else {
+            return .zero
+        }
+        return tabBarController.getTabBarFrame()
     }
 }

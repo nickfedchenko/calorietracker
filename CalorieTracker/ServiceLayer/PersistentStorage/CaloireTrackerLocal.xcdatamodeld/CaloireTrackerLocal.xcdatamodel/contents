@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21513" systemVersion="22A400" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="DomainCustomEntry" representedClassName="DomainCustomEntry" syncable="YES">
+        <attribute name="carbs" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="fats" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="kcal" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="mealTime" optional="YES" attributeType="String"/>
+        <attribute name="proteins" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <relationship name="foodData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainFoodData" inverseName="customEntry" inverseEntity="DomainFoodData"/>
+        <relationship name="meal" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainMeal" inverseName="customEntries" inverseEntity="DomainMeal"/>
+        <relationship name="mealsData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainMealData" inverseName="customEntry" inverseEntity="DomainMealData"/>
+    </entity>
     <entity name="DomainDailyMeals" representedClassName="DomainDailyMeals" syncable="YES">
         <attribute name="day" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="mealTime" attributeType="String"/>
@@ -65,6 +77,7 @@
         <attribute name="favorites" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="id" attributeType="String"/>
         <attribute name="numberUses" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="customEntry" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainCustomEntry" inverseName="foodData" inverseEntity="DomainCustomEntry"/>
         <relationship name="dish" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="DomainDish" inverseName="foodData" inverseEntity="DomainDish"/>
         <relationship name="product" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="DomainProduct" inverseName="foodData" inverseEntity="DomainProduct"/>
         <uniquenessConstraints>
@@ -76,6 +89,7 @@
     <entity name="DomainMeal" representedClassName="DomainMeal" syncable="YES">
         <attribute name="id" attributeType="String"/>
         <attribute name="mealTime" attributeType="String"/>
+        <relationship name="customEntries" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainCustomEntry" inverseName="meal" inverseEntity="DomainCustomEntry"/>
         <relationship name="dishes" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="DomainDish" inverseName="meal" inverseEntity="DomainDish"/>
         <relationship name="products" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="DomainProduct" inverseName="meal" inverseEntity="DomainProduct"/>
         <uniquenessConstraints>
@@ -86,7 +100,10 @@
     </entity>
     <entity name="DomainMealData" representedClassName="DomainMealData" syncable="YES">
         <attribute name="id" attributeType="String"/>
+        <attribute name="unitCount" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="unitId" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="weight" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="customEntry" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainCustomEntry" inverseName="mealsData" inverseEntity="DomainCustomEntry"/>
         <relationship name="dailyMeal" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainDailyMeals" inverseName="mealData" inverseEntity="DomainDailyMeals"/>
         <relationship name="dish" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainDish" inverseName="mealsData" inverseEntity="DomainDish"/>
         <relationship name="product" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainProduct" inverseName="mealsData" inverseEntity="DomainProduct"/>

@@ -27,6 +27,12 @@ final class FoodCellView: UIView {
         }
     }
     
+    var infoCenterX: CGFloat = 0 {
+        didSet {
+            updateInfoLabelLayout()
+        }
+    }
+    
     var cellButtonType: CellButtonType = .add {
         didSet {
             didChangeButtonType()
@@ -36,7 +42,6 @@ final class FoodCellView: UIView {
     var subInfo: Int? {
         didSet {
             if let info = subInfo {
-                print("subinfo is \(info)")
                 infoLabel.text = "\(info)"
             } else {
                 infoLabel.text = nil
@@ -53,6 +58,7 @@ final class FoodCellView: UIView {
     
     private lazy var selectButton: UIButton = {
         let button = UIButton()
+        button.imageView?.contentMode = .scaleAspectFit
         button.addTarget(self, action: #selector(didTapSelectButton), for: .touchUpInside)
         return button
     }()
@@ -65,23 +71,23 @@ final class FoodCellView: UIView {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = R.font.sfProTextRegular(size: 15.fontScale())
-        label.textColor = .black
+        label.font = R.font.sfProTextMedium(size: 15)
+        label.textColor = UIColor(hex: "111111")
         label.numberOfLines = 0
         return label
     }()
     
     private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
-        label.font = R.font.sfProTextRegular(size: 15.fontScale())
-        label.textColor = R.color.addFood.recipesCell.basicGray()
+        label.font = R.font.sfProTextRegular(size: 15)
+        label.textColor = UIColor(hex: "547771")
         label.textAlignment = .right
         return label
     }()
     
     private lazy var tagLabel: UILabel = {
         let label = UILabel()
-        label.font = R.font.sfProTextRegular(size: 15.fontScale())
+        label.font = R.font.sfProTextMedium(size: 15)
         label.textColor = .white
         return label
     }()
@@ -90,13 +96,13 @@ final class FoodCellView: UIView {
         let view = UIView()
         view.layer.cornerCurve = .continuous
         view.layer.cornerRadius = 5
-        view.backgroundColor = R.color.addFood.recipesCell.basicGray()
+        view.backgroundColor = UIColor(hex: "AFBEB8")
         return view
     }()
     
     private lazy var kalorieLabel: UILabel = {
         let label = UILabel()
-        label.font = R.font.sfProTextSemibold(size: 15.fontScale())
+        label.font = R.font.sfProTextBold(size: 15)
         label.textColor = R.color.addFood.menu.kcal()
         label.textAlignment = .right
         return label
@@ -104,7 +110,7 @@ final class FoodCellView: UIView {
     
     private lazy var infoLabel: UILabel = {
         let label = UILabel()
-        label.font = R.font.sfProTextSemibold(size: 15.fontScale())
+        label.font = R.font.sfProTextBold(size: 15)
         label.textAlignment = .right
         return label
     }()
@@ -137,8 +143,8 @@ final class FoodCellView: UIView {
             widthBackgroundTagViewConstraint?.isActive = false
             checkImageView.snp.remakeConstraints { make in
                 make.centerY.equalTo(tagBackgroundView)
-                make.leading.lessThanOrEqualTo(tagLabel.snp.trailing)
-                make.trailing.lessThanOrEqualTo(descriptionLabel.snp.leading).offset(-6)
+                make.leading.equalTo(titleLabel.snp.leading)
+//                make.trailing.lessThanOrEqualTo(descriptionLabel.snp.leading).offset(-6)
                 make.height.equalTo(18)
             }
         } else {
@@ -173,11 +179,12 @@ final class FoodCellView: UIView {
             imageView.image = nil
             widthImageViewConstraints?.isActive = true
         }
+
     }
     
     private func setupView() {
         backgroundColor = .white
-        layer.masksToBounds = true
+        layer.masksToBounds = false
     }
     
     private func addSubviews() {
@@ -208,7 +215,7 @@ final class FoodCellView: UIView {
         titleLabel.snp.makeConstraints { make in
             make.leading.equalTo(imageView.snp.trailing).offset(4)
             make.trailing.lessThanOrEqualTo(infoLabel.snp.leading).offset(-6)
-            make.top.equalToSuperview().offset(4)
+            make.top.equalToSuperview().offset(9)
         }
         
         widthBackgroundTagViewConstraint = tagBackgroundView.widthAnchor.constraint(equalToConstant: 0)
@@ -216,8 +223,8 @@ final class FoodCellView: UIView {
             make.height.equalTo(18)
             make.leading.equalTo(tagLabel.snp.leading).offset(-5)
             make.trailing.equalTo(tagLabel.snp.trailing).offset(5)
-            make.top.equalTo(titleLabel.snp.bottom).offset(5)
-            make.bottom.equalToSuperview().offset(-7)
+            make.top.equalTo(titleLabel.snp.bottom).offset(9)
+            make.bottom.equalToSuperview().offset(-8)
         }
         
         tagLabel.snp.makeConstraints { make in
@@ -237,7 +244,7 @@ final class FoodCellView: UIView {
         selectButton.snp.makeConstraints { make in
             make.centerY.equalTo(tagBackgroundView)
             make.trailing.equalToSuperview()
-            make.height.equalTo(20)
+            make.height.equalTo(24)
         }
         
         descriptionLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
@@ -248,13 +255,13 @@ final class FoodCellView: UIView {
         
         kalorieLabel.setContentCompressionResistancePriority(.init(rawValue: 753), for: .horizontal)
         kalorieLabel.snp.makeConstraints { make in
-            make.trailing.equalToSuperview()
+            make.trailing.equalToSuperview().inset(1)
             make.centerY.equalTo(titleLabel)
         }
         
         infoLabel.setContentCompressionResistancePriority(.init(rawValue: 753), for: .horizontal)
         infoLabel.snp.makeConstraints { make in
-            make.trailing.equalTo(kalorieLabel.snp.leading).offset(-8)
+            make.trailing.equalToSuperview().inset(66)
             make.centerY.equalTo(titleLabel)
         }
     }
@@ -262,7 +269,14 @@ final class FoodCellView: UIView {
     private func didChangeButtonType() {
         switch cellButtonType {
         case .delete:
-            selectButton.setImage(R.image.addFood.recipesCell.delete(), for: .normal)
+            selectButton.setImage(R.image.addFood.recipesCell.addedCheckmark(), for: .normal)
+            UIView.animate(withDuration: 0.2) {
+                self.selectButton.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
+            } completion: { _ in
+                UIView.animate(withDuration: 0.2) {
+                    self.selectButton.transform = .identity
+                }
+            }
         case .add:
             selectButton.setImage(R.image.addFood.recipesCell.add(), for: .normal)
         }
@@ -272,6 +286,13 @@ final class FoodCellView: UIView {
         Vibration.success.vibrate()
         didTapButton?(cellButtonType)
         cellButtonType = cellButtonType == .add ? .delete : .add
+    }
+    
+    private func updateInfoLabelLayout() {
+        infoLabel.snp.remakeConstraints { make in
+            make.centerY.equalTo(titleLabel)
+            make.centerX.equalTo(infoCenterX)
+        }
     }
 }
 
@@ -284,16 +305,28 @@ extension FoodCellView.FoodViewModel {
         self.verified = !product.isUserProduct
         
         if let weight = weight {
-            self.kcal = product.kcal / 100 * weight
-            self.description = "\(Int(weight)) g"
+            self.kcal = BAMeasurement(product.kcal / 100 * weight, .energy, isMetric: true).localized
+            let description = BAMeasurement(weight, .serving, isMetric: true).string
+            self.description = description
         } else {
-            self.kcal = product.kcal
-            self.description = product.servings?
-                .compactMap { $0.size }
-                .joined(separator: ", ") ?? ""
+            self.kcal = BAMeasurement(product.kcal, .energy, isMetric: true).localized
+            if let serving = product.servings?.first,
+               let unit = product.units?.first(where: { $0.isReference }) {
+                var description = ""
+                if unit.id == 1 {
+                    description = "\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string)"
+                } else {
+                    description = "\(unit.title ?? "") "
+                    + "(\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string))"
+                }
+                self.description = description
+            } else {
+                self.description = ""
+            }
         }
     }
     
+    // MARK: - Model for food cells
     private init(_ dish: Dish, weight: Double?) {
         self.id = String(dish.id)
         self.title = dish.title
@@ -305,34 +338,95 @@ extension FoodCellView.FoodViewModel {
            let totalWeight = dish.dishWeight {
             
             let portionWeight = (dish.dishWeight ?? 1) / Double(dish.totalServings ?? 1)
-            let portions = Int(weight / portionWeight)
+            let portions = weight / portionWeight
             let servingText: String = {
                 switch portions {
                 case 1:
                     return R.string.localizable.servings1()
-                    
                 case 2...4:
                     return R.string.localizable.servings24()
                 default:
                     return R.string.localizable.servings4()
                 }
             }()
-             self.kcal = (weight / (totalWeight)) * dish.kcal
-            self.description = "\(portions) \(servingText)"
+            self.kcal = BAMeasurement((weight / totalWeight) * dish.kcal, .energy, isMetric: true).localized
+            self.description = "\(portions) \(servingText) "
+            + "(\(BAMeasurement(portionWeight * Double(portions), .serving, isMetric: true).string))"
         } else {
-            self.kcal = dish.values?.serving.kcal ?? 1
-            self.description = dish.info ?? ""
+            var servingWeight: Double = 0
+            if let servingDishWeight = dish.values?.serving.weight {
+                servingWeight = servingDishWeight
+            } else {
+                let dishWeight = dish.dishWeight ?? 1
+                let totalServing = dish.totalServings ?? 1
+                servingWeight = dishWeight / Double(totalServing)
+            }
+            self.kcal = BAMeasurement(dish.values?.serving.kcal ?? 1, .energy, isMetric: true).localized
+            self.description = "1 "
+            + R.string.localizable.servings1()
+            + " (\(BAMeasurement(servingWeight, .serving, isMetric: true).string ))"
+        }
+    }
+    
+    private init(_ customEntry: CustomEntry, weight: Double?) {
+        self.id = customEntry.id
+        self.title = customEntry.title
+        self.kcal = customEntry.nutrients.kcal
+        self.tag = R.string.localizable.addFoodCustomEntry()
+        self.image = nil
+        self.verified = false
+        self.description = ""
+    }
+    
+    private init(product: Product, weight: Double?, unitData: FoodUnitData) {
+        self.id = product.id
+        self.title = product.title
+        self.tag = product.brand ?? ""
+        self.image = product.isUserProduct ? product.photo : nil
+        self.verified = !product.isUserProduct
+        
+        if let weight = weight {
+            self.kcal = BAMeasurement(product.kcal / 100 * weight, .energy, isMetric: true).localized
+            let descriptionWeight = BAMeasurement(weight, .serving, isMetric: true).string
+            let unit = unitData.unit
+            let unitCount = unitData.count
+            let unitTitle = unit.getTitle(.short) ?? "error geting title"
+            self.description = "\(unitCount) \(unitTitle) (\(descriptionWeight))"
+            
+        } else {
+            self.kcal = BAMeasurement(product.kcal, .energy, isMetric: true).localized
+            if let serving = product.servings?.first,
+               let unit = product.units?.first(where: { $0.isReference }) {
+                var description = ""
+                if unit.id == 1 {
+                    description = "\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string)"
+                } else {
+                    description = "\(unit.title) "
+                    + "(\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string))"
+                }
+                self.description = description
+            } else {
+                self.description = ""
+            }
         }
     }
     
     init?(_ food: Food?) {
         switch food {
-        case .product(let product, let value):
-            self.init(product, weight: value)
+        case .product(let product, let value, let unitData):
+            if let unitData = unitData {
+                self.init(product: product, weight: value, unitData: unitData)
+            } else {
+                self.init(product, weight: value)
+            }
         case .dishes(let dish, let value):
             self.init(dish, weight: value)
+        case .customEntry(let customEntry):
+            self.init(customEntry, weight: nil)
         default:
             return nil
         }
     }
+    
+    
 }

@@ -12,7 +12,7 @@ private let hideKeyboardDelegate = HideKeyboardDelegate()
 private class HideKeyboardDelegate: NSObject, UIGestureRecognizerDelegate {
     func gestureRecognizer(_: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
         guard let view = touch.view,
-            view is UIButton else {
+            view is UIButton || view is UIControl else {
             return true
         }
         return false

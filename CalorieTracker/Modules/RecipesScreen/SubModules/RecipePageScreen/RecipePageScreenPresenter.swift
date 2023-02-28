@@ -21,7 +21,7 @@ protocol RecipePageScreenPresenterInterface: AnyObject {
     func getModeForProtein() -> RecipeRoundProgressView.ProgressMode
     func getModelsForIngredients() -> [RecipeIngredientModel]
     func didChangeServing(to count: Int)
-    func didChangeAmountToEat(amount: Int)
+    func didChangeAmountToEat(amount: Double)
     func addToDiaryTapped()
     func addToFavoritesTapped(_ flag: Bool)
     func createFoodData()
@@ -120,7 +120,7 @@ extension RecipePageScreenPresenter: RecipePageScreenPresenterInterface {
         view.shouldUpdateIngredients(with: updateModels)
     }
     
-    func didChangeAmountToEat(amount: Int) {
+    func didChangeAmountToEat(amount: Double) {
         interactor?.setCurrentSelectAmountToEat(amount: amount)
         view.shouldUpdateProgressView(
             carbsData: getModeForCarbs(),

@@ -9,7 +9,7 @@
 import UIKit
 
 protocol ProductRouterInterface: AnyObject {
-    func closeViewController(_ animated: Bool)
+    func closeViewController(_ animated: Bool, completion: (() -> Void)?)
     func addToDiary(_ food: Food)
 }
 
@@ -46,8 +46,17 @@ class ProductRouter: NSObject {
 }
 
 extension ProductRouter: ProductRouterInterface {
-    func closeViewController(_ animated: Bool) {
-        viewController?.dismiss(animated: true)
+    func closeViewController(_ animated: Bool, completion: (() -> Void)? = nil) {
+        if viewController?.navigationController != nil {
+            viewController?.navigationController?.popViewController(animated: true)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                completion?()
+            }
+        } else {
+            viewController?.dismiss(animated: true) {
+                completion?()
+            }
+        }
     }
     
     func addToDiary(_ food: Food) {

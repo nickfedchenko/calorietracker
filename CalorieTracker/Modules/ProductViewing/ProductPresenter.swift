@@ -13,7 +13,7 @@ protocol ProductPresenterInterface: AnyObject {
     func getNutritionDaily() -> DailyNutrition?
     func didTapCloseButton()
     func getProduct() -> Product?
-    func saveNutritionDaily(_ weight: Double)
+    func saveNutritionDaily(_ weight: Double, unit: UnitElement.ConvenientUnit?, unitCount: Double?)
     func createFoodData()
     func didTapFavoriteButton(_ flag: Bool)
     
@@ -41,7 +41,7 @@ extension ProductPresenter: ProductPresenterInterface {
     
     var isFavoritesProduct: Bool? {
         guard let product = interactor?.getProduct() else { return nil }
-        return FDS.shared.getFoodData(.product(product, customAmount: nil))?.favorites
+        return FDS.shared.getFoodData(.product(product, customAmount: nil, unit: nil))?.favorites
     }
     
     func didTapFavoriteButton(_ flag: Bool) {
@@ -65,9 +65,9 @@ extension ProductPresenter: ProductPresenterInterface {
     func didTapCloseButton() {
         switch view.getOpenController() {
         case .addFood:
-            router?.closeViewController(true)
+            router?.closeViewController(true, completion: nil)
         case .createProduct:
-            router?.closeViewController(false)
+            router?.closeViewController(false, completion: nil)
             view.viewControllerShouldClose()
         }
     }
@@ -76,10 +76,14 @@ extension ProductPresenter: ProductPresenterInterface {
         return interactor?.getProduct()
     }
     
-    func saveNutritionDaily(_ weight: Double) {
+    func saveNutritionDaily(_ weight: Double, unit: UnitElement.ConvenientUnit?, unitCount: Double?) {
         guard let product = interactor?.getProduct() else { return }
-        
-        router?.addToDiary(.product(product, customAmount: weight))
-        router?.closeViewController(true)
+        router?.closeViewController(true) { [weak self] in
+            if let unit = unit, let unitCount = unitCount {
+                self?.router?.addToDiary(.product(product, customAmount: weight, unit: (unit, unitCount)))
+            } else {
+                self?.router?.addToDiary(.product(product, customAmount: nil, unit: nil))
+            }
+        }
     }
 }

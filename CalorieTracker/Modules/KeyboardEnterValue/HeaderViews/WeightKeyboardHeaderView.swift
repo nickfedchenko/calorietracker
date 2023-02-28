@@ -197,7 +197,7 @@ extension WeightKeyboardHeaderView {
     
     private func getTextField() -> UITextField {
         let textField = InnerShadowTextField()
-        textField.innerShadowColor = R.color.keyboardHeader.topGradient()
+        textField.innerShadowColors = [R.color.keyboardHeader.topGradient() ?? .clear]
         textField.backgroundColor = .white
         textField.layer.cornerCurve = .continuous
         textField.layer.cornerRadius = 16

@@ -69,7 +69,7 @@ final class GradientLayer: CAGradientLayer {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func drawGradient(_ model: Gradient) {
+    func drawGradient(_ model: Gradient) {
         self.colors = model.colors.compactMap { $0?.cgColor }
         self.locations = model.locations
         self.frame = model.bounds

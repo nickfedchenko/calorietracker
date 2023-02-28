@@ -43,21 +43,18 @@ class OpenMainWidgetPresenter {
         self.date = date
     }
     
-    private func getDailyMeal(_ mealTime: MealTime) -> DailyMeal {
+    private func getDailyMeals() -> [DailyMeal] {
         let day = self.date.day
-        
-        guard let dailyMeal = FDS.shared.getAllStoredDailyMeals().first(
-            where: { $0.mealTime == mealTime && $0.date == day }
-        ) else {
-            let emptyDailyMeal = DailyMeal(
-                date: day,
-                mealTime: mealTime,
-                mealData: []
-            )
-            return emptyDailyMeal
-        }
-        
-        return dailyMeal
+       let dailyMeal = FDS.shared.getAllStoredDailyMeals()
+        let breakfast = dailyMeal.first(where: { $0.mealTime == .breakfast && $0.date == day })
+        ?? .init(date: Date().day, mealTime: .breakfast, mealData: [])
+        let lunch = dailyMeal.first(where: { $0.mealTime == .launch && $0.date == day })
+        ?? .init(date: Date().day, mealTime: .launch, mealData: [])
+        let dinner = dailyMeal.first(where: { $0.mealTime == .dinner && $0.date == day })
+        ?? .init(date: Date().day, mealTime: .dinner, mealData: [])
+        let snack = dailyMeal.first(where: { $0.mealTime == .snack && $0.date == day })
+        ?? .init(date: Date().day, mealTime: .snack, mealData: [])
+        return [breakfast, lunch, dinner, snack]
     }
 }
 
@@ -75,11 +72,17 @@ extension OpenMainWidgetPresenter: OpenMainWidgetPresenterInterface {
     }
     
     func updateDailyMeals() {
-        let dailyMeals = mealTimes.map { mealTime in
-            getDailyMeal(mealTime)
-        }
-        
-        view.setDailyMeals(dailyMeals)
+        let now = Date().timeIntervalSince1970
+//        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+//            guard let self = self else { return }
+            let dailyMeals = self.getDailyMeals()
+        let new = Date().timeIntervalSince1970
+        print("Кольца открываются \(new - now)")
+//            DispatchQueue.main.async { [weak self] in
+                self.view.setDailyMeals(dailyMeals)
+//            }
+          
+//        }
     }
     
     func getMainWidgetWidget() -> MainWidgetViewNode.Model {

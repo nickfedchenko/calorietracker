@@ -25,7 +25,7 @@ final class RecipePageServingTextField: UITextField {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupAppearance()
-        keyboardType = .numberPad
+        keyboardType = .decimalPad
         addDoneCancelToolbar()
     }
     

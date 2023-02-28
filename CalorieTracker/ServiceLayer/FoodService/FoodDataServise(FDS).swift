@@ -13,7 +13,7 @@ protocol FoodDataServiceInterface {
     ///   - mealTime: время приема еды
     ///   - dishes: массив блюд
     ///   - products: массив продуктов
-    func createMeal(mealTime: MealTime, dishes: [Dish], products: [Product])
+    func createMeal(mealTime: MealTime, dishes: [Dish], products: [Product], customEntries: [CustomEntry])
     /// Возвращает все приемы пищи
     /// - Returns: массив Meal
     func getAllMeals() -> [Meal]
@@ -36,6 +36,11 @@ protocol FoodDataServiceInterface {
     ///   - count: количество результатов
     /// - Returns: массив Dish
     func getRecentDishes(_ count: Int) -> [Dish]
+    /// Возвращает недавно использованный кастомный ввод
+    /// - Parameters:
+    ///   - count: количество результатов
+    /// - Returns: массив CustomEntry
+    func getRecentCustomEntries(_ count: Int) -> [CustomEntry]
     /// Записывает в UDM поисковой запрос
     /// - Parameters:
     ///   - query: поисковой запрос
@@ -56,6 +61,11 @@ protocol FoodDataServiceInterface {
     ///   - count: количество результатов
     /// - Returns: массив Product
     func getFrequentProducts(_ count: Int) -> [Product]
+    /// Возвращает часто используемый кастомный ввод
+    /// - Parameters:
+    ///   - count: количество результатов
+    /// - Returns: массив CustomEntry
+    func getFrequentCustomEntries(_ count: Int) -> [CustomEntry]
     /// Возвращает циль на дневное питание
     /// - Returns: массив DailyNutrition
     func getNutritionGoals() -> DailyNutrition?
@@ -76,6 +86,10 @@ protocol FoodDataServiceInterface {
     func getAllStoredFoodData() -> [FoodData]
     func getAllStoredDailyMeals() -> [DailyMeal]
     func addFoodsMeal(mealTime: MealTime, date: Day, mealData: [MealData])
+    func createCustomEntry(mealTime: MealTime, title: String, nutrients: CustomEntryNutrients)
+    func getAllCustomEntries() -> [CustomEntry]
+    func deleteCustomEntry(_ id: String)
+    func saveFoodData(foods: [FoodData])
 }
 
 final class FDS {
@@ -104,7 +118,7 @@ final class FDS {
         
         mealData.forEach {
             switch $0.food {
-            case .product(let product, _):
+            case .product(let product, _, _):
                 protein += product.protein / 100 * $0.weight
                 fat += product.fat / 100 * $0.weight
                 carbs += product.carbs / 100 * $0.weight
@@ -116,6 +130,12 @@ final class FDS {
                     carbs += dish.carbs / dishWeight * $0.weight
                     kcal += dish.kcal / dishWeight * $0.weight
                 }
+            case .customEntry(let customEntry):
+                protein += customEntry.nutrients.proteins
+                fat += customEntry.nutrients.fats
+                carbs += customEntry.nutrients.carbs
+                kcal += customEntry.nutrients.kcal
+                
             default:
                 break
             }
@@ -143,12 +163,15 @@ extension FDS: FoodDataServiceInterface {
         mealData.forEach {
             var dishId: Int?
             var productId: String?
+            var customEntryId: String?
             
             switch $0.food {
             case .dishes(let dish, _):
                 dishId = dish.id
-            case .product(let product, _):
+            case .product(let product, _, _):
                 productId = product.id
+            case .customEntry(let customEntry):
+                customEntryId = customEntry.id
             default:
                 break
             }
@@ -156,7 +179,8 @@ extension FDS: FoodDataServiceInterface {
             localPersistentStore.setChildMealData(
                 mealDataId: $0.id,
                 dishID: dishId,
-                productID: productId
+                productID: productId,
+                customEntryID: customEntryId
             )
         }
         
@@ -182,6 +206,10 @@ extension FDS: FoodDataServiceInterface {
         }
     }
     
+    func saveFoodData(foods: [FoodData]) {
+        localPersistentStore.saveFoodData(foods: foods)
+    }
+    
     func foodUpdate(food: Food, favorites: Bool?) -> String? {
         guard let foodData = localPersistentStore.getFoodData(food) else {
             let foodData = FoodData(
@@ -192,10 +220,12 @@ extension FDS: FoodDataServiceInterface {
             localPersistentStore.saveFoodData(foods: [foodData])
             
             switch food {
-            case .product(let product, _):
+            case .product(let product, _, _):
                 foodData.setChild(product)
             case .dishes(let dish, _):
                 foodData.setChild(dish)
+            case .customEntry(let customEntry):
+                foodData.setChild(customEntry)
             default:
                 return nil
             }
@@ -240,7 +270,7 @@ extension FDS: FoodDataServiceInterface {
     func getFavoriteProducts() -> [Product] {
         let products: [Product] = getFavoriteFoods().compactMap { food in
             switch food.food {
-            case .product(let product, _):
+            case .product(let product, _, _):
                 return product
             default:
                 return nil
@@ -265,7 +295,7 @@ extension FDS: FoodDataServiceInterface {
     func getFrequentProducts(_ count: Int) -> [Product] {
         let products: [Product] = getFrequentFood(count).compactMap { food in
             switch food.food {
-            case .product(let product, _):
+            case .product(let product, _, _):
                 return product
             default:
                 return nil
@@ -273,6 +303,19 @@ extension FDS: FoodDataServiceInterface {
         }
         
         return products
+    }
+    
+    func getFrequentCustomEntries(_ count: Int) -> [CustomEntry] {
+        let customEntries: [CustomEntry] = getFrequentFood(count) .compactMap { food in
+            switch food.food {
+            case .customEntry(let customEntry):
+                return customEntry
+            default:
+                return nil
+            }
+        }
+        
+        return customEntries
     }
     
     func getAllMeals() -> [Meal] {
@@ -307,10 +350,28 @@ extension FDS: FoodDataServiceInterface {
         )
     }
     
-    func createMeal(mealTime: MealTime, dishes: [Dish], products: [Product]) {
+    func createMeal(mealTime: MealTime, dishes: [Dish], products: [Product], customEntries: [CustomEntry]) {
         let meal = Meal(mealTime: mealTime)
         localPersistentStore.saveMeals(meals: [meal])
-        meal.setChild(dishes: dishes, products: products)
+        meal.setChild(dishes: dishes, products: products, customEntries: customEntries)
+    }
+    
+    func createCustomEntry(mealTime: MealTime, title: String, nutrients: CustomEntryNutrients) {
+        var customEntry = CustomEntry(title: title, nutrients: nutrients, mealTime: mealTime)
+        localPersistentStore.saveCustomEntries(entries: [customEntry])
+        
+        let mealData = MealData(weight: 0.0, food: .customEntry(customEntry))
+        addFoodsMeal(mealTime: mealTime, date: UDM.currentlyWorkingDay, mealData: [mealData])
+        
+        customEntry.foodDataId = foodUpdate(food: .customEntry(customEntry), favorites: false)
+    }
+    
+    func getAllCustomEntries() -> [CustomEntry] {
+        localPersistentStore.fetchCustomEntries()
+    }
+    
+    func deleteCustomEntry(_ id: String) {
+        localPersistentStore.deleteCustomEntry(id)
     }
     
     func getRecentProducts(_ count: Int) -> [Product] {
@@ -323,7 +384,7 @@ extension FDS: FoodDataServiceInterface {
         
         return foodData.compactMap {
             switch $0.food {
-            case .product(let product, _):
+            case .product(let product, _, _):
                 return product
             default:
                 return nil
@@ -343,6 +404,24 @@ extension FDS: FoodDataServiceInterface {
             switch $0.food {
             case .dishes(let dish, _):
                 return dish
+            default:
+                return nil
+            }
+        }
+    }
+    
+    func getRecentCustomEntries(_ count: Int) -> [CustomEntry] {
+        let allFoodData = localPersistentStore.fetchFoodData()
+            .sorted(by: { $0.dateLastUse <= $1.dateLastUse })
+            .filter { $0.food != nil }
+        let foodData = allFoodData.count >= count
+            ? Array(allFoodData[0..<count])
+            : allFoodData
+        
+        return foodData.compactMap {
+            switch $0.food {
+            case .customEntry(let customEntry):
+                return customEntry
             default:
                 return nil
             }

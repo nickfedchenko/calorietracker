@@ -22,8 +22,11 @@ protocol AddFoodPresenterInterface: AnyObject {
     func createFood(_ type: FoodCreate)
     func getMealTime() -> MealTime?
     func scannerDidRecognized(barcode: String)
-    func updateSelectedFood(food: Food)
-    func didTapCalorieButton()
+    func updateSelectedFoodFromSearch(food: Food)
+    func updateSelectedFoodFromCustomEntry(food: Food)
+    func didTapCalorieButton(mealTime: MealTime)
+    func stopSearchQuery()
+    func updateCustomFood(food: Food)
 }
 
 final class AddFoodPresenter {
@@ -33,7 +36,8 @@ final class AddFoodPresenter {
     let interactor: AddFoodInteractorInterface?
     let searchQueue: OperationQueue =  {
         let queue = OperationQueue()
-        queue.maxConcurrentOperationCount = 1
+        queue.qualityOfService = .userInteractive
+        queue.maxConcurrentOperationCount = 4
         return queue
     }()
     
@@ -63,19 +67,23 @@ final class AddFoodPresenter {
     }
     
     private func configureView() {
-        guard let foodType = foodType else { return }
+        guard let foodType = foodType else {
+            return
+        }
         
         switch foodType {
         case .frequent:
             let dishes = FDS.shared.getFrequentDishes(10)
             let products = FDS.shared.getFrequentProducts(10)
+            let customEntries = FDS.shared.getFrequentCustomEntries(10)
             
-            self.foods = products.foods + dishes.foods
+            self.foods = products.foods + dishes.foods + customEntries.foods
         case .recent:
             let dishes = FDS.shared.getRecentDishes(10)
             let products = FDS.shared.getRecentProducts(10)
+            let customEntries = FDS.shared.getRecentCustomEntries(10)
             
-            self.foods = products.foods + dishes.foods
+            self.foods = products.foods + dishes.foods + customEntries.foods
         case .favorites:
             let dishes = FDS.shared.getFavoriteDishes()
             let products = FDS.shared.getFavoriteProducts()
@@ -94,7 +102,7 @@ final class AddFoodPresenter {
                 }
             }
         case .search:
-            self.foods = []
+            return
         }
     }
     
@@ -128,7 +136,7 @@ final class AddFoodPresenter {
     
     private func searchAmongAll(_ request: String) -> [Food] {
         let dishes = DSF.shared.searchDishes(by: request)
-        var products = DSF.shared.searchProducts(by: request)
+        let products = DSF.shared.searchProducts(by: request)
         let genericProducts = products.filter { $0.brand == nil }
         let brandProducts = products.filter { $0.brand != nil }
         let userProducts = products.filter { $0.isUserProduct }
@@ -156,6 +164,7 @@ final class AddFoodPresenter {
 }
 
 extension AddFoodPresenter: AddFoodPresenterInterface {
+
     func scannerDidRecognized(barcode: String) {
         searchQueue.cancelAllOperations()
         let operation = BlockOperation { [weak self] in
@@ -185,11 +194,13 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
     
     func didTapCell(_ type: Food) {
         switch type {
-        case .product(let product, _):
+        case .product(let product, _, _):
             router?.openProductViewController(product)
         case .dishes(let dish, _):
             router?.openDishViewController(dish)
         case .meal:
+            return
+        case .customEntry:
             return
         }
     }
@@ -204,21 +215,48 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
         router?.openScanner()
     }
     
-    func didTapCalorieButton() {
-        router?.openCustomEntryViewController()
+    func didTapCalorieButton(mealTime: MealTime) {
+        router?.openCustomEntryViewController(mealTime: mealTime)
     }
     
     func search(_ request: String, complition: ((Bool) -> Void)?) {
 //            let frequents = self.searchAmongFrequent(request)
 //            let favorites = self.searchAmongFavorites(request)
 //            let recents = self.searchAmongRecent(request)
+        print("operations currenly performing\(searchQueue.operationCount)")
         searchQueue.cancelAllOperations()
-        let operation = BlockOperation { [weak self] in
+        print("operations performing after cancelling\(searchQueue.operationCount)")
+        print(searchQueue.operationCount)
+        let operation = BlockOperation()
+        operation.addExecutionBlock { [weak self] in
+            guard !operation.isCancelled else {
+                print("Search for \(request) is cancelled")
+                return
+            }
+            let current = Date().timeIntervalSince1970
             guard let self = self else { return }
+            guard !operation.isCancelled else {
+                print("Search for \(request) is cancelled before finish")
+                return
+            }
             let basicFood = self.searchAmongAll(request)
+            guard !operation.isCancelled else {
+                print("Search for \(request) is cancelled before finish")
+                return
+            }
             let searchByBarcode = self.search(byBarcode: request)
+            guard !operation.isCancelled else {
+                print("Search for \(request) is cancelled before finish")
+                return
+            }
             let foods = basicFood + searchByBarcode
+            let done = Date().timeIntervalSince1970 - current
+            print("Search time is \(done)")
             DispatchQueue.main.async {
+                guard !operation.isCancelled else {
+                    print("Search for \(request) is cancelled before finish")
+                    return
+                }
                 self.foods = foods
                 complition?(!foods.isEmpty)
             }
@@ -233,6 +271,21 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
     }
     
     func saveMeal(_ mealTime: MealTime, foods: [Food]) {
+        foods.forEach {
+            if case .customEntry(let customEntry) = $0 {
+                FDS.shared.createCustomEntry(
+                    mealTime: mealTime,
+                    title: customEntry.title,
+                    nutrients: .init(
+                        kcal: customEntry.nutrients.kcal,
+                        carbs: customEntry.nutrients.carbs,
+                        proteins: customEntry.nutrients.proteins,
+                        fats: customEntry.nutrients.fats
+                    )
+                )
+            }
+        }
+        
         FDS.shared.addFoodsMeal(
             mealTime: mealTime,
             date: UDM.currentlyWorkingDay,
@@ -262,9 +315,21 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
     
     func getMealTime() -> MealTime? {
         view.getMealTime()
- }
+    }
+    
+    func updateSelectedFoodFromSearch(food: Food) {
+        view.updateSelectedFoodFromSearch(food)
+    }
+    
+    func updateSelectedFoodFromCustomEntry(food: Food) {
+        view.updateSelectedFoodFromCustomEntry(food)
+    }
+    
+    func updateCustomFood(food: Food) {
+        self.foods?.append(food)
+	}
 
-    func updateSelectedFood(food: Food) {
-        view.updateSelectedFood(food)
+    func stopSearchQuery() {
+        searchQueue.cancelAllOperations()
     }
 }

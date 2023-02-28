@@ -23,7 +23,7 @@ protocol RecipePageScreenInteractorInterface: AnyObject {
     func makeModelsForIngredients() -> [RecipeIngredientModel]
     func updateCurrentServingsCount(to count: Int)
     func getInstructions() -> [String]
-    func setCurrentSelectAmountToEat(amount: Int)
+    func setCurrentSelectAmountToEat(amount: Double)
     func addSelectedPortionsToEaten()
     func updateFoodData(_ flag: Bool?)
     
@@ -43,7 +43,7 @@ class RecipePageScreenInteractor {
     var dish: Dish
     var tags: [RecipeTagModel] = []
     private var selectedServingsAmount: Int = 0
-    private var selectedServingToEat: Int = 1
+    private var selectedServingToEat: Double = 1
     
     // TODO: - По идее данные после онбординга должны быть
 
@@ -158,7 +158,7 @@ extension RecipePageScreenInteractor: RecipePageScreenInteractorInterface {
         dish.foodDataId = FDS.shared.foodUpdate(food: .dishes(dish, customAmount: nil), favorites: flag)
     }
     
-    func setCurrentSelectAmountToEat(amount: Int) {
+    func setCurrentSelectAmountToEat(amount: Double) {
         selectedServingToEat = amount
     }
     

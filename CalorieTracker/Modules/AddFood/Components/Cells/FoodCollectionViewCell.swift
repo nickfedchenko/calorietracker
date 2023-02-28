@@ -21,6 +21,11 @@ final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
     
     var foodType: Food?
     var didTapButton: ((Food, CellButtonType) -> Void)?
+    var infoCenterX: CGFloat = 0 {
+        didSet {
+            foodView.infoCenterX = infoCenterX
+        }
+    }
     
     private var cellType: CellType = .table {
         didSet {
@@ -88,8 +93,10 @@ final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
         foodView.didTapButton = { buttonType in
             guard let foodType = self.viewModel?.food else { return }
             switch foodType {
-            case .product(let product, _):
-                self.didTapButton?(.product(product, customAmount: nil), buttonType)
+            case .product(let product, _, _):
+                self.didTapButton?(
+                    .product(product, customAmount: product.servings?.first?.weight ?? 0, unit: nil), buttonType
+                )
             case .dishes(let dish, _):
                 self.didTapButton?(
                     .dishes(dish, customAmount: (dish.dishWeight ?? 0) / Double(dish.totalServings ?? 1)),
@@ -97,6 +104,8 @@ final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
                 )
             case .meal(let meal):
                 self.didTapButton?(.meal(meal), buttonType)
+            case .customEntry(let customEntry):
+                self.didTapButton?(.customEntry(customEntry), buttonType)
             }
         }
     }

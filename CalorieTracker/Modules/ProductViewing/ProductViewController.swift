@@ -45,6 +45,8 @@ final class ProductViewController: CTViewController {
     private var contentViewBottomAnchor: NSLayoutConstraint?
     private var firstDraw = true
     private var weight: Double = 0
+    private var valueCount: Double = 100
+    var shouldUseCustomTransition = true
     
     private var addNutrition: DailyNutrition = .zero {
         didSet {
@@ -68,6 +70,7 @@ final class ProductViewController: CTViewController {
     init(_ openController: OpenController) {
         self.openController = openController
         super.init(nibName: nil, bundle: nil)
+        transitioningDelegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -283,7 +286,7 @@ final class ProductViewController: CTViewController {
             return
         }
         let value = Double(textValue) ?? 0
-        
+        valueCount = value
         switch selectedWeightType {
         case .gram(_, _, coefficient: let coefficient):
             setAddNutrition(from: product, with: value, using: coefficient)
@@ -425,11 +428,11 @@ final class ProductViewController: CTViewController {
     
     @objc private func didTapSaveButton() {
         Vibration.success.vibrate()
-        presenter?.saveNutritionDaily(weight)
+        presenter?.saveNutritionDaily(weight, unit: selectedWeightType, unitCount: valueCount)
         didChangeAddNutrition()
         
         if let product = presenter?.getProduct() {
-            FDS.shared.foodUpdate(food: .product(product, customAmount: nil), favorites: nil)
+            FDS.shared.foodUpdate(food: .product(product, customAmount: nil, unit: nil), favorites: nil)
         }
     }
 }
@@ -490,7 +493,7 @@ extension ProductViewController {
     
     func getValueTextField() -> InnerShadowTextField {
         let textField = InnerShadowTextField()
-        textField.innerShadowColor = R.color.foodViewing.basicSecondaryDark()
+        textField.innerShadowColors = [R.color.foodViewing.basicSecondaryDark() ?? .clear]
         textField.layer.borderWidth = 1
         textField.layer.borderColor = R.color.foodViewing.basicSecondaryDark()?.cgColor
         textField.layer.cornerCurve = .continuous
@@ -506,6 +509,7 @@ extension ProductViewController {
             for: .editingChanged
         )
         textField.text = "100"
+        textField.delegate = self
         return textField
     }
     
@@ -520,7 +524,10 @@ extension ProductViewController {
     }
     
     func getSelectView() -> SelectView<UnitElement.ConvenientUnit> {
-        SelectView(presenter?.getProduct()?.units?.compactMap { $0.convenientUnit } ?? [], shouldHideAtStartup: true)
+        SelectView(presenter?.getProduct()?.units?.compactMap { $0.convenientUnit } ?? [
+            .gram(title: R.string.localizable.gram(), shortTitle: R.string.localizable.gram(), coefficient: 1)],
+                   shouldHideAtStartup: true
+        )
     }
     
     func getOverlayView() -> UIView {
@@ -558,5 +565,39 @@ extension ProductViewController {
                 radius: 2
             )
         ]
+    }
+}
+
+extension ProductViewController: UIViewControllerTransitioningDelegate {
+    func animationController(
+        forPresented presented: UIViewController,
+        presenting: UIViewController,
+        source: UIViewController
+    ) -> UIViewControllerAnimatedTransitioning? {
+       
+        if shouldUseCustomTransition {
+            return ModalSideTransitionAppearing()
+        } else {
+            return nil
+        }
+    }
+    
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        if shouldUseCustomTransition {
+            return ModalSideTransitionDissapearing()
+        } else {
+            return nil
+        }
+    }
+}
+
+extension ProductViewController: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        guard textField === valueTextField else { return }
+        textField.selectAll(textField)
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        print("didEnd")
     }
 }

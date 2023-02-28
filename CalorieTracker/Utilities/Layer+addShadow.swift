@@ -20,8 +20,8 @@ extension CALayer {
        
         let shadowLayer = CALayer()
         shadowLayer.shadowPath = path.cgPath
-        shadowLayer.shadowColor = shadow.color.cgColor
-        shadowLayer.shadowOpacity = shadow.opacity
+        shadowLayer.shadowColor = shadow.color.withAlphaComponent(shadow.opacity).cgColor
+        shadowLayer.shadowOpacity = 1
         shadowLayer.shadowOffset = shadow.offset
         shadowLayer.shadowRadius = shadow.radius
         shadowLayer.frame = bounds

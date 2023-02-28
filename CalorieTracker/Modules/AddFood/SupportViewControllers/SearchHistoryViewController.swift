@@ -25,6 +25,7 @@ final class SearchHistoryViewController: UIViewController {
         view.delegate = self
         view.dataSource = self
         view.separatorColor = R.color.addFood.separator()
+        view.keyboardDismissMode = .onDrag
         return view
     }()
     

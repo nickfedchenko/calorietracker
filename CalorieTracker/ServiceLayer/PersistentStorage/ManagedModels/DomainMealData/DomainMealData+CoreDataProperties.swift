@@ -15,7 +15,10 @@ extension DomainMealData {
 
     @NSManaged public var id: String
     @NSManaged public var weight: Double
+    @NSManaged public var unitId: Int16
+    @NSManaged public var unitCount: Double
     
     @NSManaged public var dish: DomainDish?
     @NSManaged public var product: DomainProduct?
+    @NSManaged public var customEntry: DomainCustomEntry?
 }

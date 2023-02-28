@@ -32,6 +32,25 @@ final class InfoButtonsView<ID: WithGetDataProtocol>: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func tryToHideView(at index: Int) {
+        guard index < stackView.arrangedSubviews.count else { return }
+        UIView.animate(withDuration: 0.3) {
+            self.stackView.arrangedSubviews[index].alpha = 0
+        }
+    }
+    
+    func tryToShowView(at index: Int) {
+        guard index < stackView.arrangedSubviews.count else { return }
+        UIView.animate(withDuration: 0.3) {
+            self.stackView.arrangedSubviews[index].alpha = 1
+        }
+    }
+    
+    func getInfoButtonFrame() -> CGRect {
+        guard !stackView.arrangedSubviews.isEmpty else { return .zero }
+        return convert(stackView.arrangedSubviews[0].frame, from: stackView)
+    }
+    
     private func setupView() {
         backgroundColor = .clear
     }

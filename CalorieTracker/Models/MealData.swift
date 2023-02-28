@@ -26,10 +26,21 @@ extension MealData {
         
         if let domainProduct = managedModel.product,
            let product = Product(from: domainProduct) {
-            self.food = .product(product, customAmount: managedModel.weight)
+            if managedModel.unitId >= 0 && managedModel.unitCount >= 0 {
+                let unit = product.units?.first(where: { $0.id == Int(managedModel.unitId) })?.convenientUnit
+                ?? .gram(title: "gram", shortTitle: "g", coefficient: 1)
+                self.food = .product(
+                    product, customAmount: weight, unit: (unit: unit, count: managedModel.unitCount)
+                )
+            } else {
+                self.food = .product(product, customAmount: managedModel.weight, unit: nil)
+            }
         } else if let domainDish = managedModel.dish,
                   let dish = Dish(from: domainDish) {
             self.food = .dishes(dish, customAmount: managedModel.weight)
+        } else if let domainCustomEntry = managedModel.customEntry,
+                  let customEntry = CustomEntry(from: domainCustomEntry) {
+            self.food = .customEntry(customEntry)
         } else {
             self.food = nil
         }

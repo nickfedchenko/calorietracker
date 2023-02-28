@@ -105,7 +105,13 @@ final class InfoButtonView<ID: WithGetDataProtocol>: UIControl {
             shadowLayer.isHidden = false
             imageView.isHidden = true
             titleLabel.isHidden = false
-            titleLabel.text = infoButton.getTitle(.short)
+            titleLabel.attributedText = NSAttributedString(
+                string: infoButton.getTitle(.short) ?? "",
+                attributes: [
+                    .font: R.font.sfCompactTextMedium(size: 12) ?? .systemFont(ofSize: 12),
+                    .kern: Locale.current.languageCode == "ru" ? -0.36 : 0
+                ]
+            )
             backgroundColor = infoButton.getColor()
             layer.borderWidth = 1
         case .immutable(let infoButton):
@@ -123,13 +129,13 @@ private struct ShadowConst {
     static let firstShadow = Shadow(
         color: R.color.addFood.menu.firstShadow() ?? .black,
         opacity: 0.2,
-        offset: CGSize(width: 0, height: 0.79),
-        radius: 1.96
+        offset: CGSize(width: 0, height: 4),
+        radius: 10
     )
     static let secondShadow = Shadow(
         color: R.color.addFood.menu.secondShadow() ?? .black,
         opacity: 0.25,
-        offset: CGSize(width: 0, height: 0.1),
-        radius: 0.39
+        offset: CGSize(width: 0, height: 0.5),
+        radius: 2
     )
 }

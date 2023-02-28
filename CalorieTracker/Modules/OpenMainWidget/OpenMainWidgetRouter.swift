@@ -47,7 +47,7 @@ extension OpenMainWidgetRouter: OpenMainWidgetRouterInterface {
     }
     
     func openAddFoodVC(_ mealTime: MealTime) {
-        let vc = AddFoodRouter.setupModule(mealTime: mealTime) {
+        let vc = AddFoodRouter.setupModule(mealTime: mealTime, addFoodYCoordinate: UDM.mainScreenAddButtonOriginY) {
             self.presenter?.updateDailyMeals()
         }
         viewController?.navigationController?.pushViewController(vc, animated: true)
@@ -55,7 +55,7 @@ extension OpenMainWidgetRouter: OpenMainWidgetRouterInterface {
     
     func openFoodVC(_ food: Food) {
         switch food {
-        case .product(let product, _):
+        case .product(let product, _, _):
             let productVC = ProductRouter.setupModule(
                 product,
                 .createProduct,
@@ -64,8 +64,8 @@ extension OpenMainWidgetRouter: OpenMainWidgetRouterInterface {
                 
             }
             productVC.callViewWillAppear = false
-            productVC.modalPresentationStyle = .overFullScreen
-            viewController?.present(productVC, animated: true)
+//            productVC.modalPresentationStyle = .overFullScreen
+            viewController?.navigationController?.pushViewController(productVC, animated: true)
         case .dishes(let dish, _):
             let vc = RecipePageScreenRouter.setupModule(
                 with: dish,
@@ -73,9 +73,11 @@ extension OpenMainWidgetRouter: OpenMainWidgetRouterInterface {
             ) { [weak self] food in
                 
             }
-            vc.modalPresentationStyle = .overFullScreen
-            viewController?.present(vc, animated: true)
+//            vc.modalPresentationStyle = .fullScreen
+            viewController?.navigationController?.pushViewController(vc, animated: true)
         case .meal:
+            break
+        case .customEntry:
             break
         }
     }

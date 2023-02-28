@@ -10,6 +10,7 @@ import UIKit
 protocol FoodCollectionViewControllerDataSource: AnyObject {
     func cell(collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell
     func foodsCount() -> Int
+    func foodsOverAll() -> [Food]
 }
 
 protocol FoodCollectionViewControllerDelegate: AnyObject {
@@ -26,6 +27,8 @@ final class FoodCollectionViewController: UIViewController {
     weak var delegate: FoodCollectionViewControllerDelegate?
     
     var createHandler: (() -> Void)?
+    var someFoodAdded: ((Food) -> Void)?
+    
     var isSelectedType: AddFood = .recent
     
     var isScrollEnabled: Bool {
@@ -53,6 +56,7 @@ final class FoodCollectionViewController: UIViewController {
         view.showsVerticalScrollIndicator = false
         view.backgroundColor = .clear
         view.contentInset = .init(top: 0, left: 0, bottom: 20, right: 0)
+        view.keyboardDismissMode = .onDrag
         return view
     }()
     
@@ -66,6 +70,8 @@ final class FoodCollectionViewController: UIViewController {
     private lazy var nothingWasFoundView = NothingWasFoundView()
     
     private let collectionViewLayput: CollectionViewLayout
+    
+    var shouldShowNothingFound: Bool = false
     
     init(_ layout: CollectionViewLayout = .default) {
         self.collectionViewLayput = layout
@@ -85,7 +91,14 @@ final class FoodCollectionViewController: UIViewController {
     }
     
     func reloadData() {
-        collectionView.reloadData()
+        if (dataSource?.foodsCount() ?? 0) > 0 {
+            collectionView.performBatchUpdates {
+                self.collectionView.reloadSections(IndexSet(integer: 0))
+            }
+        } else {
+            collectionView.reloadData()
+        }
+        guard shouldShowNothingFound else { return }
         nothingWasFoundView.isHidden = (dataSource?.foodsCount() ?? 0) != 0
     }
     
@@ -141,9 +154,10 @@ extension FoodCollectionViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let height: CGFloat = 62
         let width = view.frame.width - 40
-        let height: CGFloat = 64
-        return CGSize(width: width, height: height)
+        let size = CGSize(width: width, height: height)
+        return size
     }
     
     func collectionView(_ collectionView: UICollectionView,

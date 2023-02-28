@@ -8,6 +8,11 @@
 import UIKit
 
 final class SearchView: ViewWithShadow {
+    enum Mode {
+        case disabled
+        case enabled
+    }
+    
     enum State {
         case smallNotEdit
         case largeNotEdit
@@ -23,7 +28,7 @@ final class SearchView: ViewWithShadow {
     var didBeginEditing: ((String) -> Void)?
     var didChangeValue: ((String) -> Void)?
     
-    var placeholderText: String = "Search" {
+    var placeholderText: String = R.string.localizable.addFoodPlaceholder() {
         didSet {
             didChangeState()
         }
@@ -51,7 +56,9 @@ final class SearchView: ViewWithShadow {
     
     private(set) lazy var textField: InnerShadowTextField = {
         let textField = InnerShadowTextField()
-        textField.font = R.font.sfProDisplaySemibold(size: 18)
+        textField.font = R.font.sfProTextMedium(size: 17)
+        textField.autocorrectionType = .no
+        textField.spellCheckingType = .no
         textField.layer.cornerRadius = 16
         textField.layer.cornerCurve = .continuous
         textField.tintColor = R.color.foodViewing.basicPrimary()
@@ -77,6 +84,8 @@ final class SearchView: ViewWithShadow {
         return button
     }()
     
+    var isStatic = false
+    
     init() {
         super.init(Const.shadows)
         setupView()
@@ -87,6 +96,13 @@ final class SearchView: ViewWithShadow {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Public methods
+    func turnOffTextFieldInteractions() {
+        textField.isUserInteractionEnabled = false
+    }
+    
+    // MARK: - Private methods
     
     private func setupView() {
         layer.cornerRadius = 16
@@ -117,15 +133,22 @@ final class SearchView: ViewWithShadow {
         }
     }
     
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        if rightButton.frame.contains(point) {
+            return rightButton
+        } else {
+            return super.hitTest(point, with: event)
+        }
+    }
+    
     private func didChangeState() {
         switch state {
         case .edit(let editState):
             self.shadowLayer.isHidden = true
             backgroundColor = .white
             textField.attributedPlaceholder = NSAttributedString(string: placeholderText)
-            textField.innerShadowColor = R.color.foodViewing.basicPrimary()
+            textField.innerShadowColors = [UIColor(hex: "0C695E"), UIColor(hex: "0C695E")]
             textField.textAlignment = .left
-            
             switch editState {
             case .isNotEmpty:
                 textField.rightViewMode = .always
@@ -133,16 +156,35 @@ final class SearchView: ViewWithShadow {
                 textField.rightViewMode = .never
             }
         case .largeNotEdit:
-            self.shadowLayer.isHidden = false
-            textField.attributedPlaceholder = getPlaceholder(placeholderText)
-            textField.innerShadowColor = .clear
-            textField.textAlignment = .center
-            textField.rightViewMode = .never
-            backgroundColor = R.color.searchTextField.background()
+            if !isStatic {
+                self.shadowLayer.isHidden = false
+                textField.attributedPlaceholder = getPlaceholder(placeholderText)
+                textField.innerShadowColors = []
+                textField.textAlignment = .center
+                textField.rightViewMode = .never
+                backgroundColor = R.color.searchTextField.background()
+            } else {
+                if (textField.text ?? "").isEmpty {
+                    self.shadowLayer.isHidden = false
+                    textField.attributedPlaceholder = getPlaceholder(placeholderText)
+                    textField.innerShadowColors = []
+                    textField.textAlignment = .center
+                    textField.rightViewMode = .never
+                    textField.leftViewMode = .never
+                    backgroundColor = R.color.searchTextField.background()
+                } else {
+                    self.shadowLayer.isHidden = true
+                    textField.innerShadowColors = [UIColor(hex: "0C695E"), UIColor(hex: "0C695E")]
+                    textField.textAlignment = (textField.text ?? "").isEmpty ? .center : .left
+                    textField.rightViewMode = (textField.text ?? "").isEmpty ? .never : .always
+                    textField.leftViewMode = .always
+                    backgroundColor = R.color.searchTextField.background()
+                }
+            }
         case .smallNotEdit:
             self.shadowLayer.isHidden = false
             textField.attributedPlaceholder = imagePlaceholder?.asAttributedString
-            textField.innerShadowColor = .clear
+            textField.innerShadowColors = []
             textField.textAlignment = .center
             textField.rightViewMode = .never
             backgroundColor = R.color.searchTextField.background()
@@ -151,7 +193,7 @@ final class SearchView: ViewWithShadow {
     
     private func getPlaceholder(_ text: String) -> NSAttributedString {
         let image = R.image.searchTextField.search()!
-        let font = R.font.sfProDisplaySemibold(size: 18)
+        let font = R.font.sfProRoundedBold(size: 18)
         
         return text.attributedSring(
             [
@@ -172,8 +214,8 @@ final class SearchView: ViewWithShadow {
     
     @objc private func didTapRightButton() {
         textField.text = ""
+        state = isStatic ? .largeNotEdit : .edit(.isEmpty)
         didChangeValue?(textField.text ?? "")
-        state = .edit(.isEmpty)
     }
 }
 
@@ -200,16 +242,16 @@ extension SearchView {
     struct Const {
         static let shadows: [Shadow] = [
             .init(
-                color: R.color.searchTextField.shadowFirst() ?? .black,
-                opacity: 0.25,
-                offset: CGSize(width: 0, height: 0.5),
-                radius: 2
-            ),
-            .init(
-                color: R.color.searchTextField.shadowSecond() ?? .black,
+                color: UIColor(hex: "06BBBB"),
                 opacity: 0.2,
                 offset: CGSize(width: 0, height: 4),
                 radius: 10
+            ),
+            .init(
+                color: UIColor(hex: "123E5E"),
+                opacity: 0.25,
+                offset: CGSize(width: 0, height: 0.5),
+                radius: 2
             )
         ]
     }

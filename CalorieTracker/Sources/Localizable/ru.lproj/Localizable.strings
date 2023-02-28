@@ -504,11 +504,11 @@
 
 "addFood.placeholder" = "ПОИСК ПИЩИ";
 "addFood.create" = "СОЗДАТЬ";
-"addFood.scan" = "СКАНИРОВАТЬ";
+"addFood.scan" = "ШТРИХ-КОД";
 "addFood.calories" = "КАЛОРИИ";
 "addFood.done" = "ГОТОВО";
 "addFood.title.recent" = "недавние поиски";
-"addFood.customEntry" = "КАСТОМНЫЙ ВВОД";
+"addFood.customEntry" = "Кастомный ввод";
 
 "breakfast" = "ЗАВТРАК";
 "lunch" = "ОБЕД";
@@ -527,11 +527,17 @@
 
 "description" = "Описание";
 "kcal.short" = "ккал";
-"carbs.short" = "Углеводы";
+"carbs.short" = "углев.";
 "fat.short" = "Жиры";
 "proteins" = "Белки";
 "kcal" = "Калории";
 "fat" = "Общее количество жира";
+"carbs.long" = "Углеводы";
+"protein.long" = "Белки";
+"protein.short" = "белки";
+"fat.short" = "жиры";
+"fat.long" = "Жиры";
+"off" = "Отключено";
 "satFat" = "Насыщенный жир";
 "transFat" = "Транс-жиры";
 "polyFat" = "Полиненасыщенные жиры";
@@ -745,3 +751,14 @@
 "Apply" = "Применить";
 "Add to diary" = "Добавить в дневник";
 "Back" = "Назад";
+
+"measurement.kg" = "кг";
+"measurement.lb" = "фт";
+"measurement.cm" = "см";
+"measurement.in" = "дюйм";
+"measurement.kcal" = "ккал";
+"measurement.kj" = "кдж";
+"measurement.ml" = "мл";
+"measurement.floz" = "ж. унц";
+"measurement.g" = "г";
+"measurement.oz" = "унц";
