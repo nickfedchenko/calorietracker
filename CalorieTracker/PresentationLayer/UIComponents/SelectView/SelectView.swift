@@ -35,7 +35,7 @@ final class SelectView<ID: WithGetTitleProtocol>: UIView {
         return view
     }()
     
-    private var isCollapsed = false
+    var isCollapsed = false
     
     private let models: [ID]
     
@@ -52,6 +52,26 @@ final class SelectView<ID: WithGetTitleProtocol>: UIView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func collapse() {
+        guard !isCollapsed else {
+            if let type = selectedCellType {
+                didSelectedCell?(type, true)
+            }
+            show(0)
+            return
+        }
+        guard let selectedCell = getSelectedCell() else { return }
+
+        stackView.arrangedSubviews.forEach {
+            if let anyCell = $0 as? SelectViewCell<ID> {
+                anyCell.isSelectedCell = anyCell.id.getTitle(.long) == selectedCell.id.getTitle(.long)
+            }
+        }
+        
+        didSelectedCell?(selectedCell.id, false)
+        close(models.count)
     }
     
     private func setupView() {

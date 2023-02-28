@@ -233,18 +233,22 @@ extension RecipePageScreenInteractor: RecipePageScreenInteractorInterface {
     }
     
     func addSelectedPortionsToEaten() {
-        if dish.eatingTags.contains(where: { $0.convenientTag == .breakfast }) {
-            mealTime = .breakfast
-        } else if dish.eatingTags.contains(where: { $0.convenientTag == .lunch || $0.convenientTag == .dinner }) {
-            let date = Date()
-            let components = Calendar.current.dateComponents([.hour], from: date)
-            if components.hour ?? 18 < 10 {
+        mealTime = .breakfast
+        let date = Date()
+        let components = Calendar.current.dateComponents([.hour, .minute], from: date)
+        if
+            let hours = components.hour,
+            let minutes = components.minute {
+            switch (hours, minutes) {
+            case (4...11, 0...59), (12, 0):
+                mealTime = .breakfast
+            case (12, 1), (12...15, 0...59), (16, 0) :
                 mealTime = .launch
-            } else {
+            case (22, 0), (18...21, 0...59):
                 mealTime = .dinner
+            default:
+                mealTime = .snack
             }
-        } else {
-            mealTime = .snack
         }
         
         guard let mealTime = mealTime else {
