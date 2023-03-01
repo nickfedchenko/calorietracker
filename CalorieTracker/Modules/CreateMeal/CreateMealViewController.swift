@@ -22,6 +22,7 @@ class CreateMealViewController: UIViewController {
     private lazy var scrollView: UIScrollView = getScrollView()
     private lazy var closeButton: UIButton = getCloseButton()
     private lazy var addPhotoButton: UIButton = getAddPhotoButton()
+    private lazy var titleLabel: UILabel = getTitleLabel()
     private lazy var titleHeaderLabel: UILabel = getTitleHeaderLabel()
     private lazy var descriptionLabel: UILabel = getDescriptionLabel()
     private lazy var descriptionForm: FormView = getDescriptionForm()
@@ -42,11 +43,13 @@ class CreateMealViewController: UIViewController {
         .heightAnchor.constraint(
             equalToConstant: containerViewHeight
         )
-    
+
     private let cellHeight: CGFloat = 57
-    private let cellCount: Int = 15
+    private var cellCount: Int = 10
     private lazy var collectionViewHeight: CGFloat = CGFloat(cellCount) * cellHeight
     private lazy var containerViewHeight: CGFloat = collectionViewHeight + 20
+    private var collectionViewHeightOffset: CGFloat = 445
+    private var keyboardHeight: CGFloat?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,6 +67,7 @@ class CreateMealViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         updateCollectionViewHeight()
+        updateContentViewHeight()
     }
     
     private func setupView() {
@@ -80,80 +84,76 @@ class CreateMealViewController: UIViewController {
         )
         
         contentView.addSubviews(
-            headerView,
-            closeButton,
-            addPhotoButton,
-            containerPhotoView,
-            mealPhoto,
-            titleHeaderLabel,
             descriptionLabel,
             descriptionForm,
             firstContainerCollectionView,
             secondContainerCollectionView,
             collectionView,
+            headerView,
+            titleHeaderLabel,
+            closeButton,
+            addPhotoButton,
+            containerPhotoView,
+            mealPhoto,
+            titleLabel,
             saveButton,
             addFoodButton
         )
     }
-    
+ 
     // swiftlint:disable:next function_body_length
     private func setupConstraints() {
-        contentView.snp.makeConstraints { make in
-            make.top.bottom.equalTo(scrollView)
-            make.left.right.equalTo(view)
-            make.width.height.equalTo(scrollView)
-        }
-        
         scrollView.snp.makeConstraints { make in
             make.edges.equalTo(view)
         }
-        
-        headerView.snp.makeConstraints { make in
-            make.top.leading.trailing.equalTo(contentView)
-            make.height.equalTo(163)
+
+        contentView.snp.makeConstraints { make in
+            make.top.equalTo(scrollView).offset(-scrollView.adjustedContentInset.top)
+            make.left.right.equalTo(view)
+            make.width.equalTo(scrollView)
+            make.bottom.equalTo(addFoodButton.snp.bottom).offset(20)
         }
-        
+
         closeButton.snp.makeConstraints { make in
-            make.bottom.equalTo(headerView).offset(-81)
-            make.leading.equalTo(headerView).inset(25)
+            make.top.equalTo(view).inset(52)
+            make.leading.equalTo(view).inset(25)
             make.width.height.equalTo(30)
         }
-        
+
         addPhotoButton.snp.makeConstraints { make in
-            make.bottom.equalTo(headerView).offset(-85)
-            make.trailing.equalTo(headerView).inset(25)
+            make.top.equalTo(view).inset(56)
+            make.trailing.equalTo(view).inset(25)
             make.width.equalTo(30)
             make.height.equalTo(22)
         }
-        
+
         containerPhotoView.snp.makeConstraints { make in
             make.height.equalTo(40)
             make.width.equalTo(60)
-            make.bottom.equalTo(headerView).offset(-76)
-            make.trailing.equalTo(headerView).inset(20)
-            
+            make.top.equalTo(view).offset(47)
+            make.trailing.equalTo(view).offset(-20)
         }
-        
+
         mealPhoto.snp.makeConstraints { make in
             make.edges.equalTo(containerPhotoView)
         }
-    
-        titleHeaderLabel.snp.makeConstraints { make in
-            make.bottom.equalTo(headerView).offset(-36)
-            make.leading.trailing.equalTo(headerView).inset(28)
+
+        titleLabel.snp.remakeConstraints { make in
+            make.top.equalTo(contentView).offset(103)
+            make.leading.trailing.equalTo(contentView).inset(28)
         }
-        
+
         descriptionForm.snp.makeConstraints { make in
-            make.top.equalTo(titleHeaderLabel.snp.bottom).inset(-36)
+            make.top.equalTo(titleLabel.snp.bottom).offset(36)
             make.height.equalTo(48)
             make.leading.trailing.equalTo(contentView).inset(20)
         }
-        
+
         descriptionLabel.snp.makeConstraints { make in
             make.leading.equalTo(contentView).inset(28)
             make.bottom.equalTo(descriptionForm.snp.top).offset(-4)
         }
-        
+
         firstContainerCollectionView.snp.makeConstraints { make in
             make.top.equalTo(descriptionForm.snp.bottom).offset(20)
             make.leading.trailing.equalTo(contentView).inset(20)
@@ -168,16 +168,43 @@ class CreateMealViewController: UIViewController {
         collectionView.snp.makeConstraints { make in
             make.edges.equalTo(secondContainerCollectionView)
         }
+
+        headerView.snp.makeConstraints { make in
+            make.top.equalTo(view)
+            make.leading.trailing.equalTo(contentView)
+            make.height.equalTo(95)
+        }
         
+        titleHeaderLabel.snp.makeConstraints { make in
+            make.centerX.equalTo(headerView)
+            make.top.equalTo(headerView).offset(58)
+            make.bottom.equalTo(headerView).offset(-13)
+        }
+
         saveButton.snp.makeConstraints { make in
             make.leading.trailing.equalTo(contentView).inset(20)
             make.bottom.equalTo(contentView).offset(-88)
         }
-        
+
         addFoodButton.snp.makeConstraints { make in
+            make.top.greaterThanOrEqualTo(descriptionForm.snp.bottom).offset(collectionViewHeightOffset)
             make.leading.trailing.equalTo(contentView).inset(20)
             make.bottom.equalTo(saveButton.snp.top).offset(-24)
         }
+
+        firstContainerCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        firstContainerCollectionView.heightAnchor.constraint(equalToConstant: containerViewHeight).isActive = true
+    }
+    
+    private func updateContentViewHeight() {
+        let contentHeight = contentView.systemLayoutSizeFitting(
+            CGSize(width: view.frame.width, height: 0),
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .defaultHigh
+        ).height
+        
+        contentView.frame.size.height = contentHeight
+        scrollView.contentSize.height = contentHeight
     }
     
     private func setupKeyboardManager() {
@@ -271,51 +298,57 @@ class CreateMealViewController: UIViewController {
             name: UIResponder.keyboardWillHideNotification,
             object: nil
         )
-        firstContainerCollectionView.translatesAutoresizingMaskIntoConstraints = false
-            firstContainerCollectionView.heightAnchor.constraint(equalToConstant: containerViewHeight).isActive = true
     }
     
     @objc private func keyboardWillBeShown(notification: NSNotification) {
         guard let keyboardFrame = keyboardFrame(from: notification) else { return }
-        
+
+        keyboardHeight = keyboardFrame.height
+
         let heightDiferenceOfView = view.frame.size.height - keyboardFrame.size.height
         let heightDiferenceOfButton = addFoodButton.frame.origin.y - heightDiferenceOfView
-        let offsetPoint = heightDiferenceOfButton + addFoodButton.frame.height + 19
-        
-        collectionViewHeightConstraint.constant -= keyboardFrame.height + addFoodButton.frame.height + 19
-        updateHeaderViewHeight(with: offsetPoint)
-        animateScrollViewInsets(with: keyboardFrame, offsetPoint: offsetPoint)
-    }
-    
-    @objc private func keyboardWillBeHidden(notification: NSNotification) {
-        collectionViewHeightConstraint.constant = containerViewHeight
-        updateHeaderViewHeight(with: 0)
-        animateScrollViewInsets(with: .zero, offsetPoint: 0)
-    }
-    
-    private func keyboardFrame(from notification: NSNotification) -> CGRect? {
-        guard let userInfo = notification.userInfo else { return nil }
-        let keyboardFrameValue = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue
-        return keyboardFrameValue?.cgRectValue
-    }
-    
-    private func updateHeaderViewHeight(with offsetPoint: CGFloat) {
-        let newHeaderViewHeight = 163 + offsetPoint
-        headerView.snp.remakeConstraints { make in
-            make.top.leading.trailing.equalTo(contentView)
-            make.height.equalTo(newHeaderViewHeight)
+        let buttonFrameHeight = addFoodButton.frame.height + 19
+        let offsetPoint = heightDiferenceOfButton + buttonFrameHeight
+
+        collectionViewHeightOffset -= offsetPoint
+        addFoodButton.snp.remakeConstraints { make in
+            make.top.greaterThanOrEqualTo(descriptionForm.snp.bottom).offset(collectionViewHeightOffset)
+            make.leading.trailing.equalTo(contentView).inset(20)
+            make.bottom.equalTo(saveButton.snp.top).offset(-24)
+            make.height.equalTo(64)
         }
-    }
-    
-    private func animateScrollViewInsets(with keyboardFrame: CGRect, offsetPoint: CGFloat) {
-        UIView.animate(withDuration: 0.6, delay: 0, options: .curveEaseInOut) {
-            self.scrollView.contentInset.bottom = keyboardFrame.height
-            self.scrollView.scrollIndicatorInsets = self.scrollView.contentInset
-            self.scrollView.contentOffset = CGPoint(x: 0, y: offsetPoint)
+
+        UIView.animate(withDuration: 0.6) {
+            self.collectionViewHeightConstraint.constant -= keyboardFrame.height + buttonFrameHeight
+            self.animateScrollViewInsets(with: offsetPoint)
             self.view.layoutIfNeeded()
         }
     }
-    
+
+    @objc private func keyboardWillBeHidden(notification: NSNotification) {
+        keyboardHeight = nil
+        
+        UIView.animate(withDuration: 0.6) {
+            self.view.layoutIfNeeded()
+        }
+    }
+
+    private func animateScrollViewInsets(with offsetPoint: CGFloat) {
+        guard let keyboardHeight = keyboardHeight else { return }
+
+        scrollView.contentInset.bottom = keyboardHeight
+        scrollView.verticalScrollIndicatorInsets = scrollView.contentInset
+        scrollView.setContentOffset(CGPoint(x: 0, y: offsetPoint), animated: true)
+    }
+
+    private func keyboardFrame(from notification: NSNotification) -> CGRect? {
+        guard let userInfo = notification.userInfo,
+              let keyboardFrameValue = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else {
+            return nil
+        }
+        return keyboardFrameValue.cgRectValue
+    }
+
     private func updateCollectionViewHeight() {
         collectionViewHeightConstraint.constant = containerViewHeight
     }
@@ -329,7 +362,6 @@ class CreateMealViewController: UIViewController {
     }
     
     @objc private func didTapAddFoodButton() {
-        
     }
 }
 
@@ -339,7 +371,7 @@ extension CreateMealViewController: CreateMealViewControllerInterface {
 
 // MARK: - Factory
 
-extension CreateMealViewController: UIScrollViewDelegate {
+extension CreateMealViewController {
     
     private func getContentView() -> UIView {
         let view = UIView()
@@ -347,7 +379,13 @@ extension CreateMealViewController: UIScrollViewDelegate {
     }
     
     private func getHeaderView() -> UIView {
-        let view = UIView()
+        let blurEffect = UIBlurEffect(style: .light)
+        let view = UIVisualEffectView(effect: blurEffect)
+        view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        view.backgroundColor = UIColor(hex: "#F3FFFE").withAlphaComponent(0.5)
+        view.layer.borderWidth = 1
+        view.layer.borderColor = UIColor(hex: "#FFFFFF").cgColor
+        view.isHidden = true
         return view
     }
     
@@ -356,6 +394,8 @@ extension CreateMealViewController: UIScrollViewDelegate {
         scrollView.showsVerticalScrollIndicator = false
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.keyboardDismissMode = .interactive
+        scrollView.alwaysBounceVertical = true
+        scrollView.isPagingEnabled = false
         scrollView.delegate = self
         return scrollView
     }
@@ -376,10 +416,18 @@ extension CreateMealViewController: UIScrollViewDelegate {
         return button
     }
     
-    private func getTitleHeaderLabel() -> UILabel {
+    private func getTitleLabel() -> UILabel {
         let label = UILabel()
         label.text = R.string.localizable.addFoodMealCreation()
         label.font = R.font.sfProRoundedBold(size: 24)
+        label.textColor = R.color.createMeal.basicPrimary()
+        return label
+    }
+    
+    private func getTitleHeaderLabel() -> UILabel {
+        let label = UILabel()
+        label.text = R.string.localizable.addFoodMealCreation()
+        label.font = R.font.sfProRoundedBold(size: 16)
         label.textColor = R.color.createMeal.basicPrimary()
         return label
     }
@@ -538,7 +586,7 @@ extension CreateMealViewController: UIScrollViewDelegate {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.layer.cornerRadius = 8
         collectionView.backgroundColor = .white
-        collectionView.isScrollEnabled = true
+        collectionView.isScrollEnabled = false
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.showsVerticalScrollIndicator = false
@@ -548,6 +596,26 @@ extension CreateMealViewController: UIScrollViewDelegate {
         return collectionView
     }
 
+}
+
+// MARK: - UIScrollViewDelegate
+
+extension CreateMealViewController: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let titleLabelMaxY = titleLabel.frame.maxY
+        let headerViewMaxY = headerView.frame.maxY
+        
+        if titleLabelMaxY < headerViewMaxY {
+            headerView.isHidden = false
+            titleLabel.isHidden = true
+            titleHeaderLabel.isHidden = false
+        } else {
+            headerView.isHidden = true
+            titleLabel.isHidden = false
+            titleHeaderLabel.isHidden = true
+        }
+    }
 }
 
 // MARK: - UITextFieldDelegate
@@ -569,7 +637,7 @@ extension CreateMealViewController: UITextFieldDelegate {
         
         guard textField == descriptionForm.textField else { return true }
         saveButton.buttonImage = R.image.basicButton.saveDefault()
-        saveButton.setState(resultText.isEmpty ? .inactive : .active)
+        saveButton.setState(!resultText.isEmpty && cellCount >= 2 ? .active : .inactive)
         
         return true
     }
