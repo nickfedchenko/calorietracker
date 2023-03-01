@@ -47,18 +47,31 @@ final class EstimationSmileButton: UIControl {
         self.aspectRatio()
         
         imageView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.edges.equalToSuperview().inset(4)
         }
     }
     
     private func didChangeSelected() {
         switch isSelectedSmile {
         case true:
-            layer.opacity = 1
-            layer.borderWidth = 3
+           
+            imageView.snp.remakeConstraints { make in
+                make.edges.equalToSuperview()
+            }
+            UIView.animate(withDuration: 0.3) {
+                self.layoutIfNeeded()
+                self.alpha = 1
+                self.layer.borderWidth = 3
+            }
         case false:
-            layer.opacity = 0.3
-            layer.borderWidth = 0
+            imageView.snp.remakeConstraints { make in
+                make.edges.equalToSuperview().inset(4)
+            }
+            UIView.animate(withDuration: 0.3) {
+                self.layoutIfNeeded()
+                self.alpha = 0.3
+                self.layer.borderWidth = 0
+            }
         }
     }
 }

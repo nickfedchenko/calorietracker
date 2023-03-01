@@ -148,8 +148,12 @@ final class WeightKeyboardHeaderView: UIView, KeyboardHeaderProtocol {
     }
     
     @objc private func didTapSaveButton() {
-        if let text = textField.text, let value = Double(text) {
-            self.didChangeValue?(value)
+        if
+            let text = textField.text {
+            let formattedText = text.replacingOccurrences(of: ",", with: ".")
+            if let value = Double(formattedText) {
+                self.didChangeValue?(value)
+            }
         }
         self.didTapClose?()
     }
@@ -196,7 +200,7 @@ extension WeightKeyboardHeaderView {
     }
     
     private func getTextField() -> UITextField {
-        let textField = InnerShadowTextField()
+        let textField = NonPastableTextField()
         textField.innerShadowColors = [R.color.keyboardHeader.topGradient() ?? .clear]
         textField.backgroundColor = .white
         textField.layer.cornerCurve = .continuous
@@ -208,6 +212,7 @@ extension WeightKeyboardHeaderView {
         textField.tintColor = R.color.keyboardHeader.weightGreen()
         textField.textAlignment = .center
         textField.clipsToBounds = true
+        textField.delegate = self
         return textField
     }
 }
@@ -218,5 +223,26 @@ extension WeightKeyboardHeaderView {
             R.color.keyboardHeader.topGradient(),
             R.color.keyboardHeader.bottomGradient()
         ]
+    }
+}
+
+extension WeightKeyboardHeaderView: UITextFieldDelegate {
+    func textField(
+        _ textField: UITextField,
+        shouldChangeCharactersIn range: NSRange,
+        replacementString string: String
+    ) -> Bool {
+        if let text = textField.text,
+            string == "." || string == "," {
+            if text.isEmpty {
+                return false
+            }
+            if text.contains(",") || text.contains(".") {
+                return false
+            } else {
+                return true
+            }
+        }
+        return true
     }
 }

@@ -54,6 +54,7 @@ final class ProductViewController: CTViewController {
         }
     }
     
+    
     private lazy var selectedWeightType: UnitElement.ConvenientUnit = presenter?
         .getProduct()?
         .units?
@@ -64,6 +65,11 @@ final class ProductViewController: CTViewController {
             didChangeWeight()
         }
     }
+    
+    private lazy var collapseRecognizer = UITapGestureRecognizer(
+        target: self,
+        action: #selector(hideServingSelector(sender:))
+    )
     
     // MARK: - Initialize
     
@@ -124,11 +130,16 @@ final class ProductViewController: CTViewController {
             self.presenter?.didTapFavoriteButton(value)
         }
         
-        selectView.didSelectedCell = { [weak self] type, isColapsed in
-            self?.showOverlayView(isColapsed)
-            self?.selectedWeightType = type
-            if !isColapsed {
-                self?.valueTextField.selectAll(nil)
+        selectView.didSelectedCell = { [weak self] type, isCollapsed in
+            guard let self = self else { return }
+            self.showOverlayView(isCollapsed)
+            self.selectedWeightType = type
+            if !isCollapsed {
+                self.valueTextField.selectAll(nil)
+                self.mainScrollView.removeGestureRecognizer(self.collapseRecognizer)
+            }
+            if isCollapsed {
+                self.mainScrollView.addGestureRecognizer(self.collapseRecognizer)
             }
         }
         
@@ -434,6 +445,12 @@ final class ProductViewController: CTViewController {
         if let product = presenter?.getProduct() {
             FDS.shared.foodUpdate(food: .product(product, customAmount: nil, unit: nil), favorites: nil)
         }
+    }
+    
+    @objc private func hideServingSelector(sender: UITapGestureRecognizer) {
+       showOverlayView(true)
+//        self?.selectedWeightType = type
+        selectView.collapse()
     }
 }
 

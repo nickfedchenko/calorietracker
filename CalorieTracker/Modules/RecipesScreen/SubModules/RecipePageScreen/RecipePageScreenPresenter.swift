@@ -29,6 +29,7 @@ protocol RecipePageScreenPresenterInterface: AnyObject {
     func shouldAddToEatenSelectedPortions()
     
     var isFavoritesDish: Bool? { get }
+//    var shouldExplicitlyHandleAddingFood: Bool { get set }
 }
 
 class RecipePageScreenPresenter {
@@ -49,6 +50,8 @@ class RecipePageScreenPresenter {
 }
 
 extension RecipePageScreenPresenter: RecipePageScreenPresenterInterface {
+//  var shouldExplicitlyHandleAddingFood: Bool = false
+    
     var isFavoritesDish: Bool? {
         guard let dish = interactor?.getDish() else { return false }
         return FDS.shared.getFoodData(.dishes(dish, customAmount: nil))?.favorites
@@ -131,7 +134,9 @@ extension RecipePageScreenPresenter: RecipePageScreenPresenterInterface {
     }
     
     func addToDiaryTapped() {
-//        interactor?.addSelectedPortionsToEaten()
+//        if shouldExplicitlyHandleAddingFood {
+//            interactor?.addSelectedPortionsToEaten()
+//        }
         router?.dismiss()
     }
     

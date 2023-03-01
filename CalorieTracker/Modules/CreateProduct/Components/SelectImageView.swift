@@ -76,7 +76,7 @@ final class SelectImageView: UIView {
         
         alert.addAction(
             .init(
-                title: R.string.localizable.galary(),
+                title: R.string.localizable.gallery(),
                 style: .default,
                 handler: { [weak self] _ in
                     self?.showImagePicker()
