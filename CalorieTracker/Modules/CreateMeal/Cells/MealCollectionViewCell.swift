@@ -108,4 +108,12 @@ class MealCollectionViewCell: UICollectionViewCell {
         kcalLabel.text = viewModel.kcal
         weightLabel.text = viewModel.weight
     }
+    
+    func showSeparator() {
+        separator.isHidden = false
+    }
+
+    func hideSeparator() {
+        separator.isHidden = true
+    }
 }

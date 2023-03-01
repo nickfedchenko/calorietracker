@@ -303,12 +303,12 @@ class CreateMealViewController: UIViewController {
     @objc private func keyboardWillBeShown(notification: NSNotification) {
         guard let keyboardFrame = keyboardFrame(from: notification) else { return }
 
-        keyboardHeight = keyboardFrame.height
+        keyboardHeight = keyboardFrame.height + 19
 
         let heightDiferenceOfView = view.frame.size.height - keyboardFrame.size.height
         let heightDiferenceOfButton = addFoodButton.frame.origin.y - heightDiferenceOfView
         let buttonFrameHeight = addFoodButton.frame.height + 19
-        let offsetPoint = heightDiferenceOfButton + buttonFrameHeight
+        var offsetPoint = heightDiferenceOfButton + buttonFrameHeight
 
         collectionViewHeightOffset -= offsetPoint
         addFoodButton.snp.remakeConstraints { make in
@@ -335,9 +335,13 @@ class CreateMealViewController: UIViewController {
 
     private func animateScrollViewInsets(with offsetPoint: CGFloat) {
         guard let keyboardHeight = keyboardHeight else { return }
-
+        let descriptionFormMaxY = descriptionForm.frame.maxY
+        let headerViewMaxY = headerView.frame.maxY
+        
         scrollView.contentInset.bottom = keyboardHeight
         scrollView.verticalScrollIndicatorInsets = scrollView.contentInset
+        
+        guard descriptionFormMaxY < headerViewMaxY else { return }
         scrollView.setContentOffset(CGPoint(x: 0, y: offsetPoint), animated: true)
     }
 
@@ -396,6 +400,7 @@ extension CreateMealViewController {
         scrollView.keyboardDismissMode = .interactive
         scrollView.alwaysBounceVertical = true
         scrollView.isPagingEnabled = false
+        scrollView.contentInsetAdjustmentBehavior = .never
         scrollView.delegate = self
         return scrollView
     }
@@ -634,7 +639,7 @@ extension CreateMealViewController: UITextFieldDelegate {
         let currentText = textField.text as NSString?
         let replacedText = currentText?.replacingCharacters(in: range, with: string)
         let resultText = replacedText ?? string
-        
+    
         guard textField == descriptionForm.textField else { return true }
         saveButton.buttonImage = R.image.basicButton.saveDefault()
         saveButton.setState(!resultText.isEmpty && cellCount >= 2 ? .active : .inactive)
@@ -691,6 +696,8 @@ extension CreateMealViewController: UICollectionViewDataSource {
             kcal: "456",
             weight: "12 g")
         )
+        
+        indexPath.item < cellCount - 1 ? cell.showSeparator() : cell.hideSeparator()
 
         return cell
     }
