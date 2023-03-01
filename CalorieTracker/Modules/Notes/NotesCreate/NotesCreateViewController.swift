@@ -31,6 +31,7 @@ final class NotesCreateViewController: TouchPassingViewController {
         setupView()
         setupConstraint()
         configureKeyboard()
+        setLastNode()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -41,6 +42,17 @@ final class NotesCreateViewController: TouchPassingViewController {
     override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
         needUpdate?()
         super.dismiss(animated: flag, completion: completion)
+    }
+    
+    private func setLastNode() {
+        guard let lastNote = NotesWidgetService.shared.getLastNote() else { return }
+        if let imgUrl = lastNote.imageUrl {
+            headerView.photo = UIImage(fileURLWithPath: imgUrl)
+        }
+        headerView.text = lastNote.text
+        if let estimation = lastNote.estimation {
+            headerView.setEstimation(estimation: estimation)
+        }
     }
     
     private func setupView() {
@@ -94,7 +106,7 @@ final class NotesCreateViewController: TouchPassingViewController {
         
         alert.addAction(
             .init(
-                title: R.string.localizable.galary(),
+                title: R.string.localizable.gallery(),
                 style: .default,
                 handler: { [weak self] _ in
                     self?.showImagePicker()
@@ -112,15 +124,17 @@ final class NotesCreateViewController: TouchPassingViewController {
             )
         )
         
-        alert.addAction(
-            .init(
-                title: R.string.localizable.delete(),
-                style: .destructive,
-                handler: { [weak self] _ in
-                    self?.headerView.photo = nil
-                }
-            )
+        let deleteAction: UIAlertAction = .init(
+            title: R.string.localizable.delete(),
+            style: .destructive,
+            handler: { [weak self] _ in
+                self?.headerView.photo = nil
+            }
         )
+        
+        if headerView.photo != nil {
+            alert.addAction(deleteAction)
+        }
         
         alert.addAction(
             .init(

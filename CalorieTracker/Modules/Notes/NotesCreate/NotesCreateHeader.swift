@@ -30,7 +30,10 @@ final class NotesCreateHeader: UIView {
     
     var text: String? {
         get { textView.text }
-        set { textView.text = newValue }
+        set {
+            textView.text = newValue
+            updateState()
+        }
     }
     
     var selectedEstimation: Estimation? { estimationView.selectedEstimation }
@@ -40,6 +43,7 @@ final class NotesCreateHeader: UIView {
         setupView()
         setupConstraints()
         addGestureRecognizerForPhotoView()
+        updateState()
     }
     
     required init?(coder: NSCoder) {
@@ -52,8 +56,19 @@ final class NotesCreateHeader: UIView {
         textView.textContainer.exclusionPaths = [imagePath]
     }
     
+    func setEstimation(estimation: Estimation) {
+        estimationView.setEstimation(estimation: estimation)
+    }
+    
     func textViewBecomeFirstResponder() {
         textView.becomeFirstResponder()
+    }
+    
+    private func updateState() {
+        doneButton.isEnabled = selectedEstimation != nil || !(text ?? "").isEmpty
+        doneButton.layer.borderColor = doneButton.isEnabled
+        ? UIColor(hex: "C07036").cgColor
+        : UIColor(hex: "D9D9D9").cgColor
     }
     
     private func setupView() {
@@ -63,9 +78,7 @@ final class NotesCreateHeader: UIView {
         layer.maskedCorners = .topCorners
         
         estimationView.didChangeValue = { [weak self] _ in
-            self?.doneButton.isEnabled = true
-            self?.doneButton.layer.borderColor = R.color.notes.noteAccent()?.cgColor
-            self?.doneButton.setTitleColor(R.color.notes.noteAccent(), for: .normal)
+            self?.updateState()
         }
     }
     
@@ -81,11 +94,12 @@ final class NotesCreateHeader: UIView {
             estimationView
         )
         
-        allNotesButton.aspectRatio(0.248)
+//        allNotesButton.aspectRatio(0.248)
         allNotesButton.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(16)
             make.centerX.equalToSuperview()
-            make.width.equalToSuperview().multipliedBy(0.388)
+            make.height.equalTo(40)
+            make.width.greaterThanOrEqualTo(161)
         }
         
         closeButton.aspectRatio()
@@ -106,12 +120,13 @@ final class NotesCreateHeader: UIView {
             make.height.greaterThanOrEqualTo(100)
         }
         
-        doneButton.aspectRatio(0.482)
+//        doneButton.aspectRatio(0.482)
         doneButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().offset(-20)
+            make.width.equalTo(83)
             make.top.equalTo(textView.snp.bottom).offset(13)
             make.bottom.equalToSuperview().offset(-16)
-            make.height.equalTo(allNotesButton)
+            make.height.equalTo(40)
         }
         
         estimationView.snp.makeConstraints { make in
@@ -190,6 +205,7 @@ extension NotesCreateHeader {
         textView.textColor = R.color.notes.text()
         textView.tintColor = R.color.notes.noteAccent()
         textView.separatorLinesColor = R.color.notes.noteGray()
+        textView.delegate = self
         return textView
     }
     
@@ -202,13 +218,27 @@ extension NotesCreateHeader {
     
     private func getDoneButton() -> UIButton {
         let button = UIButton()
-        button.setTitle("DONE", for: .normal)
+        let attrTitleDisabled = NSAttributedString(
+            string: "DONE".localized.localized,
+            attributes: [
+                .font: R.font.sfProRoundedBold(size: 18) ?? .systemFont(ofSize: 18),
+                .foregroundColor: UIColor(hex: "D9D9D9")
+            ]
+        )
+        let attrTitleEnabled = NSAttributedString(
+            string: "DONE".localized.localized,
+            attributes: [
+                .font: R.font.sfProRoundedBold(size: 18) ?? .systemFont(ofSize: 18),
+                .foregroundColor: UIColor(hex: "C07036")
+            ]
+        )
+        button.setAttributedTitle(attrTitleEnabled, for: .normal)
+        button.setAttributedTitle(attrTitleDisabled, for: .disabled)
         button.addTarget(self, action: #selector(didTapDoneButton), for: .touchUpInside)
         button.layer.cornerCurve = .continuous
         button.layer.cornerRadius = 8
         button.layer.borderWidth = 1
-        button.layer.borderColor = R.color.notes.noteAccent()?.cgColor
-        button.setTitleColor(R.color.notes.noteAccent(), for: .normal)
+        button.layer.borderColor = UIColor(hex: "D9D9D9").cgColor
 //        button.isEnabled = false
         return button
     }
@@ -223,7 +253,7 @@ extension NotesCreateHeader {
     
     private func getAllNotesButton() -> UIButton {
         let button = UIButton()
-        let font = R.font.sfProDisplaySemibold(size: 18.fontScale())
+        let font = R.font.sfProRoundedBold(size: 18)
         button.setAttributedTitle(
             "ALL NOTES".attributedSring(
                 [.init(worldIndex: [0, 1], attributes: [.color(.white), .font(font)])],
@@ -250,5 +280,11 @@ extension NotesCreateHeader {
         view.layer.masksToBounds = true
         view.isUserInteractionEnabled = true
         return view
+    }
+}
+
+extension NotesCreateHeader: UITextViewDelegate {
+    func textViewDidChange(_ textView: UITextView) {
+        updateState()
     }
 }

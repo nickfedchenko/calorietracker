@@ -12,7 +12,7 @@ final class EstimationSmileSelectionView: UIView {
         let stack = UIStackView()
         stack.axis = .horizontal
         stack.distribution = .fillEqually
-        stack.spacing = 12
+        stack.spacing = 8
         return stack
     }()
     
@@ -42,6 +42,12 @@ final class EstimationSmileSelectionView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func setEstimation(estimation: Estimation) {
+        stackView.arrangedSubviews
+            .compactMap { $0 as? EstimationSmileButton }
+            .first(where: { $0.type == estimation })?.isSelectedSmile = true
+    }
+    
     private func setupStack() {
         estimations
             .map { return EstimationSmileButton($0) }
@@ -60,9 +66,16 @@ final class EstimationSmileSelectionView: UIView {
     }
     
     @objc private func didTapButton(_ sender: EstimationSmileButton) {
-        didChangeValue?(sender.type)
+        
+        sender.isSelectedSmile = !sender.isSelectedSmile
+
         stackView.arrangedSubviews
             .compactMap { return ($0 as? EstimationSmileButton) }
-            .forEach { $0.isSelectedSmile = $0 == sender }
+            .forEach {
+                if $0 != sender {
+                    $0.isSelectedSmile = $0 == sender
+                }
+            }
+        didChangeValue?(sender.type)
     }
 }
