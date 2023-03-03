@@ -43,6 +43,7 @@ final class SequenceOfHabitFormationViewController: UIViewController {
         configureBackBarButtonItem()
         configureViews()
         configureLayouts()
+        continueCommonButton.isHidden = !answerOptions.contains(where: { $0.isSelected == true })
     }
     
     private func configureViews() {

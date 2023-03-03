@@ -76,7 +76,8 @@ extension AddFoodViewController {
             color: R.color.addFood.hideKeyboardShadow() ?? .black,
             opacity: 1,
             offset: CGSize(width: 0, height: 1),
-            radius: 0
+            radius: 0,
+            spread: 0
         )
         
         static let menuModels: [MealTime] = [

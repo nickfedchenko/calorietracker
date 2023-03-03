@@ -27,8 +27,9 @@ class AppSettingsRouter: NSObject {
             types: [
                 .title,
                 .units,
-                .sync,
-                .about
+                .database,
+                .haptic,
+                .meal
             ],
             presenter: presenter
         )

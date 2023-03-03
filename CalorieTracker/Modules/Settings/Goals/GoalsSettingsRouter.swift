@@ -31,9 +31,9 @@ class GoalsSettingsRouter: NSObject {
                 .goal,
                 .startWeight,
                 .weight,
-                .activityLevel,
-                .weekly,
-                .calorie,
+//                .activityLevel,
+//                .weekly,
+//                .calorie,
                 .nutrient
             ],
             presenter: presenter
@@ -53,7 +53,9 @@ extension GoalsSettingsRouter: GoalsSettingsRouterInterface {
     }
     
     func openEnterStartWeightVC() {
-        let vc = KeyboardEnterValueViewController(.standart("STARTING WEIGHT"))
+        let vc = KeyboardEnterValueViewController(
+            .standart(R.string.localizable.settingsGoalStartWeight().uppercased())
+        )
         
         vc.complition = { value in
             WeightWidgetService.shared.setStartWeight(BAMeasurement(value, .weight).value)
@@ -64,9 +66,10 @@ extension GoalsSettingsRouter: GoalsSettingsRouterInterface {
     }
     
     func openEnterGoalWeightVC() {
-        let vc = KeyboardEnterValueViewController(.weight(.set))
+        let vc = KeyboardEnterValueViewController(.standart(R.string.localizable.settingsGoalWeight()))
         
-        vc.complition = { _ in
+        vc.complition = { value in
+            WeightWidgetService.shared.setWeightGoal(value)
             self.presenter?.updateCell(type: .weight)
         }
         
@@ -85,7 +88,7 @@ extension GoalsSettingsRouter: GoalsSettingsRouterInterface {
     }
     
     func openNutrientGoalsVC() {
-        let vc = NutrientGoalSettingsRouter.setupModule()
+        let vc = NutritionGoalRouter.setupModule()
         vc.needUpdate = {
             self.presenter?.updateCell(type: .nutrient)
         }

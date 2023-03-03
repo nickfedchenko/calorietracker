@@ -454,14 +454,25 @@
 
 "onboarding.fourth.sequenceOfHabitFormation.button" = "Continue";
 "onboarding.fourth.sequenceOfHabitFormation.title" = "Habits";
-"onboarding.fourth.sequenceOfHabitFormation.title.first" = "What are some ways you can see yourself increasing your ";
-"onboarding.fourth.sequenceOfHabitFormation.title.second" = "activity level?";
+"onboarding.fourth.sequenceOfHabitFormation.title.first" = "Consistency is key with ";
+"onboarding.fourth.sequenceOfHabitFormation.title.second" = "habit building";
 "onboarding.fourth.sequenceOfHabitFormation.description" = "The first step is to track, and the second is to make it meaningful. For your first few days, which do you think will work best for you?";
-"onboarding.fourth.sequenceOfHabitFormation.logEachMealBeforeYouTakeTheFirstBite" = "Exploring new types of activity";
-"onboarding.fourth.sequenceOfHabitFormation.logImmediatelyAfterEachMeal" = "Hitting a daily step goal";
-"onboarding.fourth.sequenceOfHabitFormation.logAllOfYoutMealsBeforeTheDayStarts" = "Taking more walks";
-"onboarding.fourth.sequenceOfHabitFormation.logAllOfYourMealsAtTheEndOfTheDay" = "Building activity into my daily routine";
-"onboarding.fourth.sequenceOfHabitFormation.imNotSureImStillFiguringOutWhatWillWorkForMe" = "Trying a new workout plan";
+"onboarding.fourth.sequenceOfHabitFormation.logEachMealBeforeYouTakeTheFirstBite" = "Log each meal before you take the first bite";
+"onboarding.fourth.sequenceOfHabitFormation.logImmediatelyAfterEachMeal" = "Log immediately after each meal";
+"onboarding.fourth.sequenceOfHabitFormation.logAllOfYoutMealsBeforeTheDayStarts" = "Log all of yout meals before the day starts";
+"onboarding.fourth.sequenceOfHabitFormation.logAllOfYourMealsAtTheEndOfTheDay" = "Log all of your meals at the end of the day";
+"onboarding.fourth.sequenceOfHabitFormation.imNotSureImStillFiguringOutWhatWillWorkForMe" = "I’m not sure, I’m still figuring out what will work for me";
+
+"onboarding.fourth.dietaryPreference.title.first" = "Dietary";
+"onboarding.fourth.dietaryPreference.title.second" = "preference";
+"onboarding.fourth.dietaryPreference.diet.classic.title" = "Classic";
+"onboarding.fourth.dietaryPreference.diet.classic.subtitle" = "I have no dietary preferences";
+"onboarding.fourth.dietaryPreference.diet.pescatarian.title" = "Pescatarian";
+"onboarding.fourth.dietaryPreference.diet.pescatarian.subtitle" = "I eat seafood but not meat";
+"onboarding.fourth.dietaryPreference.diet.vegetarian.title" = "Vegetarian";
+"onboarding.fourth.dietaryPreference.diet.vegetarian.subtitle" = "I don't eat meat or seafood";
+"onboarding.fourth.dietaryPreference.diet.vegan.title" = "Vegan";
+"onboarding.fourth.dietaryPreference.diet.vegan.subtitle" = "I don't eat any animal product";
 
 "onboarding.fourth.soundsGood.button" = "continue";
 "onboarding.fourth.soundsGood.title" = "Habits";
@@ -658,11 +669,11 @@
 "settings.app.haptic" = "Haptic Feedback";
 "settings.app.meal" = "Rename Meal Types";
 "settings.app.about" = "About KCALC";
-"settings.myGoals.title" = "MY GOALS";
+"settings.myGoals.title" = "My Goals";
 "settings.calorieGoal.title" = "Calorie Goal";
 "settings.calorieGoal.recalculate" = "RECALCULATE GOAL";
 "settings.calorieGoal.description" = "Calorie Distribution";
-"settings.nutrientGoal.title" = "Nutrient Goals";
+"settings.nutrientGoal.title" = "Nutrition Goal";
 "settings.nutrientGoal.reset" = "RESET";
 "settings.goal.goal" = "Goal";
 "settings.goal.startWeight" = "Starting Weight";
@@ -682,7 +693,7 @@
 "settings.main.chat.title" = "Live Chat Support";
 "settings.main.reminders.title" = "Reminders";
 "settings.main.rate.title" = "Rate this App";
-"settings.main.help.title" = "Help & FAQ";
+"settings.main.help.title" = "Problems? Write to us";
 "settings.profile.name.title" = "First Name";
 "settings.profile.lastName.title" = "Last Name";
 "settings.profile.city.title" = "City";

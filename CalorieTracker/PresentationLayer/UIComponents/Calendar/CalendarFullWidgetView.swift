@@ -165,13 +165,15 @@ extension CalendarFullWidgetView {
                 color: R.color.calendarWidget.shadowFirst() ?? .black,
                 opacity: 0.45,
                 offset: CGSize(width: 0, height: 0.5),
-                radius: 2
+                radius: 2,
+                spread: 0
             ),
             .init(
                 color: R.color.calendarWidget.shadowSecond() ?? .black,
                 opacity: 0.3,
                 offset: CGSize(width: 0, height: 4),
-                radius: 16
+                radius: 16,
+                spread: 0
             )
         ]
     }

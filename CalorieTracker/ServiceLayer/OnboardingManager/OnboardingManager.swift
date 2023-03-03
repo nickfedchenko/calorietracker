@@ -134,6 +134,7 @@ protocol OnboardingManagerInterface {
     func getOnboardingInfo() -> OnboardingInfo
     func setEmail(mail: String)
     func setActivityLevel(level: ActivityLevel)
+    func setDietary(dietary: UserDietary)
 }
 
 class OnboardingManager {
@@ -472,5 +473,9 @@ extension OnboardingManager: OnboardingManagerInterface {
     
     func setActivityLevel(level: ActivityLevel) {
         onboardingInfo.activityLevel = level
+    }
+    
+    func setDietary(dietary: UserDietary) {
+        onboardingInfo.dietarySetting = dietary
     }
 }

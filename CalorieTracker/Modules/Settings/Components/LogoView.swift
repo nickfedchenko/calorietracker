@@ -10,7 +10,7 @@ import UIKit
 final class LogoView: UIView {
     private lazy var logoImageView: UIImageView = {
         let view = UIImageView()
-        view.contentMode = .scaleAspectFit
+        view.contentMode = .scaleAspectFill
         view.image = R.image.settings.logo()
         return view
     }()
@@ -40,8 +40,9 @@ final class LogoView: UIView {
         
         logoTextImageView.snp.makeConstraints { make in
             make.leading.equalTo(logoImageView.snp.trailing).offset(10)
-            make.bottom.trailing.equalToSuperview()
-            make.top.greaterThanOrEqualToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalToSuperview().inset(9)
+//            make.top.greaterThanOrEqualToSuperview()
         }
     }
 }

@@ -198,7 +198,7 @@ extension GoalsSettingsViewController {
         let button = UIButton()
         button.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
         button.setAttributedTitle(
-            "PREFERENCES".attributedSring(
+            R.string.localizable.settingsPreferencesTitle().attributedSring(
                 [
                     StringSettingsModel(
                         worldIndex: [0],

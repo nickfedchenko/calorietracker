@@ -101,8 +101,11 @@ final class StandartKeyboardHeaderView: UIView, KeyboardHeaderProtocol {
     }
     
     @objc private func didTapSaveButton() {
-        if let text = textField.text, let value = Double(text) {
-            self.didChangeValue?(value)
+        if let text = textField.text {
+            let formattedText = text.replacingOccurrences(of: ",", with: ".")
+            if let value = Double(formattedText) {
+                self.didChangeValue?(value)
+            }
         }
         self.didTapClose?()
     }

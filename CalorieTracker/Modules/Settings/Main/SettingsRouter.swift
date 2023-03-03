@@ -7,6 +7,7 @@
 //
 
 import SafariServices
+import MessageUI
 import UIKit
 
 protocol SettingsRouterInterface: AnyObject {
@@ -35,7 +36,6 @@ class SettingsRouter: NSObject {
         let viewModel = SettingsСategoriesViewModel(
             [
                 .profile,
-                .chat,
                 .goals,
                 .app,
                 .rate,
@@ -97,7 +97,18 @@ extension SettingsRouter: SettingsRouterInterface {
     }
     
     func openHelpViewController() {
-        openSafaryUrl("https://www.google.ru/")
+        if MFMailComposeViewController.canSendMail() {
+            let mail = MFMailComposeViewController()
+            mail.mailComposeDelegate = self
+            mail.setToRecipients(["developermail@gmail.com"])
+            mail.setMessageBody(
+                "<p>Hey! I have some questions|suggestions!</a></p>", isHTML: true
+            )
+            mail.setSubject("Need help")
+            viewController?.present(mail, animated: true)
+        } else {
+            print("Cant send an e-mail")
+        }
     }
     
     func openGoalsViewController() {
@@ -110,6 +121,19 @@ extension SettingsRouter: SettingsRouterInterface {
     }
     
     func openRateViewController() {
-        openSafaryUrl("https://www.google.ru/")
+        guard let url = URL(string: "itms-apps://itunes.apple.com/app/idYOUR_APP_ID") else { return }
+        if UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url)
+        }
+    }
+}
+
+extension SettingsRouter: MFMailComposeViewControllerDelegate {
+    func mailComposeController(
+        _ controller: MFMailComposeViewController,
+        didFinishWith result: MFMailComposeResult,
+        error: Error?
+    ) {
+        controller.dismiss(animated: true)
     }
 }

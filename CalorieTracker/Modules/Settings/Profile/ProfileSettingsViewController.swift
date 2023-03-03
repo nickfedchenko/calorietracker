@@ -104,6 +104,7 @@ final class ProfileSettingsViewController: UIViewController {
         backButton.snp.makeConstraints { make in
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-30)
             make.centerX.equalToSuperview()
+            make.width.equalTo(219)
         }
         
         collectionView.snp.makeConstraints { make in
@@ -235,7 +236,7 @@ extension ProfileSettingsViewController {
         let button = UIButton()
         button.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
         button.setAttributedTitle(
-            "PREFERENCES".attributedSring(
+            R.string.localizable.settingsPreferencesTitle().attributedSring(
                 [
                     StringSettingsModel(
                         worldIndex: [0],
@@ -244,15 +245,12 @@ extension ProfileSettingsViewController {
                             .color(R.color.foodViewing.basicGrey())
                         ]
                     )
-                ],
-                image: .init(
-                    image: R.image.settings.leftChevron(),
-                    font: R.font.sfProDisplaySemibold(size: 22.fontScale()),
-                    position: .left
-                )
+                ]
             ),
             for: .normal
         )
+        button.setImage(R.image.settings.leftChevron(), for: .normal)
+        button.titleEdgeInsets.left = 25
         return button
     }
     

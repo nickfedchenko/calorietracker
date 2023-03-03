@@ -35,7 +35,7 @@ final class AppCoordinator {
         
         if UDM.userData == nil {
             getStartedViewController = WelcomeRouter.setupModule()
-//            getStartedViewController = ActivityLevelSelectionRouter.setupModule()
+//            getStartedViewController = ChooseDietaryPreferenceRouter.setupModule()
         } else if Apphud.hasActiveSubscription() {
             getStartedViewController = CTTabBarController()
         } else {

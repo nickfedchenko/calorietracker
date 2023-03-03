@@ -44,10 +44,10 @@ class SequenceOfHabitFormationRouter {
 
 extension SequenceOfHabitFormationRouter: SequenceOfHabitFormationRouterInterface {
     func openSoundsGood() {
-        let soundsGoodRouter = SoundsGoodRouter.setupModule()
+        let dieatryChoose = ChooseDietaryPreferenceRouter.setupModule()
         
         viewController?.navigationController?.pushViewController(
-            soundsGoodRouter,
+            dieatryChoose,
             animated: true
         )
     }

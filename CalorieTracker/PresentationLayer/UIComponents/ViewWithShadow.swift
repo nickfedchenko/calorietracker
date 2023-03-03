@@ -58,8 +58,12 @@ class ControlWithShadow: UIControl {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        updateShadows()
+    }
+
+    private func updateShadows() {
         shadowLayer.frame = bounds
         shadowLayer.sublayers?.forEach { $0.removeFromSuperlayer() }
         shadows.forEach { shadow in
