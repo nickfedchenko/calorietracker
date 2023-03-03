@@ -69,6 +69,8 @@ extension ProductPresenter: ProductPresenterInterface {
         case .createProduct:
             router?.closeViewController(false, completion: nil)
             view.viewControllerShouldClose()
+        case .createMeal:
+            router?.closeViewController(false, completion: nil)
         }
     }
     

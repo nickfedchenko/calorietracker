@@ -1,5 +1,5 @@
 //
-//  MealCollectionViewCell.swift
+//  MealTableViewCell.swift
 //  CalorieTracker
 //
 //  Created by Alexandru Jdanov on 27.02.2023.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MealCollectionViewCell: UICollectionViewCell {
+class MealTableViewCell: UITableViewCell {
     var viewModel: MealCellViewModel?
     
     private let separator = UIView()

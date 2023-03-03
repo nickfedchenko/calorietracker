@@ -17,6 +17,7 @@ protocol AddFoodViewControllerInterface: AnyObject {
     func updateSelectedFoodFromSearch(_ food: Food)
     func updateSelectedFoodFromCustomEntry(_ food: Food)
     func getMealTime() -> MealTime?
+    func closeVcWithProduct(_ product: Product)
 }
 
 final class AddFoodViewController: UIViewController {
@@ -38,6 +39,8 @@ final class AddFoodViewController: UIViewController {
     private lazy var menuCreateView: MenuView = getMenuCreateView()
     private lazy var microphoneButton: MicrophoneButton = getMicrophoneButton()
     private lazy var doneButton: UIButton = getDoneButton()
+    private lazy var titleLabelFromMealSearch: UILabel = getTitleLabelFromMealSearch()
+    private lazy var bottomCloseButton: UIButton = getBottomCloseButton()
     
     private lazy var bottomGradientView = UIView()
     private lazy var bottomGradientViewExtended: GradientUndercover =  {
@@ -133,6 +136,9 @@ final class AddFoodViewController: UIViewController {
     private var searchFieldYCoordinate: CGFloat
     private var isFirstAppear = true
     var mealTime: MealTime = .breakfast
+    var tabBarIsHidden = false
+    var searchText: String?
+    var didSelectProduct: ((Product) -> Void)?
     
     init(searchFieldYCoordinate: CGFloat) {
         self.searchFieldYCoordinate = searchFieldYCoordinate
@@ -190,6 +196,7 @@ final class AddFoodViewController: UIViewController {
             guard let self = self else { return }
             self.presenter?.setFoodType(self.isSelectedType)
         }
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -229,6 +236,10 @@ final class AddFoodViewController: UIViewController {
         )
         let recognier = UITapGestureRecognizer(target: self, action: #selector(showSearchHeader))
         staticSearchTextField.addGestureRecognizer(recognier)
+        
+        tabBarStackView.isHidden = tabBarIsHidden
+        titleLabelFromMealSearch.text = searchText
+        menuButton.isHidden = tabBarIsHidden
     }
     
     // swiftlint:disable:next function_body_length
@@ -379,6 +390,7 @@ final class AddFoodViewController: UIViewController {
             foodCollectionViewController.view,
             searchHistoryViewController.view,
             menuButton,
+            titleLabelFromMealSearch,
             infoButtonsView,
             segmentedScrollView,
             counterKcalControl,
@@ -388,7 +400,8 @@ final class AddFoodViewController: UIViewController {
             keyboardHeaderView,
             staticSearchTextField,
 //            doneButton,
-            addToEatenButton
+            addToEatenButton,
+            bottomCloseButton
         )
     }
     
@@ -533,6 +546,18 @@ final class AddFoodViewController: UIViewController {
         }
         
         addToEatenButton.alpha = 0
+        
+        titleLabelFromMealSearch.snp.makeConstraints { make in
+            make.leading.equalToSuperview().inset(20)
+            make.trailing.equalToSuperview().inset(81)
+            make.bottom.equalTo(segmentedControl.snp.top).offset(-16)
+        }
+        
+        bottomCloseButton.snp.makeConstraints { make in
+            make.bottom.equalToSuperview().offset(-24)
+            make.centerX.equalToSuperview()
+            make.width.equalToSuperview().multipliedBy(0.155)
+        }
     }
     
     private func setupShadow() {
@@ -970,6 +995,11 @@ final class AddFoodViewController: UIViewController {
             }
         }
     }
+    
+    @objc private func didTapCloseButton() {
+        Vibration.rigid.vibrate()
+        presenter?.didTapCloseButton()
+    }
 }
 
 // MARK: - FoodCollectionViewController Delegate
@@ -1038,6 +1068,12 @@ extension AddFoodViewController: AddFoodViewControllerInterface {
         selectedFood = (selectedFood ?? []) + [food]
         state = .default
         foodCollectionViewController.reloadData()
+    }
+    
+    func closeVcWithProduct(_ product: Product) {
+        dismiss(animated: false) {
+            self.didSelectProduct?(product)
+        }
     }
 }
 
@@ -1177,6 +1213,23 @@ private extension AddFoodViewController {
         button.addTarget(self, action: #selector(didTapDoneButton), for: .touchUpInside)
         button.setTitle(R.string.localizable.addFoodDone(), for: .normal)
         button.titleLabel?.font = R.font.sfProDisplaySemibold(size: 18)
+        return button
+    }
+    
+    func getTitleLabelFromMealSearch() -> UILabel {
+        let label = UILabel()
+        label.font = R.font.sfProTextMedium(size: 20)
+        label.textColor = R.color.createMeal.basicPrimary()
+        label.isHidden = tabBarIsHidden ? false : true
+        return label
+    }
+    
+    func getBottomCloseButton() -> UIButton {
+        let button = UIButton()
+        button.setImage(R.image.foodViewing.topChevron(), for: .normal)
+        button.imageView?.tintColor = R.color.foodViewing.basicGrey()
+        button.addTarget(self, action: #selector(didTapCloseButton), for: .touchUpInside)
+        button.isHidden = tabBarIsHidden ? false : true
         return button
     }
 }

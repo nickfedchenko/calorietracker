@@ -27,6 +27,8 @@ protocol AddFoodPresenterInterface: AnyObject {
     func didTapCalorieButton(mealTime: MealTime)
     func stopSearchQuery()
     func updateCustomFood(food: Food)
+    func didTapCloseButton()
+    func closeVcToMeal(_ product: Product)
 }
 
 final class AddFoodPresenter {
@@ -331,5 +333,13 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
 
     func stopSearchQuery() {
         searchQueue.cancelAllOperations()
+    }
+    
+    func didTapCloseButton() {
+        router?.dismissVC()
+    }
+    
+    func closeVcToMeal(_ product: Product) {
+        view.closeVcWithProduct(product)
     }
 }

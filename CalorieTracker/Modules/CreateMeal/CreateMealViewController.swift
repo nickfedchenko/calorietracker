@@ -10,7 +10,8 @@ import Photos
 import UIKit
 
 protocol CreateMealViewControllerInterface: AnyObject {
-
+    func openAddFoodVC()
+    func setProducts(_ products: [Product])
 }
 
 class CreateMealViewController: UIViewController {
@@ -30,44 +31,51 @@ class CreateMealViewController: UIViewController {
     private lazy var addFoodButton: CustomAddButton = getAddFoodButton()
     private lazy var containerPhotoView: UIView = getContainerPhotoView()
     private lazy var mealPhoto: UIImageView = getMealPhoto()
-    private lazy var firstContainerCollectionView: UIView = getFirstContainerCollectionView()
-    private lazy var secondContainerCollectionView: UIView = getSecondContainerCollectionView()
-    private lazy var collectionView: UICollectionView = getCollectionView()
+    private lazy var firstContainerTableView: UIView = getFirstContainerTableView()
+    private lazy var secondContainerTableView: UIView = getSecondContainerTableView()
+    private lazy var tableView: UITableView = getTableView()
 
     private let placeholderAttributes = [
         NSAttributedString.Key.foregroundColor: R.color.grayBasicGray(),
         .font: R.font.sfProTextMedium(size: 17)
     ].mapValues { $0 as Any }
     
-    private lazy var collectionViewHeightConstraint = firstContainerCollectionView
-        .heightAnchor.constraint(
-            equalToConstant: containerViewHeight
-        )
-
-    private let cellHeight: CGFloat = 57
-    private var cellCount: Int = 10
-    private lazy var collectionViewHeight: CGFloat = CGFloat(cellCount) * cellHeight
-    private lazy var containerViewHeight: CGFloat = collectionViewHeight + 20
-    private var collectionViewHeightOffset: CGFloat = 445
-    private var keyboardHeight: CGFloat?
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupView()
-        addSubviews()
-        setupConstraints()
-        setupKeyboardManager()
-    }
+    private var searchRequest: String?
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        registerNotifications()
-    }
+    private var products: [Product] = []
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        updateCollectionViewHeight()
-        updateContentViewHeight()
+    private lazy var tableViewHeightConstraint = firstContainerTableView
+           .heightAnchor.constraint(
+               equalToConstant: containerViewHeight
+           )
+
+       private let cellHeight: CGFloat = 57
+       private var cellCount: Int = 0
+       private lazy var tableViewHeight: CGFloat = CGFloat(cellCount) * cellHeight
+       private lazy var containerViewHeight: CGFloat = tableViewHeight + 20
+       private var tableViewHeightOffset: CGFloat = 445
+       private var keyboardHeight: CGFloat?
+
+       override func viewWillAppear(_ animated: Bool) {
+           super.viewWillAppear(animated)
+           didChangeProducts()
+           setupView()
+           addSubviews()
+           setupConstraints()
+           descriptionForm.textField.becomeFirstResponder()
+           setupKeyboardManager()
+           registerNotifications()
+           updateTableViewHeight()
+           updateContentViewHeight()
+       }
+       
+    func didChangeProducts() {
+        DispatchQueue.main.async {
+            self.cellCount = self.products.count
+            self.tableViewHeight = CGFloat(self.cellCount) * self.cellHeight
+            self.containerViewHeight = self.tableViewHeight + 20
+            self.updateTableViewHeight()
+        }
     }
     
     private func setupView() {
@@ -86,9 +94,9 @@ class CreateMealViewController: UIViewController {
         contentView.addSubviews(
             descriptionLabel,
             descriptionForm,
-            firstContainerCollectionView,
-            secondContainerCollectionView,
-            collectionView,
+            firstContainerTableView,
+            secondContainerTableView,
+            tableView,
             headerView,
             titleHeaderLabel,
             closeButton,
@@ -103,38 +111,38 @@ class CreateMealViewController: UIViewController {
  
     // swiftlint:disable:next function_body_length
     private func setupConstraints() {
-        scrollView.snp.makeConstraints { make in
+        scrollView.snp.remakeConstraints { make in
             make.edges.equalTo(view)
         }
 
-        contentView.snp.makeConstraints { make in
+        contentView.snp.remakeConstraints { make in
             make.top.equalTo(scrollView).offset(-scrollView.adjustedContentInset.top)
             make.left.right.equalTo(view)
             make.width.equalTo(scrollView)
             make.bottom.equalTo(addFoodButton.snp.bottom).offset(20)
         }
 
-        closeButton.snp.makeConstraints { make in
+        closeButton.snp.remakeConstraints { make in
             make.top.equalTo(view).inset(52)
             make.leading.equalTo(view).inset(25)
             make.width.height.equalTo(30)
         }
 
-        addPhotoButton.snp.makeConstraints { make in
+        addPhotoButton.snp.remakeConstraints { make in
             make.top.equalTo(view).inset(56)
             make.trailing.equalTo(view).inset(25)
             make.width.equalTo(30)
             make.height.equalTo(22)
         }
 
-        containerPhotoView.snp.makeConstraints { make in
+        containerPhotoView.snp.remakeConstraints { make in
             make.height.equalTo(40)
             make.width.equalTo(60)
             make.top.equalTo(view).offset(47)
             make.trailing.equalTo(view).offset(-20)
         }
 
-        mealPhoto.snp.makeConstraints { make in
+        mealPhoto.snp.remakeConstraints { make in
             make.edges.equalTo(containerPhotoView)
         }
 
@@ -143,57 +151,59 @@ class CreateMealViewController: UIViewController {
             make.leading.trailing.equalTo(contentView).inset(28)
         }
 
-        descriptionForm.snp.makeConstraints { make in
+        descriptionForm.snp.remakeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(36)
             make.height.equalTo(48)
             make.leading.trailing.equalTo(contentView).inset(20)
         }
 
-        descriptionLabel.snp.makeConstraints { make in
+        descriptionLabel.snp.remakeConstraints { make in
             make.leading.equalTo(contentView).inset(28)
             make.bottom.equalTo(descriptionForm.snp.top).offset(-4)
         }
 
-        firstContainerCollectionView.snp.makeConstraints { make in
+        firstContainerTableView.snp.remakeConstraints { make in
             make.top.equalTo(descriptionForm.snp.bottom).offset(20)
             make.leading.trailing.equalTo(contentView).inset(20)
             make.bottom.lessThanOrEqualTo(addFoodButton.snp.top).offset(-20)
         }
 
-        secondContainerCollectionView.snp.makeConstraints { make in
-            make.edges.equalTo(firstContainerCollectionView)
-            make.height.equalTo(collectionViewHeight)
+        secondContainerTableView.snp.remakeConstraints { make in
+            make.edges.equalTo(firstContainerTableView)
+            make.height.equalTo(tableViewHeight)
         }
 
-        collectionView.snp.makeConstraints { make in
-            make.edges.equalTo(secondContainerCollectionView)
+        tableView.snp.remakeConstraints { make in
+            make.edges.equalTo(secondContainerTableView)
         }
 
-        headerView.snp.makeConstraints { make in
+        headerView.snp.remakeConstraints { make in
             make.top.equalTo(view)
             make.leading.trailing.equalTo(contentView)
             make.height.equalTo(95)
         }
         
-        titleHeaderLabel.snp.makeConstraints { make in
+        titleHeaderLabel.snp.remakeConstraints { make in
             make.centerX.equalTo(headerView)
             make.top.equalTo(headerView).offset(58)
             make.bottom.equalTo(headerView).offset(-13)
         }
 
-        saveButton.snp.makeConstraints { make in
+        saveButton.snp.remakeConstraints { make in
             make.leading.trailing.equalTo(contentView).inset(20)
             make.bottom.equalTo(contentView).offset(-88)
+            make.height.equalTo(64)
         }
 
-        addFoodButton.snp.makeConstraints { make in
-            make.top.greaterThanOrEqualTo(descriptionForm.snp.bottom).offset(collectionViewHeightOffset)
+        addFoodButton.snp.remakeConstraints { make in
+            make.top.greaterThanOrEqualTo(descriptionForm.snp.bottom).offset(tableViewHeightOffset)
             make.leading.trailing.equalTo(contentView).inset(20)
             make.bottom.equalTo(saveButton.snp.top).offset(-24)
+            make.height.equalTo(64)
         }
 
-        firstContainerCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        firstContainerCollectionView.heightAnchor.constraint(equalToConstant: containerViewHeight).isActive = true
+        firstContainerTableView.translatesAutoresizingMaskIntoConstraints = false
+        firstContainerTableView.heightAnchor.constraint(equalToConstant: containerViewHeight).isActive = true
     }
     
     private func updateContentViewHeight() {
@@ -308,18 +318,18 @@ class CreateMealViewController: UIViewController {
         let heightDiferenceOfView = view.frame.size.height - keyboardFrame.size.height
         let heightDiferenceOfButton = addFoodButton.frame.origin.y - heightDiferenceOfView
         let buttonFrameHeight = addFoodButton.frame.height + 19
-        var offsetPoint = heightDiferenceOfButton + buttonFrameHeight
+        let offsetPoint = heightDiferenceOfButton + buttonFrameHeight
 
-        collectionViewHeightOffset -= offsetPoint
+        tableViewHeightOffset -= offsetPoint
         addFoodButton.snp.remakeConstraints { make in
-            make.top.greaterThanOrEqualTo(descriptionForm.snp.bottom).offset(collectionViewHeightOffset)
+            make.top.greaterThanOrEqualTo(descriptionForm.snp.bottom).offset(tableViewHeightOffset)
             make.leading.trailing.equalTo(contentView).inset(20)
             make.bottom.equalTo(saveButton.snp.top).offset(-24)
             make.height.equalTo(64)
         }
 
         UIView.animate(withDuration: 0.6) {
-            self.collectionViewHeightConstraint.constant -= keyboardFrame.height + buttonFrameHeight
+            self.tableViewHeightConstraint.constant -= keyboardFrame.height + buttonFrameHeight
             self.animateScrollViewInsets(with: offsetPoint)
             self.view.layoutIfNeeded()
         }
@@ -353,8 +363,8 @@ class CreateMealViewController: UIViewController {
         return keyboardFrameValue.cgRectValue
     }
 
-    private func updateCollectionViewHeight() {
-        collectionViewHeightConstraint.constant = containerViewHeight
+    private func updateTableViewHeight() {
+        tableViewHeightConstraint.constant = containerViewHeight
     }
     
     @objc private func didTapCloseButton() {
@@ -366,11 +376,22 @@ class CreateMealViewController: UIViewController {
     }
     
     @objc private func didTapAddFoodButton() {
+//        cellCount += 1
+//        tableView.reloadData()
+        
+        openAddFoodVC()
     }
 }
 
 extension CreateMealViewController: CreateMealViewControllerInterface {
+    func openAddFoodVC() {
+        presenter?.didTapAddFood(with: searchRequest ?? "")
+    }
     
+    func setProducts(_ products: [Product]) {
+        self.products = products
+        tableView.reloadData()
+    }
 }
 
 // MARK: - Factory
@@ -559,7 +580,7 @@ extension CreateMealViewController {
         return imageView
     }
     
-    private func getFirstContainerCollectionView() -> UIView {
+    private func getFirstContainerTableView() -> UIView {
         let containerView = UIView()
         containerView.backgroundColor = .white
         containerView.layer.cornerRadius = 8
@@ -571,7 +592,7 @@ extension CreateMealViewController {
         return containerView
     }
     
-    private func getSecondContainerCollectionView() -> UIView {
+    private func getSecondContainerTableView() -> UIView {
         let containerView = UIView()
         containerView.backgroundColor = .white
         containerView.layer.cornerRadius = 8
@@ -583,22 +604,18 @@ extension CreateMealViewController {
         return containerView
     }
     
-    private func getCollectionView() -> UICollectionView {
-        let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: view.frame.width - 40, height: 57)
-        layout.minimumLineSpacing = 0
+    private func getTableView() -> UITableView {
+        let tableView = UITableView()
+        tableView.rowHeight = 57
+        tableView.separatorStyle = .none
+        tableView.backgroundColor = .white
+        tableView.layer.cornerRadius = 8
+        tableView.isScrollEnabled = false
+        tableView.dataSource = self
+        tableView.register(MealTableViewCell.self)
+        tableView.layoutIfNeeded()
         
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.layer.cornerRadius = 8
-        collectionView.backgroundColor = .white
-        collectionView.isScrollEnabled = false
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.showsVerticalScrollIndicator = false
-        collectionView.register(MealCollectionViewCell.self)
-        collectionView.layoutIfNeeded()
-
-        return collectionView
+        return tableView
     }
 
 }
@@ -638,12 +655,13 @@ extension CreateMealViewController: UITextFieldDelegate {
                    replacementString string: String) -> Bool {
         let currentText = textField.text as NSString?
         let replacedText = currentText?.replacingCharacters(in: range, with: string)
-        let resultText = replacedText ?? string
+        let resultText = replacedText ?? ""
     
         guard textField == descriptionForm.textField else { return true }
         saveButton.buttonImage = R.image.basicButton.saveDefault()
         saveButton.setState(!resultText.isEmpty && cellCount >= 2 ? .active : .inactive)
-        
+        searchRequest = resultText
+ print(cellCount)
         return true
     }
     
@@ -677,30 +695,40 @@ extension CreateMealViewController: UIImagePickerControllerDelegate, UINavigatio
     }
 }
 
-// MARK: - UICollectionViewDataSource, UICollectionViewDelegate
+// MARK: - UITableViewDataSource, UITableViewDelegate
 
-extension CreateMealViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+extension CreateMealViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return cellCount
     }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell: MealTableViewCell = tableView.dequeueReusableCell(for: indexPath)
         
-    func collectionView(
-        _ collectionView: UICollectionView,
-        cellForItemAt indexPath: IndexPath
-    ) -> UICollectionViewCell {
-        let cell: MealCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
-        
-        cell.configure(with: MealCellViewModel(
-            title: "Corn Flakes Original",
-            tag: "Basic Food",
-            kcal: "456",
-            weight: "12 g")
+        let product = products[indexPath.row]
+        let viewModel = MealCellViewModel(
+            title: product.title,
+            tag: "",
+            kcal: String(product.kcal),
+            weight: ""
         )
         
-        indexPath.item < cellCount - 1 ? cell.showSeparator() : cell.hideSeparator()
-
+        cell.configure(with: viewModel)
+        
+        indexPath.row < cellCount - 1 ? cell.showSeparator() : cell.hideSeparator()
+        
         return cell
     }
+    
+    func tableView(
+        _ tableView: UITableView,
+        commit editingStyle: UITableViewCell.EditingStyle,
+        forRowAt indexPath: IndexPath
+    ) {
+        guard editingStyle == .delete else { return }
+        products.remove(at: indexPath.row)
+        tableView.deleteRows(at: [indexPath], with: .fade)
+        tableView.reloadData()
+    }
+    
 }
-
-extension CreateMealViewController: UICollectionViewDelegate {}

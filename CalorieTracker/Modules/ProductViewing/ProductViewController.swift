@@ -17,11 +17,13 @@ final class ProductViewController: CTViewController {
     enum OpenController {
         case addFood
         case createProduct
+        case createMeal
     }
     
     var shouldClose: (() -> Void)?
     var presenter: ProductPresenterInterface?
     var keyboardManager: KeyboardManagerProtocol?
+    var productSelectionHandler: ((Product) -> Void)?
     
     // MARK: - Private
     
@@ -447,6 +449,13 @@ final class ProductViewController: CTViewController {
         }
     }
     
+    @objc private func didTapAddToNewMeal() {
+        Vibration.success.vibrate()
+        dismiss(animated: false) {
+            guard let product = self.presenter?.getProduct() else { return }
+            self.productSelectionHandler?(product)
+        }
+
     @objc private func hideServingSelector(sender: UITapGestureRecognizer) {
        showOverlayView(true)
 //        self?.selectedWeightType = type
@@ -532,12 +541,27 @@ extension ProductViewController {
     
     func getAddButton() -> BasicButtonView {
         let button = BasicButtonView(type: .add)
-        button.addTarget(
-            self,
-            action: #selector(didTapSaveButton),
-            for: .touchUpInside
-        )
-        return button
+        
+        switch openController {
+        case .addFood, .createProduct:
+            button.addTarget(
+                self,
+                action: #selector(didTapSaveButton),
+                for: .touchUpInside
+            )
+    
+            return button
+            
+        case .createMeal:
+            button.updateNode(type: .addToNewMeal)
+            button.addTarget(
+                self,
+                action: #selector(didTapAddToNewMeal),
+                for: .touchUpInside
+            )
+            
+            return button
+        }
     }
     
     func getSelectView() -> SelectView<UnitElement.ConvenientUnit> {

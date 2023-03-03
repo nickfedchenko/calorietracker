@@ -17,6 +17,7 @@ protocol AddFoodRouterInterface: AnyObject {
     func openDishViewController(_ dish: Dish)
     func openCreateMeal()
     func openCustomEntryViewController(mealTime: MealTime)
+    func dismissVC()
     
 }
 
@@ -25,6 +26,7 @@ class AddFoodRouter: NSObject {
     weak var presenter: AddFoodPresenterInterface?
     weak var viewController: UIViewController?
     var needUpdate: (() -> Void)?
+    var wasFromMealCreateVC: Bool?
     var needShowReviewController: (() -> Void)?
 
     static func setupModule(
@@ -32,7 +34,10 @@ class AddFoodRouter: NSObject {
         mealTime: MealTime = .breakfast,
         addFoodYCoordinate: CGFloat,
         needUpdate: (() -> Void)? = nil,
-        needShowReviewController: (() -> Void)? = nil
+        needShowReviewController: (() -> Void)? = nil,
+        tabBarIsHidden: Bool? = false,
+        searchRequest: String? = nil,
+        wasFromMealCreateVC: Bool? = false
     ) -> AddFoodViewController {
       
         let vc = AddFoodViewController(searchFieldYCoordinate: addFoodYCoordinate)
@@ -43,15 +48,26 @@ class AddFoodRouter: NSObject {
         vc.presenter = presenter
         vc.keyboardManager = keyboardManager
         vc.mealTime = mealTime
+        vc.tabBarIsHidden = tabBarIsHidden ?? false
+        vc.searchText = searchRequest
         router.presenter = presenter
         router.viewController = vc
         router.needUpdate = needUpdate
+        router.wasFromMealCreateVC = wasFromMealCreateVC
         router.needShowReviewController = needShowReviewController
         interactor.presenter = presenter
         defer {
             if let barcode = barcode {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                     presenter.scannerDidRecognized(barcode: barcode)
+                }
+            }
+        }
+        
+        defer {
+            if let searchRequest {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                    presenter.search(searchRequest, complition: nil)
                 }
             }
         }
@@ -71,13 +87,18 @@ extension AddFoodRouter: AddFoodRouterInterface {
     func openProductViewController(_ product: Product) {
         let productVC = ProductRouter.setupModule(
             product,
-            .addFood,
+            wasFromMealCreateVC == true ? .createMeal : .addFood,
             presenter?.getMealTime() ?? .breakfast
         ) { [weak self] food in
             self?.presenter?.updateSelectedFoodFromSearch(food: food)
         }
+        
+        productVC.productSelectionHandler = { [weak self] product in
+            self?.presenter?.closeVcToMeal(product)
+        }
+        
         productVC.modalPresentationStyle = .fullScreen
-        viewController?.navigationController?.present(productVC, animated: true)
+        viewController?.present(productVC, animated: true)
     }
     
     func openSelectedFoodCellsVC(
@@ -131,8 +152,13 @@ extension AddFoodRouter: AddFoodRouterInterface {
     }
     
     func openCreateMeal() {
-        let vc = CreateMealViewController()
-        vc.modalPresentationStyle = .overFullScreen
+        let vc = CreateMealRouter.setupModule()
+        vc.modalPresentationStyle = .fullScreen
         viewController?.present(vc, animated: true)
     }
+    
+    func dismissVC() {
+        viewController?.dismiss(animated: true, completion: nil)
+    }
+    
 }

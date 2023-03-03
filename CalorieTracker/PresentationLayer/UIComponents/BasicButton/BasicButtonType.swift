@@ -12,6 +12,7 @@ enum BasicButtonType {
     case save
     case apply
     case next
+    case addToNewMeal
     case custom(CustomType)
 }
 
