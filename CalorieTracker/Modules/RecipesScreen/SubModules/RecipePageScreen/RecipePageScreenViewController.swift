@@ -17,6 +17,7 @@ protocol RecipePageScreenViewControllerInterface: AnyObject {
         fatData: RecipeRoundProgressView.ProgressMode,
         proteinData: RecipeRoundProgressView.ProgressMode
     )
+    func getOpenController() -> RecipePageScreenViewController.OpenController
 }
 
 class RecipePageScreenViewController: CTViewController {
@@ -31,6 +32,13 @@ class RecipePageScreenViewController: CTViewController {
     private var tagsHeight: CGFloat {
         return 32
     }
+    
+    enum OpenController {
+        case addToDiary
+        case createMeal
+    }
+    
+    private let openController: OpenController
     
     private lazy var tagsCollection: UICollectionView = {
         let layout = AlignedCollectionViewFlowLayout(horizontalAlignment: .left, verticalAlignment: .top)
@@ -173,9 +181,34 @@ class RecipePageScreenViewController: CTViewController {
                 .foregroundColor: UIColor(hex: "B3EFDE")
             ]
         )
+        
         button.setAttributedTitle(attrTitle, for: .normal)
         return button
     }()
+    
+//    func getAddButton() -> BasicButtonView {
+//        let button = BasicButtonView(type: .add)
+//
+//        switch openController {
+//        case .addFood, .createProduct:
+//            button.addTarget(
+//                self,
+//                action: #selector(didTapSaveButton),
+//                for: .touchUpInside
+//            )
+//
+//            return button
+//
+//        case .createMeal:
+//            button.updateNode(type: .addToNewMeal)
+//            button.addTarget(
+//                self,
+//                action: #selector(didTapAddToNewMeal),
+//                for: .touchUpInside
+//            )
+//
+//            return button
+//
     
     private let describingLabel: UILabel = {
         let label = UILabel()
@@ -186,8 +219,9 @@ class RecipePageScreenViewController: CTViewController {
         return label
     }()
     
-    init(backButtonTitle: String) {
+    init(backButtonTitle: String, openController: OpenController?) {
         self.backButtonTitle = backButtonTitle
+        self.openController = openController ?? .addToDiary
         super.init(nibName: nil, bundle: nil)
         transitioningDelegate = self
     }
@@ -231,6 +265,20 @@ class RecipePageScreenViewController: CTViewController {
         view.backgroundColor = UIColor(hex: "E5F5F3")
         mainImageView.setIsFavorite(shouldSetFavorite: false)
         navigationController?.setNavigationBarHidden(true, animated: false)
+        switch openController {
+        case .addToDiary:
+            return
+        case .createMeal:
+            let attrTitle = NSAttributedString(
+                string: R.string.localizable.mealCreationAddToNewMeal().uppercased(),
+                attributes: [
+                    .font: R.font.sfProRoundedBold(size: 22) ?? .systemFont(ofSize: 22),
+                    .foregroundColor: UIColor(hex: "#E4FFF7")
+                ]
+            )
+            
+            addToDiary.setAttributedTitle(attrTitle, for: .normal)
+        }
     }
     
     private func setupKeyboardObservers() {
@@ -422,6 +470,10 @@ extension RecipePageScreenViewController: RecipePageScreenViewControllerInterfac
             guard index < ingredientViews.count else { return }
             ingredientViews[index].configure(with: model)
         }
+    }
+    
+    func getOpenController() -> OpenController {
+        return self.openController
     }
 }
 

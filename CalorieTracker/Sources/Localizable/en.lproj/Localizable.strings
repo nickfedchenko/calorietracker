@@ -525,6 +525,7 @@
 "mealCreation.addFoodButton" = "ADD FOOD";
 "mealCreation.accessToPhotosTitle" = "Access to Photos";
 "mealCreation.accessToPhotosMesage" = "Please grant access to your photos in Settings";
+"mealCreation.addToNewMeal" = "Add to new meal";
 
 "breakfast" = "BREAKFAST";
 "lunch" = "LUNCH";

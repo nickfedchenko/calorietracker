@@ -17,10 +17,9 @@ class CreateMealRouter: NSObject {
 
     weak var presenter: CreateMealPresenterInterface?
     weak var viewController: UIViewController?
-    var didSelectProduct: ((Product) -> Void)?
 
-    static func setupModule() -> CreateMealViewController {
-        let vc = CreateMealViewController()
+    static func setupModule(mealTime: MealTime) -> CreateMealViewController {
+        let vc = CreateMealViewController(mealTime: mealTime)
         let interactor = CreateMealInteractor()
         let router = CreateMealRouter()
         let presenter = CreateMealPresenter(interactor: interactor, router: router, view: vc)
@@ -41,14 +40,17 @@ extension CreateMealRouter: CreateMealRouterInterface {
             addFoodYCoordinate: UDM.mainScreenAddButtonOriginY,
             tabBarIsHidden: true,
             searchRequest: searchRequest,
-            wasFromMealCreateVC: true
+            wasFromMealCreateVC: true,
+            didSelectProduct: { [weak self] product in
+                self?.presenter?.addProduct(product)
+            },
+            didSelectDish: { [weak self] dish in
+                self?.presenter?.addDish(dish)
+            }
         )
-        
-        vc.didSelectProduct = { [weak self] product in
-            self?.presenter?.addProduct(product)
-        }
-        
+
         vc.modalPresentationStyle = .fullScreen
         viewController?.present(vc, animated: true)
     }
+
 }

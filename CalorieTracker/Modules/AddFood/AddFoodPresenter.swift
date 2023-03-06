@@ -28,7 +28,6 @@ protocol AddFoodPresenterInterface: AnyObject {
     func stopSearchQuery()
     func updateCustomFood(food: Food)
     func didTapCloseButton()
-    func closeVcToMeal(_ product: Product)
 }
 
 final class AddFoodPresenter {
@@ -305,7 +304,7 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
         case .recipe:
             return
         case .meal:
-            router?.openCreateMeal()
+            router?.openCreateMeal(mealTime: getMealTime() ?? .breakfast)
         }
         
         self.createFoodType = nil
@@ -337,9 +336,5 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
     
     func didTapCloseButton() {
         router?.dismissVC()
-    }
-    
-    func closeVcToMeal(_ product: Product) {
-        view.closeVcWithProduct(product)
     }
 }

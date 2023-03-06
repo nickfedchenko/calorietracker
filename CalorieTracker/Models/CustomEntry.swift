@@ -48,7 +48,6 @@ extension CustomEntry: Equatable {
     }
 }
 
-
 struct CustomEntryNutrients: Codable {
     let kcal: Double
     let carbs: Double

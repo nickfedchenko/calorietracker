@@ -21,6 +21,12 @@ class CustomAddButton: UIButton {
     var borderColorActive: UIColor?
     var bordeWidth: CGFloat?
     
+    var active: Bool = false {
+        didSet {
+            self.setState(active ? .active : .inactive)
+        }
+    }
+    
     private lazy var firstShadowLayer: CALayer = {
         let layer = CALayer()
         layer.name = "firstShadowLayer"
@@ -78,16 +84,7 @@ class CustomAddButton: UIButton {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    override func updateConstraints() {
-        super.updateConstraints()
         
-        self.snp.makeConstraints { make in
-            make.width.equalTo(374)
-            make.height.equalTo(64)
-        }
-    }
-    
     private func addLayers() {
         let layers = [firstShadowLayer, secondShadowLayer, gradientLayer]
         

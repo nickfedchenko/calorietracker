@@ -9,7 +9,7 @@ import Foundation
 
 struct MealCellViewModel {
     let title: String
-    let tag: String
+    let tag: String?
     let kcal: String
-    let weight: String
+    let weight: String?
 }

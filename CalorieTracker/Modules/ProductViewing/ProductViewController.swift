@@ -23,7 +23,6 @@ final class ProductViewController: CTViewController {
     var shouldClose: (() -> Void)?
     var presenter: ProductPresenterInterface?
     var keyboardManager: KeyboardManagerProtocol?
-    var productSelectionHandler: ((Product) -> Void)?
     
     // MARK: - Private
     
@@ -55,7 +54,6 @@ final class ProductViewController: CTViewController {
             didChangeAddNutrition()
         }
     }
-    
     
     private lazy var selectedWeightType: UnitElement.ConvenientUnit = presenter?
         .getProduct()?
@@ -451,196 +449,192 @@ final class ProductViewController: CTViewController {
     
     @objc private func didTapAddToNewMeal() {
         Vibration.success.vibrate()
-        dismiss(animated: false) {
-            guard let product = self.presenter?.getProduct() else { return }
-            self.productSelectionHandler?(product)
-        }
-
+        presenter?.didTapAddToNewMeal()
+    }
+    
     @objc private func hideServingSelector(sender: UITapGestureRecognizer) {
-       showOverlayView(true)
-//        self?.selectedWeightType = type
+        showOverlayView(true)
+        //        self?.selectedWeightType = type
         selectView.collapse()
     }
 }
-
-// MARK: - ViewController Interface
-
-extension ProductViewController: ProductViewControllerInterface {
-    func getOpenController() -> OpenController {
-        return self.openController
-    }
     
-    func viewControllerShouldClose() {
-        self.shouldClose?()
-    }
-}
-
-// MARK: - ScrollView Delegate
-
-extension ProductViewController: UIScrollViewDelegate {
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView.contentOffset.y > headerImageView.frame.maxY / 2.0 {
-            nutritionFactsView.animate(.opacity(1), 0.5)
-        } else {
-            nutritionFactsView.animate(.opacity(0.5), 0.5)
+    // MARK: - ViewController Interface
+    
+    extension ProductViewController: ProductViewControllerInterface {
+        func getOpenController() -> OpenController {
+            return self.openController
         }
-    }
-}
-
-// MARK: - Factory
-
-extension ProductViewController {
-    func getBottomCloseButton() -> UIButton {
-        let button = UIButton()
-        button.setImage(R.image.foodViewing.topChevron(), for: .normal)
-        button.imageView?.tintColor = R.color.foodViewing.basicGrey()
-        button.addTarget(self, action: #selector(didTapCloseButton), for: .touchUpInside)
-        return button
-    }
-    
-    func getMainScrollView() -> UIScrollView {
-        let view = UIScrollView()
-        view.backgroundColor = .clear
-        view.bounces = true
-        view.showsVerticalScrollIndicator = false
-        view.showsHorizontalScrollIndicator = false
-        view.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 30, right: 0)
-        view.delegate = self
-        return view
-    }
-    
-    func getTitleLabel() -> UILabel {
-        let label = UILabel()
-        label.font = R.font.sfProDisplayBold(size: 24)
-        label.textColor = R.color.foodViewing.basicPrimary()
-        label.numberOfLines = 0
-        return label
-    }
-    
-    func getValueTextField() -> InnerShadowTextField {
-        let textField = InnerShadowTextField()
-        textField.innerShadowColors = [R.color.foodViewing.basicSecondaryDark() ?? .clear]
-        textField.layer.borderWidth = 1
-        textField.layer.borderColor = R.color.foodViewing.basicSecondaryDark()?.cgColor
-        textField.layer.cornerCurve = .continuous
-        textField.layer.cornerRadius = 16
-        textField.layer.masksToBounds = true
-        textField.backgroundColor = .white
-        textField.textAlignment = .center
-        textField.keyboardType = .decimalPad
-        textField.keyboardAppearance = .light
-        textField.addTarget(
-            self,
-            action: #selector(didChangeTextFieldValue),
-            for: .editingChanged
-        )
-        textField.text = "100"
-        textField.delegate = self
-        return textField
-    }
-    
-    func getAddButton() -> BasicButtonView {
-        let button = BasicButtonView(type: .add)
         
-        switch openController {
-        case .addFood, .createProduct:
-            button.addTarget(
-                self,
-                action: #selector(didTapSaveButton),
-                for: .touchUpInside
-            )
+        func viewControllerShouldClose() {
+            self.shouldClose?()
+        }
+    }
     
+    // MARK: - ScrollView Delegate
+    
+    extension ProductViewController: UIScrollViewDelegate {
+        func scrollViewDidScroll(_ scrollView: UIScrollView) {
+            if scrollView.contentOffset.y > headerImageView.frame.maxY / 2.0 {
+                nutritionFactsView.animate(.opacity(1), 0.5)
+            } else {
+                nutritionFactsView.animate(.opacity(0.5), 0.5)
+            }
+        }
+    }
+    
+    // MARK: - Factory
+    
+    extension ProductViewController {
+        func getBottomCloseButton() -> UIButton {
+            let button = UIButton()
+            button.setImage(R.image.foodViewing.topChevron(), for: .normal)
+            button.imageView?.tintColor = R.color.foodViewing.basicGrey()
+            button.addTarget(self, action: #selector(didTapCloseButton), for: .touchUpInside)
             return button
-            
-        case .createMeal:
-            button.updateNode(type: .addToNewMeal)
-            button.addTarget(
+        }
+        
+        func getMainScrollView() -> UIScrollView {
+            let view = UIScrollView()
+            view.backgroundColor = .clear
+            view.bounces = true
+            view.showsVerticalScrollIndicator = false
+            view.showsHorizontalScrollIndicator = false
+            view.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 30, right: 0)
+            view.delegate = self
+            return view
+        }
+        
+        func getTitleLabel() -> UILabel {
+            let label = UILabel()
+            label.font = R.font.sfProDisplayBold(size: 24)
+            label.textColor = R.color.foodViewing.basicPrimary()
+            label.numberOfLines = 0
+            return label
+        }
+        
+        func getValueTextField() -> InnerShadowTextField {
+            let textField = InnerShadowTextField()
+            textField.innerShadowColors = [R.color.foodViewing.basicSecondaryDark() ?? .clear]
+            textField.layer.borderWidth = 1
+            textField.layer.borderColor = R.color.foodViewing.basicSecondaryDark()?.cgColor
+            textField.layer.cornerCurve = .continuous
+            textField.layer.cornerRadius = 16
+            textField.layer.masksToBounds = true
+            textField.backgroundColor = .white
+            textField.textAlignment = .center
+            textField.keyboardType = .decimalPad
+            textField.keyboardAppearance = .light
+            textField.addTarget(
                 self,
-                action: #selector(didTapAddToNewMeal),
-                for: .touchUpInside
+                action: #selector(didChangeTextFieldValue),
+                for: .editingChanged
             )
+            textField.text = "100"
+            textField.delegate = self
+            return textField
+        }
+        
+        func getAddButton() -> BasicButtonView {
+            let button = BasicButtonView(type: .add)
             
-            return button
+            switch openController {
+            case .addFood, .createProduct:
+                button.addTarget(
+                    self,
+                    action: #selector(didTapSaveButton),
+                    for: .touchUpInside
+                )
+                
+                return button
+                
+            case .createMeal:
+                button.updateNode(type: .addToNewMeal)
+                button.addTarget(
+                    self,
+                    action: #selector(didTapAddToNewMeal),
+                    for: .touchUpInside
+                )
+                
+                return button
+            }
         }
-    }
-    
-    func getSelectView() -> SelectView<UnitElement.ConvenientUnit> {
-        SelectView(presenter?.getProduct()?.units?.compactMap { $0.convenientUnit } ?? [
-            .gram(title: R.string.localizable.gram(), shortTitle: R.string.localizable.gram(), coefficient: 1)],
-                   shouldHideAtStartup: true
-        )
-    }
-    
-    func getOverlayView() -> UIView {
-        let view = UIView()
-        view.isHidden = true
-        view.layer.opacity = 0
-        view.backgroundColor = R.color.foodViewing.basicPrimary()?
-            .withAlphaComponent(0.25)
-        return view
-    }
-    
-    func getHeaderKeyboardView() -> ViewWithShadow {
-        let view = ViewWithShadow(Const.shadowsForKeyboard)
-        view.layer.cornerCurve = .continuous
-        view.layer.maskedCorners = .topCorners
-        view.layer.cornerRadius = 36
-        view.backgroundColor = R.color.keyboardLightColor()
-        return view
-    }
-}
-
-extension ProductViewController {
-    struct Const {
-        static let shadowsForKeyboard: [Shadow] = [
-            .init(
-                color: R.color.foodViewing.basicSecondaryDark()!,
-                opacity: 0.2,
-                offset: CGSize(width: 0, height: -2),
-                radius: 10,
-                spread: 0
-            ),
-            .init(
-                color: R.color.foodViewing.basicPrimary()!,
-                opacity: 0.7,
-                offset: CGSize(width: 0, height: -0.5),
-                radius: 2,
-                spread: 0
+        
+        func getSelectView() -> SelectView<UnitElement.ConvenientUnit> {
+            SelectView(presenter?.getProduct()?.units?.compactMap { $0.convenientUnit } ?? [
+                .gram(title: R.string.localizable.gram(), shortTitle: R.string.localizable.gram(), coefficient: 1)],
+                       shouldHideAtStartup: true
             )
-        ]
-    }
-}
-
-extension ProductViewController: UIViewControllerTransitioningDelegate {
-    func animationController(
-        forPresented presented: UIViewController,
-        presenting: UIViewController,
-        source: UIViewController
-    ) -> UIViewControllerAnimatedTransitioning? {
-       
-        if shouldUseCustomTransition {
-            return ModalSideTransitionAppearing()
-        } else {
-            return nil
+        }
+        
+        func getOverlayView() -> UIView {
+            let view = UIView()
+            view.isHidden = true
+            view.layer.opacity = 0
+            view.backgroundColor = R.color.foodViewing.basicPrimary()?
+                .withAlphaComponent(0.25)
+            return view
+        }
+        
+        func getHeaderKeyboardView() -> ViewWithShadow {
+            let view = ViewWithShadow(Const.shadowsForKeyboard)
+            view.layer.cornerCurve = .continuous
+            view.layer.maskedCorners = .topCorners
+            view.layer.cornerRadius = 36
+            view.backgroundColor = R.color.keyboardLightColor()
+            return view
         }
     }
     
-    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        if shouldUseCustomTransition {
-            return ModalSideTransitionDissapearing()
-        } else {
-            return nil
+    extension ProductViewController {
+        struct Const {
+            static let shadowsForKeyboard: [Shadow] = [
+                .init(
+                    color: R.color.foodViewing.basicSecondaryDark()!,
+                    opacity: 0.2,
+                    offset: CGSize(width: 0, height: -2),
+                    radius: 10
+                ),
+                .init(
+                    color: R.color.foodViewing.basicPrimary()!,
+                    opacity: 0.7,
+                    offset: CGSize(width: 0, height: -0.5),
+                    radius: 2
+                )
+            ]
         }
     }
-}
-
-extension ProductViewController: UITextFieldDelegate {
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        guard textField === valueTextField else { return }
-        textField.selectAll(textField)
+    
+    extension ProductViewController: UIViewControllerTransitioningDelegate {
+        func animationController(
+            forPresented presented: UIViewController,
+            presenting: UIViewController,
+            source: UIViewController
+        ) -> UIViewControllerAnimatedTransitioning? {
+            
+            if shouldUseCustomTransition {
+                return ModalSideTransitionAppearing()
+            } else {
+                return nil
+            }
+        }
+        
+        func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+            if shouldUseCustomTransition {
+                return ModalSideTransitionDissapearing()
+            } else {
+                return nil
+            }
+        }
     }
     
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        print("didEnd")
+    extension ProductViewController: UITextFieldDelegate {
+        func textFieldDidBeginEditing(_ textField: UITextField) {
+            guard textField === valueTextField else { return }
+            textField.selectAll(textField)
+        }
+        
+        func textFieldDidEndEditing(_ textField: UITextField) {
+            print("didEnd")
+        }
     }
-}

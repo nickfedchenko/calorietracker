@@ -15,7 +15,7 @@ protocol AddFoodRouterInterface: AnyObject {
     func openScanner()
     func openCreateProduct()
     func openDishViewController(_ dish: Dish)
-    func openCreateMeal()
+    func openCreateMeal(mealTime: MealTime)
     func openCustomEntryViewController(mealTime: MealTime)
     func dismissVC()
     
@@ -27,6 +27,8 @@ class AddFoodRouter: NSObject {
     weak var viewController: UIViewController?
     var needUpdate: (() -> Void)?
     var wasFromMealCreateVC: Bool?
+    var didSelectProduct: ((Product) -> Void)?
+    var didSelectDish: ((Dish) -> Void)?
     var needShowReviewController: (() -> Void)?
 
     static func setupModule(
@@ -37,7 +39,9 @@ class AddFoodRouter: NSObject {
         needShowReviewController: (() -> Void)? = nil,
         tabBarIsHidden: Bool? = false,
         searchRequest: String? = nil,
-        wasFromMealCreateVC: Bool? = false
+        wasFromMealCreateVC: Bool? = false,
+        didSelectProduct: ((Product) -> Void)? = nil,
+        didSelectDish: ((Dish) -> Void)? = nil
     ) -> AddFoodViewController {
       
         let vc = AddFoodViewController(searchFieldYCoordinate: addFoodYCoordinate)
@@ -55,6 +59,8 @@ class AddFoodRouter: NSObject {
         router.needUpdate = needUpdate
         router.wasFromMealCreateVC = wasFromMealCreateVC
         router.needShowReviewController = needShowReviewController
+        router.didSelectProduct = didSelectProduct
+        router.didSelectDish = didSelectDish
         interactor.presenter = presenter
         defer {
             if let barcode = barcode {
@@ -88,14 +94,16 @@ extension AddFoodRouter: AddFoodRouterInterface {
         let productVC = ProductRouter.setupModule(
             product,
             wasFromMealCreateVC == true ? .createMeal : .addFood,
-            presenter?.getMealTime() ?? .breakfast
-        ) { [weak self] food in
-            self?.presenter?.updateSelectedFoodFromSearch(food: food)
-        }
-        
-        productVC.productSelectionHandler = { [weak self] product in
-            self?.presenter?.closeVcToMeal(product)
-        }
+            presenter?.getMealTime() ?? .breakfast,
+            { [weak self] food in
+                self?.presenter?.updateSelectedFoodFromSearch(food: food)
+            },
+            { [weak self] product in
+                self?.viewController?.dismiss(animated: false) { [weak self] in
+                    self?.didSelectProduct?(product)
+                }
+            }
+        )
         
         productVC.modalPresentationStyle = .fullScreen
         viewController?.present(productVC, animated: true)
@@ -131,12 +139,20 @@ extension AddFoodRouter: AddFoodRouterInterface {
     func openDishViewController(_ dish: Dish) {
         let vc = RecipePageScreenRouter.setupModule(
             with: dish,
-            backButtonTitle: "Add food".localized
-        ) { [weak self] food in
-            self?.presenter?.updateSelectedFoodFromSearch(food: food)
-        }
+            backButtonTitle: "Add food".localized,
+            openController: wasFromMealCreateVC == true ? .createMeal : .addToDiary,
+            addToDiaryHandler: { [weak self] food in
+                self?.presenter?.updateSelectedFoodFromSearch(food: food)
+            },
+            dishSelectionHandler: { [weak self] dish in
+                self?.viewController?.dismiss(animated: false) { [weak self] in
+                    self?.didSelectDish?(dish)
+                }
+            }
+        )
+        
         vc.modalPresentationStyle = .fullScreen
-        viewController?.navigationController?.present(vc, animated: true)
+        viewController?.present(vc, animated: true)
     }
     
     func openCustomEntryViewController(mealTime: MealTime) {
@@ -151,8 +167,8 @@ extension AddFoodRouter: AddFoodRouterInterface {
         viewController?.navigationController?.present(vc, animated: true)
     }
     
-    func openCreateMeal() {
-        let vc = CreateMealRouter.setupModule()
+    func openCreateMeal(mealTime: MealTime) {
+        let vc = CreateMealRouter.setupModule(mealTime: mealTime)
         vc.modalPresentationStyle = .fullScreen
         viewController?.present(vc, animated: true)
     }

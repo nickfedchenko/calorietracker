@@ -16,7 +16,7 @@ protocol ProductPresenterInterface: AnyObject {
     func saveNutritionDaily(_ weight: Double, unit: UnitElement.ConvenientUnit?, unitCount: Double?)
     func createFoodData()
     func didTapFavoriteButton(_ flag: Bool)
-    
+    func didTapAddToNewMeal()
     var isFavoritesProduct: Bool? { get }
 }
 
@@ -87,5 +87,9 @@ extension ProductPresenter: ProductPresenterInterface {
                 self?.router?.addToDiary(.product(product, customAmount: nil, unit: nil))
             }
         }
+    }
+    
+    func didTapAddToNewMeal() {
+        router?.dismissToCreateMeal()
     }
 }

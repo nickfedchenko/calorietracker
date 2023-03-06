@@ -11,6 +11,7 @@ import UIKit
 protocol ProductRouterInterface: AnyObject {
     func closeViewController(_ animated: Bool, completion: (() -> Void)?)
     func addToDiary(_ food: Food)
+    func dismissToCreateMeal()
 }
 
 class ProductRouter: NSObject {
@@ -18,12 +19,14 @@ class ProductRouter: NSObject {
     weak var presenter: ProductPresenterInterface?
     weak var viewController: UIViewController?
     var addToDiaryHandler: ((Food) -> Void)?
+    var productSelectionHandler: ((Product) -> Void)?
 
     static func setupModule(
         _ product: Product,
         _ openController: ProductViewController.OpenController,
         _ mealTime: MealTime,
-        _ addToDiaryHandler: ((Food) -> Void)? = nil
+        _ addToDiaryHandler: ((Food) -> Void)? = nil,
+        _ productSelectionHandler: ((Product) -> Void)? = nil
     ) -> ProductViewController {
         let vc = ProductViewController(openController)
         let interactor = ProductInteractor()
@@ -38,6 +41,7 @@ class ProductRouter: NSObject {
         router.presenter = presenter
         router.viewController = vc
         router.addToDiaryHandler = addToDiaryHandler
+        router.productSelectionHandler = productSelectionHandler
         interactor.presenter = presenter
         interactor.product = product
         interactor.mealTime = mealTime
@@ -63,4 +67,10 @@ extension ProductRouter: ProductRouterInterface {
         addToDiaryHandler?(food)
     }
     
+    func dismissToCreateMeal() {
+        viewController?.dismiss(animated: false) { [weak self] in
+            guard let product = self?.presenter?.getProduct() else { return }
+            self?.productSelectionHandler?(product)
+        }
+    }
 }

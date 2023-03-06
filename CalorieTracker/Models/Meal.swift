@@ -54,3 +54,9 @@ extension Meal {
         )
     }
 }
+
+extension Meal: Equatable {
+    static func == (lhs: Meal, rhs: Meal) -> Bool {
+        return lhs.id == rhs.id
+    }
+}

@@ -11,6 +11,7 @@ import UIKit
 
 protocol RecipePageScreenRouterInterface: AnyObject {
     func dismiss()
+    func dismissToCreateMeal()
 }
 
 class RecipePageScreenRouter: NSObject {
@@ -18,13 +19,16 @@ class RecipePageScreenRouter: NSObject {
     weak var view: RecipePageScreenViewController?
     weak var presenter: RecipePageScreenPresenterInterface?
     var addToDiaryHandler: ((Food) -> Void)?
+    var dishSelectionHandler: ((Dish) -> Void)?
     
     static func setupModule(
         with dish: Dish,
         backButtonTitle: String,
-        addToDiaryHandler: ((Food) -> Void)? = nil
+        openController: RecipePageScreenViewController.OpenController? = .addToDiary,
+        addToDiaryHandler: ((Food) -> Void)? = nil,
+        dishSelectionHandler: ((Dish) -> Void)? = nil
     ) -> RecipePageScreenViewController {
-        let vc = RecipePageScreenViewController(backButtonTitle: backButtonTitle)
+        let vc = RecipePageScreenViewController(backButtonTitle: backButtonTitle, openController: openController)
         let interactor = RecipePageScreenInteractor(with: dish)
         let router = RecipePageScreenRouter()
         let presenter = RecipePageScreenPresenter(interactor: interactor, router: router, view: vc)
@@ -32,6 +36,7 @@ class RecipePageScreenRouter: NSObject {
         router.presenter = presenter
         router.view = vc
         router.addToDiaryHandler = addToDiaryHandler
+        router.dishSelectionHandler = dishSelectionHandler
         interactor.presenter = presenter
         return vc
     }
@@ -51,6 +56,13 @@ extension RecipePageScreenRouter: RecipePageScreenRouterInterface {
             view?.navigationController?.popViewController(animated: true)
         } else {
             view?.dismiss(animated: true)
+        }
+    }
+    
+    func dismissToCreateMeal() {
+        view?.dismiss(animated: false) { [weak self] in
+            guard let dish = self?.presenter?.getDish() else { return }
+            self?.dishSelectionHandler?(dish)
         }
     }
 }

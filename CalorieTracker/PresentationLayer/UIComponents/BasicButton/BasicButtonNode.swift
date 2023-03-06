@@ -223,7 +223,7 @@ extension BasicButtonNode {
         static let save = "SAVE"
         static let apply = "APPLY"
         static let next = "Next".localized
-        static let addToNewMeal = "ADD TO NEW MEAL"
+        static let addToNewMeal = R.string.localizable.mealCreationAddToNewMeal().uppercased()
     }
     
     struct Color {

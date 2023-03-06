@@ -17,7 +17,6 @@ protocol AddFoodViewControllerInterface: AnyObject {
     func updateSelectedFoodFromSearch(_ food: Food)
     func updateSelectedFoodFromCustomEntry(_ food: Food)
     func getMealTime() -> MealTime?
-    func closeVcWithProduct(_ product: Product)
 }
 
 final class AddFoodViewController: UIViewController {
@@ -138,7 +137,7 @@ final class AddFoodViewController: UIViewController {
     var mealTime: MealTime = .breakfast
     var tabBarIsHidden = false
     var searchText: String?
-    var didSelectProduct: ((Product) -> Void)?
+//    var didSelectProduct: ((Product) -> Void)?
     
     init(searchFieldYCoordinate: CGFloat) {
         self.searchFieldYCoordinate = searchFieldYCoordinate
@@ -1068,12 +1067,6 @@ extension AddFoodViewController: AddFoodViewControllerInterface {
         selectedFood = (selectedFood ?? []) + [food]
         state = .default
         foodCollectionViewController.reloadData()
-    }
-    
-    func closeVcWithProduct(_ product: Product) {
-        dismiss(animated: false) {
-            self.didSelectProduct?(product)
-        }
     }
 }
 

@@ -11,6 +11,9 @@ import Foundation
 protocol CreateMealPresenterInterface: AnyObject {
     func didTapAddFood(with searchRequest: String)
     func addProduct(_ product: Product)
+    func removeFood(at index: Int)
+    func addDish(_ dish: Dish)
+    func saveMeal()
 }
 
 class CreateMealPresenter {
@@ -19,12 +22,12 @@ class CreateMealPresenter {
     let router: CreateMealRouterInterface?
     let interactor: CreateMealInteractorInterface?
     
-    var products: [Product]? {
+    var foods: [Food]? {
         didSet {
-            view.setProducts(products ?? [])
+            view.setFoods(foods ?? [])
         }
     }
-
+    
     init(
         interactor: CreateMealInteractorInterface,
         router: CreateMealRouterInterface,
@@ -33,7 +36,7 @@ class CreateMealPresenter {
         self.view = view
         self.interactor = interactor
         self.router = router
-        self.products = []
+        self.foods = []
     }
 }
 
@@ -43,6 +46,33 @@ extension CreateMealPresenter: CreateMealPresenterInterface {
     }
     
     func addProduct(_ product: Product) {
-        products?.append(product)
+        foods?.append(.product(product, customAmount: nil, unit: nil))
+    }
+    
+    func addDish(_ dish: Dish) {
+        foods?.append(.dishes(dish, customAmount: nil))
+    }
+    
+    func addCustomEntry(_ customEntry: CustomEntry) {
+        foods?.append(.customEntry(customEntry))
+    }
+    
+    func removeFood(at index: Int) {
+        foods?.remove(at: index)
+    }
+    
+    func saveMeal() {
+        let customEntries = foods?.compactMap { food -> CustomEntry? in
+            if case .customEntry(let customEntry) = food {
+                return customEntry
+            }
+            return nil
+        } ?? []
+
+        FDS.shared.createMeal(
+            mealTime: view.getMealTime(),
+            dishes: foods?.dishes ?? [],
+            products: foods?.products ?? [],
+            customEntries: customEntries)
     }
 }

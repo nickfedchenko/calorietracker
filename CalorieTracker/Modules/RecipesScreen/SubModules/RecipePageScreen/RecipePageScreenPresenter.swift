@@ -138,7 +138,13 @@ extension RecipePageScreenPresenter: RecipePageScreenPresenterInterface {
 //        if shouldExplicitlyHandleAddingFood {
 //            interactor?.addSelectedPortionsToEaten()
 //        }
-        router?.dismiss()
+        
+        switch view.getOpenController() {
+        case .addToDiary:
+            router?.dismiss()
+        case .createMeal:
+            router?.dismissToCreateMeal()
+        }
     }
     
     func addToFavoritesTapped(_ flag: Bool) {

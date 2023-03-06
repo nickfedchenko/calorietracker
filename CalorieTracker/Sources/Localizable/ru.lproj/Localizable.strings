@@ -525,6 +525,7 @@
 "mealCreation.addFoodButton" = "ДОБАВИТЬ ЕДУ";
 "mealCreation.accessToPhotosTitle" = "Доступ к фотографиям";
 "mealCreation.accessToPhotosMesage" = "Предоставьте доступ к своим фотографиям в настройках";
+"mealCreation.addToNewMeal" = "Добавить к новой еде";
 
 "breakfast" = "ЗАВТРАК";
 "lunch" = "ОБЕД";

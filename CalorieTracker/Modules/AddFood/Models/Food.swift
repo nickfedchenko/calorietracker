@@ -100,8 +100,10 @@ extension Food: Equatable {
             return productLhs == productRhs
         case let (.dishes(dishLhs, _), .dishes(dishRhs, _)):
             return dishLhs == dishRhs
-        case let (.customEntry(customentryLhs), .customEntry(customEntryRhs)):
-            return customentryLhs == customEntryRhs
+        case let (.customEntry(customEntryLhs), .customEntry(customEntryRhs)):
+            return customEntryLhs == customEntryRhs
+        case let (.meal(mealLhs), .meal(mealRhs)):
+            return mealLhs == mealRhs
         default:
             return false
         }
