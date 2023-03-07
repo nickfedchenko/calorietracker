@@ -49,6 +49,8 @@ final class SliderLineView: UIView {
     private let activePartView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(hex: "E46840")
+        view.layer.cornerRadius = 2
+        view.layer.cornerCurve = .continuous
         return view
     }()
     
@@ -99,7 +101,7 @@ final class SliderLineView: UIView {
             make.centerY.equalToSuperview()
             make.leading.equalToSuperview()
             make.height.equalTo(4)
-            make.width.equalToSuperview().multipliedBy(currentFillRatio)
+            make.trailing.equalTo(thumb.snp.centerX)
         }
         
         thumb.snp.makeConstraints { make in
@@ -112,9 +114,11 @@ final class SliderLineView: UIView {
     func setProgress(_ progress: Double) {
         let width = bounds.width - 32
         let targetOffset = width * progress
-        thumb.snp.makeConstraints { make in
+        thumb.snp.updateConstraints { make in
             make.leading.equalToSuperview().offset(targetOffset)
         }
+        layoutIfNeeded()
+        adjustThumbPosition()
     }
     
     @objc private func sliderPositionChanged(sender: UIPanGestureRecognizer) {
@@ -125,9 +129,15 @@ final class SliderLineView: UIView {
             print(translation)
             guard thumb.center.x + translation > 0 && thumb.center.x + translation < bounds.width else { return }
             thumb.center.x += translation
+            thumb.snp.remakeConstraints { make in
+                make.width.height.equalTo(32)
+                make.centerY.equalToSuperview()
+                make.centerX.equalTo(thumb.center.x)
+            }
             sender.setTranslation(.zero, in: self)
         case .ended:
             sender.setTranslation(.zero, in: self)
+            adjustThumbPosition()
         default:
             return
         }
@@ -137,8 +147,56 @@ final class SliderLineView: UIView {
         let x = thumb.center.x
         switch target {
         case .activityLevel(numberOfAnchors: let anchorsCount, lowerBoundValue: _, upperBoundValue: _):
-            let step = bounds.width / anchorsCount - 1
-            let realPostionRatio = x / bounds.width
+            let step = (bounds.width) / (anchorsCount - 1)
+            let realPositionRatio = x
+            let ranges = {
+                var ranges: [ClosedRange<Double>] = []
+                for i in 0..<Int(anchorsCount) {
+                    let lowerBound = step * Double(i) - (step / 2)
+                    let upperBound = step * Double(i) + (step / 2)
+                    ranges.append(lowerBound...upperBound)
+                }
+                return ranges
+            }()
+            if let index = ranges.firstIndex(where: { $0.contains(realPositionRatio) }) {
+                let targetX = Double(index) * step
+                thumb.snp.remakeConstraints { make in
+                    make.width.height.equalTo(32)
+                    make.centerY.equalToSuperview()
+                    make.centerX.equalTo(targetX)
+                }
+                
+                UIView.animate(withDuration: 0.3) {
+                    self.layoutIfNeeded()
+                }
+                let ratio = targetX / bounds.width
+                progressEmmiter?(ratio)
+            }
+        case .weeklyGoal(numberOfAnchors: let anchorsCount, lowerBoundValue: _, upperBoundValue: _):
+            let step = (bounds.width) / (anchorsCount - 1)
+            let realPositionRatio = x
+            let ranges = {
+                var ranges: [ClosedRange<Double>] = []
+                for i in 0..<Int(anchorsCount) {
+                    let lowerBound = step * Double(i) - (step / 2)
+                    let upperBound = step * Double(i) + (step / 2)
+                    ranges.append(lowerBound...upperBound)
+                }
+                return ranges
+            }()
+            if let index = ranges.firstIndex(where: { $0.contains(realPositionRatio) }) {
+                let targetX = Double(index) * step
+                thumb.snp.remakeConstraints { make in
+                    make.width.height.equalTo(32)
+                    make.centerY.equalToSuperview()
+                    make.centerX.equalTo(targetX)
+                }
+                UIView.animate(withDuration: 0.3) {
+                    self.layoutIfNeeded()
+                }
+                let ratio = targetX / bounds.width
+                progressEmmiter?(ratio)
+            }
         }
     }
 }

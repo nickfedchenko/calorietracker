@@ -21,6 +21,7 @@ class NutritionGoalRouter: NSObject {
     
     weak var presenter: NutritionGoalPresenterInterface?
     weak var viewController: UIViewController?
+    var currentlyShowingAlert: CTAlertController?
     
     static func setupModule() -> NutritionGoalViewController {
         let vc = NutritionGoalViewController()
@@ -78,14 +79,22 @@ extension NutritionGoalRouter: NutritionGoalRouterInterface {
     }
     
     func openEnterWeeklyGoalVC() {
-        let vc = KeyboardEnterValueViewController(.standart("WEEKLY GOAL"))
+        let activitySelector = UniversalSliderSelectorController(
+            target: .weeklyGoal(numberOfAnchors: 21, lowerBoundValue: 0, upperBoundValue: 1)
+        )
+        viewController?.addChild(activitySelector)
+        activitySelector.willMove(toParent: viewController)
+        viewController?.view.addSubview(activitySelector.view!)
+        activitySelector.didMove(toParent: viewController)
         
-        vc.complition = { value in
-            WeightWidgetService.shared.setWeeklyGoal(BAMeasurement(value, .weight).value)
-            self.presenter?.updateCell(type: .weekly)
+        activitySelector.cancelAction = { [weak self] in
+            self?.removeChild(controller: activitySelector)
         }
         
-        viewController?.present(vc, animated: true)
+        activitySelector.applyAction = { [weak self] result in
+            self?.presenter?.didChange(value: result)
+            self?.removeChild(controller: activitySelector)
+        }
     }
     
     func openNutrientGoalsVC() {
@@ -97,17 +106,61 @@ extension NutritionGoalRouter: NutritionGoalRouterInterface {
     }
     
     func openCalorieGoalVC() {
-        let vc = CalorieGoalSettingsRouter.setupModule()
-        viewController?.navigationController?.pushViewController(vc, animated: true)
+//        let vc = CalorieGoalSettingsRouter.setupModule()
+//        viewController?.navigationController?.pushViewController(vc, animated: true)
+        let enterValueVc = KeyboardEnterValueViewController(.settingsKcal)
+        enterValueVc.complition = { [weak self] value in
+            guard Int(UDM.kcalGoal ?? 0) != Int(value) else {
+                return
+            }
+            let alert = CTAlertController(
+                type: .newCalorieGoal(
+                    newValue: value,
+                    buttonTypes: [
+                        .apply(action: { [weak self] in
+                            self?.saveManuallySetKcalTarget(value: value)
+                        }),
+                        .cancel(action: { [weak self] in
+                            self?.currentlyShowingAlert?.dismiss(animated: false)
+                        })
+                    ]
+                )
+            )
+            self?.currentlyShowingAlert = alert
+            alert.modalPresentationStyle = .overFullScreen
+            self?.viewController?.present(alert, animated: false)
+        }
+        viewController?.present(enterValueVc, animated: true)
     }
     
     func showActivityLevelSelector() {
         let activitySelector = UniversalSliderSelectorController(
-            target: .activityLevel(numberOfAnchors: 4, lowerBoundValue: 0, upperBoundValue: 1)
+            target: .activityLevel(numberOfAnchors: 4, lowerBoundValue: 1, upperBoundValue: 4)
         )
         viewController?.addChild(activitySelector)
         activitySelector.willMove(toParent: viewController)
         viewController?.view.addSubview(activitySelector.view!)
         activitySelector.didMove(toParent: viewController)
+        
+        activitySelector.cancelAction = { [weak self] in
+            self?.removeChild(controller: activitySelector)
+        }
+        
+        activitySelector.applyAction = { [weak self] result in
+            self?.presenter?.didChange(value: result)
+            self?.removeChild(controller: activitySelector)
+        }
+    }
+    
+    private func removeChild(controller: UIViewController) {
+        controller.didMove(toParent: nil)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            controller.view.removeFromSuperview()
+            controller.removeFromParent()
+        }
+    }
+    
+    func saveManuallySetKcalTarget(value: Double) {
+        
     }
 }

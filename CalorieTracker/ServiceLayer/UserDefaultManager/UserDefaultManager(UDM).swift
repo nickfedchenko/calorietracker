@@ -33,6 +33,7 @@ final class UDM {
         case mainScreenAddButtonOriginY
         case tempAddButtonImage
         case tempScannerImage
+        case tempActivityLevel
     }
     
     
@@ -373,6 +374,21 @@ final class UDM {
     static var activityLevel: ActivityLevel? {
         get {
             guard let data: Data = getValue(for: .activityLevel),
+                   let activityData = try? JSONDecoder().decode(ActivityLevel.self, from: data) else {
+                return nil
+            }
+            return activityData
+        }
+        
+        set {
+            let data = try? JSONEncoder().encode(newValue)
+            setValue(value: data, for: .activityLevel)
+        }
+    }
+    
+    static var tempActivityLevel: ActivityLevel? {
+        get {
+            guard let data: Data = getValue(for: .tempActivityLevel),
                    let activityData = try? JSONDecoder().decode(ActivityLevel.self, from: data) else {
                 return nil
             }

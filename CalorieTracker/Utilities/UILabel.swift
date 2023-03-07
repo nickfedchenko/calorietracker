@@ -54,12 +54,15 @@ extension UILabel {
         text: String?,
         coloredText: [String?],
         color: UIColor? = .red,
-        additionalAttributes: [NSAttributedString.Key: Any]?
+        additionalAttributes: [NSAttributedString.Key: Any]?,
+        coloredPartFont: UIFont?
     ) {
         let attributedString = NSMutableAttributedString(string: text!, attributes: additionalAttributes)
         for textToColor in coloredText {
             let range = (text! as NSString).range(of: textToColor!)
-            attributedString.setAttributes([.foregroundColor: color!], range: range)
+            attributedString.setAttributes(
+                [.foregroundColor: color!, .font: coloredPartFont ?? .systemFont(ofSize: 17)], range: range
+            )
         }
         self.attributedText = attributedString
     }

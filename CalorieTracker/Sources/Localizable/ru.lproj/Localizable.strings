@@ -773,3 +773,8 @@
 "measurement.floz" = "ж. унц";
 "measurement.g" = "г";
 "measurement.oz" = "унц";
+
+"universalSelector.currentSettingsByKcal" = "Основываясь на текущих настройках ваша цель по калориям ";
+"universalSelector.currentSettingsByKcalNew" = "Основываясь на текущих настройках ваша новая цель по калориям ";
+"universalSelector.new" = "новая";
+"enterkcal.headerview.description" = "Когда вы устананавливайте индивидуальную норму потребления - настройки уровня активности и недельной цели перестанут учитываться";

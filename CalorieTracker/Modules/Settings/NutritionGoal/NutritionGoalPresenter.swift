@@ -18,6 +18,7 @@ protocol NutritionGoalPresenterInterface: AnyObject {
     func getNutrientGoal() -> String?
     func didTapCell(_ type: GoalsSettingsCategoryType)
     func updateCell(type: GoalsSettingsCategoryType)
+    func didChange(value: SettingsCustomizableSliderView.CustomizableSliderViewResult)
 }
 
 class NutritionGoalPresenter {
@@ -35,6 +36,7 @@ class NutritionGoalPresenter {
 }
 
 extension NutritionGoalPresenter: NutritionGoalPresenterInterface {
+
     func getCalorieGoal() -> String? {
         guard let kcalGoal = UDM.kcalGoal else { return nil }
         return BAMeasurement(kcalGoal, .energy, isMetric: true).string
@@ -94,5 +96,22 @@ extension NutritionGoalPresenter: NutritionGoalPresenterInterface {
     
     func updateCell(type: GoalsSettingsCategoryType) {
         view.updateCell(type)
+    }
+    
+    func didChange(value: SettingsCustomizableSliderView.CustomizableSliderViewResult) {
+        switch value {
+        case .activityLevel(let selectedLevel, let kcalGoal):
+            UDM.activityLevel = selectedLevel
+            UDM.kcalGoal = kcalGoal
+            updateCell(type: .activityLevel)
+            updateCell(type: .calorie)
+        case .weeklyGoal(let selectedValueInKG, let kcalGoal):
+            if let selectedValueInKG = selectedValueInKG {
+                UDM.weeklyGoal = UDM.goalType == .loseWeight ? -selectedValueInKG : selectedValueInKG
+                UDM.kcalGoal = kcalGoal
+                updateCell(type: .weekly)
+                updateCell(type: .calorie)
+            }
+        }
     }
 }

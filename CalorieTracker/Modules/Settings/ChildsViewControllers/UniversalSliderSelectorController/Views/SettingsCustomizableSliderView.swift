@@ -56,8 +56,8 @@ final class AnchorPointsView: UIView {
         var step: CGFloat = 0
         switch target {
         case .weeklyGoal(let numberOfAnchors, _, _):
-           step = (bounds.width - offset) / (numberOfAnchors - 1)
-         
+            step = (bounds.width - offset) / (numberOfAnchors - 1)
+            
         case .activityLevel(let numberOfAnchors, _, _):
             step = (bounds.width - offset) / (numberOfAnchors - 1)
         }
@@ -69,25 +69,29 @@ final class AnchorPointsView: UIView {
                 make.leading.equalToSuperview().offset(CGFloat(index) * step)
             }
         }
-        
+        layoutIfNeeded()
         switch target {
         case .weeklyGoal(let numberOfAnchors, _, _):
-            let step = bounds.width / numberOfAnchors - 1
+            let step = bounds.width / (numberOfAnchors - 1)
             let stepRatio = step / bounds.width
             for (index, point) in controlPoints.enumerated() {
                 point.backgroundColor = UIColor(hex: "AFBEB8")
-                let currentStepRatio = step * CGFloat(index)
-                if (currentStepRatio - (step - 0.02)...currentStepRatio + (step - 0.02)).contains(progress) {
-                  point.backgroundColor = UIColor(hex: "FF764B")
+                let currentStepRatio = stepRatio * CGFloat(index)
+                if  (
+                    currentStepRatio - 0.02...currentStepRatio + 0.02
+                ).contains(progress) {
+                    point.backgroundColor = UIColor(hex: "FF764B")
                 }
             }
         case .activityLevel(let numberOfAnchors, _, _):
-            let step = bounds.width / numberOfAnchors - 1
+            let step = bounds.width / (numberOfAnchors - 1)
             let stepRatio = step / bounds.width
             for (index, point) in controlPoints.enumerated() {
                 point.backgroundColor = UIColor(hex: "AFBEB8")
-                let currentStepRatio = step * CGFloat(index)
-                if (currentStepRatio - (step - 0.02)...currentStepRatio + (step - 0.02)).contains(progress) {
+                let currentStepRatio = stepRatio * CGFloat(index)
+                if  (
+                    currentStepRatio - 0.02...currentStepRatio + 0.02
+                ).contains(progress) {
                     point.backgroundColor = UIColor(hex: "FF764B")
                 }
             }
@@ -95,23 +99,66 @@ final class AnchorPointsView: UIView {
     }
     
     func setProgress(_ progress: Double) {
-        
+        switch target {
+        case .weeklyGoal(let numberOfAnchors, _, _):
+            let step = bounds.width / (numberOfAnchors - 1)
+            let stepRatio = step / bounds.width
+            for (index, point) in controlPoints.enumerated() {
+                point.backgroundColor = UIColor(hex: "AFBEB8")
+                let currentStepRatio = stepRatio * CGFloat(index)
+                if  (
+                    currentStepRatio - 0.02...currentStepRatio + 0.02
+                ).contains(progress) {
+                    point.backgroundColor = UIColor(hex: "FF764B")
+                }
+            }
+        case .activityLevel(let numberOfAnchors, _, _):
+            let step = bounds.width / (numberOfAnchors - 1)
+            let stepRatio = step / bounds.width
+            for (index, point) in controlPoints.enumerated() {
+                point.backgroundColor = UIColor(hex: "AFBEB8")
+                let currentStepRatio = stepRatio * CGFloat(index)
+                if  (
+                    currentStepRatio - 0.02...currentStepRatio + 0.02
+                ).contains(progress) {
+                    point.backgroundColor = UIColor(hex: "FF764B")
+                }
+            }
+        }
     }
-    
 }
 
 final class SettingsCustomizableSliderView: ViewWithShadow {
-    var applyButtonTapped: (() -> Void)?
+    enum CustomizableSliderViewResult: Equatable {
+        case activityLevel(selectedLevel: ActivityLevel?, kcalGoal: Double)
+        case weeklyGoal(selectedValueInKG: Double?, kcalGoal: Double)
+    }
+    
+    private lazy var tempResult: CustomizableSliderViewResult = {
+        switch target {
+        case .activityLevel:
+            return .activityLevel(selectedLevel: UDM.activityLevel, kcalGoal: UDM.kcalGoal ?? 0)
+        case .weeklyGoal:
+            return .weeklyGoal(selectedValueInKG: UDM.weeklyGoal, kcalGoal: UDM.kcalGoal ?? 0)
+        }
+    }()
+    
+    var applyButtonTapped: ((CustomizableSliderViewResult) -> Void)?
     var cancelButtonTapped: (() -> Void)?
     
     private var target: UniversalSliderSelectionTargets
-
+    private var isFirstLaunch = true
     init(target: UniversalSliderSelectionTargets) {
         self.target = target
         super.init(Constants.shadows)
         layer.cornerRadius = 14
         layer.cornerCurve = .continuous
         setupSubviews()
+        setupUpdateHandlers()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     private lazy var leftTitle: UILabel = {
@@ -123,18 +170,18 @@ final class SettingsCustomizableSliderView: ViewWithShadow {
     private lazy var rightValueLabel: UILabel = {
         let label = UILabel()
         label.attributedText = {
-            switch target {
-            case .weeklyGoal:
+            switch tempResult {
+            case .weeklyGoal(let goal, _):
                 return NSAttributedString(
-                    string: UDM.weeklyGoal?.clean ?? "",
+                    string: goal?.clean ?? "",
                     attributes: [
                         .font: R.font.sfProTextSemibold(size: 20) ?? .systemFont(ofSize: 20),
                         .foregroundColor: UIColor(hex: "0C695E")
                     ]
                 )
-            case .activityLevel:
+            case .activityLevel(let level, _):
                 return NSAttributedString(
-                    string: UDM.activityLevel?.getTitle(.long) ?? "",
+                    string: level?.getTitle(.long) ?? "",
                     attributes: [
                         .font: R.font.sfProTextSemibold(size: 20) ?? .systemFont(ofSize: 20),
                         .foregroundColor: UIColor(hex: "0C695E")
@@ -145,11 +192,10 @@ final class SettingsCustomizableSliderView: ViewWithShadow {
         return label
     }()
     
-    private let descriptionView: UILabel = {
+    private lazy var descriptionView: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.text = "asfasdfkaskdfjwgjsdjflasjljasd"
-        label.numberOfLines = 0
+        label.numberOfLines = 3
         return label
     }()
     
@@ -178,16 +224,163 @@ final class SettingsCustomizableSliderView: ViewWithShadow {
     private lazy var controlPointsView: AnchorPointsView = AnchorPointsView(target: target)
     private lazy var slider = SliderLineView(target: target)
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    private func setupUpdateHandlers() {
+        slider.progressEmmiter = updateStatusByProgress(progress:)
     }
+    
+    private func updateDescriptionLabel() {
+        switch tempResult {
+        case .weeklyGoal(let value, let newKcalGoal):
+            if
+                let tempValue = value,
+                let storedValue = UDM.weeklyGoal {
+                if tempValue == storedValue {
+                    let string = R.string.localizable.universalSelectorCurrentSettingsByKcal()
+                    let calorieGoalString = BAMeasurement(UDM.kcalGoal ?? 0, .energy, isMetric: true).string
+                    let fullString = string + calorieGoalString
+                    descriptionView.attributedText = NSAttributedString(
+                        string: fullString,
+                        attributes: [
+                            .font: R.font.sfProTextRegular(size: 17) ?? .systemFont(ofSize: 17),
+                            .kern: -0.08,
+                            .foregroundColor: UIColor(hex: "192621")
+                        ]
+                    )
+                    descriptionView.changeFontFor(textPart: calorieGoalString, font: R.font.sfProTextSemibold(size: 17))
+                } else {
+                    
+                    let baseString = R.string.localizable.universalSelectorCurrentSettingsByKcalNew()
+                    let newString = R.string.localizable.universalSelectorNew()
+                    
+                    let calorieGoalString = BAMeasurement(
+                        newKcalGoal, .energy, isMetric: true
+                    ).string
+                    
+                    let fullString = baseString + calorieGoalString
+                    
+                    descriptionView.colorString(
+                        text: fullString,
+                        coloredText: [newString, calorieGoalString],
+                        color: UIColor(hex: "E46840"),
+                        additionalAttributes: [
+                            .font: R.font.sfProTextRegular(size: 17) ?? .systemFont(ofSize: 17),
+                            .kern: -0.08,
+                            .foregroundColor: UIColor(hex: "192621")
+                        ],
+                        coloredPartFont: R.font.sfProTextSemibold(size: 17)
+                    )
+                }
+            }
+        case .activityLevel(selectedLevel: let level, let kcalGoal):
+            if
+                let storedLevel = UDM.activityLevel,
+                let tempLevel = level,
+                storedLevel == level {
+                let string = R.string.localizable.universalSelectorCurrentSettingsByKcal()
+                let calorieGoalString = BAMeasurement(kcalGoal, .energy, isMetric: true).string
+                let fullString = string + calorieGoalString
+                descriptionView.attributedText = NSAttributedString(
+                    string: fullString,
+                    attributes: [
+                        .font: R.font.sfProTextRegular(size: 17) ?? .systemFont(ofSize: 17),
+                        .kern: -0.08,
+                        .foregroundColor: UIColor(hex: "192621")
+                    ]
+                )
+                descriptionView.changeFontFor(textPart: calorieGoalString, font: R.font.sfProTextSemibold(size: 17))
+            } else {
+                let baseString = R.string.localizable.universalSelectorCurrentSettingsByKcalNew()
+                let newString = R.string.localizable.universalSelectorNew()
+                
+                let calorieGoalString = BAMeasurement(
+                    kcalGoal, .energy, isMetric: true
+                ).string
+                
+                let fullString = baseString + calorieGoalString
+                
+                descriptionView.colorString(
+                    text: fullString,
+                    coloredText: [newString, calorieGoalString],
+                    color: UIColor(hex: "E46840"),
+                    additionalAttributes: [
+                        .font: R.font.sfProTextRegular(size: 17) ?? .systemFont(ofSize: 17),
+                        .kern: -0.08,
+                        .foregroundColor: UIColor(hex: "192621")
+                    ],
+                    coloredPartFont: R.font.sfProTextSemibold(size: 17)
+                )
+            }
+        }
+    }
+    
+    private func calculateNewTempResult(
+        forNew progress: Double
+    ) {
+        switch target {
+        case .weeklyGoal:
+            if let currentWeight = WeightWidgetService.shared.getStartWeight(),
+               let gender = UDM.userData?.sex,
+               let age = UDM.userData?.dateOfBirth.years(to: Date()),
+               let height = UDM.userData?.height,
+               let activity = UDM.activityLevel {
+                let normal = CalorieMeasurment.calculationRecommendedCalorieWithoutGoal(
+                    sex: gender,
+                    activity: activity,
+                    age: age,
+                    height: height,
+                    weight: currentWeight
+                )
+                
+                let targetCalorieDailyOffset = 1100 * progress
+                var newKcalGoal = UDM.goalType == .loseWeight
+                ? normal - targetCalorieDailyOffset
+                : normal + targetCalorieDailyOffset
+                tempResult = .weeklyGoal(selectedValueInKG: progress, kcalGoal: newKcalGoal)
+            }
+        case .activityLevel(_, let lowerBoundValue, let upperBoundValue):
+            let possibleValues: [ActivityLevel] = [.low, .moderate, .high, .veryHigh]
+            let targetIndex = Int((upperBoundValue - lowerBoundValue) * progress)
+            let newActivityLevel = possibleValues[targetIndex]
+            if let currentWeight = WeightWidgetService.shared.getStartWeight(),
+               let gender = UDM.userData?.sex,
+               let age = UDM.userData?.dateOfBirth.years(to: Date()),
+               let height = UDM.userData?.height {
+                let normal = CalorieMeasurment.calculationRecommendedCalorieWithoutGoal(
+                    sex: gender,
+                    activity: newActivityLevel,
+                    age: age,
+                    height: height,
+                    weight: currentWeight
+                )
+                var finalTargetKcal = normal
+                let correction = ((UDM.weeklyGoal ?? 0) * 7700) / 7
+                finalTargetKcal = normal + correction
+                tempResult = .activityLevel(selectedLevel: newActivityLevel, kcalGoal: finalTargetKcal )
+            }
+        }
+    }
+    
+    private func updateStatusByProgress(progress: CGFloat) {
+        calculateNewTempResult(forNew: progress)
+        controlPointsView.setProgress(progress)
+        updateValueLabel()
+        updateDescriptionLabel()
+        //        slider.setCurrentProgress(<#T##progress: Double##Double#>)
+        //        switch target {
+        //        case .weeklyGoal(let numberOfAnchors, let lowerBoundValue, let upperBoundValue):
+        //        case .activityLevel(let numberOfAnchors, let lowerBoundValue, let upperBoundValue):
+        //            controlPointsView.setProgress(progress)
+        //        }
+    }
+    
     
     func setInitialStates() {
         switch target {
         case .weeklyGoal(let numberOfAnchors, _, _):
             let weeklyGoal = abs(UDM.weeklyGoal ?? 0.1)
-            slider.setProgress(weeklyGoal)
             controlPointsView.setViewsInitially(at: weeklyGoal)
+            controlPointsView.setProgress(weeklyGoal)
+            slider.setProgress(weeklyGoal)
         case .activityLevel(let numberOfAnchors, _, _):
             switch UDM.activityLevel {
             case .low:
@@ -206,6 +399,37 @@ final class SettingsCustomizableSliderView: ViewWithShadow {
                 slider.setProgress(0)
                 controlPointsView.setViewsInitially(at: 0)
             }
+        }
+        updateDescriptionLabel()
+    }
+    
+    private func updateValueLabel() {
+        switch tempResult {
+        case .weeklyGoal(let progress, _):
+            var targetValue = progress ?? 0
+            if UDM.goalType == .loseWeight {
+                targetValue *= -1
+            }
+            let targetString = BAMeasurement(targetValue, .weight, isMetric: true).string
+            rightValueLabel.attributedText = NSAttributedString(
+                string: targetString,
+                attributes: [
+                    .font: R.font.sfProTextSemibold(size: 20) ?? .systemFont(ofSize: 20),
+                    .foregroundColor: UIColor(hex: "0C695E"),
+                    .kern: -0.41
+                ]
+            )
+        case .activityLevel(let activity, _):
+            //                let possibleValues: [ActivityLevel] = [.low, .moderate, .high, .veryHigh]
+            //                let targetIndex = Int((upperBoundValue - lowerBoundValue) * progress)
+            rightValueLabel.attributedText = NSAttributedString(
+                string: activity?.getTitle(.short) ?? "",
+                attributes: [
+                    .font: R.font.sfProTextSemibold(size: 20) ?? .systemFont(ofSize: 20),
+                    .foregroundColor: UIColor(hex: "0C695E"),
+                    .kern: -0.41
+                ]
+            )
         }
     }
     
@@ -249,25 +473,25 @@ final class SettingsCustomizableSliderView: ViewWithShadow {
         applyButton.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(24)
             make.height.equalTo(58)
-            make.top.equalTo(descriptionView.snp.bottom).offset(45)
+            make.top.equalTo(slider.snp.bottom).offset(162)
         }
         
         cancelButton.snp.makeConstraints { make in
             make.leading.trailing.equalTo(applyButton)
             make.top.equalTo(applyButton.snp.bottom).offset(8)
             make.bottom.equalToSuperview()
+            make.height.equalTo(58)
         }
     }
     
     @objc private func applyTapped(sender: BasicButtonView) {
-        applyButtonTapped?()
+        applyButtonTapped?(tempResult)
     }
     
     @objc private func cancelButtonTapped(sender: UIButton) {
         cancelButtonTapped?()
     }
 }
-
 
 extension SettingsCustomizableSliderView {
     enum Constants {

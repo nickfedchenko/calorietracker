@@ -69,6 +69,21 @@ struct CalorieMeasurment {
         return calorie * activity.factor * goal.factor
     }
     
+    static func calculationRecommendedCalorieWithoutGoal(
+        sex: UserSex,
+        activity: ActivityLevel,
+        age: Int,
+        height: Double,
+        weight: Double,
+        goal: GoalType = .maintainWeight
+    ) -> Double {
+        let calorie = sex.mainFactor
+        + sex.weightFactor * weight
+        + sex.heightFactor * height
+        - sex.ageFactor * Double(age)
+        return calorie * activity.factor
+    }
+    
     // swiftlint:disable:next function_parameter_count
     static func checkCalorie(
         kcal: Double,

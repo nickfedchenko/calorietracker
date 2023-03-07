@@ -671,7 +671,7 @@
 "settings.app.about" = "About KCALC";
 "settings.myGoals.title" = "My Goals";
 "settings.calorieGoal.title" = "Calorie Goal";
-"settings.calorieGoal.recalculate" = "RECALCULATE GOAL";
+"settings.calorieGoal.recalculate" = "RECALCULATE CALORIE GOAL";
 "settings.calorieGoal.description" = "Calorie Distribution";
 "settings.nutrientGoal.title" = "Nutrition Goal";
 "settings.nutrientGoal.reset" = "RESET";
@@ -772,3 +772,8 @@
 "measurement.floz" = "floz";
 "measurement.g" = "g";
 "measurement.oz" = "oz";
+
+"universalSelector.currentSettingsByKcal" = "Your calorie goal based on your current settings is ";
+"universalSelector.currentSettingsByKcalNew" = "Your new calorie goal based on your current settings is ";
+"universalSelector.new" = "new";
+"enterkcal.headerview.description" = "When you set your individual calorie intake, activity level settings and weekly goals will no longer work.";
