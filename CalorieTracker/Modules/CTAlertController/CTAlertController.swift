@@ -10,6 +10,7 @@ import UIKit
 final class CTAlertController: UIViewController {
     enum AlertType {
         case newCalorieGoal(newValue: Double, buttonTypes: [ButtonTypes])
+        case newTargetType(newValue: String, buttonTypes: [ButtonTypes])
     }
     
     enum ButtonTypes {
@@ -90,6 +91,47 @@ final class CTAlertController: UIViewController {
                     stackView.addArrangedSubview(button)
                 }
             }
+        case .newTargetType(newValue: let newValue, buttonTypes: let buttonTypes):
+            buttonTypes.forEach {
+                switch $0 {
+                case .apply(action: let action):
+                    let button = BasicButtonView(type: .apply)
+                    button.addAction(
+                        UIAction { _ in
+                            action?()
+                        },
+                        for: .touchUpInside
+                    )
+                    button.snp.makeConstraints { make in
+                        make.height.equalTo(58)
+                    }
+                    self.buttons.append(button)
+                    stackView.addArrangedSubview(button)
+                case .cancel(action: let action):
+                    let button = UIButton(type: .system)
+                    button.setAttributedTitle(
+                        NSAttributedString(
+                            string: R.string.localizable.cancel().uppercased(),
+                            attributes: [
+                                .font: R.font.sfProRoundedBold(size: 20) ?? .systemFont(ofSize: 20),
+                                .foregroundColor: UIColor(hex: "0C695E")
+                            ]
+                        ) ,
+                        for: .normal
+                    )
+                    button.addAction(
+                        UIAction { _ in
+                            action?()
+                        },
+                        for: .touchUpInside
+                    )
+                    button.snp.makeConstraints { make in
+                        make.height.equalTo(58)
+                    }
+                    self.buttons.append(button)
+                    stackView.addArrangedSubview(button)
+                }
+            }
         }
         return stackView
     }()
@@ -107,6 +149,8 @@ final class CTAlertController: UIViewController {
         switch alertType {
         case .newCalorieGoal(newValue: _, buttonTypes: let types):
             self.buttonTypes = types
+        case .newTargetType(newValue: let newValue, buttonTypes: let buttonTypes):
+            self.buttonTypes = buttonTypes
         }
         super.init(nibName: nil, bundle: nil)
     }
@@ -126,7 +170,7 @@ final class CTAlertController: UIViewController {
             make.leading.trailing.equalToSuperview().inset(20)
             make.centerY.equalToSuperview()
         }
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: 0.2) {
             self.view.alpha = 1
             self.view.layoutIfNeeded()
         }
@@ -138,7 +182,7 @@ final class CTAlertController: UIViewController {
             make.top.equalTo(view.snp.bottom)
         }
         
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: 0.2) {
             self.view.alpha = 0
             self.view.layoutIfNeeded()
         } completion: { _ in
@@ -185,6 +229,8 @@ final class CTAlertController: UIViewController {
         switch alertType {
         case .newCalorieGoal:
             return R.string.localizable.settingsCalorieGoalRecalculate()
+        case .newTargetType(newValue: let newValue, buttonTypes: _):
+            return R.string.localizable.alertYourGoalTitle()
         }
     }
     
@@ -200,6 +246,19 @@ final class CTAlertController: UIViewController {
             descriptionLabel.colorString(
                 text: mainString,
                 coloredText: [newString, valueString],
+                color: UIColor(hex: "E46840"),
+                additionalAttributes: [
+                    .font: R.font.sfProTextRegular(size: 17) ?? .systemFont(ofSize: 17),
+                    .foregroundColor: UIColor(hex: "192621"),
+                    .kern: -0.08
+                ],
+                coloredPartFont: R.font.sfProTextSemibold(size: 17)
+            )
+        case .newTargetType(newValue: let newValue, buttonTypes: _):
+            let mainString = R.string.localizable.alertWillBeChanged() + newValue
+            descriptionLabel.colorString(
+                text: mainString,
+                coloredText: [newValue],
                 color: UIColor(hex: "E46840"),
                 additionalAttributes: [
                     .font: R.font.sfProTextRegular(size: 17) ?? .systemFont(ofSize: 17),

@@ -39,7 +39,7 @@ class SafeMergePolicy: NSMergePolicy {
             for conflictObject in conflict.conflictingObjects {
                 let changedKeys = conflictObject.changedValues().keys
                 let keys = allKeys.filter { !changedKeys.contains($0) }
-                for key in keys where key == "foodData" {
+                for key in keys {
 //                    if key == "foodData" {
                         let value = databaseObject.value(forKey: key)
                         conflictObject.setValue(value, forKey: key)

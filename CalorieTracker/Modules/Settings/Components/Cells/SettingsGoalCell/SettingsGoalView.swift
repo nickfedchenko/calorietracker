@@ -36,6 +36,11 @@ final class SettingsGoalView: UIView {
         titleLabel.text = viewModel.title
         leftDescriptionLabel.text = viewModel.leftDescription ?? ""
         rightDescriptionLabel.text = viewModel.rightDescription ?? ""
+        if viewModel.rightDescription == R.string.localizable.settingsEmptyCellSet() {
+            rightDescriptionLabel.textColor = UIColor(hex: "AFBEB8")
+        } else {
+            rightDescriptionLabel.textColor = R.color.foodViewing.basicPrimary()
+        }
     }
     
     private func setupView() {

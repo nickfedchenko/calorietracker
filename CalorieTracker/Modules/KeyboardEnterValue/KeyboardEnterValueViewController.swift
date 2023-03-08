@@ -15,7 +15,7 @@ protocol KeyboardHeaderProtocol: UIView {
 
 extension KeyboardHeaderProtocol {
     func setTextFieldFirstResponder() {
-        guard let textField = subviews.first(where: { $0 is InnerShadowTextField }) else {
+        guard let textField = subviews.first?.subviews.first(where: { $0 is UITextField }) else {
             return
         }
      

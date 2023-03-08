@@ -300,10 +300,15 @@ extension FoodCellView.FoodViewModel {
     private init(_ product: Product, weight: Double?) {
         self.id = product.id
         self.title = product.title
-        self.tag = product.brand ?? ""
         self.image = product.isUserProduct ? product.photo : nil
         self.verified = !product.isUserProduct
-        
+        var tag = ""
+        if product.brand != nil {
+            tag = R.string.localizable.brandFood()
+        } else {
+            tag = R.string.localizable.baseFood()
+        }
+        self.tag = tag
         if let weight = weight {
             self.kcal = BAMeasurement(product.kcal / 100 * weight, .energy, isMetric: true).localized
             let description = BAMeasurement(weight, .serving, isMetric: true).string
@@ -330,7 +335,7 @@ extension FoodCellView.FoodViewModel {
     private init(_ dish: Dish, weight: Double?) {
         self.id = String(dish.id)
         self.title = dish.title
-        self.tag = dish.eatingTags.first?.title ?? ""
+        self.tag = R.string.localizable.recipe()
         self.image = nil
         self.verified = true
         

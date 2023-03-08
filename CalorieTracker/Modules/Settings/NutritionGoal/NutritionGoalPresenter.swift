@@ -56,17 +56,27 @@ extension NutritionGoalPresenter: NutritionGoalPresenterInterface {
     }
     
     func getGoalWeight() -> String? {
-        let goalWeight = UDM.weightGoal ?? 0
-        return BAMeasurement(goalWeight, .weight, isMetric: true).string
+        if let  goalWeight = UDM.weightGoal {
+            return BAMeasurement(goalWeight, .weight, isMetric: true).string
+        } else {
+           return R.string.localizable.settingsEmptyCellSet()
+        }
     }
     
     func getActivityLevel() -> String? {
-        UDM.activityLevel?.getTitle(.long)
+        if let activity = UDM.activityLevel {
+            return activity.getTitle(.long)
+        } else {
+            return R.string.localizable.settingsEmptyCellSet()
+        }
     }
     
     func getWeeklyGoal() -> String? {
-        let weeklyGoal = WeightWidgetService.shared.getWeeklyGoal() ?? 0
-        return BAMeasurement(weeklyGoal, .weight, isMetric: true).string
+        if let weeklyGoal = WeightWidgetService.shared.getWeeklyGoal() {
+            return BAMeasurement(weeklyGoal, .weight, isMetric: true).string
+        } else {
+            return R.string.localizable.settingsEmptyCellSet()
+        }
     }
     
     func didTapBackButton() {

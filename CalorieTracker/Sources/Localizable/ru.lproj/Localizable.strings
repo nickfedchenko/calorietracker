@@ -778,3 +778,8 @@
 "universalSelector.currentSettingsByKcalNew" = "Основываясь на текущих настройках ваша новая цель по калориям ";
 "universalSelector.new" = "новая";
 "enterkcal.headerview.description" = "Когда вы устананавливайте индивидуальную норму потребления - настройки уровня активности и недельной цели перестанут учитываться";
+"settings.emptyCell.set" = "Уст.";
+"brand.food" = "Брендированная еда";
+"base.food" = "Базовая еда";
+"alert.yourGoal.title" = "ВАША ЦЕЛЬ";
+"alert.willBeChanged" = "Будет изменена на\n";

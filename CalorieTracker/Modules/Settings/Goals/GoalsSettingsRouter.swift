@@ -20,7 +20,7 @@ class GoalsSettingsRouter: NSObject {
     
     weak var presenter: GoalsSettingsPresenterInterface?
     weak var viewController: UIViewController?
-    
+    private var currentlyShowingAlertController: CTAlertController?
     static func setupModule() -> GoalsSettingsViewController {
         let vc = GoalsSettingsViewController()
         let router = GoalsSettingsRouter()
@@ -68,9 +68,71 @@ extension GoalsSettingsRouter: GoalsSettingsRouterInterface {
     func openEnterGoalWeightVC() {
         let vc = KeyboardEnterValueViewController(.standart(R.string.localizable.settingsGoalWeight()))
         
-        vc.complition = { value in
-            WeightWidgetService.shared.setWeightGoal(value)
-            self.presenter?.updateCell(type: .weight)
+        vc.complition = { [weak self] value in
+            if abs((WeightWidgetService.shared.getStartWeight() ?? 0) - value) > 1 {
+                if value < (WeightWidgetService.shared.getStartWeight() ?? 0) && UDM.goalType != .loseWeight {
+                    let alert = CTAlertController(type: .newTargetType(
+                        newValue: GoalType.loseWeight.getTitle(.long) ?? "",
+                        buttonTypes: [
+                            .apply(action: { [weak self] in
+                                UDM.goalType = .loseWeight
+                                UDM.weightGoal = value
+                                self?.presenter?.updateCell(type: .goal)
+                                self?.presenter?.updateCell(type: .weight)
+                                self?.currentlyShowingAlertController?.dismiss(animated: false)
+                            }),
+                            .cancel(action: { [weak self] in
+                                self?.currentlyShowingAlertController?.dismiss(animated: false)
+                            })
+                        ])
+                    )
+                    self?.currentlyShowingAlertController = alert
+                    alert.modalPresentationStyle = .overFullScreen
+                    self?.viewController?.present(alert, animated: false)
+                } else if value > (WeightWidgetService.shared.getStartWeight() ?? 0) && UDM.goalType != .buildMuscle {
+                    let alert = CTAlertController(type: .newTargetType(
+                        newValue: GoalType.buildMuscle.getTitle(.long) ?? "",
+                        buttonTypes: [
+                            .apply(action: { [weak self] in
+                                UDM.goalType = .buildMuscle
+                                UDM.weightGoal = value
+                                self?.presenter?.updateCell(type: .weight)
+                                self?.presenter?.updateCell(type: .goal)
+                                self?.currentlyShowingAlertController?.dismiss(animated: false)
+                            }),
+                            .cancel(action: { [weak self] in
+                                self?.currentlyShowingAlertController?.dismiss(animated: false)
+                            })
+                        ])
+                    )
+                    self?.currentlyShowingAlertController = alert
+                    alert.modalPresentationStyle = .overFullScreen
+                    self?.viewController?.present(alert, animated: false)
+                } else {
+                    UDM.weightGoal = value
+                    self?.presenter?.updateCell(type: .weight)
+                }
+            } else if abs((WeightWidgetService.shared.getStartWeight() ?? 0) - value)
+                        <= 1 && UDM.goalType != .maintainWeight {
+                let alert = CTAlertController(type: .newTargetType(
+                    newValue: GoalType.maintainWeight.getTitle(.long) ?? "",
+                    buttonTypes: [
+                        .apply(action: { [weak self] in
+                            UDM.goalType = .maintainWeight
+                            UDM.weightGoal = value
+                            self?.presenter?.updateCell(type: .goal)
+                            self?.presenter?.updateCell(type: .weight)
+                            self?.currentlyShowingAlertController?.dismiss(animated: false)
+                        }),
+                        .cancel(action: { [weak self] in
+                            self?.currentlyShowingAlertController?.dismiss(animated: false)
+                        })
+                    ])
+                )
+                self?.currentlyShowingAlertController = alert
+                alert.modalPresentationStyle = .overFullScreen
+                self?.viewController?.present(alert, animated: false)
+            }
         }
         
         viewController?.present(vc, animated: true)

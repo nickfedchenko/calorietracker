@@ -777,3 +777,8 @@
 "universalSelector.currentSettingsByKcalNew" = "Your new calorie goal based on your current settings is ";
 "universalSelector.new" = "new";
 "enterkcal.headerview.description" = "When you set your individual calorie intake, activity level settings and weekly goals will no longer work.";
+"settings.emptyCell.set" = "Set";
+"brand.food" = "Brand food";
+"base.food" = "Base food";
+"alert.yourGoal.title" = "YOUR GOAL";
+"alert.willBeChanged" = "Will be changed to\n";

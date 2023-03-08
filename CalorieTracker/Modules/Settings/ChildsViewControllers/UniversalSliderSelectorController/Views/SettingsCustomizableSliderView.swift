@@ -107,7 +107,7 @@ final class AnchorPointsView: UIView {
                 point.backgroundColor = UIColor(hex: "AFBEB8")
                 let currentStepRatio = stepRatio * CGFloat(index)
                 if  (
-                    currentStepRatio - 0.02...currentStepRatio + 0.02
+                    currentStepRatio - (stepRatio / 2)...currentStepRatio + (stepRatio / 2)
                 ).contains(progress) {
                     point.backgroundColor = UIColor(hex: "FF764B")
                 }
@@ -137,9 +137,11 @@ final class SettingsCustomizableSliderView: ViewWithShadow {
     private lazy var tempResult: CustomizableSliderViewResult = {
         switch target {
         case .activityLevel:
-            return .activityLevel(selectedLevel: UDM.activityLevel, kcalGoal: UDM.kcalGoal ?? 0)
+            return .activityLevel(
+                selectedLevel: UDM.activityLevel ?? UDM.tempActivityLevel, kcalGoal: UDM.kcalGoal ?? 0
+            )
         case .weeklyGoal:
-            return .weeklyGoal(selectedValueInKG: UDM.weeklyGoal, kcalGoal: UDM.kcalGoal ?? 0)
+            return .weeklyGoal(selectedValueInKG: UDM.weeklyGoal ?? UDM.tempWeeklyGoal, kcalGoal: UDM.kcalGoal ?? 0)
         }
     }()
     
@@ -233,7 +235,7 @@ final class SettingsCustomizableSliderView: ViewWithShadow {
         case .weeklyGoal(let value, let newKcalGoal):
             if
                 let tempValue = value,
-                let storedValue = UDM.weeklyGoal {
+                let storedValue = UDM.weeklyGoal ?? UDM.tempWeeklyGoal {
                 if tempValue == storedValue {
                     let string = R.string.localizable.universalSelectorCurrentSettingsByKcal()
                     let calorieGoalString = BAMeasurement(UDM.kcalGoal ?? 0, .energy, isMetric: true).string
@@ -321,8 +323,8 @@ final class SettingsCustomizableSliderView: ViewWithShadow {
             if let currentWeight = WeightWidgetService.shared.getStartWeight(),
                let gender = UDM.userData?.sex,
                let age = UDM.userData?.dateOfBirth.years(to: Date()),
-               let height = UDM.userData?.height,
-               let activity = UDM.activityLevel {
+               let height = UDM.userData?.height {
+                let activity = UDM.activityLevel ?? UDM.tempActivityLevel ?? .low
                 let normal = CalorieMeasurment.calculationRecommendedCalorieWithoutGoal(
                     sex: gender,
                     activity: activity,
@@ -353,7 +355,7 @@ final class SettingsCustomizableSliderView: ViewWithShadow {
                     weight: currentWeight
                 )
                 var finalTargetKcal = normal
-                let correction = ((UDM.weeklyGoal ?? 0) * 7700) / 7
+                let correction = ((UDM.weeklyGoal ?? 0.1) * 7700) / 7
                 finalTargetKcal = normal + correction
                 tempResult = .activityLevel(selectedLevel: newActivityLevel, kcalGoal: finalTargetKcal )
             }
@@ -365,19 +367,13 @@ final class SettingsCustomizableSliderView: ViewWithShadow {
         controlPointsView.setProgress(progress)
         updateValueLabel()
         updateDescriptionLabel()
-        //        slider.setCurrentProgress(<#T##progress: Double##Double#>)
-        //        switch target {
-        //        case .weeklyGoal(let numberOfAnchors, let lowerBoundValue, let upperBoundValue):
-        //        case .activityLevel(let numberOfAnchors, let lowerBoundValue, let upperBoundValue):
-        //            controlPointsView.setProgress(progress)
-        //        }
     }
     
     
     func setInitialStates() {
         switch target {
         case .weeklyGoal(let numberOfAnchors, _, _):
-            let weeklyGoal = abs(UDM.weeklyGoal ?? 0.1)
+            let weeklyGoal = abs(UDM.weeklyGoal ?? UDM.tempWeeklyGoal ?? 0.1)
             controlPointsView.setViewsInitially(at: weeklyGoal)
             controlPointsView.setProgress(weeklyGoal)
             slider.setProgress(weeklyGoal)

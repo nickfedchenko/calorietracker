@@ -106,16 +106,16 @@ final class SliderLineView: UIView {
         
         thumb.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.leading.equalToSuperview().offset(-16)
+            make.centerX.equalTo(snp.leading)
         }
         
     }
     
     func setProgress(_ progress: Double) {
-        let width = bounds.width - 32
+        let width = bounds.width //- 32
         let targetOffset = width * progress
         thumb.snp.updateConstraints { make in
-            make.leading.equalToSuperview().offset(targetOffset)
+            make.centerX.equalTo(snp.leading).offset(targetOffset)
         }
         layoutIfNeeded()
         adjustThumbPosition()
@@ -185,7 +185,9 @@ final class SliderLineView: UIView {
                 return ranges
             }()
             if let index = ranges.firstIndex(where: { $0.contains(realPositionRatio) }) {
-                let targetX = Double(index) * step
+                let range = ranges[index]
+                var targetX = Double(index) * step
+                
                 thumb.snp.remakeConstraints { make in
                     make.width.height.equalTo(32)
                     make.centerY.equalToSuperview()

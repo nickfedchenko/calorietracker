@@ -92,7 +92,11 @@ extension NutritionGoalRouter: NutritionGoalRouterInterface {
         }
         
         activitySelector.applyAction = { [weak self] result in
+            if UDM.activityLevel == nil {
+                UDM.activityLevel = UDM.tempActivityLevel
+            }
             self?.presenter?.didChange(value: result)
+            self?.presenter?.updateCell(type: .activityLevel)
             self?.removeChild(controller: activitySelector)
         }
     }
@@ -119,6 +123,10 @@ extension NutritionGoalRouter: NutritionGoalRouterInterface {
                     buttonTypes: [
                         .apply(action: { [weak self] in
                             self?.saveManuallySetKcalTarget(value: value)
+                            self?.currentlyShowingAlert?.dismiss(animated: false)
+                            self?.presenter?.updateCell(type: .activityLevel)
+                            self?.presenter?.updateCell(type: .weekly)
+                            self?.presenter?.updateCell(type: .calorie)
                         }),
                         .cancel(action: { [weak self] in
                             self?.currentlyShowingAlert?.dismiss(animated: false)
@@ -147,7 +155,11 @@ extension NutritionGoalRouter: NutritionGoalRouterInterface {
         }
         
         activitySelector.applyAction = { [weak self] result in
+            if UDM.weeklyGoal == nil {
+                UDM.weeklyGoal = UDM.tempWeeklyGoal
+            }
             self?.presenter?.didChange(value: result)
+            self?.presenter?.updateCell(type: .weekly)
             self?.removeChild(controller: activitySelector)
         }
     }
@@ -161,6 +173,10 @@ extension NutritionGoalRouter: NutritionGoalRouterInterface {
     }
     
     func saveManuallySetKcalTarget(value: Double) {
-        
+        UDM.kcalGoal = value
+        UDM.tempActivityLevel = UDM.activityLevel
+        UDM.tempWeeklyGoal = UDM.weeklyGoal
+        UDM.activityLevel = nil
+        UDM.weeklyGoal = nil
     }
 }
