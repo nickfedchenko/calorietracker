@@ -782,3 +782,7 @@
 "base.food" = "Base food";
 "alert.yourGoal.title" = "YOUR GOAL";
 "alert.willBeChanged" = "Will be changed to\n";
+
+"calendar.topTitle.today" = "TODAY";
+"calendar.topTitle.yesterday" = "YESTERDAY";
+"calendar.logStreak" = " days\nlog streak";

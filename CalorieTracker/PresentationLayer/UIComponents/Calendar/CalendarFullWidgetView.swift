@@ -27,6 +27,17 @@ final class CalendarFullWidgetView: UIView, CTWidgetFullProtocol {
     private lazy var rightButton: UIButton = getRightButton()
     private lazy var headerView: UIView = getHeaderView()
     private lazy var dateFormatter: DateFormatter = getDateFormatter()
+    private lazy var dismissChevron: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(R.image.foodViewing.topChevronOriginal(), for: .normal)
+        button.addAction(
+            UIAction { [weak self] _ in
+                self?.didTapCloseButton?()
+        },
+            for: .touchUpInside
+        )
+        return button
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -61,7 +72,7 @@ final class CalendarFullWidgetView: UIView, CTWidgetFullProtocol {
     }
     
     private func setupConstraints() {
-        addSubviews(headerView, calendarView)
+        addSubviews(headerView, calendarView, dismissChevron)
         headerView.addSubviews(leftButton, dateLabel, rightButton)
         
         headerView.aspectRatio(0.147)
@@ -87,23 +98,45 @@ final class CalendarFullWidgetView: UIView, CTWidgetFullProtocol {
         
         calendarView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            make.bottom.greaterThanOrEqualToSuperview()
             make.top.equalTo(headerView.snp.bottom)
+        }
+        
+        dismissChevron.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.height.width.equalTo(64)
+            make.top.equalTo(calendarView.snp.bottom).offset(12)
+            make.bottom.equalToSuperview().inset(5)
         }
     }
     
     private func updateDateLabel(_ date: Date) {
-        dateLabel.text = dateFormatter.string(from: date)
+        let todayDate = Date()
+        switch abs(Calendar.current.dateComponents([.day], from: todayDate, to: date).day ?? 0) {
+        case 0:
+            dateLabel.text = R.string.localizable.calendarTopTitleToday()
+        case 1:
+            dateLabel.text = R.string.localizable.calendarTopTitleYesterday()
+        case 365...:
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "MMM, YYYY"
+            dateLabel.text = dateFormatter.string(from: date)
+        default:
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "MMMM"
+            dateLabel.text = dateFormatter.string(from: date)
+        }
     }
     
     @objc private func didTapLeftButton() {
         Vibration.rigid.vibrate()
-        calendarView.didSwipeRight()
+//        calendarView.didSwipeRight()
+        calendarView.didTapLeftButton()
     }
     
     @objc private func didTapRightButton() {
         Vibration.rigid.vibrate()
-        calendarView.didSwipeLeft()
+//        calendarView.didSwipeLeft()
+        calendarView.didTapRightButton()
     }
 }
 

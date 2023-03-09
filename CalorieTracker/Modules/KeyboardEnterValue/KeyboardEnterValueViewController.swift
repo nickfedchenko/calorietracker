@@ -208,14 +208,14 @@ extension KeyboardEnterValueViewController: KcalKeyboardHeaderOutput {
                 height: height,
                 weight: currentWeight
             )
-            var targetKCal = {
-                let weeklyGoal = UDM.weeklyGoal ?? 0
+            let targetKCal = {
+                let weeklyGoal = UDM.weeklyGoal ?? UDM.tempWeeklyGoal ?? 0
                 let targetDeficit = weeklyGoal * 1100
                 if UDM.goalType == .loseWeight {
-                    let targetKcalConsumption = normal - targetDeficit
+                    let targetKcalConsumption = normal - abs(targetDeficit)
                     return targetKcalConsumption
                 } else {
-                    let targetKcalConsumption = normal + targetDeficit
+                    let targetKcalConsumption = normal + abs(targetDeficit)
                     return targetKcalConsumption
                 }
             }()

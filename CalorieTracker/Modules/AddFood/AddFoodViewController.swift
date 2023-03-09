@@ -255,7 +255,9 @@ final class AddFoodViewController: UIViewController {
             self.isSelectedType = .search
 
             guard !text.isEmpty && text.count > 2 else {
-                self.state = .search(.recent)
+                if self.state != .search(.recent) {
+                    self.state = .search(.recent)
+                }
                 return
             }
             self.createTimer()
@@ -265,7 +267,9 @@ final class AddFoodViewController: UIViewController {
             guard let self = self else { return }
             guard !text.isEmpty && text.count > 2 else {
                 self.staticSearchTextField.text = text
-                self.state = .search(.recent)
+                if self.state != .search(.recent) {
+                    self.state = .search(.recent)
+                }
                 return
             }
             
@@ -283,7 +287,7 @@ final class AddFoodViewController: UIViewController {
         actualSearchTextField.didEndEditing = { text in
             guard !text.isEmpty else {
                 self.isSelectedType = self.previousSelectedType ?? .recent
-                if self.state == .search(.recent)  {
+                if self.state == .search(.recent) {
                     self.staticSearchTextField.endEditing(true)
                     return
                 } else {

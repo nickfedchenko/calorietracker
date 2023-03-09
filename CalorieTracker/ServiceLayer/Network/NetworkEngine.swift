@@ -134,6 +134,7 @@ final class NetworkEngine {
         request: RequestGenerator,
         completion: @escaping ((Result<T, ErrorDomain>) -> Void)
     ) {
+        let secondsNow = Date().timeIntervalSince1970
         AF.request(request.request)
             .validate()
             .responseDecodable(
@@ -145,6 +146,7 @@ final class NetworkEngine {
                     completion(.failure(.AFError(error: result.error)))
                     return
                 }
+                print("received data in \(Date().timeIntervalSince1970 - secondsNow) seconds")
                 completion(.success(data))
             }
     }

@@ -35,7 +35,11 @@ final class CalendarView: UIView {
     
     private lazy var days = generateDaysInMonth(for: baseDate)
     
-    private var selectedDate: Date
+    private var selectedDate: Date {
+        didSet {
+            collectionView.reloadData()
+        }
+    }
     private var calorieCorridorPartDays: [Day] = []
     private var calendar = Calendar.current
     private var selectedFlag = false
@@ -117,6 +121,30 @@ final class CalendarView: UIView {
     
     @objc func didSwipeRight() {
         baseDate = calculateDate(date: baseDate, value: -1)
+    }
+    
+    func didTapLeftButton() {
+        selectedDate = calculateDateByDayStride(date: selectedDate, value: -1)
+        didChangeDate?(selectedDate)
+        if selectedDate.day.day > baseDate.day.day && selectedDate.day.month != baseDate.day.month {
+            didSwipeLeft()
+        }
+    }
+    
+    func didTapRightButton() {
+        selectedDate = calculateDateByDayStride(date: selectedDate, value: 1)
+        if selectedDate.day.day < baseDate.day.day && selectedDate.day.month != baseDate.day.month {
+            didSwipeRight()
+        }
+        didChangeDate?(selectedDate)
+    }
+    
+    private func calculateDateByDayStride(date: Date, value: Int) -> Date {
+        return self.calendar.date(
+            byAdding: .day,
+            value: value,
+            to: date
+        ) ?? date
     }
     
     private func setupView() {

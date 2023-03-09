@@ -60,6 +60,7 @@ extension RecipePageScreenPresenter: RecipePageScreenPresenterInterface {
     func getModelsForIngredients() -> [RecipeIngredientModel] {
         interactor?.makeModelsForIngredients() ?? []
     }
+    
     func getModeForCarbs() -> RecipeRoundProgressView.ProgressMode {
         return .carbs(
             total: interactor?.getTotalCarbsGoal() ?? 0,

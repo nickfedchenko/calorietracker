@@ -259,7 +259,7 @@ extension KcalKeyboardHeaderView {
         ))
         button.defaultTitle = " \(R.string.localizable.settingsCalorieGoalRecalculate())"
         button.isPressTitle = " \(R.string.localizable.settingsCalorieGoalRecalculate())"
-//        button.addTarget(self, action: #selector(didTapResetButton), for: .touchUpInside)
+        button.addTarget(self, action: #selector(didTapResetButton), for: .touchUpInside)
         return button
     }
     
@@ -271,6 +271,31 @@ extension KcalKeyboardHeaderView {
         label.textAlignment = .left
         label.text = R.string.localizable.enterkcalHeaderviewDescription()
         return label
+    }
+    
+    @objc private func didTapResetButton() {
+        if let newValue = output?.didTapToRecalculate() {
+            let suffix = BAMeasurement.measurmentSuffix(.energy)
+            var newText = String(format: "%.0f", newValue)
+            var attrNewText = NSMutableAttributedString(
+                string: newText + " ",
+                attributes: [
+                    .font: R.font.sfProRoundedBold(size: 28) ?? .systemFont(ofSize: 28),
+                    .foregroundColor: UIColor(hex: "0C695E"),
+                    .kern: 0.38
+                ]
+            )
+            let placeholder = getAttributesPlaceholder(from: suffix)
+            attrNewText.append(placeholder)
+            textField.attributedText = attrNewText
+            if  let selectedRange = textField.selectedTextRange {
+                if let newPosition = textField.position(from: selectedRange.start, offset: -suffix.count - 1) {
+                    // set the new position
+                    print(newPosition)
+                    textField.selectedTextRange = textField.textRange(from: newPosition, to: newPosition)
+                }
+            }
+        }
     }
     
     @objc private func didChangeKcalValue(sender: UITextField) {

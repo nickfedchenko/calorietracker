@@ -52,19 +52,20 @@ final class WeightHeaderView: UIView {
         return view
     }()
     
-    private lazy var rightBackgroundView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .white
-        view.layer.cornerRadius = 16
-        view.layer.cornerCurve = .circular
-        view.layer.borderWidth = 1
-        view.layer.borderColor = R.color.weightWidget.backgroundLabelColor()?.cgColor
-        view.layer.shadowColor = UIColor.gray.cgColor
-        view.layer.shadowRadius = 10
-        view.layer.shadowOffset = CGSize(width: 0, height: 4)
-        view.layer.shadowOpacity = 0.2
-        return view
-    }()
+//    private lazy var rightBackgroundView: UIView = {
+//        let view = UIView()
+//        view.backgroundColor = .white
+//        view.layer.cornerRadius = 16
+//        view.layer.cornerCurve = .circular
+//        view.layer.borderWidth = 1
+//        view.layer.borderColor = R.color.weightWidget.backgroundLabelColor()?.cgColor
+//        view.layer.shadowColor = UIColor.gray.cgColor
+//        view.layer.shadowRadius = 10
+//        view.layer.shadowOffset = CGSize(width: 0, height: 4)
+//        view.layer.shadowOpacity = 0.2
+//        view.alpha = 0
+//        return view
+//    }()
     
     var model: Model? {
         didSet {
@@ -95,12 +96,13 @@ final class WeightHeaderView: UIView {
         }()
         
         middleBackgroundView.addSubview(middleLabel)
-        rightBackgroundView.addSubview(rightLabel)
+//        rightBackgroundView.addSubview(rightLabel)
         
         addSubviews([
             leftLabel,
             middleBackgroundView,
-            rightBackgroundView,
+            rightLabel,
+//            rightBackgroundView,
             leftImageView,
             rightImageView
         ])
@@ -110,7 +112,8 @@ final class WeightHeaderView: UIView {
         }
         
         rightLabel.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.trailing.top.bottom.equalToSuperview()
+            make.width.equalTo(75)
         }
         
         leftLabel.snp.makeConstraints { make in
@@ -118,10 +121,10 @@ final class WeightHeaderView: UIView {
             make.width.equalTo(75)
         }
         
-        rightBackgroundView.snp.makeConstraints { make in
-            make.trailing.top.bottom.equalToSuperview()
-            make.width.equalTo(75)
-        }
+//        rightBackgroundView.snp.makeConstraints { make in
+//            make.trailing.top.bottom.equalToSuperview()
+//            make.width.equalTo(75)
+//        }
         
         middleBackgroundView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
@@ -137,7 +140,7 @@ final class WeightHeaderView: UIView {
         
         rightImageView.snp.makeConstraints { make in
             make.leading.equalTo(middleBackgroundView.snp.trailing).offset(4)
-            make.trailing.equalTo(rightBackgroundView.snp.leading).offset(-4)
+            make.trailing.equalTo(rightLabel.snp.leading).offset(-4)
             make.centerY.equalToSuperview()
         }
     }

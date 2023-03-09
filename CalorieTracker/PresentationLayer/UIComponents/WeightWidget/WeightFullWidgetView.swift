@@ -35,6 +35,7 @@ final class WeightFullWidgetView: UIView, CTWidgetFullProtocol {
             R.image.weightWidget.settings(),
             for: .normal
         )
+        button.alpha = 0
         return button
     }()
     

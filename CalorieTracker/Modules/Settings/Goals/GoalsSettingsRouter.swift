@@ -134,7 +134,6 @@ extension GoalsSettingsRouter: GoalsSettingsRouterInterface {
                 self?.viewController?.present(alert, animated: false)
             }
         }
-        
         viewController?.present(vc, animated: true)
     }
     

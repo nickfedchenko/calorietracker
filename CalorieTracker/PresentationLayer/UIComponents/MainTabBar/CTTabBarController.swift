@@ -66,13 +66,14 @@ final class CTTabBarController: ASTabBarController {
     func hideTabBar() {
         blurView.snp.remakeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(116)
+            make.height.equalTo(0)
             make.top.equalTo(view.snp.bottom)
         }
         
         UIView.animate(withDuration: 0.3) {
             self.view.layoutIfNeeded()
         }
+        makeBlurTransperent()
         isTabBarHidden = true
     }
     
@@ -86,6 +87,7 @@ final class CTTabBarController: ASTabBarController {
             self.view.layoutIfNeeded()
         }
         isTabBarHidden = false
+        restoreBlur()
     }
     
     func makeBlurTransperent() {
@@ -120,7 +122,7 @@ final class CTTabBarController: ASTabBarController {
         
         blurView.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
-            make.height.equalTo(110.fitH)
+            make.height.equalTo(116.fitH)
         }
         
         footer.snp.makeConstraints { make in
@@ -141,6 +143,9 @@ final class CTTabBarController: ASTabBarController {
 
 extension CTTabBarController: CTTabBarDelegate {
     func tabSelected(at index: Int) {
+        if index != 2 {
+           makeBlurTransperent()
+        }
         selectedIndex = index
     }
 }

@@ -677,7 +677,7 @@
 "settings.nutrientGoal.reset" = "СБРОС";
 "settings.goal.goal" = "Цель";
 "settings.goal.startWeight" = "Начальный вес";
-"settings.goal.weight" = "Вес цели";
+"settings.goal.weight" = "Целевой вес";
 "settings.goal.activityLevel" = "Уровень активности";
 "settings.goal.weekly" = "Недельная цель";
 "settings.profile.title" = "Профиль";
@@ -783,3 +783,7 @@
 "base.food" = "Базовая еда";
 "alert.yourGoal.title" = "ВАША ЦЕЛЬ";
 "alert.willBeChanged" = "Будет изменена на\n";
+
+"calendar.topTitle.today" = "СЕГОДНЯ";
+"calendar.topTitle.yesterday" = "ВЧЕРА";
+"calendar.logStreak" = " дней\подряд";

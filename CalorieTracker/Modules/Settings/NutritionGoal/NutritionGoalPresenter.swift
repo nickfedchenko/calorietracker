@@ -72,7 +72,9 @@ extension NutritionGoalPresenter: NutritionGoalPresenterInterface {
     }
     
     func getWeeklyGoal() -> String? {
-        if let weeklyGoal = WeightWidgetService.shared.getWeeklyGoal() {
+        if let
+            weeklyGoal = WeightWidgetService.shared.getWeeklyGoal(),
+        weeklyGoal != 0 {
             return BAMeasurement(weeklyGoal, .weight, isMetric: true).string
         } else {
             return R.string.localizable.settingsEmptyCellSet()
