@@ -521,6 +521,7 @@
 "addFood.title.recent" = "recent searches";
 "addFood.customEntry" = "CUSTOM ENTRY";
 "addFood.mealCreation" = "MEAL CREATION";
+"addFood.editMeal" = "Edit Meal";
 
 "mealCreation.addFoodButton" = "ADD FOOD";
 "mealCreation.accessToPhotosTitle" = "Access to Photos";

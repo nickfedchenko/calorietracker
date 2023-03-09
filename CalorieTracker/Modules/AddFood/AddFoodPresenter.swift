@@ -28,6 +28,11 @@ protocol AddFoodPresenterInterface: AnyObject {
     func stopSearchQuery()
     func updateCustomFood(food: Food)
     func didTapCloseButton()
+    func getAllMeals() -> [Meal]
+    func openEditMeal(meal: Meal)
+    func realoadCollectionView()
+    func dismissToCreateMeal(with product: Product)
+    func dismissToCreateMeal(with dish: Dish)
 }
 
 final class AddFoodPresenter {
@@ -91,7 +96,7 @@ final class AddFoodPresenter {
             
             self.foods = products.foods + dishes.foods
         case .myMeals:
-            self.foods = FDS.shared.getAllMeals().foods
+            self.foods = getAllMeals().foods
         case .myRecipes:
             self.foods = []
         case .myFood:
@@ -336,5 +341,25 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
     
     func didTapCloseButton() {
         router?.dismissVC()
+    }
+    
+    func getAllMeals() -> [Meal] {
+        FDS.shared.getAllMeals()
+    }
+    
+    func openEditMeal(meal: Meal) {
+        router?.openEditMeal(meal: meal)
+    }
+    
+    func realoadCollectionView() {
+        view.realoadCollectionView()
+    }
+    
+    func dismissToCreateMeal(with product: Product) {
+        router?.dismissToCreateMeal(with: product)
+    }
+    
+    func dismissToCreateMeal(with dish: Dish) {
+        router?.dismissToCreateMeal(with: dish)
     }
 }

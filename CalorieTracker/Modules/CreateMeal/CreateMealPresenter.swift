@@ -13,7 +13,7 @@ protocol CreateMealPresenterInterface: AnyObject {
     func addProduct(_ product: Product)
     func removeFood(at index: Int)
     func addDish(_ dish: Dish)
-    func saveMeal()
+    func saveMeal(mealTime: MealTime, title: String, photoURL: URL)
 }
 
 class CreateMealPresenter {
@@ -61,18 +61,11 @@ extension CreateMealPresenter: CreateMealPresenterInterface {
         foods?.remove(at: index)
     }
     
-    func saveMeal() {
-        let customEntries = foods?.compactMap { food -> CustomEntry? in
-            if case .customEntry(let customEntry) = food {
-                return customEntry
-            }
-            return nil
-        } ?? []
-
+    func saveMeal(mealTime: MealTime, title: String, photoURL: URL) {
         FDS.shared.createMeal(
-            mealTime: view.getMealTime(),
-            dishes: foods?.dishes ?? [],
-            products: foods?.products ?? [],
-            customEntries: customEntries)
+            mealTime: mealTime,
+            title: title,
+            photoURL: photoURL.absoluteString,
+            foods: foods ?? [])
     }
 }

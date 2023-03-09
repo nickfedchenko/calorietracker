@@ -89,6 +89,8 @@
     <entity name="DomainMeal" representedClassName="DomainMeal" syncable="YES">
         <attribute name="id" attributeType="String"/>
         <attribute name="mealTime" attributeType="String"/>
+        <attribute name="photoURL" optional="YES" attributeType="String"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
         <relationship name="customEntries" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainCustomEntry" inverseName="meal" inverseEntity="DomainCustomEntry"/>
         <relationship name="dishes" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="DomainDish" inverseName="meal" inverseEntity="DomainDish"/>
         <relationship name="products" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="DomainProduct" inverseName="meal" inverseEntity="DomainProduct"/>

@@ -521,6 +521,7 @@
 "addFood.title.recent" = "недавние поиски";
 "addFood.customEntry" = "КАСТОМНЫЙ ВВОД";
 "addFood.mealCreation" = "СОЗДАНИЕ ПРИЕМА ПИЩИ";
+"addFood.editMeal" = "Изменить еду";
 
 "mealCreation.addFoodButton" = "ДОБАВИТЬ ЕДУ";
 "mealCreation.accessToPhotosTitle" = "Доступ к фотографиям";

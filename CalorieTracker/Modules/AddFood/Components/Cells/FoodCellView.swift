@@ -279,6 +279,8 @@ final class FoodCellView: UIView {
             }
         case .add:
             selectButton.setImage(R.image.addFood.recipesCell.add(), for: .normal)
+        case .addToMeal:
+            return
         }
     }
     
@@ -432,6 +434,4 @@ extension FoodCellView.FoodViewModel {
             return nil
         }
     }
-    
-    
 }

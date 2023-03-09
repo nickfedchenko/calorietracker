@@ -13,7 +13,6 @@ protocol CreateMealViewControllerInterface: AnyObject {
     func openAddFoodVC()
     func removeFood(at index: Int)
     func setFoods(_ foods: [Food])
-    func getMealTime() -> MealTime
 }
 
 class CreateMealViewController: UIViewController {
@@ -51,16 +50,26 @@ class CreateMealViewController: UIViewController {
     private var containerViewHeight: CGFloat = 0
     private var tableViewHeightOffset: CGFloat = 445
     private var keyboardHeight: CGFloat?
+    private var mealImageURL: URL?
     
     let mealTime: MealTime
+    let editedMeal: Meal?
+    var needToUpdate: (() -> Void)?
+    var isEditingState: Bool = false
     
-    init(mealTime: MealTime) {
+    init(mealTime: MealTime, editedMeal: Meal? = nil) {
         self.mealTime = mealTime
+        self.editedMeal = editedMeal
         super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        initEditedMeal()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -308,25 +317,25 @@ class CreateMealViewController: UIViewController {
             return
         }
         
-        var viewModel: MealCellViewModel
+        var viewModel: CreateMealCellViewModel
         
         switch foodType {
         case .product(let product, _, _):
-            viewModel = MealCellViewModel(
+            viewModel = CreateMealCellViewModel(
                 title: product.title,
                 tag: product.brand,
                 kcal: "\(Int(product.kcal.rounded()))",
                 weight: "\(Int(product.servings?.first?.weight?.rounded() ?? 0.0)) g"
             )
         case .dishes(let dish, _):
-            viewModel = MealCellViewModel(
+            viewModel = CreateMealCellViewModel(
                 title: dish.title,
                 tag: dish.eatingTags.first?.title,
                 kcal: "\(Int(dish.kcal.rounded()))",
                 weight: "\(Int(dish.dishWeight ?? 0.0)) g"
             )
         case .customEntry(let customEntry):
-            viewModel = MealCellViewModel(
+            viewModel = CreateMealCellViewModel(
                 title: customEntry.title,
                 tag: R.string.localizable.addFoodCustomEntry().capitalized,
                 kcal: "\(Int(customEntry.nutrients.kcal.rounded()))",
@@ -346,17 +355,73 @@ class CreateMealViewController: UIViewController {
     
     private func updateSaveButton() {
         saveButton.buttonImage = R.image.basicButton.saveDefault()
-        saveButton.active = cellCount >= 2
+        saveButton.active = cellCount >= 2 && descriptionForm.textField.text != ""
+    }
+    
+    private func addFoods(from meal: Meal) {
+        meal.products.foods.forEach { foods.append($0) }
+        meal.dishes.foods.forEach { foods.append($0) }
+        meal.customEntries.foods.forEach { foods.append($0) }
+    }
+    
+    private func initEditedMeal() {
+        guard let editedMeal else { return }
+        
+        descriptionForm.textField.text = editedMeal.title
+        
+        if let url = URL(string: editedMeal.photoURL),
+           editedMeal.photoURL != "file:///" {
+            header.setImage(with: url)
+            mealImageURL = url
+        } else {
+            header.hidePhoto()
+        }
+        
+        addFoods(from: editedMeal)
+        isEditingState = true
+    }
+    
+    private func saveNewMeal() {
+        guard let title = descriptionForm.textField.text else { return }
+        let photoURL = mealImageURL ?? URL(fileURLWithPath: "")
+        presenter?.saveMeal(mealTime: mealTime, title: title, photoURL: photoURL)
+        needToUpdate?()
+    }
+    
+    private func updateMeal(for meal: Meal) {
+        guard let title = descriptionForm.textField.text else { return }
+        let photoURL = mealImageURL?.absoluteString ?? ""
+        FDS.shared.updateMeal(mealID: meal.id, title: title, photoURL: photoURL)
+    }
+    
+    private func setChildMeal(for meal: Meal) {
+        let dishesID = foods.dishes.map { $0.id }
+        let productsID = foods.products.map { $0.id }
+        DSF.shared.setChildMeal(
+            mealId: meal.id,
+            dishesID: dishesID,
+            productsID: productsID,
+            customEntriesID: [])
     }
     
     @objc private func didTapSaveButton() {
+        Vibration.rigid.vibrate()
         dismiss(animated: true) {
             self.header.releaseBlurAnimation()
-            self.presenter?.saveMeal()
+            
+            switch self.isEditingState {
+            case true:
+                guard let meal = self.editedMeal else { return }
+                self.updateMeal(for: meal)
+                self.setChildMeal(for: meal)
+            case false:
+                self.saveNewMeal()
+            }
         }
     }
     
     @objc private func didTapAddFoodButton() {
+        Vibration.rigid.vibrate()
         openAddFoodVC()
     }
 }
@@ -368,17 +433,19 @@ extension CreateMealViewController: CreateMealViewControllerInterface {
         
     func setFoods(_ foods: [Food]) {
         DispatchQueue.main.async {
-            self.foods = foods
+            switch self.isEditingState {
+            case true:
+                foods.forEach { self.foods.append($0) }
+            case false:
+                self.foods = foods
+            }
+            
             self.didChangeFoods()
         }
     }
     
     func removeFood(at index: Int) {
         presenter?.removeFood(at: index)
-    }
-    
-    func getMealTime() -> MealTime {
-        return mealTime
     }
 }
 
@@ -556,7 +623,10 @@ extension CreateMealViewController {
 extension CreateMealViewController: CreateMealPageScreenHeaderDelegate {
     
     func didTapCloseButton() {
-        self.dismiss(animated: true)
+        DispatchQueue.main.async {
+            self.header.releaseBlurAnimation()
+            self.dismiss(animated: false, completion: nil)
+        }
     }
     
     func openGallery() {
@@ -625,6 +695,13 @@ extension CreateMealViewController: UITextFieldDelegate {
         
         guard textField == descriptionForm.textField else { return true }
         searchRequest = resultText
+        
+        guard !resultText.isEmpty else {
+            saveButton.active = false
+            return true
+        }
+        
+        updateSaveButton()
 
         return true
     }
@@ -647,8 +724,10 @@ extension CreateMealViewController: UIImagePickerControllerDelegate, UINavigatio
         _ picker: UIImagePickerController,
         didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]
     ) {
-        guard let image = info[.originalImage] as? UIImage else { return }
-        header.setImage(image)
+        guard let imageURL = info[.imageURL] as? URL else { return }
+        header.setImage(with: imageURL)
+        mealImageURL = imageURL
+        
         picker.dismiss(animated: true)
     }
     

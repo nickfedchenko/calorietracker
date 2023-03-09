@@ -18,12 +18,11 @@ class CreateMealRouter: NSObject {
     weak var presenter: CreateMealPresenterInterface?
     weak var viewController: UIViewController?
 
-    static func setupModule(mealTime: MealTime) -> CreateMealViewController {
-        let vc = CreateMealViewController(mealTime: mealTime)
+    static func setupModule(mealTime: MealTime? = nil, editedMeal: Meal? = nil) -> CreateMealViewController {
+        let vc = CreateMealViewController(mealTime: mealTime ?? .breakfast, editedMeal: editedMeal)
         let interactor = CreateMealInteractor()
         let router = CreateMealRouter()
         let presenter = CreateMealPresenter(interactor: interactor, router: router, view: vc)
-
         vc.presenter = presenter
         router.presenter = presenter
         interactor.presenter = presenter

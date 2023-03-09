@@ -14,10 +14,12 @@ extension DomainMeal {
     }
     
     @NSManaged public var id: String
+    @NSManaged public var title: String
     @NSManaged public var mealTime: String
     @NSManaged public var dishes: NSSet?
     @NSManaged public var products: NSSet?
     @NSManaged public var customEntries: NSSet?
+    @NSManaged public var photoURL: String
 }
 
 extension DomainMeal {
@@ -53,6 +55,9 @@ extension DomainMeal {
 }
 
 extension DomainMeal {
+    @objc(addCustomEntriesObject:)
+    @NSManaged public func addToCustomEntries(_ value: DomainCustomEntry)
+    
     @objc(addCustomEntries:)
     @NSManaged public func addToCustomEntriesSet(_ values: NSSet)
 }

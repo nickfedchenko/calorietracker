@@ -11,9 +11,10 @@ protocol FoodDataServiceInterface {
     /// Создает и сохраняет в БД модель Meal и привязывает к ней продукты и блюда
     /// - Parameters:
     ///   - mealTime: время приема еды
-    ///   - dishes: массив блюд
-    ///   - products: массив продуктов
-    func createMeal(mealTime: MealTime, dishes: [Dish], products: [Product], customEntries: [CustomEntry])
+    ///   - title: название
+    ///   - photo: фото
+    ///   - foods: список ингридиентов
+    func createMeal(mealTime: MealTime, title: String, photoURL: String, foods: [Food])
     /// Возвращает все приемы пищи
     /// - Returns: массив Meal
     func getAllMeals() -> [Meal]
@@ -90,6 +91,7 @@ protocol FoodDataServiceInterface {
     func getAllCustomEntries() -> [CustomEntry]
     func deleteCustomEntry(_ id: String)
     func saveFoodData(foods: [FoodData])
+    func updateMeal(mealID: String, title: String, photoURL: String) 
 }
 
 final class FDS {
@@ -350,10 +352,22 @@ extension FDS: FoodDataServiceInterface {
         )
     }
     
-    func createMeal(mealTime: MealTime, dishes: [Dish], products: [Product], customEntries: [CustomEntry]) {
-        let meal = Meal(mealTime: mealTime)
+    func createMeal(mealTime: MealTime, title: String, photoURL: String, foods: [Food]) {
+        let meal = Meal(mealTime: mealTime, title: title, photoURL: photoURL)
         localPersistentStore.saveMeals(meals: [meal])
-        meal.setChild(dishes: dishes, products: products, customEntries: customEntries)
+        
+        let customEntries = foods.compactMap { food -> CustomEntry? in
+            if case .customEntry(let customEntry) = food {
+                return customEntry
+            }
+            return nil
+        } 
+        
+        meal.setChild(dishes: foods.dishes, products: foods.products, customEntries: customEntries)
+    }
+    
+    func updateMeal(mealID: String, title: String, photoURL: String) {
+        localPersistentStore.updateMeal(mealID: mealID, title: title, photoURL: photoURL)
     }
     
     func createCustomEntry(mealTime: MealTime, title: String, nutrients: CustomEntryNutrients) {

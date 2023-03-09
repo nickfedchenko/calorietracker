@@ -5,6 +5,7 @@
 //  Created by Alexandru Jdanov on 04.03.2023.
 //
 
+import Kingfisher
 import UIKit
 
 protocol CreateMealPageScreenHeaderDelegate: AnyObject {
@@ -191,10 +192,15 @@ final class CreateMealPageScreenHeader: UIView {
         self.delegate?.openGallery()
     }
     
-    func setImage(_ image: UIImage) {
+    func setImage(with imageURL: URL) {
         mealPhoto.isHidden = false
         containerPhotoView.isHidden = false
-        mealPhoto.image = image
+        mealPhoto.kf.setImage(with: imageURL)
+    }
+    
+    func hidePhoto() {
+        mealPhoto.isHidden = true
+        containerPhotoView.isHidden = true
     }
     
     func hiddenTitle(_ isHidden: Bool) {

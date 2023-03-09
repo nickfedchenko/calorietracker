@@ -9,8 +9,6 @@ import UIKit
 
 class MealTableViewCell: UITableViewCell {
     
-    var viewModel: MealCellViewModel?
-    
     let containerView = UIView()
     private let separator = UIView()
     private let titleLabel = UILabel()
@@ -18,7 +16,7 @@ class MealTableViewCell: UITableViewCell {
     private let tagLabel = UILabel()
     private let kcalLabel = UILabel()
     private let weightLabel = UILabel()
-    private let checkMarkImage = UIImageView(
+    let checkMarkImage = UIImageView(
         image: R.image.createMeal.checkMark()
     )
     
@@ -180,7 +178,7 @@ class MealTableViewCell: UITableViewCell {
         containerView.layer.maskedCorners = maskedCorners
     }
     
-    func configure(with viewModel: MealCellViewModel) {
+    func configure(with viewModel: CreateMealCellViewModel) {
         titleLabel.text = viewModel.title
         tagLabel.text = viewModel.tag
         kcalLabel.text = viewModel.kcal

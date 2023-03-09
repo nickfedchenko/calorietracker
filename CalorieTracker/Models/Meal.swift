@@ -9,13 +9,17 @@ import Foundation
 
 struct Meal {
     let id: String
+    let title: String
     let mealTime: MealTime
     let products: [Product]
     let dishes: [Dish]
     let customEntries: [CustomEntry]
+    let photoURL: String
     
     init?(from managedModel: DomainMeal) {
         self.id = managedModel.id
+        self.title = managedModel.title
+        self.photoURL = managedModel.photoURL
         self.mealTime = MealTime(rawValue: managedModel.mealTime) ?? .breakfast
         self.products = managedModel.products?
             .compactMap { $0 as? DomainProduct }
@@ -26,10 +30,32 @@ struct Meal {
         self.customEntries = managedModel.customEntries?
             .compactMap { $0 as? DomainCustomEntry }
             .compactMap { CustomEntry(from: $0) } ?? []
+        
+        
+        
+//        if let photoData = managedModel.photo {
+//            self.photo = try? JSONDecoder().decode(Photo.self, from: photoData)
+//        } else {
+//            self.photo = nil
+//        }
     }
     
-    init(mealTime: MealTime) {
+    struct Photo: Codable {
+        var photoData: Data?
+    }
+    
+    init(mealTime: MealTime, title: String, photoURL: String?) {
         self.mealTime = mealTime
+        self.title = title
+        
+        self.photoURL = photoURL ?? ""
+        
+//        if let photo = photo {
+//            self.photo = Photo(photoData: photo)
+//        } else {
+//            self.photo = nil
+//        }
+        
         self.products = []
         self.dishes = []
         self.customEntries = []

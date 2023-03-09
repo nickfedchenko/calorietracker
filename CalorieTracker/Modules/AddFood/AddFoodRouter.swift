@@ -18,7 +18,9 @@ protocol AddFoodRouterInterface: AnyObject {
     func openCreateMeal(mealTime: MealTime)
     func openCustomEntryViewController(mealTime: MealTime)
     func dismissVC()
-    
+    func openEditMeal(meal: Meal)
+    func dismissToCreateMeal(with product: Product)
+    func dismissToCreateMeal(with dish: Dish)
 }
 
 class AddFoodRouter: NSObject {
@@ -54,6 +56,7 @@ class AddFoodRouter: NSObject {
         vc.mealTime = mealTime
         vc.tabBarIsHidden = tabBarIsHidden ?? false
         vc.searchText = searchRequest
+        vc.wasFromMealCreateVC = wasFromMealCreateVC ?? false
         router.presenter = presenter
         router.viewController = vc
         router.needUpdate = needUpdate
@@ -169,12 +172,35 @@ extension AddFoodRouter: AddFoodRouterInterface {
     
     func openCreateMeal(mealTime: MealTime) {
         let vc = CreateMealRouter.setupModule(mealTime: mealTime)
+        
+        vc.needToUpdate = { [weak self] in
+            self?.presenter?.setFoodType(.myMeals)
+        }
+        
+        vc.modalPresentationStyle = .fullScreen
+        viewController?.present(vc, animated: true)
+    }
+    
+    func openEditMeal(meal: Meal) {
+        let vc = CreateMealRouter.setupModule(editedMeal: meal)
         vc.modalPresentationStyle = .fullScreen
         viewController?.present(vc, animated: true)
     }
     
     func dismissVC() {
         viewController?.dismiss(animated: true, completion: nil)
+    }
+    
+    func dismissToCreateMeal(with product: Product) {
+        viewController?.dismiss(animated: false) { [weak self] in
+            self?.didSelectProduct?(product)
+        }
+    }
+
+    func dismissToCreateMeal(with dish: Dish) {
+        viewController?.dismiss(animated: false) { [weak self] in
+            self?.didSelectDish?(dish)
+        }
     }
     
 }

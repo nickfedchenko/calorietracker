@@ -61,6 +61,8 @@ protocol LocalDomainServiceInterface {
         productID: String?,
         customEntryID: String?
     ) -> Bool
+    
+    func updateMeal(mealID: String, title: String, photoURL: String) 
 }
 
 final class LocalDomainService {
@@ -384,6 +386,31 @@ extension LocalDomainService: LocalDomainServiceInterface {
         try? backgroundContext.save()
     }
     
+    func updateMeal(mealID: String, title: String, photoURL: String) {
+        let format = "id == %@"
+        
+        guard let domainMeal = fetchData(
+            for: DomainMeal.self,
+            withPredicate: NSCompoundPredicate(
+                orPredicateWithSubpredicates: [NSPredicate(format: format, mealID)]
+            )
+        )?.first else {
+            debugPrint("No DomainMeal found with ID: \(mealID)")
+            return
+        }
+        
+        domainMeal.title = title
+        domainMeal.photoURL = photoURL
+        
+        context.performAndWait {
+            do {
+                try context.save()
+            } catch {
+                debugPrint("Error occurred: \(error.localizedDescription)")
+            }
+        }
+    }
+    
     @discardableResult
     func delete<T>(_ object: T) -> Bool {
         let format = "id == %@"
@@ -586,9 +613,17 @@ extension LocalDomainService: LocalDomainServiceInterface {
             withPredicate: NSCompoundPredicate(orPredicateWithSubpredicates: [mealPredicate])
         )?.first else { return }
         
-        meal.addToDishes(NSSet(array: dishes))
-        meal.addToProductsSet(NSSet(array: products))
-        meal.addToCustomEntriesSet(NSSet(array: customEntries))
+        dishes.forEach {
+            meal.addToDishes($0)
+        }
+        
+        products.forEach {
+            meal.addToProducts($0)
+        }
+        
+        customEntries.forEach {
+            meal.addToCustomEntries($0)
+        }
         
         try? context.save()
     }
