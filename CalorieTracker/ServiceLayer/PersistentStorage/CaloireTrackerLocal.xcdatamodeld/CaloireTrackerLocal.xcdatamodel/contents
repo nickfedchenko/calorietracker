@@ -79,6 +79,7 @@
         <attribute name="numberUses" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="customEntry" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainCustomEntry" inverseName="foodData" inverseEntity="DomainCustomEntry"/>
         <relationship name="dish" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="DomainDish" inverseName="foodData" inverseEntity="DomainDish"/>
+        <relationship name="meal" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainMeal" inverseName="foodData" inverseEntity="DomainMeal"/>
         <relationship name="product" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="DomainProduct" inverseName="foodData" inverseEntity="DomainProduct"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
@@ -93,6 +94,8 @@
         <attribute name="title" optional="YES" attributeType="String"/>
         <relationship name="customEntries" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainCustomEntry" inverseName="meal" inverseEntity="DomainCustomEntry"/>
         <relationship name="dishes" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="DomainDish" inverseName="meal" inverseEntity="DomainDish"/>
+        <relationship name="foodData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainFoodData" inverseName="meal" inverseEntity="DomainFoodData"/>
+        <relationship name="mealsData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainMealData" inverseName="meal" inverseEntity="DomainMealData"/>
         <relationship name="products" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="DomainProduct" inverseName="meal" inverseEntity="DomainProduct"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
@@ -108,6 +111,7 @@
         <relationship name="customEntry" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainCustomEntry" inverseName="mealsData" inverseEntity="DomainCustomEntry"/>
         <relationship name="dailyMeal" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainDailyMeals" inverseName="mealData" inverseEntity="DomainDailyMeals"/>
         <relationship name="dish" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainDish" inverseName="mealsData" inverseEntity="DomainDish"/>
+        <relationship name="meal" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainMeal" inverseName="mealsData" inverseEntity="DomainMeal"/>
         <relationship name="product" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainProduct" inverseName="mealsData" inverseEntity="DomainProduct"/>
         <uniquenessConstraints>
             <uniquenessConstraint>

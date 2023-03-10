@@ -15,6 +15,8 @@ struct Meal {
     let dishes: [Dish]
     let customEntries: [CustomEntry]
     let photoURL: String
+
+    var foodDataId: String?
     
     init?(from managedModel: DomainMeal) {
         self.id = managedModel.id
@@ -31,13 +33,8 @@ struct Meal {
             .compactMap { $0 as? DomainCustomEntry }
             .compactMap { CustomEntry(from: $0) } ?? []
         
+        self.foodDataId = managedModel.foodData?.id
         
-        
-//        if let photoData = managedModel.photo {
-//            self.photo = try? JSONDecoder().decode(Photo.self, from: photoData)
-//        } else {
-//            self.photo = nil
-//        }
     }
     
     struct Photo: Codable {
@@ -47,20 +44,19 @@ struct Meal {
     init(mealTime: MealTime, title: String, photoURL: String?) {
         self.mealTime = mealTime
         self.title = title
-        
         self.photoURL = photoURL ?? ""
-        
-//        if let photo = photo {
-//            self.photo = Photo(photoData: photo)
-//        } else {
-//            self.photo = nil
-//        }
-        
         self.products = []
         self.dishes = []
         self.customEntries = []
         self.id = UUID().uuidString
     }
+}
+
+struct MealNutrients: Codable {
+    let kcal: Double
+    let carbs: Double
+    let proteins: Double
+    let fats: Double
 }
 
 enum MealTime: String {
@@ -84,5 +80,27 @@ extension Meal {
 extension Meal: Equatable {
     static func == (lhs: Meal, rhs: Meal) -> Bool {
         return lhs.id == rhs.id
+    }
+}
+
+extension Meal {
+    var nutrients: MealNutrients {
+        let totalKcal = products.reduce(0.0, { $0 + $1.kcal }) +
+        dishes.reduce(0.0, { $0 + $1.kcal }) +
+        customEntries.reduce(0.0, { $0 + $1.nutrients.kcal })
+        
+        let totalCarbs = products.reduce(0.0, { $0 + $1.carbs }) +
+        dishes.reduce(0.0, { $0 + $1.carbs }) +
+        customEntries.reduce(0.0, { $0 + $1.nutrients.carbs })
+        
+        let totalProteins = products.reduce(0.0, { $0 + $1.protein }) +
+        dishes.reduce(0.0, { $0 + $1.protein }) +
+        customEntries.reduce(0.0, { $0 + $1.nutrients.proteins })
+        
+        let totalFats = products.reduce(0.0, { $0 + $1.fat }) +
+        dishes.reduce(0.0, { $0 + $1.fat }) +
+        customEntries.reduce(0.0, { $0 + $1.nutrients.fats })
+        
+        return MealNutrients(kcal: totalKcal, carbs: totalCarbs, proteins: totalProteins, fats: totalFats)
     }
 }

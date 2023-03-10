@@ -201,7 +201,8 @@ class MealTableViewCell: UITableViewCell {
                 color: UIColor(hex: "06BBBB"),
                 opacity: 0.2,
                 offset: CGSize(width: 2, height: 0),
-                radius: 2
+                radius: 2,
+                spread: 0
             ),
             rect: containerView.bounds,
             cornerRadius: layer.maskedCorners.isEmpty ? 0 : 8

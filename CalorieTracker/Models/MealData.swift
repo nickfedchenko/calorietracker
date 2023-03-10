@@ -41,6 +41,9 @@ extension MealData {
         } else if let domainCustomEntry = managedModel.customEntry,
                   let customEntry = CustomEntry(from: domainCustomEntry) {
             self.food = .customEntry(customEntry)
+        } else if let domainMeal = managedModel.meal,
+                  let meal = Meal(from: domainMeal) {
+            self.food = .meal(meal)
         } else {
             self.food = nil
         }

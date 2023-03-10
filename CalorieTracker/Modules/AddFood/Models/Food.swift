@@ -41,8 +41,13 @@ extension Food {
                     .protein: dish.protein
                 ]
             }
-        case .meal:
-            return [:]
+        case .meal(let meal):
+            return [
+                .kcal: meal.nutrients.kcal,
+                .carb: meal.nutrients.carbs,
+                .fat: meal.nutrients.fats,
+                .protein: meal.nutrients.proteins
+            ]
         case .customEntry(let customEntry):
             return [
                 .kcal: customEntry.nutrients.kcal,
@@ -72,8 +77,8 @@ extension Food {
             return product.foodDataId
         case .dishes(let dish, _):
             return dish.foodDataId
-        case .meal:
-            return nil
+        case .meal(let meal):
+            return meal.foodDataId
         case .customEntry(let customEntry):
             return customEntry.foodDataId
         }

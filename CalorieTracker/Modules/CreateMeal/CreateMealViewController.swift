@@ -358,12 +358,6 @@ class CreateMealViewController: UIViewController {
         saveButton.active = cellCount >= 2 && descriptionForm.textField.text != ""
     }
     
-    private func addFoods(from meal: Meal) {
-        meal.products.foods.forEach { foods.append($0) }
-        meal.dishes.foods.forEach { foods.append($0) }
-        meal.customEntries.foods.forEach { foods.append($0) }
-    }
-    
     private func initEditedMeal() {
         guard let editedMeal else { return }
         
@@ -377,7 +371,7 @@ class CreateMealViewController: UIViewController {
             header.hidePhoto()
         }
         
-        addFoods(from: editedMeal)
+        presenter?.addFoods(from: editedMeal)
         isEditingState = true
     }
     
@@ -417,6 +411,8 @@ class CreateMealViewController: UIViewController {
             case false:
                 self.saveNewMeal()
             }
+            
+            self.needToUpdate?()
         }
     }
     
@@ -433,13 +429,7 @@ extension CreateMealViewController: CreateMealViewControllerInterface {
         
     func setFoods(_ foods: [Food]) {
         DispatchQueue.main.async {
-            switch self.isEditingState {
-            case true:
-                foods.forEach { self.foods.append($0) }
-            case false:
-                self.foods = foods
-            }
-            
+            self.foods = foods
             self.didChangeFoods()
         }
     }

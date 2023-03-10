@@ -31,7 +31,7 @@ final class FoodCollectionViewController: UIViewController {
     
     var isSelectedType: AddFood = .recent
     
-    private lazy var mealCellsHeight: [CGFloat] = Array(
+    lazy var mealCellsHeight: [CGFloat] = Array(
         repeating: 104,
         count: collectionView.numberOfItems(inSection: 0)
     )

@@ -67,7 +67,8 @@ final class CreateMealPageScreenHeader: UIView {
                 color: UIColor(hex: "06BBBB"),
                 opacity: 0.2,
                 offset: CGSize(width: 0, height: 4),
-                radius: 10
+                radius: 10,
+                spread: 0
             ),
             rect: containerView.bounds,
             cornerRadius: 8
@@ -78,7 +79,8 @@ final class CreateMealPageScreenHeader: UIView {
                 color: UIColor(hex: "000000"),
                 opacity: 0.25,
                 offset: CGSize(width: 0, height: 0.5),
-                radius: 2
+                radius: 2,
+                spread: 0
             ),
             rect: containerView.bounds,
             cornerRadius: 8
@@ -89,7 +91,8 @@ final class CreateMealPageScreenHeader: UIView {
                 color: UIColor(hex: "FFE665"),
                 opacity: 0.25,
                 offset: CGSize(width: 0, height: 6),
-                radius: 12
+                radius: 12,
+                spread: 0
             ),
             rect: containerView.bounds,
             cornerRadius: 8

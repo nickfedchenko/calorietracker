@@ -20,6 +20,8 @@ extension DomainMeal {
     @NSManaged public var products: NSSet?
     @NSManaged public var customEntries: NSSet?
     @NSManaged public var photoURL: String
+    
+    @NSManaged public var foodData: DomainFoodData?
 }
 
 extension DomainMeal {

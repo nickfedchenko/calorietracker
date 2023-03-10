@@ -593,13 +593,15 @@ final class ProductViewController: CTViewController {
                     color: R.color.foodViewing.basicSecondaryDark()!,
                     opacity: 0.2,
                     offset: CGSize(width: 0, height: -2),
-                    radius: 10
+                    radius: 10,
+                    spread: 0
                 ),
                 .init(
                     color: R.color.foodViewing.basicPrimary()!,
                     opacity: 0.7,
                     offset: CGSize(width: 0, height: -0.5),
-                    radius: 2
+                    radius: 2,
+                    spread: 0
                 )
             ]
         }

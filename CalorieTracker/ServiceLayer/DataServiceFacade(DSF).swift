@@ -88,6 +88,10 @@ extension DSF: DataServiceFacadeInterface {
         localPersistentStore.setChildFoodData(foodDataId: foodDataId, customEntryID: customEntryID)
     }
     
+    func setChildFoodData(foodDataId: String, mealID: String) {
+        localPersistentStore.setChildFoodData(foodDataId: foodDataId, mealID: mealID)
+    }
+    
     func setChildMeal(mealId: String, dishesID: [Int], productsID: [String], customEntriesID: [String]) {
         localPersistentStore.setChildMeal(
             mealId: mealId,

@@ -14,6 +14,7 @@ protocol CreateMealPresenterInterface: AnyObject {
     func removeFood(at index: Int)
     func addDish(_ dish: Dish)
     func saveMeal(mealTime: MealTime, title: String, photoURL: URL)
+    func addFoods(from meal: Meal)
 }
 
 class CreateMealPresenter {
@@ -58,6 +59,7 @@ extension CreateMealPresenter: CreateMealPresenterInterface {
     }
     
     func removeFood(at index: Int) {
+        print("--------\(foods?.count)")
         foods?.remove(at: index)
     }
     
@@ -67,5 +69,11 @@ extension CreateMealPresenter: CreateMealPresenterInterface {
             title: title,
             photoURL: photoURL.absoluteString,
             foods: foods ?? [])
+    }
+    
+    func addFoods(from meal: Meal) {
+        meal.products.foods.forEach { foods?.append($0) }
+        meal.dishes.foods.forEach { foods?.append($0) }
+        meal.customEntries.foods.forEach { foods?.append($0) }
     }
 }

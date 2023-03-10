@@ -10,13 +10,25 @@ import UIKit
 
 final class MealsCollectionViewCell: UICollectionViewCell {
     
+    enum MealCellButtonType {
+        case delete
+        case add
+    }
+    
     var meal: Meal? {
         didSet {
             configureMealCell()
         }
     }
     
+    var cellButtonType: MealCellButtonType = .add {
+        didSet {
+            didChangeButtonType()
+        }
+    }
+    
     var foods: [Food] = []
+    var didTapButton: ((MealCellButtonType) -> Void)?
 
     private let shadowView = ViewWithShadow([
         ShadowConst.firstShadow,
@@ -73,9 +85,10 @@ final class MealsCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    private lazy var addToDiaryButton: UIButton = {
+     private lazy var addToDiaryButton: UIButton = {
         let button = UIButton()
         button.setImage(R.image.createMeal.add(), for: .normal)
+        button.addTarget(self, action: #selector(didTapSelectButton), for: .touchUpInside)
         return button
     }()
     
@@ -316,6 +329,28 @@ final class MealsCollectionViewCell: UICollectionViewCell {
         
         cell.configure(with: viewModel)
     }
+    
+    private func didChangeButtonType() {
+        switch cellButtonType {
+        case .delete:
+            addToDiaryButton.setImage(R.image.addFood.recipesCell.addedCheckmark(), for: .normal)
+            UIView.animate(withDuration: 0.2) {
+                self.addToDiaryButton.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
+            } completion: { _ in
+                UIView.animate(withDuration: 0.2) {
+                    self.addToDiaryButton.transform = .identity
+                }
+            }
+        case .add:
+            addToDiaryButton.setImage(R.image.createMeal.add(), for: .normal)
+        }
+    }
+    
+    @objc private func didTapSelectButton() {
+        Vibration.success.vibrate()
+        didTapButton?(cellButtonType)
+        cellButtonType = cellButtonType == .add ? .delete : .add
+    }
 }
 
 extension MealsCollectionViewCell {
@@ -324,13 +359,15 @@ extension MealsCollectionViewCell {
             color: UIColor(hex: "#123E5E"),
             opacity: 0.25,
             offset: CGSize(width: 0, height: 0.5),
-            radius: 2
+            radius: 2,
+            spread: 0
         )
         static let secondShadow = Shadow(
             color: UIColor(hex: "#06BBBB"),
             opacity: 0.2,
             offset: CGSize(width: 0, height: 4),
-            radius: 10
+            radius: 10,
+            spread: 0
         )
     }
 }

@@ -418,6 +418,16 @@ extension FoodCellView.FoodViewModel {
         }
     }
     
+    private init(_ meal: Meal, weight: Double?) {
+        self.id = meal.id
+        self.title = meal.title
+        self.kcal = meal.nutrients.kcal
+        self.tag = R.string.localizable.meal()
+        self.image = nil
+        self.verified = false
+        self.description = ""
+    }
+    
     init?(_ food: Food?) {
         switch food {
         case .product(let product, let value, let unitData):
@@ -430,6 +440,8 @@ extension FoodCellView.FoodViewModel {
             self.init(dish, weight: value)
         case .customEntry(let customEntry):
             self.init(customEntry, weight: nil)
+        case .meal(let meal):
+            self.init(meal, weight: nil)
         default:
             return nil
         }

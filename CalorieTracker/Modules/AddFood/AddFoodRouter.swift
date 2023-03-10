@@ -174,7 +174,7 @@ extension AddFoodRouter: AddFoodRouterInterface {
         let vc = CreateMealRouter.setupModule(mealTime: mealTime)
         
         vc.needToUpdate = { [weak self] in
-            self?.presenter?.setFoodType(.myMeals)
+            self?.presenter?.realoadCollectionView()
         }
         
         vc.modalPresentationStyle = .fullScreen
@@ -183,6 +183,11 @@ extension AddFoodRouter: AddFoodRouterInterface {
     
     func openEditMeal(meal: Meal) {
         let vc = CreateMealRouter.setupModule(editedMeal: meal)
+        
+        vc.needToUpdate = { [weak self] in
+            self?.presenter?.realoadCollectionView()
+        }
+        
         vc.modalPresentationStyle = .fullScreen
         viewController?.present(vc, animated: true)
     }

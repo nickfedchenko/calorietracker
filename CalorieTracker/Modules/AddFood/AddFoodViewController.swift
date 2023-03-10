@@ -200,7 +200,6 @@ final class AddFoodViewController: UIViewController {
             guard let self = self else { return }
             self.presenter?.setFoodType(self.isSelectedType)
         }
-        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -671,27 +670,6 @@ final class AddFoodViewController: UIViewController {
             } else {
                 finalFoodModel = food
             }
-            //            cell.viewModel = .init(
-            //                cellType: .table,
-            //                food: finalFoodModel,
-            //                buttonType: (selectedFood ?? [])
-            //                    .contains(food ?? .meal(.init(mealTime: .breakfast, title: "", photoURL: ""))) && state != .default
-            //                ? .delete
-            //                : .add,
-            //                subInfo: presenter?.getSubInfo(food, selectedFoodInfo),
-            //                colorSubInfo: selectedFoodInfo.getColor()
-            //            )
-            //            cell.didTapButton = { food, buttonType in
-            //                switch buttonType {
-            //                case .delete:
-            //                    guard !self.wasFromMealCreateVC else { return }
-            //                    self.selectedFood?.removeAll(where: { $0.id == food.id })
-            //                case .add:
-            //                    guard !self.wasFromMealCreateVC else { return }
-            //                    self.selectedFood = (self.selectedFood ?? []) + [food]
-            //                case .addToMeal:
-            //                    self.dismiss(animated: false)
-            //                }
             
             cell.viewModel = .init(
                 cellType: .table,
@@ -737,6 +715,15 @@ final class AddFoodViewController: UIViewController {
             if case .meal(let meal) = food {
                 cell.meal = meal
                 cell.editMealButton.addTarget(self, action: #selector(editMealButtonTapped), for: .touchUpInside)
+                
+                cell.didTapButton = { [weak self] buttonType in
+                    switch buttonType {
+                    case .delete:
+                        self?.selectedFood?.removeAll(where: { $0.id == meal.id })
+                    case .add:
+                        self?.selectedFood = (self?.selectedFood ?? []) + [.meal(meal)]
+                    }
+                }
             }
             
             return cell
@@ -1166,6 +1153,11 @@ extension AddFoodViewController: AddFoodViewControllerInterface {
     
     func realoadCollectionView() {
         foodCollectionViewController.reloadData()
+        foodCollectionViewController.mealCellsHeight = Array(
+            repeating: 104,
+            count: foodCollectionViewController.collectionView
+                .numberOfItems(inSection: 0)
+        )
     }
 }
 

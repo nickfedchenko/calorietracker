@@ -138,6 +138,12 @@ final class FDS {
                 carbs += customEntry.nutrients.carbs
                 kcal += customEntry.nutrients.kcal
                 
+            case .meal(let meal):
+                protein += meal.nutrients.proteins
+                fat += meal.nutrients.fats
+                carbs += meal.nutrients.carbs
+                kcal += meal.nutrients.kcal
+                
             default:
                 break
             }
@@ -166,6 +172,7 @@ extension FDS: FoodDataServiceInterface {
             var dishId: Int?
             var productId: String?
             var customEntryId: String?
+            var mealId: String?
             
             switch $0.food {
             case .dishes(let dish, _):
@@ -174,6 +181,8 @@ extension FDS: FoodDataServiceInterface {
                 productId = product.id
             case .customEntry(let customEntry):
                 customEntryId = customEntry.id
+            case .meal(let meal):
+                mealId = meal.id
             default:
                 break
             }
@@ -182,7 +191,8 @@ extension FDS: FoodDataServiceInterface {
                 mealDataId: $0.id,
                 dishID: dishId,
                 productID: productId,
-                customEntryID: customEntryId
+                customEntryID: customEntryId,
+                mealID: mealId
             )
         }
         
