@@ -16,6 +16,8 @@ protocol StepsFullWidgetInterface: AnyObject {
 }
 
 final class StepsFullWidgetView: UIView, CTWidgetFullProtocol {
+    var didChangeSelectedDate: ((Date) -> Void)?
+    
     struct Model {
         let nowSteps: Int
         let goalSteps: Int?

@@ -35,11 +35,7 @@ final class CalendarView: UIView {
     
     private lazy var days = generateDaysInMonth(for: baseDate)
     
-    private var selectedDate: Date {
-        didSet {
-            collectionView.reloadData()
-        }
-    }
+    private var selectedDate: Date
     private var calorieCorridorPartDays: [Day] = []
     private var calendar = Calendar.current
     private var selectedFlag = false
@@ -102,21 +98,22 @@ final class CalendarView: UIView {
     }
     
     @objc func didSwipeLeft() {
-        let nowDate = Date()
-        let newDate = calculateDate(date: baseDate, value: 1)
-        let newYear = calendar.component(.year, from: newDate)
-        let nowYear = calendar.component(.year, from: nowDate)
-        if newYear == nowYear {
-            let newMonth = calendar.component(.month, from: newDate)
-            let nowMonth = calendar.component(.month, from: nowDate)
-            if newMonth <= nowMonth {
-                baseDate = newDate
-            }
-        } else if newYear < nowYear {
-            baseDate = newDate
-        } else if newYear > nowYear {
-            return
-        }
+//        let nowDate = Date()
+//        let newDate = calculateDate(date: baseDate, value: 1)
+//        let newYear = calendar.component(.year, from: newDate)
+//        let nowYear = calendar.component(.year, from: nowDate)
+//        if newYear == nowYear {
+//            let newMonth = calendar.component(.month, from: newDate)
+//            let nowMonth = calendar.component(.month, from: nowDate)
+//            if newMonth <= nowMonth {
+//                baseDate = newDate
+//            }
+//        } else if newYear < nowYear {
+//            baseDate = newDate
+//        } else if newYear > nowYear {
+//            return
+//        }
+        baseDate = calculateDate(date: baseDate, value: 1)
     }
     
     @objc func didSwipeRight() {
@@ -125,16 +122,27 @@ final class CalendarView: UIView {
     
     func didTapLeftButton() {
         selectedDate = calculateDateByDayStride(date: selectedDate, value: -1)
-        didChangeDate?(selectedDate)
         if selectedDate.day.day > baseDate.day.day && selectedDate.day.month != baseDate.day.month {
-            didSwipeLeft()
+            didSwipeRight()
+            generateDaysInMonth(for: baseDate)
+        } else {
+            collectionView.performBatchUpdates {
+                collectionView.reloadSections(IndexSet(integer: 0))
+            }
         }
+        didChangeDate?(selectedDate)
+   
     }
     
     func didTapRightButton() {
         selectedDate = calculateDateByDayStride(date: selectedDate, value: 1)
         if selectedDate.day.day < baseDate.day.day && selectedDate.day.month != baseDate.day.month {
-            didSwipeRight()
+            didSwipeLeft()
+            generateDaysInMonth(for: baseDate)
+        } else {
+            collectionView.performBatchUpdates {
+                collectionView.reloadSections(IndexSet(integer: 0))
+            }
         }
         didChangeDate?(selectedDate)
     }
@@ -162,9 +170,10 @@ final class CalendarView: UIView {
         
         addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
+            make.top.equalToSuperview()
             make.centerX.equalToSuperview()
             make.height.equalTo(cellSize.height * CGFloat(numberOfWeeksInBaseDate))
+            make.bottom.equalToSuperview()
         }
     }
     
@@ -194,8 +203,9 @@ final class CalendarView: UIView {
         collectionView.snp.updateConstraints { make in
             make.height.equalTo(collectionViewHeight)
         }
-        
-        collectionView.reloadData()
+        collectionView.performBatchUpdates {
+            collectionView.reloadSections(IndexSet(integer: 0))
+        }
     }
     
     private func getCalorieCorridorPartDays() -> [Day] {
@@ -408,17 +418,18 @@ extension CalendarView: UICollectionViewDelegateFlowLayout {
         let day = days[indexPath.row]
         let dayNow = Day(Date())
         
-        guard Day(day.date) <= dayNow else { return }
+//        guard Day(day.date) <= dayNow else { return }
         
         let selectedCell = collectionView.cellForItem(at: indexPath) as? CalendarCollectionViewCell
-        selectedDate = day.date
-        
+     
 //        if selectedFlag {
             collectionView.visibleCells.map { $0 as? CalendarCollectionViewCell }.forEach { $0?.isSelectedCell = false }
             selectedFlag = false
 //        }
         selectedCell?.isSelectedCell = true
+        selectedDate = day.date
         selectedDateChanged(day.date)
+        didChangeDate?(selectedDate)
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {

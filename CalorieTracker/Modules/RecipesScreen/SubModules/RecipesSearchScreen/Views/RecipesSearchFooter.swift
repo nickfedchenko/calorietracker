@@ -22,7 +22,7 @@ final class RecipesSearchFooter: UIView {
     
     private let backButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(R.image.foodViewing.topChevron(), for: .normal)
+        button.setImage(R.image.leftChevron(), for: .normal)
         button.contentMode = .center
         button.tintColor = UIColor(hex: "7A948F")
         return button
@@ -124,7 +124,7 @@ final class RecipesSearchFooter: UIView {
         if state == .compact {
             mainFilterButton.setImage(R.image.filtersIcon(), for: .normal)
         } else {
-            mainFilterButton.setImage(R.image.burnedKcalTextField.chevron(), for: .normal)
+            mainFilterButton.setImage(R.image.chevronLeft(), for: .normal)
             mainFilterButton.tintColor = .black
         }
     }
@@ -148,8 +148,8 @@ final class RecipesSearchFooter: UIView {
         
         textField.snp.makeConstraints { make in
             make.height.equalTo(64)
-            make.leading.equalToSuperview().offset(20)
-            make.trailing.equalToSuperview().inset(96)
+            make.leading.equalTo(mainFilterButton.snp.trailing).offset(12)
+            make.trailing.equalToSuperview().inset(34)
             make.top.equalToSuperview().offset(51)
         }
         
@@ -162,7 +162,7 @@ final class RecipesSearchFooter: UIView {
         mainFilterButton.snp.makeConstraints { make in
             make.height.width.equalTo(64)
             make.centerY.equalTo(textField)
-            make.trailing.equalToSuperview().inset(20)
+            make.leading.equalToSuperview().offset(20)
         }
     }
     

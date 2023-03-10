@@ -598,6 +598,7 @@
 "highProtein" = "С высоким содержанием белка";
 "lowFat" = "С низким содержанием жира";
 "custom" = "Настраиваемый";
+"Keto" = "Кето";
 
 "low" = "Низкий";
 "moderate" = "Умеренный";
@@ -786,4 +787,4 @@
 
 "calendar.topTitle.today" = "СЕГОДНЯ";
 "calendar.topTitle.yesterday" = "ВЧЕРА";
-"calendar.logStreak" = " дней\подряд";
+"calendar.logStreak" = " дней\nподряд";

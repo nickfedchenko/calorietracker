@@ -35,6 +35,13 @@ final class SelectedFoodCellsViewController: UIViewController {
         return button
     }()
     
+    private let dimmingView: UIView = {
+        let view = UIView()
+        view.backgroundColor = R.color.foodViewing.basicPrimary()?.withAlphaComponent(0.25)
+        view.alpha = 0
+        return view
+    }()
+    
     private let foodCollectionViewController = FoodCollectionViewController(.contentFitting)
     
     private var foods: [Food] {
@@ -58,6 +65,14 @@ final class SelectedFoodCellsViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         setupConstraints()
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapToHideTapped)))
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        UIView.animate(withDuration: 0.3) {
+            self.dimmingView.alpha = 1
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -71,8 +86,25 @@ final class SelectedFoodCellsViewController: UIViewController {
         )
     }
     
+    override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+        UIView.animate(withDuration: 0.3) {
+            self.dimmingView.alpha = 0
+        } completion: { _ in
+            super.dismiss(animated: flag, completion: completion)
+        }
+    }
+    
+    @objc private func tapToHideTapped(sender: UITapGestureRecognizer) {
+        let location = sender.location(in: scrollView)
+        print(containerView.frame)
+        print(location)
+        guard !containerView.frame.contains(location) else { return }
+       
+        dismiss(animated: true)
+    }
+    
     private func setupView() {
-        view.backgroundColor = R.color.foodViewing.basicPrimary()?.withAlphaComponent(0.25)
+        view.backgroundColor = .clear
         
         foodCollectionViewController.isScrollEnabled = false
         foodCollectionViewController.delegate = self
@@ -80,12 +112,16 @@ final class SelectedFoodCellsViewController: UIViewController {
     }
     
     private func setupConstraints() {
-        view.addSubviews(scrollView, closeButton)
+        view.addSubviews(dimmingView,scrollView, closeButton)
         
         containerView.addSubviews(foodCollectionViewController.view)
         scrollView.addSubviews(containerView)
         
         scrollView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        dimmingView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         

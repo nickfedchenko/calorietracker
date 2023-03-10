@@ -255,6 +255,7 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         presenter?.checkOnboarding()
         generator.prepare()
     }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         navigationController?.setToolbarHidden(true, animated: true)

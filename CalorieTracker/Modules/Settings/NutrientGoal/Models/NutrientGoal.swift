@@ -12,6 +12,7 @@ enum NutrientGoalType: Codable {
     case lowCarb
     case highProtein
     case lowFat
+    case keto
     case custom(NutrientPercent)
 }
 
@@ -19,6 +20,10 @@ struct NutrientPercent: Codable {
     let fat: Double
     let protein: Double
     let carbs: Double
+    
+    func sum() -> Double {
+        return fat + protein + carbs
+    }
 }
 
 extension NutrientGoalType: WithGetTitleProtocol {
@@ -34,6 +39,8 @@ extension NutrientGoalType: WithGetTitleProtocol {
             return R.string.localizable.lowFat()
         case .custom:
             return R.string.localizable.custom()
+        case .keto:
+            return R.string.localizable.keto()
         }
     }
 }
@@ -101,6 +108,8 @@ extension NutrientGoalType {
             return NutrientPercent(fat: 0.25, protein: 0.2, carbs: 0.55)
         case .custom(let data):
             return data
+        case .keto:
+            return NutrientPercent(fat: 0.7, protein: 0.23, carbs: 0.07)
         }
     }
 }

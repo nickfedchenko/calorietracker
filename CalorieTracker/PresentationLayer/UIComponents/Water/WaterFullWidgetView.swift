@@ -17,6 +17,8 @@ protocol WaterFullWidgetOutput: AnyObject {
 }
 
 final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
+    var didChangeSelectedDate: ((Date) -> Void)?
+    
     var didTapCloseButton: (() -> Void)?
     weak var output: WaterFullWidgetOutput?
     

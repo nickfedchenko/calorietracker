@@ -13,21 +13,21 @@ class SafeMergePolicy: NSMergePolicy {
         super.init(merge: .mergeByPropertyObjectTrumpMergePolicyType)
     }
     
-    override func resolve(optimisticLockingConflicts list: [NSMergeConflict]) throws {
-        print(list)
-        for conflict in list {
-            let sourceObject = conflict.sourceObject
-            guard let persistentSnapshot = conflict.persistedSnapshot else {
-                return
-            }
-            if let sourceObject = sourceObject as? DomainDish {
-                let storedFoodData = persistentSnapshot["foodData"] as? DomainFoodData
-                sourceObject.foodData = storedFoodData
-                try super.resolve(optimisticLockingConflicts: list)
-                continue
-            }
-        }
-    }
+//    override func resolve(optimisticLockingConflicts list: [NSMergeConflict]) throws {
+//        print(list)
+//        for conflict in list {
+//            let sourceObject = conflict.sourceObject
+//            guard let persistentSnapshot = conflict.persistedSnapshot else {
+//                return
+//            }
+//            if let sourceObject = sourceObject as? DomainDish {
+//                let storedFoodData = persistentSnapshot["foodData"] as? DomainFoodData
+//                sourceObject.foodData = storedFoodData
+//                try super.resolve(optimisticLockingConflicts: list)
+//                continue
+//            }
+//        }
+//    }
     
     override func resolve(constraintConflicts list: [NSConstraintConflict]) throws {
         for conflict in list {

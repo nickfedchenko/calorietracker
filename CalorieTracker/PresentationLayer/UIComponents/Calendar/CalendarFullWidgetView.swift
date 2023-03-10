@@ -12,6 +12,8 @@ protocol CalendarFullWidgetViewInterface: AnyObject {
 }
 
 final class CalendarFullWidgetView: UIView, CTWidgetFullProtocol {
+    var didChangeSelectedDate: ((Date) -> Void)?
+    
     var didTapCloseButton: (() -> Void)?
     var date: Date? {
         didSet {
@@ -65,9 +67,10 @@ final class CalendarFullWidgetView: UIView, CTWidgetFullProtocol {
             return CalendarWidgetService.shared.getCalendarData(year: date.year, month: date.month)
         }
         
-        calendarView.didChangeDate = { date in
+        calendarView.didChangeDate = { [weak self] date in
             Vibration.selection.vibrate()
-            self.updateDateLabel(date)
+            self?.updateDateLabel(date)
+            self?.didChangeSelectedDate?(date)
         }
     }
     

@@ -11,6 +11,8 @@ protocol NutrientGoalSettingsViewControllerInterface: AnyObject {
     func updateCell(_ type: NutrientGoalSettingsCategoryType)
     func updateNutrientCell(_ nutrientPercent: NutrientPercent)
     func needUpdateParentVC()
+    func setSaveButton(enabled: Bool)
+    func updatePercentLabel(by percent: Double)
 }
 
 final class NutrientGoalSettingsViewController: UIViewController {
@@ -105,13 +107,13 @@ final class NutrientGoalSettingsViewController: UIViewController {
         saveButton.aspectRatio(0.171)
         saveButton.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(20)
-            make.bottom.equalTo(backButton.snp.top).offset(-20)
+            make.bottom.equalTo(resetButton.snp.top).offset(-16)
         }
         
         resetButton.aspectRatio(0.171)
         resetButton.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(20)
-            make.bottom.equalTo(saveButton.snp.top).offset(-16)
+            make.bottom.equalTo(backButton.snp.top).offset(-20)
         }
     }
     
@@ -138,6 +140,10 @@ final class NutrientGoalSettingsViewController: UIViewController {
 }
 
 extension NutrientGoalSettingsViewController: NutrientGoalSettingsViewControllerInterface {
+    func setSaveButton(enabled: Bool) {
+        saveButton.isEnabled = enabled
+    }
+    
     func needUpdateParentVC() {
         needUpdate?()
     }
@@ -149,6 +155,14 @@ extension NutrientGoalSettingsViewController: NutrientGoalSettingsViewController
         
         let indexPath = IndexPath(row: row, section: 0)
         collectionView.reloadItems(at: [indexPath])
+    }
+    
+    func updatePercentLabel(by percent: Double) {
+        guard let cell = collectionView
+            .visibleCells
+            .filter{ $0 is SettingsProfileHeaderCollectionViewCell}.last
+                as? SettingsProfileHeaderCollectionViewCell else { return }
+        cell.setPercentLabel(value: percent)
     }
     
     func updateNutrientCell(_ nutrientPercent: NutrientPercent) {
@@ -284,7 +298,7 @@ extension NutrientGoalSettingsViewController {
     }
     
     private func getNutrientMenuView() -> MenuView<NutrientGoalType> {
-        MenuView<NutrientGoalType>([.default, .lowCarb, .highProtein, .lowFat])
+        MenuView<NutrientGoalType>([.default, .lowCarb, .highProtein, .lowFat, .keto])
     }
     
     private func getTitleHeaderLabel() -> UILabel {

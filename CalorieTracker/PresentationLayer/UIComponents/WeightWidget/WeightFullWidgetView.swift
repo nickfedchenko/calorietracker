@@ -17,6 +17,8 @@ protocol WeightFullWidgetOutput: AnyObject {
 }
 
 final class WeightFullWidgetView: UIView, CTWidgetFullProtocol {
+    var didChangeSelectedDate: ((Date) -> Void)?
+    
     weak var output: WeightFullWidgetOutput?
     var didTapCloseButton: (() -> Void)?
     

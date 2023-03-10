@@ -9,6 +9,11 @@ import AsyncDisplayKit
 
 final class BasicButtonView: UIControl {
     private let buttonNode: BasicButtonNode
+    private let dimmingView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white.withAlphaComponent(0.4)
+        return view
+    }()
     
     var isPressTitle: String? {
         get { buttonNode.isPressTitle }
@@ -23,6 +28,21 @@ final class BasicButtonView: UIControl {
         didSet {
             buttonNode.active = active
             self.isEnabled = active
+        }
+    }
+    
+    override var isEnabled: Bool {
+        didSet {
+            switch buttonNode.type {
+            case .save:
+                if isEnabled {
+                    makeEnabled()
+                } else {
+                    makeDisabled()
+                }
+            default:
+                super.isEnabled = isEnabled
+            }
         }
     }
     
@@ -48,6 +68,14 @@ final class BasicButtonView: UIControl {
         buttonNode.view.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+    }
+    
+    private func makeDisabled() {
+        alpha = 0.3
+    }
+    
+    private func makeEnabled() {
+        alpha = 1
     }
 }
 
