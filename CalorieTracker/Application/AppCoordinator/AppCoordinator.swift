@@ -38,8 +38,8 @@ final class AppCoordinator: ApphudDelegate {
             getStartedViewController = WelcomeRouter.setupModule()
 //            getStartedViewController = ChooseDietaryPreferenceRouter.setupModule()
         } else if Apphud.hasActiveSubscription() {
-//            getStartedViewController = CTTabBarController()
-            getStartedViewController = PaywallRouter.setupModule()
+            getStartedViewController = CTTabBarController()
+//            getStartedViewController = PaywallRouter.setupModule()
         } else {
 //            getStartedViewController = CTTabBarController()
             getStartedViewController = PaywallRouter.setupModule()
