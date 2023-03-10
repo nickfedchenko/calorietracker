@@ -46,7 +46,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 } else {
                     print("Something goes wrong")
                 }
-
         return true
     }
 }

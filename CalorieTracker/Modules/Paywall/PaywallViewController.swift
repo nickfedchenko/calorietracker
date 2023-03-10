@@ -47,6 +47,14 @@ final class PaywallViewController: UIViewController {
     private lazy var termOfUseButton: UIButton = getTermsButton()
     private lazy var collectionView: UICollectionView = getCollectionView()
     
+    private lazy var closeButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(R.image.waterWidget.closeSettings(), for: .normal)
+        button.tintColor = UIColor(hex: "192621").withAlphaComponent(0.3)
+        button.addTarget(self, action: #selector(didTapCloseButton), for: .touchUpInside)
+        return button
+    }()
+    
     // MARK: - Lifecycle methods
     
     override func viewDidLoad() {
@@ -54,7 +62,6 @@ final class PaywallViewController: UIViewController {
         registerCell()
         configureViews()
         configureLayouts()
-        
         subscriptionViewModel?.loadProducts()
     }
     
@@ -70,6 +77,10 @@ final class PaywallViewController: UIViewController {
     
     private func registerCell() {
         collectionView.register(SubscriptionAmountCollectionViewCell.self)
+    }
+    
+    @objc private func didTapCloseButton() {
+        presenter?.didTapCloseButton()
     }
     
     private func configureViews() {
@@ -124,7 +135,8 @@ final class PaywallViewController: UIViewController {
             collectionView,
             privacyPolicyButton,
             termOfUseButton,
-            startNowCommonButton
+            startNowCommonButton,
+            closeButton
         )
         
         subscriptionBenefitsContainerView.addSubviews(
@@ -195,6 +207,12 @@ final class PaywallViewController: UIViewController {
         termOfUseButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().offset(-24)
             $0.bottom.equalToSuperview().offset(-35)
+        }
+        
+        closeButton.snp.makeConstraints { make in
+            make.height.width.equalTo(32)
+            make.trailing.equalToSuperview().inset(18)
+            make.top.equalToSuperview().offset(53.fitH)
         }
     }
     
