@@ -40,8 +40,9 @@ final class AppCoordinator: ApphudDelegate {
         } else if Apphud.hasActiveSubscription() {
             getStartedViewController = CTTabBarController()
         } else {
-            getStartedViewController = CTTabBarController()
-//            getStartedViewController = PaywallRouter.setupModule()
+//            getStartedViewController = CTTabBarController()
+            getStartedViewController = PaywallRouter.setupModule()
+//            getStartedViewController = RateUsScreenRouter.setupModule()
         }
         
         let navigationController = UINavigationController(rootViewController: getStartedViewController)

@@ -791,3 +791,6 @@
 
 "reviews.writeAReview" = "Написать отзыв";
 "reviews.sendUsFeedback" = "Сообщите нам";
+
+"rateUs.title" = "Оцените приложение";
+"rateUs.subtitle" = "Это поможет сделать его лучше";

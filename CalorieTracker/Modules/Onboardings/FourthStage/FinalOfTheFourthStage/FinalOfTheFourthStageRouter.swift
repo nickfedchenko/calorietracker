@@ -42,11 +42,7 @@ class FinalOfTheFourthStageRouter {
 
 extension FinalOfTheFourthStageRouter: FinalOfTheFourthStageRouterInterface {
     func didTapCalorieTrackingViaKcalc() {
-        let calorieTrackingViaKcalcRouter = CalorieTrackingViaKcalcRouter.setupModule()
-        
-        viewController?.navigationController?.pushViewController(
-            calorieTrackingViaKcalcRouter,
-            animated: true
-        )
+        let vc = RateUsScreenRouter.setupModule()
+        viewController?.navigationController?.pushViewController(vc, animated: true)
     }
 }

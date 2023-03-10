@@ -790,3 +790,6 @@
 
 "reviews.writeAReview" = "Write a review";
 "reviews.sendUsFeedback" = "Send us feedback";
+
+"rateUs.title" = "Rate the app";
+"rateUs.subtitle" = "This helps to make it even better";

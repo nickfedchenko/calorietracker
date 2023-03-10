@@ -9,7 +9,7 @@
 import Foundation
 
 protocol RateUsScreenPresenterInterface: AnyObject {
-
+    func didTapNextButton()
 }
 
 class RateUsScreenPresenter {
@@ -30,5 +30,7 @@ class RateUsScreenPresenter {
 }
 
 extension RateUsScreenPresenter: RateUsScreenPresenterInterface {
-
+    func didTapNextButton() {
+        router?.didTapNextButton()
+    }
 }
