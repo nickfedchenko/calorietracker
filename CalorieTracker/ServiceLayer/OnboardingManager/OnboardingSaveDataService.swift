@@ -25,7 +25,7 @@ struct OnboardingSaveDataService {
             sex: onboardingInfo.whatsYourGender?.userSex ?? .male,
             dateOfBirth: onboardingInfo.dateOfBirth ?? Date(),
             height: onboardingInfo.yourHeight ?? 0,
-            dietary: .classic,
+            dietary: onboardingInfo.dietarySetting ?? .classic,
             email: onboardingInfo.mail
         )
         

@@ -145,13 +145,15 @@ extension OnboardingChartView {
                 color: .black,
                 opacity: 0.03,
                 offset: CGSize(width: 0, height: 1),
-                radius: 16
+                radius: 16,
+                spread: 0
             ),
             .init(
                 color: .black,
                 opacity: 0.03,
                 offset: CGSize(width: 0, height: 6),
-                radius: 8
+                radius: 8,
+                spread: 0
             )
         ]
     }

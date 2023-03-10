@@ -70,7 +70,7 @@ extension SettingsPresenter: SettingsPresenterInterface {
     }
     
     func didTapShareButton() {
-        let url = URL(string: "https://www.youtube.com")!
+        let url = URL(string: "http://itunes.com/apps/appname")!
         router?.openShareViewController(url)
     }
     

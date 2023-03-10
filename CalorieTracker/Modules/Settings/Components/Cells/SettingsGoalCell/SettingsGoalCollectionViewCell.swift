@@ -52,13 +52,15 @@ extension SettingsGoalCollectionViewCell {
                 color: R.color.createProduct.formFirstShadow() ?? .black,
                 opacity: 0.15,
                 offset: CGSize(width: 0, height: 0.5),
-                radius: 2
+                radius: 2,
+                spread: 0
             ),
             Shadow(
                 color: R.color.createProduct.formSecondShadow() ?? .black,
                 opacity: 0.1,
                 offset: CGSize(width: 0, height: 4),
-                radius: 10
+                radius: 10,
+                spread: 0
             )
         ]
     }

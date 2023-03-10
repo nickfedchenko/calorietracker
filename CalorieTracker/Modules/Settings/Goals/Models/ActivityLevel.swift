@@ -51,5 +51,3 @@ extension ActivityLevel: WithGetImageProtocol, WithGetDescriptionProtocol {
         return nil
     }
 }
-
-

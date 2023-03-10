@@ -54,18 +54,61 @@ final class GoalsSettingsViewController: UIViewController {
     private func setupView() {
         view.backgroundColor = R.color.mainBackground()
         
-        goalMenuView.complition = { goalType in
+        goalMenuView.complition = { [weak self] goalType in
+            self?.updateAccording(new: goalType)
             UDM.goalType = goalType
-            self.presenter?.updateCell(type: .goal)
+            self?.presenter?.updateCell(type: .goal)
         }
         
-        activityMenuView.complition = { activity in
+        activityMenuView.complition = { [weak self] activity in
             UDM.activityLevel = activity
-            self.presenter?.updateCell(type: .activityLevel)
+            self?.presenter?.updateCell(type: .activityLevel)
         }
         
         goalMenuController = .init(goalMenuView, width: 243.fontScale())
         activityMenuController = .init(activityMenuView, width: 243.fontScale())
+    }
+    
+    private func updateAccording(new goal: GoalType) {
+        guard goal != UDM.goalType else { return }
+        if goal == .maintainWeight {
+            UDM.tempWeeklyGoal = UDM.weeklyGoal
+            UDM.weeklyGoal = 0
+            UDM.weightGoal = WeightWidgetService.shared.getStartWeight()
+        } else if goal == .loseWeight {
+            UDM.weeklyGoal = -(abs(UDM.weeklyGoal != 0 ? UDM.weeklyGoal ?? 0 : UDM.tempWeeklyGoal ?? 0))
+            if (UDM.weightGoal ?? 0) >= (WeightWidgetService.shared.getStartWeight() ?? 0) {
+                UDM.weightGoal = (WeightWidgetService.shared.getStartWeight() ?? 0) - 1
+            }
+            UDM.weeklyGoal = UDM.tempWeeklyGoal
+            UDM.activityLevel = UDM.tempActivityLevel
+        } else if goal == .buildMuscle {
+            if (UDM.weightGoal ?? 0) <= (WeightWidgetService.shared.getStartWeight() ?? 0) {
+                UDM.weightGoal = (WeightWidgetService.shared.getStartWeight() ?? 0) + 1
+            }
+            UDM.weeklyGoal = UDM.tempWeeklyGoal
+            UDM.activityLevel = UDM.tempActivityLevel
+            UDM.weeklyGoal = (abs(UDM.weeklyGoal != 0 ? UDM.weeklyGoal ?? 0 : UDM.tempWeeklyGoal ?? 0))
+        }
+        
+        if let currentWeight = WeightWidgetService.shared.getStartWeight(),
+           let gender = UDM.userData?.sex,
+           let age = UDM.userData?.dateOfBirth.years(to: Date()),
+           let height = UDM.userData?.height {
+            let activity = UDM.activityLevel ?? UDM.tempActivityLevel ?? .low
+            let normal = CalorieMeasurment.calculationRecommendedCalorieWithoutGoal(
+                sex: gender,
+                activity: activity,
+                age: age,
+                height: height,
+                weight: currentWeight
+            )
+            
+            let targetCalorieDailyOffset = 1100 * (UDM.weeklyGoal ?? 0)
+            var newKcalGoal = normal + targetCalorieDailyOffset
+            UDM.kcalGoal = newKcalGoal
+            presenter?.updateCell(type: .weight)
+        }
     }
     
     private func addSubviews() {
@@ -198,7 +241,7 @@ extension GoalsSettingsViewController {
         let button = UIButton()
         button.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
         button.setAttributedTitle(
-            "PREFERENCES".attributedSring(
+            R.string.localizable.settingsPreferencesTitle().attributedSring(
                 [
                     StringSettingsModel(
                         worldIndex: [0],

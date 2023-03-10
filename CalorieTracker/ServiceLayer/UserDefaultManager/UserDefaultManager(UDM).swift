@@ -33,8 +33,25 @@ final class UDM {
         case mainScreenAddButtonOriginY
         case tempAddButtonImage
         case tempScannerImage
+        case tempActivityLevel
+        case tempWeeklyGoal
     }
     
+    static var tempWeeklyGoal: Double? {
+        get {
+            guard let value: Double = getValue(for: .tempWeeklyGoal) else {
+                return nil
+            }
+            return value
+        }
+        set {
+            guard let value = newValue else {
+                UserDefaults.standard.removeObject(forKey: UDMKeys.tempWeeklyGoal.rawValue)
+                return
+            }
+            setValue(value: value, for: .tempWeeklyGoal)
+        }
+    }
     
     static var tempAddButtonImage: Data? {
         get {
@@ -248,7 +265,10 @@ final class UDM {
         }
         
         set {
-            guard let value = newValue else { return }
+            guard let value = newValue else {
+                UserDefaults.standard.removeObject(forKey: UDMKeys.weeklyGoal.rawValue)
+                return
+            }
             setValue(value: value, for: .weeklyGoal)
         }
     }
@@ -382,6 +402,21 @@ final class UDM {
         set {
             let data = try? JSONEncoder().encode(newValue)
             setValue(value: data, for: .activityLevel)
+        }
+    }
+    
+    static var tempActivityLevel: ActivityLevel? {
+        get {
+            guard let data: Data = getValue(for: .tempActivityLevel),
+                   let activityData = try? JSONDecoder().decode(ActivityLevel.self, from: data) else {
+                return nil
+            }
+            return activityData
+        }
+        
+        set {
+            let data = try? JSONEncoder().encode(newValue)
+            setValue(value: data, for: .tempActivityLevel)
         }
     }
     

@@ -127,6 +127,7 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
         dateFormatter.dateFormat = "MMM d"
         let calendarModel: CalendarWidgetNode.Model = .init(
             dateString: dateFormatter.string(from: date ?? Date()).uppercased(),
+            date: date,
             daysStreak: CalendarWidgetService.shared.getStreakDays()
         )
         view.setCalendarWidget(calendarModel)

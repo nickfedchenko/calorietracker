@@ -37,6 +37,8 @@ struct NutrientGoalSettingsViewModel {
         case .nutritionTitle:
             let cell: SettingsProfileHeaderCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
             cell.title = presenter?.getNutritionGoalStr()
+            let percent = (presenter?.getNutrientPercent().sum() ?? 0) * 100
+            cell.setPercentLabel(value: percent)
             return cell
         case .nutrition:
             let cell: SettingsGoalCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)

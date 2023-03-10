@@ -19,18 +19,20 @@ protocol NutrientGoalSettingsPresenterInterface: AnyObject {
 class NutrientGoalSettingsPresenter {
     
     private var kcalGoal: Double?
+
     private var nutrientTypeGoal: NutrientGoalType? {
         didSet {
             guard let nutrientTypeGoal = nutrientTypeGoal,
-                    let oldValue = oldValue else {
+                  let oldValue = oldValue else {
                 return
             }
-
+            
             switch (oldValue, nutrientTypeGoal) {
             case (.default, .default):
                 return
             case (.custom, .custom):
-                return
+                let newSum = nutrientTypeGoal.getNutrientPercent().sum()
+                view.updatePercentLabel(by: (nutrientTypeGoal.getNutrientPercent().sum() ?? 0) * 100)
             case (.lowFat, .lowFat):
                 return
             case (.lowCarb, .lowCarb):
@@ -72,18 +74,34 @@ extension NutrientGoalSettingsPresenter: NutrientGoalSettingsPresenterInterface 
                 protein: oldNutrientPercent.protein,
                 carbs: oldNutrientPercent.carbs
             ))
+            if Double(value) + oldNutrientPercent.protein + oldNutrientPercent.carbs > 1 {
+                view.setSaveButton(enabled: false)
+            } else {
+                view.setSaveButton(enabled: true)
+            }
+            print("New fat value \(value)")
         case .protein:
             self.nutrientTypeGoal = .custom(.init(
-                fat: Double(value),
-                protein: oldNutrientPercent.protein,
+                fat: oldNutrientPercent.fat,
+                protein: Double(value),
                 carbs: oldNutrientPercent.carbs
             ))
+            if Double(value) + oldNutrientPercent.fat + oldNutrientPercent.carbs > 1 {
+                view.setSaveButton(enabled: false)
+            } else {
+                view.setSaveButton(enabled: true)
+            }
         case .carbs:
             self.nutrientTypeGoal = .custom(.init(
-                fat: Double(value),
+                fat: oldNutrientPercent.fat,
                 protein: oldNutrientPercent.protein,
-                carbs: oldNutrientPercent.carbs
+                carbs: Double(value)
             ))
+            if Double(value) + oldNutrientPercent.protein + oldNutrientPercent.fat > 1 {
+                view.setSaveButton(enabled: false)
+            } else {
+                view.setSaveButton(enabled: true)
+            }
         }
     }
     

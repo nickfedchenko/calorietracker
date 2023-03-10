@@ -141,12 +141,14 @@ private struct ShadowConst {
         color: R.color.addFood.menu.firstShadow() ?? .black,
         opacity: 0.2,
         offset: CGSize(width: 0, height: 4),
-        radius: 10
+        radius: 10,
+        spread: 0
     )
     static let secondShadow = Shadow(
         color: R.color.addFood.menu.secondShadow() ?? .black,
         opacity: 0.25,
         offset: CGSize(width: 0, height: 0.5),
-        radius: 2
+        radius: 2,
+        spread: 0
     )
 }

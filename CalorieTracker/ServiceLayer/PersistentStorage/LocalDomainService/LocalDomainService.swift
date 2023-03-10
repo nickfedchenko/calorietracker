@@ -65,7 +65,12 @@ protocol LocalDomainServiceInterface {
 
 final class LocalDomainService {
     // MARK: - Constants
-    private let savingQueue = DispatchQueue(label: "savingQueue", qos: .utility)
+    private let savingQueue: OperationQueue = {
+      let queue = OperationQueue()
+        queue.maxConcurrentOperationCount = 2
+        return queue
+    }()
+    
     enum Constants {
         static let modelName: String = "CaloireTrackerLocal"
     }
@@ -99,7 +104,7 @@ final class LocalDomainService {
     
     private lazy var taskContext: NSManagedObjectContext = {
         let context = container.newBackgroundContext()
-        context.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
+        context.mergePolicy = NSMergePolicy.safeMergePolicy
         return context
     }()
     
@@ -110,7 +115,7 @@ final class LocalDomainService {
             return
         }
         
-        let workItem = DispatchWorkItem(flags: .barrier) { [weak taskContext] in
+        let workItem = BlockOperation { [weak taskContext] in
             do {
                 try taskContext?.save()
             } catch let error {
@@ -120,7 +125,7 @@ final class LocalDomainService {
         }
         
          taskContext.perform { [weak self] in
-             self?.savingQueue.async(execute: workItem)
+             self?.savingQueue.addOperation(workItem)
          }
     }
     
@@ -269,22 +274,39 @@ extension LocalDomainService: LocalDomainServiceInterface {
     }
     
     func saveProducts(products: [Product], saveInPriority: Bool) {
+   
         let backgroundContext = container.newBackgroundContext()
+
         backgroundContext.mergePolicy = NSMergePolicy.safeMergePolicy
         
-        let _: [DomainProduct] = products
-            .map { DomainProduct.prepare(fromPlainModel: $0, context: backgroundContext) }
-        try? backgroundContext.save()
+            backgroundContext.performAndWait {
+            let _: [DomainProduct] = products
+                .map { DomainProduct.prepare(fromPlainModel: $0, context: backgroundContext) }
+                do {
+                  try backgroundContext.save()
+                } catch let error {
+                    print(error)
+                    backgroundContext.rollback()
+                }
+        }
+//        }
+//        savingQueue.addOperation(operationBlock)
     }
     
     func saveDishes(dishes: [Dish]) {
         let backgroundContext = container.newBackgroundContext()
         backgroundContext.mergePolicy = NSMergePolicy.safeMergePolicy
-        let _: [DomainDish] = dishes
-            .map { DomainDish.prepare(fromPlainModel: $0, context: backgroundContext) }
-        backgroundContext.perform({
-            try? backgroundContext.save()
-        })
+        
+        backgroundContext.performAndWait {
+            let _: [DomainDish] = dishes
+                .map { DomainDish.prepare(fromPlainModel: $0, context: backgroundContext) }
+            do {
+              try backgroundContext.save()
+            } catch let error {
+                print(error)
+                backgroundContext.rollback()
+            }
+        }
     }
     
     func saveDailyMeals(data: [DailyMeal]) {

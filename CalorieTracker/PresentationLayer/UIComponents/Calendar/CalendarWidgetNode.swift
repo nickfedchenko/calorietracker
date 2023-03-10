@@ -11,6 +11,7 @@ final class CalendarWidgetNode: CTWidgetNode {
     
     struct Model {
         let dateString: String
+        let date: Date?
         let daysStreak: Int
     }
     
@@ -122,6 +123,49 @@ final class CalendarWidgetNode: CTWidgetNode {
         ])
         
         bottomTextNode.attributedText = getDaysStreakString(days: model.daysStreak)
+        if let date = model.date {
+            setTopLabel(for: date)
+        }
+    }
+    
+    private func setTopLabel(for date: Date) {
+        let todayDate = Date()
+        switch abs(Calendar.current.dateComponents([.day], from: todayDate, to: date).day ?? 0) {
+        case 0:
+            topTextNode.attributedText = Text.today.attributedSring([
+                .init(
+                    worldIndex: [0],
+                    attributes: [
+                        .color(.white),
+                        .font(R.font.sfProRoundedBold(size: UIDevice.isSmallDevice ? 16 : 18))
+                    ]
+                )
+            ])
+        case 1:
+            topTextNode.attributedText = Text.yesterday.attributedSring([
+                .init(
+                    worldIndex: [0],
+                    attributes: [
+                        .color(.white),
+                        .font(R.font.sfProRoundedBold(size: UIDevice.isSmallDevice ? 13 : 15))
+                    ]
+                )
+            ])
+            
+        default:
+            let formatter = DateFormatter()
+            formatter.dateFormat = "EEEE"
+            let weekDayString = formatter.string(from: date)
+            topTextNode.attributedText = weekDayString.uppercased().attributedSring([
+                .init(
+                    worldIndex: [0],
+                    attributes: [
+                        .color(.white),
+                        .font(R.font.sfProRoundedBold(size: UIDevice.isSmallDevice ? 13 : 15))
+                    ]
+                )
+            ])
+        }
     }
     
     private func getDaysStreakString(days: Int) -> NSAttributedString {
@@ -147,7 +191,8 @@ final class CalendarWidgetNode: CTWidgetNode {
 
 extension CalendarWidgetNode {
     struct Text {
-        static let today = "TODAY"
-        static let streak = " days\nlog streak"
+        static let today = R.string.localizable.calendarTopTitleToday()
+        static let yesterday = R.string.localizable.calendarTopTitleYesterday()
+        static let streak = R.string.localizable.calendarLogStreak()
     }
 }

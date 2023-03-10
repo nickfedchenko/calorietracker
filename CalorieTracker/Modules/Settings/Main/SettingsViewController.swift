@@ -68,11 +68,11 @@ final class SettingsViewController: UIViewController {
     }
     
     private func setupConstraints() {
-        logoView.aspectRatio(0.344)
         logoView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(31)
-            make.leading.equalToSuperview().offset(31)
-            make.width.equalToSuperview().multipliedBy(0.464)
+            make.leading.equalToSuperview().offset(20)
+            make.width.equalTo(195)
+            make.height.equalTo(64)
         }
         
         collectionView.snp.makeConstraints { make in
@@ -88,12 +88,12 @@ final class SettingsViewController: UIViewController {
         
         shareButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().offset(-28)
-            make.top.equalTo(logoView.snp.top)
+            make.bottom.equalTo(premiumButton.snp.top).inset(-16)
         }
         
         premiumButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().offset(-20)
-            make.bottom.equalTo(logoView.snp.bottom)
+            make.bottom.equalTo(logoView.snp.bottom).inset(4)
         }
     }
     
@@ -160,7 +160,6 @@ extension SettingsViewController: UICollectionViewDelegate {
         guard let type = viewModel?.getTypeCell(indexPath) else {
             return
         }
-        
         presenter?.didTapCell(type)
     }
 }
@@ -172,8 +171,10 @@ extension SettingsViewController: UICollectionViewDataSource {
         return viewModel?.numberOfItemsInSection() ?? 0
     }
     
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
         let defaultCell: UICollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
         let cell = viewModel?.getCell(collectionView, indexPath: indexPath)
         return cell ?? defaultCell
@@ -217,20 +218,18 @@ extension SettingsViewController {
                     StringSettingsModel(
                         worldIndex: [0],
                         attributes: [
-                            .font(R.font.sfProTextMedium(size: 17.fontScale())),
+                            .font(R.font.sfProTextMedium(size: 17)),
                             .color(R.color.foodViewing.basicPrimary())
                         ]
                     )
-                ],
-                image: .init(
-                    image: R.image.settings.share(),
-                    font: R.font.sfProTextMedium(size: 14.fontScale()),
-                    position: .right
-                )
+                ]
             ),
+            
             for: .normal
         )
-        
+        button.setImage(R.image.settings.share(), for: .normal)
+        button.imageEdgeInsets.left = 11
+        button.semanticContentAttribute = .forceRightToLeft
         return button
     }
 }

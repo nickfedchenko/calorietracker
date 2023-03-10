@@ -25,12 +25,7 @@ struct SettingsСategoriesViewModel {
             return nil
         }
         switch type {
-        case .profile:
-            let cell: SettingsProfileCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
-            cell.viewModel = getProfileCellViewModel()
-            cell.type = type
-            return cell
-        case .chat, .goals, .rate, .help, .app, .reminders:
+        default:
             let cell: SettingsCategoryCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
             cell.viewModel = getCategoryCellViewModel(type)
             cell.type = type
@@ -39,17 +34,7 @@ struct SettingsСategoriesViewModel {
     }
     
     func getCellSize(width: CGFloat, indexPath: IndexPath) -> CGSize {
-        let height: CGFloat
-        switch settingsCategoryTypes[safe: indexPath.row] {
-        case .profile:
-            height = width * 0.256
-        case .chat, .goals, .rate, .help, .app, .reminders:
-            height = width * 0.192
-        default:
-            return .zero
-        }
-        
-        return CGSize(width: width, height: height)
+        return CGSize(width: width, height: 72)
     }
     
     func getIndexType(_ type: SettingsCategoryType) -> Int? {
@@ -77,7 +62,15 @@ struct SettingsСategoriesViewModel {
     private func getCategoryCellViewModel(_ type: SettingsCategoryType) -> SettingsCategoryCellViewModel? {
         switch type {
         case .profile:
-            return nil
+            return .init(
+                title: R.string.localizable.settingsProfileTitle(),
+                description: nil,
+                titleColor: R.color.foodViewing.basicDark(),
+                descriptionColor: nil,
+                image: R.image.settings.profileIcon(),
+                imageBackgroundColor: UIColor(hex: "1EA162"),
+                remindersCount: 2
+            )
         case .chat:
             return .init(
                 title: "Live Chat Support",
@@ -90,7 +83,7 @@ struct SettingsСategoriesViewModel {
             )
         case .goals:
             return .init(
-                title: "My Goals",
+                title: R.string.localizable.settingsMyGoalsTitle(),
                 description: nil,
                 titleColor: R.color.foodViewing.basicDark(),
                 descriptionColor: nil,
@@ -100,7 +93,7 @@ struct SettingsСategoriesViewModel {
             )
         case .app:
             return .init(
-                title: "App Settings",
+                title: R.string.localizable.settingsApp(),
                 description: nil,
                 titleColor: R.color.foodViewing.basicDark(),
                 descriptionColor: nil,
@@ -110,7 +103,7 @@ struct SettingsСategoriesViewModel {
             )
         case .reminders:
             return .init(
-                title: "Reminders",
+                title: R.string.localizable.settingsMainRemindersTitle(),
                 description: nil,
                 titleColor: R.color.foodViewing.basicDark(),
                 descriptionColor: nil,
@@ -120,7 +113,7 @@ struct SettingsСategoriesViewModel {
             )
         case .rate:
             return .init(
-                title: "Rate this App",
+                title: R.string.localizable.settingsMainRateTitle(),
                 description: nil,
                 titleColor: R.color.foodViewing.basicDark(),
                 descriptionColor: nil,
@@ -130,7 +123,7 @@ struct SettingsСategoriesViewModel {
             )
         case .help:
             return .init(
-                title: "Help & FAQ",
+                title: R.string.localizable.settingsMainHelpTitle(),
                 description: nil,
                 titleColor: R.color.foodViewing.basicDark(),
                 descriptionColor: nil,

@@ -454,14 +454,25 @@
 
 "onboarding.fourth.sequenceOfHabitFormation.button" = "Продолжить";
 "onboarding.fourth.sequenceOfHabitFormation.title" = "Привычки";
-"onboarding.fourth.sequenceOfHabitFormation.title.first" = "Какими способами вы можете повысить уровень ";
-"onboarding.fourth.sequenceOfHabitFormation.title.second" = "своей активности?";
+"onboarding.fourth.sequenceOfHabitFormation.title.first" = "Последовательность это ключ ";
+"onboarding.fourth.sequenceOfHabitFormation.title.second" = "к формированию привычки";
 "onboarding.fourth.sequenceOfHabitFormation.description" = "Первый шаг - это отслеживание, а второй - сделать его осмысленным. Как вы думаете, что лучше всего подойдет вам в первые несколько дней?";
-"onboarding.fourth.sequenceOfHabitFormation.logEachMealBeforeYouTakeTheFirstBite" = "Изучение новых видов деятельности";
-"onboarding.fourth.sequenceOfHabitFormation.logImmediatelyAfterEachMeal" = "Достижение ежедневной пошаговой цели";
-"onboarding.fourth.sequenceOfHabitFormation.logAllOfYoutMealsBeforeTheDayStarts" = "Больше гулять";
-"onboarding.fourth.sequenceOfHabitFormation.logAllOfYourMealsAtTheEndOfTheDay" = "Включение активности в мой распорядок дня";
-"onboarding.fourth.sequenceOfHabitFormation.imNotSureImStillFiguringOutWhatWillWorkForMe" = "Пробуем новый план тренировок";
+"onboarding.fourth.sequenceOfHabitFormation.logEachMealBeforeYouTakeTheFirstBite" = "Записывать каждый прием пищи перед употреблением";
+"onboarding.fourth.sequenceOfHabitFormation.logImmediatelyAfterEachMeal" = "Записывать сразу после каждого приема пищи";
+"onboarding.fourth.sequenceOfHabitFormation.logAllOfYoutMealsBeforeTheDayStarts" = "Записывать все запланированные приемы пищи перед началом дня";
+"onboarding.fourth.sequenceOfHabitFormation.logAllOfYourMealsAtTheEndOfTheDay" = "Записывать все приемы пищи в конце дня";
+"onboarding.fourth.sequenceOfHabitFormation.imNotSureImStillFiguringOutWhatWillWorkForMe" = "Я не уверен(а), пытаюсь понять что будет лучше для меня";
+
+"onboarding.fourth.dietaryPreference.title.first" = "Диетические";
+"onboarding.fourth.dietaryPreference.title.second" = "предпочтения";
+"onboarding.fourth.dietaryPreference.diet.classic.title" = "Классическая";
+"onboarding.fourth.dietaryPreference.diet.classic.subtitle" = "У меня нет диетических предпочтений";
+"onboarding.fourth.dietaryPreference.diet.pescatarian.title" = "Пескетарианская";
+"onboarding.fourth.dietaryPreference.diet.pescatarian.subtitle" = "Я ем морепродукты, но мясо";
+"onboarding.fourth.dietaryPreference.diet.vegetarian.title" = "Вегетарианская";
+"onboarding.fourth.dietaryPreference.diet.vegetarian.subtitle" = "Я не ем мясо и морепродукты";
+"onboarding.fourth.dietaryPreference.diet.vegan.title" = "Веганская";
+"onboarding.fourth.dietaryPreference.diet.vegan.subtitle" = "Я не ем продукты животного происхождения";
 
 "onboarding.fourth.soundsGood.button" = "Продолжить";
 "onboarding.fourth.soundsGood.title" = "Привычки";
@@ -587,6 +598,7 @@
 "highProtein" = "С высоким содержанием белка";
 "lowFat" = "С низким содержанием жира";
 "custom" = "Настраиваемый";
+"Keto" = "Кето";
 
 "low" = "Низкий";
 "moderate" = "Умеренный";
@@ -658,15 +670,15 @@
 "settings.app.haptic" = "Обратная связь";
 "settings.app.meal" = "Переименовать типы блюд";
 "settings.app.about" = "О KCALC";
-"settings.myGoals.title" = "МОИ ЦЕЛИ";
+"settings.myGoals.title" = "Мои Цели";
 "settings.calorieGoal.title" = "Цель по калориям";
 "settings.calorieGoal.recalculate" = "ПЕРЕСЧИТАТЬ ЦЕЛЬ";
 "settings.calorieGoal.description" = "Распределение калорий";
-"settings.nutrientGoal.title" = "Цели в области питательных веществ";
+"settings.nutrientGoal.title" = "Цель по БЖУ";
 "settings.nutrientGoal.reset" = "СБРОС";
 "settings.goal.goal" = "Цель";
 "settings.goal.startWeight" = "Начальный вес";
-"settings.goal.weight" = "Вес цели";
+"settings.goal.weight" = "Целевой вес";
 "settings.goal.activityLevel" = "Уровень активности";
 "settings.goal.weekly" = "Недельная цель";
 "settings.profile.title" = "Профиль";
@@ -682,7 +694,7 @@
 "settings.main.chat.title" = "Поддержка живого чата";
 "settings.main.reminders.title" = "Напоминания";
 "settings.main.rate.title" = "Оцените это приложение";
-"settings.main.help.title" = "Справка и часто задаваемые вопросы";
+"settings.main.help.title" = "Проблемы ? Напишите нам";
 "settings.profile.name.title" = "Имя";
 "settings.profile.lastName.title" = "Фамилия";
 "settings.profile.city.title" = "Город";
@@ -762,3 +774,17 @@
 "measurement.floz" = "ж. унц";
 "measurement.g" = "г";
 "measurement.oz" = "унц";
+
+"universalSelector.currentSettingsByKcal" = "Основываясь на текущих настройках ваша цель по калориям ";
+"universalSelector.currentSettingsByKcalNew" = "Основываясь на текущих настройках ваша новая цель по калориям ";
+"universalSelector.new" = "новая";
+"enterkcal.headerview.description" = "Когда вы устананавливайте индивидуальную норму потребления - настройки уровня активности и недельной цели перестанут учитываться";
+"settings.emptyCell.set" = "Уст.";
+"brand.food" = "Брендированная еда";
+"base.food" = "Базовая еда";
+"alert.yourGoal.title" = "ВАША ЦЕЛЬ";
+"alert.willBeChanged" = "Будет изменена на\n";
+
+"calendar.topTitle.today" = "СЕГОДНЯ";
+"calendar.topTitle.yesterday" = "ВЧЕРА";
+"calendar.logStreak" = " дней\nподряд";

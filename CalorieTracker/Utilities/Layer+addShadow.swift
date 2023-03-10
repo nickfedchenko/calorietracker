@@ -23,8 +23,12 @@ extension CALayer {
         shadowLayer.shadowColor = shadow.color.withAlphaComponent(shadow.opacity).cgColor
         shadowLayer.shadowOpacity = 1
         shadowLayer.shadowOffset = shadow.offset
-        shadowLayer.shadowRadius = shadow.radius
-        shadowLayer.frame = bounds
+        shadowLayer.shadowRadius = shadow.radius / 2
+        var frame = bounds
+//        if let spread = shadow.spread {
+//            frame = frame.insetBy(dx: spread, dy: spread)
+//        }
+        shadowLayer.frame = frame
         path.append(UIBezierPath(rect: CGRect(
             origin: CGPoint(
                 x: bounds.origin.x - (shadow.radius + 10) / 2.0,

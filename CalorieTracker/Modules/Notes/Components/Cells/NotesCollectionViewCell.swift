@@ -56,13 +56,15 @@ extension NotesTableViewCell {
                 color: R.color.notes.noteAccent() ?? .black,
                 opacity: 0.25,
                 offset: CGSize(width: 0, height: 0.5),
-                radius: 2
+                radius: 2,
+                spread: 0
             ),
             Shadow(
                 color: R.color.notes.noteSecond() ?? .black,
                 opacity: 0.2,
                 offset: CGSize(width: 0, height: 4),
-                radius: 10
+                radius: 10,
+                spread: 0
             )
         ]
     }

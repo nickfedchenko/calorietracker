@@ -10,6 +10,17 @@ import UIKit
 protocol KeyboardHeaderProtocol: UIView {
     var didTapClose: (() -> Void)? { get set }
     var didChangeValue: ((Double) -> Void)? { get set }
+    func setTextFieldFirstResponder()
+}
+
+extension KeyboardHeaderProtocol {
+    func setTextFieldFirstResponder() {
+        guard let textField = subviews.first?.subviews.first(where: { $0 is UITextField }) else {
+            return
+        }
+     
+        textField.becomeFirstResponder()
+    }
 }
 
 final class KeyboardEnterValueViewController: TouchPassingViewController {
@@ -19,6 +30,7 @@ final class KeyboardEnterValueViewController: TouchPassingViewController {
         case standart(String)
         case meal(String, ((String) -> String)?)
         case water
+        case settingsKcal
     }
     var needUpdate: (() -> Void)?
     var complition: ((Double) -> Void)?
@@ -59,6 +71,11 @@ final class KeyboardEnterValueViewController: TouchPassingViewController {
         setupOutput()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        headerView?.setTextFieldFirstResponder()
+    }
+    
     override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
         super.dismiss(animated: flag, completion: completion)
         guard let enterValue = enterValue else {
@@ -73,7 +90,8 @@ final class KeyboardEnterValueViewController: TouchPassingViewController {
             self.dismiss(animated: true)
         }
         
-        headerView?.didChangeValue = { value in
+        headerView?.didChangeValue = { [weak self] value in
+            guard let self = self else {return }
             self.enterValue = value
             switch self.type {
             case .weight(let actionType):
@@ -88,6 +106,8 @@ final class KeyboardEnterValueViewController: TouchPassingViewController {
                 StepsWidgetService.shared.setDailyStepsGoal(value)
             case .standart, .meal, .water:
                 break
+            case .settingsKcal:
+                return
             }
             self.needUpdate?()
         }
@@ -118,6 +138,8 @@ final class KeyboardEnterValueViewController: TouchPassingViewController {
             return
         case .water:
             (headerView as? WaterKeyboardHeaderView)?.output = self
+        case .settingsKcal:
+            (headerView as? KcalKeyboardHeaderView)?.output = self
         }
     }
     
@@ -142,6 +164,8 @@ final class KeyboardEnterValueViewController: TouchPassingViewController {
             return MealKeyboardHeaderView(title, complition: complition)
         case .water:
             return WaterKeyboardHeaderView("")
+        case .settingsKcal:
+            return KcalKeyboardHeaderView("CALORIE GOAL")
         }
     }
     
@@ -167,5 +191,43 @@ extension KeyboardEnterValueViewController: UIViewControllerTransitioningDelegat
             presenting: presenting,
             insets: .zero
         )
+    }
+}
+
+extension KeyboardEnterValueViewController: KcalKeyboardHeaderOutput {
+    func didTapToRecalculate() -> Double? {
+        if let currentWeight = WeightWidgetService.shared.getStartWeight(),
+           let gender = UDM.userData?.sex,
+           let age = UDM.userData?.dateOfBirth.years(to: Date()),
+           let height = UDM.userData?.height {
+            let activity = UDM.activityLevel ?? UDM.tempActivityLevel ?? .low
+            let normal = CalorieMeasurment.calculationRecommendedCalorieWithoutGoal(
+                sex: gender,
+                activity: activity,
+                age: age,
+                height: height,
+                weight: currentWeight
+            )
+            let targetKCal = {
+                let weeklyGoal = UDM.weeklyGoal ?? UDM.tempWeeklyGoal ?? 0
+                let targetDeficit = weeklyGoal * 1100
+                if UDM.goalType == .loseWeight {
+                    let targetKcalConsumption = normal - abs(targetDeficit)
+                    return targetKcalConsumption
+                } else {
+                    let targetKcalConsumption = normal + abs(targetDeficit)
+                    return targetKcalConsumption
+                }
+            }()
+            return targetKCal
+        } else {
+            return nil
+        }
+    }
+    
+    func didTapToSave(value: Double) {
+        dismiss(animated: true) { [weak self] in
+            self?.complition?(value)
+        }
     }
 }

@@ -13,6 +13,6 @@ protocol CTWidgetProtocol {
 
 protocol CTWidgetFullProtocol: UIView {
     var didTapCloseButton: (() -> Void)? { get set }
-    
+    var didChangeSelectedDate: ((Date) -> Void)? { get set }
     func update()
 }

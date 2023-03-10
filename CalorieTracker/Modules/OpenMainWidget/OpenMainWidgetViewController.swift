@@ -63,6 +63,7 @@ class OpenMainWidgetViewController: UIViewController {
             bottom: 0,
             right: 0
         )
+        
     }
     
     private func setupConstraints() {
@@ -163,6 +164,9 @@ extension OpenMainWidgetViewController: UICollectionViewDelegateFlowLayout {
 extension OpenMainWidgetViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? MealTimeCollectionViewCell else {
+            if let cell = collectionView.cellForItem(at: indexPath) as? MainWidgetCollectionViewCell {
+                didTapCloseButton()
+            }
             return
         }
         

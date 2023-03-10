@@ -103,10 +103,20 @@ extension DSF: DataServiceFacadeInterface {
             case .failure(let error):
                 dump(error)
             case .success(let products):
-                self?.localPersistentStore.saveProducts(
-                    products: products.map { .init($0) },
-                    saveInPriority: false
-                )
+                print("Got \(products.count)")
+                let convProduct: [Product] = products.map { .init($0) }
+                let splittedProducts = convProduct.splitInSubArrays(into: 8)
+                splittedProducts.forEach { [weak self] in
+                    self?.localPersistentStore.saveProducts(
+                        products: $0,
+                        saveInPriority: false
+                    )
+                }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 40) { [weak self] in
+                   let products = self?.localPersistentStore.fetchProducts()
+                    print("got fetched \(products?.count) products")
+                }
             }
         }
     }
@@ -118,8 +128,11 @@ extension DSF: DataServiceFacadeInterface {
                 print(error)
             case .success(let dishes):
                 print("dishes received \(dishes.count)")
+                let splitDishes = dishes.splitInSubArrays(into: 8)
                 self?.makeTagTitles(from: dishes)
-                self?.localPersistentStore.saveDishes(dishes: dishes)
+                splitDishes.forEach { [weak self] dishes in
+                    self?.localPersistentStore.saveDishes(dishes: dishes)
+                }
             }
         }
     }

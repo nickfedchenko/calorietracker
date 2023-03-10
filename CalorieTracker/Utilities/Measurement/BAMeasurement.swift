@@ -137,11 +137,14 @@ struct BAMeasurement {
 extension Double {
     var clean: String {
         if self.isNaN { return "0" }
-        var string = self.truncatingRemainder(dividingBy: 1) < 0.1
+        var string = self > 0 ? self.truncatingRemainder(dividingBy: 1) < 0.05
         ? String(format: "%.0f", self)
-        : String(format: "%.1f", self)
+        : String(format: "%.2f", self)
+        : self.truncatingRemainder(dividingBy: 1) > -0.05
+        ? String(format: "%.0f", self)
+        : String(format: "%.2f", self)
         if string.hasSuffix(".0") { string = string.replacingOccurrences(of: ".00", with: "") }
-        if string != "0" && string.contains(".") && string.hasSuffix("0") {
+        if string != "0" && string.contains(".") && string.hasSuffix("00") {
             string = String(string.dropLast(2))
         }
         return string

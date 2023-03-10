@@ -17,6 +17,8 @@ protocol WeightFullWidgetOutput: AnyObject {
 }
 
 final class WeightFullWidgetView: UIView, CTWidgetFullProtocol {
+    var didChangeSelectedDate: ((Date) -> Void)?
+    
     weak var output: WeightFullWidgetOutput?
     var didTapCloseButton: (() -> Void)?
     
@@ -35,6 +37,7 @@ final class WeightFullWidgetView: UIView, CTWidgetFullProtocol {
             R.image.weightWidget.settings(),
             for: .normal
         )
+        button.alpha = 0
         return button
     }()
     

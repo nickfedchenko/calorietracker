@@ -91,13 +91,15 @@ extension QuickAddView {
                 color: R.color.quickAdd.shadowFirst()!,
                 opacity: 0.1,
                 offset: .init(width: 0, height: 0.5),
-                radius: 2
+                radius: 2,
+                spread: 0
             ),
             .init(
                 color: R.color.quickAdd.shadowSecond()!,
                 opacity: 0.1,
                 offset: .init(width: 0, height: 4),
-                radius: 16
+                radius: 16,
+                spread: 0
             )
         ]
     }

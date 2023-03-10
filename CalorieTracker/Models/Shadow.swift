@@ -12,4 +12,5 @@ struct Shadow {
     let opacity: CGFloat
     let offset: CGSize
     let radius: CGFloat
+    let spread: CGFloat?
 }

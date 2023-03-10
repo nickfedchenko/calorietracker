@@ -42,4 +42,13 @@ extension UIDevice {
             return .unknown
         }
     }
+    
+    static var isSmallDevice: Bool {
+        switch screenType {
+        case .h16x375, .h16x414:
+            return true
+        default:
+            return false
+        }
+    }
 }

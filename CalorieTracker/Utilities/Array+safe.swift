@@ -15,4 +15,10 @@ extension Array {
 
         return self[index]
     }
+    
+    func splitInSubArrays(into size: Int) -> [[Element]] {
+        return (0..<size).map {
+            stride(from: $0, to: count, by: size).map { self[$0] }
+        }
+    }
 }
