@@ -60,6 +60,9 @@ extension DomainMeal {
     @objc(addCustomEntriesObject:)
     @NSManaged public func addToCustomEntries(_ value: DomainCustomEntry)
     
+    @objc(removeCustomEntriesObject:)
+    @NSManaged public func removeFromCustomEntries(_ value: DomainCustomEntry)
+    
     @objc(addCustomEntries:)
     @NSManaged public func addToCustomEntriesSet(_ values: NSSet)
 }

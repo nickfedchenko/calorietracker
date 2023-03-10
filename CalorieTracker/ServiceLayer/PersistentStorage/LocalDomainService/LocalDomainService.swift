@@ -619,50 +619,54 @@ extension LocalDomainService: LocalDomainServiceInterface {
     func setChildMeal(mealId: String, dishesID: [Int], productsID: [String], customEntriesID: [String]) {
         let format = "id == %ld"
         let formatMeal = "id == %@"
-        
+
         let dishPredicates = dishesID.map { NSPredicate(format: format, $0) }
         let productPredicates = productsID.map { NSPredicate(format: formatMeal, $0) }
         let customEntryPredicates = customEntriesID.map { NSPredicate(format: formatMeal, $0) }
         let mealPredicate = NSPredicate(format: formatMeal, mealId)
-        
+
         let products = productPredicates.compactMap {
             fetchData(
                 for: DomainProduct.self,
                 withPredicate: NSCompoundPredicate(orPredicateWithSubpredicates: [$0])
             )?.first
         }
-        
+
         let dishes = dishPredicates.compactMap {
             fetchData(
                 for: DomainDish.self,
                 withPredicate: NSCompoundPredicate(orPredicateWithSubpredicates: [$0])
             )?.first
         }
-        
+
         let customEntries = customEntryPredicates.compactMap {
             fetchData(
                 for: DomainCustomEntry.self,
                 withPredicate: NSCompoundPredicate(orPredicateWithSubpredicates: [$0])
             )?.first
         }
-        
+
         guard let meal = fetchData(
             for: DomainMeal.self,
             withPredicate: NSCompoundPredicate(orPredicateWithSubpredicates: [mealPredicate])
         )?.first else { return }
-        
+
+        fetchData(for: DomainDish.self)?.forEach { meal.removeFromDishes($0) }
+        fetchData(for: DomainProduct.self)?.forEach { meal.removeFromProducts($0) }
+        fetchData(for: DomainCustomEntry.self)?.forEach { meal.removeFromCustomEntries($0) }
+
         dishes.forEach {
             meal.addToDishes($0)
         }
-        
+
         products.forEach {
             meal.addToProducts($0)
         }
-        
+
         customEntries.forEach {
             meal.addToCustomEntries($0)
         }
-        
+
         try? context.save()
     }
     

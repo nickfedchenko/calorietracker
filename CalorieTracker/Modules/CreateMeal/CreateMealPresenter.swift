@@ -15,6 +15,7 @@ protocol CreateMealPresenterInterface: AnyObject {
     func addDish(_ dish: Dish)
     func saveMeal(mealTime: MealTime, title: String, photoURL: URL)
     func addFoods(from meal: Meal)
+    func setChildMeal(for meal: Meal)
 }
 
 class CreateMealPresenter {
@@ -59,7 +60,6 @@ extension CreateMealPresenter: CreateMealPresenterInterface {
     }
     
     func removeFood(at index: Int) {
-        print("--------\(foods?.count)")
         foods?.remove(at: index)
     }
     
@@ -75,5 +75,15 @@ extension CreateMealPresenter: CreateMealPresenterInterface {
         meal.products.foods.forEach { foods?.append($0) }
         meal.dishes.foods.forEach { foods?.append($0) }
         meal.customEntries.foods.forEach { foods?.append($0) }
+    }
+    
+    func setChildMeal(for meal: Meal) {
+        let dishesID = foods?.dishes.map { $0.id } ?? []
+        let productsID = foods?.products.map { $0.id } ?? []
+        DSF.shared.setChildMeal(
+            mealId: meal.id,
+            dishesID: dishesID,
+            productsID: productsID,
+            customEntriesID: [])
     }
 }

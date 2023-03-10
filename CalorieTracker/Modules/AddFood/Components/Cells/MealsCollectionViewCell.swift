@@ -49,7 +49,7 @@ final class MealsCollectionViewCell: UICollectionViewCell {
         label.font = R.font.sfProTextRegular(size: 13)
         label.textColor = UIColor(hex: "547771")
         label.textAlignment = .left
-        label.numberOfLines = 2
+        label.numberOfLines = 0
         return label
     }()
     
@@ -237,7 +237,7 @@ final class MealsCollectionViewCell: UICollectionViewCell {
         }
         
         descriptionLabel.snp.makeConstraints { make in
-            make.height.equalTo(32)
+            make.height.greaterThanOrEqualTo(32)
             make.top.equalTo(titleLabel.snp.bottom).offset(8)
             make.leading.equalTo(mealPhotoImageView.snp.trailing).offset(8)
             make.trailing.equalToSuperview().offset(-48)
@@ -250,7 +250,7 @@ final class MealsCollectionViewCell: UICollectionViewCell {
         }
         
         tableView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(104)
+            make.top.equalTo(descriptionLabel.snp.bottom).offset(14)
             make.leading.equalToSuperview().offset(-20)
             make.trailing.equalToSuperview().offset(20)
             make.bottom.equalToSuperview()
@@ -389,17 +389,12 @@ extension MealsCollectionViewCell: UITableViewDelegate, UITableViewDataSource {
             
             editMealButton.snp.makeConstraints { make in
                 make.centerX.equalToSuperview()
-                make.top.equalToSuperview().offset(8)
-                make.bottom.equalToSuperview().offset(-8)
+                make.centerY.equalToSuperview()
                 make.height.equalTo(36)
                 make.width.equalTo(120)
             }
         }
         
         return cell
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1 ? 50 : 57
     }
 }

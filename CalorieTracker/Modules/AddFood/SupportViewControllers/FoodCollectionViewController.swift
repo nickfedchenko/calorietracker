@@ -151,10 +151,12 @@ extension FoodCollectionViewController: UICollectionViewDelegate {
                         didSelectItemAt indexPath: IndexPath) {
         
         if let cell = collectionView.cellForItem(at: indexPath) as? MealsCollectionViewCell {
-            let cellHeight = cell.tableView.contentSize.height + 104 - 7
+            let mainCellHeight = cell.frame.height - cell.tableView.frame.height
+            let cellHeight = cell.tableView.contentSize.height + mainCellHeight
             mealCellsHeight[indexPath.item] = mealCellsHeight[indexPath.item] == 104 ? cellHeight : 104
             collectionView.performBatchUpdates(nil, completion: nil)
             collectionView.reloadItems(at: [indexPath])
+            cell.tableView.reloadData()
         }
                 
         guard let cell = collectionView.cellForItem(at: indexPath) as? FoodCellProtocol,

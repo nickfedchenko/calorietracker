@@ -323,14 +323,15 @@ class CreateMealViewController: UIViewController {
         case .product(let product, _, _):
             viewModel = CreateMealCellViewModel(
                 title: product.title,
-                tag: product.brand,
+                tag: product.brand != nil ? R.string.localizable.brandFood() :
+                    R.string.localizable.baseFood(),
                 kcal: "\(Int(product.kcal.rounded()))",
                 weight: "\(Int(product.servings?.first?.weight?.rounded() ?? 0.0)) g"
             )
         case .dishes(let dish, _):
             viewModel = CreateMealCellViewModel(
                 title: dish.title,
-                tag: dish.eatingTags.first?.title,
+                tag: R.string.localizable.recipe(),
                 kcal: "\(Int(dish.kcal.rounded()))",
                 weight: "\(Int(dish.dishWeight ?? 0.0)) g"
             )
@@ -389,13 +390,7 @@ class CreateMealViewController: UIViewController {
     }
     
     private func setChildMeal(for meal: Meal) {
-        let dishesID = foods.dishes.map { $0.id }
-        let productsID = foods.products.map { $0.id }
-        DSF.shared.setChildMeal(
-            mealId: meal.id,
-            dishesID: dishesID,
-            productsID: productsID,
-            customEntriesID: [])
+        presenter?.setChildMeal(for: meal)
     }
     
     @objc private func didTapSaveButton() {

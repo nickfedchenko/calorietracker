@@ -1112,7 +1112,6 @@ extension AddFoodViewController: FoodCollectionViewControllerDataSource {
 
 extension AddFoodViewController: AddFoodViewControllerInterface {
 
-    
     func setFoods(_ foods: [Food]) {
         self.foods = foods
         self.foodCollectionViewController.reloadData()
@@ -1152,12 +1151,13 @@ extension AddFoodViewController: AddFoodViewControllerInterface {
     }
     
     func realoadCollectionView() {
-        foodCollectionViewController.reloadData()
         foodCollectionViewController.mealCellsHeight = Array(
             repeating: 104,
-            count: foodCollectionViewController.collectionView
-                .numberOfItems(inSection: 0)
+            count: FDS.shared.getAllMeals().count
         )
+        
+        presenter?.setFoodType(.myMeals)
+        foodCollectionViewController.reloadData()
     }
 }
 
