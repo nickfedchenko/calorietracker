@@ -35,6 +35,7 @@ final class UDM {
         case tempScannerImage
         case tempActivityLevel
         case tempWeeklyGoal
+        case didShowAskingOpinion
     }
     
     static var tempWeeklyGoal: Double? {
@@ -525,6 +526,19 @@ final class UDM {
         set {
             let data = try? JSONEncoder().encode(newValue)
             setValue(value: data, for: .possibleExceptionTags)
+        }
+    }
+    
+    static var didShowAskingOpinion: Bool {
+        get {
+            guard let didShow: Bool = getValue(for: .didShowAskingOpinion) else {
+                return false
+            }
+            return didShow
+        }
+        
+        set {
+            setValue(value: newValue, for: .didShowAskingOpinion)
         }
     }
 }

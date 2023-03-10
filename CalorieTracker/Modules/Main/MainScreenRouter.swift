@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import MessageUI
 import UIKit
 
 protocol MainScreenRouterInterface: AnyObject {
@@ -49,7 +50,18 @@ extension MainScreenRouter: MainScreenRouterInterface {
     }
     
     func openAddFoodVC() {
-        let vc = AddFoodRouter.setupModule(addFoodYCoordinate: UDM.mainScreenAddButtonOriginY)
+        let handler: (() -> Void) = { [weak self] in
+            if !UDM.didShowAskingOpinion {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0) { [weak self] in
+                    self?.showRateUsView()
+                    UDM.didShowAskingOpinion = true
+                }
+            }
+        }
+        let vc = AddFoodRouter.setupModule(
+            addFoodYCoordinate: UDM.mainScreenAddButtonOriginY,
+            needShowReviewController: handler
+        )
         viewController?.navigationController?.delegate = self
         viewController?.navigationController?.pushViewController(vc, animated: true)
     }
@@ -97,6 +109,40 @@ extension MainScreenRouter: MainScreenRouterInterface {
             OpenMainWidgetNavigationController(rootViewController: vc),
             animated: true
         )
+    }
+    
+    private func showRateUsView() {
+        let vc = AskingOpinionViewController()
+        vc.modalPresentationStyle = .overCurrentContext
+        vc.shouldShowMailController = { [weak self] in
+            self?.showMailController()
+        }
+        vc.shouldOpenWriteReviewPage = { [weak self] in
+            self?.openReviewPage()
+        }
+        viewController?.navigationController?.present(vc, animated: true)
+    }
+    
+    private func showMailController() {
+        if MFMailComposeViewController.canSendMail() {
+            let mail = MFMailComposeViewController()
+            mail.mailComposeDelegate = self
+            mail.setToRecipients(["po.fedchenko.top@gmail.com"])
+            mail.setSubject("Here is my feedback")
+            viewController?.navigationController?.present(mail, animated: true)
+        } else {
+            print("Cant send an e-mail")
+        }
+    }
+    
+    private func openReviewPage() {
+        guard
+            let url = URL(string: "itms-apps://itunes.apple.com/app/id1667349931?action=write-review"),
+            UIApplication.shared.canOpenURL(url)
+        else {
+            return
+        }
+        UIApplication.shared.open(url)
     }
 }
 
@@ -161,5 +207,15 @@ extension MainScreenRouter: UINavigationControllerDelegate {
                 return nil
             }
         }
+    }
+}
+
+extension MainScreenRouter: MFMailComposeViewControllerDelegate {
+    func mailComposeController(
+        _ controller: MFMailComposeViewController,
+        didFinishWith result: MFMailComposeResult,
+        error: Error?
+    ) {
+        controller.dismiss(animated: true)
     }
 }

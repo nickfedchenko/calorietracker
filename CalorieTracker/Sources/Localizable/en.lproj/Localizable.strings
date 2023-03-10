@@ -787,3 +787,6 @@
 "calendar.topTitle.today" = "TODAY";
 "calendar.topTitle.yesterday" = "YESTERDAY";
 "calendar.logStreak" = " days\nlog streak";
+
+"reviews.writeAReview" = "Write a review";
+"reviews.sendUsFeedback" = "Send us feedback";

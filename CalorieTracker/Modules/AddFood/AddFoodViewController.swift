@@ -243,7 +243,7 @@ final class AddFoodViewController: UIViewController {
                 DispatchQueue.main.async {
                     self?.selectedFood = []
                     self?.presenter?.setFoodType(self?.previousSelectedType ?? .recent)
-                    self?.presenter?.didTapBackButton()
+                    self?.presenter?.didTapBackButton(shouldShowReview: true)
                 }
             },
             for: .touchUpInside
@@ -902,7 +902,7 @@ final class AddFoodViewController: UIViewController {
             actualSearchTextField.text = ""
             return
         }
-        presenter?.didTapBackButton()
+        presenter?.didTapBackButton(shouldShowReview: false)
     }
     
     @objc private func didTapCreateButton() {

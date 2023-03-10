@@ -788,3 +788,6 @@
 "calendar.topTitle.today" = "СЕГОДНЯ";
 "calendar.topTitle.yesterday" = "ВЧЕРА";
 "calendar.logStreak" = " дней\nподряд";
+
+"reviews.writeAReview" = "Написать отзыв";
+"reviews.sendUsFeedback" = "Сообщите нам";
