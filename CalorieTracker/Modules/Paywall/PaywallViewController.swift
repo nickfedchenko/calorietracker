@@ -122,6 +122,11 @@ final class PaywallViewController: UIViewController {
         subscriptionViewModel?.reloadHandler = { [weak self] in
             DispatchQueue.main.async {
                 self?.collectionView.reloadData()
+                self?.collectionView.selectItem(
+                    at: IndexPath(item: 0, section: 0),
+                    animated: true,
+                    scrollPosition: .top
+                )
             }
         }
     }
@@ -164,21 +169,21 @@ final class PaywallViewController: UIViewController {
         }
         
         convenientCalorieSubscriptionBenefits.snp.makeConstraints {
-            $0.top.equalTo(subscriptionBenefitsContainerView.snp.top).offset(24)
+            $0.top.equalTo(subscriptionBenefitsContainerView.snp.top).offset(24.fitH)
             $0.left.equalTo(subscriptionBenefitsContainerView.snp.left).offset(25)
-            $0.right.equalTo(subscriptionBenefitsContainerView.snp.right).offset(-25)
+            $0.right.equalTo(subscriptionBenefitsContainerView.snp.right).offset(-25.fitH)
         }
         
         effectiveWeightSubscriptionBenefits.snp.makeConstraints {
-            $0.top.equalTo(convenientCalorieSubscriptionBenefits.snp.bottom).offset(24)
+            $0.top.equalTo(convenientCalorieSubscriptionBenefits.snp.bottom).offset(24.fitH)
             $0.left.equalTo(subscriptionBenefitsContainerView.snp.left).offset(25)
-            $0.right.equalTo(subscriptionBenefitsContainerView.snp.right).offset(-25)
+            $0.right.equalTo(subscriptionBenefitsContainerView.snp.right).offset(-25.fitH)
         }
         
         recipesForDifferentSubscriptionBenefits.snp.makeConstraints {
-            $0.top.equalTo(effectiveWeightSubscriptionBenefits.snp.bottom).offset(24)
+            $0.top.equalTo(effectiveWeightSubscriptionBenefits.snp.bottom).offset(24.fitH)
             $0.left.equalTo(subscriptionBenefitsContainerView.snp.left).offset(25)
-            $0.right.equalTo(subscriptionBenefitsContainerView.snp.right).offset(-25)
+            $0.right.equalTo(subscriptionBenefitsContainerView.snp.right).offset(-25.fitH)
         }
         
         bestWaySubscriptionBenefits.snp.makeConstraints {
@@ -259,8 +264,16 @@ extension PaywallViewController: UICollectionViewDelegateFlowLayout {
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = view.frame.width - 56
-        let height = width * 0.2
+        let height: CGFloat = 70
         return CGSize(width: width, height: height)
+    }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumLineSpacingForSectionAt section: Int
+    ) -> CGFloat {
+        6
     }
 }
 

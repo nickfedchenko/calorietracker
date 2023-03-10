@@ -16,6 +16,11 @@ final class SubscriptionAmountCollectionViewCell: UICollectionViewCell {
             view.isSelected = isSelectedCell
         }
     }
+    override var isSelected: Bool {
+        didSet {
+            isSelectedCell = isSelected
+        }
+    }
     
     var model: SubscriptionAmountModel? {
         didSet {
