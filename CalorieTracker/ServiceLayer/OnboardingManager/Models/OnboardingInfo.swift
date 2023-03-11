@@ -14,9 +14,9 @@ struct OnboardingInfo {
     var recentWeightChanges: Bool?
     var questionAboutTheChange: QuestionAboutTheChange?
     var achievingDifficultGoal: AchievingDifficultGoal?
-    var lastCalorieCount: LastCalorieCount?
+    var lastCalorieCount: LastCalorieCount? = .anotherWay
     var calorieCount: Bool?
-    var previousApplication: PreviousApplication?
+    var previousApplication: PreviousApplication? = .anotherApp
     var obsessingOverFood: ObsessingOverFood?
     var theEffectOfWeight: TheEffectOfWeight?
     var formationGoodHabits: FormationGoodHabits?
@@ -60,7 +60,9 @@ struct OnboardingInfo {
     private var firstStageData: [Any?] {
         return [
             purposeOfTheParish,
+            lastCalorieCount,
             calorieCount,
+            previousApplication,
             obsessingOverFood,
             formationGoodHabits
         ]
@@ -75,8 +77,7 @@ struct OnboardingInfo {
             yourHeight,
             yourWeight,
             risksOfDiseases,
-            presenceOfAllergies,
-            allergicRestrictions
+            presenceOfAllergies
         ]
     }
     

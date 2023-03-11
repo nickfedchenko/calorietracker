@@ -37,7 +37,10 @@ class ThanksForTheInformationPresenter {
 
 extension ThanksForTheInformationPresenter: ThanksForTheInformationPresenterInterface {
     func viewDidLoad() {
-        view.set(currentOnboardingStage: .first(progress: 0))
+        
+        if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
+            view.set(currentOnboardingStage: currentOnboardingStage)
+        }
     }
     
     func didTapContinueCommonButton() {

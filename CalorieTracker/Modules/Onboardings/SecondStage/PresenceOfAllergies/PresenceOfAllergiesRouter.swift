@@ -9,6 +9,7 @@ import UIKit
 
 protocol PresenceOfAllergiesRouterInterface: AnyObject {
     func openAllergicRestrictions()
+    func openThanksForTheInformation()
 }
 
 class PresenceOfAllergiesRouter {
@@ -45,5 +46,11 @@ extension PresenceOfAllergiesRouter: PresenceOfAllergiesRouterInterface {
         let allergicRestrictionsRouter = AllergicRestrictionsRouter.setupModule()
         
         viewController?.navigationController?.pushViewController(allergicRestrictionsRouter, animated: true)
+    }
+    
+    func openThanksForTheInformation() {
+        let thanksForTheInformationRouter = ThanksForTheInformationRouter.setupModule()
+        
+        viewController?.navigationController?.pushViewController(thanksForTheInformationRouter, animated: true)
     }
 }

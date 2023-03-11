@@ -41,6 +41,11 @@ final class EnterYourNameViewController: UIViewController {
         configureLayouts()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        textField.becomeFirstResponder()
+    }
+    
     private func configureViews() {
         view.backgroundColor = R.color.mainBackground()
         

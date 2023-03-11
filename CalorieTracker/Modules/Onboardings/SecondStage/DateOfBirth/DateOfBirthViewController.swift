@@ -71,6 +71,24 @@ final class DateOfBirthViewController: UIViewController {
         
         datePicker.preferredDatePickerStyle = .wheels
         datePicker.datePickerMode = .date
+        
+        let currentDate = Date()
+        let minDate = Calendar.current.date(byAdding: .year, value: -100, to: currentDate)
+        let maxDate = Calendar.current.date(byAdding: .year, value: -10, to: currentDate)
+        
+        datePicker.minimumDate = minDate
+        datePicker.maximumDate = maxDate
+        
+        let defaultDateComponents = DateComponents(year: 1993, month: 1, day: 1)
+        let defaultDate = Calendar.current.date(from: defaultDateComponents)
+        if let defaultDate {
+            datePicker.setDate(defaultDate, animated: true)
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd.MM.yyyy"
+            let dateString = dateFormatter.string(from: defaultDate)
+            borderTextField.text = dateString
+        }
+        
         datePicker.addTarget(self, action: #selector(didChangedDatePicker), for: .valueChanged)
         
         continueCommonButton.addTarget(self, action: #selector(didTapContinueCommonButton), for: .touchUpInside)

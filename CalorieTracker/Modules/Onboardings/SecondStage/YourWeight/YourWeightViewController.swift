@@ -65,6 +65,7 @@ final class YourWeightViewController: UIViewController {
             action: #selector(didTapContinueCommonButton),
             for: .touchUpInside
         )
+        borderTextField.text = "70.0 \(R.string.localizable.measurementKg())"
         
         containerPickerView.backgroundColor = .white
         containerPickerView.layer.cornerRadius = 12
@@ -76,6 +77,7 @@ final class YourWeightViewController: UIViewController {
         
         pickerView.dataSource = self
         pickerView.delegate = self
+        pickerView.selectRow(70, inComponent: 0, animated: false)
 
         continueCommonButton.addTarget(self, action: #selector(didTapContinueCommonButton), for: .touchUpInside)
     }
@@ -205,7 +207,7 @@ extension YourWeightViewController: UIPickerViewDelegate {
         
         weight = Double(kilograms) + Double(grams) / 10
         
-        borderTextField.text = "\(kilograms).\(grams) kg"
+        borderTextField.text = "\(kilograms).\(grams) \(R.string.localizable.measurementKg())"
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
