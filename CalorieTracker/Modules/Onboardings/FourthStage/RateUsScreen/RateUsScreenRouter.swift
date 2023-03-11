@@ -56,6 +56,7 @@ extension RateUsScreenRouter: RateUsScreenRouterInterface {
                 let paywall = PaywallRouter.setupModule()
                 viewController?.navigationController?.pushViewController(paywall, animated: true)
             }
+            _ = OnboardingSaveDataService(OnboardingManager.shared.getOnboardingInfo())
         } else {
             guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene else {
                 let paywall = PaywallRouter.setupModule()
