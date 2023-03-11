@@ -9,13 +9,14 @@
 import UIKit
 
 protocol AddFoodRouterInterface: AnyObject {
-    func closeViewController()
+    func closeViewController(shouldAskForReview: Bool)
     func openProductViewController(_ product: Product)
     func openSelectedFoodCellsVC(_ foods: [Food], complition: @escaping ([Food]) -> Void )
     func openScanner()
     func openCreateProduct()
     func openDishViewController(_ dish: Dish)
     func openCustomEntryViewController(mealTime: MealTime)
+    
 }
 
 class AddFoodRouter: NSObject {
@@ -23,12 +24,14 @@ class AddFoodRouter: NSObject {
     weak var presenter: AddFoodPresenterInterface?
     weak var viewController: UIViewController?
     var needUpdate: (() -> Void)?
+    var needShowReviewController: (() -> Void)?
 
     static func setupModule(
         shouldInitiallyPerformSearchWith barcode: String? = nil,
         mealTime: MealTime = .breakfast,
         addFoodYCoordinate: CGFloat,
-        needUpdate: (() -> Void)? = nil
+        needUpdate: (() -> Void)? = nil,
+        needShowReviewController: (() -> Void)? = nil
     ) -> AddFoodViewController {
       
         let vc = AddFoodViewController(searchFieldYCoordinate: addFoodYCoordinate)
@@ -42,6 +45,7 @@ class AddFoodRouter: NSObject {
         router.presenter = presenter
         router.viewController = vc
         router.needUpdate = needUpdate
+        router.needShowReviewController = needShowReviewController
         interactor.presenter = presenter
         defer {
             if let barcode = barcode {
@@ -55,9 +59,12 @@ class AddFoodRouter: NSObject {
 }
 
 extension AddFoodRouter: AddFoodRouterInterface {
-    func closeViewController() {
+    func closeViewController(shouldAskForReview: Bool = false) {
         viewController?.navigationController?.popToRootViewController(animated: true)
         needUpdate?()
+        if shouldAskForReview {
+            needShowReviewController?()
+        }
     }
     
     func openProductViewController(_ product: Product) {

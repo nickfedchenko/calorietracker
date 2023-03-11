@@ -118,6 +118,11 @@ final class ProgressViewController: UIViewController {
                 conteiners.forEach { ($0.view.setChartFormat(.monthly)) }
             }
         }
+        let containers = getWidgetContainers()
+        containers.forEach { container in
+            container.blackout = false
+        }
+        
     }
     
     override func viewDidLayoutSubviews() {
@@ -222,9 +227,9 @@ final class ProgressViewController: UIViewController {
     private func openWidgets() {
         let containers = getWidgetContainers()
         containers.forEach { $0.blackout = false }
-        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {
+//        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {
             self.widgetContainersStack.spacing = 12
-        }
+//        }
     }
     
     private func closeWidgets() {

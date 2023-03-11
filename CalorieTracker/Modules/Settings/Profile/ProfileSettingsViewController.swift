@@ -241,7 +241,7 @@ extension ProfileSettingsViewController {
                     StringSettingsModel(
                         worldIndex: [0],
                         attributes: [
-                            .font(R.font.sfProDisplaySemibold(size: 22.fontScale())),
+                            .font(R.font.sfProDisplaySemibold(size: Locale.current.languageCode == "ru" ? 19 : 22)),
                             .color(R.color.foodViewing.basicGrey())
                         ]
                     )

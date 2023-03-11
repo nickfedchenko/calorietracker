@@ -47,6 +47,14 @@ final class PaywallViewController: UIViewController {
     private lazy var termOfUseButton: UIButton = getTermsButton()
     private lazy var collectionView: UICollectionView = getCollectionView()
     
+    private lazy var closeButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(R.image.waterWidget.closeSettings(), for: .normal)
+        button.tintColor = UIColor(hex: "192621").withAlphaComponent(0.3)
+        button.addTarget(self, action: #selector(didTapCloseButton), for: .touchUpInside)
+        return button
+    }()
+    
     // MARK: - Lifecycle methods
     
     override func viewDidLoad() {
@@ -54,7 +62,6 @@ final class PaywallViewController: UIViewController {
         registerCell()
         configureViews()
         configureLayouts()
-        
         subscriptionViewModel?.loadProducts()
     }
     
@@ -70,6 +77,10 @@ final class PaywallViewController: UIViewController {
     
     private func registerCell() {
         collectionView.register(SubscriptionAmountCollectionViewCell.self)
+    }
+    
+    @objc private func didTapCloseButton() {
+        presenter?.didTapCloseButton()
     }
     
     private func configureViews() {
@@ -111,6 +122,11 @@ final class PaywallViewController: UIViewController {
         subscriptionViewModel?.reloadHandler = { [weak self] in
             DispatchQueue.main.async {
                 self?.collectionView.reloadData()
+                self?.collectionView.selectItem(
+                    at: IndexPath(item: 0, section: 0),
+                    animated: true,
+                    scrollPosition: .top
+                )
             }
         }
     }
@@ -124,7 +140,8 @@ final class PaywallViewController: UIViewController {
             collectionView,
             privacyPolicyButton,
             termOfUseButton,
-            startNowCommonButton
+            startNowCommonButton,
+            closeButton
         )
         
         subscriptionBenefitsContainerView.addSubviews(
@@ -152,21 +169,21 @@ final class PaywallViewController: UIViewController {
         }
         
         convenientCalorieSubscriptionBenefits.snp.makeConstraints {
-            $0.top.equalTo(subscriptionBenefitsContainerView.snp.top).offset(24)
+            $0.top.equalTo(subscriptionBenefitsContainerView.snp.top).offset(24.fitH)
             $0.left.equalTo(subscriptionBenefitsContainerView.snp.left).offset(25)
-            $0.right.equalTo(subscriptionBenefitsContainerView.snp.right).offset(-25)
+            $0.right.equalTo(subscriptionBenefitsContainerView.snp.right).offset(-25.fitH)
         }
         
         effectiveWeightSubscriptionBenefits.snp.makeConstraints {
-            $0.top.equalTo(convenientCalorieSubscriptionBenefits.snp.bottom).offset(24)
+            $0.top.equalTo(convenientCalorieSubscriptionBenefits.snp.bottom).offset(24.fitH)
             $0.left.equalTo(subscriptionBenefitsContainerView.snp.left).offset(25)
-            $0.right.equalTo(subscriptionBenefitsContainerView.snp.right).offset(-25)
+            $0.right.equalTo(subscriptionBenefitsContainerView.snp.right).offset(-25.fitH)
         }
         
         recipesForDifferentSubscriptionBenefits.snp.makeConstraints {
-            $0.top.equalTo(effectiveWeightSubscriptionBenefits.snp.bottom).offset(24)
+            $0.top.equalTo(effectiveWeightSubscriptionBenefits.snp.bottom).offset(24.fitH)
             $0.left.equalTo(subscriptionBenefitsContainerView.snp.left).offset(25)
-            $0.right.equalTo(subscriptionBenefitsContainerView.snp.right).offset(-25)
+            $0.right.equalTo(subscriptionBenefitsContainerView.snp.right).offset(-25.fitH)
         }
         
         bestWaySubscriptionBenefits.snp.makeConstraints {
@@ -196,9 +213,19 @@ final class PaywallViewController: UIViewController {
             $0.trailing.equalToSuperview().offset(-24)
             $0.bottom.equalToSuperview().offset(-35)
         }
+        
+        closeButton.snp.makeConstraints { make in
+            make.height.width.equalTo(32)
+            make.trailing.equalToSuperview().inset(18)
+            make.top.equalToSuperview().offset(53.fitH)
+        }
     }
     
     @objc private func didTapStartNow() {
+        #if DEBUG
+        presenter?.continueToAppNonConditionally()
+        return
+        #endif
         
         guard let product = subscriptionViewModel?.getProductToPurchase() else {
             presenter?.continueToAppNonConditionally()
@@ -241,8 +268,16 @@ extension PaywallViewController: UICollectionViewDelegateFlowLayout {
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = view.frame.width - 56
-        let height = width * 0.2
+        let height: CGFloat = 70
         return CGSize(width: width, height: height)
+    }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumLineSpacingForSectionAt section: Int
+    ) -> CGFloat {
+        6
     }
 }
 

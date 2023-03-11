@@ -23,8 +23,8 @@ final class SubscriptionViewModel {
     
     func loadProducts() {
         Apphud.paywallsDidLoadCallback { [weak self] paywalls in
-            guard let products = paywalls.first?.products else { return }
-            self?.products = products
+            guard let products = paywalls.first?.products	 else { return }
+            self?.products = products.reversed()
         }
     }
     
@@ -38,40 +38,40 @@ final class SubscriptionViewModel {
     
     func makeModelForProduct(at indexPath: IndexPath) -> SubscriptionAmountModel {
         guard !products.isEmpty else {
-            return .init(title: "Loading info", describe: nil)
+            return .init(title: "Loading info".localized, describe: nil)
         }
         let product = products[indexPath.item]
         let periodTitle = makePeriodStirng(for: product)
         let priceString = makePriceString(for: product)
         let weeklyPriceString = makeWeeklyPrice(for: product)
         return .init(
-            title: "\(periodTitle) \(priceString)",
+            title: "\(periodTitle) - \(priceString)",
             describe: weeklyPriceString
         )
     }
     
     private func makePeriodStirng(for product: ApphudProduct) -> String {
         guard let skProduct = product.skProduct else {
-            return "Loading info"
+            return "Loading info".localized
         }
         switch skProduct.subscriptionPeriod?.unit {
         case .year:
-            return "Annualy"
+            return "Annualy".localized
         case .month:
             if skProduct.subscriptionPeriod?.numberOfUnits == 1 {
-                return R.string.localizable.monthly()
+                return R.string.localizable.monthly().lowercased().capitalized
             } else {
                 return "Error fetching payment info"
             }
         case .day:
             if skProduct.subscriptionPeriod?.numberOfUnits == 7 {
-                return R.string.localizable.weekly()
+                return R.string.localizable.weekly().lowercased().capitalized
             } else {
                 return "Error fetching payment info"
             }
         case .week:
             if skProduct.subscriptionPeriod?.numberOfUnits == 1 {
-                return R.string.localizable.weekly()
+                return R.string.localizable.weekly().lowercased().capitalized
             } else {
                 return "Error fetching payment info"
             }
@@ -126,12 +126,14 @@ final class SubscriptionViewModel {
         default:
            return ""
         }
+        
         let shouldTruncate = weeklyPrice.truncatingRemainder(dividingBy: 1) > 0 ? false : true
         string = currencySymbol + (
             shouldTruncate
                 ? String(format: "%.0f", weeklyPrice)
                 : String(format: "%.2f", weeklyPrice)
         )
+        string += " - \("week".localized)"
         return string
     }
 }

@@ -581,7 +581,7 @@
 "weekly" = "WEEKLY";
 "monthly" = "MONTHLY";
 
-"viewing" = "Viewving";
+"viewing" = "Viewing";
 
 "length" = "Length";
 "energy" = "Energy Value";
@@ -787,3 +787,12 @@
 "calendar.topTitle.today" = "TODAY";
 "calendar.topTitle.yesterday" = "YESTERDAY";
 "calendar.logStreak" = " days\nlog streak";
+
+"reviews.writeAReview" = "Write a review";
+"reviews.sendUsFeedback" = "Send us feedback";
+
+"rateUs.title" = "Rate the app";
+"rateUs.subtitle" = "This helps to make it even better";
+
+"Annualy" = "Annualy";
+"week" = "week";

@@ -12,4 +12,5 @@ target 'CalorieTracker' do
   pod 'ApphudSDK'
   pod 'AlignedCollectionViewFlowLayout'
   pod 'NVActivityIndicatorView'
+  pod 'Amplitude'
 end

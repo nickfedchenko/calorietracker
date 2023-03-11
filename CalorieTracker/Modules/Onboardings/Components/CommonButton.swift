@@ -42,7 +42,7 @@ class CommonButton: UIButton {
     
     private func configureViews() {
         layer.cornerRadius = 16
-        
+        layer.cornerCurve = .continuous
         titleLabel?.font = .systemFont(ofSize: 22, weight: .bold)
     }
     

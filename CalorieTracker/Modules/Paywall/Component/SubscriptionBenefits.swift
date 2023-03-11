@@ -20,11 +20,9 @@ final class SubscriptionBenefits: UIView {
     init(text: String) {
         
         super.init(frame: .zero)
-        
-        titleLabel.text = text
-        
         configureViews()
         configureLayouts()
+        titleLabel.text = text
     }
     
     private func configureViews() {
@@ -43,9 +41,9 @@ final class SubscriptionBenefits: UIView {
         addSubview(titleLabel)
         
         imageView.snp.makeConstraints {
-            $0.top.equalTo(snp.top)
+//            $0.top.equalTo(snp.top)
             $0.left.equalTo(snp.left)
-            $0.bottom.equalTo(snp.bottom)
+//            $0.bottom.equalTo(snp.bottom)
             $0.centerY.equalTo(titleLabel.snp.centerY)
             $0.size.equalTo(16)
         }

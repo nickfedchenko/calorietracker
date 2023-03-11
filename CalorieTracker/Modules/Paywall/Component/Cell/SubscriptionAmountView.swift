@@ -41,7 +41,7 @@ final class SubscriptionAmount: UIView {
     
     private func configureViews() {
         backgroundColor = R.color.mainBackground()
-        
+        checkMarkImageView.alpha = 0
         layer.borderColor = UIColor(named: R.color.onboardings.radialGradientFirst.name)?.cgColor
 
         layer.cornerRadius = 16
@@ -84,10 +84,10 @@ final class SubscriptionAmount: UIView {
     
     private func didChageIsSelected() {
         if isSelected {
-            layer.borderColor = R.color.onboardings.radialGradientFirst()?.cgColor
+            layer.borderColor = UIColor(hex: "179458").cgColor
             checkMarkImageView.image = R.image.onboardings.complet()
         } else {
-            layer.borderColor = R.color.onboardings.basicGray()?.cgColor
+            layer.borderColor = UIColor(hex: "568189").cgColor
             checkMarkImageView.image = R.image.paywall.dottedLine()
         }
     }

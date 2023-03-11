@@ -21,7 +21,7 @@
 "onboarding.first.achievingDifficultGoal.aPlanAndGoodHabits" = "План и хорошие привычки";
 
 "onboarding.first.callToAchieveGoal.title" = "История";
-"onboarding.first.callToAchieveGoal.button" = "Продолжть";
+"onboarding.first.callToAchieveGoal.button" = "Продолжить";
 "onboarding.first.callToAchieveGoal.title.first" = "Классно! ";
 "onboarding.first.callToAchieveGoal.title.second" = "Kcalс поможет вам выработать привычки, необходимые для достижения ваших целей.";
 
@@ -85,7 +85,7 @@
 "onboarding.first.obsessingOverFood.title.first" = "Вы когда-нибудь находили себя";
 "onboarding.first.obsessingOverFood.title.second" = "одержимым едой?";
 "onboarding.first.obsessingOverFood.yesDefinitely" = "Да, определенно";
-"onboarding.first.obsessingOverFood.sureSometimes" = "Конечно, иногд";
+"onboarding.first.obsessingOverFood.sureSometimes" = "Конечно, иногда";
 "onboarding.first.obsessingOverFood.noNotReall" = "Нет, не совсем";
 
 "onboarding.first.previousApplication.title" = "История";
@@ -788,3 +788,12 @@
 "calendar.topTitle.today" = "СЕГОДНЯ";
 "calendar.topTitle.yesterday" = "ВЧЕРА";
 "calendar.logStreak" = " дней\nподряд";
+
+"reviews.writeAReview" = "Написать отзыв";
+"reviews.sendUsFeedback" = "Сообщите нам";
+
+"rateUs.title" = "Оцените приложение";
+"rateUs.subtitle" = "Это поможет сделать его лучше";
+
+"Annualy" = "Ежегодно";
+"week" = "неделя";

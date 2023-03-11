@@ -6,9 +6,10 @@
 //
 
 import ApphudSDK
+import Amplitude
 import UIKit
 
-final class AppCoordinator {
+final class AppCoordinator: ApphudDelegate {
     enum Route: String {
         case recipe
     }
@@ -38,9 +39,11 @@ final class AppCoordinator {
 //            getStartedViewController = ChooseDietaryPreferenceRouter.setupModule()
         } else if Apphud.hasActiveSubscription() {
             getStartedViewController = CTTabBarController()
-        } else {
-            getStartedViewController = CTTabBarController()
 //            getStartedViewController = PaywallRouter.setupModule()
+        } else {
+//            getStartedViewController = CTTabBarController()
+            getStartedViewController = PaywallRouter.setupModule()
+//            getStartedViewController = RateUsScreenRouter.setupModule()
         }
         
         let navigationController = UINavigationController(rootViewController: getStartedViewController)
@@ -54,6 +57,11 @@ final class AppCoordinator {
         let appearance = UINavigationBarAppearance()
         appearance.backgroundEffect = nil
         UINavigationBar.appearance().standardAppearance = appearance
+        #if DEBUG
+        UDM.didShowAskingOpinion = false
+        #endif
+        startApphud()
+        setupAmplitude()
     }
     
     private func updateFoodData() {
@@ -73,6 +81,17 @@ final class AppCoordinator {
         }
     }
     
+    private func startApphud() {
+        Apphud.start(apiKey: "app_HW3PbpkqD1jPNEfhdgrRyRyiAmwWB9")
+        Apphud.setDelegate(self)
+    }
+    
+    private func setupAmplitude() {
+        Amplitude.instance().trackingSessionEvents = true
+        Amplitude.instance().initializeApiKey("a3f37803a6c4e1da9f884f40d47236d7", userId: Apphud.userID())
+        Amplitude.instance().logEvent("app_start")
+    }
+    
     func navigateTo(route: Route?, with id: String) {
         guard let route = route else { return }
         let finalOnb = CalorieTrackingViaKcalcRouter.setupModule()
@@ -88,4 +107,9 @@ final class AppCoordinator {
             }
         }
     }
+    
+    func apphudDidChangeUserID(_ userID: String) {
+        Amplitude.instance().setUserId(userID)
+    }
 }
+

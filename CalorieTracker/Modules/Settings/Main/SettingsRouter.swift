@@ -100,7 +100,7 @@ extension SettingsRouter: SettingsRouterInterface {
         if MFMailComposeViewController.canSendMail() {
             let mail = MFMailComposeViewController()
             mail.mailComposeDelegate = self
-            mail.setToRecipients(["developermail@gmail.com"])
+            mail.setToRecipients(["po.fedchenko.top@gmail.com"])
             mail.setMessageBody(
                 "<p>Hey! I have some questions|suggestions!</a></p>", isHTML: true
             )

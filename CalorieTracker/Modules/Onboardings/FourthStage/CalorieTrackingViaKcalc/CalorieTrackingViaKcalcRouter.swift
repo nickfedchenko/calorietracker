@@ -43,23 +43,25 @@ class CalorieTrackingViaKcalcRouter {
 
 extension CalorieTrackingViaKcalcRouter: CalorieTrackingViaKcalcRouterInterface {
     func openPaywallControllerConditionally() {
-        guard Apphud.hasActiveSubscription() else {
-            let vc = PaywallRouter.setupModule()
-            viewController?.navigationController?.pushViewController(vc, animated: true)
-            return
-        }
-        let tabBar = CTTabBarController()
-        
-        if let navigationController = viewController?.navigationController {
-            navigationController.viewControllers = [tabBar]
-            UIView.transition(
-                with: navigationController.view,
-                duration: 0.5,
-                options: .transitionCrossDissolve,
-                animations: nil
-            )
-        } else {
-            viewController?.navigationController?.viewControllers = [tabBar]
-        }
+        let vc = RateUsScreenRouter.setupModule()
+        viewController?.navigationController?.pushViewController(vc, animated: true)
+//        guard Apphud.hasActiveSubscription() else {
+//            let vc = PaywallRouter.setupModule()
+//            viewController?.navigationController?.pushViewController(vc, animated: true)
+//            return
+//        }
+//        let tabBar = CTTabBarController()
+//        
+//        if let navigationController = viewController?.navigationController {
+//            navigationController.viewControllers = [tabBar]
+//            UIView.transition(
+//                with: navigationController.view,
+//                duration: 0.5,
+//                options: .transitionCrossDissolve,
+//                animations: nil
+//            )
+//        } else {
+//            viewController?.navigationController?.viewControllers = [tabBar]
+//        }
     }
 }

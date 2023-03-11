@@ -11,7 +11,7 @@ import Foundation
 protocol AddFoodPresenterInterface: AnyObject {
     func setFoodType(_ type: AddFood)
     func getSearchHistory() -> [String]
-    func didTapBackButton()
+    func didTapBackButton(shouldShowReview: Bool)
     func didTapCell(_ type: Food)
     func search(_ request: String, complition: ((Bool) -> Void)?)
     func getSubInfo(_ food: Food?, _ type: FoodInfoCases) -> Int?
@@ -188,8 +188,8 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
         UDM.searchHistory
     }
     
-    func didTapBackButton() {
-        router?.closeViewController()
+    func didTapBackButton(shouldShowReview: Bool = false) {
+        router?.closeViewController(shouldAskForReview: shouldShowReview)
     }
     
     func didTapCell(_ type: Food) {
