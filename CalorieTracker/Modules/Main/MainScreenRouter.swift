@@ -67,6 +67,37 @@ extension MainScreenRouter: MainScreenRouterInterface {
     }
     
     func openWidget(_ type: WidgetContainerViewController.WidgetType) {
+        switch type {
+        case.steps:
+            if !UDM.isAuthorisedHealthKit {
+                HealthKitAccessManager.shared.askPermission { result in
+                    switch result {
+                    case .success(let success):
+                        UDM.isAuthorisedHealthKit = success
+                    case .failure(let failure):
+                        print(failure)
+                    }
+                }
+                return
+            }
+          
+            fallthrough
+        case .exercises:
+            if !UDM.isAuthorisedHealthKit {
+                HealthKitAccessManager.shared.askPermission { result in
+                    switch result {
+                    case .success(let success):
+                        UDM.isAuthorisedHealthKit = success
+                    case .failure(let failure):
+                        print(failure)
+                    }
+                }
+                return
+            }
+            fallthrough
+        default:
+            print()
+        }
         let vc = WidgetContainerRouter.setupModule(type)
         vc.output = self
         
