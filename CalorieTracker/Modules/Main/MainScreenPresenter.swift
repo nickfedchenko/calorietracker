@@ -183,15 +183,18 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
         let proteinToday = nutritionToday.protein
         let fatToday = nutritionToday.fat
         let kcalToday = nutritionToday.kcal
-        let burnedKcalToday = ExerciseWidgetServise.shared.getBurnedKcalForDate(date)
+        let burnedKcalFromExercises = ExerciseWidgetServise.shared.getBurnedKcalForDate(date)
+        let burnedKCalFromSteps = StepsWidgetService.shared.getStepsNow() * 0.0608
+        let includingBurned = kcalGoal + burnedKCalFromSteps + burnedKcalFromExercises - kcalToday
+        let includingBurnedInt: Int = includingBurned < 0 ? 0 : Int(includingBurned)
         let model: MainWidgetViewNode.Model = .init(
             text: MainWidgetViewNode.Model.Text(
                 firstLine: "\(Int(kcalToday)) / \(Int(kcalGoal)) kcal",
                 secondLine: "\(Int(carbsToday)) / \(Int(carbsGoal)) carbs",
                 thirdLine: "\(Int(proteinToday)) / \(Int(proteinGoal)) protein",
                 fourthLine: "\(Int(fatToday)) / \(Int(fatGoal)) fat",
-                excludingBurned: "\(Int(kcalToday - burnedKcalToday))",
-                includingBurned: "\(Int(kcalToday))"
+                excludingBurned: "\(UInt(kcalGoal - kcalToday < 0 ? 0 : kcalGoal - kcalToday))",
+                includingBurned: "\(includingBurnedInt)"
             ),
             circleData: MainWidgetViewNode.Model.CircleData(
                 rings: [

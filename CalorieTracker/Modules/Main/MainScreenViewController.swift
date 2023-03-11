@@ -254,6 +254,7 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         addTapGestureRecognizer()
         presenter?.checkOnboarding()
         generator.prepare()
+        setupObservers()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -372,6 +373,22 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         return stackInset
     }
     
+    private func setupObservers() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(updateHKStepsWidgetByObserver),
+            name: Notification.Name("UpdateStepsWidget"),
+            object: nil
+        )
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(updateHKExercisesWidgetByObserver),
+            name: Notification.Name("UpdateExercisesWidget"),
+            object: nil
+        )
+    }
+    
     private func addTapGestureRecognizer() {
         [
             calendarWidget,
@@ -388,6 +405,18 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
                     forControlEvents: .touchUpInside
                 )
             }
+    }
+    
+    @objc private func updateHKStepsWidgetByObserver() {
+        DispatchQueue.main.async { [weak self] in
+            self?.presenter?.updateStepsWidget()
+        }
+    }
+    
+    @objc private func updateHKExercisesWidgetByObserver() {
+        DispatchQueue.main.async { [weak self] in
+            self?.presenter?.updateExersiceWidget()
+        }
     }
     
     @objc private func didTapWidget(_ sender: ASControlNode) {

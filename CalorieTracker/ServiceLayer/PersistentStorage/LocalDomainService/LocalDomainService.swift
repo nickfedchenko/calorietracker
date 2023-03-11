@@ -131,7 +131,7 @@ final class LocalDomainService {
     
     private func deleteObject<T: NSManagedObject> (object: T) {
         context.delete(object)
-        save()
+        try? context.save()
     }
     
     private func fetchData<T: NSManagedObject> (
@@ -328,27 +328,45 @@ extension LocalDomainService: LocalDomainServiceInterface {
     }
     
     func saveWater(data: [DailyData]) {
+        let backgroundContext = container.newBackgroundContext()
         let _: [DomainWater] = data
-            .map { DomainWater.prepare(fromPlainModel: $0, context: context) }
-        try? context.save()
+            .map { DomainWater.prepare(fromPlainModel: $0, context: backgroundContext) }
+        backgroundContext.performAndWait {
+            try? backgroundContext.save()
+        }
     }
     
     func saveSteps(data: [DailyData]) {
+        let backgroundContext = container.newBackgroundContext()
+        backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
         let _: [DomainSteps] = data
-            .map { DomainSteps.prepare(fromPlainModel: $0, context: context) }
-        try? context.save()
+            .map { DomainSteps.prepare(fromPlainModel: $0, context: backgroundContext) }
+        backgroundContext.performAndWait {
+            try? backgroundContext.save()
+            NotificationCenter.default.post(name: NSNotification.Name("UpdateStepsWidget"), object: nil)
+        }
     }
     
     func saveWeight(data: [DailyData]) {
+        let backgroundContext = container.newBackgroundContext()
+        backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
         let _: [DomainWeight] = data
-            .map { DomainWeight.prepare(fromPlainModel: $0, context: context) }
-        try? context.save()
+            .map { DomainWeight.prepare(fromPlainModel: $0, context: backgroundContext) }
+        backgroundContext.performAndWait {
+            try? backgroundContext.save()
+            
+        }
     }
     
     func saveExercise(data: [Exercise]) {
+        let backgroundContext = container.newBackgroundContext()
+        backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
         let _: [DomainExercise] = data
-            .map { DomainExercise.prepare(fromPlainModel: $0, context: context) }
-        try? context.save()
+            .map { DomainExercise.prepare(fromPlainModel: $0, context: backgroundContext) }
+        backgroundContext.performAndWait {
+            try? backgroundContext.save()
+            NotificationCenter.default.post(name: NSNotification.Name("UpdateExercisesWidget"), object: nil)
+        }
     }
     
     func saveNotes(data: [Note]) {
@@ -392,7 +410,9 @@ extension LocalDomainService: LocalDomainServiceInterface {
             withPredicate: NSCompoundPredicate(
                 orPredicateWithSubpredicates: [NSPredicate(format: format, id)]
             )
-        )?.first else { return false }
+        )?.first else {
+            return false
+        }
         deleteObject(object: mealData)
         return true
     }

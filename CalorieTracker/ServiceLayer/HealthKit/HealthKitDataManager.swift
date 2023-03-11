@@ -80,8 +80,10 @@ final class HealthKitDataManager {
         var interval = DateComponents()
         interval.day = 1
         let syncDate = UDM.dateHealthKitSync
-
-        var anchorComponents = calendar.dateComponents([.day, .month, .year], from: syncDate ?? Date.distantPast)
+ 
+        var anchorComponents = calendar.dateComponents(
+            [.day, .month, .year], from: Calendar.current.startOfDay(for: Date())
+        )
         anchorComponents.hour = 0
         guard let anchorDate = calendar.date(from: anchorComponents) else { return }
 
@@ -102,6 +104,7 @@ final class HealthKitDataManager {
                     if let quantity = statistics.sumQuantity() {
                         let date = statistics.startDate
                         let totalCalories = quantity.doubleValue(for: HKUnit.kilocalorie())
+    
                         calories.append(.init(day: date.day, value: totalCalories))
                     }
                 }
@@ -196,7 +199,6 @@ final class HealthKitDataManager {
                 completion(.failure(Error.commonError))
             }
         }
-        
         healthStore.execute(query)
     }
 }
