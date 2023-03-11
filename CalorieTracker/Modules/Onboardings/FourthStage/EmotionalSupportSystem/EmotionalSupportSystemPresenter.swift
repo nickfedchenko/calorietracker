@@ -52,6 +52,6 @@ extension EmotionalSupportSystemPresenter: EmotionalSupportSystemPresenterInterf
     
     func didTapContinueCommonButton() {
         interactor?.set(emotionalSupportSystem: .dontUsuallyNeedSupportSystem)
-        router?.openHealthApp()
+        router?.openlifestyleOfOthers()
     }
 }

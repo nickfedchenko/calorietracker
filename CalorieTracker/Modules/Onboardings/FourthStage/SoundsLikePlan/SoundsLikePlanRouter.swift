@@ -8,7 +8,7 @@
 import UIKit
 
 protocol SoundsLikePlanRouterInterface: AnyObject {
-    func openIncreasingYourActivityLevel()
+    func openWhatImportantToYou()
 }
 
 class SoundsLikePlanRouter {
@@ -41,9 +41,9 @@ class SoundsLikePlanRouter {
 // MARK: - SoundsLikePlanRouterInterface
 
 extension SoundsLikePlanRouter: SoundsLikePlanRouterInterface {
-    func openIncreasingYourActivityLevel() {
-        let increasingYourActivityLevelRouter = IncreasingYourActivityLevelRouter.setupModule()
+    func openWhatImportantToYou() {
+        let whatImportantToYouRouter = WhatImportantToYouRouter.setupModule()
         
-        viewController?.navigationController?.pushViewController(increasingYourActivityLevelRouter, animated: true)
+        viewController?.navigationController?.pushViewController(whatImportantToYouRouter, animated: true)
     }
 }

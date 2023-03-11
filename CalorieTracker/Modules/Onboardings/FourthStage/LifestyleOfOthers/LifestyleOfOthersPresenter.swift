@@ -52,6 +52,6 @@ extension LifestyleOfOthersPresenter: LifestyleOfOthersPresenterInterface {
     
     func didTapContinueCommonButton() {
         interactor?.set(lifestyleOfOthers: .dontHaveManyHealthyHabitsount)
-        router?.openEmotionalSupportSystem()
+        router?.openActivityLevelSelection()
     }
 }

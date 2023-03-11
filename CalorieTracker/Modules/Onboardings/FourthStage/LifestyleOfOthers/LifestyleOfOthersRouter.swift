@@ -8,7 +8,7 @@
 import UIKit
 
 protocol LifestyleOfOthersRouterInterface: AnyObject {
-    func openEmotionalSupportSystem()
+    func openActivityLevelSelection()
 }
 
 class LifestyleOfOthersRouter {
@@ -41,11 +41,11 @@ class LifestyleOfOthersRouter {
 // MARK: - LifestyleOfOthersRouterInterface
 
 extension LifestyleOfOthersRouter: LifestyleOfOthersRouterInterface {
-    func openEmotionalSupportSystem() {
-        let emotionalSupportSystemRouter = EmotionalSupportSystemRouter.setupModule()
+    func openActivityLevelSelection() {
+        let activityLevelSelectionRouter = ActivityLevelSelectionRouter.setupModule()
         
         viewController?.navigationController?.pushViewController(
-            emotionalSupportSystemRouter,
+            activityLevelSelectionRouter,
             animated: true
         )
     }

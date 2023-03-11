@@ -10,7 +10,7 @@ import Lottie
 import UIKit
 
 protocol PurposeOfTheParishRouterInterface: AnyObject {
-    func openRecentWeightChanges()
+    func openCallToAchieveGoal()
 }
 
 class PurposeOfTheParishRouter: NSObject {
@@ -44,9 +44,9 @@ class PurposeOfTheParishRouter: NSObject {
 // MARK: - PurposeOfTheParishRouterInterface
 
 extension PurposeOfTheParishRouter: PurposeOfTheParishRouterInterface {
-    func openRecentWeightChanges() {
-        let recentWeightChangesRouter = RecentWeightChangesRouter.setupModule()
+    func openCallToAchieveGoal() {
+        let callToAchieveGoalRouter = CallToAchieveGoalRouter.setupModule()
         
-        viewController?.navigationController?.pushViewController(recentWeightChangesRouter, animated: true)
+        viewController?.navigationController?.pushViewController(callToAchieveGoalRouter, animated: true)
     }
 }

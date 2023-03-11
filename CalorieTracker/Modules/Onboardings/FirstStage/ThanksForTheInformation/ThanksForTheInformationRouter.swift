@@ -9,9 +9,9 @@ import Foundation
 import UIKit
 
 protocol ThanksForTheInformationRouterInterface: AnyObject {
-    func openFinalOfTheFirstStage()
-    func openFinalOfTheSecondStage()
-    func openFinalOfTheThirdStage()
+    func openEnterYourName()
+    func openImportanceOfWeightLoss()
+    func openCurrentLifestile()
 }
 
 class ThanksForTheInformationRouter: NSObject {
@@ -42,21 +42,21 @@ class ThanksForTheInformationRouter: NSObject {
 // MARK: - ThanksForTheInformationRouterInterface
 
 extension ThanksForTheInformationRouter: ThanksForTheInformationRouterInterface {
-    func openFinalOfTheFirstStage() {
-        let finalOfTheFirstStageRouter = FinalOfTheFirstStageRouter.setupModule()
+    func openEnterYourName() {
+        let enterYourNameRouter = EnterYourNameRouter.setupModule()
         
-        viewController?.navigationController?.pushViewController(finalOfTheFirstStageRouter, animated: true)
+        viewController?.navigationController?.pushViewController(enterYourNameRouter, animated: true)
     }
     
-    func openFinalOfTheSecondStage() {
-        let finalOfTheSecondStageRouter = FinalOfTheSecondStageRouter.setupModule()
+    func openImportanceOfWeightLoss() {
+        let importanceOfWeightLossRouter = ImportanceOfWeightLossRouter.setupModule()
         
-        viewController?.navigationController?.pushViewController(finalOfTheSecondStageRouter, animated: true)
+        viewController?.navigationController?.pushViewController(importanceOfWeightLossRouter, animated: true)
     }
     
-    func openFinalOfTheThirdStage() {
-        let finalOfTheThirdStageRouter = FinalOfTheThirdStageRouter.setupModule()
+    func openCurrentLifestile() {
+        let currentLifestileRouter = CurrentLifestileRouter.setupModule()
         
-        viewController?.navigationController?.pushViewController(finalOfTheThirdStageRouter, animated: true)
+        viewController?.navigationController?.pushViewController(currentLifestileRouter, animated: true)
     }
 }

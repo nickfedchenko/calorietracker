@@ -54,8 +54,14 @@ extension LastCalorieCountPresenter: LastCalorieCountPresenterInterface {
     }
 
     func didTapNextCommonButton() {
-        interactor?.set(lastCalorieCount: .usingAnApp)
-        router?.openCalorieCount()
+        interactor?.set(lastCalorieCount: lastCalorieCount[lastCalorieCountIndex ?? 0])
+        
+        switch lastCalorieCountIndex {
+        case 0:
+            router?.openPreviousApplication()
+        default:
+            router?.openObsessingOverFood()
+        }
     }
     
     func didSelectLastCalorieCount(with index: Int) {

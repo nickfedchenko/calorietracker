@@ -59,17 +59,9 @@ struct OnboardingInfo {
     
     private var firstStageData: [Any?] {
         return [
-            isHaveYouTriedToLoseWeightBefor,
-            descriptionOfExperience,
             purposeOfTheParish,
-            recentWeightChanges,
-            questionAboutTheChange,
-            achievingDifficultGoal,
-            lastCalorieCount,
             calorieCount,
-            previousApplication,
             obsessingOverFood,
-            theEffectOfWeight,
             formationGoodHabits
         ]
     }
@@ -91,7 +83,6 @@ struct OnboardingInfo {
     private var thirdStageData: [Any?] {
         return [
             importanceOfWeightLoss,
-            thoughtsAboutChangingFeelings,
             lifeChangesAfterWeightLoss,
             whatIsYourGoalWeight
         ]
@@ -100,22 +91,11 @@ struct OnboardingInfo {
     private var fourthStageData: [Any?] {
         return [
             currentLifestile,
-            nutritionImprovement,
             improvingNutrition,
-            increasingYourActivityLevel,
-            howImproveYourEfficiency,
-            representationOfIncreasedActivityLevels,
-            sequenceOfHabitFormation,
-            descriptionOfCulinarySkills,
             whatImportantToYou,
-            thoughtsOnStressEating,
-            difficultyChoosingLifestyle,
-            interestInUsingTechnology,
             placeOfResidence,
             environmentInfluencesTheChoice,
             bestDescriptionOfTheSituation,
-            timeForYourself,
-            jointWeightLoss,
             lifestyleOfOthers,
             emotionalSupportSystem,
             activityLevel,

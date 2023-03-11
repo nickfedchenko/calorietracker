@@ -43,6 +43,6 @@ extension SoundsLikePlanPresenter: SoundsLikePlanPresenterInterface {
     }
     
     func didTapContinueCommonButton() {
-        router?.openIncreasingYourActivityLevel()
+        router?.openWhatImportantToYou()
     }
 }

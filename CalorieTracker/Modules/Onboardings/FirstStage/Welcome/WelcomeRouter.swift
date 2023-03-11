@@ -8,7 +8,7 @@
 import UIKit
 
 protocol WelcomeRouterInterface: AnyObject {
-    func openQuestionOfLosingWeight()
+    func openPurposeOfTheParish()
 }
 
 class WelcomeRouter: NSObject {
@@ -41,9 +41,9 @@ class WelcomeRouter: NSObject {
 // MARK: - WelcomeRouterInterface
 
 extension WelcomeRouter: WelcomeRouterInterface {
-    func openQuestionOfLosingWeight() {
-        let questionOfLosingWeightViewController = QuestionOfLosingWeightRouter.setupModule()
+    func openPurposeOfTheParish() {
+        let purposeOfTheParishRouter = PurposeOfTheParishRouter.setupModule()
         
-        viewController?.navigationController?.pushViewController(questionOfLosingWeightViewController, animated: true)
+        viewController?.navigationController?.pushViewController(purposeOfTheParishRouter, animated: true)
     }
 }

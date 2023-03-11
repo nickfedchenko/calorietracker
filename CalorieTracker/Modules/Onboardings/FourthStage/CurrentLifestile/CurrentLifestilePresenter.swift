@@ -52,6 +52,6 @@ extension CurrentLifestilePresenter: CurrentLifestilePresenterInterface {
     
     func didTapContinueCommonButton() {
         interactor?.set(currentLifestile: .myDietAndActivityNeedImprovement)
-        router?.openNutritionImprovement()
+        router?.openImprovingNutrition()
     }
 }

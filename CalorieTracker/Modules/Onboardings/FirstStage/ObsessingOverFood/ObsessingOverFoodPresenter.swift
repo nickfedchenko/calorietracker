@@ -55,7 +55,7 @@ extension ObsessingOverFoodPresenter: ObsessingOverFoodPresenterInterface {
     
     func didTapNextCommonButton() {
         interactor?.set(obsessingOverFood: .yesDefinitely)
-        router?.openTheEffectOfWeight()
+        router?.openFormationGoodHabits()
     }
     
     func didSelectObsessingOverFood(with index: Int) {

@@ -8,7 +8,7 @@
 import UIKit
 
 protocol WhatImportantToYouRouterInterface: AnyObject {
-    func openThoughtsOnStressEating()
+    func openBestDescriptionOfTheSituation()
 }
 
 class WhatImportantToYouRouter {
@@ -43,11 +43,11 @@ class WhatImportantToYouRouter {
 // MARK: - WhatImportantToYouRouterInterface
 
 extension WhatImportantToYouRouter: WhatImportantToYouRouterInterface {
-    func openThoughtsOnStressEating() {
-        let thoughtsOnStressEatingRouter = ThoughtsOnStressEatingRouter.setupModule()
+    func openBestDescriptionOfTheSituation() {
+        let bestDescriptionOfTheSituationRouter = BestDescriptionOfTheSituationRouter.setupModule()
         
         viewController?.navigationController?.pushViewController(
-            thoughtsOnStressEatingRouter,
+            bestDescriptionOfTheSituationRouter,
             animated: true
         )
     }

@@ -8,7 +8,7 @@
 import UIKit
 
 protocol CurrentLifestileRouterInterface: AnyObject {
-    func openNutritionImprovement()
+    func openImprovingNutrition()
 }
 
 class CurrentLifestileRouter {
@@ -41,9 +41,9 @@ class CurrentLifestileRouter {
 // MARK: - CurrentLifestileRouterInterface
 
 extension CurrentLifestileRouter: CurrentLifestileRouterInterface {
-    func openNutritionImprovement() {
-        let nutritionImprovementRouter = NutritionImprovementRouter.setupModule()
+    func openImprovingNutrition() {
+        let improvingNutritionRouter = ImprovingNutritionRouter.setupModule()
         
-        viewController?.navigationController?.pushViewController(nutritionImprovementRouter, animated: true)
+        viewController?.navigationController?.pushViewController(improvingNutritionRouter, animated: true)
     }
 }

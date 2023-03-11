@@ -9,7 +9,8 @@ import Foundation
 import UIKit
 
 protocol LastCalorieCountRouterInterface: AnyObject {
-    func openCalorieCount()
+    func openPreviousApplication()
+    func openObsessingOverFood()
 }
 
 class LastCalorieCountRouter: NSObject {
@@ -40,9 +41,15 @@ class LastCalorieCountRouter: NSObject {
 // MARK: - LastCalorieCountRouterInterface
 
 extension LastCalorieCountRouter: LastCalorieCountRouterInterface {
-    func openCalorieCount() {
-        let calorieCountRouter = CalorieCountRouter.setupModule()
+    func openPreviousApplication() {
+        let previousApplicationRouter = PreviousApplicationRouter.setupModule()
         
-        viewController?.navigationController?.pushViewController(calorieCountRouter, animated: true)
+        viewController?.navigationController?.pushViewController(previousApplicationRouter, animated: true)
+    }
+    
+    func openObsessingOverFood() {
+        let obsessingOverFoodRouter = ObsessingOverFoodRouter.setupModule()
+        
+        viewController?.navigationController?.pushViewController(obsessingOverFoodRouter, animated: true)
     }
 }
