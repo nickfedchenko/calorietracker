@@ -32,8 +32,8 @@ class ActivityLevelSelectionRouter: NSObject {
 }
 
 extension ActivityLevelSelectionRouter: ActivityLevelSelectionRouterInterface {
-    func navigateNext() {
-        let finalOfTheFourthStageRouter = FinalOfTheFourthStageRouter.setupModule()
-        viewController?.navigationController?.pushViewController(finalOfTheFourthStageRouter, animated: true)
-    }
+//    func navigateNext() {
+//        let finalOfTheFourthStageRouter = FinalOfTheFourthStageRouter.setupModule()
+//        viewController?.navigationController?.pushViewController(finalOfTheFourthStageRouter, animated: true)
+//    }
 }

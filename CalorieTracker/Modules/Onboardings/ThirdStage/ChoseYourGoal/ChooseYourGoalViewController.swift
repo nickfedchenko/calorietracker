@@ -1,29 +1,20 @@
 //
-//  CurrentLifestileViewController.swift
-//  CalorieTracker
+//  ChooseYourGoalViewController.swift
+//  CIViperGenerator
 //
-//  Created by Алексей on 29.08.2022.
+//  Created by Alexandru Jdanov on 11.03.2023.
+//  Copyright © 2023 Alexandru Jdanov. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
-protocol CurrentLifestileViewControllerInterface: AnyObject {
-    func set(currentLifestile: [CurrentLifestile])
+protocol ChooseYourGoalViewControllerInterface: AnyObject {
+    func set(chooseYourGoal: [ChooseYourGoal])
     func set(currentOnboardingStage: OnboardingStage)
 }
 
-final class CurrentLifestileViewController: UIViewController {
-    
-    // MARK: - Public properties
-    
-    var presenter: CurrentLifestilePresenterInterface?
-    
-    // MARK: - Private properties
-    
-    var isHedden: Bool = false {
-        didSet { didChangeIsHeaden() }
-    }
+final class ChooseYourGoalViewController: UIViewController {
+    var presenter: ChoseYourGoalPresenterInterface?
     
     // MARK: - Views properties
     
@@ -35,7 +26,7 @@ final class CurrentLifestileViewController: UIViewController {
     private var answerOptions: [AnswerOption] = []
     private let continueCommonButton: CommonButton = .init(
         style: .filled,
-        text: R.string.localizable.onboardingFourthCurrentLifestileButton().uppercased()
+        text: R.string.localizable.onboardingThirdLifeChangesAfterWeightLossButton().uppercased()
     )
     
     // MARK: - Lifecycle methods
@@ -51,21 +42,19 @@ final class CurrentLifestileViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = R.string.localizable.onboardingFourthCurrentLifestileTitle()
-        
+        title = R.string.localizable.onboardingThirdLifeChangesAfterWeightLossTitle()
+
         view.backgroundColor = R.color.mainBackground()
-        
-        scrolView.showsVerticalScrollIndicator = false
         
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: R.string.localizable.onboardingFourthCurrentLifestileTitleFirst(),
+            string: R.string.localizable.onboardingThirdLifeChangesAfterWeightLossTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         attributedString.append(NSAttributedString(
-            string: R.string.localizable.onboardingFourthCurrentLifestileTitleSecond(),
+            string: R.string.localizable.onboardingThirdLifeChangesAfterWeightLossTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
@@ -77,7 +66,6 @@ final class CurrentLifestileViewController: UIViewController {
         stackView.axis = .vertical
         stackView.spacing = 12
         
-        continueCommonButton.isHidden = true
         continueCommonButton.addTarget(self, action: #selector(didTapContinueCommonButton), for: .touchUpInside)
     }
     
@@ -87,7 +75,7 @@ final class CurrentLifestileViewController: UIViewController {
         scrolView.addSubview(contentView)
         
         contentView.addSubview(stageCounterView)
-
+        
         contentView.addSubview(titleLabel)
         
         contentView.addSubview(stackView)
@@ -118,13 +106,12 @@ final class CurrentLifestileViewController: UIViewController {
             $0.top.equalTo(stageCounterView.snp.bottom).offset(40)
             $0.left.equalTo(contentView.snp.left).offset(43)
             $0.right.equalTo(contentView.snp.right).offset(-43)
-            $0.centerX.equalTo(contentView.snp.centerX)
         }
         
         stackView.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(40)
-            $0.left.equalTo(contentView.snp.left).offset(40)
-            $0.right.equalTo(contentView.snp.right).offset(-40)
+            $0.top.equalTo(titleLabel.snp.bottom).offset(32)
+            $0.left.equalTo(contentView.snp.left).offset(32)
+            $0.right.equalTo(contentView.snp.right).offset(-32)
         }
         
         continueCommonButton.snp.makeConstraints {
@@ -157,32 +144,22 @@ final class CurrentLifestileViewController: UIViewController {
         continueCommonButton.isHidden = !answerOptions.contains(where: { $0.isSelected == true })
     }
     
-    @objc func didTapContinueCommonButton() {
+    @objc func didTapContinueCommonButton(_ sender: AnswerOption) {
         presenter?.didTapContinueCommonButton()
-    }
-    
-    private func didChangeIsHeaden() {
-        if isHedden {
-            continueCommonButton.isHidden = false
-        } else {
-            continueCommonButton.isHidden = true
-        }
     }
 }
 
-// MARK: - CurrentLifestileViewControllerInterface
-
-extension CurrentLifestileViewController: CurrentLifestileViewControllerInterface {
+extension ChooseYourGoalViewController: ChooseYourGoalViewControllerInterface {
     func set(currentOnboardingStage: OnboardingStage) {
         stageCounterView.set(onboardingStage: currentOnboardingStage)
     }
     
-    func set(currentLifestile: [CurrentLifestile]) {
+    func set(chooseYourGoal: [ChooseYourGoal]) {
         stackView.removeAllArrangedSubviews()
         answerOptions = []
         
-        for currentLifestile in currentLifestile {
-            let answerOption = AnswerOption(text: currentLifestile.description)
+        for chooseYourGoal in chooseYourGoal {
+            let answerOption = AnswerOption(text: chooseYourGoal.description)
             
             answerOption.addTarget(self, action: #selector(didTapAnswerOption), for: .touchUpInside)
             
@@ -192,21 +169,17 @@ extension CurrentLifestileViewController: CurrentLifestileViewControllerInterfac
     }
 }
 
-// MARK: - CurrentLifestile + description
+// MARK: - ChooseYourGoal + description
 
-fileprivate extension CurrentLifestile {
+fileprivate extension ChooseYourGoal {
     var description: String {
         switch self {
-        case .iEatWellAndAmActive:
-            return R.string.localizable.onboardingFourthCurrentLifestileIEatWellAndAmActive()
-        case .iEatWellButAmNotVeryActive:
-            return R.string.localizable.onboardingFourthCurrentLifestileIEatWellButAmNotVeryActive()
-        case .iDontEatVeryWellButiAmActive:
-            return R.string.localizable.onboardingFourthCurrentLifestileIDontEatVeryWellButiAmActive()
-        case .iHaveSomeHealthyHabits:
-            return R.string.localizable.onboardingFourthCurrentLifestileIHaveSomeHealthyHabits()
-        case .myDietAndActivityNeedImprovement:
-            return R.string.localizable.onboardingFourthCurrentLifestileMyDietAndActivityNeedImprovement()
+        case .loseWeight:
+            return R.string.localizable.loseWeight()
+        case .gainMuscleMass:
+            return R.string.localizable.gainMuscleMass()
+        case .manageHealthCondition:
+            return R.string.localizable.manageHealthCondition()
         }
     }
 }
