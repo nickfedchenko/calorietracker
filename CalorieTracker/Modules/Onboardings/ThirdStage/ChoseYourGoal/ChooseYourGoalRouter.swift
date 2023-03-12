@@ -15,14 +15,14 @@ protocol ChooseYourGoalRouterInterface: AnyObject {
 
 class ChooseYourGoalRouter: NSObject {
 
-    weak var presenter: ChoseYourGoalPresenterInterface?
+    weak var presenter: ChooseYourGoalPresenterInterface?
     weak var viewController: UIViewController?
 
-    static func setupModule() -> ChoseYourGoalViewController {
-        let vc = ChoseYourGoalViewController()
-        let interactor = ChoseYourGoalInteractor(onboardingManager: OnboardingManager.shared)
+    static func setupModule() -> ChooseYourGoalViewController {
+        let vc = ChooseYourGoalViewController()
+        let interactor = ChooseYourGoalInteractor(onboardingManager: OnboardingManager.shared)
         let router = ChooseYourGoalRouter()
-        let presenter = ChoseYourGoalPresenter(interactor: interactor, router: router, view: vc)
+        let presenter = ChooseYourGoalPresenter(interactor: interactor, router: router, view: vc)
 
         vc.presenter = presenter
         router.presenter = presenter

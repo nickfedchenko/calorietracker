@@ -53,7 +53,7 @@ extension ThanksForTheInformationPresenter: ThanksForTheInformationPresenterInte
         case .third:
             router?.openImportanceOfWeightLoss()
         case .fourth:
-            router?.openCurrentLifestile()
+            router?.openImprovingNutrition()
         }
     }
 }

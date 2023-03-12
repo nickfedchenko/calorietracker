@@ -227,6 +227,11 @@
 "onboarding.second.yourWeight.title.first" = "Your weight";
 "onboarding.second.yourWeight.title.weight" = "0.0 kg";
 
+"onboarding.third.chooseYourGoal.button" = "Continue";
+"onboarding.third.chooseYourGoal.title" = "Motivation/Goal";
+"onboarding.third.chooseYourGoal.title.first" = "Choose your ";
+"onboarding.third.chooseYourGoal.title.second" = "goal";
+
 "onboarding.third.deficitAndSurplusCalorie.button" = "Continue";
 "onboarding.third.deficitAndSurplusCalorie.title" = "Motivation/Goal";
 "onboarding.third.deficitAndSurplusCalorie.surplus" = "Calorie surplus";
@@ -614,6 +619,9 @@
 "loseWeight" = "Lose Weight";
 "buildMuscle" = "Build Muscle";
 "maintainWeight" = "Maintain Weight";
+"loseYourWeight" = "Lose weight";
+"gainMuscleMass" = "Gain muscle mass";
+"manageHealthCondition" = "Manage a health condition";
 
 "male" = "Male";
 "famale" = "Famale";

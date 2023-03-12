@@ -133,7 +133,7 @@ final class DeficitAndSurplusCalorieViewController: UIViewController {
         
         scrolView.addSubview(contentView)
         
-        view.addSubview(stageCounterView)
+        contentView.addSubview(stageCounterView)
         
         contentView.addSubview(stackView)
         
@@ -264,7 +264,9 @@ final class DeficitAndSurplusCalorieViewController: UIViewController {
     }
     
     @objc private func didTapContinueCommonButton() {
-        presenter?.didTapContinueCommonButton()
+        if let weightGoal = weightGoal {
+            presenter?.didTapContinueCommonButton(with: weightGoal)
+        }
     }
     
     @objc private func handlePanGesture(sender: UIPanGestureRecognizer) {

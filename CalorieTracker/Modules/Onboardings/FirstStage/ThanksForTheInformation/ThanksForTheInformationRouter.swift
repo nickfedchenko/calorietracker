@@ -11,7 +11,7 @@ import UIKit
 protocol ThanksForTheInformationRouterInterface: AnyObject {
     func openEnterYourName()
     func openImportanceOfWeightLoss()
-    func openCurrentLifestile()
+    func openImprovingNutrition()
 }
 
 class ThanksForTheInformationRouter: NSObject {
@@ -54,9 +54,9 @@ extension ThanksForTheInformationRouter: ThanksForTheInformationRouterInterface 
         viewController?.navigationController?.pushViewController(importanceOfWeightLossRouter, animated: true)
     }
     
-    func openCurrentLifestile() {
-        let currentLifestileRouter = CurrentLifestileRouter.setupModule()
+    func openImprovingNutrition() {
+        let improvingNutritionRouter = ImprovingNutritionRouter.setupModule()
         
-        viewController?.navigationController?.pushViewController(currentLifestileRouter, animated: true)
+        viewController?.navigationController?.pushViewController(improvingNutritionRouter, animated: true)
     }
 }

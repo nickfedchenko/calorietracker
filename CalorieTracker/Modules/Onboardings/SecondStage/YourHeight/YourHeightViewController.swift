@@ -32,7 +32,7 @@ final class YourHeightViewController: UIViewController {
     )
     private let pickerView: UIPickerView = .init()
     
-    private var height: Double?
+    private var height: Double? = 160.0
     
     // MARK: - Lifecycle methods
     

@@ -56,6 +56,7 @@ struct OnboardingInfo {
     var mail: String?
     var activityLevel: ActivityLevel?
     var dietarySetting: UserDietary?
+    var chooseYourGoal: ChooseYourGoal?
     
     private var firstStageData: [Any?] {
         return [
@@ -84,14 +85,16 @@ struct OnboardingInfo {
     private var thirdStageData: [Any?] {
         return [
             importanceOfWeightLoss,
+            chooseYourGoal,
             lifeChangesAfterWeightLoss,
-            whatIsYourGoalWeight
+            whatIsYourGoalWeight,
+            activityLevel,
+            weightGoal
         ]
     }
     
     private var fourthStageData: [Any?] {
         return [
-            currentLifestile,
             improvingNutrition,
             whatImportantToYou,
             placeOfResidence,
@@ -99,7 +102,6 @@ struct OnboardingInfo {
             bestDescriptionOfTheSituation,
             lifestyleOfOthers,
             emotionalSupportSystem,
-            activityLevel,
             dietarySetting
         ]
     }

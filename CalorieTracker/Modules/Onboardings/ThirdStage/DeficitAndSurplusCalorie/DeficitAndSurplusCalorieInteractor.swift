@@ -13,6 +13,7 @@ protocol DeficitAndSurplusCalorieInteractorInterface: AnyObject {
     func getYourWeight() -> Double?
     func getWeightGoal(rate: Double) -> WeightGoal?
     func getDate(rate: Double) -> Date?
+    func set(weightGoal: WeightGoal)
 }
 
 class DeficitAndSurplusCalorieInteractor {
@@ -93,5 +94,9 @@ extension DeficitAndSurplusCalorieInteractor: DeficitAndSurplusCalorieInteractor
     
     func getCurrentOnboardingStage() -> OnboardingStage {
         return onboardingManager.getCurrentOnboardingStage()
+    }
+    
+    func set(weightGoal: WeightGoal) {
+        onboardingManager.set(weightGoal: weightGoal)
     }
 }

@@ -10,6 +10,7 @@ import Foundation
 protocol WhatIsYourGoalWeightInteractorInterface: AnyObject {
     func set(whatIsYourGoalWeight: Double)
     func getCurrentOnboardingStage() -> OnboardingStage
+    func getWeightRange() -> Double
 }
 
 class WhatIsYourGoalWeightInteractor {
@@ -38,5 +39,19 @@ extension WhatIsYourGoalWeightInteractor: WhatIsYourGoalWeightInteractorInterfac
     
     func set(whatIsYourGoalWeight: Double) {
         onboardingManager.set(whatIsYourGoalWeight: whatIsYourGoalWeight)
+    }
+    
+    func getWeightRange() -> Double {
+        let currentWeight = onboardingManager.getYourWeight()
+        let goal = onboardingManager.getYourGoal()
+        
+        switch goal {
+        case .loseWeight:
+            return ((currentWeight ?? 0.0) * 0.85).rounded()
+        case .gainMuscleMass:
+            return ((currentWeight ?? 0.0) * 1.15).rounded()
+        default:
+            return currentWeight ?? 0.0
+        }
     }
 }

@@ -10,6 +10,7 @@ import Foundation
 protocol WhatIsYourGoalWeightPresenterInterface: AnyObject {
     func viewDidLoad()
     func didTapContinueCommonButton(with weightDesired: Double)
+    func getWeightRange() -> Double
 }
 
 class WhatIsYourGoalWeightPresenter {
@@ -44,6 +45,10 @@ extension WhatIsYourGoalWeightPresenter: WhatIsYourGoalWeightPresenterInterface 
     
     func didTapContinueCommonButton(with weightDesired: Double) {
         interactor?.set(whatIsYourGoalWeight: weightDesired)
-        router?.openDeficitAndSurplusCalorie()
+        router?.openActivityLevelSelection()
+    }
+    
+    func getWeightRange() -> Double {
+        interactor?.getWeightRange() ?? 0.0
     }
 }

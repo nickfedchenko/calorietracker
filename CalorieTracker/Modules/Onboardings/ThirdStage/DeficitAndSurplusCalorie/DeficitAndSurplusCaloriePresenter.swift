@@ -9,8 +9,8 @@ import Foundation
 
 protocol DeficitAndSurplusCaloriePresenterInterface: AnyObject {
     func viewDidLoad()
-    func didTapContinueCommonButton()
     func didChangeRate(on value: Double)
+    func didTapContinueCommonButton(with weightGoal: WeightGoal)
 }
 
 class DeficitAndSurplusCaloriePresenter {
@@ -57,7 +57,8 @@ extension DeficitAndSurplusCaloriePresenter: DeficitAndSurplusCaloriePresenterIn
         }
     }
     
-    func didTapContinueCommonButton() {
+    func didTapContinueCommonButton(with weightGoal: WeightGoal) {
+        interactor?.set(weightGoal: weightGoal)
         router?.openThanksForTheInformation()
     }
     

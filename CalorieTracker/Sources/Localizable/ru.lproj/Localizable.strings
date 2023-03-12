@@ -227,6 +227,11 @@
 "onboarding.second.yourWeight.title.first" = "Ваш вес";
 "onboarding.second.yourWeight.title.weight" = "0.0 кг";
 
+"onboarding.third.chooseYourGoal.button" = "Продолжить";
+"onboarding.third.chooseYourGoal.title" = "Мотивация / Цель";
+"onboarding.third.chooseYourGoal.title.first" = "Выберите ";
+"onboarding.third.chooseYourGoal.title.second" = "цель";
+
 "onboarding.third.deficitAndSurplusCalorie.button" = "Продолжить";
 "onboarding.third.deficitAndSurplusCalorie.title" = "Мотивация / Цель";
 "onboarding.third.deficitAndSurplusCalorie.surplus" = "Избыток калорий";
@@ -614,6 +619,9 @@
 "loseWeight" = "Худеть";
 "buildMuscle" = "Наращивать мышечную массу";
 "maintainWeight" = "Поддерживать вес";
+"loseYourWeight" = "Похудеть";
+"gainMuscleMass" = "Набрать мышечную массу";
+"manageHealthCondition" = "Управлять своим здоровьем";
 
 "male" = "Мужчина";
 "famale" = "Женщина";

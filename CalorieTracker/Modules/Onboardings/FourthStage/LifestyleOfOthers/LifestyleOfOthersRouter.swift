@@ -8,7 +8,7 @@
 import UIKit
 
 protocol LifestyleOfOthersRouterInterface: AnyObject {
-    func openActivityLevelSelection()
+    func navigateNext()
 }
 
 class LifestyleOfOthersRouter {
@@ -41,12 +41,8 @@ class LifestyleOfOthersRouter {
 // MARK: - LifestyleOfOthersRouterInterface
 
 extension LifestyleOfOthersRouter: LifestyleOfOthersRouterInterface {
-    func openActivityLevelSelection() {
-        let activityLevelSelectionRouter = ActivityLevelSelectionRouter.setupModule()
-        
-        viewController?.navigationController?.pushViewController(
-            activityLevelSelectionRouter,
-            animated: true
-        )
+    func navigateNext() {
+        let finalOfTheFourthStageRouter = FinalOfTheFourthStageRouter.setupModule()
+        viewController?.navigationController?.pushViewController(finalOfTheFourthStageRouter, animated: true)
     }
 }

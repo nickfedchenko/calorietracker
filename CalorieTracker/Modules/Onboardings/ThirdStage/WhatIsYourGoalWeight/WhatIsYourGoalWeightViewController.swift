@@ -86,6 +86,13 @@ final class WhatIsYourGoalWeightViewController: UIViewController {
         
         pickerView.dataSource = self
         pickerView.delegate = self
+        
+        if let range = presenter?.getWeightRange() {
+            pickerView.selectRow(Int(range), inComponent: 0, animated: false)
+            pickerView.selectRow(0, inComponent: 2, animated: false)
+            borderTextField.textField.text = "\(range) \(R.string.localizable.measurementKg())"
+            weightDesired = range
+        }
 
         continueCommonButton.addTarget(self, action: #selector(didTapContinueCommonButton), for: .touchUpInside)
     }
@@ -203,15 +210,14 @@ extension WhatIsYourGoalWeightViewController: UIPickerViewDataSource {
 }
 
 // MARK: - UIPickerViewDelegate
-
 extension WhatIsYourGoalWeightViewController: UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         let kilograms = pickerView.selectedRow(inComponent: 0)
         let grams = pickerView.selectedRow(inComponent: 2)
-        
+
         weightDesired = Double(kilograms) + Double(grams) / 10
-        
-        borderTextField.text = "\(kilograms).\(grams) kg"
+
+        borderTextField.text = "\(kilograms).\(grams) \(R.string.localizable.measurementKg())"
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {

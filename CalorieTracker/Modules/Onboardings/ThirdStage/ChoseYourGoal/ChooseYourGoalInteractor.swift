@@ -9,8 +9,8 @@
 import Foundation
 
 protocol ChooseYourGoalInteractorInterface: AnyObject {
-    func getAllChoseYourGoal() -> [ChooseYourGoal]
-    func set(choseYourGoal: ChooseYourGoal)
+    func getAllChooseYourGoal() -> [ChooseYourGoal]
+    func set(chooseYourGoal: ChooseYourGoal)
     func getCurrentOnboardingStage() -> OnboardingStage
 }
 
@@ -33,11 +33,11 @@ extension ChooseYourGoalInteractor: ChooseYourGoalInteractorInterface {
         return onboardingManager.getCurrentOnboardingStage()
     }
     
-    func getAllChoseYourGoal() -> [ChooseYourGoal] {
-        return onboardingManager.getAllChoseYourGoal()
+    func getAllChooseYourGoal() -> [ChooseYourGoal] {
+        return onboardingManager.getAllChooseYourGoal()
     }
     
-    func set(choseYourGoal: ChooseYourGoal) {
-        onboardingManager.set(choseYourGoal: choseYourGoal)
+    func set(chooseYourGoal: ChooseYourGoal) {
+        onboardingManager.set(chooseYourGoal: chooseYourGoal)
     }
 }

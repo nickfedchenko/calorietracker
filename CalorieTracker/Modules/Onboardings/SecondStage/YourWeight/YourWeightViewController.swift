@@ -20,7 +20,7 @@ final class YourWeightViewController: UIViewController {
     
     // MARK: - Private properties
     
-    private var weight: Double = 0.0
+    private var weight: Double = 70.0
     
     // MARK: - Views properties
     

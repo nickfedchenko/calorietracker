@@ -53,6 +53,6 @@ extension ImportanceOfWeightLossPresenter: ImportanceOfWeightLossPresenterInterf
     
     func didTapContinueCommonButton() {
         interactor?.set(importanceOfWeightLoss: .itIsVeryImportant)
-        router?.openLifeChangesAfterWeightLoss()
+        router?.openChoseYourGoalRouter()
     }
 }

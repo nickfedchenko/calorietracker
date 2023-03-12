@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 protocol ActivityLevelSelectionRouterInterface: AnyObject {
-    func navigateNext()
+    func openDeficitAndSurplusCalorie()
 }
 
 class ActivityLevelSelectionRouter: NSObject {
@@ -32,8 +32,9 @@ class ActivityLevelSelectionRouter: NSObject {
 }
 
 extension ActivityLevelSelectionRouter: ActivityLevelSelectionRouterInterface {
-//    func navigateNext() {
-//        let finalOfTheFourthStageRouter = FinalOfTheFourthStageRouter.setupModule()
-//        viewController?.navigationController?.pushViewController(finalOfTheFourthStageRouter, animated: true)
-//    }
+    func openDeficitAndSurplusCalorie() {
+        let deficitAndSurplusCalorieRouter = DeficitAndSurplusCalorieRouter.setupModule()
+        
+        viewController?.navigationController?.pushViewController(deficitAndSurplusCalorieRouter, animated: true)
+    }
 }

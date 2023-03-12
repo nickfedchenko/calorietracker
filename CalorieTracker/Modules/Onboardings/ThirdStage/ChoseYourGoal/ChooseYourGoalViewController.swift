@@ -14,7 +14,11 @@ protocol ChooseYourGoalViewControllerInterface: AnyObject {
 }
 
 final class ChooseYourGoalViewController: UIViewController {
-    var presenter: ChoseYourGoalPresenterInterface?
+    var presenter: ChooseYourGoalPresenterInterface?
+    
+    var isHedden: Bool = false {
+        didSet { didChangeIsHeaden() }
+    }
     
     // MARK: - Views properties
     
@@ -42,19 +46,19 @@ final class ChooseYourGoalViewController: UIViewController {
     }
     
     private func configureViews() {
-        title = R.string.localizable.onboardingThirdLifeChangesAfterWeightLossTitle()
+        title = R.string.localizable.onboardingThirdChooseYourGoalTitle()
 
         view.backgroundColor = R.color.mainBackground()
         
         let attributedString = NSMutableAttributedString()
         
         attributedString.append(NSAttributedString(
-            string: R.string.localizable.onboardingThirdLifeChangesAfterWeightLossTitleFirst(),
+            string: R.string.localizable.onboardingThirdChooseYourGoalTitleFirst(),
             attributes: [.foregroundColor: R.color.onboardings.basicDark()!]
         ))
         
         attributedString.append(NSAttributedString(
-            string: R.string.localizable.onboardingThirdLifeChangesAfterWeightLossTitleSecond(),
+            string: R.string.localizable.onboardingThirdChooseYourGoalTitleSecond(),
             attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
         ))
         
@@ -66,6 +70,7 @@ final class ChooseYourGoalViewController: UIViewController {
         stackView.axis = .vertical
         stackView.spacing = 12
         
+        continueCommonButton.isHidden = true
         continueCommonButton.addTarget(self, action: #selector(didTapContinueCommonButton), for: .touchUpInside)
     }
     
@@ -124,12 +129,17 @@ final class ChooseYourGoalViewController: UIViewController {
     }
     
     @objc func didTapAnswerOption(_ sender: AnswerOption) {
-        answerOptions.forEach { answerOption in
+        answerOptions.enumerated().forEach { index, answerOption in
             if answerOption == sender {
                 let isSelected = !answerOption.isSelected
                 
                 answerOption.isSelected = isSelected
                 
+                if isSelected {
+                    presenter?.didSelectChooseYourGoal(with: index)
+                } else {
+                    presenter?.didDeselectChooseYourGoal()
+                }
             } else {
                 answerOption.isSelected = false
             }
@@ -146,6 +156,14 @@ final class ChooseYourGoalViewController: UIViewController {
     
     @objc func didTapContinueCommonButton(_ sender: AnswerOption) {
         presenter?.didTapContinueCommonButton()
+    }
+    
+    private func didChangeIsHeaden() {
+        if isHedden {
+            continueCommonButton.isHidden = false
+        } else {
+            continueCommonButton.isHidden = true
+        }
     }
 }
 
@@ -175,7 +193,7 @@ fileprivate extension ChooseYourGoal {
     var description: String {
         switch self {
         case .loseWeight:
-            return R.string.localizable.loseWeight()
+            return R.string.localizable.loseYourWeight()
         case .gainMuscleMass:
             return R.string.localizable.gainMuscleMass()
         case .manageHealthCondition:

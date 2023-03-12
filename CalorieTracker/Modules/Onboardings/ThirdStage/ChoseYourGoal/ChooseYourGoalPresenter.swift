@@ -11,6 +11,8 @@ import Foundation
 protocol ChooseYourGoalPresenterInterface: AnyObject {
     func viewDidLoad()
     func didTapContinueCommonButton()
+    func didSelectChooseYourGoal(with index: Int)
+    func didDeselectChooseYourGoal()
 }
 
 class ChooseYourGoalPresenter {
@@ -19,15 +21,16 @@ class ChooseYourGoalPresenter {
     
     unowned var view: ChooseYourGoalViewControllerInterface
     let router: ChooseYourGoalRouterInterface?
-    let interactor: ChoseYourGoalInteractorInterface?
+    let interactor: ChooseYourGoalInteractorInterface?
     // MARK: - Private properties
     
-    private var choseYourGoal: [ChooseYourGoal] = []
+    private var chooseYourGoal: [ChooseYourGoal] = []
+    private var chooseYourGoalIndex: Int?
     
     // MARK: - Initialization
     
     init(
-        interactor: ChoseYourGoalInteractorInterface,
+        interactor: ChooseYourGoalInteractorInterface,
         router: ChooseYourGoalRouterInterface,
         view: ChooseYourGoalViewControllerInterface
     ) {
@@ -39,9 +42,9 @@ class ChooseYourGoalPresenter {
 
 extension ChooseYourGoalPresenter: ChooseYourGoalPresenterInterface {
     func viewDidLoad() {
-        choseYourGoal = interactor?.getAllChoseYourGoal() ?? []
+        chooseYourGoal = interactor?.getAllChooseYourGoal() ?? []
         
-        view.set(choseYourGoal: choseYourGoal)
+        view.set(chooseYourGoal: chooseYourGoal)
         
         if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
             view.set(currentOnboardingStage: currentOnboardingStage)
@@ -49,7 +52,15 @@ extension ChooseYourGoalPresenter: ChooseYourGoalPresenterInterface {
     }
     
     func didTapContinueCommonButton() {
-        interactor?.set(choseYourGoal: .loseWeight)
+        interactor?.set(chooseYourGoal: chooseYourGoal[chooseYourGoalIndex ?? 0])
         router?.openLifeChangesAfterWeightLoss()
+    }
+    
+    func didSelectChooseYourGoal(with index: Int) {
+        chooseYourGoalIndex = index
+    }
+    
+    func didDeselectChooseYourGoal() {
+        chooseYourGoalIndex = nil
     }
 }

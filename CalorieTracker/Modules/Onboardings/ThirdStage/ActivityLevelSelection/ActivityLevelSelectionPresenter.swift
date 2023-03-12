@@ -44,6 +44,6 @@ extension ActivityLevelSelectionPresenter: ActivityLevelSelectionPresenterInterf
     
     func didTapContinueCommonButton(with selectedActivityLevel: ActivityLevel) {
         interactor?.set(selectedActivityLevel: selectedActivityLevel)
-        router?.navigateNext()
+        router?.openDeficitAndSurplusCalorie()
     }
 }
