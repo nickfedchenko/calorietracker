@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 protocol ChooseYourGoalRouterInterface: AnyObject {
-    func openLifeChangesAfterWeightLoss()
+    func openImportanceOfWeightLoss()
 }
 
 class ChooseYourGoalRouter: NSObject {
@@ -33,9 +33,9 @@ class ChooseYourGoalRouter: NSObject {
 }
 
 extension ChooseYourGoalRouter: ChooseYourGoalRouterInterface {
-    func openLifeChangesAfterWeightLoss() {
-        let lifeChangesAfterWeightLossRouter = LifeChangesAfterWeightLossRouter.setupModule()
-        
-        viewController?.navigationController?.pushViewController(lifeChangesAfterWeightLossRouter, animated: true)
+    func openImportanceOfWeightLoss() {
+        let importanceOfWeightLossRouter = ImportanceOfWeightLossRouter.setupModule()
+
+        viewController?.navigationController?.pushViewController(importanceOfWeightLossRouter, animated: true)
     }
 }

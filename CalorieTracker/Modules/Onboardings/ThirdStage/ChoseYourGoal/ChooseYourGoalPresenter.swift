@@ -53,7 +53,7 @@ extension ChooseYourGoalPresenter: ChooseYourGoalPresenterInterface {
     
     func didTapContinueCommonButton() {
         interactor?.set(chooseYourGoal: chooseYourGoal[chooseYourGoalIndex ?? 0])
-        router?.openLifeChangesAfterWeightLoss()
+        router?.openImportanceOfWeightLoss()
     }
     
     func didSelectChooseYourGoal(with index: Int) {

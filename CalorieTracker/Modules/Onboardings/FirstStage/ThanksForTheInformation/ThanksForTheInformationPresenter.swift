@@ -51,7 +51,7 @@ extension ThanksForTheInformationPresenter: ThanksForTheInformationPresenterInte
         case .second:
             router?.openEnterYourName()
         case .third:
-            router?.openImportanceOfWeightLoss()
+            router?.openChoseYourGoalRouter()
         case .fourth:
             router?.openImprovingNutrition()
         }

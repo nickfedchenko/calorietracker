@@ -250,7 +250,9 @@
 "onboarding.third.importanceOfWeightLoss.button" = "continue";
 "onboarding.third.importanceOfWeightLoss.title" = "Motivation/Goal";
 "onboarding.third.importanceOfWeightLoss.title.first" = "How importans is it for you to ";
-"onboarding.third.importanceOfWeightLoss.title.second" = "lose weight ";
+"onboarding.third.importanceOfWeightLoss.title.second.loseWeight" = "lose weight ";
+"onboarding.third.importanceOfWeightLoss.title.second.gainMuscleMass" = "gain muscle mass ";
+"onboarding.third.importanceOfWeightLoss.title.second.manageHealthCondition" = "manage health condition ";
 "onboarding.third.importanceOfWeightLoss.title.third" = "right now?";
 "onboarding.third.importanceOfWeightLoss.itIsMyTopPriority" = "It is my top priority";
 "onboarding.third.importanceOfWeightLoss.itIsVeryImportant" = "It is very important";
@@ -259,7 +261,7 @@
 
 "onboarding.third.lifeChangesAfterWeightLoss.button" = "Continue";
 "onboarding.third.lifeChangesAfterWeightLoss.title" = "Motivation/Goal";
-"onboarding.third.lifeChangesAfterWeightLoss.title.first" = "Think about how your life will be different once you’ve lost the weight. ";
+"onboarding.third.lifeChangesAfterWeightLoss.title.first" = "Think about how your life will be different once you've achieved your goal. ";
 "onboarding.third.lifeChangesAfterWeightLoss.title.second" = "What are you most excited about?";
 "onboarding.third.lifeChangesAfterWeightLoss.beingProudOfMyself" = "Being proud of myself";
 "onboarding.third.lifeChangesAfterWeightLoss.feelingGreat" = "Feeling great";

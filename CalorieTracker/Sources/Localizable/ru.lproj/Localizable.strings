@@ -250,7 +250,9 @@
 "onboarding.third.importanceOfWeightLoss.button" = "Продолжить";
 "onboarding.third.importanceOfWeightLoss.title" = "Мотивация / Цель";
 "onboarding.third.importanceOfWeightLoss.title.first" = "Насколько важно для Вас";
-"onboarding.third.importanceOfWeightLoss.title.second" = "сбросить вес ";
+"onboarding.third.importanceOfWeightLoss.title.second.loseWeight" = "сбросить вес ";
+"onboarding.third.importanceOfWeightLoss.title.second.gainMuscleMass" = "набрать мышечную массу ";
+"onboarding.third.importanceOfWeightLoss.title.second.manageHealthCondition" = "поддерживать свое здоровье ";
 "onboarding.third.importanceOfWeightLoss.title.third" = "прямо сейчас?";
 "onboarding.third.importanceOfWeightLoss.itIsMyTopPriority" = "Это мой главный приоритет";
 "onboarding.third.importanceOfWeightLoss.itIsVeryImportant" = "Это очень важно";
@@ -259,7 +261,7 @@
 
 "onboarding.third.lifeChangesAfterWeightLoss.button" = "Продолжить";
 "onboarding.third.lifeChangesAfterWeightLoss.title" = "Мотивация/Цель";
-"onboarding.third.lifeChangesAfterWeightLoss.title.first" = "Подумайте о том, как изменится ваша жизнь, когда вы сбросите вес.";
+"onboarding.third.lifeChangesAfterWeightLoss.title.first" = "Подумайте о том, как изменится ваша жизнь, когда вы добьетесь поставленой цели.";
 "onboarding.third.lifeChangesAfterWeightLoss.title.second" = "Что вас больше всего волнует?";
 "onboarding.third.lifeChangesAfterWeightLoss.beingProudOfMyself" = "Гордиться собой";
 "onboarding.third.lifeChangesAfterWeightLoss.feelingGreat" = "Чувствую себя великолепно";

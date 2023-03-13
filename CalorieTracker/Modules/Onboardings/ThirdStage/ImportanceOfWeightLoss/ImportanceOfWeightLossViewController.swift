@@ -66,10 +66,7 @@ final class ImportanceOfWeightLossViewController: UIViewController {
         
         attributedString.append(.init(string: " "))
         
-        attributedString.append(NSAttributedString(
-            string: R.string.localizable.onboardingThirdImportanceOfWeightLossTitleSecond(),
-            attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
-        ))
+        attributedString.append(getSecondTitle())
         
         attributedString.append(.init(string: " "))
         attributedString.append(NSAttributedString(
@@ -174,6 +171,32 @@ final class ImportanceOfWeightLossViewController: UIViewController {
             continueCommonButton.isHidden = false
         } else {
             continueCommonButton.isHidden = true
+        }
+    }
+    
+    private func getSecondTitle() -> NSAttributedString {
+        let goal = presenter?.getYourGoal()
+        switch goal {
+        case .loseWeight:
+            return NSAttributedString(
+                string: R.string.localizable.onboardingThirdImportanceOfWeightLossTitleSecondLoseWeight(),
+                attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
+            )
+        case .gainMuscleMass:
+            return NSAttributedString(
+                string: R.string.localizable.onboardingThirdImportanceOfWeightLossTitleSecondGainMuscleMass(),
+                attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
+            )
+        case .manageHealthCondition:
+            return NSAttributedString(
+                string: R.string.localizable.onboardingThirdImportanceOfWeightLossTitleSecondManageHealthCondition(),
+                attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
+            )
+        default:
+            return NSAttributedString(
+                string: R.string.localizable.onboardingThirdImportanceOfWeightLossTitleSecondLoseWeight(),
+                attributes: [.foregroundColor: R.color.onboardings.radialGradientFirst()!]
+            )
         }
     }
 }

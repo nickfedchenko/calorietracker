@@ -10,7 +10,7 @@ import UIKit
 
 protocol ThanksForTheInformationRouterInterface: AnyObject {
     func openEnterYourName()
-    func openImportanceOfWeightLoss()
+    func openChoseYourGoalRouter()
     func openImprovingNutrition()
 }
 
@@ -48,10 +48,10 @@ extension ThanksForTheInformationRouter: ThanksForTheInformationRouterInterface 
         viewController?.navigationController?.pushViewController(enterYourNameRouter, animated: true)
     }
     
-    func openImportanceOfWeightLoss() {
-        let importanceOfWeightLossRouter = ImportanceOfWeightLossRouter.setupModule()
+    func openChoseYourGoalRouter() {
+        let choseYourGoalRouter = ChooseYourGoalRouter.setupModule()
         
-        viewController?.navigationController?.pushViewController(importanceOfWeightLossRouter, animated: true)
+        viewController?.navigationController?.pushViewController(choseYourGoalRouter, animated: true)
     }
     
     func openImprovingNutrition() {

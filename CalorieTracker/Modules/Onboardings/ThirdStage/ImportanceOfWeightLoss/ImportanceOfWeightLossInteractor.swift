@@ -11,6 +11,7 @@ protocol ImportanceOfWeightLossInteractorInterface: AnyObject {
     func getAllImportanceOfWeightLoss() -> [ImportanceOfWeightLoss]
     func set(importanceOfWeightLoss: ImportanceOfWeightLoss)
     func getCurrentOnboardingStage() -> OnboardingStage
+    func getYourGoal() -> ChooseYourGoal?
 }
 
 class ImportanceOfWeightLossInteractor {
@@ -43,5 +44,9 @@ extension ImportanceOfWeightLossInteractor: ImportanceOfWeightLossInteractorInte
     
     func set(importanceOfWeightLoss: ImportanceOfWeightLoss) {
         onboardingManager.set(importanceOfWeightLoss: importanceOfWeightLoss)
+    }
+    
+    func getYourGoal() -> ChooseYourGoal? {
+        return onboardingManager.getYourGoal()
     }
 }
