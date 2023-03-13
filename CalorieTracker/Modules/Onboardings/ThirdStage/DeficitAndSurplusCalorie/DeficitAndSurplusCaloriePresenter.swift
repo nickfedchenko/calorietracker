@@ -11,6 +11,7 @@ protocol DeficitAndSurplusCaloriePresenterInterface: AnyObject {
     func viewDidLoad()
     func didChangeRate(on value: Double)
     func didTapContinueCommonButton(with weightGoal: WeightGoal)
+    func getGoal() -> WeightGoal
 }
 
 class DeficitAndSurplusCaloriePresenter {
@@ -35,6 +36,10 @@ class DeficitAndSurplusCaloriePresenter {
 }
 
 extension DeficitAndSurplusCaloriePresenter: DeficitAndSurplusCaloriePresenterInterface {
+    func getGoal() -> WeightGoal {
+        interactor?.getWeightGoal(rate: 0) ?? .loss(calorieDeficit: 0)
+    }
+    
     func viewDidLoad() {
         if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
             view.set(currentOnboardingStage: currentOnboardingStage)
@@ -63,10 +68,10 @@ extension DeficitAndSurplusCaloriePresenter: DeficitAndSurplusCaloriePresenterIn
     }
     
     func didChangeRate(on value: Double) {
-        if let weightGoal = interactor?.getWeightGoal(rate: value) {
-            view.set(weightGoal: weightGoal)
-        }
-        
+//        if let weightGoal = interactor?.getWeightGoal(rate: value) {
+//            view.set(weightGoal: weightGoal)
+//        }
+//        
         if let date = interactor?.getDate(rate: value) {
             view.set(date: date)
         }

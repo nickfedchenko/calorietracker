@@ -10,7 +10,7 @@ import AsyncDisplayKit
 final class WeightWidgetNode: CTWidgetNode {
     private lazy var titleLabel: ASTextNode = {
         let node = ASTextNode()
-        node.attributedText = "WEIGHT".attributedSring([
+        node.attributedText = R.string.localizable.widgetWeightTitle().attributedSring([
             .init(
                 worldIndex: [0],
                 attributes: [

@@ -91,7 +91,7 @@ protocol FoodDataServiceInterface {
     func getAllCustomEntries() -> [CustomEntry]
     func deleteCustomEntry(_ id: String)
     func saveFoodData(foods: [FoodData])
-    func updateMeal(mealID: String, title: String, photoURL: String)
+    func updateMeal(meal: Meal)
     func getProduct(by id: String) -> Product?
     func getDish(by id: String) -> Dish?
     func getCustomEntry(by id: String) -> CustomEntry?
@@ -371,8 +371,8 @@ extension FDS: FoodDataServiceInterface {
 //        meal.setChild(dishes: foods.dishes, products: foods.products, customEntries: foods.customEntries)
     }
     
-    func updateMeal(mealID: String, title: String, photoURL: String) {
-        localPersistentStore.updateMeal(mealID: mealID, title: title, photoURL: photoURL)
+    func updateMeal(meal: Meal) {
+        localPersistentStore.updateMeal(meal: meal)
     }
     
     func createCustomEntry(mealTime: MealTime, title: String, nutrients: CustomEntryNutrients) {

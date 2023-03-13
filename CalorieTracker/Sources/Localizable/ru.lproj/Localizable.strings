@@ -159,7 +159,7 @@
 
 "onboarding.chart.description" = "Такими темпами мы ожидаем, что вы достигнете своего целевого веса примерно в декабре";
 "onboarding.chart.now" = "Сейчас";
-"onboarding.chart.title" = "Таблица увеличения веса";
+"onboarding.chart.title" = "Таблица изменения веса";
 
 "onboarding.second.allergicRestrictions.title" = "Аллергические ограничения";
 "onboarding.second.allergicRestrictions.button" = "Продолжить";
@@ -813,3 +813,8 @@
 
 "Annualy" = "Ежегодно";
 "week" = "неделя";
+
+"onboarding.currentWeight" = "Ваш текущий вес";
+"onboarding.targetweight" = "Ваш целевой вес";
+
+"ALL NOTES" = "ALL NOTES";

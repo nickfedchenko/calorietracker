@@ -27,7 +27,7 @@ final class ConnectAHView: UIView {
         let view = UILabel()
         view.font = R.font.sfProDisplaySemibold(size: 16)
         view.textColor = .black
-        view.text = "Connect to Apple Health"
+        view.text = R.string.localizable.ahConnectTitle()
         return view
     }()
     

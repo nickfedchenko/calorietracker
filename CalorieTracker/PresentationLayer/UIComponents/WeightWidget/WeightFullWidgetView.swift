@@ -27,7 +27,7 @@ final class WeightFullWidgetView: UIView, CTWidgetFullProtocol {
         label.textAlignment = .center
         label.font = R.font.sfProDisplaySemibold(size: 22.fontScale())
         label.textColor = R.color.weightWidget.weightTextColor()
-        label.text = "WEIGHT"
+        label.text = R.string.localizable.widgetWeightTitle()
         return label
     }()
     

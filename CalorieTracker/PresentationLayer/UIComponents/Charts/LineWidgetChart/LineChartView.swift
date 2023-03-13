@@ -20,9 +20,9 @@ final class LineChartView: UIView {
         func getTitle() -> String {
             switch self {
             case .weight:
-                return "WEIGHT"
+                return R.string.localizable.widgetWeightTitle()
             case .bmi:
-                return "BODY MASS INDEX"
+                return R.string.localizable.lineChartTypeBmiTitle()
             }
         }
         

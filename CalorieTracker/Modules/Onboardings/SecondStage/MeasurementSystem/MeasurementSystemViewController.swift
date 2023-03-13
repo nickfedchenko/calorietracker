@@ -55,6 +55,7 @@ final class MeasurementSystemViewController: UIViewController {
         titleLabel.textColor = R.color.onboardings.basicDark()
         titleLabel.textAlignment = .center
         titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .medium)
+        titleLabel.numberOfLines = 0
         
         stackView.axis = .vertical
         stackView.spacing = 12

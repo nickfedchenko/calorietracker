@@ -19,7 +19,7 @@ final class WaterWidgetNode: CTWidgetNode {
     private lazy var topTitleLabel: ASTextNode = {
         let node = ASTextNode()
         node.attributedText = getAttributedString(
-            string: "Water".localized.uppercased(),
+            string: R.string.localizable.diagramChartTypeWaterTitle(),
             size: 18.fontScale(),
             color: R.color.waterWidget.firstGradientColor()
         )

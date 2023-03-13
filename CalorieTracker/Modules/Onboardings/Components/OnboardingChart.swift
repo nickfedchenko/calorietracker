@@ -131,9 +131,9 @@ final class OnboardingChartView: ViewWithShadow {
         }
         
         descriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(nowLabel.snp.bottom).offset(6)
+            make.top.equalTo(nowLabel.snp.bottom).offset(5)
             make.leading.trailing.equalToSuperview().inset(24)
-            make.bottom.equalToSuperview().offset(-16)
+            make.bottom.equalToSuperview().offset(-17)
         }
     }
 }

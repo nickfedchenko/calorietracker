@@ -28,17 +28,17 @@ final class DiagramChartView: UIView {
         func getTitle() -> String {
             switch self {
             case .calories:
-                return "CALORIES"
+                return R.string.localizable.addFoodCalories()
             case .carb:
-                return "CARBOHYDRATES"
+                return R.string.localizable.diagramChartTypeCarbTitle()
             case .steps:
-                return "STEPS"
+                return R.string.localizable.diagramChartTypeStepsTitle()
             case .water:
-                return "WATER"
+                return R.string.localizable.diagramChartTypeWaterTitle()
             case .activity:
-                return "ACTIVITY ENERGY"
+                return R.string.localizable.diagramChartTypeActivityTitle()
             case .protein:
-                return "PROTEIN"
+                return R.string.localizable.diagramChartTypeProteinTitle()
             }
         }
         

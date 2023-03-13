@@ -277,9 +277,9 @@ extension MainWidgetViewNode: CircleActivityNodeDataSource {
 
 extension MainWidgetViewNode {
     struct Text {
-        static let including = "INCLUDING BURNED"
-        static let excluding = "EXCLUDING BURNED"
-        static let kcalLeft = "KCAL LEFT"
+        static let including = R.string.localizable.widgetMainIncludingTitle()
+        static let excluding = R.string.localizable.widgetMainExcludingTitle()
+        static let kcalLeft = R.string.localizable.widgetMainKcalLeftTitle()
     }
     
     struct Color {

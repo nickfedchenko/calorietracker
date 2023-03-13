@@ -41,26 +41,25 @@ extension DeficitAndSurplusCalorieInteractor: DeficitAndSurplusCalorieInteractor
               let targetWeight = onboardingManager.getYourGoalWeight(),
               let gender = onboardingManager.getOnboardingInfo().whatsYourGender?.userSex,
               let age = onboardingManager.getOnboardingInfo().dateOfBirth?.years(to: Date()),
-              let height = onboardingManager.getOnboardingInfo().yourHeight
+              let height = onboardingManager.getOnboardingInfo().yourHeight,
+              let activity = onboardingManager.getOnboardingInfo().activityLevel
         else { return nil }
         
-        let calorieMeasurment = CalorieMeasurment(
+        let recommendedCalories = CalorieMeasurment.calculationRecommendedCalorieWithoutGoal(
+            sex: gender,
+            activity: activity,
             age: age,
             height: height,
-            sex: gender,
-            weight: currentWeight,
-            goalWeight: targetWeight,
-            kcalPercent: rate / 100
+            weight: currentWeight
         )
 
-        let weekGoal = calorieMeasurment.weekGoalKg()
+        let weekGoal = rate
         let weightGoal: WeightGoal = currentWeight >= targetWeight
             ? .loss(calorieDeficit: weekGoal)
             : .gain(calorieSurplus: weekGoal)
         
         onboardingManager.set(weightGoal: weightGoal)
-        UDM.kcalGoal = calorieMeasurment.recommendedCalorie
-        
+        UDM.kcalGoal = recommendedCalories + (weekGoal * 1100)
         return weightGoal
     }
     
@@ -69,19 +68,28 @@ extension DeficitAndSurplusCalorieInteractor: DeficitAndSurplusCalorieInteractor
               let targetWeight = onboardingManager.getYourGoalWeight(),
               let gender = onboardingManager.getOnboardingInfo().whatsYourGender?.userSex,
               let age = onboardingManager.getOnboardingInfo().dateOfBirth?.years(to: Date()),
-              let height = onboardingManager.getOnboardingInfo().yourHeight
+              let height = onboardingManager.getOnboardingInfo().yourHeight,
+              let activity = onboardingManager.getOnboardingInfo().activityLevel
         else { return nil }
         
-        let calorieMeasurment = CalorieMeasurment(
+        let recommendedCalories = CalorieMeasurment.calculationRecommendedCalorieWithoutGoal(
+            sex: gender,
+            activity: activity,
             age: age,
             height: height,
-            sex: gender,
-            weight: currentWeight,
-            goalWeight: targetWeight,
-            kcalPercent: rate / 100
+            weight: currentWeight
         )
-        
-        return calorieMeasurment.goalCompletionDate(Date())
+
+        let weekGoal = rate
+        let weightGoal: WeightGoal = currentWeight >= targetWeight
+            ? .loss(calorieDeficit: weekGoal)
+            : .gain(calorieSurplus: weekGoal)
+        let weightDiff = abs(currentWeight - targetWeight)
+        let totalTargetKcal = weightDiff * 7700
+        let dailyTarget = (rate != 0 ? abs(rate) : 0.01) * 1100
+        let daysToReach = Int(totalTargetKcal / dailyTarget)
+        let targetDate = Calendar.current.date(byAdding: .day, value: daysToReach, to: Date())
+        return targetDate
     }
     
     func getYourGoalWeight() -> Double? {

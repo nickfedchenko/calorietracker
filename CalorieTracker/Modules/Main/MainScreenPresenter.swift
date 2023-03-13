@@ -189,10 +189,10 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
         let includingBurnedInt: Int = includingBurned < 0 ? 0 : Int(includingBurned)
         let model: MainWidgetViewNode.Model = .init(
             text: MainWidgetViewNode.Model.Text(
-                firstLine: "\(Int(kcalToday)) / \(Int(kcalGoal)) kcal",
-                secondLine: "\(Int(carbsToday)) / \(Int(carbsGoal)) carbs",
-                thirdLine: "\(Int(proteinToday)) / \(Int(proteinGoal)) protein",
-                fourthLine: "\(Int(fatToday)) / \(Int(fatGoal)) fat",
+                firstLine: "\(Int(kcalToday)) / \(Int(kcalGoal)) " + R.string.localizable.kcalShort().uppercased(),
+                secondLine: "\(Int(carbsToday)) / \(Int(carbsGoal)) " + R.string.localizable.carbsShort().uppercased(),
+                thirdLine: "\(Int(proteinToday)) / \(Int(proteinGoal)) " + R.string.localizable.protein().uppercased(),
+                fourthLine: "\(Int(fatToday)) / \(Int(fatGoal)) " + R.string.localizable.fatShort().uppercased(),
                 excludingBurned: "\(UInt(kcalGoal - kcalToday < 0 ? 0 : kcalGoal - kcalToday))",
                 includingBurned: "\(includingBurnedInt)"
             ),

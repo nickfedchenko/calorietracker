@@ -276,6 +276,6 @@ private extension UIColor {
 
 extension StepsWidgetNode {
     struct Text {
-        static let steps = " STEPS"
+        static let steps = " \(R.string.localizable.diagramChartTypeStepsTitle())"
     }
 }

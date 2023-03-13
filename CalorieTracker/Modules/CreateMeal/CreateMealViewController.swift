@@ -417,7 +417,8 @@ class CreateMealViewController: UIViewController {
     private func updateMeal(for meal: Meal) {
         guard let title = descriptionForm.textField.text else { return }
         let photoURL = mealImageURL?.absoluteString ?? ""
-        FDS.shared.updateMeal(mealID: meal.id, title: title, photoURL: photoURL)
+        var newMeal = Meal(mealTime: meal.mealTime, title: title, photoURL: photoURL, foods: meal.foods)
+        FDS.shared.updateMeal(meal: newMeal)
     }
     
     private func setChildMeal(for meal: Meal) {
