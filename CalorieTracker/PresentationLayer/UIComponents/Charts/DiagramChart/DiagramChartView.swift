@@ -216,7 +216,9 @@ final class DiagramChartView: UIView {
             rightBottomDateLabel.isHidden = true
             middleBottomDateLabel.isHidden = true
             messageLabel.isHidden = false
-            messageLabel.text = "There are no measurements. Your first \(chartFormat.rawValue) has not yet passed"
+            messageLabel.text = R.string.localizable.nomeasurementsFirst()
+            + chartFormat.title
+            + R.string.localizable.nomeasurementsSecond()
             return
         }
         leftBottomLabel.layer.opacity = 1
@@ -277,7 +279,7 @@ final class DiagramChartView: UIView {
         rightTopLabel.textColor = chartType.getColor()
         leftTopLabel.text = chartType.getTitle()
         leftTopLabel.textColor = chartType.getColor()
-        rightBottomLabel.text = "Daily Average"
+        rightBottomLabel.text = "Daily Average".localized
         
         backgroundColor = .white
         layer.cornerRadius = 16

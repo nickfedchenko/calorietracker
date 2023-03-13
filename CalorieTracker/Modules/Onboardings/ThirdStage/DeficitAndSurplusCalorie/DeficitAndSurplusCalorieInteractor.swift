@@ -53,12 +53,11 @@ extension DeficitAndSurplusCalorieInteractor: DeficitAndSurplusCalorieInteractor
             weight: currentWeight
         )
 
-        let weekGoal = rate
         let weightGoal: WeightGoal = currentWeight >= targetWeight
-            ? .loss(calorieDeficit: weekGoal)
-            : .gain(calorieSurplus: weekGoal)
-        
+            ? .loss(calorieDeficit: -rate)
+            : .gain(calorieSurplus: rate)
         onboardingManager.set(weightGoal: weightGoal)
+        let weekGoal = currentWeight > targetWeight ? -rate : rate
         UDM.kcalGoal = recommendedCalories + (weekGoal * 1100)
         return weightGoal
     }

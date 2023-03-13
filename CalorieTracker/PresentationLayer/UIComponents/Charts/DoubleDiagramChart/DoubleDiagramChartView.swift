@@ -236,7 +236,7 @@ final class DoubleDiagramChartView: UIView {
         rightTopLabel.textColor = chartType.getColor()
         leftTopLabel.text = chartType.getTitle()
         leftTopLabel.textColor = chartType.getColor()
-        rightBottomLabel.text = "Daily Average"
+        rightBottomLabel.text = "Daily Average".localized
         
         backgroundColor = .white
         layer.cornerRadius = 16

@@ -20,14 +20,15 @@ class TopDownPresentTransition: NSObject, UIViewControllerAnimatedTransitioning 
             return
         }
         
-        var toViewInitialFrame = fromController.view.frame
-        toViewInitialFrame.origin.y = -toView.frame.size.height
-        
-        toView.frame = toViewInitialFrame
+//        var toViewInitialFrame = fromController.view.frame
+//        toViewInitialFrame.origin.y = -toView.frame.size.height
+//
+//        toView.frame = toViewInitialFrame
+        toView.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
         container.addSubview(toView)
         
         UIView.animate(withDuration: transitionDuration(using: transitionContext)) {
-            toView.frame = fromController.view.frame
+            toView.transform = .identity
         } completion: { _ in
             transitionContext.completeTransition(true)
         }

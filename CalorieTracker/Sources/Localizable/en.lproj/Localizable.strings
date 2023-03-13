@@ -635,6 +635,7 @@
 "days" = "Days";
 "weeks" = "Weeks";
 "months" = "Months";
+"day" = "day";
 
 "track" = "TRACK";
 
@@ -777,7 +778,7 @@
 "Calories" = "Calories";
 "Exceptions" = "Exceptions";
 "Complexity" = "Complexity";
-"Apply" = "Apply";
+
 "Add to diary" = "Add to diary";
 "Back" = "Back";
 
@@ -818,3 +819,14 @@
 "onboarding.targetweight" = "Your target weight";
 
 "ALL NOTES" = "ALL NOTES";
+
+"weightWidget.full.segment.week" = "Week";
+"weightWidget.full.segment.month" = "Month";
+"weightWidget.full.segment.2months" = "2 months";
+"weightWidget.full.segment.3months" = "3 months";
+"weightWidget.full.segment.halfYear" = "Half a year";
+"weightWidget.full.segment.year" = "Year";
+"weightWidget.full.segment.alltime" = "All time";
+
+"nomeasurements.first" = "There are no measurements. Your first ";
+"nomeasurements.second" = " has not yet passed";

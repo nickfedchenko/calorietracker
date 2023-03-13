@@ -118,7 +118,8 @@ final class SegmentedControl<ID: Equatable>: UIView {
             view.addSubview(button)
             button.snp.makeConstraints { make in
                 make.top.bottom.equalToSuperview()
-                make.leading.trailing.equalToSuperview().inset(26.5)
+                make.leading.trailing.lessThanOrEqualToSuperview().inset(26.5)
+                make.center.equalToSuperview()
             }
             stack.addArrangedSubview(view)
             button.addTarget(
@@ -191,19 +192,19 @@ enum HistoryHeaderButtonType {
     func getTitle() -> String {
         switch self {
         case .weak:
-            return NSLocalizedString("Неделя", comment: "")
+            return R.string.localizable.weightWidgetFullSegmentWeek()
         case .months:
-            return NSLocalizedString("Месяц", comment: "")
+            return R.string.localizable.weightWidgetFullSegmentMonth()
         case .twoMonths:
-            return NSLocalizedString("2 месяца", comment: "")
+            return R.string.localizable.weightWidgetFullSegment2months()
         case .threeMonths:
-            return NSLocalizedString("3 месяца", comment: "")
+            return R.string.localizable.weightWidgetFullSegment3months()
         case .sixMonths:
-            return NSLocalizedString("Полгода", comment: "")
+            return R.string.localizable.weightWidgetFullSegmentHalfYear()
         case .year:
-            return NSLocalizedString("Год", comment: "")
+            return R.string.localizable.weightWidgetFullSegmentYear()
         case .allTheTime:
-            return NSLocalizedString("Все время", comment: "")
+            return R.string.localizable.weightWidgetFullSegmentAlltime()
         }
     }
 }
