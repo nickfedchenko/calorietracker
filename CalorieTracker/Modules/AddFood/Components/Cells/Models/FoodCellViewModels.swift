@@ -23,4 +23,5 @@ enum CellType {
 enum CellButtonType {
     case delete
     case add
+    case addToMeal
 }

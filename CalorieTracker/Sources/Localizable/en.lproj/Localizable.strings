@@ -519,7 +519,14 @@
 "addFood.calories" = "CALORIES";
 "addFood.done" = "DONE";
 "addFood.title.recent" = "recent searches";
-"addFood.customEntry" = "Custom entry";
+"addFood.customEntry" = "CUSTOM ENTRY";
+"addFood.mealCreation" = "MEAL CREATION";
+"addFood.editMeal" = "Edit Meal";
+
+"mealCreation.addFoodButton" = "ADD FOOD";
+"mealCreation.accessToPhotosTitle" = "Access to Photos";
+"mealCreation.accessToPhotosMesage" = "Please grant access to your photos in Settings";
+"mealCreation.addToNewMeal" = "Add to new meal";
 
 "breakfast" = "BREAKFAST";
 "lunch" = "LUNCH";
@@ -623,8 +630,8 @@
 
 "exercises" = "exercises";
 
-"textField.required" = "Required";
-"textField.optional" = "Optional";
+"textField.required" = "required";
+"textField.optional" = "optional";
 
 "create.title" = "Food Creation";
 "create.description.first" = "Step";
@@ -660,6 +667,7 @@
 "scan.alert.title" = "Barcode already exists";
 "scan.alert.description" = "A product with this barcode already exists. Do you want to see it?";
 
+"settings" = "Settings";
 "settings.app" = "App Settings";
 "settings.preferences.title" = "PREFERENCES";
 "settings.units.title" = "UNITS";

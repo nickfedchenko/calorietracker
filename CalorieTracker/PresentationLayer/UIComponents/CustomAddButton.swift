@@ -1,5 +1,5 @@
 //
-//  AddCustomEntryButton.swift
+//  CustomAddButton.swift
 //  CalorieTracker
 //
 //  Created by Alexandru Jdanov on 16.02.2023.
@@ -12,10 +12,20 @@ enum ButtonState {
     case inactive
 }
 
-class AddCustomEntryButton: UIButton {
+class CustomAddButton: UIButton {
     
-    private let buttonImage: UIImage? = R.image.basicButton.addDefault()
-    private let buttonImagePressed: UIImage? = R.image.basicButton.addPressed()
+    var buttonImage: UIImage?
+    var buttonImagePressed: UIImage?
+    var gradientFirstColor: UIColor?
+    var gradientSecondColor: UIColor?
+    var borderColorActive: UIColor?
+    var bordeWidth: CGFloat?
+    
+    var active: Bool = false {
+        didSet {
+            self.setState(active ? .active : .inactive)
+        }
+    }
     
     private lazy var firstShadowLayer: CALayer = {
         let layer = CALayer()
@@ -41,8 +51,8 @@ class AddCustomEntryButton: UIButton {
         let gradient = CAGradientLayer()
         gradient.name = "gradientLayer"
         
-        guard let firstColor = R.color.basicButton.gradientFirstColor(),
-              let secondColor = R.color.basicButton.gradientSecondColor()
+        guard let firstColor = gradientFirstColor,
+              let secondColor = gradientSecondColor
         else { return gradient }
         
         gradient.colors = [firstColor.cgColor, secondColor.cgColor]
@@ -52,8 +62,21 @@ class AddCustomEntryButton: UIButton {
         return gradient
     }()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(
+        buttonImage: UIImage?,
+        buttonImagePressed: UIImage?,
+        gradientFirstColor: UIColor?,
+        gradientSecondColor: UIColor?,
+        borderColorActive: UIColor?,
+        borderWidth: CGFloat?
+    ) {
+        self.buttonImage = buttonImage
+        self.buttonImagePressed = buttonImagePressed
+        self.gradientFirstColor = gradientFirstColor
+        self.gradientSecondColor = gradientSecondColor
+        self.borderColorActive = borderColorActive
+        self.bordeWidth = borderWidth
+        super.init(frame: .zero)
         setState(.active)
         addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
     }
@@ -61,14 +84,28 @@ class AddCustomEntryButton: UIButton {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    override func updateConstraints() {
-        super.updateConstraints()
         
-        self.snp.makeConstraints { make in
-            make.width.equalTo(374)
-            make.height.equalTo(64)
+    private func addLayers() {
+        let layers = [firstShadowLayer, secondShadowLayer, gradientLayer]
+        
+        for index in 0..<layers.count {
+            let layer = layers[index]
+            guard self.layer.sublayers?.filter({ $0.name == layer.name }) == nil else { return }
+            self.layer.insertSublayer(layer, at: UInt32(index))
         }
+    }
+    
+    private func addPath() {
+        let path = UIBezierPath(roundedRect: bounds, cornerRadius: 16).cgPath
+        firstShadowLayer.shadowPath = path
+        secondShadowLayer.shadowPath = path
+        gradientLayer.frame = bounds
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        addPath()
+        addLayers()
     }
     
     @objc func buttonTapped() {
@@ -86,31 +123,31 @@ class AddCustomEntryButton: UIButton {
     func setState(_ state: ButtonState) {
         switch state {
         case .active:
+            isUserInteractionEnabled = true
+            
+            self.layoutIfNeeded()
             setImage(buttonImage, for: .normal)
             setImage(buttonImagePressed, for: .highlighted)
             
             layer.cornerRadius = 16
             layer.cornerCurve = .continuous
-            layer.borderWidth = 2
-            layer.borderColor = R.color.foodViewing.basicSecondary()?.cgColor
+            layer.borderWidth = bordeWidth ?? 0
+            layer.borderColor = borderColorActive?.cgColor
             
-            let path = UIBezierPath(roundedRect: bounds, cornerRadius: 16).cgPath
-            firstShadowLayer.shadowPath = path
-            secondShadowLayer.shadowPath = path
-            
-            gradientLayer.frame = bounds
+            addPath()
             gradientLayer.cornerRadius = layer.cornerRadius
             gradientLayer.cornerCurve = layer.cornerCurve
             
-            let layers = [firstShadowLayer, secondShadowLayer, gradientLayer]
-            
-            for index in 0..<layers.count {
-                let layer = layers[index]
-                guard self.layer.sublayers?.filter({ $0.name == layer.name }) != nil else { return }
-                self.layer.insertSublayer(layer, at: UInt32(index))
+            let layers = [gradientLayer, firstShadowLayer, secondShadowLayer]
+            layers.forEach {
+                if self.layer.sublayers?.contains($0) == false {
+                    self.layer.insertSublayer($0, at: 0)
+                }
             }
             
         case .inactive:
+            isUserInteractionEnabled = false
+            
             backgroundColor = R.color.basicButton.inactiveColor()
             layer.borderColor = UIColor.white.cgColor
             setImage(buttonImage?.withTintColor(.white), for: .normal)

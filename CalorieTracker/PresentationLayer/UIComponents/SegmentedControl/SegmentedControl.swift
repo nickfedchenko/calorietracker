@@ -10,7 +10,7 @@ import UIKit
 final class SegmentedControl<ID: Equatable>: UIView {
     typealias Button = SegmentedButton<ID>
     
-    private let buttons: [Button]
+    var buttons: [Button]
     private var firstDraw = true
     
     private(set) var selectedButton: Button? {

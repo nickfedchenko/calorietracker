@@ -31,6 +31,11 @@ final class FoodCollectionViewController: UIViewController {
     
     var isSelectedType: AddFood = .recent
     
+    lazy var mealCellsHeight: [CGFloat] = Array(
+        repeating: 104,
+        count: collectionView.numberOfItems(inSection: 0)
+    )
+        
     var isScrollEnabled: Bool {
         get { collectionView.isScrollEnabled }
         set { collectionView.isScrollEnabled = newValue }
@@ -55,7 +60,6 @@ final class FoodCollectionViewController: UIViewController {
         view.clipsToBounds = true
         view.showsVerticalScrollIndicator = false
         view.backgroundColor = .clear
-        view.contentInset = .init(top: 0, left: 0, bottom: 20, right: 0)
         view.keyboardDismissMode = .onDrag
         return view
     }()
@@ -103,6 +107,7 @@ final class FoodCollectionViewController: UIViewController {
     }
     
     private func registerCells() {
+        collectionView.register(MealsCollectionViewCell.self)
         collectionView.register(RecipesColectionViewCell.self)
         collectionView.register(FoodCollectionViewCell.self)
         collectionView.register(UICollectionViewCell.self)
@@ -144,8 +149,22 @@ final class FoodCollectionViewController: UIViewController {
 extension FoodCollectionViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView,
                         didSelectItemAt indexPath: IndexPath) {
+        
+        if let cell = collectionView.cellForItem(at: indexPath) as? MealsCollectionViewCell {
+            let mainCellHeight = cell.frame.height - cell.tableView.frame.height
+            let cellHeight = cell.tableView.contentSize.height + mainCellHeight
+            mealCellsHeight[indexPath.item] = mealCellsHeight[indexPath.item] == 104 ? cellHeight : 104
+            CATransaction.begin()
+            CATransaction.setAnimationDuration(0.3)
+            CATransaction.setAnimationTimingFunction(CAMediaTimingFunction(name: .easeOut))
+            collectionView.performBatchUpdates {
+                cell.tableView.reloadSections(IndexSet(integer: 0), with: .none)
+            }
+            CATransaction.commit()
+        }
+        
         guard let cell = collectionView.cellForItem(at: indexPath) as? FoodCellProtocol,
-               let type = cell.foodType else { return }
+              let type = cell.foodType else { return }
         delegate?.didSelectCell(type)
     }
 }
@@ -154,21 +173,39 @@ extension FoodCollectionViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let height: CGFloat = 62
+        
+        let height: CGFloat = isSelectedType == .myMeals ?
+        mealCellsHeight[indexPath.row] : 62
         let width = view.frame.width - 40
         let size = CGSize(width: width, height: height)
         return size
     }
-    
+        
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         switch isSelectedType {
         case .frequent, .recent, .favorites, .search:
             return 1
-        case .myMeals, .myRecipes, .myFood:
+        case .myRecipes, .myFood:
             return 8
+        case .myMeals:
+            return 16
         }
+    }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        insetForSectionAt section: Int
+    ) -> UIEdgeInsets {
+        
+        return UIEdgeInsets(
+            top: isSelectedType == .myMeals ? 5 : 0,
+            left: 0,
+            bottom: 20,
+            right: 0
+        )
     }
 }
 

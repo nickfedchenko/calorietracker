@@ -519,7 +519,14 @@
 "addFood.calories" = "КАЛОРИИ";
 "addFood.done" = "ГОТОВО";
 "addFood.title.recent" = "недавние поиски";
-"addFood.customEntry" = "Кастомный ввод";
+"addFood.customEntry" = "КАСТОМНЫЙ ВВОД";
+"addFood.mealCreation" = "СОЗДАНИЕ ПРИЕМА ПИЩИ";
+"addFood.editMeal" = "Изменить";
+
+"mealCreation.addFoodButton" = "ДОБАВИТЬ ЕДУ";
+"mealCreation.accessToPhotosTitle" = "Доступ к фотографиям";
+"mealCreation.accessToPhotosMesage" = "Предоставьте доступ к своим фотографиям в настройках";
+"mealCreation.addToNewMeal" = "Добавить к новой еде";
 
 "breakfast" = "ЗАВТРАК";
 "lunch" = "ОБЕД";
@@ -527,7 +534,7 @@
 "snack" = "ЗАКУСКА";
 "food" = "Еда";
 "recipe" = "Рецепты";
-"meal" = "Пища";
+"meal" = "Прием пищи";
 "frequent" = "Частый";
 "recent" = "Недавний";
 "favorites" = "Избранное";
@@ -623,8 +630,8 @@
 
 "exercises" = "упражнения";
 
-"textField.required" = "Обязательное";
-"textField.optional" = "Опциональное";
+"textField.required" = "обязательно";
+"textField.optional" = "опционально";
 
 "create.title" = "Создание продуктов питания";
 "create.description.first" = "Шаг";
@@ -660,6 +667,7 @@
 "scan.alert.title" = "Штрих-код уже существует";
 "scan.alert.description" = "Продукт с этим штрих-кодом уже существует. Ты хочешь это увидеть?";
 
+"settings" = "Настройки";
 "settings.app" = "Настройки приложения";
 "settings.preferences.title" = "ПРЕДПОЧТЕНИЯ";
 "settings.units.title" = "ЕДИНИЦЫ";

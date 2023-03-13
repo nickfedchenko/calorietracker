@@ -11,9 +11,10 @@ protocol FoodDataServiceInterface {
     /// Создает и сохраняет в БД модель Meal и привязывает к ней продукты и блюда
     /// - Parameters:
     ///   - mealTime: время приема еды
-    ///   - dishes: массив блюд
-    ///   - products: массив продуктов
-    func createMeal(mealTime: MealTime, dishes: [Dish], products: [Product], customEntries: [CustomEntry])
+    ///   - title: название
+    ///   - photo: фото
+    ///   - foods: список ингридиентов
+    func createMeal(mealTime: MealTime, title: String, photoURL: String, foods: [Food])
     /// Возвращает все приемы пищи
     /// - Returns: массив Meal
     func getAllMeals() -> [Meal]
@@ -90,6 +91,10 @@ protocol FoodDataServiceInterface {
     func getAllCustomEntries() -> [CustomEntry]
     func deleteCustomEntry(_ id: String)
     func saveFoodData(foods: [FoodData])
+    func updateMeal(mealID: String, title: String, photoURL: String)
+    func getProduct(by id: String) -> Product?
+    func getDish(by id: String) -> Dish?
+    func getCustomEntry(by id: String) -> CustomEntry?
 }
 
 final class FDS {
@@ -136,6 +141,12 @@ final class FDS {
                 carbs += customEntry.nutrients.carbs
                 kcal += customEntry.nutrients.kcal
                 
+            case .meal(let meal):
+                protein += meal.nutrients.proteins
+                fat += meal.nutrients.fats
+                carbs += meal.nutrients.carbs
+                kcal += meal.nutrients.kcal
+                
             default:
                 break
             }
@@ -164,6 +175,7 @@ extension FDS: FoodDataServiceInterface {
             var dishId: Int?
             var productId: String?
             var customEntryId: String?
+            var mealId: String?
             
             switch $0.food {
             case .dishes(let dish, _):
@@ -172,6 +184,8 @@ extension FDS: FoodDataServiceInterface {
                 productId = product.id
             case .customEntry(let customEntry):
                 customEntryId = customEntry.id
+            case .meal(let meal):
+                mealId = meal.id
             default:
                 break
             }
@@ -180,7 +194,8 @@ extension FDS: FoodDataServiceInterface {
                 mealDataId: $0.id,
                 dishID: dishId,
                 productID: productId,
-                customEntryID: customEntryId
+                customEntryID: customEntryId,
+                mealID: mealId
             )
         }
         
@@ -350,10 +365,14 @@ extension FDS: FoodDataServiceInterface {
         )
     }
     
-    func createMeal(mealTime: MealTime, dishes: [Dish], products: [Product], customEntries: [CustomEntry]) {
-        let meal = Meal(mealTime: mealTime)
+    func createMeal(mealTime: MealTime, title: String, photoURL: String, foods: [Food]) {
+        let meal = Meal(mealTime: mealTime, title: title, photoURL: photoURL, foods: foods)
         localPersistentStore.saveMeals(meals: [meal])
-        meal.setChild(dishes: dishes, products: products, customEntries: customEntries)
+//        meal.setChild(dishes: foods.dishes, products: foods.products, customEntries: foods.customEntries)
+    }
+    
+    func updateMeal(mealID: String, title: String, photoURL: String) {
+        localPersistentStore.updateMeal(mealID: mealID, title: title, photoURL: photoURL)
     }
     
     func createCustomEntry(mealTime: MealTime, title: String, nutrients: CustomEntryNutrients) {
@@ -454,5 +473,20 @@ extension FDS: FoodDataServiceInterface {
             protein: kcalGoal * nutrientPercent.getNutrientPercent().protein,
             fat: kcalGoal * nutrientPercent.getNutrientPercent().fat
         )
+    }
+    
+    func getProduct(by id: String) -> Product? {
+        guard let domainProduct =  localPersistentStore.getDomainProduct(id) else { return nil }
+        return Product(from: domainProduct)
+    }
+    
+    func getDish(by id: String) -> Dish? {
+        guard let domainDish =  localPersistentStore.getDomainDish(Int(id) ?? -1) else { return nil }
+        return Dish(from: domainDish)
+    }
+    
+    func getCustomEntry(by id: String) -> CustomEntry? {
+        guard let domainCustomEntry = localPersistentStore.getDomainCustomEntry(id) else { return nil }
+        return CustomEntry(from: domainCustomEntry)
     }
 }

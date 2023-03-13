@@ -11,6 +11,7 @@ import UIKit
 
 protocol RecipePageScreenRouterInterface: AnyObject {
     func dismiss()
+    func dismissToCreateMeal()
 }
 
 class RecipePageScreenRouter: NSObject {
@@ -22,9 +23,10 @@ class RecipePageScreenRouter: NSObject {
     static func setupModule(
         with dish: Dish,
         backButtonTitle: String,
+        openController: RecipePageScreenViewController.OpenController? = .addToDiary,
         addToDiaryHandler: ((Food) -> Void)? = nil
     ) -> RecipePageScreenViewController {
-        let vc = RecipePageScreenViewController(backButtonTitle: backButtonTitle)
+        let vc = RecipePageScreenViewController(backButtonTitle: backButtonTitle, openController: openController)
         let interactor = RecipePageScreenInteractor(with: dish)
         let router = RecipePageScreenRouter()
         let presenter = RecipePageScreenPresenter(interactor: interactor, router: router, view: vc)
@@ -51,6 +53,13 @@ extension RecipePageScreenRouter: RecipePageScreenRouterInterface {
             view?.navigationController?.popViewController(animated: true)
         } else {
             view?.dismiss(animated: true)
+        }
+    }
+    
+    func dismissToCreateMeal() {
+        view?.dismiss(animated: false) { [weak self] in
+            guard let dish = self?.presenter?.getDish() else { return }
+            self?.addToDiaryHandler?(.dishes(dish, customAmount: self?.presenter?.getPossibleEatenAmount()))
         }
     }
 }

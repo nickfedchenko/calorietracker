@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class CustomEntryViewController: UIViewController, UIScrollViewDelegate {
+final class CustomEntryViewController: UIViewController {
     
     private lazy var titleHeaderLabel: UILabel = getTitleHeaderLabel()
     private lazy var descriptionLabel: UILabel = getDescriptionLabel()
@@ -20,7 +20,7 @@ final class CustomEntryViewController: UIViewController, UIScrollViewDelegate {
     private lazy var proteinForm: FormView = getProteinForm()
     private lazy var fatLabel: UILabel = getFatLabel()
     private lazy var fatForm: FormView = getFatForm()
-    private lazy var addEntryButton: AddCustomEntryButton = getAddEntryButton()
+    private lazy var addEntryButton: CustomAddButton = getAddEntryButton()
     private lazy var closeButton: UIButton = getCloseButton()
     private lazy var contentView: UIView = getContentView()
     private lazy var scrollView: UIScrollView = getScrollView()
@@ -258,7 +258,7 @@ final class CustomEntryViewController: UIViewController, UIScrollViewDelegate {
 
 // MARK: - Factory
 
-extension CustomEntryViewController {
+extension CustomEntryViewController: UIScrollViewDelegate {
     
     private func getTitleHeaderLabel() -> UILabel {
         let label = UILabel()
@@ -377,8 +377,15 @@ extension CustomEntryViewController {
         return form
     }
     
-    private func getAddEntryButton() -> AddCustomEntryButton {
-        let button = AddCustomEntryButton()
+    private func getAddEntryButton() -> CustomAddButton {
+        let button = CustomAddButton(
+            buttonImage: R.image.basicButton.addDefault(),
+            buttonImagePressed: R.image.basicButton.addPressed(),
+            gradientFirstColor: R.color.basicButton.gradientFirstColor(),
+            gradientSecondColor: R.color.basicButton.gradientSecondColor(),
+            borderColorActive: R.color.foodViewing.basicSecondary(),
+            borderWidth: 2
+        )
         button.setState(.inactive)
         button.addTarget(self, action: #selector(didTapCustomEntryButton), for: .touchUpInside)
         return button

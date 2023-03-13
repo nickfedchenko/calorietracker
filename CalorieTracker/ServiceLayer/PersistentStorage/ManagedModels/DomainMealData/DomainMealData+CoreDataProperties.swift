@@ -21,4 +21,5 @@ extension DomainMealData {
     @NSManaged public var dish: DomainDish?
     @NSManaged public var product: DomainProduct?
     @NSManaged public var customEntry: DomainCustomEntry?
+    @NSManaged public var meal: DomainMeal?
 }

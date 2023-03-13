@@ -39,6 +39,7 @@ protocol LocalDomainServiceInterface {
     func setChildFoodData(foodDataId: String, dishID: Int)
     func setChildFoodData(foodDataId: String, productID: String)
     func setChildFoodData(foodDataId: String, customEntryID: String)
+    func setChildFoodData(foodDataId: String, mealID: String)
     func setChildMeal(mealId: String, dishesID: [Int], productsID: [String], customEntriesID: [String])
     func getFoodData(_ food: Food) -> FoodData?
     func fetchSpecificRecipe(with id: String) -> Dish?
@@ -59,8 +60,14 @@ protocol LocalDomainServiceInterface {
         mealDataId: String,
         dishID: Int?,
         productID: String?,
-        customEntryID: String?
+        customEntryID: String?,
+        mealID: String?
     ) -> Bool
+    
+    func updateMeal(mealID: String, title: String, photoURL: String)
+    func getDomainProduct(_ id: String) -> DomainProduct?
+    func getDomainDish(_ id: Int) -> DomainDish?
+    func getDomainCustomEntry(_ id: String) -> DomainCustomEntry?
 }
 
 final class LocalDomainService {
@@ -165,7 +172,7 @@ final class LocalDomainService {
         return domainFoodData
     }
     
-    private func getDomainProduct(_ id: String) -> DomainProduct? {
+    func getDomainProduct(_ id: String) -> DomainProduct? {
         let format = "id == %@"
         
         let request = NSFetchRequest<DomainProduct>(entityName: "DomainProduct")
@@ -178,7 +185,7 @@ final class LocalDomainService {
         return domainProduct
     }
     
-    private func getDomainDish(_ id: Int) -> DomainDish? {
+   func getDomainDish(_ id: Int) -> DomainDish? {
         let format = "id == %id"
         
         let request = NSFetchRequest<DomainDish>(entityName: "DomainDish")
@@ -191,7 +198,7 @@ final class LocalDomainService {
         return domainDish
     }
     
-    private func getDomainCustomEntry(_ id: String) -> DomainCustomEntry? {
+    func getDomainCustomEntry(_ id: String) -> DomainCustomEntry? {
         let format = "id == %@"
         
         let request = NSFetchRequest<DomainCustomEntry>(entityName: "DomainCustomEntry")
@@ -202,6 +209,19 @@ final class LocalDomainService {
         }
         
         return domainCustomEntry
+    }
+    
+    private func getDomainMeal(_ id: String) -> DomainMeal? {
+        let format = "id == %@"
+        
+        let request = NSFetchRequest<DomainMeal>(entityName: "DomainMeal")
+        request.predicate = NSPredicate(format: format, id)
+        
+        guard let domainMeal = try? context.fetch(request).first else {
+            return nil
+        }
+        
+        return domainMeal
     }
 }
 
@@ -323,7 +343,7 @@ extension LocalDomainService: LocalDomainServiceInterface {
     
     func saveMeals(meals: [Meal]) {
         let _: [DomainMeal] = meals
-            .map { DomainMeal.prepare(fromPlainModel: $0, context: context) }
+            .map { DomainMeal.prepare(from: $0, context: context) }
         try? context.save()
     }
     
@@ -384,6 +404,31 @@ extension LocalDomainService: LocalDomainServiceInterface {
         try? backgroundContext.save()
     }
     
+    func updateMeal(mealID: String, title: String, photoURL: String) {
+        let format = "id == %@"
+        
+        guard let domainMeal = fetchData(
+            for: DomainMeal.self,
+            withPredicate: NSCompoundPredicate(
+                orPredicateWithSubpredicates: [NSPredicate(format: format, mealID)]
+            )
+        )?.first else {
+            debugPrint("No DomainMeal found with ID: \(mealID)")
+            return
+        }
+        
+        domainMeal.title = title
+        domainMeal.photoURL = photoURL
+        
+        context.performAndWait {
+            do {
+                try context.save()
+            } catch {
+                debugPrint("Error occurred: \(error.localizedDescription)")
+            }
+        }
+    }
+    
     @discardableResult
     func delete<T>(_ object: T) -> Bool {
         let format = "id == %@"
@@ -441,6 +486,7 @@ extension LocalDomainService: LocalDomainServiceInterface {
         foodData.dish = dish
         foodData.product = nil
         foodData.customEntry = nil
+        foodData.meal = nil
         
         try? context.save()
     }
@@ -456,6 +502,7 @@ extension LocalDomainService: LocalDomainServiceInterface {
         foodData.product = product
         foodData.dish = nil
         foodData.customEntry = nil
+        foodData.meal = nil
         
         try? context.save()
     }
@@ -471,6 +518,23 @@ extension LocalDomainService: LocalDomainServiceInterface {
         foodData.customEntry = customEntry
         foodData.dish = nil
         foodData.product = nil
+        foodData.meal = nil
+        
+        try? context.save()
+    }
+    
+    func setChildFoodData(foodDataId: String, mealID: String) {
+        let format = "id == %@"
+        let mealRequest = NSFetchRequest<DomainMeal>(entityName: "DomainMeal")
+        mealRequest.predicate = NSPredicate(format: format, mealID)
+        
+        guard let meal = try? context.fetch(mealRequest).first,
+              let foodData = getDomainFoodData(foodDataId) else { return }
+        
+        foodData.meal = meal
+        foodData.dish = nil
+        foodData.product = nil
+        foodData.customEntry = nil
         
         try? context.save()
     }
@@ -528,8 +592,12 @@ extension LocalDomainService: LocalDomainServiceInterface {
                     return nil
                 }
                 return FoodData(from: domainFoodData)
-            case .meal:
-                return nil
+            case .meal(let meal):
+                guard let domainMeal = getDomainMeal(meal.id),
+                      let domainFoodData = domainMeal.foodData else {
+                    return nil
+                }
+                return FoodData(from: domainFoodData)
             case .customEntry(let customEntry):
                 guard let domainCustomEntry = getDomainCustomEntry(customEntry.id),
                       let domainFoodData = domainCustomEntry.foodData else {
@@ -554,42 +622,57 @@ extension LocalDomainService: LocalDomainServiceInterface {
     func setChildMeal(mealId: String, dishesID: [Int], productsID: [String], customEntriesID: [String]) {
         let format = "id == %ld"
         let formatMeal = "id == %@"
-        
+
         let dishPredicates = dishesID.map { NSPredicate(format: format, $0) }
         let productPredicates = productsID.map { NSPredicate(format: formatMeal, $0) }
         let customEntryPredicates = customEntriesID.map { NSPredicate(format: formatMeal, $0) }
         let mealPredicate = NSPredicate(format: formatMeal, mealId)
-        
+
         let products = productPredicates.compactMap {
             fetchData(
                 for: DomainProduct.self,
                 withPredicate: NSCompoundPredicate(orPredicateWithSubpredicates: [$0])
             )?.first
         }
-        
+
         let dishes = dishPredicates.compactMap {
             fetchData(
                 for: DomainDish.self,
                 withPredicate: NSCompoundPredicate(orPredicateWithSubpredicates: [$0])
             )?.first
         }
-        
+
         let customEntries = customEntryPredicates.compactMap {
             fetchData(
                 for: DomainCustomEntry.self,
                 withPredicate: NSCompoundPredicate(orPredicateWithSubpredicates: [$0])
             )?.first
         }
-        
+
         guard let meal = fetchData(
             for: DomainMeal.self,
             withPredicate: NSCompoundPredicate(orPredicateWithSubpredicates: [mealPredicate])
         )?.first else { return }
-        
-        meal.addToDishes(NSSet(array: dishes))
-        meal.addToProductsSet(NSSet(array: products))
-        meal.addToCustomEntriesSet(NSSet(array: customEntries))
-        
+
+//        fetchData(for: DomainDish.self)?.forEach { meal.removeFromDishes($0) }
+//        fetchData(for: DomainProduct.self)?.forEach { meal.removeFromProducts($0) }
+//        fetchData(for: DomainCustomEntry.self)?.forEach { meal.removeFromCustomEntries($0) }
+//        dishes.forEach { dish in
+//            dish.foodData =
+//        }
+
+//        dishes.forEach {
+//            meal.addToDishes($0)
+//        }
+//
+//        products.forEach {
+//            meal.addToProducts($0)
+//        }
+//
+//        customEntries.forEach {
+//            meal.addToCustomEntries($0)
+//        }
+
         try? context.save()
     }
     
@@ -633,13 +716,18 @@ extension LocalDomainService: LocalDomainServiceInterface {
         }
     }
     
-    func setChildMealData(mealDataId: String, dishID: Int?, productID: String?, customEntryID: String?) -> Bool {
+    func setChildMealData(mealDataId: String,
+                          dishID: Int?,
+                          productID: String?,
+                          customEntryID: String?,
+                          mealID: String?) -> Bool {
         let formatId = "id == %ld"
         let formatStrId = "id == %@"
         
         var dishPredicate: NSPredicate?
         var productPredicate: NSPredicate?
         var customEntryPredicate: NSPredicate?
+        var mealPredicate: NSPredicate?
         let mealDataPredicate = NSPredicate(format: formatStrId, mealDataId)
         
         if let dishID = dishID {
@@ -648,6 +736,8 @@ extension LocalDomainService: LocalDomainServiceInterface {
             productPredicate = NSPredicate(format: formatStrId, productID)
         } else if let customEntryID = customEntryID {
             customEntryPredicate = NSPredicate(format: formatStrId, customEntryID)
+        } else if let mealID = mealID {
+            mealPredicate = NSPredicate(format: formatStrId, mealID)
         }
         
         guard let mealData = fetchData(
@@ -678,6 +768,13 @@ extension LocalDomainService: LocalDomainServiceInterface {
             )
         )?.first {
             mealData.customEntry = customEntry
+        } else if let meal = fetchData(
+            for: DomainMeal.self,
+            withPredicate: NSCompoundPredicate(
+                orPredicateWithSubpredicates: [mealPredicate].compactMap { $0 }
+            )
+        )?.first {
+            mealData.meal = meal
         }
         
         do {

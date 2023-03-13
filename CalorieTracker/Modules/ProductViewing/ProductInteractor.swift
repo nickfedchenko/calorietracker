@@ -18,6 +18,7 @@ class ProductInteractor {
     weak var presenter: ProductPresenterInterface?
     var product: Product?
     var mealTime: MealTime?
+    var onAddToNewMeal: ((Product) -> Void)?
 }
 
 extension ProductInteractor: ProductInteractorInterface {

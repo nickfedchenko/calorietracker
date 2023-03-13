@@ -17,8 +17,10 @@ protocol AddFoodViewControllerInterface: AnyObject {
     func updateSelectedFoodFromSearch(_ food: Food)
     func updateSelectedFoodFromCustomEntry(_ food: Food)
     func getMealTime() -> MealTime?
+    func realoadCollectionView()
 }
 
+// swiftlint:disable:next type_body_length
 final class AddFoodViewController: UIViewController {
     var presenter: AddFoodPresenterInterface?
     var keyboardManager: KeyboardManagerProtocol?
@@ -38,6 +40,8 @@ final class AddFoodViewController: UIViewController {
     private lazy var menuCreateView: MenuView = getMenuCreateView()
     private lazy var microphoneButton: MicrophoneButton = getMicrophoneButton()
     private lazy var doneButton: UIButton = getDoneButton()
+    private lazy var titleLabelFromMealSearch: UILabel = getTitleLabelFromMealSearch()
+    private lazy var bottomCloseButton: UIButton = getBottomCloseButton()
     
     private lazy var bottomGradientView = UIView()
     private lazy var bottomGradientViewExtended: GradientUndercover =  {
@@ -133,6 +137,13 @@ final class AddFoodViewController: UIViewController {
     private var searchFieldYCoordinate: CGFloat
     private var isFirstAppear = true
     var mealTime: MealTime = .breakfast
+    var tabBarIsHidden = false
+    var searchText: String?
+    var wasFromMealCreateVC: Bool = false {
+        didSet {
+            wasFromMealCreateVC ? changeSegmentControl() : ()
+        }
+    }
     
     init(searchFieldYCoordinate: CGFloat) {
         self.searchFieldYCoordinate = searchFieldYCoordinate
@@ -229,6 +240,10 @@ final class AddFoodViewController: UIViewController {
         )
         let recognier = UITapGestureRecognizer(target: self, action: #selector(showSearchHeader))
         staticSearchTextField.addGestureRecognizer(recognier)
+        
+        tabBarStackView.isHidden = tabBarIsHidden
+        titleLabelFromMealSearch.text = searchText
+        menuButton.isHidden = tabBarIsHidden
     }
     
     // swiftlint:disable:next function_body_length
@@ -241,8 +256,8 @@ final class AddFoodViewController: UIViewController {
                 }
                 self?.presenter?.saveMeal(mealTime, foods: self?.selectedFood ?? [])
                 DispatchQueue.main.async {
-                    self?.selectedFood = []
-                    self?.presenter?.setFoodType(self?.previousSelectedType ?? .recent)
+//                    self?.selectedFood = []
+//                    self?.presenter?.setFoodType(self?.previousSelectedType ?? .recent)
                     self?.presenter?.didTapBackButton(shouldShowReview: true)
                 }
             },
@@ -341,8 +356,13 @@ final class AddFoodViewController: UIViewController {
             switch model.id {
             case .frequent, .recent, .favorites:
                 self.infoButtonsView.isHidden = false
-            case .myMeals, .myRecipes, .myFood:
+                self.updateCollectionViewTopOffsetPoint(model.id)
+            case .myRecipes, .myFood:
                 self.infoButtonsView.isHidden = true
+                self.updateCollectionViewTopOffsetPoint(model.id)
+            case .myMeals:
+                self.infoButtonsView.isHidden = true
+                self.updateCollectionViewTopOffsetPoint(model.id)
             case .search:
                 break
             }
@@ -379,6 +399,7 @@ final class AddFoodViewController: UIViewController {
             foodCollectionViewController.view,
             searchHistoryViewController.view,
             menuButton,
+            titleLabelFromMealSearch,
             infoButtonsView,
             segmentedScrollView,
             counterKcalControl,
@@ -388,7 +409,8 @@ final class AddFoodViewController: UIViewController {
             keyboardHeaderView,
             staticSearchTextField,
 //            doneButton,
-            addToEatenButton
+            addToEatenButton,
+            bottomCloseButton
         )
     }
     
@@ -533,6 +555,36 @@ final class AddFoodViewController: UIViewController {
         }
         
         addToEatenButton.alpha = 0
+        
+        titleLabelFromMealSearch.snp.makeConstraints { make in
+            make.leading.equalToSuperview().inset(20)
+            make.trailing.equalToSuperview().inset(81)
+            make.bottom.equalTo(segmentedControl.snp.top).offset(-16)
+        }
+        
+        bottomCloseButton.snp.makeConstraints { make in
+            make.bottom.equalToSuperview().offset(-24)
+            make.centerX.equalToSuperview()
+            make.width.equalToSuperview().multipliedBy(0.155)
+        }
+    }
+    
+    private func updateCollectionViewTopOffsetPoint(_ foodType: AddFood) {
+        switch foodType {
+        case .frequent, .recent, .favorites, .myRecipes, .myFood, .search:
+            foodCollectionViewController.view.snp.remakeConstraints { make in
+                make.leading.trailing.equalToSuperview()
+                make.top.equalTo(infoButtonsView.snp.bottom).offset(4).priority(.low)
+                make.bottom.equalTo(staticSearchTextField.snp.top)
+            }
+    
+        case .myMeals:
+            foodCollectionViewController.view.snp.remakeConstraints { make in
+                make.leading.trailing.equalToSuperview()
+                make.top.equalTo(segmentedScrollView.snp.bottom).offset(19).priority(.low)
+                make.bottom.equalTo(staticSearchTextField.snp.top)
+            }
+        }
     }
     
     private func setupShadow() {
@@ -563,6 +615,17 @@ final class AddFoodViewController: UIViewController {
 //                )
 //            )
 //        )
+    }
+    
+    private func changeSegmentControl() {
+        segmentedControl = SegmentedControl<AddFood>(
+            Const.segmentedModels.filter({
+                $0.title != "My Meals" })
+        )
+        
+        segmentedControl.backgroundColor = UIColor(hex: "E4FFF7")
+        segmentedControl.font = R.font.sfProTextSemibold(size: 16)
+        segmentedControl.selectedButtonType = .recent
     }
     
     private func showMealMenu() {
@@ -608,31 +671,56 @@ final class AddFoodViewController: UIViewController {
             } else {
                 finalFoodModel = food
             }
+            let foodPlaceholder: Food = .customEntry(
+                .init(title: "", nutrients: .init(kcal: 0, carbs: 0, proteins: 0, fats: 0), mealTime: .breakfast)
+            )
             cell.viewModel = .init(
                 cellType: .table,
                 food: finalFoodModel,
                 buttonType: (selectedFood ?? [])
-                    .contains(food ?? .meal(.init(mealTime: .breakfast))) && state != .default
+                    .contains(food ?? foodPlaceholder) && state != .default
                 ? .delete
-                : .add,
+                : wasFromMealCreateVC ? .addToMeal : .add,
                 subInfo: presenter?.getSubInfo(food, selectedFoodInfo),
                 colorSubInfo: selectedFoodInfo.getColor()
             )
-            cell.didTapButton = { food, buttonType in
-                if buttonType == .add {
-                    self.selectedFood = (self.selectedFood ?? []) + [food]
-                } else {
-                    self.selectedFood?.removeAll(where: { $0.id == food.id })
+            cell.didTapButton = { [weak self] food, buttonType in
+                switch buttonType {
+                case .delete:
+                    self?.selectedFood?.removeAll(where: { $0.id == food.id })
+                case .add:
+                    self?.selectedFood = (self?.selectedFood ?? []) + [food]
+                case .addToMeal:
+                    self?.presenter?.dismissToCreateMeal(with: food)
                 }
                 
-                FDS.shared.foodUpdate(food: food, favorites: false)
+                DispatchQueue.global(qos: .background).async {
+                    FDS.shared.foodUpdate(food: food, favorites: false)
+                }
             }
+            
             let frame = view.convert(infoButtonsView.getInfoButtonFrame(), from: infoButtonsView)
             let targetFrame = cell.convert(frame, from: view)
             cell.infoCenterX = targetFrame.midX
             return cell
         case .myMeals:
-            let cell: RecipesColectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
+            let cell: MealsCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
+            let food = foods[indexPath.item]
+            if case .meal(let meal) = food {
+                cell.meal = meal
+                cell.editMealButton.addTarget(self, action: #selector(editMealButtonTapped), for: .touchUpInside)
+                
+                cell.didTapButton = { [weak self] buttonType in
+                    switch buttonType {
+                    case .delete:
+                        self?.selectedFood?.removeAll(where: { $0.id == meal.id })
+                    case .add:
+                        self?.selectedFood = (self?.selectedFood ?? []) + [.meal(meal)]
+                    }
+                }
+            }
+            
+            
             return cell
         case .myRecipes:
             let cell: RecipesColectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
@@ -970,6 +1058,24 @@ final class AddFoodViewController: UIViewController {
             }
         }
     }
+    
+    @objc private func didTapCloseButton() {
+        Vibration.rigid.vibrate()
+        presenter?.didTapCloseButton()
+    }
+    
+    @objc private func editMealButtonTapped(sender: UIButton) {
+        Vibration.rigid.vibrate()
+        var view = sender.superview
+        while view != nil && !(view is MealsCollectionViewCell) {
+            view = view?.superview
+        }
+
+        if let cell = view as? MealsCollectionViewCell,
+           let meal = cell.meal {
+            presenter?.openEditMeal(meal: meal)
+        }
+    }
 }
 
 // MARK: - FoodCollectionViewController Delegate
@@ -1001,7 +1107,6 @@ extension AddFoodViewController: FoodCollectionViewControllerDataSource {
 
 extension AddFoodViewController: AddFoodViewControllerInterface {
 
-    
     func setFoods(_ foods: [Food]) {
         self.foods = foods
         self.foodCollectionViewController.reloadData()
@@ -1037,6 +1142,16 @@ extension AddFoodViewController: AddFoodViewControllerInterface {
     func updateSelectedFoodFromCustomEntry(_ food: Food) {
         selectedFood = (selectedFood ?? []) + [food]
         state = .default
+        foodCollectionViewController.reloadData()
+    }
+    
+    func realoadCollectionView() {
+        foodCollectionViewController.mealCellsHeight = Array(
+            repeating: 104,
+            count: FDS.shared.getAllMeals().count
+        )
+        
+//        presenter?.setFoodType(.myMeals)
         foodCollectionViewController.reloadData()
     }
 }
@@ -1177,6 +1292,23 @@ private extension AddFoodViewController {
         button.addTarget(self, action: #selector(didTapDoneButton), for: .touchUpInside)
         button.setTitle(R.string.localizable.addFoodDone(), for: .normal)
         button.titleLabel?.font = R.font.sfProDisplaySemibold(size: 18)
+        return button
+    }
+    
+    func getTitleLabelFromMealSearch() -> UILabel {
+        let label = UILabel()
+        label.font = R.font.sfProTextMedium(size: 20)
+        label.textColor = R.color.createMeal.basicPrimary()
+        label.isHidden = tabBarIsHidden ? false : true
+        return label
+    }
+    
+    func getBottomCloseButton() -> UIButton {
+        let button = UIButton()
+        button.setImage(R.image.foodViewing.topChevron(), for: .normal)
+        button.imageView?.tintColor = R.color.foodViewing.basicGrey()
+        button.addTarget(self, action: #selector(didTapCloseButton), for: .touchUpInside)
+        button.isHidden = tabBarIsHidden ? false : true
         return button
     }
 }

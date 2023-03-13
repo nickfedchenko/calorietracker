@@ -18,11 +18,21 @@ extension Food {
     var foodInfo: [FoodInfoCases: Double] {
         switch self {
         case .product(let product, let customAmount, let foodUnitData):
+            if let unitData = foodUnitData {
+                let coefficient = unitData.unit.getCoefficient() ?? 1
+                let amount = unitData.count * coefficient
+                return [
+                    .kcal: product.kcal * (amount / 100),
+                    .carb: product.carbs * (amount / 100),
+                    .fat: product.fat * (amount / 100),
+                    .protein: product.protein * (amount / 100)
+                ]
+            }
             return [
                 .kcal: product.kcal * ((customAmount ?? 100) / 100),
                 .carb: product.carbs * ((customAmount ?? 100) / 100),
                 .fat: product.fat * ((customAmount ?? 100) / 100),
-                .protein: product.protein
+                .protein: product.protein * ((customAmount ?? 100) / 100)
             ]
         case .dishes(let dish, let amount):
             if let amount = amount {
@@ -41,8 +51,13 @@ extension Food {
                     .protein: dish.protein
                 ]
             }
-        case .meal:
-            return [:]
+        case .meal(let meal):
+            return [
+                .kcal: meal.nutrients.kcal,
+                .carb: meal.nutrients.carbs,
+                .fat: meal.nutrients.fats,
+                .protein: meal.nutrients.proteins
+            ]
         case .customEntry(let customEntry):
             return [
                 .kcal: customEntry.nutrients.kcal,
@@ -72,8 +87,8 @@ extension Food {
             return product.foodDataId
         case .dishes(let dish, _):
             return dish.foodDataId
-        case .meal:
-            return nil
+        case .meal(let meal):
+            return meal.foodDataId
         case .customEntry(let customEntry):
             return customEntry.foodDataId
         }
@@ -100,8 +115,10 @@ extension Food: Equatable {
             return productLhs == productRhs
         case let (.dishes(dishLhs, _), .dishes(dishRhs, _)):
             return dishLhs == dishRhs
-        case let (.customEntry(customentryLhs), .customEntry(customEntryRhs)):
-            return customentryLhs == customEntryRhs
+        case let (.customEntry(customEntryLhs), .customEntry(customEntryRhs)):
+            return customEntryLhs == customEntryRhs
+        case let (.meal(mealLhs), .meal(mealRhs)):
+            return mealLhs == mealRhs
         default:
             return false
         }

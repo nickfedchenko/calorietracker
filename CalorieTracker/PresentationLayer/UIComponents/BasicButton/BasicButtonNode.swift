@@ -13,7 +13,7 @@ final class BasicButtonNode: CTWidgetButtonNode {
         switch type {
         case .custom(let model):
             layer.colors = model.gradientColors?.map { ($0 ?? .white).cgColor }
-        case .add, .apply, .save, .next:
+        case .add, .apply, .save, .next, .addToNewMeal:
             layer.colors = Color.gradientColors.compactMap { $0?.cgColor }
         }
         layer.startPoint = CGPoint(x: 0, y: 0)
@@ -71,6 +71,8 @@ final class BasicButtonNode: CTWidgetButtonNode {
             children = [textNode]
         case .custom:
             children = [iconNode, textNode]
+        case .addToNewMeal:
+            children = [textNode]
         }
         
         let stack = ASStackLayoutSpec.horizontal()
@@ -94,7 +96,7 @@ final class BasicButtonNode: CTWidgetButtonNode {
         gradientLayer.frame = frame
         if active {
             switch type {
-            case .add, .save, .apply, .next:
+            case .add, .save, .apply, .next, .addToNewMeal:
                 backgroundColor = gradientLayer.gradientColor()
             case .custom(let model):
                 if model.gradientColors != nil {
@@ -134,6 +136,8 @@ final class BasicButtonNode: CTWidgetButtonNode {
         case .custom(let model):
             iconNode.image = model.image?.inactiveImage
             textNode.attributedText = getAttributedString(string: defaultTitle ?? "", color: .white)
+        case .addToNewMeal:
+            textNode.attributedText = getAttributedString(string: Text.addToNewMeal, color: .white)
         }
     }
     
@@ -175,6 +179,11 @@ final class BasicButtonNode: CTWidgetButtonNode {
                     color: isPress ? text.isPressTitleColor : text.defaultTitleColor
                 )
             }
+        case .addToNewMeal:
+            textNode.attributedText = getAttributedString(
+                string: Text.addToNewMeal,
+                color: isPress ? Color.borderColor : UIColor.white
+            )
         }
     }
     
@@ -214,6 +223,7 @@ extension BasicButtonNode {
         static let save = "SAVE"
         static let apply = "APPLY"
         static let next = "Next".localized
+        static let addToNewMeal = R.string.localizable.mealCreationAddToNewMeal().uppercased()
     }
     
     struct Color {
