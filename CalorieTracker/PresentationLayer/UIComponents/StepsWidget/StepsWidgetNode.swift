@@ -12,7 +12,7 @@ final class StepsWidgetNode: CTWidgetNode {
     private lazy var topTextNode: ASTextNode = {
         let node = ASTextNode()
         let string = Text.steps
-        let font = R.font.sfProRoundedBold(size: 18)
+        let font = R.font.sfProRoundedBold(size: 5 / Double(string.count) * 18)
         let color = R.color.stepsWidget.secondGradientColor()
         let image = R.image.stepsWidget.foot()
         
@@ -276,6 +276,6 @@ private extension UIColor {
 
 extension StepsWidgetNode {
     struct Text {
-        static let steps = " STEPS"
+        static let steps = " \(R.string.localizable.diagramChartTypeStepsTitle())"
     }
 }

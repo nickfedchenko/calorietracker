@@ -37,6 +37,7 @@ class ThanksForTheInformationPresenter {
 
 extension ThanksForTheInformationPresenter: ThanksForTheInformationPresenterInterface {
     func viewDidLoad() {
+        
         if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
             view.set(currentOnboardingStage: currentOnboardingStage)
         }
@@ -48,11 +49,11 @@ extension ThanksForTheInformationPresenter: ThanksForTheInformationPresenterInte
         case .first:
             break
         case .second:
-            router?.openFinalOfTheFirstStage()
+            router?.openEnterYourName()
         case .third:
-            router?.openFinalOfTheSecondStage()
+            router?.openChoseYourGoalRouter()
         case .fourth:
-            router?.openFinalOfTheThirdStage()
+            router?.openImprovingNutrition()
         }
     }
 }

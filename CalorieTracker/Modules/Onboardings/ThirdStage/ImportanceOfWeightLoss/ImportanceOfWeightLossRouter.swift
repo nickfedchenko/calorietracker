@@ -8,7 +8,7 @@
 import UIKit
 
 protocol ImportanceOfWeightLossRouterInterface: AnyObject {
-    func openThoughtsAboutChangingFeelings()
+    func openLifeChangesAfterWeightLoss()
 }
 
 class ImportanceOfWeightLossRouter {
@@ -41,9 +41,9 @@ class ImportanceOfWeightLossRouter {
 // MARK: - ImportanceOfWeightLossRouterInterface
 
 extension ImportanceOfWeightLossRouter: ImportanceOfWeightLossRouterInterface {
-    func openThoughtsAboutChangingFeelings() {
-        let thoughtsAboutChangingFeelingsRouter = ThoughtsAboutChangingFeelingsRouter.setupModule()
-        
-        viewController?.navigationController?.pushViewController(thoughtsAboutChangingFeelingsRouter, animated: true)
+    func openLifeChangesAfterWeightLoss() {
+        let lifeChangesAfterWeightLossRouter = LifeChangesAfterWeightLossRouter.setupModule()
+
+        viewController?.navigationController?.pushViewController(lifeChangesAfterWeightLossRouter, animated: true)
     }
 }

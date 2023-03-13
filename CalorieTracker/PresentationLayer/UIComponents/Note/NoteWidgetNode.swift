@@ -21,7 +21,6 @@ final class NoteWidgetNode: CTWidgetNode {
         let node = ASDisplayNode { () -> UIView in
             return self.lastNodeView
         }
-        
         return node
     }()
     

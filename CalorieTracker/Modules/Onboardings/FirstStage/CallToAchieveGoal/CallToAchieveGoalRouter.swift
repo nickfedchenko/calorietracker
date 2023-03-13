@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 protocol CallToAchieveGoalRouterInterface: AnyObject {
-    func openQuestionAboutTheChange()
+    func openCalorieCount()
 }
 
 class CallToAchieveGoalRouter: NSObject {
@@ -42,9 +42,9 @@ class CallToAchieveGoalRouter: NSObject {
 // MARK: - CallToAchieveGoalRouterInterface
 
 extension CallToAchieveGoalRouter: CallToAchieveGoalRouterInterface {
-    func openQuestionAboutTheChange() {
-        let questionAboutTheChangeRouter = QuestionAboutTheChangeRouter.setupModule()
+    func openCalorieCount() {
+        let calorieCountRouter = CalorieCountRouter.setupModule()
         
-        viewController?.navigationController?.pushViewController(questionAboutTheChangeRouter, animated: true)
+        viewController?.navigationController?.pushViewController(calorieCountRouter, animated: true)
     }
 }

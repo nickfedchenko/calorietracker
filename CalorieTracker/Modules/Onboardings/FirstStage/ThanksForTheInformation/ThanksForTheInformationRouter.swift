@@ -9,9 +9,9 @@ import Foundation
 import UIKit
 
 protocol ThanksForTheInformationRouterInterface: AnyObject {
-    func openFinalOfTheFirstStage()
-    func openFinalOfTheSecondStage()
-    func openFinalOfTheThirdStage()
+    func openEnterYourName()
+    func openChoseYourGoalRouter()
+    func openImprovingNutrition()
 }
 
 class ThanksForTheInformationRouter: NSObject {
@@ -42,21 +42,21 @@ class ThanksForTheInformationRouter: NSObject {
 // MARK: - ThanksForTheInformationRouterInterface
 
 extension ThanksForTheInformationRouter: ThanksForTheInformationRouterInterface {
-    func openFinalOfTheFirstStage() {
-        let finalOfTheFirstStageRouter = FinalOfTheFirstStageRouter.setupModule()
+    func openEnterYourName() {
+        let enterYourNameRouter = EnterYourNameRouter.setupModule()
         
-        viewController?.navigationController?.pushViewController(finalOfTheFirstStageRouter, animated: true)
+        viewController?.navigationController?.pushViewController(enterYourNameRouter, animated: true)
     }
     
-    func openFinalOfTheSecondStage() {
-        let finalOfTheSecondStageRouter = FinalOfTheSecondStageRouter.setupModule()
+    func openChoseYourGoalRouter() {
+        let choseYourGoalRouter = ChooseYourGoalRouter.setupModule()
         
-        viewController?.navigationController?.pushViewController(finalOfTheSecondStageRouter, animated: true)
+        viewController?.navigationController?.pushViewController(choseYourGoalRouter, animated: true)
     }
     
-    func openFinalOfTheThirdStage() {
-        let finalOfTheThirdStageRouter = FinalOfTheThirdStageRouter.setupModule()
+    func openImprovingNutrition() {
+        let improvingNutritionRouter = ImprovingNutritionRouter.setupModule()
         
-        viewController?.navigationController?.pushViewController(finalOfTheThirdStageRouter, animated: true)
+        viewController?.navigationController?.pushViewController(improvingNutritionRouter, animated: true)
     }
 }

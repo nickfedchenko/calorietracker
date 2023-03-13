@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 protocol ObsessingOverFoodRouterInterface: AnyObject {
-    func openTheEffectOfWeight()
+    func openFormationGoodHabits()
 }
 
 class ObsessingOverFoodRouter: NSObject {
@@ -40,9 +40,9 @@ class ObsessingOverFoodRouter: NSObject {
 // MARK: - ObsessingOverFoodRouterInterface
 
 extension ObsessingOverFoodRouter: ObsessingOverFoodRouterInterface {
-    func openTheEffectOfWeight() {
-        let theEffectOfWeightRouter = TheEffectOfWeightRouter.setupModule()
+    func openFormationGoodHabits() {
+        let formationGoodHabitsRouter = FormationGoodHabitsRouter.setupModule()
         
-        viewController?.navigationController?.pushViewController(theEffectOfWeightRouter, animated: true)
+        viewController?.navigationController?.pushViewController(formationGoodHabitsRouter, animated: true)
     }
 }

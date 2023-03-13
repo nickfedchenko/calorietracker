@@ -36,6 +36,6 @@ class WelcomePresenter {
 
 extension WelcomePresenter: WelcomePresenterInterface {
     func didTapWelcomCommonButton() {
-        router?.openQuestionOfLosingWeight()
+        router?.openPurposeOfTheParish()
     }
 }

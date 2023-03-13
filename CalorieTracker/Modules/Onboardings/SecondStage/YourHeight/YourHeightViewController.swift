@@ -32,7 +32,7 @@ final class YourHeightViewController: UIViewController {
     )
     private let pickerView: UIPickerView = .init()
     
-    private var height: Double?
+    private var height: Double? = 160.0
     
     // MARK: - Lifecycle methods
     
@@ -62,6 +62,7 @@ final class YourHeightViewController: UIViewController {
             action: #selector(didTapContinueCommonButton),
             for: .touchUpInside
         )
+        borderTextField.text = BAMeasurement(160, .lenght, isMetric: true).string
         
         containerPickerView.backgroundColor = .white
         containerPickerView.layer.cornerRadius = 12
@@ -73,7 +74,10 @@ final class YourHeightViewController: UIViewController {
         
         pickerView.dataSource = self
         pickerView.delegate = self
-
+        
+        pickerView.selectRow(0, inComponent: 0, animated: false)
+        pickerView.selectRow(60, inComponent: 2, animated: false)
+        
         continueCommonButton.addTarget(self, action: #selector(didTapContinueCommonButton), for: .touchUpInside)
     }
     

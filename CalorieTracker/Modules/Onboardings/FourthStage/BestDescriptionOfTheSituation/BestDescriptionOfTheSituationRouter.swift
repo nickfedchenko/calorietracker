@@ -8,7 +8,7 @@
 import UIKit
 
 protocol BestDescriptionOfTheSituationRouterInterface: AnyObject {
-    func openTimeForYourself()
+    func openEmotionalSupportSystem()
 }
 
 class BestDescriptionOfTheSituationRouter {
@@ -41,11 +41,11 @@ class BestDescriptionOfTheSituationRouter {
 // MARK: - BestDescriptionOfTheSituationRouterInterface
 
 extension BestDescriptionOfTheSituationRouter: BestDescriptionOfTheSituationRouterInterface {
-    func openTimeForYourself() {
-        let timeForYourselfRouter = TimeForYourselfRouter.setupModule()
+    func openEmotionalSupportSystem() {
+        let emotionalSupportSystemRouter = EmotionalSupportSystemRouter.setupModule()
         
         viewController?.navigationController?.pushViewController(
-            timeForYourselfRouter,
+            emotionalSupportSystemRouter,
             animated: true
         )
     }

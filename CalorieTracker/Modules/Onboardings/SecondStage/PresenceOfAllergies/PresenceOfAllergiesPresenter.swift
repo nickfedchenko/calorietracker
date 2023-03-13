@@ -54,8 +54,14 @@ extension PresenceOfAllergiesPresenter: PresenceOfAllergiesPresenterInterface {
     }
     
     func didTapContinueCommonButton() {
-        interactor?.set(presenceOfAllergies: .yes)
-        router?.openAllergicRestrictions()
+        switch presenceOfAllergiesIndex {
+        case 0:
+            interactor?.set(presenceOfAllergies: .yes)
+            router?.openAllergicRestrictions()
+        default:
+            interactor?.set(presenceOfAllergies: .no)
+            router?.openThanksForTheInformation()
+        }
     }
     
     func didSelectPresenceOfAllergies(with index: Int) {

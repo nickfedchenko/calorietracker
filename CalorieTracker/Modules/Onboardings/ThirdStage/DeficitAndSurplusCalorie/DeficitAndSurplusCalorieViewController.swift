@@ -31,20 +31,14 @@ final class DeficitAndSurplusCalorieViewController: UIViewController {
     private let currentYourWeightComponent: YourWeightComponent = .init(style: .current)
     private let targetYourWeightComponent: YourWeightComponent = .init(style: .target)
     private let chartView: OnboardingChartView = .init()
-    private let sliderBackground: UIView = .init()
-    private let firstDotView: UIView = .init()
-    private let secondDotView: UIView = .init()
-    private let thirdDotView: UIView = .init()
-    private let fourthDotView: UIView = .init()
-    private let sliderDotsStackView: UIStackView = .init()
-    private lazy var sliderThumb: UIView = .init()
-    private let resultLabel: UILabel = .init()
-    private let rateLabel: UILabel = .init()
-    private let procentStackView: UIStackView = .init()
-    private let firstProcentLabel: UILabel = .init()
-    private let secondProcentLabel: UILabel = .init()
-    private let thirdProcentLabel: UILabel = .init()
-    private let fourthProcentLabel: UILabel = .init()
+    
+    private lazy var sliderView: SettingsCustomizableSliderView = SettingsCustomizableSliderView(
+        target: .weeklyGoal(
+            numberOfAnchors: 21, lowerBoundValue: 0, upperBoundValue: 1), mode: .compact(
+                goalType: presenter?.getGoal() ?? .loss(calorieDeficit: 0)
+            )
+    )
+
     private let continueCommonButton: CommonButton = .init(
         style: .filled,
         text: R.string.localizable.onboardingThirdDeficitAndSurplusCalorieButton()
@@ -64,6 +58,14 @@ final class DeficitAndSurplusCalorieViewController: UIViewController {
         configureLayouts()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        sliderView.setInitialStates()
+        sliderView.standaloneRatioEmitter = { [weak self] ratio in
+            self?.presenter?.didChangeRate(on: ratio)
+        }
+    }
+    
     // swiftlint:disable:next function_body_length
     private func configureViews() {
         title = R.string.localizable.onboardingThirdDeficitAndSurplusCalorieTitle()
@@ -71,58 +73,8 @@ final class DeficitAndSurplusCalorieViewController: UIViewController {
         view.backgroundColor = R.color.mainBackground()
         
         stackView.axis = .horizontal
-        stackView.spacing = 15
+        stackView.distribution = .equalSpacing
         stackView.alignment = .center
-        
-        rateLabel.font = .systemFont(ofSize: 18.fontScale(), weight: .bold)
-        rateLabel.textColor = R.color.onboardings.basicDark()
-        
-        resultLabel.font = .systemFont(ofSize: 18.fontScale(), weight: .bold)
-        resultLabel.textColor = R.color.onboardings.radialGradientFirst()
-        
-        sliderBackground.clipsToBounds = false
-        
-        firstDotView.backgroundColor = .white
-        firstDotView.layer.borderWidth = 4
-        firstDotView.layer.cornerRadius = 9
-        
-        secondDotView.backgroundColor = .white
-        secondDotView.layer.borderWidth = 4
-        secondDotView.layer.cornerRadius = 9
-        
-        thirdDotView.backgroundColor = .white
-        thirdDotView.layer.borderWidth = 4
-        thirdDotView.layer.cornerRadius = 9
-        
-        fourthDotView.backgroundColor = .white
-        fourthDotView.layer.borderWidth = 4
-        fourthDotView.layer.cornerRadius = 9
-        
-        sliderDotsStackView.distribution = .equalSpacing
-        sliderDotsStackView.axis = .horizontal
-        sliderDotsStackView.alignment = .center
-        
-        sliderThumb.layer.cornerRadius = 15
-        sliderThumb.layer.borderWidth = 4
-        sliderThumb.layer.borderColor = UIColor(named: R.color.onboardings.basicWhite.name)?.cgColor
-        sliderThumb.isUserInteractionEnabled = true
-        sliderThumb.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture)))
-        
-        procentStackView.distribution = .equalSpacing
-        procentStackView.axis = .horizontal
-        procentStackView.alignment = .center
-        
-        firstProcentLabel.text = "+5%"
-        firstProcentLabel.font = .systemFont(ofSize: 16, weight: .bold)
-        
-        secondProcentLabel.text = "+10%"
-        secondProcentLabel.font = .systemFont(ofSize: 16, weight: .bold)
-        
-        thirdProcentLabel.text = "+15%"
-        thirdProcentLabel.font = .systemFont(ofSize: 16, weight: .bold)
-        
-        fourthProcentLabel.text = "+20%"
-        fourthProcentLabel.font = .systemFont(ofSize: 16, weight: .bold)
         
         continueCommonButton.addTarget(self, action: #selector(didTapContinueCommonButton), for: .touchUpInside)
     }
@@ -133,7 +85,7 @@ final class DeficitAndSurplusCalorieViewController: UIViewController {
         
         scrolView.addSubview(contentView)
         
-        view.addSubview(stageCounterView)
+        contentView.addSubview(stageCounterView)
         
         contentView.addSubview(stackView)
         
@@ -141,29 +93,8 @@ final class DeficitAndSurplusCalorieViewController: UIViewController {
         stackView.addArrangedSubview(targetYourWeightComponent)
         
         contentView.addSubview(chartView)
-        
-        contentView.addSubview(resultLabel)
-        
-        contentView.addSubview(rateLabel)
-        
-        contentView.addSubview(sliderBackground)
-        
-        contentView.addSubview(sliderDotsStackView)
-        
-        sliderDotsStackView.addArrangedSubview(firstDotView)
-        sliderDotsStackView.addArrangedSubview(secondDotView)
-        sliderDotsStackView.addArrangedSubview(thirdDotView)
-        sliderDotsStackView.addArrangedSubview(fourthDotView)
-        
-        contentView.addSubview(sliderThumb)
-        
-        contentView.addSubview(procentStackView)
-        
-        procentStackView.addArrangedSubview(firstProcentLabel)
-        procentStackView.addArrangedSubview(secondProcentLabel)
-        procentStackView.addArrangedSubview(thirdProcentLabel)
-        procentStackView.addArrangedSubview(fourthProcentLabel)
-        
+        contentView.addSubview(sliderView)
+
         contentView.addSubview(continueCommonButton)
         
         scrolView.snp.makeConstraints {
@@ -196,66 +127,21 @@ final class DeficitAndSurplusCalorieViewController: UIViewController {
             $0.width.equalTo(targetYourWeightComponent.snp.width)
         }
         
+        targetYourWeightComponent.aspectRatio()
+        
         chartView.snp.makeConstraints {
             $0.top.equalTo(stackView.snp.bottom).offset(18)
             $0.left.equalTo(contentView.snp.left).offset(40)
             $0.right.equalTo(contentView.snp.right).offset(-40)
         }
         
-        rateLabel.snp.makeConstraints {
-            $0.top.equalTo(chartView.snp.bottom).offset(35)
-            $0.left.equalTo(sliderBackground.snp.left).offset(-10)
-        }
-        
-        resultLabel.snp.makeConstraints {
-            $0.top.equalTo(chartView.snp.bottom).offset(35)
-            $0.left.equalTo(rateLabel.snp.right).offset(10)
-            $0.right.equalTo(sliderBackground.snp.right).offset(10)
-        }
-        
-        sliderBackground.snp.makeConstraints {
-            $0.top.equalTo(resultLabel.snp.bottom).offset(26)
-            $0.left.equalTo(stackView.snp.left).offset(30)
-            $0.right.equalTo(stackView.snp.right).offset(-30)
-            $0.height.equalTo(4)
-        }
-        
-        firstDotView.snp.makeConstraints {
-            $0.size.equalTo(18)
-        }
-        
-        secondDotView.snp.makeConstraints {
-            $0.size.equalTo(18)
-        }
-        
-        thirdDotView.snp.makeConstraints {
-            $0.size.equalTo(18)
-        }
-        
-        fourthDotView.snp.makeConstraints {
-            $0.size.equalTo(18)
-        }
-        
-        sliderDotsStackView.snp.makeConstraints {
-            $0.left.equalTo(sliderBackground.snp.left).offset(-9)
-            $0.right.equalTo(sliderBackground.snp.right).offset(9)
-            $0.centerY.equalTo(sliderBackground.snp.centerY)
-        }
-        
-        sliderThumb.snp.makeConstraints {
-            $0.width.height.equalTo(30)
-            $0.centerX.equalTo(sliderBackground.snp.leading)
-            $0.centerY.equalTo(sliderBackground)
-        }
-        
-        procentStackView.snp.makeConstraints {
-            $0.top.equalTo(sliderBackground.snp.bottom).offset(12)
-            $0.left.equalTo(sliderBackground.snp.left).offset(-15)
-            $0.right.equalTo(sliderBackground.snp.right).offset(15)
+        sliderView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(40)
+            make.top.equalTo(chartView.snp.bottom).offset(16)
         }
         
         continueCommonButton.snp.makeConstraints {
-            $0.top.greaterThanOrEqualTo(procentStackView.snp.bottom).offset(40)
+            $0.top.greaterThanOrEqualTo(sliderView.snp.bottom).offset(40)
             $0.left.equalTo(contentView.snp.left).offset(40)
             $0.right.equalTo(contentView.snp.right).offset(-40)
             $0.bottom.equalTo(contentView.snp.bottom).offset(-35)
@@ -264,33 +150,35 @@ final class DeficitAndSurplusCalorieViewController: UIViewController {
     }
     
     @objc private func didTapContinueCommonButton() {
-        presenter?.didTapContinueCommonButton()
+        if let weightGoal = weightGoal {
+            presenter?.didTapContinueCommonButton(with: weightGoal)
+        }
     }
     
-    @objc private func handlePanGesture(sender: UIPanGestureRecognizer) {
-        let stopLocation = sender.location(in: sliderBackground)
-        var offset = stopLocation.x
-        if offset < 0 { offset = 0 }
-        if offset > sliderBackground.bounds.width { offset = sliderBackground.bounds.width }
-        
-        sliderThumb.snp.updateConstraints { make in
-            make.centerX.equalTo(sliderBackground.snp.leading).offset(offset)
-        }
-        
-        if sender.state == UIGestureRecognizer.State.ended {
-            let stepWidth = sliderBackground.bounds.width / 3
-            
-            var currentStep = Int(Double(offset / stepWidth).rounded())
-            
-            presenter?.didChangeRate(on: Double(5 * (currentStep + 1)))
-            
-            if (offset - (CGFloat(currentStep) * stepWidth)) > (stepWidth / 2) { currentStep += 1 }
-            
-            sliderThumb.snp.updateConstraints { make in
-                make.centerX.equalTo(sliderBackground.snp.leading).offset(CGFloat(currentStep) * stepWidth)
-            }
-        }
-    }
+//    @objc private func handlePanGesture(sender: UIPanGestureRecognizer) {
+//        let stopLocation = sender.location(in: sliderBackground)
+//        var offset = stopLocation.x
+//        if offset < 0 { offset = 0 }
+//        if offset > sliderBackground.bounds.width { offset = sliderBackground.bounds.width }
+//
+//        sliderThumb.snp.updateConstraints { make in
+//            make.centerX.equalTo(sliderBackground.snp.leading).offset(offset)
+//        }
+//
+//        if sender.state == UIGestureRecognizer.State.ended {
+//            let stepWidth = sliderBackground.bounds.width / 3
+//
+//            var currentStep = Int(Double(offset / stepWidth).rounded())
+//
+//            presenter?.didChangeRate(on: Double(5 * (currentStep + 1)))
+//
+//            if (offset - (CGFloat(currentStep) * stepWidth)) > (stepWidth / 2) { currentStep += 1 }
+//
+//            sliderThumb.snp.updateConstraints { make in
+//                make.centerX.equalTo(sliderBackground.snp.leading).offset(CGFloat(currentStep) * stepWidth)
+//            }
+//        }
+//    }
 }
 
 extension DeficitAndSurplusCalorieViewController: DeficitAndSurplusCalorieViewControllerInterface {
@@ -319,31 +207,33 @@ extension DeficitAndSurplusCalorieViewController: DeficitAndSurplusCalorieViewCo
         let suffix = R.string.localizable.onboardingThirdDeficitAndSurplusCalorieResult()
         switch weightGoal {
         case .gain(let calorieSurplus):
-            rateLabel.text = R.string.localizable.onboardingThirdDeficitAndSurplusCalorieSurplus()
-            resultLabel.text = "+\(calorieSurplus.clean) \(suffix)"
-            sliderBackground.backgroundColor = R.color.onboardings.radialGradientFirst()
-            sliderThumb.backgroundColor = R.color.onboardings.radialGradientFirst()
-            firstDotView.layer.borderColor = R.color.onboardings.radialGradientFirst()?.cgColor
-            secondDotView.layer.borderColor = R.color.onboardings.radialGradientFirst()?.cgColor
-            thirdDotView.layer.borderColor = R.color.onboardings.radialGradientFirst()?.cgColor
-            fourthDotView.layer.borderColor = R.color.onboardings.radialGradientFirst()?.cgColor
-            firstProcentLabel.textColor = R.color.onboardings.radialGradientFirst()
-            secondProcentLabel.textColor = R.color.onboardings.radialGradientFirst()
-            thirdProcentLabel.textColor = R.color.onboardings.radialGradientFirst()
-            fourthProcentLabel.textColor = R.color.onboardings.radialGradientFirst()
+            return
+//            rateLabel.text = R.string.localizable.onboardingThirdDeficitAndSurplusCalorieSurplus()
+//            resultLabel.text = "+\(calorieSurplus.clean) \(suffix)"
+//            sliderBackground.backgroundColor = R.color.onboardings.radialGradientFirst()
+//            sliderThumb.backgroundColor = R.color.onboardings.radialGradientFirst()
+//            firstDotView.layer.borderColor = R.color.onboardings.radialGradientFirst()?.cgColor
+//            secondDotView.layer.borderColor = R.color.onboardings.radialGradientFirst()?.cgColor
+//            thirdDotView.layer.borderColor = R.color.onboardings.radialGradientFirst()?.cgColor
+//            fourthDotView.layer.borderColor = R.color.onboardings.radialGradientFirst()?.cgColor
+//            firstProcentLabel.textColor = R.color.onboardings.radialGradientFirst()
+//            secondProcentLabel.textColor = R.color.onboardings.radialGradientFirst()
+//            thirdProcentLabel.textColor = R.color.onboardings.radialGradientFirst()
+//            fourthProcentLabel.textColor = R.color.onboardings.radialGradientFirst()
         case .loss(let calorieDeficit):
-            rateLabel.text = R.string.localizable.onboardingThirdDeficitAndSurplusCalorieDeficit()
-            resultLabel.text = "-\(calorieDeficit.clean) \(suffix)"
-            sliderBackground.backgroundColor = R.color.onboardings.currentWeight()
-            sliderThumb.backgroundColor = R.color.onboardings.currentWeight()
-            firstDotView.layer.borderColor = R.color.onboardings.currentWeight()?.cgColor
-            secondDotView.layer.borderColor = R.color.onboardings.currentWeight()?.cgColor
-            thirdDotView.layer.borderColor = R.color.onboardings.currentWeight()?.cgColor
-            fourthDotView.layer.borderColor = R.color.onboardings.currentWeight()?.cgColor
-            firstProcentLabel.textColor = R.color.onboardings.currentWeight()
-            secondProcentLabel.textColor = R.color.onboardings.currentWeight()
-            thirdProcentLabel.textColor = R.color.onboardings.currentWeight()
-            fourthProcentLabel.textColor = R.color.onboardings.currentWeight()
+            return
+//            rateLabel.text = R.string.localizable.onboardingThirdDeficitAndSurplusCalorieDeficit()
+//            resultLabel.text = "-\(calorieDeficit.clean) \(suffix)"
+//            sliderBackground.backgroundColor = R.color.onboardings.currentWeight()
+//            sliderThumb.backgroundColor = R.color.onboardings.currentWeight()
+//            firstDotView.layer.borderColor = R.color.onboardings.currentWeight()?.cgColor
+//            secondDotView.layer.borderColor = R.color.onboardings.currentWeight()?.cgColor
+//            thirdDotView.layer.borderColor = R.color.onboardings.currentWeight()?.cgColor
+//            fourthDotView.layer.borderColor = R.color.onboardings.currentWeight()?.cgColor
+//            firstProcentLabel.textColor = R.color.onboardings.currentWeight()
+//            secondProcentLabel.textColor = R.color.onboardings.currentWeight()
+//            thirdProcentLabel.textColor = R.color.onboardings.currentWeight()
+//            fourthProcentLabel.textColor = R.color.onboardings.currentWeight()
         }
     }
 }

@@ -45,11 +45,11 @@ extension WhatImportantToYouPresenter: WhatImportantToYouPresenterInterface {
     
     func didTapCaloriesInMyFoodCommonButton() {
         interactor?.set(whatImportantToYou: true)
-        router?.openThoughtsOnStressEating()
+        router?.openBestDescriptionOfTheSituation()
     }
     
     func didTapNutritionOfMyFoodCommonButton() {
         interactor?.set(whatImportantToYou: false)
-        router?.openThoughtsOnStressEating()
+        router?.openBestDescriptionOfTheSituation()
     }
 }

@@ -63,7 +63,7 @@ struct OnboardingSaveDataService {
             UDM.weeklyGoal = value
         case .loss(let value):
             UDM.goalType = .loseWeight
-            UDM.weeklyGoal = -value
+            UDM.weeklyGoal = value
         default:
             UDM.goalType = .maintainWeight
             UDM.weeklyGoal = nil

@@ -26,7 +26,7 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
         let label = UILabel()
         label.font = R.font.sfProDisplaySemibold(size: 22.fontScale())
         label.textColor = R.color.waterWidget.firstGradientColor()
-        label.text = "WATER"
+        label.text = R.string.localizable.diagramChartTypeWaterTitle()
         return label
     }()
     

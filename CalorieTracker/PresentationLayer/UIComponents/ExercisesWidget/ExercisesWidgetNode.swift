@@ -24,7 +24,7 @@ final class ExercisesWidgetNode: CTWidgetNode {
     
     private lazy var exercisesTextNode: ASTextNode = {
         let node = ASTextNode()
-        node.attributedText = "EXERCISES".attributedSring([
+        node.attributedText = "exercises".localized.uppercased().attributedSring([
             .init(
                 worldIndex: [0],
                 attributes: [
@@ -38,7 +38,7 @@ final class ExercisesWidgetNode: CTWidgetNode {
     
     private lazy var connectAHTextNode: ASTextNode = {
         let node = ASTextNode()
-        node.attributedText = "Connect to\napple health".attributedSring([
+        node.attributedText = R.string.localizable.ahConnectTitle().attributedSring([
             .init(
                 worldIndex: Array(0...5),
                 attributes: [

@@ -135,6 +135,10 @@ protocol OnboardingManagerInterface {
     func setEmail(mail: String)
     func setActivityLevel(level: ActivityLevel)
     func setDietary(dietary: UserDietary)
+    
+    func set(chooseYourGoal: ChooseYourGoal)
+    func getAllChooseYourGoal() -> [ChooseYourGoal]
+    func getYourGoal() -> ChooseYourGoal?
 }
 
 class OnboardingManager {
@@ -329,6 +333,18 @@ extension OnboardingManager: OnboardingManagerInterface {
     
     func set(lifeChangesAfterWeightLoss: LifeChangesAfterWeightLoss) {
         onboardingInfo.lifeChangesAfterWeightLoss = lifeChangesAfterWeightLoss
+    }
+    
+    func getAllChooseYourGoal() -> [ChooseYourGoal] {
+        return ChooseYourGoal.allCases
+    }
+    
+    func set(chooseYourGoal: ChooseYourGoal) {
+        onboardingInfo.chooseYourGoal = chooseYourGoal
+    }
+    
+    func getYourGoal() -> ChooseYourGoal? {
+        return onboardingInfo.chooseYourGoal
     }
     
     func set(whatIsYourGoalWeight: Double) {

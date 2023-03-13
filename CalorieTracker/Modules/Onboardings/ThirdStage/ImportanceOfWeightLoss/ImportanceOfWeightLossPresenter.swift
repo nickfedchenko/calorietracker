@@ -10,6 +10,7 @@ import Foundation
 protocol ImportanceOfWeightLossPresenterInterface: AnyObject {
     func viewDidLoad()
     func didTapContinueCommonButton()
+    func getYourGoal() -> ChooseYourGoal
 }
 
 class ImportanceOfWeightLossPresenter {
@@ -53,6 +54,10 @@ extension ImportanceOfWeightLossPresenter: ImportanceOfWeightLossPresenterInterf
     
     func didTapContinueCommonButton() {
         interactor?.set(importanceOfWeightLoss: .itIsVeryImportant)
-        router?.openThoughtsAboutChangingFeelings()
+        router?.openLifeChangesAfterWeightLoss()
+    }
+    
+    func getYourGoal() -> ChooseYourGoal {
+        interactor?.getYourGoal() ?? .loseWeight
     }
 }

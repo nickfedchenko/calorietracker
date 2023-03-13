@@ -17,7 +17,7 @@ import UIKit
 
      let model: Model
      
-     var font: UIFont? = R.font.sfProRoundedBold(size: 16){
+     var font: UIFont? = R.font.sfProRoundedBold(size: Constants.fontSize){
          didSet {
              titleLabel?.font = font
          }
@@ -41,3 +41,20 @@ import UIKit
          clipsToBounds = false
      }
  }
+
+extension SegmentedButton {
+    enum Constants {
+        static var fontSize: CGFloat {
+            switch Locale.current.languageCode {
+            case "de":
+                return 13.fitW
+            case "en":
+                return 15.fitW
+            case "it":
+                return 10.fitW
+            default:
+                return 16.fitW
+            }
+        }
+    }
+}

@@ -255,7 +255,7 @@ extension NotesCreateHeader {
         let button = UIButton()
         let font = R.font.sfProRoundedBold(size: 18)
         button.setAttributedTitle(
-            "ALL NOTES".attributedSring(
+            "ALL NOTES".localized.attributedSring(
                 [.init(worldIndex: [0, 1], attributes: [.color(.white), .font(font)])],
                 image: .init(
                     image: R.image.notes.note(),

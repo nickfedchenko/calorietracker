@@ -43,6 +43,6 @@ extension CallToAchieveGoalPresenter: CallToAchieveGoalPresenterInterface {
     }
     
     func didTapContinueCommonButton() {
-        router?.openQuestionAboutTheChange()
+        router?.openCalorieCount()
     }
 }

@@ -9,8 +9,9 @@ import Foundation
 
 protocol DeficitAndSurplusCaloriePresenterInterface: AnyObject {
     func viewDidLoad()
-    func didTapContinueCommonButton()
     func didChangeRate(on value: Double)
+    func didTapContinueCommonButton(with weightGoal: WeightGoal)
+    func getGoal() -> WeightGoal
 }
 
 class DeficitAndSurplusCaloriePresenter {
@@ -35,6 +36,10 @@ class DeficitAndSurplusCaloriePresenter {
 }
 
 extension DeficitAndSurplusCaloriePresenter: DeficitAndSurplusCaloriePresenterInterface {
+    func getGoal() -> WeightGoal {
+        interactor?.getWeightGoal(rate: 0) ?? .loss(calorieDeficit: 0)
+    }
+    
     func viewDidLoad() {
         if let currentOnboardingStage = interactor?.getCurrentOnboardingStage() {
             view.set(currentOnboardingStage: currentOnboardingStage)
@@ -48,16 +53,17 @@ extension DeficitAndSurplusCaloriePresenter: DeficitAndSurplusCaloriePresenterIn
             view.set(yourGoalWeight: yourGoalWeight)
         }
                 
-        if let weightGoal = interactor?.getWeightGoal(rate: 5.0) {
+        if let weightGoal = interactor?.getWeightGoal(rate: 0.1) {
             view.set(weightGoal: weightGoal)
         }
         
-        if let date = interactor?.getDate(rate: 5.0) {
+        if let date = interactor?.getDate(rate: 0.1) {
             view.set(date: date)
         }
     }
     
-    func didTapContinueCommonButton() {
+    func didTapContinueCommonButton(with weightGoal: WeightGoal) {
+        interactor?.set(weightGoal: weightGoal)
         router?.openThanksForTheInformation()
     }
     
@@ -65,7 +71,7 @@ extension DeficitAndSurplusCaloriePresenter: DeficitAndSurplusCaloriePresenterIn
         if let weightGoal = interactor?.getWeightGoal(rate: value) {
             view.set(weightGoal: weightGoal)
         }
-        
+//        
         if let date = interactor?.getDate(rate: value) {
             view.set(date: date)
         }

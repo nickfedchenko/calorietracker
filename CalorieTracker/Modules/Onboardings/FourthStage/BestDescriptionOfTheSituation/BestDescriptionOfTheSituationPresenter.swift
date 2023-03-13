@@ -52,6 +52,6 @@ extension BestDescriptionOfTheSituationPresenter: BestDescriptionOfTheSituationP
     
     func didTapContinueCommonButton() {
         interactor?.set(bestDescriptionOfTheSituation: .livewithRoommates)
-        router?.openTimeForYourself()
+        router?.openEmotionalSupportSystem()
     }
 }

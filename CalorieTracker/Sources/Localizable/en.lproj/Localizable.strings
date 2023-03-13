@@ -159,7 +159,7 @@
 
 "onboarding.chart.description" = "At this rate, we expect you to reach your target weight around December";
 "onboarding.chart.now" = "Now";
-"onboarding.chart.title" = "Weight gain chart";
+"onboarding.chart.title" = "Weight change chart";
 
 "onboarding.second.allergicRestrictions.title" = "Allergic restrictions";
 "onboarding.second.allergicRestrictions.button" = "continue";
@@ -227,6 +227,11 @@
 "onboarding.second.yourWeight.title.first" = "Your weight";
 "onboarding.second.yourWeight.title.weight" = "0.0 kg";
 
+"onboarding.third.chooseYourGoal.button" = "Continue";
+"onboarding.third.chooseYourGoal.title" = "Motivation/Goal";
+"onboarding.third.chooseYourGoal.title.first" = "Choose your ";
+"onboarding.third.chooseYourGoal.title.second" = "goal";
+
 "onboarding.third.deficitAndSurplusCalorie.button" = "Continue";
 "onboarding.third.deficitAndSurplusCalorie.title" = "Motivation/Goal";
 "onboarding.third.deficitAndSurplusCalorie.surplus" = "Calorie surplus";
@@ -245,7 +250,9 @@
 "onboarding.third.importanceOfWeightLoss.button" = "continue";
 "onboarding.third.importanceOfWeightLoss.title" = "Motivation/Goal";
 "onboarding.third.importanceOfWeightLoss.title.first" = "How importans is it for you to ";
-"onboarding.third.importanceOfWeightLoss.title.second" = "lose weight ";
+"onboarding.third.importanceOfWeightLoss.title.second.loseWeight" = "lose weight ";
+"onboarding.third.importanceOfWeightLoss.title.second.gainMuscleMass" = "gain muscle mass ";
+"onboarding.third.importanceOfWeightLoss.title.second.manageHealthCondition" = "manage health condition ";
 "onboarding.third.importanceOfWeightLoss.title.third" = "right now?";
 "onboarding.third.importanceOfWeightLoss.itIsMyTopPriority" = "It is my top priority";
 "onboarding.third.importanceOfWeightLoss.itIsVeryImportant" = "It is very important";
@@ -254,7 +261,7 @@
 
 "onboarding.third.lifeChangesAfterWeightLoss.button" = "Continue";
 "onboarding.third.lifeChangesAfterWeightLoss.title" = "Motivation/Goal";
-"onboarding.third.lifeChangesAfterWeightLoss.title.first" = "Think about how your life will be different once you’ve lost the weight. ";
+"onboarding.third.lifeChangesAfterWeightLoss.title.first" = "Think about how your life will be different once you've achieved your goal. ";
 "onboarding.third.lifeChangesAfterWeightLoss.title.second" = "What are you most excited about?";
 "onboarding.third.lifeChangesAfterWeightLoss.beingProudOfMyself" = "Being proud of myself";
 "onboarding.third.lifeChangesAfterWeightLoss.feelingGreat" = "Feeling great";
@@ -614,6 +621,9 @@
 "loseWeight" = "Lose Weight";
 "buildMuscle" = "Build Muscle";
 "maintainWeight" = "Maintain Weight";
+"loseYourWeight" = "Lose weight";
+"gainMuscleMass" = "Gain muscle mass";
+"manageHealthCondition" = "Manage a health condition";
 
 "male" = "Male";
 "famale" = "Famale";
@@ -625,6 +635,7 @@
 "days" = "Days";
 "weeks" = "Weeks";
 "months" = "Months";
+"day" = "day";
 
 "track" = "TRACK";
 
@@ -767,7 +778,7 @@
 "Calories" = "Calories";
 "Exceptions" = "Exceptions";
 "Complexity" = "Complexity";
-"Apply" = "Apply";
+
 "Add to diary" = "Add to diary";
 "Back" = "Back";
 
@@ -804,3 +815,18 @@
 
 "Annualy" = "Annualy";
 "week" = "week";
+"onboarding.currentWeight" = "Your current weight";
+"onboarding.targetweight" = "Your target weight";
+
+"ALL NOTES" = "ALL NOTES";
+
+"weightWidget.full.segment.week" = "Week";
+"weightWidget.full.segment.month" = "Month";
+"weightWidget.full.segment.2months" = "2 months";
+"weightWidget.full.segment.3months" = "3 months";
+"weightWidget.full.segment.halfYear" = "Half a year";
+"weightWidget.full.segment.year" = "Year";
+"weightWidget.full.segment.alltime" = "All time";
+
+"nomeasurements.first" = "There are no measurements. Your first ";
+"nomeasurements.second" = " has not yet passed";

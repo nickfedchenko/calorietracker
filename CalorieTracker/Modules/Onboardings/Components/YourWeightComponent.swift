@@ -47,8 +47,9 @@ class YourWeightComponent: UIView {
         layer.shadowRadius = 12
         
         stackView.alignment = .center
-        stackView.spacing = 14
         stackView.axis = .vertical
+        stackView.spacing = 13
+        stackView.distribution = .fillProportionally
         
         titleLabe.font = .systemFont(ofSize: 16, weight: .regular)
         titleLabe.textColor = .white
@@ -67,10 +68,10 @@ class YourWeightComponent: UIView {
         stackView.addArrangedSubview(weightLabel)
         
         stackView.snp.makeConstraints {
-            $0.top.equalTo(snp.top).offset(17)
-            $0.left.equalTo(snp.left).offset(30)
-            $0.right.equalTo(snp.right).offset(-30)
-            $0.bottom.equalTo(snp.bottom).offset(-17)
+            $0.top.equalTo(snp.top).offset(16)
+            $0.left.equalTo(snp.left).offset(20)
+            $0.right.equalTo(snp.right).offset(-20)
+            $0.bottom.equalTo(snp.bottom).offset(-22)
         }
         
         imageView.snp.makeConstraints {
@@ -82,11 +83,11 @@ class YourWeightComponent: UIView {
         switch style {
         case .current:
             backgroundColor = R.color.onboardings.currentWeight()
-            titleLabe.text = "Your current weight"
+            titleLabe.text = R.string.localizable.onboardingCurrentWeight()
             imageView.image = R.image.onboardings.location()
         case .target:
             backgroundColor = R.color.onboardings.radialGradientFirst()
-            titleLabe.text = "Your target weight"
+            titleLabe.text = R.string.localizable.onboardingTargetweight()
             imageView.image = R.image.onboardings.gps()
         }
     }

@@ -14,9 +14,9 @@ struct OnboardingInfo {
     var recentWeightChanges: Bool?
     var questionAboutTheChange: QuestionAboutTheChange?
     var achievingDifficultGoal: AchievingDifficultGoal?
-    var lastCalorieCount: LastCalorieCount?
+    var lastCalorieCount: LastCalorieCount? = .anotherWay
     var calorieCount: Bool?
-    var previousApplication: PreviousApplication?
+    var previousApplication: PreviousApplication? = .anotherApp
     var obsessingOverFood: ObsessingOverFood?
     var theEffectOfWeight: TheEffectOfWeight?
     var formationGoodHabits: FormationGoodHabits?
@@ -56,20 +56,15 @@ struct OnboardingInfo {
     var mail: String?
     var activityLevel: ActivityLevel?
     var dietarySetting: UserDietary?
+    var chooseYourGoal: ChooseYourGoal?
     
     private var firstStageData: [Any?] {
         return [
-            isHaveYouTriedToLoseWeightBefor,
-            descriptionOfExperience,
             purposeOfTheParish,
-            recentWeightChanges,
-            questionAboutTheChange,
-            achievingDifficultGoal,
             lastCalorieCount,
             calorieCount,
             previousApplication,
             obsessingOverFood,
-            theEffectOfWeight,
             formationGoodHabits
         ]
     }
@@ -83,42 +78,30 @@ struct OnboardingInfo {
             yourHeight,
             yourWeight,
             risksOfDiseases,
-            presenceOfAllergies,
-            allergicRestrictions
+            presenceOfAllergies
         ]
     }
     
     private var thirdStageData: [Any?] {
         return [
             importanceOfWeightLoss,
-            thoughtsAboutChangingFeelings,
+            chooseYourGoal,
             lifeChangesAfterWeightLoss,
-            whatIsYourGoalWeight
+            whatIsYourGoalWeight,
+            activityLevel,
+            weightGoal
         ]
     }
     
     private var fourthStageData: [Any?] {
         return [
-            currentLifestile,
-            nutritionImprovement,
             improvingNutrition,
-            increasingYourActivityLevel,
-            howImproveYourEfficiency,
-            representationOfIncreasedActivityLevels,
-            sequenceOfHabitFormation,
-            descriptionOfCulinarySkills,
             whatImportantToYou,
-            thoughtsOnStressEating,
-            difficultyChoosingLifestyle,
-            interestInUsingTechnology,
             placeOfResidence,
             environmentInfluencesTheChoice,
             bestDescriptionOfTheSituation,
-            timeForYourself,
-            jointWeightLoss,
             lifestyleOfOthers,
             emotionalSupportSystem,
-            activityLevel,
             dietarySetting
         ]
     }

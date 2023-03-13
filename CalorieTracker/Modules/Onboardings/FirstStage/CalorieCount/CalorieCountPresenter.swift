@@ -45,11 +45,11 @@ extension CalorieCountPresenter: CalorieCountPresenterInterface {
     
     func didTapApprovalCommonButton() {
         interactor?.set(calorieCount: true)
-        router?.openPreviousApplication()
+        router?.openLastCalorieCount()
     }
     
     func didTapRejectionCommonButton() {
         interactor?.set(calorieCount: false)
-        router?.openPreviousApplication()
+        router?.openObsessingOverFood()
     }
 }

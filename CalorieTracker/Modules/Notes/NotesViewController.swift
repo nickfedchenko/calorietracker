@@ -185,7 +185,7 @@ extension NotesViewController {
         let label = UILabel()
         label.font = R.font.sfProDisplaySemibold(size: 28.fontScale())
         label.textColor = R.color.notes.noteAccent()
-        label.text = "ALL NOTES"
+        label.text = "ALL NOTES".localized
         return label
     }
 }

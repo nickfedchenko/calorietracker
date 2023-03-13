@@ -8,7 +8,7 @@
 import UIKit
 
 protocol WhatIsYourGoalWeightRouterInterface: AnyObject {
-    func openDeficitAndSurplusCalorie()
+    func openActivityLevelSelection()
 }
 
 class WhatIsYourGoalWeightRouter {
@@ -41,9 +41,12 @@ class WhatIsYourGoalWeightRouter {
 // MARK: - WhatIsYourGoalWeightRouterInterface
 
 extension WhatIsYourGoalWeightRouter: WhatIsYourGoalWeightRouterInterface {
-    func openDeficitAndSurplusCalorie() {
-        let deficitAndSurplusCalorieRouter = DeficitAndSurplusCalorieRouter.setupModule()
+    func openActivityLevelSelection() {
+        let activityLevelSelectionRouter = ActivityLevelSelectionRouter.setupModule()
         
-        viewController?.navigationController?.pushViewController(deficitAndSurplusCalorieRouter, animated: true)
+        viewController?.navigationController?.pushViewController(
+            activityLevelSelectionRouter,
+            animated: true
+        )
     }
 }

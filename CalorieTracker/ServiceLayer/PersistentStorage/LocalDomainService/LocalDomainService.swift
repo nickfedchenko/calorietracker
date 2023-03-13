@@ -64,7 +64,7 @@ protocol LocalDomainServiceInterface {
         mealID: String?
     ) -> Bool
     
-    func updateMeal(mealID: String, title: String, photoURL: String)
+    func updateMeal(meal: Meal)
     func getDomainProduct(_ id: String) -> DomainProduct?
     func getDomainDish(_ id: Int) -> DomainDish?
     func getDomainCustomEntry(_ id: String) -> DomainCustomEntry?
@@ -404,22 +404,24 @@ extension LocalDomainService: LocalDomainServiceInterface {
         try? backgroundContext.save()
     }
     
-    func updateMeal(mealID: String, title: String, photoURL: String) {
+    func updateMeal(meal: Meal) {
         let format = "id == %@"
-        
+       
         guard let domainMeal = fetchData(
             for: DomainMeal.self,
             withPredicate: NSCompoundPredicate(
-                orPredicateWithSubpredicates: [NSPredicate(format: format, mealID)]
+                orPredicateWithSubpredicates: [NSPredicate(format: format, meal.id)]
             )
         )?.first else {
-            debugPrint("No DomainMeal found with ID: \(mealID)")
+            debugPrint("No DomainMeal found with ID: \(meal.id)")
             return
         }
+    
+        if let components = domainMeal.components {
+            domainMeal.removeFromComponents(components)
+        }
         
-        domainMeal.title = title
-        domainMeal.photoURL = photoURL
-        
+        let newDomainMeal = DomainMeal.prepare(from: meal, context: context)
         context.performAndWait {
             do {
                 try context.save()

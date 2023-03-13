@@ -8,7 +8,18 @@
 import Foundation
 
 enum ChartFormat: String {
-    case daily = "day"
-    case weekly = "week"
-    case monthly = "month"
+    case daily
+    case weekly
+    case monthly
+    
+    var title: String {
+        switch self {
+        case .daily:
+            return "day".localized
+        case .weekly:
+            return "week".localized
+        case .monthly:
+            return R.string.localizable.weightWidgetFullSegmentMonth().lowercased()
+        }
+    }
 }

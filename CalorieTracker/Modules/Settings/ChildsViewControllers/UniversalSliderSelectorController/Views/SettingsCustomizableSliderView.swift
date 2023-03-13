@@ -8,6 +8,7 @@
 import UIKit
 
 final class AnchorPointsView: UIView {
+    
     private var target: UniversalSliderSelectionTargets
     
     init(target: UniversalSliderSelectionTargets) {
@@ -134,6 +135,37 @@ final class SettingsCustomizableSliderView: ViewWithShadow {
         case weeklyGoal(selectedValueInKG: Double?, kcalGoal: Double)
     }
     
+    enum AppearanceModes: Equatable {
+        static func == (
+            lhs: SettingsCustomizableSliderView.AppearanceModes,
+            rhs: SettingsCustomizableSliderView.AppearanceModes
+        ) -> Bool {
+            var lhsValue = {
+                switch lhs {
+                case .full:
+                    return 0
+                case .compact:
+                    return 1
+                }
+            }()
+            
+            var rhsValue = {
+                switch rhs {
+                case .full:
+                    return 0
+                case .compact:
+                    return 1
+                }
+            }()
+            return lhsValue == rhsValue
+        }
+        
+        case full
+        case compact(goalType: WeightGoal)
+    }
+    
+    var standaloneRatioEmitter: ((Double) -> Void)?
+    
     private lazy var tempResult: CustomizableSliderViewResult = {
         switch target {
         case .activityLevel:
@@ -141,17 +173,20 @@ final class SettingsCustomizableSliderView: ViewWithShadow {
                 selectedLevel: UDM.activityLevel ?? UDM.tempActivityLevel, kcalGoal: UDM.kcalGoal ?? 0
             )
         case .weeklyGoal:
-            return .weeklyGoal(selectedValueInKG: UDM.weeklyGoal ?? UDM.tempWeeklyGoal, kcalGoal: UDM.kcalGoal ?? 0)
+            return .weeklyGoal(
+                selectedValueInKG: UDM.weeklyGoal ?? UDM.tempWeeklyGoal ?? 0, kcalGoal: UDM.kcalGoal ?? 0
+            )
         }
     }()
     
     var applyButtonTapped: ((CustomizableSliderViewResult) -> Void)?
     var cancelButtonTapped: (() -> Void)?
-    
+    private var mode: AppearanceModes = .full
     private var target: UniversalSliderSelectionTargets
     private var isFirstLaunch = true
-    init(target: UniversalSliderSelectionTargets) {
+    init(target: UniversalSliderSelectionTargets, mode: AppearanceModes = .full) {
         self.target = target
+        self.mode = mode
         super.init(Constants.shadows)
         layer.cornerRadius = 14
         layer.cornerCurve = .continuous
@@ -276,7 +311,7 @@ final class SettingsCustomizableSliderView: ViewWithShadow {
         case .activityLevel(selectedLevel: let level, let kcalGoal):
             if
                 let storedLevel = UDM.activityLevel,
-                let tempLevel = level,
+//                let tempLevel = level,
                 storedLevel == level {
                 let string = R.string.localizable.universalSelectorCurrentSettingsByKcal()
                 let calorieGoalString = BAMeasurement(kcalGoal, .energy, isMetric: true).string
@@ -319,7 +354,7 @@ final class SettingsCustomizableSliderView: ViewWithShadow {
         forNew progress: Double
     ) {
         switch target {
-        case .weeklyGoal:
+        case .weeklyGoal(numberOfAnchors: _, lowerBoundValue: let lowerBound, upperBoundValue: let upperBound):
             if let currentWeight = WeightWidgetService.shared.getStartWeight(),
                let gender = UDM.userData?.sex,
                let age = UDM.userData?.dateOfBirth.years(to: Date()),
@@ -338,6 +373,8 @@ final class SettingsCustomizableSliderView: ViewWithShadow {
                 ? normal - targetCalorieDailyOffset
                 : normal + targetCalorieDailyOffset
                 tempResult = .weeklyGoal(selectedValueInKG: progress, kcalGoal: newKcalGoal)
+            } else {
+                tempResult = .weeklyGoal(selectedValueInKG: progress, kcalGoal: 0)
             }
         case .activityLevel(_, let lowerBoundValue, let upperBoundValue):
             let possibleValues: [ActivityLevel] = [.low, .moderate, .high, .veryHigh]
@@ -367,8 +404,8 @@ final class SettingsCustomizableSliderView: ViewWithShadow {
         controlPointsView.setProgress(progress)
         updateValueLabel()
         updateDescriptionLabel()
+        standaloneRatioEmitter?(progress)
     }
-    
     
     func setInitialStates() {
         switch target {
@@ -406,6 +443,14 @@ final class SettingsCustomizableSliderView: ViewWithShadow {
             if UDM.goalType == .loseWeight {
                 targetValue *= -1
             }
+            if case let .compact(goalType: goal) = self.mode {
+                switch goal {
+                case .loss(calorieDeficit: let defecit):
+                    targetValue *= -1
+                case .gain(calorieSurplus: let surplus):
+                    targetValue = abs(targetValue)
+                }
+            }
             let targetString = BAMeasurement(targetValue, .weight, isMetric: true).string
             rightValueLabel.attributedText = NSAttributedString(
                 string: targetString,
@@ -431,7 +476,10 @@ final class SettingsCustomizableSliderView: ViewWithShadow {
     
     private func setupSubviews() {
         backgroundColor = .white
-        addSubviews(leftTitle, rightValueLabel, controlPointsView, slider, descriptionView, applyButton, cancelButton)
+        addSubviews(leftTitle, rightValueLabel, controlPointsView, slider)
+        if mode == .full {
+            addSubviews(descriptionView, applyButton, cancelButton)
+        }
         leftTitle.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(19)
             make.top.equalToSuperview().offset(24)
@@ -459,24 +507,29 @@ final class SettingsCustomizableSliderView: ViewWithShadow {
             make.leading.trailing.equalTo(controlPointsView)
             make.top.equalTo(controlPointsView.snp.bottom).offset(4)
             make.height.equalTo(32)
+            if mode != .full {
+                make.bottom.equalToSuperview().inset(24)
+            }
         }
         
-        descriptionView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(24)
-            make.top.equalTo(slider.snp.bottom).offset(57)
-        }
-        
-        applyButton.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(24)
-            make.height.equalTo(58)
-            make.top.equalTo(slider.snp.bottom).offset(162)
-        }
-        
-        cancelButton.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(applyButton)
-            make.top.equalTo(applyButton.snp.bottom).offset(8)
-            make.bottom.equalToSuperview()
-            make.height.equalTo(58)
+        if mode == .full {
+            descriptionView.snp.makeConstraints { make in
+                make.leading.trailing.equalToSuperview().inset(24)
+                make.top.equalTo(slider.snp.bottom).offset(57)
+            }
+            
+            applyButton.snp.makeConstraints { make in
+                make.leading.trailing.equalToSuperview().inset(24)
+                make.height.equalTo(58)
+                make.top.equalTo(slider.snp.bottom).offset(162)
+            }
+            
+            cancelButton.snp.makeConstraints { make in
+                make.leading.trailing.equalTo(applyButton)
+                make.top.equalTo(applyButton.snp.bottom).offset(8)
+                make.bottom.equalToSuperview()
+                make.height.equalTo(58)
+            }
         }
     }
     

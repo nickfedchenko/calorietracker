@@ -13,6 +13,7 @@ protocol DeficitAndSurplusCalorieInteractorInterface: AnyObject {
     func getYourWeight() -> Double?
     func getWeightGoal(rate: Double) -> WeightGoal?
     func getDate(rate: Double) -> Date?
+    func set(weightGoal: WeightGoal)
 }
 
 class DeficitAndSurplusCalorieInteractor {
@@ -40,26 +41,24 @@ extension DeficitAndSurplusCalorieInteractor: DeficitAndSurplusCalorieInteractor
               let targetWeight = onboardingManager.getYourGoalWeight(),
               let gender = onboardingManager.getOnboardingInfo().whatsYourGender?.userSex,
               let age = onboardingManager.getOnboardingInfo().dateOfBirth?.years(to: Date()),
-              let height = onboardingManager.getOnboardingInfo().yourHeight
+              let height = onboardingManager.getOnboardingInfo().yourHeight,
+              let activity = onboardingManager.getOnboardingInfo().activityLevel
         else { return nil }
         
-        let calorieMeasurment = CalorieMeasurment(
+        let recommendedCalories = CalorieMeasurment.calculationRecommendedCalorieWithoutGoal(
+            sex: gender,
+            activity: activity,
             age: age,
             height: height,
-            sex: gender,
-            weight: currentWeight,
-            goalWeight: targetWeight,
-            kcalPercent: rate / 100
+            weight: currentWeight
         )
 
-        let weekGoal = calorieMeasurment.weekGoalKg()
         let weightGoal: WeightGoal = currentWeight >= targetWeight
-            ? .loss(calorieDeficit: weekGoal)
-            : .gain(calorieSurplus: weekGoal)
-        
+            ? .loss(calorieDeficit: -rate)
+            : .gain(calorieSurplus: rate)
         onboardingManager.set(weightGoal: weightGoal)
-        UDM.kcalGoal = calorieMeasurment.recommendedCalorie
-        
+        let weekGoal = currentWeight > targetWeight ? -rate : rate
+        UDM.kcalGoal = recommendedCalories + (weekGoal * 1100)
         return weightGoal
     }
     
@@ -68,19 +67,28 @@ extension DeficitAndSurplusCalorieInteractor: DeficitAndSurplusCalorieInteractor
               let targetWeight = onboardingManager.getYourGoalWeight(),
               let gender = onboardingManager.getOnboardingInfo().whatsYourGender?.userSex,
               let age = onboardingManager.getOnboardingInfo().dateOfBirth?.years(to: Date()),
-              let height = onboardingManager.getOnboardingInfo().yourHeight
+              let height = onboardingManager.getOnboardingInfo().yourHeight,
+              let activity = onboardingManager.getOnboardingInfo().activityLevel
         else { return nil }
         
-        let calorieMeasurment = CalorieMeasurment(
+        let recommendedCalories = CalorieMeasurment.calculationRecommendedCalorieWithoutGoal(
+            sex: gender,
+            activity: activity,
             age: age,
             height: height,
-            sex: gender,
-            weight: currentWeight,
-            goalWeight: targetWeight,
-            kcalPercent: rate / 100
+            weight: currentWeight
         )
-        
-        return calorieMeasurment.goalCompletionDate(Date())
+
+        let weekGoal = rate
+        let weightGoal: WeightGoal = currentWeight >= targetWeight
+            ? .loss(calorieDeficit: weekGoal)
+            : .gain(calorieSurplus: weekGoal)
+        let weightDiff = abs(currentWeight - targetWeight)
+        let totalTargetKcal = weightDiff * 7700
+        let dailyTarget = (rate != 0 ? abs(rate) : 0.01) * 1100
+        let daysToReach = Int(totalTargetKcal / dailyTarget)
+        let targetDate = Calendar.current.date(byAdding: .day, value: daysToReach, to: Date())
+        return targetDate
     }
     
     func getYourGoalWeight() -> Double? {
@@ -93,5 +101,9 @@ extension DeficitAndSurplusCalorieInteractor: DeficitAndSurplusCalorieInteractor
     
     func getCurrentOnboardingStage() -> OnboardingStage {
         return onboardingManager.getCurrentOnboardingStage()
+    }
+    
+    func set(weightGoal: WeightGoal) {
+        onboardingManager.set(weightGoal: weightGoal)
     }
 }

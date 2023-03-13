@@ -159,7 +159,7 @@
 
 "onboarding.chart.description" = "Такими темпами мы ожидаем, что вы достигнете своего целевого веса примерно в декабре";
 "onboarding.chart.now" = "Сейчас";
-"onboarding.chart.title" = "Таблица увеличения веса";
+"onboarding.chart.title" = "Таблица изменения веса";
 
 "onboarding.second.allergicRestrictions.title" = "Аллергические ограничения";
 "onboarding.second.allergicRestrictions.button" = "Продолжить";
@@ -227,6 +227,11 @@
 "onboarding.second.yourWeight.title.first" = "Ваш вес";
 "onboarding.second.yourWeight.title.weight" = "0.0 кг";
 
+"onboarding.third.chooseYourGoal.button" = "Продолжить";
+"onboarding.third.chooseYourGoal.title" = "Мотивация / Цель";
+"onboarding.third.chooseYourGoal.title.first" = "Выберите ";
+"onboarding.third.chooseYourGoal.title.second" = "цель";
+
 "onboarding.third.deficitAndSurplusCalorie.button" = "Продолжить";
 "onboarding.third.deficitAndSurplusCalorie.title" = "Мотивация / Цель";
 "onboarding.third.deficitAndSurplusCalorie.surplus" = "Избыток калорий";
@@ -245,7 +250,9 @@
 "onboarding.third.importanceOfWeightLoss.button" = "Продолжить";
 "onboarding.third.importanceOfWeightLoss.title" = "Мотивация / Цель";
 "onboarding.third.importanceOfWeightLoss.title.first" = "Насколько важно для Вас";
-"onboarding.third.importanceOfWeightLoss.title.second" = "сбросить вес ";
+"onboarding.third.importanceOfWeightLoss.title.second.loseWeight" = "сбросить вес ";
+"onboarding.third.importanceOfWeightLoss.title.second.gainMuscleMass" = "набрать мышечную массу ";
+"onboarding.third.importanceOfWeightLoss.title.second.manageHealthCondition" = "поддерживать свое здоровье ";
 "onboarding.third.importanceOfWeightLoss.title.third" = "прямо сейчас?";
 "onboarding.third.importanceOfWeightLoss.itIsMyTopPriority" = "Это мой главный приоритет";
 "onboarding.third.importanceOfWeightLoss.itIsVeryImportant" = "Это очень важно";
@@ -254,7 +261,7 @@
 
 "onboarding.third.lifeChangesAfterWeightLoss.button" = "Продолжить";
 "onboarding.third.lifeChangesAfterWeightLoss.title" = "Мотивация/Цель";
-"onboarding.third.lifeChangesAfterWeightLoss.title.first" = "Подумайте о том, как изменится ваша жизнь, когда вы сбросите вес.";
+"onboarding.third.lifeChangesAfterWeightLoss.title.first" = "Подумайте о том, как изменится ваша жизнь, когда вы добьетесь поставленой цели.";
 "onboarding.third.lifeChangesAfterWeightLoss.title.second" = "Что вас больше всего волнует?";
 "onboarding.third.lifeChangesAfterWeightLoss.beingProudOfMyself" = "Гордиться собой";
 "onboarding.third.lifeChangesAfterWeightLoss.feelingGreat" = "Чувствую себя великолепно";
@@ -614,6 +621,9 @@
 "loseWeight" = "Худеть";
 "buildMuscle" = "Наращивать мышечную массу";
 "maintainWeight" = "Поддерживать вес";
+"loseYourWeight" = "Похудеть";
+"gainMuscleMass" = "Набрать мышечную массу";
+"manageHealthCondition" = "Управлять своим здоровьем";
 
 "male" = "Мужчина";
 "famale" = "Женщина";
@@ -625,6 +635,7 @@
 "days" = "Дни";
 "weeks" = "Недели";
 "months" = "Месяцы";
+"day" = "день";
 
 "track" = "Отслеживать";
 
@@ -768,7 +779,7 @@
 "Calories" = "Калории";
 "Exceptions" = "Исключения";
 "Complexity" = "Сложность";
-"Apply" = "Применить";
+
 "Add to diary" = "Добавить в дневник";
 "Back" = "Назад";
 
@@ -805,3 +816,19 @@
 
 "Annualy" = "Ежегодно";
 "week" = "неделя";
+
+"onboarding.currentWeight" = "Ваш текущий вес";
+"onboarding.targetweight" = "Ваш целевой вес";
+
+"ALL NOTES" = "ALL NOTES";
+
+"weightWidget.full.segment.week" = "Неделя";
+"weightWidget.full.segment.month" = "Месяц";
+"weightWidget.full.segment.2months" = "2 месяца";
+"weightWidget.full.segment.3months" = "3 месяца";
+"weightWidget.full.segment.halfYear" = "Полгода";
+"weightWidget.full.segment.year" = "Год";
+"weightWidget.full.segment.alltime" = "Все время";
+
+"nomeasurements.first" = "Нет измерений. Ваш первый ";
+"nomeasurements.second" = " еще не прошел";

@@ -55,7 +55,7 @@ extension PurposeOfTheParishPresenter: PurposeOfTheParishPresenterInterface {
     
     func didTapNextCommonButton() {
         interactor?.set(purposeOfTheParish: .thisTimeToGetBackToHealthyHabits)
-        router?.openRecentWeightChanges()
+        router?.openCallToAchieveGoal()
     }
     
     func didSelectPurposeOfTheParish(with index: Int) {
