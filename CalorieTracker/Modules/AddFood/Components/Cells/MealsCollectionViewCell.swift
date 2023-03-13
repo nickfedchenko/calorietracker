@@ -260,20 +260,51 @@ final class MealsCollectionViewCell: UICollectionViewCell {
     func getDescriptionText() -> String {
         guard let meal = meal else { return "" }
 
-        var ingredients = [String]()
-        meal.products.forEach { ingredients.append($0.title) }
-        meal.dishes.forEach { ingredients.append($0.title) }
-        meal.customEntries.forEach { ingredients.append($0.title) }
-
+        var ingredients: [String] = foods.map { food in
+            switch food {
+            case .product(let product, customAmount: _, unit: _):
+                return product.title
+            case .customEntry(let entry):
+                return entry.title
+            case .dishes(let dish, customAmount: _):
+                return dish.title
+            case .meal(let meal):
+                return meal.title
+            }
+        }
         return ingredients.joined(separator: ", ")
     }
     
     func getKcalText() -> String {
         guard let meal = meal else { return "" }
         
-        let kcalSum = meal.products.reduce(0) { $0 + $1.kcal } +
-        meal.dishes.reduce(0) { $0 + $1.kcal } +
-        meal.customEntries.reduce(0) { $0 + $1.nutrients.kcal }
+        let kcalSum = meal.foods.reduce(Double(0)) { partialResult, food in
+            switch food {
+            case .product(let product, customAmount: let amount, unit: let unit):
+                if let unit = unit {
+                    let coefficient = unit.unit.getCoefficient() ?? 1
+                    let amount = coefficient * unit.count
+                    let kcal = product.kcal * (amount / 100)
+                    return partialResult + kcal
+                } else if let customAmount = amount {
+                    let kcal = (customAmount / 100) * product.kcal
+                    return partialResult + kcal
+                } else {
+                    return partialResult + product.kcal
+                }
+            case .dishes(let dish, customAmount: let amount):
+                if let amount = amount {
+                    let kcal = dish.kcal * (amount / (dish.dishWeight ?? 1))
+                    return partialResult + kcal
+                } else {
+                    return partialResult + (dish.kcal / Double(dish.totalServings ?? 1))
+                }
+            case .customEntry(let entry):
+                return partialResult + entry.nutrients.kcal
+            default:
+                return partialResult + 0
+            }
+        }
         
         return String(format: "%.0f", kcalSum)
     }
@@ -288,9 +319,7 @@ final class MealsCollectionViewCell: UICollectionViewCell {
     }
     
     private func addFoods(from meal: Meal) {
-        foods = meal.products.foods +
-        meal.dishes.foods +
-        meal.customEntries.foods
+        foods = meal.foods
         tableView.reloadData()
     }
     
@@ -302,19 +331,54 @@ final class MealsCollectionViewCell: UICollectionViewCell {
         var viewModel: CreateMealCellViewModel
         
         switch foodType {
-        case .product(let product, _, _):
+        case .product(let product, let amount, let unit):
+            var title = product.title
+            var tag = product.brand != nil
+            ? R.string.localizable.brandFood()
+            : R.string.localizable.baseFood()
+            var kcal: Double = 0
+            var weight: Double = 0
+            if let unit = unit {
+                let coefficient = unit.unit.getCoefficient() ?? 1
+                let count = unit.count
+                let tempKcal = product.kcal * ((coefficient * count) / 100)
+                kcal = tempKcal
+                weight = count * coefficient
+            } else if let amount = amount {
+                kcal = product.kcal * (amount / 100)
+                weight = amount
+            } else {
+                kcal = product.kcal
+                weight = 100
+            }
+            let energySuffix = BAMeasurement.measurmentSuffix(.energy)
+            let weightSuffix = BAMeasurement.measurmentSuffix(.serving)
             viewModel = CreateMealCellViewModel(
                 title: product.title,
-                tag: product.brand,
-                kcal: "\(Int(product.kcal.rounded()))",
-                weight: "\(Int(product.servings?.first?.weight?.rounded() ?? 0.0)) g"
+                tag: tag,
+                kcal: String(format: "%.0f", BAMeasurement(kcal, .energy, isMetric: true).localized)
+                + " \(energySuffix)",
+                weight: "\(BAMeasurement(weight, .serving, isMetric: true).localized) \(weightSuffix)"
             )
-        case .dishes(let dish, _):
+        case .dishes(let dish, let amount):
+            var kcal: Double = 0
+            var weight: Double = 0
+            if let amount = amount {
+                weight = amount
+                kcal = (amount / (dish.dishWeight ?? 1)) * dish.kcal
+            } else {
+                weight = dish.dishWeight ?? 100
+                kcal = dish.kcal
+            }
+            let energySuffix = BAMeasurement.measurmentSuffix(.energy)
+            let weightSuffix = BAMeasurement.measurmentSuffix(.serving)
             viewModel = CreateMealCellViewModel(
                 title: dish.title,
-                tag: dish.eatingTags.first?.title,
-                kcal: "\(Int(dish.kcal.rounded()))",
-                weight: "\(Int(dish.dishWeight ?? 0.0)) g"
+                tag: R.string.localizable.recipe(),
+                kcal:  String(format: "%.0f", BAMeasurement(kcal, .energy, isMetric: true).localized)
+                + " \(energySuffix)",
+                weight: String(format: "%.0f", BAMeasurement(weight, .serving, isMetric: true).localized)
+                + " \(weightSuffix)"
             )
         case .customEntry(let customEntry):
             viewModel = CreateMealCellViewModel(
@@ -326,7 +390,6 @@ final class MealsCollectionViewCell: UICollectionViewCell {
         case .meal:
             return
         }
-        
         cell.configure(with: viewModel)
     }
     

@@ -31,8 +31,7 @@ protocol AddFoodPresenterInterface: AnyObject {
     func getAllMeals() -> [Meal]
     func openEditMeal(meal: Meal)
     func realoadCollectionView()
-    func dismissToCreateMeal(with product: Product)
-    func dismissToCreateMeal(with dish: Dish)
+    func dismissToCreateMeal(with food: Food)
 }
 
 final class AddFoodPresenter {
@@ -355,11 +354,8 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
         view.realoadCollectionView()
     }
     
-    func dismissToCreateMeal(with product: Product) {
-        router?.dismissToCreateMeal(with: product)
+    func dismissToCreateMeal(with food: Food) {
+        router?.dismissToCreateMeal(with: food)
     }
-    
-    func dismissToCreateMeal(with dish: Dish) {
-        router?.dismissToCreateMeal(with: dish)
-    }
+
 }

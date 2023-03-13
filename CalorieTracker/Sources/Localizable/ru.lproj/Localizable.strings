@@ -521,7 +521,7 @@
 "addFood.title.recent" = "недавние поиски";
 "addFood.customEntry" = "КАСТОМНЫЙ ВВОД";
 "addFood.mealCreation" = "СОЗДАНИЕ ПРИЕМА ПИЩИ";
-"addFood.editMeal" = "Изменить еду";
+"addFood.editMeal" = "Изменить";
 
 "mealCreation.addFoodButton" = "ДОБАВИТЬ ЕДУ";
 "mealCreation.accessToPhotosTitle" = "Доступ к фотографиям";
@@ -534,7 +534,7 @@
 "snack" = "ЗАКУСКА";
 "food" = "Еда";
 "recipe" = "Рецепты";
-"meal" = "Пища";
+"meal" = "Прием пищи";
 "frequent" = "Частый";
 "recent" = "Недавний";
 "favorites" = "Избранное";

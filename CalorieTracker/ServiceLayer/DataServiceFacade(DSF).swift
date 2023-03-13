@@ -63,6 +63,9 @@ protocol DataServiceFacadeInterface {
     ///   - productsID: массив id Product
     func setChildMeal(mealId: String, dishesID: [Int], productsID: [String], customEntriesID: [String])
     func setChildFoodData(foodDataId: String, customEntryID: String)
+//    func getProduct(by id: String) -> DomainProduct
+//    func getDish(by id: String) -> DomainDish
+//    func getCustomEntry(by id: String) -> DomainDish
 }
 
 final class DSF {
@@ -227,4 +230,5 @@ extension DSF: DataServiceFacadeInterface {
         }
         UDM.titlesForFilterTags[.favorite] = "Favorites".localized
     }
+    
 }

@@ -10,11 +10,10 @@ import Foundation
 
 protocol CreateMealPresenterInterface: AnyObject {
     func didTapAddFood(with searchRequest: String)
-    func addProduct(_ product: Product)
     func removeFood(at index: Int)
-    func addDish(_ dish: Dish)
     func saveMeal(mealTime: MealTime, title: String, photoURL: URL)
     func addFoods(from meal: Meal)
+    func addFood(food: Food)
     func setChildMeal(for meal: Meal)
 }
 
@@ -47,12 +46,16 @@ extension CreateMealPresenter: CreateMealPresenterInterface {
         router?.openAddFoodVC(with: searchRequest)
     }
     
-    func addProduct(_ product: Product) {
-        foods?.append(.product(product, customAmount: nil, unit: nil))
-    }
+//    func addProduct(_ product: Product) {
+//        foods?.append(.product(product, customAmount: nil, unit: nil))
+//    }
+//
+//    func addDish(_ dish: Dish) {
+//        foods?.append(.dishes(dish, customAmount: nil))
+//    }
     
-    func addDish(_ dish: Dish) {
-        foods?.append(.dishes(dish, customAmount: nil))
+    func addFood(food: Food) {
+        foods?.append(food)
     }
     
     func addCustomEntry(_ customEntry: CustomEntry) {
@@ -72,9 +75,7 @@ extension CreateMealPresenter: CreateMealPresenterInterface {
     }
     
     func addFoods(from meal: Meal) {
-        meal.products.foods.forEach { foods?.append($0) }
-        meal.dishes.foods.forEach { foods?.append($0) }
-        meal.customEntries.foods.forEach { foods?.append($0) }
+        foods = meal.foods
     }
     
     func setChildMeal(for meal: Meal) {

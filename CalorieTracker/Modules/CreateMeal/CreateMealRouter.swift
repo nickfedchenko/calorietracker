@@ -38,18 +38,15 @@ extension CreateMealRouter: CreateMealRouterInterface {
         let vc = AddFoodRouter.setupModule(
             addFoodYCoordinate: UDM.mainScreenAddButtonOriginY,
             tabBarIsHidden: true,
-            searchRequest: searchRequest,
+            searchRequest: nil,
             wasFromMealCreateVC: true,
-            didSelectProduct: { [weak self] product in
-                self?.presenter?.addProduct(product)
-            },
-            didSelectDish: { [weak self] dish in
-                self?.presenter?.addDish(dish)
+            didSelectFood: { [weak self] food in
+                self?.presenter?.addFood(food: food)
             }
-        )
-
+        ) 
+        
         vc.modalPresentationStyle = .fullScreen
         viewController?.present(vc, animated: true)
     }
-
+    
 }

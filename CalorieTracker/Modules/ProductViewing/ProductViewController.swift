@@ -449,7 +449,10 @@ final class ProductViewController: CTViewController {
     
     @objc private func didTapAddToNewMeal() {
         Vibration.success.vibrate()
-        presenter?.didTapAddToNewMeal()
+        if let product = presenter?.getProduct() {
+            FDS.shared.foodUpdate(food: .product(product, customAmount: nil, unit: nil), favorites: nil)
+        }
+        presenter?.didTapAddToNewMeal(weight, unit: selectedWeightType, unitCount: valueCount)
     }
     
     @objc private func hideServingSelector(sender: UITapGestureRecognizer) {

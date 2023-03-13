@@ -320,20 +320,51 @@ class CreateMealViewController: UIViewController {
         var viewModel: CreateMealCellViewModel
         
         switch foodType {
-        case .product(let product, _, _):
+        case .product(let product, let amount, let unit):
+            var title = product.title
+            var tag = product.brand != nil
+            ? R.string.localizable.brandFood()
+            : R.string.localizable.baseFood()
+            var kcal:Double = 0
+            var weight: Double = 0
+            if let unit = unit {
+                let coefficient = unit.unit.getCoefficient() ?? 1
+                let count = unit.count
+                let tempKcal = product.kcal * ((coefficient * count) / 100)
+                kcal = tempKcal
+                weight = count * coefficient
+            } else if let amount = amount {
+                kcal = product.kcal * (amount / 100)
+                weight = amount
+            } else {
+                kcal = product.kcal
+                weight = 100
+            }
+            let energySuffix = BAMeasurement.measurmentSuffix(.energy)
+            let weightSuffix = BAMeasurement.measurmentSuffix(.serving)
             viewModel = CreateMealCellViewModel(
                 title: product.title,
-                tag: product.brand != nil ? R.string.localizable.brandFood() :
-                    R.string.localizable.baseFood(),
-                kcal: "\(Int(product.kcal.rounded()))",
-                weight: "\(Int(product.servings?.first?.weight?.rounded() ?? 0.0)) g"
+                tag: tag,
+                kcal: String(format: "%.0f", BAMeasurement(kcal, .energy, isMetric: true).localized)
+                + " \(energySuffix)",
+                weight: "\(BAMeasurement(weight, .serving, isMetric: true).localized) \(weightSuffix)"
             )
-        case .dishes(let dish, _):
+        case .dishes(let dish, let amount):
+            var kcal: Double = 0
+            var weight: Double = 0
+            if let amount = amount {
+                weight = amount
+                kcal = (amount / (dish.dishWeight ?? 1)) * dish.kcal
+            }
+            let energySuffix = BAMeasurement.measurmentSuffix(.energy)
+            let weightSuffix = BAMeasurement.measurmentSuffix(.serving)
             viewModel = CreateMealCellViewModel(
                 title: dish.title,
                 tag: R.string.localizable.recipe(),
-                kcal: "\(Int(dish.kcal.rounded()))",
-                weight: "\(Int(dish.dishWeight ?? 0.0)) g"
+                kcal:  String(format: "%.0f", BAMeasurement(kcal, .energy, isMetric: true).localized)
+                + " \(energySuffix)",
+                weight: String(format: "%.0f", BAMeasurement(weight, .serving, isMetric: true).localized)
+                + " \(weightSuffix)"
             )
         case .customEntry(let customEntry):
             viewModel = CreateMealCellViewModel(

@@ -126,6 +126,43 @@ struct UnitElement: Codable {
             }
         }
         
+        func getCoefficient() -> Double? {
+            switch self {
+            case .gram(title: _, shortTitle: _, coefficient: let coefficient):
+                return coefficient
+            case .oz(title: _, shortTitle: _, coefficient: let coefficient):
+                return coefficient
+            case .portion(title: _, shortTitle: _, coefficient: let coefficient):
+                return coefficient
+            case .cup(title: _, shortTitle: _, coefficient: let coefficient):
+                return coefficient
+            case .cupGrated(title: _, shortTitle: _, coefficient: let coefficient):
+                return coefficient
+            case .cupSliced(title: _, shortTitle: _, coefficient: let coefficient):
+                return coefficient
+            case .teaSpoon(title: _, shortTitle: _, coefficient: let coefficient):
+                return coefficient
+            case .tableSpoon(title: _, shortTitle: _, coefficient: let coefficient):
+                return coefficient
+            case .piece(title: _, shortTitle: _, coefficient: let coefficient):
+                return coefficient
+            case .smallSize(title: _, shortTitle: _, coefficient: let coefficient):
+                return coefficient
+            case .middleSize(title: _, shortTitle: _, coefficient: let coefficient):
+                return coefficient
+            case .hugeSize(title: _, shortTitle: _, coefficient: let coefficient):
+                return coefficient
+            case .pack(title: _, shortTitle: _, coefficient: let coefficient):
+                return coefficient
+            case .ml(title: _, shortTitle: _, coefficient: let coefficient):
+                return coefficient
+            case .floz(title: _, shortTitle: _, coefficient: let coefficient):
+                return coefficient
+            case .custom(title: _, shortTitle: _, coefficient: let coefficient):
+                return coefficient
+            }
+        }
+        
         case gram(title: String, shortTitle: String?, coefficient: Double?)
         case oz(title: String, shortTitle: String?, coefficient: Double?)
         case portion(title: String, shortTitle: String?, coefficient: Double?)

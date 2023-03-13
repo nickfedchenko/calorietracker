@@ -64,7 +64,10 @@ protocol LocalDomainServiceInterface {
         mealID: String?
     ) -> Bool
     
-    func updateMeal(mealID: String, title: String, photoURL: String) 
+    func updateMeal(mealID: String, title: String, photoURL: String)
+    func getDomainProduct(_ id: String) -> DomainProduct?
+    func getDomainDish(_ id: Int) -> DomainDish?
+    func getDomainCustomEntry(_ id: String) -> DomainCustomEntry?
 }
 
 final class LocalDomainService {
@@ -169,7 +172,7 @@ final class LocalDomainService {
         return domainFoodData
     }
     
-    private func getDomainProduct(_ id: String) -> DomainProduct? {
+    func getDomainProduct(_ id: String) -> DomainProduct? {
         let format = "id == %@"
         
         let request = NSFetchRequest<DomainProduct>(entityName: "DomainProduct")
@@ -182,7 +185,7 @@ final class LocalDomainService {
         return domainProduct
     }
     
-    private func getDomainDish(_ id: Int) -> DomainDish? {
+   func getDomainDish(_ id: Int) -> DomainDish? {
         let format = "id == %id"
         
         let request = NSFetchRequest<DomainDish>(entityName: "DomainDish")
@@ -195,7 +198,7 @@ final class LocalDomainService {
         return domainDish
     }
     
-    private func getDomainCustomEntry(_ id: String) -> DomainCustomEntry? {
+    func getDomainCustomEntry(_ id: String) -> DomainCustomEntry? {
         let format = "id == %@"
         
         let request = NSFetchRequest<DomainCustomEntry>(entityName: "DomainCustomEntry")
@@ -340,7 +343,7 @@ extension LocalDomainService: LocalDomainServiceInterface {
     
     func saveMeals(meals: [Meal]) {
         let _: [DomainMeal] = meals
-            .map { DomainMeal.prepare(fromPlainModel: $0, context: context) }
+            .map { DomainMeal.prepare(from: $0, context: context) }
         try? context.save()
     }
     
@@ -651,21 +654,24 @@ extension LocalDomainService: LocalDomainServiceInterface {
             withPredicate: NSCompoundPredicate(orPredicateWithSubpredicates: [mealPredicate])
         )?.first else { return }
 
-        fetchData(for: DomainDish.self)?.forEach { meal.removeFromDishes($0) }
-        fetchData(for: DomainProduct.self)?.forEach { meal.removeFromProducts($0) }
-        fetchData(for: DomainCustomEntry.self)?.forEach { meal.removeFromCustomEntries($0) }
+//        fetchData(for: DomainDish.self)?.forEach { meal.removeFromDishes($0) }
+//        fetchData(for: DomainProduct.self)?.forEach { meal.removeFromProducts($0) }
+//        fetchData(for: DomainCustomEntry.self)?.forEach { meal.removeFromCustomEntries($0) }
+//        dishes.forEach { dish in
+//            dish.foodData =
+//        }
 
-        dishes.forEach {
-            meal.addToDishes($0)
-        }
-
-        products.forEach {
-            meal.addToProducts($0)
-        }
-
-        customEntries.forEach {
-            meal.addToCustomEntries($0)
-        }
+//        dishes.forEach {
+//            meal.addToDishes($0)
+//        }
+//
+//        products.forEach {
+//            meal.addToProducts($0)
+//        }
+//
+//        customEntries.forEach {
+//            meal.addToCustomEntries($0)
+//        }
 
         try? context.save()
     }

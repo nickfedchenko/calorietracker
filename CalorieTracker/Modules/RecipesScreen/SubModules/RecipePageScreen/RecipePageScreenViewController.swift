@@ -546,14 +546,18 @@ extension RecipePageScreenViewController: UITextFieldDelegate {
     ) -> Bool {
         guard let text = textField.text else { return false }
         let fullText = text + string
-        guard let int = Double(fullText),
-              int <= 15 else { return false }
+        guard let int = Double(fullText.replacingOccurrences(of: ",", with: ".")),
+              int <= 15 else {
+            return false
+        }
         return true
     }
     
     func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
         if reason == .committed {
-            presenter?.didChangeAmountToEat(amount: Double(textField.text ?? "1") ?? 1)
+            presenter?.didChangeAmountToEat(
+                amount: Double(textField.text?.replacingOccurrences(of: ",", with: ".") ?? "1") ?? 1
+            )
         }
     }
 }

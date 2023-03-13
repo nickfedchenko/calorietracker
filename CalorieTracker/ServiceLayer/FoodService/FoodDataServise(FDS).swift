@@ -91,7 +91,10 @@ protocol FoodDataServiceInterface {
     func getAllCustomEntries() -> [CustomEntry]
     func deleteCustomEntry(_ id: String)
     func saveFoodData(foods: [FoodData])
-    func updateMeal(mealID: String, title: String, photoURL: String) 
+    func updateMeal(mealID: String, title: String, photoURL: String)
+    func getProduct(by id: String) -> Product?
+    func getDish(by id: String) -> Dish?
+    func getCustomEntry(by id: String) -> CustomEntry?
 }
 
 final class FDS {
@@ -363,17 +366,9 @@ extension FDS: FoodDataServiceInterface {
     }
     
     func createMeal(mealTime: MealTime, title: String, photoURL: String, foods: [Food]) {
-        let meal = Meal(mealTime: mealTime, title: title, photoURL: photoURL)
+        let meal = Meal(mealTime: mealTime, title: title, photoURL: photoURL, foods: foods)
         localPersistentStore.saveMeals(meals: [meal])
-        
-        let customEntries = foods.compactMap { food -> CustomEntry? in
-            if case .customEntry(let customEntry) = food {
-                return customEntry
-            }
-            return nil
-        } 
-        
-        meal.setChild(dishes: foods.dishes, products: foods.products, customEntries: customEntries)
+//        meal.setChild(dishes: foods.dishes, products: foods.products, customEntries: foods.customEntries)
     }
     
     func updateMeal(mealID: String, title: String, photoURL: String) {
@@ -478,5 +473,20 @@ extension FDS: FoodDataServiceInterface {
             protein: kcalGoal * nutrientPercent.getNutrientPercent().protein,
             fat: kcalGoal * nutrientPercent.getNutrientPercent().fat
         )
+    }
+    
+    func getProduct(by id: String) -> Product? {
+        guard let domainProduct =  localPersistentStore.getDomainProduct(id) else { return nil }
+        return Product(from: domainProduct)
+    }
+    
+    func getDish(by id: String) -> Dish? {
+        guard let domainDish =  localPersistentStore.getDomainDish(Int(id) ?? -1) else { return nil }
+        return Dish(from: domainDish)
+    }
+    
+    func getCustomEntry(by id: String) -> CustomEntry? {
+        guard let domainCustomEntry = localPersistentStore.getDomainCustomEntry(id) else { return nil }
+        return CustomEntry(from: domainCustomEntry)
     }
 }

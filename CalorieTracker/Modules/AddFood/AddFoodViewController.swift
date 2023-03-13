@@ -20,6 +20,7 @@ protocol AddFoodViewControllerInterface: AnyObject {
     func realoadCollectionView()
 }
 
+// swiftlint:disable:next type_body_length
 final class AddFoodViewController: UIViewController {
     var presenter: AddFoodPresenterInterface?
     var keyboardManager: KeyboardManagerProtocol?
@@ -255,8 +256,8 @@ final class AddFoodViewController: UIViewController {
                 }
                 self?.presenter?.saveMeal(mealTime, foods: self?.selectedFood ?? [])
                 DispatchQueue.main.async {
-                    self?.selectedFood = []
-                    self?.presenter?.setFoodType(self?.previousSelectedType ?? .recent)
+//                    self?.selectedFood = []
+//                    self?.presenter?.setFoodType(self?.previousSelectedType ?? .recent)
                     self?.presenter?.didTapBackButton(shouldShowReview: true)
                 }
             },
@@ -670,12 +671,14 @@ final class AddFoodViewController: UIViewController {
             } else {
                 finalFoodModel = food
             }
-            
+            let foodPlaceholder: Food = .customEntry(
+                .init(title: "", nutrients: .init(kcal: 0, carbs: 0, proteins: 0, fats: 0), mealTime: .breakfast)
+            )
             cell.viewModel = .init(
                 cellType: .table,
                 food: finalFoodModel,
                 buttonType: (selectedFood ?? [])
-                    .contains(food ?? .meal(.init(mealTime: .breakfast, title: "", photoURL: ""))) && state != .default
+                    .contains(food ?? foodPlaceholder) && state != .default
                 ? .delete
                 : wasFromMealCreateVC ? .addToMeal : .add,
                 subInfo: presenter?.getSubInfo(food, selectedFoodInfo),
@@ -688,16 +691,7 @@ final class AddFoodViewController: UIViewController {
                 case .add:
                     self?.selectedFood = (self?.selectedFood ?? []) + [food]
                 case .addToMeal:
-                    switch food {
-                    case .product(let product, customAmount: _, unit: _):
-                        self?.presenter?.dismissToCreateMeal(with: product)
-                    case .dishes(let dish, customAmount: _):
-                        self?.presenter?.dismissToCreateMeal(with: dish)
-                    case .meal:
-                        return
-                    case .customEntry:
-                        return
-                    }
+                    self?.presenter?.dismissToCreateMeal(with: food)
                 }
                 
                 DispatchQueue.global(qos: .background).async {
@@ -725,6 +719,7 @@ final class AddFoodViewController: UIViewController {
                     }
                 }
             }
+            
             
             return cell
         case .myRecipes:
@@ -1156,7 +1151,7 @@ extension AddFoodViewController: AddFoodViewControllerInterface {
             count: FDS.shared.getAllMeals().count
         )
         
-        presenter?.setFoodType(.myMeals)
+//        presenter?.setFoodType(.myMeals)
         foodCollectionViewController.reloadData()
     }
 }

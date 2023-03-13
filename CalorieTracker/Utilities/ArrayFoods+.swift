@@ -53,4 +53,15 @@ extension Array where Element == Food {
             }
         }
     }
+    
+    var customEntries: [CustomEntry] {
+        self.compactMap { food in
+            switch food {
+            case .customEntry(let entry):
+                return entry
+            default:
+                return nil
+            }
+        }
+    }
 }

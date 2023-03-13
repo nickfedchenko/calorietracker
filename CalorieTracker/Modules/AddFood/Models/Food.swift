@@ -18,11 +18,21 @@ extension Food {
     var foodInfo: [FoodInfoCases: Double] {
         switch self {
         case .product(let product, let customAmount, let foodUnitData):
+            if let unitData = foodUnitData {
+                let coefficient = unitData.unit.getCoefficient() ?? 1
+                let amount = unitData.count * coefficient
+                return [
+                    .kcal: product.kcal * (amount / 100),
+                    .carb: product.carbs * (amount / 100),
+                    .fat: product.fat * (amount / 100),
+                    .protein: product.protein * (amount / 100)
+                ]
+            }
             return [
                 .kcal: product.kcal * ((customAmount ?? 100) / 100),
                 .carb: product.carbs * ((customAmount ?? 100) / 100),
                 .fat: product.fat * ((customAmount ?? 100) / 100),
-                .protein: product.protein
+                .protein: product.protein * ((customAmount ?? 100) / 100)
             ]
         case .dishes(let dish, let amount):
             if let amount = amount {

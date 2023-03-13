@@ -19,8 +19,7 @@ protocol AddFoodRouterInterface: AnyObject {
     func openCustomEntryViewController(mealTime: MealTime)
     func dismissVC()
     func openEditMeal(meal: Meal)
-    func dismissToCreateMeal(with product: Product)
-    func dismissToCreateMeal(with dish: Dish)
+    func dismissToCreateMeal(with food: Food)
 }
 
 class AddFoodRouter: NSObject {
@@ -28,9 +27,8 @@ class AddFoodRouter: NSObject {
     weak var presenter: AddFoodPresenterInterface?
     weak var viewController: UIViewController?
     var needUpdate: (() -> Void)?
-    var wasFromMealCreateVC: Bool?
-    var didSelectProduct: ((Product) -> Void)?
-    var didSelectDish: ((Dish) -> Void)?
+    var wasFromMealCreateVC: Bool = false
+    var didSelectFood: ((Food) -> Void)?
     var needShowReviewController: (() -> Void)?
 
     static func setupModule(
@@ -41,9 +39,8 @@ class AddFoodRouter: NSObject {
         needShowReviewController: (() -> Void)? = nil,
         tabBarIsHidden: Bool? = false,
         searchRequest: String? = nil,
-        wasFromMealCreateVC: Bool? = false,
-        didSelectProduct: ((Product) -> Void)? = nil,
-        didSelectDish: ((Dish) -> Void)? = nil
+        wasFromMealCreateVC: Bool = false,
+        didSelectFood: ((Food) -> Void)? = nil
     ) -> AddFoodViewController {
       
         let vc = AddFoodViewController(searchFieldYCoordinate: addFoodYCoordinate)
@@ -62,8 +59,9 @@ class AddFoodRouter: NSObject {
         router.needUpdate = needUpdate
         router.wasFromMealCreateVC = wasFromMealCreateVC
         router.needShowReviewController = needShowReviewController
-        router.didSelectProduct = didSelectProduct
-        router.didSelectDish = didSelectDish
+//        router.didSelectProduct = didSelectProduct
+//        router.didSelectDish = didSelectDish
+        router.didSelectFood = didSelectFood
         interactor.presenter = presenter
         defer {
             if let barcode = barcode {
@@ -99,11 +97,12 @@ extension AddFoodRouter: AddFoodRouterInterface {
             wasFromMealCreateVC == true ? .createMeal : .addFood,
             presenter?.getMealTime() ?? .breakfast,
             { [weak self] food in
-                self?.presenter?.updateSelectedFoodFromSearch(food: food)
-            },
-            { [weak self] product in
-                self?.viewController?.dismiss(animated: false) { [weak self] in
-                    self?.didSelectProduct?(product)
+                if !(self?.wasFromMealCreateVC ?? false) {
+                    self?.presenter?.updateSelectedFoodFromSearch(food: food)
+                } else {
+                    self?.viewController?.dismiss(animated: false) { [weak self] in
+                        self?.didSelectFood?(food)
+                    }
                 }
             }
         )
@@ -126,7 +125,7 @@ extension AddFoodRouter: AddFoodRouterInterface {
     }
     
     func openScanner() {
-        let vc = ScannerRouter.setupModule() { [weak self] barcode in
+        let vc = ScannerRouter.setupModule { [weak self] barcode in
             self?.presenter?.scannerDidRecognized(barcode: barcode)
         }
         vc.modalPresentationStyle = .fullScreen
@@ -134,6 +133,7 @@ extension AddFoodRouter: AddFoodRouterInterface {
     }
     
     func openCreateProduct() {
+        guard !wasFromMealCreateVC else { return }
         let vc = CreateProductRouter.setupModule()
         vc.modalPresentationStyle = .overFullScreen
         viewController?.navigationController?.present(vc, animated: true)
@@ -145,11 +145,12 @@ extension AddFoodRouter: AddFoodRouterInterface {
             backButtonTitle: "Add food".localized,
             openController: wasFromMealCreateVC == true ? .createMeal : .addToDiary,
             addToDiaryHandler: { [weak self] food in
-                self?.presenter?.updateSelectedFoodFromSearch(food: food)
-            },
-            dishSelectionHandler: { [weak self] dish in
-                self?.viewController?.dismiss(animated: false) { [weak self] in
-                    self?.didSelectDish?(dish)
+                if !(self?.wasFromMealCreateVC ?? false) {
+                    self?.presenter?.updateSelectedFoodFromSearch(food: food)
+                } else {
+                    self?.viewController?.dismiss(animated: false) { [weak self] in
+                        self?.didSelectFood?(food)
+                    }
                 }
             }
         )
@@ -195,16 +196,10 @@ extension AddFoodRouter: AddFoodRouterInterface {
     func dismissVC() {
         viewController?.dismiss(animated: true, completion: nil)
     }
-    
-    func dismissToCreateMeal(with product: Product) {
-        viewController?.dismiss(animated: false) { [weak self] in
-            self?.didSelectProduct?(product)
-        }
-    }
 
-    func dismissToCreateMeal(with dish: Dish) {
+    func dismissToCreateMeal(with food: Food) {
         viewController?.dismiss(animated: false) { [weak self] in
-            self?.didSelectDish?(dish)
+            self?.didSelectFood?(food)
         }
     }
     
