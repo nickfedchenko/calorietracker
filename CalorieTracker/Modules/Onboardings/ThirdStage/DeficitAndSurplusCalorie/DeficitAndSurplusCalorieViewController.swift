@@ -17,7 +17,7 @@ protocol DeficitAndSurplusCalorieViewControllerInterface: AnyObject {
 }
 
 final class DeficitAndSurplusCalorieViewController: UIViewController {
-    
+    private var isFirstLaunch = true
     // MARK: - Public properties
     
     var presenter: DeficitAndSurplusCaloriePresenterInterface?
@@ -60,10 +60,14 @@ final class DeficitAndSurplusCalorieViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        sliderView.setInitialStates()
+       
         sliderView.standaloneRatioEmitter = { [weak self] ratio in
             self?.presenter?.didChangeRate(on: ratio)
         }
+        
+        guard isFirstLaunch else { return }
+        sliderView.setInitialStates()
+        isFirstLaunch.toggle()
     }
     
     // swiftlint:disable:next function_body_length

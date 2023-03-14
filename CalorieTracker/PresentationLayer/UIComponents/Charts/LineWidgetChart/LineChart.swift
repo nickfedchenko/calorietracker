@@ -14,7 +14,11 @@ final class LineChart: UIView {
     var countHorizontalLines: Int = 4
     var countVerticalLines: Int = 4
     var startValue: Int = 0
-    var goalValue: CGFloat?
+    var goalValue: CGFloat? {
+        didSet {
+            print(goalValue)
+        }
+    }
     var goalTitle: String?
     var startDate: Date?
     var titles: [Int] = []

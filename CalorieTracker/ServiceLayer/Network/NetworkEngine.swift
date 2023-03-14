@@ -105,12 +105,12 @@ enum RequestGenerator {
             prepareSearchUrl(url: &optUrl, by: phrase)
             url = optUrl
         case .fetchProductZipped:
-            guard let optUrl = URL(string: "https://newketo.finanse.space/storage/json/products_\(langCode).json.gz") else {
+            guard let optUrl = URL(string: "https://ketodietapplication.site/storage/json/products_\(langCode).json.gz") else {
                 fatalError("wrong url")
             }
             url = optUrl
         case .fetchDishesZipped:
-            guard let optUrl = URL(string: "https://newketo.finanse.space/storage/json/dish_\(langCode).json.gz") else {
+            guard let optUrl = URL(string: "https://ketodietapplication.site/storage/json/dish_\(langCode).json.gz") else {
                 fatalError("wrong url")
             }
             url = optUrl
