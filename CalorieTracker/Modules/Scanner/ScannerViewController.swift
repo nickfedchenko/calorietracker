@@ -182,6 +182,7 @@ final class ScannerViewController: UIViewController {
             Vibration.success.vibrate()
             didRecognizedBarcode?(barcode ?? "")
             maskView.layer.borderWidth = 2
+            LoggingService.postEvent(event: .diarybarcoderead(succeeded: true))
         case .barcodeExists:
             guard let barcode = barcode else { return }
             Vibration.warning.vibrate()
@@ -189,8 +190,10 @@ final class ScannerViewController: UIViewController {
                 self.maskView.layer.borderWidth = 2
             } completion: { [weak self] _ in
                 self?.router?.barCodeSuccessfullyRecognized(barcode: barcode)
+                LoggingService.postEvent(event: .diarybarcoderead(succeeded: true))
             }
         case .default:
+            LoggingService.postEvent(event: .diarybarcoderead(succeeded: false))
             maskView.layer.borderWidth = 0
         }
     }

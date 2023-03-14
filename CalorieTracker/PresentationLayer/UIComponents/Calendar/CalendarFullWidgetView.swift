@@ -71,6 +71,9 @@ final class CalendarFullWidgetView: UIView, CTWidgetFullProtocol {
             Vibration.selection.vibrate()
             self?.updateDateLabel(date)
             self?.didChangeSelectedDate?(date)
+            if date.day == Date().day {
+                LoggingService.postEvent(event: .calcurrentdate)
+            }
         }
     }
     

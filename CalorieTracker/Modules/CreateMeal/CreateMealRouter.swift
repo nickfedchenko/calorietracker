@@ -42,6 +42,7 @@ extension CreateMealRouter: CreateMealRouterInterface {
             wasFromMealCreateVC: true,
             didSelectFood: { [weak self] food in
                 self?.presenter?.addFood(food: food)
+                LoggingService.postEvent(event: .diaryaddtomeal)
             }
         ) 
         

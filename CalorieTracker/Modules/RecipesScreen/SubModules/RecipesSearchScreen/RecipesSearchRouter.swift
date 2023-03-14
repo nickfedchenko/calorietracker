@@ -55,6 +55,7 @@ extension RecipesSearchRouter: RecipesSearchRouterInterface {
         )
         recipeScreenModule.modalPresentationStyle = .fullScreen
         navigationController?.present(recipeScreenModule, animated: true)
+        LoggingService.postEvent(event: .recipeopenfromsearch)
     }
 }
 

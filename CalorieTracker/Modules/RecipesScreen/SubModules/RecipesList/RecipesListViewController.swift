@@ -74,6 +74,7 @@ class RecipesListViewController: UIViewController {
         searchButton.addAction(
             UIAction { [weak self] _ in
                 self?.presenter?.searchButtonTapped()
+                LoggingService.postEvent(event: .recipesearch)
             },
             for: .touchUpInside
         )

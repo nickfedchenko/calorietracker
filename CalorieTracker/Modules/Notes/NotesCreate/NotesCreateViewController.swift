@@ -166,6 +166,7 @@ final class NotesCreateViewController: TouchPassingViewController {
         guard let text = headerView.text else {
             return
         }
+        LoggingService.postEvent(event: .noteaddtext)
         let estimation = headerView.selectedEstimation
         let id = UUID().uuidString
         let note = Note(
@@ -203,5 +204,6 @@ extension NotesCreateViewController: UIImagePickerControllerDelegate, UINavigati
         }
         self.headerView.photo = image
         picker.dismiss(animated: true)
+        LoggingService.postEvent(event: .noteaddphoto)
     }
 }

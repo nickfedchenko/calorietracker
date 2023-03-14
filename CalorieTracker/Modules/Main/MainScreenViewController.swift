@@ -269,6 +269,8 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         presenter?.updateActivityWidget()
         presenter?.updateCalendarWidget(UDM.currentlyWorkingDay.date)
         presenter?.updateNoteWidget()
+        let weights = WeightWidgetService.shared.getAllWeight()
+        print(weights)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -427,14 +429,23 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         }
         
         switch widget.widgetType {
-        case .weight, .steps, .calendar:
+        case .calendar:
+            LoggingService.postEvent(event: .calwopen)
             presenter?.didTapWidget(widget.widgetType)
+        case .weight:
+            presenter?.didTapWidget(widget.widgetType)
+            LoggingService.postEvent(event: .weightwopen)
+        case .steps:
+            presenter?.didTapWidget(widget.widgetType)
+            LoggingService.postEvent(event: .stepswopen)
         case .water:
             presenter?.didTapWidget(.water(specificDate: presenter?.getPointDate() ?? Date()))
+            LoggingService.postEvent(event: .waterwopen)
         case .exercises:
             presenter?.didTapExerciseWidget()
         case .notes:
             presenter?.didTapNotesWidget()
+            LoggingService.postEvent(event: .notewopen)
         case .main:
             presenter?.didTapMainWidget()
         default:

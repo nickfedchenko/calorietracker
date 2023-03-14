@@ -6,7 +6,7 @@
 //  Copyright © 2022 FedmanCassad. All rights reserved.
 //
 
-import Foundation
+import ApphudSDK
 import MessageUI
 import UIKit
 
@@ -50,6 +50,7 @@ extension MainScreenRouter: MainScreenRouterInterface {
     }
     
     func openAddFoodVC() {
+        LoggingService.postEvent(event: .diaryaddfood)
         let handler: (() -> Void) = { [weak self] in
             if !UDM.didShowAskingOpinion {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0) { [weak self] in
@@ -202,9 +203,17 @@ extension MainScreenRouter: WidgetContainerOutput {
     }
     
     func openBarcodeScannerVC() {
+        guard Apphud.hasActiveSubscription() else {
+            let paywall = PaywallRouter.setupModule()
+            paywall.modalPresentationStyle = .fullScreen
+            viewController?.navigationController?.present(paywall, animated: true)
+            return
+        }
+        
         let vc = ScannerRouter.setupModule { [weak self] barcode in
             self?.openAddFoodVCandPerformSearch(with: barcode)
         }
+        LoggingService.postEvent(event: .diaryscanfood)
         viewController?.present(TopDownNavigationController(rootViewController: vc), animated: true)
     }
     

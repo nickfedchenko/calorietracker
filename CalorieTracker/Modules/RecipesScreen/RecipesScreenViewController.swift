@@ -159,6 +159,7 @@ class RecipesScreenViewController: UIViewController {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
         presenter?.updateFavorites()
+        shouldHideTabBar = false
         guard isFirstLayout else { return }
         showActivityIndicator()
         presenter?.askForSections()

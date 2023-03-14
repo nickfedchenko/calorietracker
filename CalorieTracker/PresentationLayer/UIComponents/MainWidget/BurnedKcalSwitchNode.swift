@@ -135,6 +135,7 @@ final class BurnedKcalSwitchNode: ASButtonNode {
     }
     
     private func didChangeSelected() {
+        LoggingService.postEvent(event: .diarywinclactive)
         textNodeLeftInset = onSelected ? 16 : 8
         textNodeRightInset = onSelected ? 8 : 14
         transitionLayout(withAnimation: true, shouldMeasureAsync: false)

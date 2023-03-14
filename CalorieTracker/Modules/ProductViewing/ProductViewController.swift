@@ -445,6 +445,12 @@ final class ProductViewController: CTViewController {
         if let product = presenter?.getProduct() {
             FDS.shared.foodUpdate(food: .product(product, customAmount: nil, unit: nil), favorites: nil)
         }
+        switch getOpenController() {
+        case .createProduct:
+            LoggingService.postEvent(event: .diarycreatefoodsave)
+        default:
+            return 
+        }
     }
     
     @objc private func didTapAddToNewMeal() {
@@ -470,6 +476,7 @@ final class ProductViewController: CTViewController {
         }
         
         func viewControllerShouldClose() {
+            print(shouldClose)
             self.shouldClose?()
         }
     }

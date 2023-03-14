@@ -265,5 +265,6 @@ extension RecipePageScreenInteractor: RecipePageScreenInteractorInterface {
                 )
             ]
         )
+        LoggingService.postEvent(event: .recipeaddtodiary)
     }
 }

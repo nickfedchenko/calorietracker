@@ -305,30 +305,44 @@ extension FoodCellView.FoodViewModel {
         self.image = product.isUserProduct ? product.photo : nil
         self.verified = !product.isUserProduct
         var tag = ""
-        if product.brand != nil {
+        if product.brand != nil && !product.isUserProduct {
             tag = R.string.localizable.brandFood()
-        } else {
+        } else if product.isUserProduct {
+            
+        }
+        else {
             tag = R.string.localizable.baseFood()
         }
         self.tag = tag
-        if let weight = weight {
-            self.kcal = BAMeasurement(product.kcal / 100 * weight, .energy, isMetric: true).localized
-            let description = BAMeasurement(weight, .serving, isMetric: true).string
-            self.description = description
-        } else {
-            self.kcal = BAMeasurement(product.kcal, .energy, isMetric: true).localized
-            if let serving = product.servings?.first,
-               let unit = product.units?.first(where: { $0.isReference }) {
-                var description = ""
-                if unit.id == 1 {
-                    description = "\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string)"
-                } else {
-                    description = "\(unit.title ?? "") "
-                    + "(\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string))"
-                }
+        if !product.isUserProduct {
+            if let weight = weight {
+                self.kcal = BAMeasurement(product.kcal / 100 * weight, .energy, isMetric: true).localized
+                let description = BAMeasurement(weight, .serving, isMetric: true).string
                 self.description = description
             } else {
-                self.description = ""
+                self.kcal = BAMeasurement(product.kcal, .energy, isMetric: true).localized
+                if let serving = product.servings?.first,
+                   let unit = product.units?.first(where: { $0.isReference }) {
+                    var description = ""
+                    if unit.id == 1 {
+                        description = "\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string)"
+                    } else {
+                        description = "\(unit.title ?? "") "
+                        + "(\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string))"
+                    }
+                    self.description = description
+                } else {
+                    self.description = ""
+                }
+            }
+        } else {
+            if let serving = product.servings?.first {
+                let kcal = (serving.weight ?? 100) / 100 * product.kcal
+                self.kcal = BAMeasurement(kcal, .energy, isMetric: true).localized
+                description = "(\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string))"
+            } else {
+                self.kcal = BAMeasurement(product.kcal, .energy, isMetric: true).localized
+                description = ""
             }
         }
     }

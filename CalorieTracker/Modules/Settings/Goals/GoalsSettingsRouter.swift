@@ -133,6 +133,7 @@ extension GoalsSettingsRouter: GoalsSettingsRouterInterface {
                 alert.modalPresentationStyle = .overFullScreen
                 self?.viewController?.present(alert, animated: false)
             }
+            LoggingService.postEvent(event: .weightsetgoal)
         }
         viewController?.present(vc, animated: true)
     }

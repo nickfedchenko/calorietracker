@@ -36,6 +36,20 @@ final class UDM {
         case tempActivityLevel
         case tempWeeklyGoal
         case didShowAskingOpinion
+        case openCreateProductCounter
+    }
+    
+    
+    static var openCreateProductCounter: Int {
+        get {
+            guard let value: Int = getValue(for: .openCreateProductCounter) else {
+                return 0
+            }
+            return value
+        }
+        set {
+            setValue(value: newValue, for: .openCreateProductCounter)
+        }
     }
     
     static var tempWeeklyGoal: Double? {
@@ -95,6 +109,7 @@ final class UDM {
         
         set {
             let data = try? JSONEncoder().encode(newValue)
+            LoggingService.postEvent(event: .calchangedate)
             setValue(value: data, for: .currentWorkingDay)
         }
     }

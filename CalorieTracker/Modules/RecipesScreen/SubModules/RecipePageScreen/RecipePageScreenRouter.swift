@@ -45,6 +45,7 @@ extension RecipePageScreenRouter: RecipePageScreenRouterInterface {
            let handler = addToDiaryHandler {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { [weak self] in
                 handler(.dishes(dish, customAmount: self?.presenter?.getPossibleEatenAmount()))
+                LoggingService.postEvent(event: .recipeaddtodiary)
             }
         } else {
             presenter?.shouldAddToEatenSelectedPortions()

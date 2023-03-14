@@ -52,7 +52,7 @@ extension CreateProductPresenter: CreateProductPresenterInterface {
     func saveProduct() {
         let formValues = view.getFormValues()
         let image = view.getImage()
-        let brand = view.getBrand()
+        var brand = view.getBrand()
         let barcode = view.getBarcode()
         let servingDescription = view.getServingDescription()
         let servingWeight = view.getServingWeight()
@@ -63,7 +63,7 @@ extension CreateProductPresenter: CreateProductPresenterInterface {
         let kcal = stringFromDouble(formValues[.kcal] ?? ""),
         let carbs = stringFromDouble(formValues[.carb] ?? "")
         else { return }
-        
+        brand = (brand ?? "").isEmpty ? nil : brand
         let product: Product = .init(
             id: UUID().uuidString,
             title: productName,

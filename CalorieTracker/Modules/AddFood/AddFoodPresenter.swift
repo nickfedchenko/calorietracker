@@ -176,6 +176,7 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
             guard let self = self else { return }
             let foundFood = self.search(byBarcode: barcode)
             DispatchQueue.main.async {
+                LoggingService.postEvent(event: .diaryscanfound(succeeded: !foundFood.isEmpty))
                 self.foods = foundFood
                 self.view.updateState(for: .search(foundFood.isEmpty ? .noResults : .foundResults))
                 self.view.setSearchField(to: barcode)

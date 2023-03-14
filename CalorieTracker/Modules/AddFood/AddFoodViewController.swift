@@ -254,6 +254,7 @@ final class AddFoodViewController: UIViewController {
                 guard let mealTime = self?.mealTime else {
                     return
                 }
+                LoggingService.postEvent(event: .diaryfoodadded(count: self?.selectedFood?.count ?? 0))
                 self?.presenter?.saveMeal(mealTime, foods: self?.selectedFood ?? [])
                 DispatchQueue.main.async {
 //                    self?.selectedFood = []
@@ -689,7 +690,9 @@ final class AddFoodViewController: UIViewController {
                 case .delete:
                     self?.selectedFood?.removeAll(where: { $0.id == food.id })
                 case .add:
+                    print(food)
                     self?.selectedFood = (self?.selectedFood ?? []) + [food]
+                    LoggingService.postEvent(event: .diaryquickadd)
                 case .addToMeal:
                     self?.presenter?.dismissToCreateMeal(with: food)
                 }
@@ -716,10 +719,10 @@ final class AddFoodViewController: UIViewController {
                         self?.selectedFood?.removeAll(where: { $0.id == meal.id })
                     case .add:
                         self?.selectedFood = (self?.selectedFood ?? []) + [.meal(meal)]
+                        LoggingService.postEvent(event: .diaryaddfooditem)
                     }
                 }
             }
-            
             
             return cell
         case .myRecipes:
@@ -777,6 +780,7 @@ final class AddFoodViewController: UIViewController {
                 setupSearchFoundResultsState(shouldAnimate: shouldAnimate)
             }
             showDoneButton(false)
+            LoggingService.postEvent(event: .diarysearch)
         case .default:
             menuButton.alpha = 1
             showDoneButton((selectedFood ?? []).isEmpty ? false : true)
@@ -1134,6 +1138,9 @@ extension AddFoodViewController: AddFoodViewControllerInterface {
     }
     
     func updateSelectedFoodFromSearch(_ food: Food) {
+        if isSelectedType == .search {
+            LoggingService.postEvent(event: .diaryaddfromsearch)
+        }
         isSelectedType = previousSelectedType ?? .recent
         selectedFood = (selectedFood ?? []) + [food]
         foodCollectionViewController.reloadData()

@@ -63,6 +63,7 @@ final class AppCoordinator: ApphudDelegate {
         #endif
         startApphud()
         setupAmplitude()
+        updateLogStreak()
     }
     
     private func updateFoodData() {
@@ -96,9 +97,14 @@ final class AppCoordinator: ApphudDelegate {
         Amplitude.instance().logEvent("app_start")
     }
     
+    private func updateLogStreak() {
+        let streak = CalendarWidgetService.shared.getStreakDays()
+        LoggingService.postEvent(event: .caldaysstreak(count: streak))
+    }
+    
     func navigateTo(route: Route?, with id: String) {
         guard let route = route else { return }
-        let finalOnb = CalorieTrackingViaKcalcRouter.setupModule()
+//        let finalOnb = CalorieTrackingViaKcalcRouter.setupModule()
         switch route {
         case .recipe:
             if let dish = localDomainService.fetchSpecificRecipe(with: id),

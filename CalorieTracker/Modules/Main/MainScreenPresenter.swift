@@ -75,6 +75,7 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
     }
     
     func didTapMainWidget() {
+        LoggingService.postEvent(event: .diarywopen)
         router?.openOpenMainWidget(pointDate ?? Date())
     }
     
@@ -183,6 +184,9 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
         let proteinToday = nutritionToday.protein
         let fatToday = nutritionToday.fat
         let kcalToday = nutritionToday.kcal
+        if kcalToday >= kcalGoal {
+            LoggingService.postEvent(event: .diarycaloriegoal)
+        }
         let burnedKcalFromExercises = ExerciseWidgetServise.shared.getBurnedKcalForDate(date)
         let burnedKCalFromSteps = StepsWidgetService.shared.getStepsNow() * 0.0608
         let includingBurned = kcalGoal + burnedKCalFromSteps + burnedKcalFromExercises - kcalToday

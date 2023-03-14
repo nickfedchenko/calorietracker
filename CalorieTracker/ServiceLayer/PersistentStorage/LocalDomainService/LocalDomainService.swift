@@ -349,6 +349,7 @@ extension LocalDomainService: LocalDomainServiceInterface {
     
     func saveWater(data: [DailyData]) {
         let backgroundContext = container.newBackgroundContext()
+        backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
         let _: [DomainWater] = data
             .map { DomainWater.prepare(fromPlainModel: $0, context: backgroundContext) }
         backgroundContext.performAndWait {

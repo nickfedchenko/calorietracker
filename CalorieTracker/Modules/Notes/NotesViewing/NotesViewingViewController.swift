@@ -38,6 +38,7 @@ final class NotesViewingViewController: UIViewController {
         setupConstraint()
         configureKeyboard()
         addGestureRecognizer()
+        LoggingService.postEvent(event: .noteopennotes)
     }
     
     override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
@@ -64,6 +65,7 @@ final class NotesViewingViewController: UIViewController {
         headerView.complitionDeleteButton = { [weak self] in
             self?.deleteNote()
             self?.dismiss(animated: true)
+            LoggingService.postEvent(event: .notedelete)
         }
         
         headerView.complitionShareButton = { [weak self] in

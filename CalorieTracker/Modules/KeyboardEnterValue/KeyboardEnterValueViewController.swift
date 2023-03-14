@@ -99,11 +99,13 @@ final class KeyboardEnterValueViewController: TouchPassingViewController {
                 switch actionType {
                 case .add:
                     WeightWidgetService.shared.addWeight(weight, to: UDM.currentlyWorkingDay.date)
+                    LoggingService.postEvent(event: .weighttrack)
                 case .set:
                     WeightWidgetService.shared.setWeightGoal(weight)
                 }
             case .steps:
                 StepsWidgetService.shared.setDailyStepsGoal(value)
+                LoggingService.postEvent(event: .stepssetgoal)
             case .standart, .meal, .water:
                 break
             case .settingsKcal:

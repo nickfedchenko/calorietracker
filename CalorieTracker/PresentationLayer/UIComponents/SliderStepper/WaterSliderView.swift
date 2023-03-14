@@ -48,6 +48,7 @@ final class WaterSliderView: UIView {
             self.circleLayers[oldStep].fillColor = R.color.waterSlider.circles()?.cgColor
             self.textLabels[oldStep].isHidden = true
             self.textLabels[step].isHidden = false
+            LoggingService.postEvent(event: .waterslider)
         }
         
         slider.beginTracking = {

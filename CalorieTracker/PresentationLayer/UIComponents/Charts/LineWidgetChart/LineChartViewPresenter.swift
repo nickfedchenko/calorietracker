@@ -28,6 +28,7 @@ class LineChartViewPresenter {
     var data: [(date: Date, value: CGFloat)] {
         switch view.getChartType() {
         case .weight:
+//            let weights = WeightWidgetService.shared.getAllWeight()
             return WeightWidgetService.shared.getAllWeight().compactMap {
                 guard let date = $0.day.date else { return nil }
                 return (date: date, value: CGFloat($0.value))
