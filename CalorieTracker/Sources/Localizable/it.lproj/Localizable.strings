@@ -844,3 +844,19 @@
 
 "nomeasurements.first" = "Non ci sono misurazioni. La tua prima ";
 "nomeasurements.second" = " non è ancora passato";
+
+"camera.roll" = "Camera roll";
+
+"ask.opinion.title" = "La tua opinione è importante per noi!";
+"ask.opinion.subtitle" = "Ti piace l'app?";
+
+"last.plural" = "Scorso";
+"dney" = "giorni";
+"nedelb" = "settimane";
+"mesyacev" = "mesi";
+
+"EXERCISE ENERGY" = "ENERGIA ESERCIZIO";
+
+"calendar.tomorrow" = "DOMANI";
+
+"settings.recommendations.sources" = "Fonti di raccomandazioni";

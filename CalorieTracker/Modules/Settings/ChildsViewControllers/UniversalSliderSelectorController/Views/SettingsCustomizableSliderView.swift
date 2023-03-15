@@ -445,10 +445,12 @@ final class SettingsCustomizableSliderView: ViewWithShadow {
             }
             if case let .compact(goalType: goal) = self.mode {
                 switch goal {
-                case .loss(calorieDeficit: let defecit):
+                case .loss(calorieDeficit: _):
                     targetValue *= -1
-                case .gain(calorieSurplus: let surplus):
+                case .gain(calorieSurplus: _):
                     targetValue = abs(targetValue)
+                case .maintain(calorieDeficit: _):
+                    targetValue = 0
                 }
             }
             let targetString = BAMeasurement(targetValue, .weight, isMetric: true).string

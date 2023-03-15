@@ -556,7 +556,7 @@
 "fat.short" = "Жиры";
 "proteins" = "Белки";
 "kcal" = "Калории";
-"fat" = "Общее количество жира";
+"fat" = "Жиры";
 "carbs.long" = "Углеводы";
 "protein.long" = "Белки";
 "protein.short" = "белки";
@@ -569,7 +569,7 @@
 "monoFat" = "Мононенасыщенные жиры";
 "choleterol" = "Холестерин";
 "sodium" = "Натрий";
-"carb" = "Общее количество углеводов";
+"carb" = "Углеводы";
 "dietaryFiber" = "Пищевые волокна";
 "sugars" = "Общее количество сахаров";
 "addSugars" = "Включает добавленный Сахар";
@@ -725,16 +725,16 @@
 "diagramChartType.calories.title" = "КАЛОРИИ";
 "diagramChartType.carb.title" = "УГЛЕВОДЫ";
 "diagramChartType.steps.title" = "ШАГИ";
-"diagramChartType.water.title" = "ВОДЫ";
+"diagramChartType.water.title" = "ВОДА";
 "diagramChartType.activity.title" = "ЭНЕРГИЯ АКТИВНОСТИ";
-"diagramChartType.protein.title" = "БЕЛКА";
+"diagramChartType.protein.title" = "БЕЛКИ";
 "doubleDiagramChart.exercises.title" = "ТРЕНИРУЙТЕ ЭНЕРГИЮ";
 "lineChartType.bmi.title" = "ИНДЕКС МАССЫ ТЕЛА";
 "tripleDiagramChartType.dietary.title" = "ПОТРЕБЛЕНИЕ С ПИЩЕЙ";
 
 "chart.message.title.first" = "Здесь нет никаких измерений. Ваш первый";
 "chart.message.title.second" = "еще не прошел";
-"chart.right.bottom.title" = "Среднесуточный показатель";
+"chart.right.bottom.title" = "Среднесут.";
 "lineChart.right.bottom.first" = "Начальный вес: ";
 "lineChart.right.bottom.second" = "Начало: ";
 
@@ -832,3 +832,19 @@
 
 "nomeasurements.first" = "Нет измерений. Ваш первый ";
 "nomeasurements.second" = " еще не прошел";
+
+"camera.roll" = "Камера";
+
+"ask.opinion.title" = "Ваше мнение важно для нас!";
+"ask.opinion.subtitle" = "Нравится приложение?";
+
+"last.plural" = "Последие";
+"dney" = "дней";
+"nedelb" = "недель";
+"mesyacev" = "месяцев";
+
+"EXERCISE ENERGY" = "ЭНЕРГИЯ УПРАЖНЕНИЙ";
+
+"calendar.tomorrow" = "ЗАВТРА";
+
+"settings.recommendations.sources" = "Источники рекомендаций";

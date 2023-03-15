@@ -75,7 +75,6 @@ final class CreateProductViewController: UIViewController {
         rightScrollView.contentInset = insets
 
         setupKeyboardManager()
-        
         firstDraw = false
     }
     

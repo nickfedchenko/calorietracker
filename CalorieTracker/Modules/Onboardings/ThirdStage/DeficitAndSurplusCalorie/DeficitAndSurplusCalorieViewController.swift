@@ -208,10 +208,10 @@ extension DeficitAndSurplusCalorieViewController: DeficitAndSurplusCalorieViewCo
     
     func set(weightGoal: WeightGoal) {
         self.weightGoal = weightGoal
-        let suffix = R.string.localizable.onboardingThirdDeficitAndSurplusCalorieResult()
-        switch weightGoal {
-        case .gain(let calorieSurplus):
-            return
+//        let suffix = R.string.localizable.onboardingThirdDeficitAndSurplusCalorieResult()
+//        switch weightGoal {
+//        case .gain(let calorieSurplus):
+//            return
 //            rateLabel.text = R.string.localizable.onboardingThirdDeficitAndSurplusCalorieSurplus()
 //            resultLabel.text = "+\(calorieSurplus.clean) \(suffix)"
 //            sliderBackground.backgroundColor = R.color.onboardings.radialGradientFirst()
@@ -224,8 +224,8 @@ extension DeficitAndSurplusCalorieViewController: DeficitAndSurplusCalorieViewCo
 //            secondProcentLabel.textColor = R.color.onboardings.radialGradientFirst()
 //            thirdProcentLabel.textColor = R.color.onboardings.radialGradientFirst()
 //            fourthProcentLabel.textColor = R.color.onboardings.radialGradientFirst()
-        case .loss(let calorieDeficit):
-            return
+//        case .loss(let calorieDeficit):
+//            return
 //            rateLabel.text = R.string.localizable.onboardingThirdDeficitAndSurplusCalorieDeficit()
 //            resultLabel.text = "-\(calorieDeficit.clean) \(suffix)"
 //            sliderBackground.backgroundColor = R.color.onboardings.currentWeight()
@@ -238,6 +238,7 @@ extension DeficitAndSurplusCalorieViewController: DeficitAndSurplusCalorieViewCo
 //            secondProcentLabel.textColor = R.color.onboardings.currentWeight()
 //            thirdProcentLabel.textColor = R.color.onboardings.currentWeight()
 //            fourthProcentLabel.textColor = R.color.onboardings.currentWeight()
-        }
+        
+//        }
     }
 }

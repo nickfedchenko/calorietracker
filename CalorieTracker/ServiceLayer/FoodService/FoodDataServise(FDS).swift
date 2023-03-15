@@ -395,7 +395,7 @@ extension FDS: FoodDataServiceInterface {
     
     func getRecentProducts(_ count: Int) -> [Product] {
         let allFoodData = localPersistentStore.fetchFoodData()
-            .sorted(by: { $0.dateLastUse <= $1.dateLastUse })
+            .sorted(by: { $0.dateLastUse >= $1.dateLastUse })
             .filter { $0.food != nil }
         let foodData = allFoodData.count >= count
             ? Array(allFoodData[0..<count])
@@ -413,7 +413,7 @@ extension FDS: FoodDataServiceInterface {
     
     func getRecentDishes(_ count: Int) -> [Dish] {
         let allFoodData = localPersistentStore.fetchFoodData()
-            .sorted(by: { $0.dateLastUse <= $1.dateLastUse })
+            .sorted(by: { $0.dateLastUse >= $1.dateLastUse })
             .filter { $0.food != nil }
         let foodData = allFoodData.count >= count
             ? Array(allFoodData[0..<count])
@@ -431,7 +431,7 @@ extension FDS: FoodDataServiceInterface {
     
     func getRecentCustomEntries(_ count: Int) -> [CustomEntry] {
         let allFoodData = localPersistentStore.fetchFoodData()
-            .sorted(by: { $0.dateLastUse <= $1.dateLastUse })
+            .sorted(by: { $0.dateLastUse >= $1.dateLastUse })
             .filter { $0.food != nil }
         let foodData = allFoodData.count >= count
             ? Array(allFoodData[0..<count])

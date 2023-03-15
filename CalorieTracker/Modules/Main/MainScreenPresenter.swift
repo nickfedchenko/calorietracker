@@ -261,11 +261,23 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
     
     func didTapExerciseWidget() {
         if !UDM.isAuthorisedHealthKit {
-            ExerciseWidgetServise.shared.syncWithHealthKit {
-                DispatchQueue.main.async {
-                    self.updateExersiceWidget()
+            HealthKitAccessManager.shared.askPermission { result in
+                switch result {
+                case .success(let success):
+                    UDM.isAuthorisedHealthKit = success
+                    HealthKitDataManager.shared.getSteps { steps in
+                        DSF.shared.saveSteps(steps)
+                    }
+                    
+                    HealthKitDataManager.shared.getWorkouts { exercises  in
+                        DSF.shared.saveExercises(exercises)
+                    }
+                    
+                case .failure(let failure):
+                    print(failure)
                 }
             }
+            return
         }
     }
     

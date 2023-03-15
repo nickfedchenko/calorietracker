@@ -16,6 +16,7 @@ final class SubscriptionAmountCollectionViewCell: UICollectionViewCell {
             view.isSelected = isSelectedCell
         }
     }
+    
     override var isSelected: Bool {
         didSet {
             isSelectedCell = isSelected
@@ -35,6 +36,12 @@ final class SubscriptionAmountCollectionViewCell: UICollectionViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    var isProfitable: Bool = false {
+        didSet {
+            view.isProfitable = isProfitable
+        }
     }
     
     private func setupView() {

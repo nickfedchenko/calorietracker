@@ -105,7 +105,7 @@ final class LocalDomainService {
     private lazy var context: NSManagedObjectContext = {
         let context = container.viewContext
         context.automaticallyMergesChangesFromParent = true
-        context.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
+        context.mergePolicy = NSMergePolicy.overwrite
         return context
     }()
     
@@ -375,7 +375,6 @@ extension LocalDomainService: LocalDomainServiceInterface {
             .map { DomainWeight.prepare(fromPlainModel: $0, context: backgroundContext) }
         backgroundContext.performAndWait {
             try? backgroundContext.save()
-            
         }
     }
     

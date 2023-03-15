@@ -83,6 +83,8 @@ final class OnboardingChartView: ViewWithShadow {
             chartImageView.image = R.image.onboardings.upWeightChart()
         case .loss:
             chartImageView.image = R.image.onboardings.downWeightChart()
+        case .maintain:
+            chartImageView.image = R.image.onboardings.downWeightChart()
         }
     }
     

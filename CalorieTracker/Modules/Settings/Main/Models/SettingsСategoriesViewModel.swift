@@ -131,6 +131,16 @@ struct SettingsСategoriesViewModel {
                 imageBackgroundColor: R.color.settings.help(),
                 remindersCount: 0
             )
+        case .sources:
+            return .init(
+                title: R.string.localizable.settingsRecommendationsSources(),
+                description: nil,
+                titleColor: R.color.foodViewing.basicDark(),
+                descriptionColor: nil,
+                image: R.image.settings.settingsExclamationMark(),
+                imageBackgroundColor: R.color.settings.help(),
+                remindersCount: 0
+            )
         }
     }
 }

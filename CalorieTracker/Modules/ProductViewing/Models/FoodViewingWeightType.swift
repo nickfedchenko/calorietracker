@@ -8,8 +8,8 @@
 import Foundation
 
 enum FoodViewingWeightType: WithGetTitleProtocol, CaseIterable {
-    case ounce
     case gram
+    case ounce
     case piece
     
     func getTitle(_ lenght: Lenght) -> String? {

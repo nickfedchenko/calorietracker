@@ -142,8 +142,8 @@ final class AddFoodPresenter {
     private func searchAmongAll(_ request: String) -> [Food] {
         let dishes = DSF.shared.searchDishes(by: request)
         let products = DSF.shared.searchProducts(by: request)
-        let genericProducts = products.filter { $0.brand == nil }
-        let brandProducts = products.filter { $0.brand != nil }
+        let genericProducts = products.filter { $0.brand == nil && !$0.isUserProduct }
+        let brandProducts = products.filter { $0.brand != nil && !$0.isUserProduct }
         let userProducts = products.filter { $0.isUserProduct }
         return genericProducts.foods + userProducts.foods + dishes.foods + brandProducts.foods
     }

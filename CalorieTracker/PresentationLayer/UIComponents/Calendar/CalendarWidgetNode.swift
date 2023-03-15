@@ -130,7 +130,24 @@ final class CalendarWidgetNode: CTWidgetNode {
     
     private func setTopLabel(for date: Date) {
         let todayDate = Date()
-        switch abs(Calendar.current.dateComponents([.day], from: todayDate, to: date).day ?? 0) {
+
+        let todayComponents = Calendar.current.dateComponents(
+            [.year, .month, .day, .hour, .minute, .second],
+            from: todayDate
+        )
+        var targetComponents = Calendar.current.dateComponents(
+            [.year, .month, .day, .hour, .minute, .second],
+            from: date
+        )
+        targetComponents.hour = todayComponents.hour
+        targetComponents.minute = todayComponents.minute
+        if todayDate > date {
+            targetComponents.second = (todayComponents.second ?? 0) - 1
+        } else {
+            targetComponents.second = (todayComponents.second ?? 0) + 1
+        }
+        let targetDate = Calendar.current.date(from: targetComponents)
+        switch abs(Calendar.current.dateComponents([.day], from: todayDate, to: targetDate ?? Date()).day ?? 0) {
         case 0:
             topTextNode.attributedText = Text.today.attributedSring([
                 .init(
@@ -151,7 +168,16 @@ final class CalendarWidgetNode: CTWidgetNode {
                     ]
                 )
             ])
-            
+        case -1:
+            topTextNode.attributedText = Text.tomorrow.attributedSring([
+                .init(
+                    worldIndex: [0],
+                    attributes: [
+                        .color(.white),
+                        .font(R.font.sfProRoundedBold(size: UIDevice.isSmallDevice ? 13 : 15))
+                    ]
+                )
+            ])
         default:
             let formatter = DateFormatter()
             formatter.dateFormat = "EEEE"
@@ -194,5 +220,6 @@ extension CalendarWidgetNode {
         static let today = R.string.localizable.calendarTopTitleToday()
         static let yesterday = R.string.localizable.calendarTopTitleYesterday()
         static let streak = R.string.localizable.calendarLogStreak()
+        static let tomorrow = R.string.localizable.calendarTomorrow()
     }
 }

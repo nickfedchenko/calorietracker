@@ -123,17 +123,14 @@ final class AppCoordinator: ApphudDelegate {
     }
     
     func setupPeriodicUpdate() {
-        hkUpdateTimer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { timer in
+        hkUpdateTimer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { _ in
+            HealthKitAccessManager.shared.updateAuthorizationStatus()
             HealthKitDataManager.shared.getSteps { [weak self] steps in
                 self?.localDomainService.saveSteps(data: steps)
             }
             
             HealthKitDataManager.shared.getWorkouts { [weak self] exercises  in
                 self?.localDomainService.saveExercise(data: exercises)
-            }
-            
-            HealthKitDataManager.shared.getBurnedKcal { data in
-                print(data)
             }
         }
     }

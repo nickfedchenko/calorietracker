@@ -308,7 +308,7 @@ extension FoodCellView.FoodViewModel {
         if product.brand != nil && !product.isUserProduct {
             tag = R.string.localizable.brandFood()
         } else if product.isUserProduct {
-            
+            tag
         }
         else {
             tag = R.string.localizable.baseFood()

@@ -214,7 +214,7 @@ final class UDM {
             }
             return value
         }
-        set {
+        set { 
             setValue(value: newValue, for: .isAuthorisedHealthKit)
         }
     }

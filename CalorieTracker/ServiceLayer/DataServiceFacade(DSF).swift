@@ -66,6 +66,9 @@ protocol DataServiceFacadeInterface {
 //    func getProduct(by id: String) -> DomainProduct
 //    func getDish(by id: String) -> DomainDish
 //    func getCustomEntry(by id: String) -> DomainDish
+    
+    func saveExercises(_ exercises: [Exercise])
+    func saveSteps(_ steps: [DailyData])
 }
 
 final class DSF {
@@ -78,6 +81,13 @@ final class DSF {
 }
 
 extension DSF: DataServiceFacadeInterface {
+    func saveExercises(_ exercises: [Exercise]) {
+        localPersistentStore.saveExercise(data: exercises)
+    }
+    
+    func saveSteps(_ steps: [DailyData]) {
+        localPersistentStore.saveSteps(data: steps)
+    }
     
     func setChildFoodData(foodDataId: String, dishID: Int) {
         localPersistentStore.setChildFoodData(foodDataId: foodDataId, dishID: dishID)

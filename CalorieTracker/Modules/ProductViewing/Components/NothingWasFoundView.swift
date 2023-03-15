@@ -26,6 +26,7 @@ final class NothingWasFoundView: UIView {
         button.addTarget(self, action: #selector(didTapButton), for: .touchUpInside)
         button.imageView.tintColor = R.color.foodViewing.basicPrimary()
         button.titleLabel.font = R.font.sfProDisplaySemibold(size: 11.fontScale())
+        button.alpha = 0
         return button
     }()
     

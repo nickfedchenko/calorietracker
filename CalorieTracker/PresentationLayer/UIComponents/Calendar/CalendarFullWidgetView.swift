@@ -61,7 +61,7 @@ final class CalendarFullWidgetView: UIView, CTWidgetFullProtocol {
         layer.cornerCurve = .continuous
         layer.cornerRadius = 16
         
-        updateDateLabel(Date())
+        updateDateLabel(UDM.currentlyWorkingDay.date ?? Date())
         
         calendarView.dateDataCompletion = { date in
             return CalendarWidgetService.shared.getCalendarData(year: date.year, month: date.month)
@@ -117,19 +117,37 @@ final class CalendarFullWidgetView: UIView, CTWidgetFullProtocol {
     
     private func updateDateLabel(_ date: Date) {
         let todayDate = Date()
-        switch abs(Calendar.current.dateComponents([.day], from: todayDate, to: date).day ?? 0) {
+        let todayComponents = Calendar.current.dateComponents(
+            [.year, .month, .day, .hour, .minute, .second],
+            from: todayDate
+        )
+        var targetComponents = Calendar.current.dateComponents(
+            [.year, .month, .day, .hour, .minute, .second],
+            from: date
+        )
+        targetComponents.hour = todayComponents.hour
+        targetComponents.minute = todayComponents.minute
+        if todayDate > date {
+            targetComponents.second = (todayComponents.second ?? 0) - 1
+        } else {
+            targetComponents.second = (todayComponents.second ?? 0) + 1
+        }
+        let targetDate = Calendar.current.date(from: targetComponents)
+        switch Calendar.current.dateComponents([.day], from: todayDate, to: targetDate ?? Date()).day ?? 0 {
         case 0:
             dateLabel.text = R.string.localizable.calendarTopTitleToday()
-        case 1:
+        case -1:
             dateLabel.text = R.string.localizable.calendarTopTitleYesterday()
+        case 1:
+            dateLabel.text = R.string.localizable.calendarTomorrow()
         case 365...:
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "MMM, YYYY"
-            dateLabel.text = dateFormatter.string(from: date)
+            dateFormatter.dateFormat = "LLLL, YYYY"
+            dateLabel.text = dateFormatter.string(from: date).uppercased()
         default:
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "MMMM"
-            dateLabel.text = dateFormatter.string(from: date)
+            dateFormatter.dateFormat = "LLLL"
+            dateLabel.text = dateFormatter.string(from: date).uppercased()
         }
     }
     

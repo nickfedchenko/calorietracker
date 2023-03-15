@@ -19,21 +19,25 @@ final class TripleDiagramChartView: UIView {
         func getTitle() -> String {
             switch self {
             case .dietary:
-                return "DIETARY INTAKE"
+                return R.string.localizable.tripleDiagramChartTypeDietaryTitle()
             }
         }
         
         func getTitles() -> (String, String, String) {
             switch self {
             case .dietary:
-                return ("Carbs:  ", "Protein:  ", "Fat:  ")
+                return (
+                    "carbs.short".localized + ": ",
+                    "protein.short".localized + ": ",
+                    "fat.short".localized + ": "
+                )
             }
         }
         
         func getPostfix() -> String {
             switch self {
             case .dietary:
-                return "Kcal"
+                return "kcal.short".localized
             }
         }
         
@@ -183,7 +187,15 @@ final class TripleDiagramChartView: UIView {
             rightBottomDateLabel.isHidden = true
             middleBottomDateLabel.isHidden = true
             messageLabel.isHidden = false
-            messageLabel.text = "There are no measurements. Your first \(chartFormat.rawValue) has not yet passed"
+            messageLabel.text = {
+                var textPart = R.string.localizable.nomeasurementsFirst()
+                +  "\(chartFormat.title)"
+                + R.string.localizable.nomeasurementsSecond()
+                if Locale.current.languageCode == "ru" && chartFormat == .weekly {
+                    textPart = "Нет измерений. Ваша первая неделя еще не прошла"
+                }
+                return textPart
+            }()
             return
         }
         leftBottomLabel.layer.opacity = 1
@@ -210,11 +222,17 @@ final class TripleDiagramChartView: UIView {
     private func configureLabels(chartData: TripleDiagramChartData) {
         switch chartFormat {
         case .daily:
-            leftBottomLabel.text = "Last \((chartData.data.keys.max() ?? 0 ) + 1) Days, Daily Average"
+            leftBottomLabel.text = "\("last.plural".localized) \((chartData.data.keys.max() ?? 0 ) + 1)"
+            + " \("dney".localized),"
+            + "\(R.string.localizable.chartRightBottomTitle())"
         case .weekly:
-            leftBottomLabel.text = "Last \((chartData.data.keys.max() ?? 0) + 1) Weeks, Daily Average"
+            leftBottomLabel.text = "\("last.plural".localized) \((chartData.data.keys.max() ?? 0 ) + 1)"
+            + " \("nedelb".localized),"
+            + "\(R.string.localizable.chartRightBottomTitle())"
         case .monthly:
-            leftBottomLabel.text = "Last \((chartData.data.keys.max() ?? 0) + 1) Months, Daily Average"
+            leftBottomLabel.text = "\("last.plural".localized) \((chartData.data.keys.max() ?? 0 ) + 1)"
+            + " \("mesyacev".localized),"
+            + "\(R.string.localizable.chartRightBottomTitle())"
         }
         
         let count = CGFloat(chartData.data.count)
@@ -277,6 +295,9 @@ final class TripleDiagramChartView: UIView {
         diagramChart.columnColors = chartType.getColors()
         rightTopLabel.textColor = chartType.getColor()
         leftTopLabel.text = chartType.getTitle()
+        if Locale.current.languageCode != "en" {
+            leftTopLabel.font = R.font.sfProDisplaySemibold(size: 16.fitW)
+        }
         leftTopLabel.textColor = chartType.getColor()
         
         backgroundColor = .white

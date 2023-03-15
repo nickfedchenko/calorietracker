@@ -19,7 +19,7 @@ final class DoubleDiagramChartView: UIView {
         func getTitle() -> String {
             switch self {
             case .exercises:
-                return "EXERSISE ENERGY"
+                return "EXERCISE ENERGY".localized
             }
         }
         
@@ -177,7 +177,15 @@ final class DoubleDiagramChartView: UIView {
             rightBottomDateLabel.isHidden = true
             middleBottomDateLabel.isHidden = true
             messageLabel.isHidden = false
-            messageLabel.text = "There are no measurements. Your first \(chartFormat.rawValue) has not yet passed"
+            messageLabel.text =  {
+                var textPart = R.string.localizable.nomeasurementsFirst()
+                +  "\(chartFormat.title)"
+                + R.string.localizable.nomeasurementsSecond()
+                if Locale.current.languageCode == "ru" && chartFormat == .weekly {
+                    textPart = "Нет измерений. Ваша первая неделя еще не прошла"
+                }
+                return textPart
+            }()
             return
         }
         diagramChart.isHidden = false
@@ -205,11 +213,17 @@ final class DoubleDiagramChartView: UIView {
     private func configureLabels(chartData: DoubleDiagramChartData) {
         switch chartFormat {
         case .daily:
-            leftBottomLabel.text = "Last \((chartData.data.keys.max() ?? 0 ) + 1) Days"
+            leftBottomLabel.text = "\("last.plural".localized) \((chartData.data.keys.max() ?? 0 ) + 1)"
+            + " \("dney".localized),"
+            + "\(R.string.localizable.chartRightBottomTitle())"
         case .weekly:
-            leftBottomLabel.text = "Last \((chartData.data.keys.max() ?? 0) + 1) Weeks"
+            leftBottomLabel.text = "\("last.plural".localized) \((chartData.data.keys.max() ?? 0 ) + 1)"
+            + " \("nedelb".localized),"
+            + "\(R.string.localizable.chartRightBottomTitle())"
         case .monthly:
-            leftBottomLabel.text = "Last \((chartData.data.keys.max() ?? 0) + 1) Months"
+            leftBottomLabel.text = "\("last.plural".localized) \((chartData.data.keys.max() ?? 0 ) + 1)"
+            + " \("mesyacev".localized),"
+            + "\(R.string.localizable.chartRightBottomTitle())"
         }
         
         let maxValue = CGFloat(getCountHorizontalLines() * chartData.step)
@@ -236,7 +250,7 @@ final class DoubleDiagramChartView: UIView {
         rightTopLabel.textColor = chartType.getColor()
         leftTopLabel.text = chartType.getTitle()
         leftTopLabel.textColor = chartType.getColor()
-        rightBottomLabel.text = "Daily Average".localized
+        rightBottomLabel.text = R.string.localizable.chartRightBottomTitle()
         
         backgroundColor = .white
         layer.cornerRadius = 16

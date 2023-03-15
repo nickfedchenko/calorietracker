@@ -116,7 +116,7 @@ final class NotesCreateViewController: TouchPassingViewController {
         
         alert.addAction(
             .init(
-                title: "Camera",
+                title: "Camera".localized,
                 style: .default,
                 handler: { [weak self] _ in
                     self?.showCameraVC()

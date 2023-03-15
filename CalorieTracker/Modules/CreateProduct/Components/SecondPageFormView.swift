@@ -17,10 +17,12 @@ final class SecondPageFormView: UIView {
     
     var title: String? { servingSizeForm.value }
     var weight: Double? {
-        guard let valueStr = valueTextField.text,
-               let value = Double(valueStr) else {
+        guard let valueStr = valueTextField.text else {
             return nil
         }
+        let cleanValue = valueStr.replacingOccurrences(of: ",", with: ".")
+        guard let value = Double(cleanValue) else { return nil }
+        
         return value
     }
     
@@ -102,7 +104,7 @@ extension SecondPageFormView {
     }
         
     func getSelectView() -> SelectView<FoodViewingWeightType> {
-        SelectView(FoodViewingWeightType.allCases)
+        SelectView(FoodViewingWeightType.allCases, shouldHideAtStartup: true)
     }
     
     func getValueTextField() -> InnerShadowTextField {

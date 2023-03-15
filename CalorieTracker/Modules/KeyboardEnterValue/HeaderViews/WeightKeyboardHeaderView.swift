@@ -205,7 +205,7 @@ extension WeightKeyboardHeaderView {
         textField.backgroundColor = .white
         textField.layer.cornerCurve = .continuous
         textField.layer.cornerRadius = 16
-        textField.keyboardType = .numberPad
+        textField.keyboardType = .decimalPad
         textField.keyboardAppearance = .light
         textField.font = R.font.sfProDisplaySemibold(size: 28)
         textField.textColor = R.color.keyboardHeader.weightDarkGreen()

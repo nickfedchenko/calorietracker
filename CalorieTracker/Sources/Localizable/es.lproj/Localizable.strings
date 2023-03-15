@@ -831,3 +831,19 @@
 
 "nomeasurements.first" = "No hay medidas. Tu primera ";
 "nomeasurements.second" = " aún no ha pasado";
+
+"camera.roll" = "Camera roll";
+
+"ask.opinion.title" = "¡Su opinión nos importa!";
+"ask.opinion.subtitle" = "¿Te gusta la aplicación?";
+
+"last.plural" = "Pasado";
+"dney" = "día";
+"nedelb" = "semanas";
+"mesyacev" = "meses";
+
+"EXERCISE ENERGY" = "ENERGÍA DEL EJERCICIO";
+
+"calendar.tomorrow" = "MAÑANA";
+
+"settings.recommendations.sources" = "Fuentes de recomendaciones";

@@ -49,7 +49,7 @@ extension SegmentedButton {
             case "de":
                 return 13.fitW
             case "en":
-                return 15.fitW
+                return 14.fitW
             case "it":
                 return 10.fitW
             default:

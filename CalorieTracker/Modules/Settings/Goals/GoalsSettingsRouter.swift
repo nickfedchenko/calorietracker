@@ -69,6 +69,9 @@ extension GoalsSettingsRouter: GoalsSettingsRouterInterface {
         let vc = KeyboardEnterValueViewController(.standart(R.string.localizable.settingsGoalWeight()))
         
         vc.complition = { [weak self] value in
+            if UDM.weeklyGoal != 0 {
+                UDM.tempWeeklyGoal = UDM.weeklyGoal
+            }
             if abs((WeightWidgetService.shared.getStartWeight() ?? 0) - value) > 1 {
                 if value < (WeightWidgetService.shared.getStartWeight() ?? 0) && UDM.goalType != .loseWeight {
                     let alert = CTAlertController(type: .newTargetType(
@@ -77,6 +80,7 @@ extension GoalsSettingsRouter: GoalsSettingsRouterInterface {
                             .apply(action: { [weak self] in
                                 UDM.goalType = .loseWeight
                                 UDM.weightGoal = value
+                                UDM.weeklyGoal = -abs(UDM.tempWeeklyGoal ?? 0.2)
                                 self?.presenter?.updateCell(type: .goal)
                                 self?.presenter?.updateCell(type: .weight)
                                 self?.currentlyShowingAlertController?.dismiss(animated: false)
@@ -96,6 +100,7 @@ extension GoalsSettingsRouter: GoalsSettingsRouterInterface {
                             .apply(action: { [weak self] in
                                 UDM.goalType = .buildMuscle
                                 UDM.weightGoal = value
+                                UDM.weeklyGoal = abs(UDM.tempWeeklyGoal ?? 0.2)
                                 self?.presenter?.updateCell(type: .weight)
                                 self?.presenter?.updateCell(type: .goal)
                                 self?.currentlyShowingAlertController?.dismiss(animated: false)
@@ -120,6 +125,7 @@ extension GoalsSettingsRouter: GoalsSettingsRouterInterface {
                         .apply(action: { [weak self] in
                             UDM.goalType = .maintainWeight
                             UDM.weightGoal = value
+                            UDM.weeklyGoal = 0
                             self?.presenter?.updateCell(type: .goal)
                             self?.presenter?.updateCell(type: .weight)
                             self?.currentlyShowingAlertController?.dismiss(animated: false)

@@ -15,4 +15,5 @@ enum SettingsCategoryType {
     case reminders
     case rate
     case help
+    case sources
 }
