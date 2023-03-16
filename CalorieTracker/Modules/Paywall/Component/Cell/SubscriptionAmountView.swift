@@ -44,14 +44,23 @@ final class SubscriptionAmount: UIView {
         return view
     }()
     
-    private let profitLabel: UILabel = {
+    private let priceLabel: UILabel = {
         let label = UILabel()
-        label.font = R.font.sfProRoundedSemibold(size: 13)
+        label.font = R.font.sfProRoundedBold(size: 16)
         label.text = "save".localized.capitalized + " 85%"
-        label.textColor = .white
+        label.textColor = UIColor(hex: "292D32")
         label.textAlignment = .center
         return label
     }()
+    
+    private let profitLabel: UILabel = {
+           let label = UILabel()
+           label.font = R.font.sfProRoundedSemibold(size: 13)
+           label.text = "save".localized.capitalized + " 85%"
+           label.textColor = .white
+           label.textAlignment = .center
+           return label
+       }()
 
     // MARK: - Initialization
     
@@ -68,11 +77,11 @@ final class SubscriptionAmount: UIView {
         checkMarkImageView.alpha = 0
         layer.borderColor = UIColor(named: R.color.onboardings.radialGradientFirst.name)?.cgColor
 
-        layer.cornerRadius = 16
+        layer.cornerRadius = 8
         layer.borderWidth = 2
         
         stackView.alignment = .leading
-        stackView.spacing = 4
+        stackView.spacing = 2
         stackView.axis = .vertical
         stackView.isUserInteractionEnabled = false
         
@@ -80,7 +89,7 @@ final class SubscriptionAmount: UIView {
         nameLabel.text = "Annually — $24.40 (3 days free)"
         nameLabel.textColor = UIColor(hex: "292D32")
         
-        describeLabel.font = R.font.sfProRoundedRegular(size: 18)
+        describeLabel.font = R.font.sfProRoundedRegular(size: 13)
         describeLabel.textColor = UIColor(hex: "2E3844")
         describeLabel.text = "$0,46 — week / 3 days free"
     }
@@ -88,6 +97,7 @@ final class SubscriptionAmount: UIView {
     private func configureLayouts() {
         addSubview(stackView)
         addSubview(profitBackgroundView)
+        addSubview(priceLabel)
         profitBackgroundView.addSubview(profitLabel)
         
         profitBackgroundView.snp.makeConstraints { make in
@@ -95,9 +105,9 @@ final class SubscriptionAmount: UIView {
             make.height.equalTo(22)
         }
         
-        profitLabel.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.leading.trailing.equalToSuperview().inset(16)
+        priceLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(8)
+            make.trailing.equalToSuperview().inset(16)
         }
         
         stackView.addArrangedSubview(nameLabel)
@@ -106,9 +116,9 @@ final class SubscriptionAmount: UIView {
         addSubview(checkMarkImageView)
                 
         stackView.snp.makeConstraints {
-            $0.top.equalTo(snp.top).offset(15)
-            $0.left.equalTo(snp.left).offset(20)
-            $0.bottom.equalTo(snp.bottom).offset(-15)
+            $0.top.equalTo(snp.top).offset(8)
+            $0.left.equalTo(snp.left).offset(16)
+            $0.bottom.equalTo(snp.bottom).offset(-8)
         }
         
         checkMarkImageView.snp.makeConstraints {
@@ -116,6 +126,11 @@ final class SubscriptionAmount: UIView {
             $0.right.equalTo(snp.right).offset(-16)
             $0.centerY.equalTo(stackView.snp.centerY)
             $0.size.equalTo(24)
+        }
+        
+        profitLabel.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(16)
         }
     }
     
@@ -134,6 +149,7 @@ final class SubscriptionAmount: UIView {
         guard let model = model else { return }
         nameLabel.text = model.title
         describeLabel.text = model.describe
+        priceLabel.text = model.priceString
     }
     
     required init?(coder: NSCoder) {

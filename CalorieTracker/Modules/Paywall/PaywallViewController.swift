@@ -281,7 +281,9 @@ extension PaywallViewController: UICollectionViewDelegate {
         collectionView.visibleCells
             .map { $0 as? SubscriptionAmountCollectionViewCell }
             .forEach { $0?.isSelectedCell = cell == $0 }
-        
+        if indexPath.item == 0 {
+            cell.isProfitable = true
+        }
         subscriptionViewModel?.selectedIndex = indexPath.row
     }
 }
