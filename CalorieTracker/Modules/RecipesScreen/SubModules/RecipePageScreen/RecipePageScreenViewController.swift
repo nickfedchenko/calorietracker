@@ -18,6 +18,7 @@ protocol RecipePageScreenViewControllerInterface: AnyObject {
         proteinData: RecipeRoundProgressView.ProgressMode
     )
     func getOpenController() -> RecipePageScreenViewController.OpenController
+    func shouldUpdateServingSelectorString(string: String)
 }
 
 class RecipePageScreenViewController: CTViewController {
@@ -161,7 +162,7 @@ class RecipePageScreenViewController: CTViewController {
         label.font = R.font.sfProRoundedMedium(size: 22)
         label.textColor = UIColor(hex: "192621")
         label.textAlignment = .left
-        label.text = "Serving".localized
+        label.text = "serving".localized
         label.backgroundColor = .white
         label.layer.borderWidth = 1
         label.layer.borderColor = UIColor(hex: "B3EFDE").cgColor
@@ -451,6 +452,10 @@ extension RecipePageScreenViewController: RecipeMainImageViewDelegate {
 }
 
 extension RecipePageScreenViewController: RecipePageScreenViewControllerInterface {
+    func shouldUpdateServingSelectorString(string: String) {
+        servingSelectorLabel.text = string
+    }
+    
     func shouldUpdateProgressView(
         carbsData: RecipeRoundProgressView.ProgressMode,
         kcalData: RecipeRoundProgressView.ProgressMode,

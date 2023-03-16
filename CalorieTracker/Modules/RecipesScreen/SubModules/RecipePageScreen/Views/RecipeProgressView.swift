@@ -13,7 +13,7 @@ final class RecipeProgressView: UIView {
         label.textColor = UIColor(hex: "547771")
         label.textAlignment = .center
         label.font = R.font.sfProRoundedSemibold(size: 17)
-        label.text = "Percent of daily goal".localized
+        label.text = R.string.localizable.productDailyFoodIntakeTitle()
         return label
     }()
     

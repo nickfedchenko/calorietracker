@@ -20,6 +20,7 @@ final class BurnedKcalSwitchNode: ASButtonNode {
             )
         }
     }
+    
     var includingBurned: String?
     var offGradientStartPoint = CGPoint(x: -0.5, y: 0)
     var offGradientEndPoint = CGPoint(x: 0.7, y: 0.5)
@@ -27,6 +28,8 @@ final class BurnedKcalSwitchNode: ASButtonNode {
     var onGradientEndPoint = CGPoint(x: 0.5, y: 0)
     private var textNodeLeftInset: CGFloat = 8
     private var textNodeRightInset: CGFloat = 14
+    
+    
     
     private(set) var onSelected = false {
         didSet {

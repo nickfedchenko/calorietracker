@@ -147,7 +147,7 @@ final class CalendarWidgetNode: CTWidgetNode {
             targetComponents.second = (todayComponents.second ?? 0) + 1
         }
         let targetDate = Calendar.current.date(from: targetComponents)
-        switch abs(Calendar.current.dateComponents([.day], from: todayDate, to: targetDate ?? Date()).day ?? 0) {
+        switch (Calendar.current.dateComponents([.day], from: todayDate, to: targetDate ?? Date()).day ?? 0) {
         case 0:
             topTextNode.attributedText = Text.today.attributedSring([
                 .init(
@@ -158,7 +158,7 @@ final class CalendarWidgetNode: CTWidgetNode {
                     ]
                 )
             ])
-        case 1:
+        case -1:
             topTextNode.attributedText = Text.yesterday.attributedSring([
                 .init(
                     worldIndex: [0],
@@ -168,7 +168,7 @@ final class CalendarWidgetNode: CTWidgetNode {
                     ]
                 )
             ])
-        case -1:
+        case 1:
             topTextNode.attributedText = Text.tomorrow.attributedSring([
                 .init(
                     worldIndex: [0],

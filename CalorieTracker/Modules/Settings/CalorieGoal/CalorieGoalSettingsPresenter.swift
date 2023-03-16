@@ -93,30 +93,30 @@ extension CalorieGoalSettingsPresenter: CalorieGoalSettingsPresenterInterface {
     
     func getGoalKcalStr() -> String? {
         guard let kcalGoal = self.kcalGoal else { return nil }
-        return BAMeasurement(kcalGoal.rounded(), .energy, isMetric: true).string
+        return BAMeasurement(kcalGoal.rounded(), .energy, isMetric: true).string(with: 2)
     }
     
     func getLunchGoalKcalStr() -> String? {
         guard let lunchPercent = mealPercent?.lunch,
                 let kcalGoal = kcalGoal else { return nil }
-        return BAMeasurement((lunchPercent * kcalGoal).rounded(), .energy, isMetric: true).string
+        return BAMeasurement((lunchPercent * kcalGoal).rounded(), .energy, isMetric: true).string(with: 2)
     }
     
     func getDinnerGoalKcalStr() -> String? {
         guard let dinnerPercent = mealPercent?.dinner,
                 let kcalGoal = kcalGoal else { return nil }
-        return BAMeasurement((dinnerPercent * kcalGoal).rounded(), .energy, isMetric: true).string
+        return BAMeasurement((dinnerPercent * kcalGoal).rounded(), .energy, isMetric: true).string(with: 2)
     }
     
     func getSnacksGoalKcalStr() -> String? {
         guard let snacksPercent = mealPercent?.snacks, let kcalGoal = kcalGoal else { return nil }
-        return BAMeasurement((snacksPercent * kcalGoal).rounded(), .energy, isMetric: true).string
+        return BAMeasurement((snacksPercent * kcalGoal).rounded(), .energy, isMetric: true).string(with: 2)
     }
     
     func getBreakfastGoalKcalStr() -> String? {
         guard let breakfastPercent = mealPercent?.breakfast,
                 let kcalGoal = kcalGoal else { return nil }
-        return BAMeasurement((breakfastPercent * kcalGoal).rounded(), .energy, isMetric: true).string
+        return BAMeasurement((breakfastPercent * kcalGoal).rounded(), .energy, isMetric: true).string(with: 2)
     }
     
     func getLunchPercentStr() -> String? {

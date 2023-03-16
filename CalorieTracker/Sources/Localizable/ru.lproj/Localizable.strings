@@ -539,12 +539,12 @@
 "lunch" = "ОБЕД";
 "dinner" = "УЖИН";
 "snack" = "ЗАКУСКА";
-"food" = "Еда";
+"food" = "Продукт";
 "recipe" = "Рецепты";
 "meal" = "Прием пищи";
-"frequent" = "Частый";
-"recent" = "Недавний";
-"favorites" = "Избранное";
+"frequent" = "Частые";
+"recent" = "Недавние";
+"favorites" = "Избранные";
 "myMeals" = "Мои блюда";
 "myRecipes" = "Мои рецепты";
 "myFood" = "Моя еда";
@@ -753,7 +753,7 @@
 "widget.water.quickAdd.goalbutton.title" ="ИЗМЕНИТЕ ЕЖЕДНЕВНУЮ ЦЕЛЬ";
 
 "widget.weight.title" = "ВЕС";
-"widget.weight.add" = "ДОБАВИТЬ ВЕС";
+"widget.weight.add" = " ДОБАВИТЬ ВЕС";
 
 "ah.connect.title" = "Подключить Apple Health";
 
@@ -820,7 +820,7 @@
 "onboarding.currentWeight" = "Ваш текущий вес";
 "onboarding.targetweight" = "Ваш целевой вес";
 
-"ALL NOTES" = "ALL NOTES";
+"ALL NOTES" = "ВСЕ ЗАМЕТКИ";
 
 "weightWidget.full.segment.week" = "Неделя";
 "weightWidget.full.segment.month" = "Месяц";
@@ -915,3 +915,5 @@
 "Recommendations.diets.exercise.link.text.2" = "Health Organization - Physical Activity and Adults";
 "Recommendations.diets.exercise.link.text.3" = "U.S. DEPARTMENT OF AGRICULTURE - Choose my Plate - Physical activity amount";
 "Recommendations.diets.exercise.link.text.4" = "MET values: Activity Categories - Compendium of Physical Activities";
+
+"Have a nice day! Don't forget to track your breakfast" = "Хорошего дня! Не забудьте внести свой завтрак";

@@ -116,9 +116,10 @@ final class WeightFullWidgetView: UIView, CTWidgetFullProtocol {
             )
         )
         
-        button.isPressTitle = " ADD WEIGHING"
-        button.defaultTitle = " ADD WEIGHING"
-        
+        button.isPressTitle = R.string.localizable.widgetWeightAdd()
+        button.defaultTitle = R.string.localizable.widgetWeightAdd()
+        button.isEnabled = UDM.currentlyWorkingDay <= Date().day
+        button.alpha = UDM.currentlyWorkingDay <= Date().day ? 1 : 0.3
         return button
     }()
     
@@ -203,9 +204,9 @@ final class WeightFullWidgetView: UIView, CTWidgetFullProtocol {
         )
         
         headerView.model = WeightHeaderView.Model(
-            start: Double(presenter?.getStartWeight(period: period) ?? 0).clean,
-            now: BAMeasurement(Double(presenter?.getNowWeight() ?? 0), .weight).string,
-            goal: Double(presenter?.getGoalWeight() ?? 0).clean
+            start: Double(presenter?.getStartWeight(period: period) ?? 0).clean(with: 1),
+            now: BAMeasurement(Double(presenter?.getNowWeight() ?? 0), .weight).string(with: 1),
+            goal: Double(presenter?.getGoalWeight() ?? 0).clean(with: 1)
         )
         
         switch period {

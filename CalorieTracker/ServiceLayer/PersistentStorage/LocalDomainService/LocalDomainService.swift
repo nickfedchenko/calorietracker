@@ -239,9 +239,12 @@ extension LocalDomainService: LocalDomainServiceInterface {
     }
     
     func fetchDishes() -> [Dish] {
+        let secondsStart = Date().timeIntervalSince1970
         guard let domainDishes = fetchData(for: DomainDish.self) else {
             return []
         }
+        let secondsEnd = Date().timeIntervalSince1970
+        print("Dishes fetch without mapping \(secondsEnd - secondsStart)")
         return domainDishes.compactMap { Dish(from: $0) }
     }
     

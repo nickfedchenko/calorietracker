@@ -115,7 +115,7 @@ extension CalorieGoalSettingsRouter: CalorieGoalSettingsRouterInterface {
             guard let value = Double(text),
                   let kcalGoal = self.presenter?.getKcalGoal() else { return "" }
             let kcalValue = value / 100 * kcalGoal
-            return BAMeasurement(kcalValue.rounded(), .energy, isMetric: true).string
+            return BAMeasurement(kcalValue.rounded(), .energy, isMetric: true).string(with: 1)
         }))
         
         vc.complition = { value in

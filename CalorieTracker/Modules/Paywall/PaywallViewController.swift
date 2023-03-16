@@ -180,7 +180,7 @@ final class PaywallViewController: UIViewController {
         titleLabel.snp.makeConstraints {
             $0.left.equalToSuperview().offset(24)
             $0.right.equalToSuperview().offset(-24)
-            $0.top.equalTo(imageView.snp.top).offset(257.fitH)
+            $0.top.equalTo(imageView.snp.top).offset(UIDevice.isSmallDevice ? 60 : 257.fitH)
         }
         
         subscriptionBenefitsContainerView.snp.makeConstraints {
@@ -239,6 +239,10 @@ final class PaywallViewController: UIViewController {
             make.height.width.equalTo(32)
             make.trailing.equalToSuperview().inset(18)
             make.top.equalToSuperview().offset(53.fitH)
+        }
+        
+        if UIDevice.isSmallDevice {
+            logoView.alpha = 0
         }
     }
     

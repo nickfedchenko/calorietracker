@@ -135,8 +135,7 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
     }
     
     func updateMessageWidget() {
-        let message: String = "Have a nice day! Don't forget to track your breakfast "
-        
+        let message: String = "Have a nice day! Don't forget to track your breakfast".localized
         view.setMessageWidget(message)
     }
     

@@ -12,7 +12,7 @@ struct BAMeasurement {
     let measurement: MeasurementValue
     
     var localized: Double { self.getLocalized() }
-    var string: String { self.getString() }
+    func string(with precision: Int) -> String { return getString(with: precision) }
     
     init(_ value: Double, _ measurement: MeasurementValue, isMetric: Bool = false) {
         self.measurement = measurement
@@ -68,8 +68,8 @@ struct BAMeasurement {
         }
     }
     
-    private func getString() -> String {
-        let valueStr = localized.clean
+    private func getString(with precision: Int = 2) -> String {
+        let valueStr = localized.clean(with: precision)
         let suffix = getMeasurementSuffix()
         return [valueStr, suffix].joined(separator: " ")
     }
@@ -135,14 +135,14 @@ struct BAMeasurement {
 }
 
 extension Double {
-    var clean: String {
+    func clean(with precision: Int = 2) -> String {
         if self.isNaN { return "0" }
         var string = self > 0 ? self.truncatingRemainder(dividingBy: 1) < 0.049
         ? String(format: "%.0f", self)
-        : String(format: "%.2f", self)
+        : String(format: "%.\(precision)f", self)
         : self.truncatingRemainder(dividingBy: 1) > -0.049
         ? String(format: "%.0f", self)
-        : String(format: "%.2f", self)
+        : String(format: "%.\(precision)f", self)
         if string.hasSuffix(".0") { string = string.replacingOccurrences(of: ".00", with: "") }
         if string != "0" && string.contains(".") && string.hasSuffix("00") {
             string = String(string.dropLast(2))

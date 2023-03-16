@@ -765,7 +765,7 @@
 "widget.water.quickAdd.goalbutton.title" ="CAMBIA IL TUO OBIETTIVO GIORNALIERO";
 
 "widget.weight.title" = "PESO";
-"widget.weight.add" = "AGGIUNGI PESO";
+"widget.weight.add" = " AGGIUNGI PESO";
 
 "ah.connect.title" = "Connetti Apple Salute";
 
@@ -927,3 +927,5 @@
 "Recommendations.diets.exercise.link.text.2" = "Health Organization - Physical Activity and Adults";
 "Recommendations.diets.exercise.link.text.3" = "U.S. DEPARTMENT OF AGRICULTURE - Choose my Plate - Physical activity amount";
 "Recommendations.diets.exercise.link.text.4" = "MET values: Activity Categories - Compendium of Physical Activities";
+
+"Have a nice day! Don't forget to track your breakfast" = "Buona giornata! Non dimenticare di tenere traccia della tua colazione";

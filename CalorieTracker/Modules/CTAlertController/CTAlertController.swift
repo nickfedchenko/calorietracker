@@ -239,7 +239,7 @@ final class CTAlertController: UIViewController {
         case .newCalorieGoal(newValue: let value, buttonTypes: _):
             let intValue = Int(value)
             let doubleValue = Double(intValue)
-            let valueString = BAMeasurement(doubleValue, .energy).string
+            let valueString = BAMeasurement(doubleValue, .energy).string(with: 1)
             let newString = R.string.localizable.universalSelectorNew()
             let mainString = R.string.localizable.universalSelectorCurrentSettingsByKcalNew() + valueString
             

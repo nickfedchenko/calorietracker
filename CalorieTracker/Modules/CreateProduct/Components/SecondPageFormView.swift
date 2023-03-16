@@ -7,11 +7,16 @@
 
 import UIKit
 
-final class SecondPageFormView: UIView {
+final class SecondPageFormView: UIView, UIGestureRecognizerDelegate {
     private lazy var servingSizeLabel: UILabel = getServingSizeLabel()
     private lazy var servingWeightLabel: UILabel = getServingWeightLabel()
     private lazy var selectView: SelectView = getSelectView()
     private lazy var valueTextField: UITextField = getValueTextField()
+    
+    private lazy var hideGesture: UITapGestureRecognizer = UITapGestureRecognizer(
+        target: self,
+        action: #selector(closeMenu)
+    )
 
     private lazy var servingSizeForm: FormView = getServingSizeForm()
     
@@ -22,7 +27,6 @@ final class SecondPageFormView: UIView {
         }
         let cleanValue = valueStr.replacingOccurrences(of: ",", with: ".")
         guard let value = Double(cleanValue) else { return nil }
-        
         return value
     }
     
@@ -30,6 +34,8 @@ final class SecondPageFormView: UIView {
         super.init(frame: frame)
         addSubviews()
         setupConstraints()
+        setupHandlers()
+        hideGesture.delegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -75,6 +81,32 @@ final class SecondPageFormView: UIView {
             make.bottom.trailing.equalToSuperview()
             make.leading.equalTo(valueTextField.snp.trailing).offset(12)
         }
+    }
+    
+    private func setupHandlers() {
+        selectView.didShowHandler = { [weak self] in
+            guard let self = self else { return }
+            self.superview?.removeGestureRecognizer(self.hideGesture)
+            self.superview?.addGestureRecognizer(self.hideGesture)
+        }
+        
+        selectView.didSelectedCell = { [weak self] _, _ in
+            guard let self = self else { return }
+            self.superview?.removeGestureRecognizer(self.hideGesture)
+        }
+    }
+    
+    @objc private func closeMenu(sender: UITapGestureRecognizer) {
+        let location = sender.location(in: self)
+        if !selectView.frame.contains(location) {
+            selectView.collapse()
+        }
+    }
+    
+    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        let location = gestureRecognizer.location(in: self)
+        let shouldBegin = !selectView.isCollapsed && !selectView.frame.contains(location)
+        return shouldBegin
     }
 }
 

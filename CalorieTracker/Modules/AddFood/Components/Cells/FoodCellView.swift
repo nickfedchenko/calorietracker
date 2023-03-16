@@ -317,7 +317,7 @@ extension FoodCellView.FoodViewModel {
         if !product.isUserProduct {
             if let weight = weight {
                 self.kcal = BAMeasurement(product.kcal / 100 * weight, .energy, isMetric: true).localized
-                let description = BAMeasurement(weight, .serving, isMetric: true).string
+                let description = BAMeasurement(weight, .serving, isMetric: true).string(with: 0)
                 self.description = description
             } else {
                 self.kcal = BAMeasurement(product.kcal, .energy, isMetric: true).localized
@@ -328,7 +328,7 @@ extension FoodCellView.FoodViewModel {
                         description = "\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string)"
                     } else {
                         description = "\(unit.title ?? "") "
-                        + "(\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string))"
+                        + "(\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string(with: 1))"
                     }
                     self.description = description
                 } else {
@@ -339,7 +339,7 @@ extension FoodCellView.FoodViewModel {
             if let serving = product.servings?.first {
                 let kcal = (serving.weight ?? 100) / 100 * product.kcal
                 self.kcal = BAMeasurement(kcal, .energy, isMetric: true).localized
-                description = "(\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string))"
+                description = "(\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string(with: 1))"
             } else {
                 self.kcal = BAMeasurement(product.kcal, .energy, isMetric: true).localized
                 description = ""
