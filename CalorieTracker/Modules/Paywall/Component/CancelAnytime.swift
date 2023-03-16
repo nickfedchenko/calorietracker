@@ -26,8 +26,8 @@ final class CancelAnytime: UIButton {
     
     private func configureViews() {
         textLabel.text = "Cancel anytime"
-        textLabel.font = .systemFont(ofSize: 15, weight: .medium)
-        
+        textLabel.font = R.font.sfProRoundedMedium(size: 15)
+        textLabel.textColor = UIColor(hex: "192621")
         lockImageView.image = R.image.paywall.lock()
     }
     

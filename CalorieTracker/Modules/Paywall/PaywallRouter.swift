@@ -78,10 +78,14 @@ extension PaywallRouter: PaywallRouterInterface {
     }
     
     func openTerms() {
-        viewController?.openSafaryUrl("")
+        viewController?.openSafaryUrl(
+            "https://docs.google.com/document/d/1JcCmpl__MudDKQhdrCwT30HRXID2ZoFJL3Ux4ooR-jk/edit?usp=sharing"
+        )
     }
     
     func openPolicy() {
-        viewController?.openSafaryUrl("")
+        viewController?.openSafaryUrl(
+            "https://docs.google.com/document/d/1PL9dbxBszn3_2srCTsclI9zISGiUHUDTkp8v2YfFc7s/edit?usp=sharing"
+        )
     }
 }

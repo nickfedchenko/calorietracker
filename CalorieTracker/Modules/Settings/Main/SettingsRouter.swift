@@ -130,7 +130,11 @@ extension SettingsRouter: SettingsRouterInterface {
     }
     
     func showSourcesViewController() {
-        
+        let recVC = RecommendationsViewController()
+        let viewModel = RecommendationsViewModel()
+        recVC.viewModel = viewModel
+        recVC.modalPresentationStyle = .fullScreen
+        viewController?.present(recVC, animated: true)
     }
 }
 

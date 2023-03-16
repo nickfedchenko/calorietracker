@@ -43,7 +43,12 @@ final class PaywallViewController: UIViewController {
         style: .gradientBordered,
         text: R.string.localizable.paywallStartNow().uppercased()
     )
-
+    
+    private lazy var cancelAnyTime: UIButton =  {
+        let button = CancelAnytime()
+        return button
+    }()
+    
     private lazy var privacyPolicyButton: UIButton = getPolicyButton()
     private lazy var termOfUseButton: UIButton = getTermsButton()
     private lazy var collectionView: UICollectionView = getCollectionView()
@@ -146,7 +151,8 @@ final class PaywallViewController: UIViewController {
             termOfUseButton,
             startNowCommonButton,
             closeButton,
-            logoView
+            logoView,
+            cancelAnyTime
         )
         
         subscriptionBenefitsContainerView.addSubviews(
@@ -158,6 +164,11 @@ final class PaywallViewController: UIViewController {
         
         imageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+        }
+        
+        cancelAnyTime.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalTo(termOfUseButton.snp.top)
         }
         
         logoView.snp.makeConstraints { make in
@@ -316,18 +327,12 @@ extension PaywallViewController: UICollectionViewDataSource {
 
 extension PaywallViewController {
     private func getTermsButton() -> UIButton {
-        let button = UIButton()
-        button.setTitle("Terms", for: .normal)
-        button.titleLabel?.font = R.font.sfProDisplaySemibold(size: 12)
-        button.setTitleColor(.black, for: .normal)
+        let button = TermOfUse()
         return button
     }
     
     private func getPolicyButton() -> UIButton {
-        let button = UIButton()
-        button.setTitle("Privacy Policy", for: .normal)
-        button.titleLabel?.font = R.font.sfProDisplaySemibold(size: 12)
-        button.setTitleColor(.black, for: .normal)
+        let button = PrivacyPolicy()
         return button
     }
     

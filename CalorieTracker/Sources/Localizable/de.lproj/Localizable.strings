@@ -847,3 +847,70 @@
 "calendar.tomorrow" = "MORGEN";
 
 "settings.recommendations.sources" = "Empfehlung Quellen";
+
+"Recommendations.title" = "Empfehlungsquellen";
+"Recommendations.description" = "Kcalc App is a health and lifestyle app that provides guidelines and recommendations to help you on your journey towards a healthier life. While encouraging your understanding of what nutrition, exercise and healthy habits can do for you, Kcalc is not intended to be used for any diagnosis, advice, prevention or treatment of a disease or medical condition (Kcalc is not a medical device or app). Always consult with a doctor or healthcare professional for medical advice and treatments before making any medical decisions.";
+
+"Recommendations.calorieRec.title" = "Calorie recommendations";
+"Recommendations.calorieRec.link.text.1" = "National Institute of Health - Clinical Guidelines on the Identification, Evaluation and Treatment of Overweight and Obesity in Adults";
+"Recommendations.calorieRec.link.text.2" = "Eat Right - Academy of Nutrition and Dietetics - Healthy weight gain";
+
+"Recommendations.diets.title" = "Diets";
+"Recommendations.diets.classic.title" = "Classic";
+"Recommendations.diets.classic.link.text.1" = "U.S. Department of Health and Human Services - Dietary Guidelines for Americans 2020-2025";
+"Recommendations.diets.classic.link.text.2" = "https://www.who.int/news-room/fact-sheets/detail/healthy-diet";
+
+"Recommendations.diets.cleaneating.title" = "Clean eating";
+"Recommendations.diets.cleaneating.link.text.1" = "American Heart Association - How Can I Eat More Nutrient-Dense Food?";
+"Recommendations.diets.cleaneating.link.text.2" = "American Heart Association - What is Clean Eating? Infografic";
+"Recommendations.diets.cleaneating.text.3" = "American Heart Association - Protein and Heart Health";
+
+"Recommendations.diets.mediterranean.title" = "Mediterranean";
+"Recommendations.diets.mediterranean.link.text.1" = "American Heart Association - What is the Mediterranean diet?";
+
+"Recommendations.diets.scandinavian.title" = "Scandinavian";
+"Recommendations.diets.scandinavian.link.text.1" = "Journal of Internal Medicine - Effects of a healthy Nordic diet on cardiovascular risk factors in hypercholesterolaemic subjects: a randomized controlled trial (NORDIET) - 2011";
+"Recommendations.diets.scandinavian.link.text.2" = "Journal of Internal Medicine - Effects of an isocaloric healthy Nordic diet on insulin sensitivity, lipid profile and inflammation markers in metabolic syndrome -- a randomized study (SYSDIET) - 2013";
+
+"Recommendations.diets.highprotein.title" = "High protein";
+"Recommendations.diets.highprotein.link.text.1" = "American Heart Association - Protein and Heart Health";
+"Recommendations.diets.highprotein.link.text.2" = "MedlinePlus - Protein in Diet";
+"Recommendations.diets.highprotein.link.text.3" = "American Journal of Clinical Nutrition - Effects of energy-restricted high-protein, low-fat compared with standard-protein, low-fat diets: a meta-analysis of randomized controlled trials - 2012";
+
+"Recommendations.diets.сlimatarian.title" = "Climatarian";
+"Recommendations.diets.сlimatarian.link.text.1" = "U.S. Department of Health and Human Services - Dietary Guidelines for Americans 2020-2025";
+"Recommendations.diets.сlimatarian.link.text.2" = "European Commission - Assessment of resource efficiency in the food cycle - December 2012";
+"Recommendations.diets.сlimatarian.link.text.3" = "Livsmedelsverket - Miljösmarta matval";
+
+"Recommendations.diets.ketogenic.title" = "Ketogenic diets";
+"Recommendations.diets.ketogenic.link.text.1" = "Low Carbohydrate Diet - StatPearls 2020";
+"Recommendations.diets.ketogenic.link.text.2" = "European Journal of Nutrition - Overweight and diabetes prevention: is a low-carbohydrate-high-fat diet recommendable? - 2018";
+"Recommendations.diets.ketogenic.link.text.3" = "British Journal of Nutrition - Very-low-carbohydrate ketogenic diet v. low-fat diet for long-term weight loss: a meta-analysis of randomised controlled trials - 2013";
+
+"Recommendations.diets.ketogenicmedium.title" = "Keto medium";
+"Recommendations.diets.ketogenicmedium.link.text.1" = "Low Carbohydrate Diet - StatPearls 2020";
+"Recommendations.diets.ketogenicmedium.link.text.2" = "European Journal of Nutrition - Overweight and diabetes prevention: is a low-carbohydrate-high-fat diet recommendable? - 2018";
+"Recommendations.diets.ketogenicmedium.link.text.3" = "British Journal of Nutrition - Very-low-carbohydrate ketogenic diet v. low-fat diet for long-term weight loss: a meta-analysis of randomised controlled trials - 2013";
+
+"Recommendations.diets.ketogenicstrict.title" = "Keto Strict";
+"Recommendations.diets.ketogenicstrict.link.text.1" = "Low Carbohydrate Diet - StatPearls 2020";
+"Recommendations.diets.ketogenicstrict.link.text.2" = "European Journal of Nutrition - Overweight and diabetes prevention: is a low-carbohydrate-high-fat diet recommendable? - 2018";
+"Recommendations.diets.ketogenicstrict.link.text.3" = "British Journal of Nutrition - Very-low-carbohydrate ketogenic diet v. low-fat diet for long-term weight loss: a meta-analysis of randomised controlled trials - 2013";
+
+"Recommendations.diets.fasting.title" = "Fasting diets";
+"Recommendations.diets.fasting.link.text.1" = "National Institute on Aging - Calorie Restriction and Fasting Diets: What do We Know?";
+
+"Recommendations.diets.lifescore.title" = "Life score";
+"Recommendations.diets.lifescore.link.text.1" = "Water: MedlinePlus - Water in diet & Institute of Medicine - Dietary Reference Intakes for Water";
+"Recommendations.diets.lifescore.link.text.2" = "Vegetable: U.S. DEPARTMENT OF AGRICULTURE - Choose my Plate - Vegetables";
+"Recommendations.diets.lifescore.link.text.3" = "Fruit: U.S. DEPARTMENT OF AGRICULTURE - Choose my Plate - Fruit";
+"Recommendations.diets.lifescore.link.text.4" = "Fish: U.S. FOOD & DRUG ADMINISTRATION - Advice about eating fish";
+"Recommendations.diets.lifescore.link.text.5" = "Red meat: World Cancer Research Fund - American Institute for Cancer Research - Limit red & processed meat";
+"Recommendations.diets.lifescore.link.text.6" = "Healthy diet: World Health Organization - Healthy diet";
+"Recommendations.diets.lifescore.link.text.7" = "Physical activity: U.S. DEPARTMENT OF AGRICULTURE - Choose my plate - Physical activity amount & World Health Organization - Physical Activity and Adults";
+
+"Recommendations.diets.exercise.title" = "Exercise";
+"Recommendations.diets.exercise.link.text.1" = "Swedish Food Agency - Physical activity advice";
+"Recommendations.diets.exercise.link.text.2" = "Health Organization - Physical Activity and Adults";
+"Recommendations.diets.exercise.link.text.3" = "U.S. DEPARTMENT OF AGRICULTURE - Choose my Plate - Physical activity amount";
+"Recommendations.diets.exercise.link.text.4" = "MET values: Activity Categories - Compendium of Physical Activities";
