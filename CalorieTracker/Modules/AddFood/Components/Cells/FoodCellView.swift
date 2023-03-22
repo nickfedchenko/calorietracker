@@ -144,7 +144,7 @@ final class FoodCellView: UIView {
             checkImageView.snp.remakeConstraints { make in
                 make.centerY.equalTo(tagBackgroundView)
                 make.leading.equalTo(titleLabel.snp.leading)
-//                make.trailing.lessThanOrEqualTo(descriptionLabel.snp.leading).offset(-6)
+                //                make.trailing.lessThanOrEqualTo(descriptionLabel.snp.leading).offset(-6)
                 make.height.equalTo(18)
             }
         } else {
@@ -179,7 +179,7 @@ final class FoodCellView: UIView {
             imageView.image = nil
             widthImageViewConstraints?.isActive = true
         }
-
+        
     }
     
     private func setupView() {
@@ -325,10 +325,10 @@ extension FoodCellView.FoodViewModel {
                    let unit = product.units?.first(where: { $0.isReference }) {
                     var description = ""
                     if unit.id == 1 {
-                        description = "\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string)"
+                        description = "\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string(with: 1))"
                     } else {
                         description = "\(unit.title ?? "") "
-                        + "(\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string(with: 1))"
+                        + "(\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string(with: 1)))"
                     }
                     self.description = description
                 } else {
@@ -339,7 +339,7 @@ extension FoodCellView.FoodViewModel {
             if let serving = product.servings?.first {
                 let kcal = (serving.weight ?? 100) / 100 * product.kcal
                 self.kcal = BAMeasurement(kcal, .energy, isMetric: true).localized
-                description = "(\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string(with: 1))"
+                description = "(\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string(with: 1)))"
             } else {
                 self.kcal = BAMeasurement(product.kcal, .energy, isMetric: true).localized
                 description = ""
@@ -372,7 +372,7 @@ extension FoodCellView.FoodViewModel {
             }()
             self.kcal = BAMeasurement((weight / totalWeight) * dish.kcal, .energy, isMetric: true).localized
             self.description = "\(portions) \(servingText) "
-            + "(\(BAMeasurement(portionWeight * Double(portions), .serving, isMetric: true).string))"
+            + "(\(BAMeasurement(portionWeight * Double(portions), .serving, isMetric: true).string(with: 1))"
         } else {
             var servingWeight: Double = 0
             if let servingDishWeight = dish.values?.serving.weight {
@@ -385,7 +385,7 @@ extension FoodCellView.FoodViewModel {
             self.kcal = BAMeasurement(dish.values?.serving.kcal ?? 1, .energy, isMetric: true).localized
             self.description = "1 "
             + R.string.localizable.servings1()
-            + " (\(BAMeasurement(servingWeight, .serving, isMetric: true).string ))"
+            + " (\(BAMeasurement(servingWeight, .serving, isMetric: true).string(with: 1)))"
         }
     }
     
@@ -408,22 +408,21 @@ extension FoodCellView.FoodViewModel {
         
         if let weight = weight {
             self.kcal = BAMeasurement(product.kcal / 100 * weight, .energy, isMetric: true).localized
-            let descriptionWeight = BAMeasurement(weight, .serving, isMetric: true).string
+            let descriptionWeight = BAMeasurement(weight, .serving, isMetric: true).string(with: 1)
             let unit = unitData.unit
             let unitCount = unitData.count
             let unitTitle = unit.getTitle(.short) ?? "error geting title"
             self.description = "\(unitCount) \(unitTitle) (\(descriptionWeight))"
-            
         } else {
             self.kcal = BAMeasurement(product.kcal, .energy, isMetric: true).localized
             if let serving = product.servings?.first,
                let unit = product.units?.first(where: { $0.isReference }) {
                 var description = ""
                 if unit.id == 1 {
-                    description = "\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string)"
+                    description = "\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string(with: 1)))"
                 } else {
                     description = "\(unit.title) "
-                    + "(\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string))"
+                    + "(\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string(with: 1)))"
                 }
                 self.description = description
             } else {

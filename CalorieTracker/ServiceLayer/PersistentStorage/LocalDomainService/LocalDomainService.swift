@@ -227,6 +227,11 @@ final class LocalDomainService {
 
 // MARK: - LocalDomainServiceInterface
 extension LocalDomainService: LocalDomainServiceInterface {
+    
+    func fetchEatingTags() -> [DomainEatingTag] {
+        guard let tags = fetchData(for: DomainEatingTag.self) else { return [] }
+        return tags
+    }
 
     func fetchProducts() -> [Product] {
         guard let domainProducts = fetchData(for: DomainProduct.self) else { return [] }
@@ -244,6 +249,7 @@ extension LocalDomainService: LocalDomainServiceInterface {
             return []
         }
         let secondsEnd = Date().timeIntervalSince1970
+        print("Tags found \(domainDishes.first?.eatingTags)")
         print("Dishes fetch without mapping \(secondsEnd - secondsStart)")
         return domainDishes.compactMap { Dish(from: $0) }
     }

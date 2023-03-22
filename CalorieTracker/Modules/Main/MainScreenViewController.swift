@@ -270,12 +270,11 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         presenter?.updateCalendarWidget(UDM.currentlyWorkingDay.date)
         presenter?.updateNoteWidget()
         let weights = WeightWidgetService.shared.getAllWeight()
-        print(weights)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let now = Date().timeIntervalSince1970
+//        let now = Date().timeIntervalSince1970
 //        navigationController?.setToolbarHidden(true, animated: true)
 //        navigationController?.navigationBar.isHidden = true
 //        presenter?.updateWaterWidgetModel()
@@ -286,8 +285,8 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
 //        presenter?.updateActivityWidget()
 //        presenter?.updateCalendarWidget(UDM.currentlyWorkingDay.date)
 //        presenter?.updateNoteWidget()
-        let new = Date().timeIntervalSince1970
-        print("main screen time passed \(new - now)")
+//        let new = Date().timeIntervalSince1970
+//        print("main screen time passed \(new - now)")
     }
     
     // MARK: - Private methods

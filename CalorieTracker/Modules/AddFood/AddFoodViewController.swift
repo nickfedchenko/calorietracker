@@ -185,7 +185,6 @@ final class AddFoodViewController: UIViewController {
             y: view.frame.height - 20
         )
         firstDraw = false
-        print("static search frame \(staticSearchTextField.frame)")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -547,7 +546,6 @@ final class AddFoodViewController: UIViewController {
             make.bottom.equalTo(addToEatenButton)
         }
         
-        print("side inset is\(sideInset)")
         addToEatenButton.snp.remakeConstraints { make in
             make.trailing.equalToSuperview().inset(sideInset)
             make.width.equalTo(0)
@@ -690,7 +688,6 @@ final class AddFoodViewController: UIViewController {
                 case .delete:
                     self?.selectedFood?.removeAll(where: { $0.id == food.id })
                 case .add:
-                    print(food)
                     self?.selectedFood = (self?.selectedFood ?? []) + [food]
                     LoggingService.postEvent(event: .diaryquickadd)
                 case .addToMeal:

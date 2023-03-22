@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21513" systemVersion="22A400" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="DomainAdditionalTag" representedClassName="DomainAdditionalTag" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <relationship name="dishesAssigned" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DomainDish" inverseName="additionalTags" inverseEntity="DomainDish"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
     <entity name="DomainCustomEntry" representedClassName="DomainCustomEntry" syncable="YES">
         <attribute name="carbs" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="fats" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -27,35 +37,92 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
+    <entity name="DomainDietTag" representedClassName="DomainDietTag" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <relationship name="dishesAssigned" optional="YES" toMany="YES" deletionRule="No Action" destinationEntity="DomainDish" inverseName="dietTags" inverseEntity="DomainDish"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
     <entity name="DomainDish" representedClassName="DomainDish" syncable="YES">
-        <attribute name="additionalTags" optional="YES" attributeType="Binary"/>
         <attribute name="carbs" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="cookTime" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="countries" optional="YES" attributeType="Binary"/>
-        <attribute name="dietTags" optional="YES" attributeType="Binary"/>
-        <attribute name="dishTypeTags" optional="YES" attributeType="Binary"/>
-        <attribute name="dishValues" optional="YES" attributeType="Binary"/>
         <attribute name="dishWeightType" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="eatingTags" optional="YES" attributeType="Binary"/>
-        <attribute name="exceptionTags" optional="YES" attributeType="Binary"/>
         <attribute name="fat" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="hundredValues" optional="YES" attributeType="Binary"/>
         <attribute name="id" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="info" optional="YES" attributeType="String"/>
-        <attribute name="ingredients" optional="YES" attributeType="Binary"/>
         <attribute name="kcal" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="methods" optional="YES" attributeType="Binary"/>
         <attribute name="photo" optional="YES" attributeType="URI"/>
-        <attribute name="processingTypeTags" optional="YES" attributeType="Binary"/>
         <attribute name="protein" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="servings" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="servingValues" optional="YES" attributeType="Binary"/>
         <attribute name="title" attributeType="String"/>
         <attribute name="updatedAt" attributeType="String"/>
         <attribute name="weight" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="additionalTags" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="DomainAdditionalTag" inverseName="dishesAssigned" inverseEntity="DomainAdditionalTag"/>
+        <relationship name="dietTags" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="DomainDietTag" inverseName="dishesAssigned" inverseEntity="DomainDietTag"/>
+        <relationship name="dishTypeTags" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="DomainDishTypeTag" inverseName="dishesAssigned" inverseEntity="DomainDishTypeTag"/>
+        <relationship name="dishValues" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainPCFValues" inverseName="dishFullAssigned" inverseEntity="DomainPCFValues"/>
+        <relationship name="eatingTags" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="DomainEatingTag" inverseName="dishesAssigned" inverseEntity="DomainEatingTag"/>
+        <relationship name="exceptionTags" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="DomainExceptionTag" inverseName="dishesAssigned" inverseEntity="DomainExceptionTag"/>
         <relationship name="foodData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainFoodData" inverseName="dish" inverseEntity="DomainFoodData"/>
+        <relationship name="hundredValues" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainPCFValues" inverseName="dishHundredAssigned" inverseEntity="DomainPCFValues"/>
+        <relationship name="ingredients" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="DomainDishIngredient" inverseName="dishesAssigned" inverseEntity="DomainDishIngredient"/>
         <relationship name="meal" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainMeal"/>
         <relationship name="mealsData" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DomainMealData" inverseName="dish" inverseEntity="DomainMealData"/>
+        <relationship name="processingTypeTags" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="DomainProcessingTag" inverseName="dishesAssigned" inverseEntity="DomainProcessingTag"/>
+        <relationship name="servingValues" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainPCFValues" inverseName="dishServingAssigned" inverseEntity="DomainPCFValues"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="DomainDishIngredient" representedClassName="DomainDishIngredient" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="isNamed" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="productID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="quantity" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="unitID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="unitIsOnlyForMarket" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="unitShorTitle" optional="YES" attributeType="String"/>
+        <attribute name="unitTitle" optional="YES" attributeType="String"/>
+        <relationship name="dishesAssigned" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="DomainDish" inverseName="ingredients" inverseEntity="DomainDish"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="DomainDishTypeTag" representedClassName="DomainDishTypeTag" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <relationship name="dishesAssigned" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="DomainDish" inverseName="dishTypeTags" inverseEntity="DomainDish"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="DomainEatingTag" representedClassName="DomainEatingTag" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <relationship name="dishesAssigned" optional="YES" toMany="YES" deletionRule="No Action" destinationEntity="DomainDish" inverseName="eatingTags" inverseEntity="DomainDish"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="DomainExceptionTag" representedClassName="DomainExceptionTag" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <relationship name="dishesAssigned" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="DomainDish" inverseName="exceptionTags" inverseEntity="DomainDish"/>
+        <relationship name="productsAssigned" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="DomainProduct" inverseName="exceptionTags" inverseEntity="DomainProduct"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="id"/>
@@ -86,6 +153,12 @@
                 <constraint value="id"/>
             </uniquenessConstraint>
         </uniquenessConstraints>
+    </entity>
+    <entity name="DomainMarketUnit" representedClassName="DomainMarketUnit" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="isOnlyForMarket" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="shortTitle" optional="YES" attributeType="String"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
     </entity>
     <entity name="DomainMeal" representedClassName="DomainMeal" syncable="YES">
         <attribute name="id" attributeType="String"/>
@@ -154,20 +227,51 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
+    <entity name="DomainPCFValues" representedClassName="DomainPCFValues" syncable="YES">
+        <attribute name="carbohydrates" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="fats" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="kcal" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="netCarbs" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="proteins" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="weight" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="dishFullAssigned" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainDish" inverseName="dishValues" inverseEntity="DomainDish"/>
+        <relationship name="dishHundredAssigned" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainDish" inverseName="hundredValues" inverseEntity="DomainDish"/>
+        <relationship name="dishServingAssigned" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainDish" inverseName="servingValues" inverseEntity="DomainDish"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="DomainProcessingTag" representedClassName="DomainProcessingTag" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <relationship name="dishesAssigned" optional="YES" toMany="YES" deletionRule="No Action" destinationEntity="DomainDish" inverseName="processingTypeTags" inverseEntity="DomainDish"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
     <entity name="DomainProduct" representedClassName="DomainProduct" syncable="YES">
         <attribute name="barcode" optional="YES" attributeType="String"/>
         <attribute name="brand" optional="YES" attributeType="String"/>
         <attribute name="carbs" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="composition" optional="YES" attributeType="Binary"/>
+        <attribute name="createdAt" optional="YES" attributeType="String"/>
         <attribute name="fat" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="id" attributeType="String"/>
         <attribute name="isUserProduct" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="kcal" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="ketoRating" optional="YES" attributeType="String"/>
         <attribute name="photo" optional="YES" attributeType="Binary"/>
+        <attribute name="productURL" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="protein" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="servings" optional="YES" attributeType="Binary"/>
         <attribute name="title" attributeType="String"/>
         <attribute name="units" optional="YES" attributeType="Binary"/>
+        <relationship name="exceptionTags" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="DomainExceptionTag" inverseName="productsAssigned" inverseEntity="DomainExceptionTag"/>
         <relationship name="foodData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainFoodData" inverseName="product" inverseEntity="DomainFoodData"/>
         <relationship name="meal" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainMeal"/>
         <relationship name="mealsData" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DomainMealData" inverseName="product" inverseEntity="DomainMealData"/>

@@ -73,16 +73,8 @@ extension OpenMainWidgetPresenter: OpenMainWidgetPresenterInterface {
     
     func updateDailyMeals() {
         let now = Date().timeIntervalSince1970
-//        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-//            guard let self = self else { return }
-            let dailyMeals = self.getDailyMeals()
-        let new = Date().timeIntervalSince1970
-        print("Кольца открываются \(new - now)")
-//            DispatchQueue.main.async { [weak self] in
-                self.view.setDailyMeals(dailyMeals)
-//            }
-          
-//        }
+        let dailyMeals = self.getDailyMeals()
+        self.view.setDailyMeals(dailyMeals)
     }
     
     func getMainWidgetWidget() -> MainWidgetViewNode.Model {

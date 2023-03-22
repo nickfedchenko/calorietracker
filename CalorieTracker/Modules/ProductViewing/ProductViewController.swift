@@ -476,7 +476,6 @@ final class ProductViewController: CTViewController {
         }
         
         func viewControllerShouldClose() {
-            print(shouldClose)
             self.shouldClose?()
         }
     }
@@ -647,6 +646,6 @@ final class ProductViewController: CTViewController {
         }
         
         func textFieldDidEndEditing(_ textField: UITextField) {
-            print("didEnd")
+        
         }
     }

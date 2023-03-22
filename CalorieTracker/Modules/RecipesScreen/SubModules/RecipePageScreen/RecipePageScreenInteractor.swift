@@ -84,7 +84,6 @@ class RecipePageScreenInteractor {
         setGoals()
         setCurrentNutritionData()
         setDefaultServingsAmount()
-        print("Got ingredients models \(makeModelsForIngredients()) ")
     }
     
     private func setDefaultServingsAmount() {

@@ -2,20 +2,20 @@
 //  DomainDish+CoreDataClass.swift
 //  
 //
-//  Created by Vladimir Banushkin on 12.08.2022.
+//  Created by Vladimir Banushkin on 22.03.2023.
 //
 //
 
 import CoreData
 
+// swiftlint:disable:next function_body_length
 @objc(DomainDish)
 public class DomainDish: NSManagedObject {
-    // swiftlint:disable:next cyclomatic_complexity function_body_length
     static func prepare(fromPlainModel model: Dish, context: NSManagedObjectContext) -> DomainDish {
         let dish = DomainDish(context: context)
         dish.id = Int16(model.id)
         dish.title = model.title
-        dish.info = model.info
+        dish.info = model.description
         dish.cookTime = Int16(model.cookTime)
         dish.kcal = model.kcal
         dish.protein = model.protein
@@ -27,56 +27,75 @@ public class DomainDish: NSManagedObject {
         dish.updatedAt = model.createdAt
         dish.dishWeightType = Int16(model.dishWeightType ?? 1)
         
-        if let servingValues = model.values?.serving,
-            let servingValuesData = try? JSONEncoder().encode(servingValues) {
-            dish.servingValues = servingValuesData
-        }
-        
-        if let hundredValues = model.values?.hundred,
-            let hundredValuesData = try? JSONEncoder().encode(hundredValues) {
-            dish.hundredValues = hundredValuesData
-        }
-        
-        if let dishValues = model.values?.dish,
-            let dishValuesData = try? JSONEncoder().encode(dishValues) {
-            dish.dishValues = dishValuesData
-        }
-        
         if let countriesData = try? JSONEncoder().encode(model.countries) {
             dish.countries = countriesData
         }
         
-        if let ingredientsData = try? JSONEncoder().encode(model.ingredients) {
-            dish.ingredients = ingredientsData
+        if let hundredValues = model.values?.hundred {
+            dish.hundredValues = DomainPCFValues.prepare(
+                from: hundredValues,
+                purposeString: "hundreds",
+                context: context,
+                parentDishID: String(model.id)
+            )
         }
+        
+        if let dishValues = model.values?.dish {
+            dish.dishValues = DomainPCFValues.prepare(
+                from: dishValues,
+                purposeString: "dish",
+                context: context,
+                parentDishID: String(model.id)
+            )
+        }
+        
+        if let servingValues = model.values?.serving {
+            dish.servingValues = DomainPCFValues.prepare(
+                from: servingValues,
+                purposeString: "serving",
+                context: context,
+                parentDishID: String(model.id)
+            )
+        }
+        
+        let ingredients: [DomainDishIngredient] = model
+            .ingredients
+            .compactMap { DomainDishIngredient.prepare(from: $0, context: context) }
+        dish.addToIngredients(NSOrderedSet(array: ingredients))
         
         if let methodsData = try? JSONEncoder().encode(model.instructions) {
             dish.methods = methodsData
         }
         
-        if let eatingTagsData = try? JSONEncoder().encode(model.eatingTags) {
-            dish.eatingTags = eatingTagsData
-        }
+        let eatingTags: [DomainEatingTag] = model
+            .eatingTags
+            .compactMap { DomainEatingTag.prepare(from: $0, context: context) }
+        dish.addToEatingTags(NSOrderedSet(array: eatingTags))
         
-        if let dishTypeTags = try? JSONEncoder().encode(model.dishTypeTags) {
-            dish.dishTypeTags = dishTypeTags
-        }
+        let dishTypeTags: [DomainDishTypeTag] = model
+            .dishTypeTags
+            .compactMap { DomainDishTypeTag.prepare(from: $0, context: context) }
+        dish.addToDishTypeTags(NSOrderedSet(array: dishTypeTags))
         
-        if let processingTypeTags = try? JSONEncoder().encode(model.processingTypeTags) {
-            dish.processingTypeTags = processingTypeTags
-        }
+        let processingTypeTags: [DomainProcessingTag] = model
+            .processingTypeTags
+            .compactMap { DomainProcessingTag.prepare(from: $0, context: context) }
+        dish.addToProcessingTypeTags(NSOrderedSet(array: processingTypeTags))
         
-        if let additionalTags = try? JSONEncoder().encode(model.additionalTags) {
-            dish.additionalTags = additionalTags
-        }
+        let additionalTags: [DomainAdditionalTag] = model
+            .additionalTags
+            .compactMap { DomainAdditionalTag.prepare(from: $0, context: context) }
+        dish.addToAdditionalTags(NSOrderedSet(array: additionalTags))
         
-        if let dietTags = try? JSONEncoder().encode(model.dietTags) {
-            dish.dietTags = dietTags
-        }
+        let dietTags: [DomainDietTag] = model
+            .dietTags
+            .compactMap { DomainDietTag.prepare(from: $0, context: context) }
+        dish.addToDietTags(NSOrderedSet(array: dietTags))
         
-        if let exceptionTags = try? JSONEncoder().encode(model.exceptionTags) {
-            dish.exceptionTags = exceptionTags
-        }
+        let exceptionTags: [DomainExceptionTag] = model
+            .exceptionTags
+            .compactMap { DomainExceptionTag.prepare(from: $0, context: context) }
+        dish.addToExceptionTags(NSOrderedSet(array: exceptionTags))
         dish.foodData = nil
         return dish
     }

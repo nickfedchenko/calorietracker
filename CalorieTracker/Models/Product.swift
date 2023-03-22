@@ -14,10 +14,14 @@ struct Product {
     let barcode: String?
     let brand: String?
     let protein, fat, carbs, kcal: Double
+    let productURL: Int?
     let photo: Photo?
     let composition: Composition?
     let servings: [Serving]?
     var units: [UnitElement]?
+    let ketoRating: String?
+    let baseTags: [ExceptionTag]
+    let createdAt: String
     
     var foodDataId: String?
     
@@ -41,7 +45,7 @@ struct Serving: Codable {
 
 extension Product {
     init?(from managedModel: DomainProduct) {
-        self.id = managedModel.id
+        self.id = String(managedModel.id)
         self.barcode = managedModel.barcode
         self.title = managedModel.title
         self.brand = managedModel.brand
@@ -50,9 +54,9 @@ extension Product {
         self.kcal = managedModel.kcal
         self.carbs = managedModel.carbs
         self.isUserProduct = managedModel.isUserProduct
-        
+        self.productURL = Int(managedModel.productURL)
         self.foodDataId = managedModel.foodData?.id
-        
+        self.createdAt = managedModel.createdAt ?? ""
         if let photoData = managedModel.photo {
             self.photo = try? JSONDecoder().decode(Photo.self, from: photoData)
         } else {
@@ -76,6 +80,13 @@ extension Product {
         } else {
             self.units = nil
         }
+        let secondsPassed = Date().timeIntervalSince1970
+        self.ketoRating = managedModel.ketoRating
+        if let domainBaseTags = managedModel.exceptionTags?.array as? [DomainExceptionTag] {
+            self.baseTags = domainBaseTags.compactMap { ExceptionTag(from: $0) }
+        } else {
+            self.baseTags = []
+        }
     }
     
     init(_ product: ProductDTO) {
@@ -90,13 +101,15 @@ extension Product {
         self.isUserProduct = false
         self.servings = [product.serving]
         self.units = product.units
-      
+        self.productURL = product.productURL
         self.composition = Composition(product.nutritions)
-        
+        self.createdAt = product.createdAt
         self.photo = {
             guard let url = URL(string: product.photo) else { return nil }
             return .url(url)
         }()
+        self.ketoRating = product.ketoRating
+        self.baseTags = product.baseTags
     }
 }
 
@@ -119,7 +132,7 @@ extension Composition {
             case .transFats:
                 self.transFat = nutrition.value ?? .zero
             case .polyUnsaturatedFats:
-                continue
+                self.unsatFat = nutrition.value ?? .zero
             case .monoUnsaturatedFats:
                 continue
             case .cholesterol:
