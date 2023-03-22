@@ -72,6 +72,7 @@ extension CreateMealPresenter: CreateMealPresenterInterface {
             title: title,
             photoURL: photoURL.absoluteString,
             foods: foods ?? [])
+        LoggingService.postEvent(event: .diarymealsaved(count: (foods ?? []).count))
     }
     
     func addFoods(from meal: Meal) {

@@ -210,7 +210,7 @@ final class SettingsCustomizableSliderView: ViewWithShadow {
             switch tempResult {
             case .weeklyGoal(let goal, _):
                 return NSAttributedString(
-                    string: goal?.clean ?? "",
+                    string: goal?.clean(with: 2) ?? "",
                     attributes: [
                         .font: R.font.sfProTextSemibold(size: 20) ?? .systemFont(ofSize: 20),
                         .foregroundColor: UIColor(hex: "0C695E")
@@ -273,7 +273,7 @@ final class SettingsCustomizableSliderView: ViewWithShadow {
                 let storedValue = UDM.weeklyGoal ?? UDM.tempWeeklyGoal {
                 if tempValue == storedValue {
                     let string = R.string.localizable.universalSelectorCurrentSettingsByKcal()
-                    let calorieGoalString = BAMeasurement(UDM.kcalGoal ?? 0, .energy, isMetric: true).string
+                    let calorieGoalString = BAMeasurement(UDM.kcalGoal ?? 0, .energy, isMetric: true).string(with: 1)
                     let fullString = string + calorieGoalString
                     descriptionView.attributedText = NSAttributedString(
                         string: fullString,
@@ -291,7 +291,7 @@ final class SettingsCustomizableSliderView: ViewWithShadow {
                     
                     let calorieGoalString = BAMeasurement(
                         newKcalGoal, .energy, isMetric: true
-                    ).string
+                    ).string(with: 1)
                     
                     let fullString = baseString + calorieGoalString
                     
@@ -314,7 +314,7 @@ final class SettingsCustomizableSliderView: ViewWithShadow {
 //                let tempLevel = level,
                 storedLevel == level {
                 let string = R.string.localizable.universalSelectorCurrentSettingsByKcal()
-                let calorieGoalString = BAMeasurement(kcalGoal, .energy, isMetric: true).string
+                let calorieGoalString = BAMeasurement(kcalGoal, .energy, isMetric: true).string(with: 1)
                 let fullString = string + calorieGoalString
                 descriptionView.attributedText = NSAttributedString(
                     string: fullString,
@@ -331,7 +331,7 @@ final class SettingsCustomizableSliderView: ViewWithShadow {
                 
                 let calorieGoalString = BAMeasurement(
                     kcalGoal, .energy, isMetric: true
-                ).string
+                ).string(with: 1)
                 
                 let fullString = baseString + calorieGoalString
                 
@@ -445,13 +445,15 @@ final class SettingsCustomizableSliderView: ViewWithShadow {
             }
             if case let .compact(goalType: goal) = self.mode {
                 switch goal {
-                case .loss(calorieDeficit: let defecit):
+                case .loss(calorieDeficit: _):
                     targetValue *= -1
-                case .gain(calorieSurplus: let surplus):
+                case .gain(calorieSurplus: _):
                     targetValue = abs(targetValue)
+                case .maintain(calorieDeficit: _):
+                    targetValue = 0
                 }
             }
-            let targetString = BAMeasurement(targetValue, .weight, isMetric: true).string
+            let targetString = BAMeasurement(targetValue, .weight, isMetric: true).string(with: 2)
             rightValueLabel.attributedText = NSAttributedString(
                 string: targetString,
                 attributes: [

@@ -177,6 +177,7 @@ extension MealTimeCollectionViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView,
                         didSelectItemAt indexPath: IndexPath) {
         guard let food = viewModel?.foods[safe: indexPath.row] else { return }
+        LoggingService.postEvent(event: .diaryitemopen)
         tapedCellHandler?(food)
     }
 }
@@ -211,6 +212,7 @@ extension MealTimeCollectionViewCell: UICollectionViewDataSource {
         )
         cell.turnIntoOpenMainWidgetState()
         cell.didTapButton = { [weak self] food, _ in
+            LoggingService.postEvent(event: .diaryitemdelete)
             self?.deleteCell(indexPath: indexPath, food: food)
         }
         return cell

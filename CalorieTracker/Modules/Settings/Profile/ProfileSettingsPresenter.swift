@@ -134,7 +134,7 @@ extension ProfileSettingsPresenter: ProfileSettingsPresenterInterface {
     
     func getHeightStr() -> String? {
         guard let height = UDM.userData?.height else { return nil }
-        return BAMeasurement(height, .lenght, isMetric: true).string
+        return BAMeasurement(height, .lenght, isMetric: true).string(with: 1)
     }
     
     func getUserSexStr() -> String? {

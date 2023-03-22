@@ -20,6 +20,7 @@ final class BurnedKcalSwitchNode: ASButtonNode {
             )
         }
     }
+    
     var includingBurned: String?
     var offGradientStartPoint = CGPoint(x: -0.5, y: 0)
     var offGradientEndPoint = CGPoint(x: 0.7, y: 0.5)
@@ -27,6 +28,8 @@ final class BurnedKcalSwitchNode: ASButtonNode {
     var onGradientEndPoint = CGPoint(x: 0.5, y: 0)
     private var textNodeLeftInset: CGFloat = 8
     private var textNodeRightInset: CGFloat = 14
+    
+    
     
     private(set) var onSelected = false {
         didSet {
@@ -135,6 +138,7 @@ final class BurnedKcalSwitchNode: ASButtonNode {
     }
     
     private func didChangeSelected() {
+        LoggingService.postEvent(event: .diarywinclactive)
         textNodeLeftInset = onSelected ? 16 : 8
         textNodeRightInset = onSelected ? 8 : 14
         transitionLayout(withAnimation: true, shouldMeasureAsync: false)

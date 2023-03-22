@@ -52,7 +52,7 @@ extension CreateProductPresenter: CreateProductPresenterInterface {
     func saveProduct() {
         let formValues = view.getFormValues()
         let image = view.getImage()
-        let brand = view.getBrand()
+        var brand = view.getBrand()
         let barcode = view.getBarcode()
         let servingDescription = view.getServingDescription()
         let servingWeight = view.getServingWeight()
@@ -63,8 +63,10 @@ extension CreateProductPresenter: CreateProductPresenterInterface {
         let kcal = stringFromDouble(formValues[.kcal] ?? ""),
         let carbs = stringFromDouble(formValues[.carb] ?? "")
         else { return }
-        
-        let product: Product = .init(
+        brand = (brand ?? "").isEmpty ? nil : brand
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yyyy hh:mm"
+        let product = Product(
             id: UUID().uuidString,
             title: productName,
             isUserProduct: true,
@@ -74,10 +76,8 @@ extension CreateProductPresenter: CreateProductPresenterInterface {
             fat: fat,
             carbs: carbs,
             kcal: kcal,
-            photo: {
-                guard let data = image?.pngData() else { return nil }
-                return .data(data)
-            }(),
+            productURL: 8,
+            photo: nil,
             composition: .init(
                 vitaminA: stringFromDouble(formValues[.vitaminA] ?? ""),
                 vitaminD: stringFromDouble(formValues[.vitaminD] ?? ""),
@@ -100,7 +100,10 @@ extension CreateProductPresenter: CreateProductPresenterInterface {
                     size: servingDescription,
                     weight: servingWeight
                 )
-            ]
+            ],
+            ketoRating: nil,
+            baseTags: [],
+            createdAt: dateFormatter.string(from: Date())
         )
         
         localDomainService.saveProducts(products: [product], saveInPriority: true)

@@ -171,11 +171,17 @@ final class LineChartView: UIView {
         
         switch chartFormat {
         case .daily:
-            leftBottomLabel.text = "Last \((chartData.data.keys.max() ?? 0 ) + 1) Days"
+            leftBottomLabel.text = "\("last.plural".localized) \((chartData.data.keys.max() ?? 0 ) + 1)"
+            + " \("dney".localized),"
+            + "\(R.string.localizable.chartRightBottomTitle())"
         case .weekly:
-            leftBottomLabel.text = "Last \((chartData.data.keys.max() ?? 0) + 1) Weeks"
+            leftBottomLabel.text = "\("last.plural".localized) \((chartData.data.keys.max() ?? 0 ) + 1)"
+            + " \("nedelb".localized),"
+            + "\(R.string.localizable.chartRightBottomTitle())"
         case .monthly:
-            leftBottomLabel.text = "Last \((chartData.data.keys.max() ?? 0) + 1) Months"
+            leftBottomLabel.text = "\("last.plural".localized) \((chartData.data.keys.max() ?? 0 ) + 1)"
+            + " \("mesyacev".localized),"
+            + "\(R.string.localizable.chartRightBottomTitle())"
         }
         
         rightTopLabel.text = String(
@@ -267,7 +273,9 @@ final class LineChartView: UIView {
     }
     
     private func setupRightBottomLabel(_ valueStart: CGFloat, _ valueNow: CGFloat) {
-        let string = chartType == .weight ? "Starting Weight: " : "Starting: "
+        let string = chartType == .weight
+        ? R.string.localizable.weight() + " :"
+        : R.string.localizable.lineChartRightBottomSecond()
         let attributedString = NSMutableAttributedString(
             attributedString: getAttributedString(
                 string: string + String(format: "%.1f", valueStart) + (chartType.getPostfix()),

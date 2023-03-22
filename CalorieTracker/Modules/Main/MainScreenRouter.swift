@@ -6,7 +6,7 @@
 //  Copyright © 2022 FedmanCassad. All rights reserved.
 //
 
-import Foundation
+import ApphudSDK
 import MessageUI
 import UIKit
 
@@ -22,16 +22,16 @@ protocol MainScreenRouterInterface: AnyObject {
 }
 
 class MainScreenRouter: NSObject {
-
+    
     weak var presenter: MainScreenPresenterInterface?
     weak var viewController: UIViewController?
-
+    
     static func setupModule() -> MainScreenViewController {
         let vc = MainScreenViewController()
         let interactor = MainScreenInteractor()
         let router = MainScreenRouter()
         let presenter = MainScreenPresenter(interactor: interactor, router: router, view: vc)
-
+        
         vc.presenter = presenter
         router.presenter = presenter
         router.viewController = vc
@@ -50,6 +50,7 @@ extension MainScreenRouter: MainScreenRouterInterface {
     }
     
     func openAddFoodVC() {
+        LoggingService.postEvent(event: .diaryaddfood)
         let handler: (() -> Void) = { [weak self] in
             if !UDM.didShowAskingOpinion {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0) { [weak self] in
@@ -74,13 +75,21 @@ extension MainScreenRouter: MainScreenRouterInterface {
                     switch result {
                     case .success(let success):
                         UDM.isAuthorisedHealthKit = success
+                        HealthKitDataManager.shared.getSteps { steps in
+                            DSF.shared.saveSteps(steps)
+                        }
+                        
+                        HealthKitDataManager.shared.getWorkouts { exercises  in
+                            DSF.shared.saveExercises(exercises)
+                        }
+                        
                     case .failure(let failure):
                         print(failure)
                     }
                 }
                 return
             }
-          
+            
             fallthrough
         case .exercises:
             if !UDM.isAuthorisedHealthKit {
@@ -88,6 +97,13 @@ extension MainScreenRouter: MainScreenRouterInterface {
                     switch result {
                     case .success(let success):
                         UDM.isAuthorisedHealthKit = success
+                        HealthKitDataManager.shared.getSteps { steps in
+                            DSF.shared.saveSteps(steps)
+                        }
+                        
+                        HealthKitDataManager.shared.getWorkouts { exercises  in
+                            DSF.shared.saveExercises(exercises)
+                        }
                     case .failure(let failure):
                         print(failure)
                     }
@@ -202,15 +218,23 @@ extension MainScreenRouter: WidgetContainerOutput {
     }
     
     func openBarcodeScannerVC() {
+        guard Apphud.hasActiveSubscription() else {
+            let paywall = PaywallRouter.setupModule()
+            paywall.modalPresentationStyle = .fullScreen
+            viewController?.navigationController?.present(paywall, animated: true)
+            return
+        }
+        
         let vc = ScannerRouter.setupModule { [weak self] barcode in
             self?.openAddFoodVCandPerformSearch(with: barcode)
         }
+        LoggingService.postEvent(event: .diaryscanfood)
         viewController?.present(TopDownNavigationController(rootViewController: vc), animated: true)
     }
     
     private func openAddFoodVCandPerformSearch(with barcode: String) {
         let vc = AddFoodRouter.setupModule(
-            shouldInitiallyPerformSearchWith: barcode, 
+            shouldInitiallyPerformSearchWith: barcode,
             addFoodYCoordinate: UDM.mainScreenAddButtonOriginY
         )
         viewController?.navigationController?.pushViewController(vc, animated: true)

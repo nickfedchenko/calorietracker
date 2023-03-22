@@ -39,7 +39,7 @@ extension NutritionGoalPresenter: NutritionGoalPresenterInterface {
 
     func getCalorieGoal() -> String? {
         guard let kcalGoal = UDM.kcalGoal else { return nil }
-        return BAMeasurement(kcalGoal, .energy, isMetric: true).string
+        return BAMeasurement(kcalGoal, .energy, isMetric: true).string(with: 2)
     }
     
     func getNutrientGoal() -> String? {
@@ -52,12 +52,12 @@ extension NutritionGoalPresenter: NutritionGoalPresenterInterface {
     
     func getStartWeight() -> String? {
         let startWeight = WeightWidgetService.shared.getStartWeight() ?? 0
-        return BAMeasurement(startWeight, .weight, isMetric: true).string
+        return BAMeasurement(startWeight, .weight, isMetric: true).string(with: 2)
     }
     
     func getGoalWeight() -> String? {
         if let  goalWeight = UDM.weightGoal {
-            return BAMeasurement(goalWeight, .weight, isMetric: true).string
+            return BAMeasurement(goalWeight, .weight, isMetric: true).string(with: 2)
         } else {
            return R.string.localizable.settingsEmptyCellSet()
         }
@@ -75,7 +75,7 @@ extension NutritionGoalPresenter: NutritionGoalPresenterInterface {
         if let
             weeklyGoal = WeightWidgetService.shared.getWeeklyGoal(),
         weeklyGoal != 0 {
-            return BAMeasurement(weeklyGoal, .weight, isMetric: true).string
+            return BAMeasurement(weeklyGoal, .weight, isMetric: true).string(with: 2)
         } else {
             return R.string.localizable.settingsEmptyCellSet()
         }

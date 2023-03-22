@@ -40,7 +40,7 @@ final class NotesCellView: UIView {
         smileImageView.image = model.estimation?.getEstimationSmile()
         textLabel.text = model.text
         dateLabel.text = getDateString(model.date)
-        weightLabel.text = BAMeasurement(model.weight, .weight, isMetric: true).string
+        weightLabel.text = BAMeasurement(model.weight, .weight, isMetric: true).string(with: 1)
         
         if let photo = model.image {
             photoImageView.image = photo

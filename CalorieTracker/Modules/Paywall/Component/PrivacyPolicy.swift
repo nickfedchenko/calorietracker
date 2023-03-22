@@ -25,7 +25,8 @@ final class PrivacyPolicy: UIButton {
     
     private func configureViews() {
         textLabel.text = "Privacy Policy"
-        textLabel.font = .systemFont(ofSize: 12, weight: .medium)
+        textLabel.font = R.font.sfProRoundedMedium(size: 12)
+        textLabel.textColor = UIColor(hex: "192621")
     }
     
     private func configureLayouts() {

@@ -71,7 +71,7 @@ struct Dish: Codable {
     var cookTime: Int {
         cookingTime ?? 0
     }
-
+    
     //    var weight: Double {
     //        return values.
     // Set не нужен вроде
@@ -107,26 +107,18 @@ struct Dish: Codable {
         let decoder = JSONDecoder()
         
         if
-            let ingredientsData = managedModel.ingredients,
-            let ingredients = try? decoder.decode([Ingredient].self, from: ingredientsData) {
-            self.ingredients = ingredients
+            let ingredients = managedModel.ingredients?.array as? [DomainDishIngredient] {
+            self.ingredients = ingredients.compactMap { Ingredient(from: $0) }
         } else {
             self.ingredients = []
         }
         
         if
-            let dishValuesData = managedModel.dishValues,
-            let servingValuesData = managedModel.servingValues,
-            let hundredValuesData = managedModel.hundredValues,
-            let dishValues = try? decoder.decode(DishValues.self, from: dishValuesData),
-            let servingValues = try? decoder.decode(DishValues.self, from: servingValuesData),
-            let hundredValues = try? decoder.decode(DishValues.self, from: hundredValuesData) {
+            let dishValues = DishValues(from: managedModel.dishValues),
+            let servingValues = DishValues(from: managedModel.servingValues),
+            let hundredValues = DishValues(from: managedModel.hundredValues) {
             
-            self.values = Values(
-                dish: dishValues,
-                serving: servingValues,
-                hundred: hundredValues
-            )
+            self.values = Values(dish: dishValues, serving: servingValues, hundred: hundredValues)
         } else {
             self.values = nil
         }
@@ -147,49 +139,41 @@ struct Dish: Codable {
         }
         
         if
-            let eatingsTagsData = managedModel.eatingTags,
-            let eatingTags = try? decoder.decode([AdditionalTag].self, from: eatingsTagsData) {
-            self.eatingTags = eatingTags
+            let domainEatingTags = managedModel.eatingTags?.array as? [DomainEatingTag] {
+            self.eatingTags = domainEatingTags.compactMap { AdditionalTag(from: $0) }
         } else {
             self.eatingTags = []
         }
-        
         if
-            let dishTypeTagsData = managedModel.dishTypeTags,
-            let dishTypeTags = try? decoder.decode([AdditionalTag].self, from: dishTypeTagsData) {
-            self.dishTypeTags = dishTypeTags
+            let domainDishTypeTags = managedModel.dishTypeTags?.array as? [DomainDishTypeTag] {
+            self.dishTypeTags = domainDishTypeTags.compactMap { AdditionalTag(from: $0) }
         } else {
             self.dishTypeTags = []
         }
         
-        if
-            let processingTypeTagsData = managedModel.processingTypeTags,
-            let processingTypeTags = try? decoder.decode([AdditionalTag].self, from: processingTypeTagsData) {
-            self.processingTypeTags = processingTypeTags
+        if let domainProcessingTypeTags = managedModel.processingTypeTags?.array as? [DomainProcessingTag] {
+            self.processingTypeTags = domainProcessingTypeTags.compactMap { AdditionalTag(from: $0) }
         } else {
             self.processingTypeTags = []
         }
         
         if
-            let additionalTagsData = managedModel.additionalTags,
-            let additionalTags = try? decoder.decode([AdditionalTag].self, from: additionalTagsData) {
-            self.additionalTags = additionalTags
+            let domainAdditionalTags = managedModel.additionalTags?.array as? [DomainAdditionalTag] {
+            self.additionalTags = domainAdditionalTags.compactMap { AdditionalTag(from: $0) }
         } else {
             self.additionalTags = []
         }
         
         if
-            let dietTagsData = managedModel.dietTags,
-            let dietTags = try? decoder.decode([AdditionalTag].self, from: dietTagsData) {
-            self.dietTags = dietTags
+            let domainDietTags = managedModel.dietTags?.array as? [DomainDietTag] {
+            self.dietTags = domainDietTags.compactMap { AdditionalTag(from: $0) }
         } else {
             self.dietTags = []
         }
         
         if
-            let exceptionTagsData = managedModel.exceptionTags,
-            let exceptionTags = try? decoder.decode([ExceptionTag].self, from: exceptionTagsData) {
-            self.exceptionTags = exceptionTags
+            let domainExceptionTags = managedModel.exceptionTags?.array as? [DomainExceptionTag] {
+            self.exceptionTags = domainExceptionTags.compactMap { ExceptionTag(from: $0) }
         } else {
             self.exceptionTags = []
         }
@@ -223,6 +207,20 @@ struct Ingredient: Codable {
     let quantity: Double
     let isNamed: Bool
     let unit: MarketUnitClass?
+    
+    init?(from domainIngredient: DomainDishIngredient) {
+        guard let productDTO = ProductDTO(from: domainIngredient) else { return nil }
+        self.id = Int(domainIngredient.id)
+        self.product = productDTO
+        self.isNamed = domainIngredient.isNamed
+        self.quantity = domainIngredient.quantity
+        self.unit = .init(
+            id: Int(domainIngredient.unitID),
+            title: domainIngredient.unitTitle ?? "",
+            shortTitle: domainIngredient.unitShorTitle ?? "",
+            isOnlyForMarket: domainIngredient.unitIsOnlyForMarket
+        )
+    }
 }
 
 // MARK: - New DTO
@@ -270,6 +268,46 @@ struct AdditionalTag: Hashable, Codable {
     
     let id: Int
     let title: String
+    
+    init?(from domainTag: DomainDietTag?) {
+        guard
+            let domainTag = domainTag,
+            let domainTagTitle = domainTag.title else { return nil }
+        id = Int(domainTag.id)
+        title = domainTagTitle
+    }
+    
+    init?(from domainTag: DomainEatingTag?) {
+        guard
+            let domainTag = domainTag,
+            let domainTagTitle = domainTag.title else { return nil }
+        id = Int(domainTag.id)
+        title = domainTagTitle
+    }
+    
+    init?(from domainTag: DomainAdditionalTag?) {
+        guard
+            let domainTag = domainTag,
+            let domainTagTitle = domainTag.title else { return nil }
+        id = Int(domainTag.id)
+        title = domainTagTitle
+    }
+    
+    init?(from domainTag: DomainProcessingTag?) {
+        guard
+            let domainTag = domainTag,
+            let domainTagTitle = domainTag.title else { return nil }
+        id = Int(domainTag.id)
+        title = domainTagTitle
+    }
+    
+    init?(from domainTag: DomainDishTypeTag?) {
+        guard
+            let domainTag = domainTag,
+            let domainTagTitle = domainTag.title else { return nil }
+        id = Int(domainTag.id)
+        title = domainTagTitle
+    }
     
     var convenientTag: ConvenientTag? {
         ConvenientTag(rawValue: id)
@@ -343,6 +381,16 @@ struct DishValues: Codable {
     let netCarbs, proteins, fats: Double
     let kcal: Double
     let carbohydrates: Double
+    
+    init?(from domainModel: DomainPCFValues?) {
+        guard let domainModel = domainModel else { return nil }
+        self.weight = domainModel.weight
+        self.netCarbs = domainModel.netCarbs
+        self.proteins = domainModel.proteins
+        self.fats = domainModel.fats
+        self.kcal = domainModel.kcal
+        self.carbohydrates = domainModel.carbohydrates
+    }
 }
 
 enum TagTypeColorRepresentation {

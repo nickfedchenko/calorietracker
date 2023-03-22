@@ -38,15 +38,16 @@ final class SubscriptionViewModel {
     
     func makeModelForProduct(at indexPath: IndexPath) -> SubscriptionAmountModel {
         guard !products.isEmpty else {
-            return .init(title: "Loading info".localized, describe: nil)
+            return .init(title: "Loading info".localized, describe: nil, priceString: "")
         }
         let product = products[indexPath.item]
         let periodTitle = makePeriodStirng(for: product)
         let priceString = makePriceString(for: product)
         let weeklyPriceString = makeWeeklyPrice(for: product)
         return .init(
-            title: "\(periodTitle) - \(priceString)",
-            describe: weeklyPriceString
+            title: "\(periodTitle)",
+            describe: weeklyPriceString,
+            priceString: priceString
         )
     }
     

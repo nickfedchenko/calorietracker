@@ -166,12 +166,14 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
         quickAddStack.didTapQuickAdd = { value in
             self.presenter?.addWater(value)
             self.configureView()
+            LoggingService.postEvent(event: .waterquickbutton)
         }
         
         quickAddStack.didTapEdit = { complition in
             self.output?.setQuickAdd(self, complition: { model in
                 self.presenter?.addQuickAddTypes(model)
                 complition(model)
+                LoggingService.postEvent(event: .watersetmeasure)
             })
         }
         
@@ -302,6 +304,9 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
         slider.countParts = presenter?.getCountSliderParts() ?? 0
         let goal = presenter?.getGoal() ?? 1
         let valueNow = presenter?.getValueNow() ?? 0
+        if valueNow >= goal {
+            LoggingService.postEvent(event: .watergoal)
+        }
         switch isSelectedSettingsButton {
         case true:
             configureLabel(
@@ -388,6 +393,7 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
         Vibration.success.vibrate()
         presenter?.addWater(slider.stepVolume * slider.step)
         configureView()
+        LoggingService.postEvent(event: .watersetmanual)
     }
     
     @objc private func didTapBottomCloseButton() {

@@ -62,7 +62,7 @@ final class YourHeightViewController: UIViewController {
             action: #selector(didTapContinueCommonButton),
             for: .touchUpInside
         )
-        borderTextField.text = BAMeasurement(160, .lenght, isMetric: true).string
+        borderTextField.text = BAMeasurement(160, .lenght, isMetric: true).string(with: 0)
         
         containerPickerView.backgroundColor = .white
         containerPickerView.layer.cornerRadius = 12
@@ -208,7 +208,7 @@ extension YourHeightViewController: UIPickerViewDelegate {
         let height = Double(meters * 100 + centimeters)
         
         self.height = height
-        borderTextField.text = BAMeasurement(height, .lenght, isMetric: true).string
+        borderTextField.text = BAMeasurement(height, .lenght, isMetric: true).string(with: 1)
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {

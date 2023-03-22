@@ -142,8 +142,8 @@ final class AddFoodPresenter {
     private func searchAmongAll(_ request: String) -> [Food] {
         let dishes = DSF.shared.searchDishes(by: request)
         let products = DSF.shared.searchProducts(by: request)
-        let genericProducts = products.filter { $0.brand == nil }
-        let brandProducts = products.filter { $0.brand != nil }
+        let genericProducts = products.filter { $0.brand == nil && !$0.isUserProduct }
+        let brandProducts = products.filter { $0.brand != nil && !$0.isUserProduct }
         let userProducts = products.filter { $0.isUserProduct }
         return genericProducts.foods + userProducts.foods + dishes.foods + brandProducts.foods
     }
@@ -176,6 +176,7 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
             guard let self = self else { return }
             let foundFood = self.search(byBarcode: barcode)
             DispatchQueue.main.async {
+                LoggingService.postEvent(event: .diaryscanfound(succeeded: !foundFood.isEmpty))
                 self.foods = foundFood
                 self.view.updateState(for: .search(foundFood.isEmpty ? .noResults : .foundResults))
                 self.view.setSearchField(to: barcode)
@@ -228,38 +229,30 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
 //            let frequents = self.searchAmongFrequent(request)
 //            let favorites = self.searchAmongFavorites(request)
 //            let recents = self.searchAmongRecent(request)
-        print("operations currenly performing\(searchQueue.operationCount)")
         searchQueue.cancelAllOperations()
-        print("operations performing after cancelling\(searchQueue.operationCount)")
         print(searchQueue.operationCount)
         let operation = BlockOperation()
         operation.addExecutionBlock { [weak self] in
             guard !operation.isCancelled else {
-                print("Search for \(request) is cancelled")
                 return
             }
             let current = Date().timeIntervalSince1970
             guard let self = self else { return }
             guard !operation.isCancelled else {
-                print("Search for \(request) is cancelled before finish")
                 return
             }
             let basicFood = self.searchAmongAll(request)
             guard !operation.isCancelled else {
-                print("Search for \(request) is cancelled before finish")
                 return
             }
             let searchByBarcode = self.search(byBarcode: request)
             guard !operation.isCancelled else {
-                print("Search for \(request) is cancelled before finish")
                 return
             }
             let foods = basicFood + searchByBarcode
             let done = Date().timeIntervalSince1970 - current
-            print("Search time is \(done)")
             DispatchQueue.main.async {
                 guard !operation.isCancelled else {
-                    print("Search for \(request) is cancelled before finish")
                     return
                 }
                 self.foods = foods

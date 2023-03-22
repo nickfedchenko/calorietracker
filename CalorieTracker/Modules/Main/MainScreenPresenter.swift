@@ -75,6 +75,7 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
     }
     
     func didTapMainWidget() {
+        LoggingService.postEvent(event: .diarywopen)
         router?.openOpenMainWidget(pointDate ?? Date())
     }
     
@@ -134,8 +135,7 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
     }
     
     func updateMessageWidget() {
-        let message: String = "Have a nice day! Don't forget to track your breakfast "
-        
+        let message: String = "Have a nice day! Don't forget to track your breakfast".localized
         view.setMessageWidget(message)
     }
     
@@ -183,6 +183,9 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
         let proteinToday = nutritionToday.protein
         let fatToday = nutritionToday.fat
         let kcalToday = nutritionToday.kcal
+        if kcalToday >= kcalGoal {
+            LoggingService.postEvent(event: .diarycaloriegoal)
+        }
         let burnedKcalFromExercises = ExerciseWidgetServise.shared.getBurnedKcalForDate(date)
         let burnedKCalFromSteps = StepsWidgetService.shared.getStepsNow() * 0.0608
         let includingBurned = kcalGoal + burnedKCalFromSteps + burnedKcalFromExercises - kcalToday
@@ -257,11 +260,23 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
     
     func didTapExerciseWidget() {
         if !UDM.isAuthorisedHealthKit {
-            ExerciseWidgetServise.shared.syncWithHealthKit {
-                DispatchQueue.main.async {
-                    self.updateExersiceWidget()
+            HealthKitAccessManager.shared.askPermission { result in
+                switch result {
+                case .success(let success):
+                    UDM.isAuthorisedHealthKit = success
+                    HealthKitDataManager.shared.getSteps { steps in
+                        DSF.shared.saveSteps(steps)
+                    }
+                    
+                    HealthKitDataManager.shared.getWorkouts { exercises  in
+                        DSF.shared.saveExercises(exercises)
+                    }
+                    
+                case .failure(let failure):
+                    print(failure)
                 }
             }
+            return
         }
     }
     

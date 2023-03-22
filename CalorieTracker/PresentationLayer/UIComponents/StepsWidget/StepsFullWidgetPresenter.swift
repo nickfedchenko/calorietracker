@@ -26,6 +26,10 @@ extension StepsFullWidgetPresenter: StepsFullWidgetPresenterInterface {
             goalSteps: StepsWidgetService.shared.getDailyStepsGoal()
         )
         
+        if model.nowSteps >= (model.goalSteps ?? 10000) {
+            LoggingService.postEvent(event: .stepsgoal)
+        }
+        
         view.setModel(model)
     }
 }

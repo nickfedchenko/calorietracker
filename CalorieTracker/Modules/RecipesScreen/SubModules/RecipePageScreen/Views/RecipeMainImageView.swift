@@ -161,6 +161,9 @@ final class RecipeMainImageView: UIView {
     @objc private func addToFavoritesTapped(sender: UIButton) {
         sender.animateByScaleTransform()
         sender.isSelected.toggle()
+        if sender.isSelected {
+            LoggingService.postEvent(event: .recipeaddfavorites)
+        }
         delegate?.addToFavoritesTapped(sender.isSelected)
     }
     

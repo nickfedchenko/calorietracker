@@ -14,7 +14,7 @@ final class SelectImageView: UIView {
         return view
     }()
     
-    private let viewController: UIViewController
+    private weak var viewController: UIViewController?
     
     private(set) var image: UIImage? {
         didSet {
@@ -75,6 +75,15 @@ final class SelectImageView: UIView {
         )
         
         alert.addAction(
+            UIAlertAction(
+                title: R.string.localizable.cameraRoll(),
+                style: .default
+            ) {  [weak self] _ in
+                self?.showCameraRoll()
+            }
+        )
+        
+        alert.addAction(
             .init(
                 title: R.string.localizable.gallery(),
                 style: .default,
@@ -101,14 +110,22 @@ final class SelectImageView: UIView {
             )
         )
         
-        viewController.present(alert, animated: true)
+        viewController?.present(alert, animated: true)
     }
     
     private func showImagePicker() {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         imagePicker.allowsEditing = true
-        viewController.present(imagePicker, animated: true)
+        viewController?.present(imagePicker, animated: true)
+    }
+    
+    private func showCameraRoll() {
+        let imagePicker = UIImagePickerController()
+        imagePicker.sourceType = .camera
+        imagePicker.delegate = self
+        imagePicker.allowsEditing = true
+        viewController?.present(imagePicker, animated: true)
     }
     
     @objc private func didTapImageView() {

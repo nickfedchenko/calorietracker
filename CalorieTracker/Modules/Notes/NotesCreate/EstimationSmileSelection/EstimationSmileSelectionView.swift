@@ -66,9 +66,8 @@ final class EstimationSmileSelectionView: UIView {
     }
     
     @objc private func didTapButton(_ sender: EstimationSmileButton) {
-        
+      
         sender.isSelectedSmile = !sender.isSelectedSmile
-
         stackView.arrangedSubviews
             .compactMap { return ($0 as? EstimationSmileButton) }
             .forEach {
@@ -77,5 +76,6 @@ final class EstimationSmileSelectionView: UIView {
                 }
             }
         didChangeValue?(sender.type)
+        LoggingService.postEvent(event: .notesetmood)
     }
 }

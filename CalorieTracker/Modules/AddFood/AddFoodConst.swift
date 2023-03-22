@@ -49,11 +49,11 @@ enum FoodCreate: WithGetTitleProtocol, WithGetImageProtocol, WithGetDescriptionP
     func getTitle(_ lenght: Lenght) -> String? {
         switch self {
         case .food:
-            return "Food"
+            return "food".localized
         case .recipe:
-            return "Recipe"
+            return "recipe".localized
         case .meal:
-            return "Meal"
+            return "meal".localized
         }
     }
     
@@ -147,17 +147,17 @@ enum AddFood {
     func getTitle() -> String {
         switch self {
         case .frequent:
-            return "Frequent"
+            return "frequent".localized
         case .recent:
-            return "Recent"
+            return "recent".localized
         case .favorites:
-            return "Favorites"
+            return "favorites".localized
         case .myMeals:
-            return "My Meals"
+            return "myMeals".localized
         case .myRecipes:
-            return "My Recipes"
+            return "myRecipes".localized
         case .myFood:
-            return "My Food"
+            return "myFood".localized
         default:
             return ""
         }

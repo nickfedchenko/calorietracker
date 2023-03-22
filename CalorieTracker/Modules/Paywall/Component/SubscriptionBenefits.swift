@@ -28,9 +28,9 @@ final class SubscriptionBenefits: UIView {
     private func configureViews() {
         backgroundColor = .clear
         
-        imageView.image = R.image.onboardings.on()
+        imageView.image = R.image.onboardings.checkOk()
         
-        titleLabel.font = .systemFont(ofSize: 14, weight: .medium)
+        titleLabel.font = R.font.sfProRoundedMedium(size: 14)
         titleLabel.numberOfLines = 0
         titleLabel.textAlignment = .left
     }

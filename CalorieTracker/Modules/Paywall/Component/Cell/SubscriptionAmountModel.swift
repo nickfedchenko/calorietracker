@@ -10,4 +10,5 @@ import Foundation
 struct SubscriptionAmountModel {
     let title: String?
     let describe: String?
+    let priceString: String?
 }

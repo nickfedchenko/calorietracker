@@ -39,13 +39,13 @@ final class RecipeRoundProgressView: UIView {
             switch self {
                 
             case .carbs:
-                return "Carbs".localized
+                return R.string.localizable.carbsShort()
             case .protein:
-                return "Protein".localized
+                return R.string.localizable.proteinShort()
             case .fat:
-                return "Fat".localized
+                return R.string.localizable.fatShort()
             case .kcal:
-                return "Kcal".localized
+                return R.string.localizable.kcalShort()
             case .undefined:
                 return "Undefined"
             }
@@ -182,10 +182,25 @@ final class RecipeRoundProgressView: UIView {
         self.currentMode = data
         makeLayers()
         animateProgress()
-        possibleValue.text = String(format: "%.1f", currentMode.possibleValue) + " " + "g".localized
+        possibleValue.text = {
+            var value: Double
+            switch currentMode {
+            case .carbs:
+                return BAMeasurement(currentMode.possibleValue, .serving, isMetric: true).string(with: 1)
+            case .protein:
+                return BAMeasurement(currentMode.possibleValue, .serving, isMetric: true).string(with: 1)
+            case .fat:
+                return BAMeasurement(currentMode.possibleValue, .serving, isMetric: true).string(with: 1)
+            case .kcal:
+                return BAMeasurement(currentMode.possibleValue, .energy, isMetric: true).string(with: 0)
+            case .undefined:
+                return ""
+            }
+            return ""
+        }() //= String(format: "%.1f", currentMode.possibleValue) + " " + "g".localized
         switch currentMode {
         case .kcal:
-            possibleValue.text?.removeLast(2)
+            possibleValue.text?.removeLast(5)
         default:
             return
         }

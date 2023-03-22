@@ -14,7 +14,7 @@ final class WeightWidgetNode: CTWidgetNode {
             .init(
                 worldIndex: [0],
                 attributes: [
-                    .color(R.color.weightWidget.weightTextColor()),
+                    .color(UIColor(hex: "5BAA1C")),
                     .font(R.font.sfProRoundedBold(size: 18)),
                 ]
             )
@@ -45,7 +45,7 @@ final class WeightWidgetNode: CTWidgetNode {
     var weight: CGFloat? {
         didSet {
             guard let weight = weight else { return }
-            valueLabel.attributedText = Double(weight).clean.attributedSring([
+            valueLabel.attributedText = Double(weight).clean(with: 1).attributedSring([
                 .init(
                     worldIndex: [0],
                     attributes: [

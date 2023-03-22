@@ -52,10 +52,11 @@ extension CreateProductRouter: CreateProductRouterInterface {
     
     func openProductViewController(_ product: Product) {
         let vc = ProductRouter.setupModule(product, .createProduct, .breakfast)
-        vc.modalPresentationStyle = .overFullScreen
-        
+        vc.modalPresentationStyle = .fullScreen
         vc.shouldClose = {
-            self.closeViewController()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { [weak self] in
+                self?.closeViewController()
+            }
         }
         
         viewController?.present(vc, animated: true)

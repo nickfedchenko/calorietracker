@@ -6,6 +6,7 @@
 //  Copyright © 2022 Mov4D. All rights reserved.
 //
 
+import ApphudSDK
 import UIKit
 
 protocol AddFoodRouterInterface: AnyObject {
@@ -125,18 +126,41 @@ extension AddFoodRouter: AddFoodRouterInterface {
     }
     
     func openScanner() {
+        guard Apphud.hasActiveSubscription() else {
+            let paywall = PaywallRouter.setupModule()
+            paywall.modalPresentationStyle = .fullScreen
+            viewController?.navigationController?.present(paywall, animated: true)
+            return
+        }
         let vc = ScannerRouter.setupModule { [weak self] barcode in
             self?.presenter?.scannerDidRecognized(barcode: barcode)
         }
         vc.modalPresentationStyle = .fullScreen
         viewController?.present(vc, animated: true)
+        LoggingService.postEvent(event: .diaryscanfromtabbar)
     }
     
     func openCreateProduct() {
         guard !wasFromMealCreateVC else { return }
-        let vc = CreateProductRouter.setupModule()
-        vc.modalPresentationStyle = .overFullScreen
-        viewController?.navigationController?.present(vc, animated: true)
+        if UDM.openCreateProductCounter >= 1 {
+//            guard Apphud.hasActiveSubscription() else {
+//                let paywall = PaywallRouter.setupModule()
+//                paywall.modalPresentationStyle = .fullScreen
+//                viewController?.navigationController?.present(paywall, animated: true)
+//                return
+//            }
+            LoggingService.postEvent(event: .diarycreatefood)
+            let vc = CreateProductRouter.setupModule()
+            vc.modalPresentationStyle = .overFullScreen
+            viewController?.present(vc, animated: true)
+            LoggingService.postEvent(event: .diarycreatefood)
+        } else {
+            let vc = CreateProductRouter.setupModule()
+            vc.modalPresentationStyle = .overFullScreen
+            viewController?.present(vc, animated: true)
+            UDM.openCreateProductCounter += 1
+            LoggingService.postEvent(event: .diarycreatefood)
+        }
     }
     
     func openDishViewController(_ dish: Dish) {
@@ -160,18 +184,33 @@ extension AddFoodRouter: AddFoodRouterInterface {
     }
     
     func openCustomEntryViewController(mealTime: MealTime) {
+        guard Apphud.hasActiveSubscription() else {
+            let paywall = PaywallRouter.setupModule()
+            paywall.modalPresentationStyle = .fullScreen
+            viewController?.navigationController?.present(paywall, animated: true)
+            return
+        }
         let vc = CustomEntryViewController(mealTime: mealTime)
         
         vc.onSavedCustomEntry = { [weak self] customEntry in
             self?.presenter?.updateSelectedFoodFromCustomEntry(food: .customEntry(customEntry))
             self?.presenter?.updateCustomFood(food: .customEntry(customEntry))
+            LoggingService.postEvent(event: .diarycustomadd)
         }
         
         vc.modalPresentationStyle = .overFullScreen
         viewController?.navigationController?.present(vc, animated: true)
+        LoggingService.postEvent(event: .diarycustom)
     }
     
     func openCreateMeal(mealTime: MealTime) {
+        guard Apphud.hasActiveSubscription() else {
+            let paywall = PaywallRouter.setupModule()
+            paywall.modalPresentationStyle = .fullScreen
+            viewController?.navigationController?.present(paywall, animated: true)
+            return
+        }
+        
         let vc = CreateMealRouter.setupModule(mealTime: mealTime)
         
         vc.needToUpdate = { [weak self] in
@@ -180,6 +219,7 @@ extension AddFoodRouter: AddFoodRouterInterface {
         
         vc.modalPresentationStyle = .fullScreen
         viewController?.present(vc, animated: true)
+        LoggingService.postEvent(event: .diarycreatemeal)
     }
     
     func openEditMeal(meal: Meal) {

@@ -28,6 +28,7 @@ class LineChartViewPresenter {
     var data: [(date: Date, value: CGFloat)] {
         switch view.getChartType() {
         case .weight:
+//            let weights = WeightWidgetService.shared.getAllWeight()
             return WeightWidgetService.shared.getAllWeight().compactMap {
                 guard let date = $0.day.date else { return nil }
                 return (date: date, value: CGFloat($0.value))
@@ -151,7 +152,7 @@ extension LineChartViewPresenter: LineChartViewPresenterInterface {
     func getData(_ period: ChartFormat) -> LineChartData? {
         guard let data = getDataForPeriod(period),
               let values = getValuesChart(data.map { $0.value }) else { return nil }
-        let difference = CGFloat(values.max - values.min)
+        let difference = CGFloat(values.max - values.min) > 0 ? CGFloat(values.max - values.min) : 0.01
         let goal = self.goal == nil ? nil : (self.goal! - CGFloat(values.min)) / difference
         var newData: [Int: CGFloat] = [:]
         var indexData: [Int: Int] = [:]

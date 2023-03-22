@@ -20,7 +20,7 @@ final class SelectViewCell<ID: WithGetTitleProtocol>: UIControl {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = R.font.sfProRoundedMedium(size: 22)
+        label.font = R.font.sfProRoundedBold(size: 22)
         return label
     }()
     
@@ -64,8 +64,10 @@ final class SelectViewCell<ID: WithGetTitleProtocol>: UIControl {
             shadowLayer.isHidden = true
             layer.borderColor = R.color.foodViewing.basicPrimary()?.cgColor
             backgroundColor = UIColor.white
-            titleLabel.textColor = R.color.foodViewing.basicDark()
+            titleLabel.textColor = R.color.foodViewing.basicPrimary()
+            titleLabel.font = R.font.sfProRoundedBold(size: 22)
         case false:
+            titleLabel.font = R.font.sfProRoundedMedium(size: 22)
             shadowLayer.isHidden = false
             layer.borderColor = R.color.foodViewing.basicSecondaryDark()?.cgColor
             backgroundColor = UIColor.white

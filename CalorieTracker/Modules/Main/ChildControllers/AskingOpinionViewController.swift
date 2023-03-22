@@ -28,6 +28,7 @@ final class AskingOpinionViewController: UIViewController {
         label.font = R.font.sfProRoundedHeavy(size: 24)
         label.textColor = UIColor(hex: "0C695E")
         label.numberOfLines = 0
+        label.text = R.string.localizable.askOpinionTitle()
         return label
     }()
     
@@ -36,6 +37,8 @@ final class AskingOpinionViewController: UIViewController {
         label.textAlignment = .center
         label.font = R.font.sfProRoundedHeavy(size: 24)
         label.textColor = UIColor(hex: "0C695E")
+        label.numberOfLines = 0
+        label.text = R.string.localizable.askOpinionSubtitle()
         return label
     }()
     
@@ -167,7 +170,7 @@ final class AskingOpinionViewController: UIViewController {
         
         container.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(428)
+//            make.height.equalTo(506)
             make.top.equalTo(view.snp.bottom)
         }
         
@@ -207,13 +210,14 @@ final class AskingOpinionViewController: UIViewController {
         writeUsMail.snp.makeConstraints { make in
             make.leading.trailing.height.equalTo(writeReviewButton)
             make.top.equalTo(writeReviewButton.snp.bottom).offset(16)
+            make.bottom.equalToSuperview().inset(42)
         }
     }
     
     func animateAppearing() {
         container.snp.remakeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
-            make.height.equalTo(428)
+//            make.height.equalTo(506)
         }
         
         UIView.animate(withDuration: 0.3) {
@@ -245,7 +249,7 @@ final class AskingOpinionViewController: UIViewController {
             UIView.animate(withDuration: 0.2) {
                 self.container.snp.remakeConstraints { make in
                     make.leading.trailing.equalToSuperview()
-                    make.height.equalTo(428)
+//                    make.height.equalTo(506)
                     make.top.equalTo(self.view.snp.bottom)
                 }
                 self.dimmingView.alpha = 0
@@ -265,14 +269,14 @@ final class AskingOpinionViewController: UIViewController {
             guard translation > 0 else { return }
             container.snp.remakeConstraints { make in
                 make.leading.trailing.equalToSuperview()
-                make.height.equalTo(428)
+//                make.height.equalTo(428)
                 make.bottom.equalToSuperview().offset(translation)
             }
         case .ended:
             if translation < 214 {
                 container.snp.remakeConstraints { make in
                     make.leading.trailing.equalToSuperview()
-                    make.height.equalTo(428)
+//                    make.height.equalTo(506)
                     make.bottom.equalToSuperview()
                 }
                 UIView.animate(withDuration: 0.3) {

@@ -33,7 +33,10 @@ class RecipesScreenInteractor {
 
 extension RecipesScreenInteractor: RecipesScreenInteractorInterface {
     func requestAllDishes() -> [Dish] {
+        let secondsStart = Date().timeIntervalSince1970
         let dishes = facade.getAllStoredDishes()
+        let secondsDoneFetch = Date().timeIntervalSince1970
+        print("Dishes fetch time \(secondsDoneFetch - secondsStart)")
         return dishes
     }
     

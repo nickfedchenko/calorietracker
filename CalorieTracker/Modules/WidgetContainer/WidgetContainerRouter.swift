@@ -59,6 +59,7 @@ extension WidgetContainerRouter: WidgetContainerRouterInterface {
         vc.complition = { value in
             WaterWidgetService.shared.setDailyWaterGoal(BAMeasurement(value, .liquid).value)
             self.presenter?.updateView()
+            LoggingService.postEvent(event: .watersetgoal(ml: Int(value)))
         }
         
         viewController?.present(vc, animated: true)

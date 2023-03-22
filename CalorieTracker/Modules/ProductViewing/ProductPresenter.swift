@@ -86,6 +86,8 @@ extension ProductPresenter: ProductPresenterInterface {
             } else {
                 self?.router?.addToDiary(.product(product, customAmount: nil, unit: nil))
             }
+            LoggingService.postEvent(event: .diaryaddfromfoodscreen)
+            self?.view.viewControllerShouldClose()
         }
     }
     

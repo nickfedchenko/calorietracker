@@ -46,6 +46,9 @@ final class CreateProductViewController: UIViewController {
     
     private var currentPage: Int = 0 {
         didSet {
+            if currentPage == 1 {
+                LoggingService.postEvent(event: .diarycreatefoodstep2)
+            }
             didChangePage()
         }
     }
@@ -72,7 +75,6 @@ final class CreateProductViewController: UIViewController {
         rightScrollView.contentInset = insets
 
         setupKeyboardManager()
-        
         firstDraw = false
     }
     

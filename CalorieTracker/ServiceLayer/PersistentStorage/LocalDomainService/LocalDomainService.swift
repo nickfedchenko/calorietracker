@@ -105,7 +105,7 @@ final class LocalDomainService {
     private lazy var context: NSManagedObjectContext = {
         let context = container.viewContext
         context.automaticallyMergesChangesFromParent = true
-        context.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
+        context.mergePolicy = NSMergePolicy.overwrite
         return context
     }()
     
@@ -227,6 +227,11 @@ final class LocalDomainService {
 
 // MARK: - LocalDomainServiceInterface
 extension LocalDomainService: LocalDomainServiceInterface {
+    
+    func fetchEatingTags() -> [DomainEatingTag] {
+        guard let tags = fetchData(for: DomainEatingTag.self) else { return [] }
+        return tags
+    }
 
     func fetchProducts() -> [Product] {
         guard let domainProducts = fetchData(for: DomainProduct.self) else { return [] }
@@ -239,9 +244,13 @@ extension LocalDomainService: LocalDomainServiceInterface {
     }
     
     func fetchDishes() -> [Dish] {
+        let secondsStart = Date().timeIntervalSince1970
         guard let domainDishes = fetchData(for: DomainDish.self) else {
             return []
         }
+        let secondsEnd = Date().timeIntervalSince1970
+        print("Tags found \(domainDishes.first?.eatingTags)")
+        print("Dishes fetch without mapping \(secondsEnd - secondsStart)")
         return domainDishes.compactMap { Dish(from: $0) }
     }
     
@@ -349,6 +358,7 @@ extension LocalDomainService: LocalDomainServiceInterface {
     
     func saveWater(data: [DailyData]) {
         let backgroundContext = container.newBackgroundContext()
+        backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
         let _: [DomainWater] = data
             .map { DomainWater.prepare(fromPlainModel: $0, context: backgroundContext) }
         backgroundContext.performAndWait {
@@ -374,7 +384,6 @@ extension LocalDomainService: LocalDomainServiceInterface {
             .map { DomainWeight.prepare(fromPlainModel: $0, context: backgroundContext) }
         backgroundContext.performAndWait {
             try? backgroundContext.save()
-            
         }
     }
     

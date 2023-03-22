@@ -52,7 +52,6 @@ class AddFoodControllerPushAnimationController: NSObject, UIViewControllerAnimat
         let microButton = MicrophoneButton()
         searchView.frame = targetAddButtonFrame
         microButton.frame = targetScannerFrame
-       print("target serchView frame \(targetAddButtonFrame)")
         fromController.setToBeginningTransition()
         toViewController.setToStartTransitionState()
         

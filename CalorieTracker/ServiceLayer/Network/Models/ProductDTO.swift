@@ -1,5 +1,5 @@
 import Foundation
-
+// swiftlint:disable cyclomatic_complexity
 typealias ProductsResult = (Result<[ProductDTO], ErrorDomain>) -> Void
 
 /// Product
@@ -8,10 +8,8 @@ struct ProductDTO: Codable {
     let title: String
     let productTypeID: Int
     let brand, barcode: String?
-    let marketCategory: AdditionalTag?
     let productURL: Int?
     let units: [UnitElement]
-    let marketUnit: MarketUnitClass?
     let serving: Serving
     let ketoRating: String?
     let nutritions: [Nutrition]
@@ -23,9 +21,9 @@ struct ProductDTO: Codable {
     enum CodingKeys: String, CodingKey {
         case id, title
         case productTypeID = "productTypeId"
-        case brand, barcode, marketCategory
+        case brand, barcode
         case productURL = "product_url"
-        case units, marketUnit, serving, ketoRating, nutritions, baseTags, photo, isDraft, createdAt
+        case units, serving, ketoRating, nutritions, baseTags, photo, isDraft, createdAt
     }
     
     var protein: Double {
@@ -54,6 +52,252 @@ struct ProductDTO: Codable {
             return .zero
         }
         return carbs.value ?? .zero
+    }
+    
+    // swiftlint:disable:next function_body_length
+    init?(from ingredient: DomainDishIngredient) {
+     
+        guard  let product: Product = ingredient.product else { return nil }
+        if let id = Int(product.id) {
+            self.id = id
+        } else {
+            return nil
+        }
+        self.title = product.title
+        self.brand = product.brand
+        self.barcode = product.barcode
+        self.productURL = product.productURL
+        self.units = product.units ?? []
+        self.serving = product.servings?.first ?? .init(size: "g", weight: 101)
+        self.ketoRating = product.ketoRating
+        // TODO: - Сохранить тип еще надо
+        self.productTypeID = 1
+        self.nutritions = {
+            var nutritions: [Nutrition] = []
+            
+            if let vitaminA = product.composition?.vitaminA {
+                nutritions.append(
+                    Nutrition(
+                        id: 19,
+                        title: "Vitamin A",
+                        unit: .init(
+                            id: Int(ingredient.unitID),
+                            title: ingredient.unitTitle ?? "",
+                            shortTitle: ingredient.unitShorTitle ?? "",
+                            isOnlyForMarket: ingredient.unitIsOnlyForMarket
+                        ),
+                        value: vitaminA
+                    )
+                )
+            }
+            
+            if let vitaminD = product.composition?.vitaminD {
+                nutritions.append(
+                    .init(id: 14 ,
+                          title: "Vitamin D",
+                          unit: .init(
+                            id: Int(ingredient.unitID),
+                            title: ingredient.unitTitle ?? "",
+                            shortTitle: ingredient.unitShorTitle ?? "",
+                            isOnlyForMarket: ingredient.unitIsOnlyForMarket
+                          ),
+                          value: vitaminD)
+                )
+            }
+            
+            if let vitaminC = product.composition?.vitaminC {
+                nutritions.append(
+                    .init(id: 20 ,
+                          title: "Vitamin C",
+                          unit: .init(
+                            id: Int(ingredient.unitID),
+                            title: ingredient.unitTitle ?? "",
+                            shortTitle: ingredient.unitShorTitle ?? "",
+                            isOnlyForMarket: ingredient.unitIsOnlyForMarket
+                          ),
+                          value: vitaminC)
+                )
+            }
+            
+            if let calcium = product.composition?.calcium {
+                nutritions.append(
+                    .init(id: 16,
+                          title: "Calcium",
+                          unit: .init(
+                            id: Int(ingredient.unitID),
+                            title: ingredient.unitTitle ?? "",
+                            shortTitle: ingredient.unitShorTitle ?? "",
+                            isOnlyForMarket: ingredient.unitIsOnlyForMarket
+                          ),
+                          value: calcium
+                         )
+                )
+            }
+            
+            if let sugar = product.composition?.sugar {
+                nutritions.append(
+                    .init(id: 11,
+                          title: "Total sugar",
+                          unit: .init(
+                            id: Int(ingredient.unitID),
+                            title: ingredient.unitTitle ?? "",
+                            shortTitle: ingredient.unitShorTitle ?? "",
+                            isOnlyForMarket: ingredient.unitIsOnlyForMarket
+                          ),
+                          value: sugar
+                         )
+                )
+            }
+            
+            if let fiber = product.composition?.fiber {
+                nutritions.append(
+                    .init(id: 9,
+                          title: "Fiber",
+                          unit: .init(
+                            id: Int(ingredient.unitID),
+                            title: ingredient.unitTitle ?? "",
+                            shortTitle: ingredient.unitShorTitle ?? "",
+                            isOnlyForMarket: ingredient.unitIsOnlyForMarket
+                          ),
+                          value: fiber
+                         )
+                )
+            }
+            
+            if let satFat = product.composition?.satFat {
+                nutritions.append(
+                    .init(id: 2,
+                          title: "Saturated fat",
+                          unit: .init(
+                            id: Int(ingredient.unitID),
+                            title: ingredient.unitTitle ?? "",
+                            shortTitle: ingredient.unitShorTitle ?? "",
+                            isOnlyForMarket: ingredient.unitIsOnlyForMarket
+                          ),
+                          value: satFat
+                         )
+                )
+            }
+            
+            if let unsatFat = product.composition?.unsatFat {
+                nutritions.append(
+                    .init(id: 4,
+                          title: "Unsaturated fat",
+                          unit: .init(
+                            id: Int(ingredient.unitID),
+                            title: ingredient.unitTitle ?? "",
+                            shortTitle: ingredient.unitShorTitle ?? "",
+                            isOnlyForMarket: ingredient.unitIsOnlyForMarket
+                          ),
+                          value: unsatFat
+                         )
+                )
+            }
+            
+            if let transFat = product.composition?.transFat {
+                nutritions.append(
+                    .init(id: 3,
+                          title: "Trans fat",
+                          unit: .init(
+                            id: Int(ingredient.unitID),
+                            title: ingredient.unitTitle ?? "",
+                            shortTitle: ingredient.unitShorTitle ?? "",
+                            isOnlyForMarket: ingredient.unitIsOnlyForMarket
+                          ),
+                          value: transFat
+                         )
+                )
+            }
+            
+            if let sodium = product.composition?.sodium {
+                nutritions.append(
+                    .init(id: 7,
+                          title: "Sodium",
+                          unit: .init(
+                            id: Int(ingredient.unitID),
+                            title: ingredient.unitTitle ?? "",
+                            shortTitle: ingredient.unitShorTitle ?? "",
+                            isOnlyForMarket: ingredient.unitIsOnlyForMarket
+                          ),
+                          value: sodium
+                         )
+                )
+            }
+            
+            if let cholesterol = product.composition?.cholesterol {
+                nutritions.append(
+                    .init(id: 6,
+                          title: "Cholesterol",
+                          unit: .init(
+                            id: Int(ingredient.unitID),
+                            title: ingredient.unitTitle ?? "",
+                            shortTitle: ingredient.unitShorTitle ?? "",
+                            isOnlyForMarket: ingredient.unitIsOnlyForMarket
+                          ),
+                          value: cholesterol
+                         )
+                )
+            }
+            
+            if let potassium = product.composition?.potassium {
+                nutritions.append(
+                    .init(id: 18,
+                          title: "Potassium",
+                          unit: .init(
+                            id: Int(ingredient.unitID),
+                            title: ingredient.unitTitle ?? "",
+                            shortTitle: ingredient.unitShorTitle ?? "",
+                            isOnlyForMarket: ingredient.unitIsOnlyForMarket
+                          ),
+                          value: potassium
+                         )
+                )
+            }
+            
+            if let sugarAlc = product.composition?.sugarAlc {
+                nutritions.append(
+                    .init(id: 13,
+                          title: "Sugar spirits",
+                          unit: .init(
+                            id: Int(ingredient.unitID),
+                            title: ingredient.unitTitle ?? "",
+                            shortTitle: ingredient.unitShorTitle ?? "",
+                            isOnlyForMarket: ingredient.unitIsOnlyForMarket
+                          ),
+                          value: sugarAlc
+                         )
+                )
+            }
+            
+            if let iron = product.composition?.iron {
+                nutritions.append(
+                    .init(id: 17,
+                          title: "Ferrum",
+                          unit: .init(
+                            id: Int(ingredient.unitID),
+                            title: ingredient.unitTitle ?? "",
+                            shortTitle: ingredient.unitShorTitle ?? "",
+                            isOnlyForMarket: ingredient.unitIsOnlyForMarket
+                          ),
+                          value: iron
+                         )
+                )
+            }
+           return nutritions
+        }()
+        self.baseTags = product.baseTags
+        self.photo = {
+            switch product.photo {
+            case .data:
+                return ""
+            case .url(let url):
+                return url.absoluteString
+            case .none:
+                return ""
+            }
+        }()
+        self.isDraft = false
+        self.createdAt = product.createdAt
     }
     
 //    init?(from searchModel: SearchProduct) {
@@ -267,27 +511,27 @@ struct UnitElement: Codable {
 struct Nutrition: Codable {
     enum NutritionType: Int {
         case fatsOverall = 1
-        case saturatedFats
-        case transFats
-        case polyUnsaturatedFats
-        case monoUnsaturatedFats
-        case cholesterol
-        case sodium
-        case carbsTotal
-        case alimentaryFiber
-        case netCarbs
-        case sugarOverall
-        case includingAdditionalSugars
-        case sugarSpirits
-        case protein
-        case vitaminD
-        case calcium
-        case ferrum
-        case potassium
-        case vitaminA
-        case vitaminC
-        case kcal
-        case undefined
+        case saturatedFats = 2
+        case transFats = 3
+        case polyUnsaturatedFats = 4
+        case monoUnsaturatedFats = 5
+        case cholesterol = 6
+        case sodium = 7
+        case carbsTotal = 8
+        case alimentaryFiber = 9
+        case netCarbs = 10
+        case sugarOverall = 11
+        case includingAdditionalSugars = 12
+        case sugarSpirits = 13
+        case protein = 14
+        case vitaminD = 15
+        case calcium = 16
+        case ferrum = 17
+        case potassium = 18
+        case vitaminA = 19
+        case vitaminC = 20
+        case kcal = 21
+        case undefined = 22
     }
     
     let id: Int
@@ -324,6 +568,15 @@ struct ExceptionTag: Hashable, Codable {
     
     let id: Int
     let title: String
+    
+    init?(from domainTag: DomainExceptionTag?) {
+        guard
+            let domainTag = domainTag,
+            let domainTagTitle = domainTag.title else { return nil }
+        id = Int(domainTag.id)
+        title = domainTagTitle
+    }
+    
     var convenientTag: ConvenientExceptionTag? {
         ConvenientExceptionTag(rawValue: id)
     }

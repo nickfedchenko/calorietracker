@@ -291,7 +291,6 @@ extension KcalKeyboardHeaderView {
             if  let selectedRange = textField.selectedTextRange {
                 if let newPosition = textField.position(from: selectedRange.start, offset: -suffix.count - 1) {
                     // set the new position
-                    print(newPosition)
                     textField.selectedTextRange = textField.textRange(from: newPosition, to: newPosition)
                 }
             }
@@ -321,7 +320,6 @@ extension KcalKeyboardHeaderView {
             // and only if the new position is valid
             if let newPosition = sender.position(from: selectedRange.start, offset: -suffix.count - 1) {
                 // set the new position
-                print(newPosition)
                 sender.selectedTextRange = sender.textRange(from: newPosition, to: newPosition)
             }
         }

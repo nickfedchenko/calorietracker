@@ -132,6 +132,22 @@ extension RecipePageScreenPresenter: RecipePageScreenPresenterInterface {
             fatData: getModeForFat(),
             proteinData: getModeForProtein()
         )
+        if Locale.current.languageCode == "ru" {
+            var string = ""
+            if amount.truncatingRemainder(dividingBy: 1) > 0 {
+                string = R.string.localizable.servings24().capitalized
+            } else {
+                switch amount {
+                case 1:
+                    string = R.string.localizable.servings1().capitalized
+                case 2...4:
+                    string = R.string.localizable.servings24().capitalized
+                default:
+                    string = R.string.localizable.servings4().capitalized
+                }
+            }
+            view.shouldUpdateServingSelectorString(string: string)
+        }
     }
     
     func addToDiaryTapped() {

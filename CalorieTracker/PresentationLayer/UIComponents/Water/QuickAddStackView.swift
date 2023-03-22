@@ -93,7 +93,8 @@ final class QuickAddStackView: UIView {
                 $0.0.isHidden = $0.1.model.type == .add
                 $0.1.isEdit = false
             }
-            containers.last?.isHidden = false
+            
+            containers.last?.isHidden = true
         }
     }
     

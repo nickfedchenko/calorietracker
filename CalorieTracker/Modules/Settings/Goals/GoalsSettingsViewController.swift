@@ -71,6 +71,12 @@ final class GoalsSettingsViewController: UIViewController {
     
     private func updateAccording(new goal: GoalType) {
         guard goal != UDM.goalType else { return }
+        UDM.tempActivityLevel = UDM.activityLevel
+        if UDM.weeklyGoal != 0 {
+            UDM.tempWeeklyGoal = UDM.weeklyGoal
+        } else {
+            UDM.tempWeeklyGoal = 0.1
+        }
         if goal == .maintainWeight {
             UDM.tempWeeklyGoal = UDM.weeklyGoal
             UDM.weeklyGoal = 0
@@ -80,13 +86,13 @@ final class GoalsSettingsViewController: UIViewController {
             if (UDM.weightGoal ?? 0) >= (WeightWidgetService.shared.getStartWeight() ?? 0) {
                 UDM.weightGoal = (WeightWidgetService.shared.getStartWeight() ?? 0) - 1
             }
-            UDM.weeklyGoal = UDM.tempWeeklyGoal
+//            UDM.weeklyGoal = UDM.tempWeeklyGoal
             UDM.activityLevel = UDM.tempActivityLevel
         } else if goal == .buildMuscle {
             if (UDM.weightGoal ?? 0) <= (WeightWidgetService.shared.getStartWeight() ?? 0) {
                 UDM.weightGoal = (WeightWidgetService.shared.getStartWeight() ?? 0) + 1
             }
-            UDM.weeklyGoal = UDM.tempWeeklyGoal
+//            UDM.weeklyGoal = UDM.tempWeeklyGoal
             UDM.activityLevel = UDM.tempActivityLevel
             UDM.weeklyGoal = (abs(UDM.weeklyGoal != 0 ? UDM.weeklyGoal ?? 0 : UDM.tempWeeklyGoal ?? 0))
         }

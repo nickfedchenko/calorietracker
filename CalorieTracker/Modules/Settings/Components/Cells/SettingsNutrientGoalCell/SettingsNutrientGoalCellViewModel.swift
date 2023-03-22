@@ -77,7 +77,7 @@ struct SettingsNutrientGoalCellViewModel {
             from: .kcal,
             to: .gram
         )
-        let weightTitle = BAMeasurement(weight, .serving, isMetric: true).string
+        let weightTitle = BAMeasurement(weight, .serving, isMetric: true).string(with: 1)
         
         output?.updateView(
             percentTitle: percentTitle,

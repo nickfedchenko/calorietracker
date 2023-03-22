@@ -310,7 +310,7 @@ extension WeightLineChart {
             
             toolTip.text = (
                 date: dateFormatter.string(from: data[point.index].date),
-                weight: BAMeasurement(data[point.index].weight, .weight).string
+                weight: BAMeasurement(data[point.index].weight, .weight).string(with: 2)
             )
             toolTip.rotated = flag
             toolTip.frame = CGRect(

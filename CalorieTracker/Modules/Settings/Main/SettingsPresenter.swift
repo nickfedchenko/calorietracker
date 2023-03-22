@@ -94,6 +94,8 @@ extension SettingsPresenter: SettingsPresenterInterface {
             router?.openRateViewController()
         case .help:
             router?.openHelpViewController()
+        case .sources:
+            router?.showSourcesViewController()
         }
     }
 }

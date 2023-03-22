@@ -21,6 +21,7 @@ protocol SettingsRouterInterface: AnyObject {
     func closeViewController()
     func openShareViewController(_ url: URL)
     func openPremiumViewController()
+    func showSourcesViewController()
 }
 
 class SettingsRouter: NSObject {
@@ -39,7 +40,8 @@ class SettingsRouter: NSObject {
                 .goals,
                 .app,
                 .rate,
-                .help
+                .help,
+                .sources
             ],
             presenter: presenter
         )
@@ -125,6 +127,14 @@ extension SettingsRouter: SettingsRouterInterface {
         if UIApplication.shared.canOpenURL(url) {
             UIApplication.shared.open(url)
         }
+    }
+    
+    func showSourcesViewController() {
+        let recVC = RecommendationsViewController()
+        let viewModel = RecommendationsViewModel()
+        recVC.viewModel = viewModel
+        recVC.modalPresentationStyle = .fullScreen
+        viewController?.present(recVC, animated: true)
     }
 }
 

@@ -37,7 +37,7 @@ class GoalsSettingsPresenter {
 extension GoalsSettingsPresenter: GoalsSettingsPresenterInterface {
     func getCalorieGoal() -> String? {
         guard let kcalGoal = UDM.kcalGoal else { return nil }
-        return BAMeasurement(kcalGoal, .energy, isMetric: true).string
+        return BAMeasurement(kcalGoal, .energy, isMetric: true).string(with: 0)
     }
     
     func getNutrientGoal() -> String? {
@@ -50,12 +50,12 @@ extension GoalsSettingsPresenter: GoalsSettingsPresenterInterface {
     
     func getStartWeight() -> String? {
         let startWeight = WeightWidgetService.shared.getStartWeight() ?? 0
-        return BAMeasurement(startWeight, .weight, isMetric: true).string
+        return BAMeasurement(startWeight, .weight, isMetric: true).string(with: 1)
     }
     
     func getGoalWeight() -> String? {
         let goalWeight = UDM.weightGoal ?? 0
-        return BAMeasurement(goalWeight, .weight, isMetric: true).string
+        return BAMeasurement(goalWeight, .weight, isMetric: true).string(with: 1)
     }
     
     func getActivityLevel() -> String? {
@@ -64,7 +64,7 @@ extension GoalsSettingsPresenter: GoalsSettingsPresenterInterface {
     
     func getWeeklyGoal() -> String? {
         let weeklyGoal = WeightWidgetService.shared.getWeeklyGoal() ?? 0
-        return BAMeasurement(weeklyGoal, .weight, isMetric: true).string
+        return BAMeasurement(weeklyGoal, .weight, isMetric: true).string(with: 2)
     }
     
     func didTapBackButton() {

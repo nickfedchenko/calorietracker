@@ -8,4 +8,5 @@
 enum WeightGoal {
     case gain(calorieSurplus: Double)
     case loss(calorieDeficit: Double)
+    case maintain(calorieDeficit: Double)
 }

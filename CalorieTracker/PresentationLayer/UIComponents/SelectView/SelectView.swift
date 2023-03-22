@@ -11,6 +11,8 @@ final class SelectView<ID: WithGetTitleProtocol>: UIView {
     var selectedCellType: ID? { getSelectedCell()?.id }
     var didSelectedCell: ((ID, Bool) -> Void)?
     
+    var didShowHandler: (() -> Void)?
+    
     var height: CGFloat? {
         didSet {
             configureHeightConstraint()
@@ -144,6 +146,7 @@ final class SelectView<ID: WithGetTitleProtocol>: UIView {
                 self.show(index + 1)
             }
         }
+        didShowHandler?()
     }
     
     private func getSelectedCell() -> SelectViewCell<ID>? {

@@ -5,13 +5,13 @@
 //  Created by Алексей on 22.08.2022.
 //
 //
-//import Foundation
+// import Foundation
 //
-//protocol AchievementByWillPowerInteractorInterface: AnyObject {
+// protocol AchievementByWillPowerInteractorInterface: AnyObject {
 //    func getCurrentOnboardingStage() -> OnboardingStage
-//}
+// }
 //
-//class AchievementByWillPowerInteractor {
+// class AchievementByWillPowerInteractor {
 //    
 //    // MARK: - Public properties
 //    
@@ -30,8 +30,8 @@
 //
 //// MARK: - AchievementByWillPowerInteractorInterface
 //
-//extension AchievementByWillPowerInteractor: AchievementByWillPowerInteractorInterface {
+// extension AchievementByWillPowerInteractor: AchievementByWillPowerInteractorInterface {
 //    func getCurrentOnboardingStage() -> OnboardingStage {
 //        return onboardingManager.getCurrentOnboardingStage()
 //    }
-//}
+// }

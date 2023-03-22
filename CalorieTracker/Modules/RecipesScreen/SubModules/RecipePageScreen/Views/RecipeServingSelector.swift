@@ -137,5 +137,6 @@ final class RecipeServingSelector: UIView {
             return
         }
         animateBlinking(button: sender)
+        LoggingService.postEvent(event: .recipesetserving)
     }
 }

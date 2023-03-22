@@ -17,7 +17,7 @@ protocol DeficitAndSurplusCalorieViewControllerInterface: AnyObject {
 }
 
 final class DeficitAndSurplusCalorieViewController: UIViewController {
-    
+    private var isFirstLaunch = true
     // MARK: - Public properties
     
     var presenter: DeficitAndSurplusCaloriePresenterInterface?
@@ -60,10 +60,14 @@ final class DeficitAndSurplusCalorieViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        sliderView.setInitialStates()
+       
         sliderView.standaloneRatioEmitter = { [weak self] ratio in
             self?.presenter?.didChangeRate(on: ratio)
         }
+        
+        guard isFirstLaunch else { return }
+        sliderView.setInitialStates()
+        isFirstLaunch.toggle()
     }
     
     // swiftlint:disable:next function_body_length
@@ -204,10 +208,10 @@ extension DeficitAndSurplusCalorieViewController: DeficitAndSurplusCalorieViewCo
     
     func set(weightGoal: WeightGoal) {
         self.weightGoal = weightGoal
-        let suffix = R.string.localizable.onboardingThirdDeficitAndSurplusCalorieResult()
-        switch weightGoal {
-        case .gain(let calorieSurplus):
-            return
+//        let suffix = R.string.localizable.onboardingThirdDeficitAndSurplusCalorieResult()
+//        switch weightGoal {
+//        case .gain(let calorieSurplus):
+//            return
 //            rateLabel.text = R.string.localizable.onboardingThirdDeficitAndSurplusCalorieSurplus()
 //            resultLabel.text = "+\(calorieSurplus.clean) \(suffix)"
 //            sliderBackground.backgroundColor = R.color.onboardings.radialGradientFirst()
@@ -220,8 +224,8 @@ extension DeficitAndSurplusCalorieViewController: DeficitAndSurplusCalorieViewCo
 //            secondProcentLabel.textColor = R.color.onboardings.radialGradientFirst()
 //            thirdProcentLabel.textColor = R.color.onboardings.radialGradientFirst()
 //            fourthProcentLabel.textColor = R.color.onboardings.radialGradientFirst()
-        case .loss(let calorieDeficit):
-            return
+//        case .loss(let calorieDeficit):
+//            return
 //            rateLabel.text = R.string.localizable.onboardingThirdDeficitAndSurplusCalorieDeficit()
 //            resultLabel.text = "-\(calorieDeficit.clean) \(suffix)"
 //            sliderBackground.backgroundColor = R.color.onboardings.currentWeight()
@@ -234,6 +238,7 @@ extension DeficitAndSurplusCalorieViewController: DeficitAndSurplusCalorieViewCo
 //            secondProcentLabel.textColor = R.color.onboardings.currentWeight()
 //            thirdProcentLabel.textColor = R.color.onboardings.currentWeight()
 //            fourthProcentLabel.textColor = R.color.onboardings.currentWeight()
-        }
+        
+//        }
     }
 }

@@ -73,19 +73,12 @@ extension OpenMainWidgetPresenter: OpenMainWidgetPresenterInterface {
     
     func updateDailyMeals() {
         let now = Date().timeIntervalSince1970
-//        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-//            guard let self = self else { return }
-            let dailyMeals = self.getDailyMeals()
-        let new = Date().timeIntervalSince1970
-        print("Кольца открываются \(new - now)")
-//            DispatchQueue.main.async { [weak self] in
-                self.view.setDailyMeals(dailyMeals)
-//            }
-          
-//        }
+        let dailyMeals = self.getDailyMeals()
+        self.view.setDailyMeals(dailyMeals)
     }
     
     func getMainWidgetWidget() -> MainWidgetViewNode.Model {
+        let date = date ?? Date()
         let nutritionDailyGoal = FDS.shared.getNutritionGoals() ?? .zero
         let nutritionToday = FDS.shared.getNutritionForDate(date).nutrition
         let kcalGoal = nutritionDailyGoal.kcal
@@ -111,15 +104,18 @@ extension OpenMainWidgetPresenter: OpenMainWidgetPresenterInterface {
         let proteinToday = nutritionToday.protein
         let fatToday = nutritionToday.fat
         let kcalToday = nutritionToday.kcal
-        let burnedKcalToday = ExerciseWidgetServise.shared.getBurnedKcalForDate(date)
+        let burnedKcalFromExercises = ExerciseWidgetServise.shared.getBurnedKcalForDate(date)
+        let burnedKCalFromSteps = StepsWidgetService.shared.getStepsNow() * 0.0608
+        let includingBurned = kcalGoal + burnedKCalFromSteps + burnedKcalFromExercises - kcalToday
+        let includingBurnedInt: Int = includingBurned < 0 ? 0 : Int(includingBurned)
         let model: MainWidgetViewNode.Model = .init(
             text: MainWidgetViewNode.Model.Text(
-                firstLine: "\(Int(kcalToday)) / \(Int(kcalGoal)) kcal",
-                secondLine: "\(Int(carbsToday)) / \(Int(carbsGoal)) carbs",
-                thirdLine: "\(Int(proteinToday)) / \(Int(proteinGoal)) protein",
-                fourthLine: "\(Int(fatToday)) / \(Int(fatGoal)) fat",
-                excludingBurned: "\(Int(kcalToday - burnedKcalToday))",
-                includingBurned: "\(Int(kcalToday))"
+                firstLine: "\(Int(kcalToday)) / \(Int(kcalGoal)) " + R.string.localizable.kcalShort().uppercased(),
+                secondLine: "\(Int(carbsToday)) / \(Int(carbsGoal)) " + R.string.localizable.carbsShort().uppercased(),
+                thirdLine: "\(Int(proteinToday)) / \(Int(proteinGoal)) " + R.string.localizable.protein().uppercased(),
+                fourthLine: "\(Int(fatToday)) / \(Int(fatGoal)) " + R.string.localizable.fatShort().uppercased(),
+                excludingBurned: "\(UInt(kcalGoal - kcalToday < 0 ? 0 : kcalGoal - kcalToday))",
+                includingBurned: "\(includingBurnedInt)"
             ),
             circleData: MainWidgetViewNode.Model.CircleData(
                 rings: [
@@ -154,6 +150,7 @@ extension OpenMainWidgetPresenter: OpenMainWidgetPresenterInterface {
                 ]
             )
         )
+        
         
         return model
     }

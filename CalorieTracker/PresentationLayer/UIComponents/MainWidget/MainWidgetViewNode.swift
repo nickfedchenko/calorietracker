@@ -182,6 +182,10 @@ final class MainWidgetViewNode: CTWidgetNode {
         )
         
         view.layer.insertSublayer(gradientLayer, at: 0)
+        // TODO: Вернуть и сделать нормальное обновление модели
+        fifthLabel.alpha = 0
+        sixthLabel.alpha = 0
+        burnedKcalSwitchNode.alpha = 0
     }
     
     private func didChangeModel() {
