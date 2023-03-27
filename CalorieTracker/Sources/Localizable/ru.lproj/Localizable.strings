@@ -625,8 +625,8 @@
 "gainMuscleMass" = "Набрать мышечную массу";
 "manageHealthCondition" = "Управлять своим здоровьем";
 
-"male" = "Мужчина";
-"famale" = "Женщина";
+"male" = "Мужской";
+"famale" = "Женский";
 
 "save" = "Сохранить";
 "apply" = "Применить";
@@ -919,3 +919,4 @@
 
 "Have a nice day! Don't forget to track your breakfast" = "Хорошего дня! Не забудьте внести свой завтрак";
 "Net Carbs" = "Чистые углеводы";
+"Restore Purchases" = "Восстановить Покупки";

@@ -51,7 +51,7 @@ final class MenuCellView<ID: WithGetTitleProtocol
     var isSelectedBackgroundColor: UIColor? = .white
     var isNotSelectedBackgroundColor: UIColor? = R.color.addFood.menu.background()
     var isSelectedTextColor: UIColor? = R.color.addFood.menu.isSelectedText()
-    var isNotSelectedTextColor: UIColor? = R.color.addFood.menu.isNotSelectedText()
+    var isNotSelectedTextColor: UIColor? = UIColor(hex: "0C695E")
     var isSelectedBorderColor: UIColor? = R.color.addFood.menu.isSelectedBorder()
     var isNotSelectedBorderColor: UIColor? = R.color.addFood.menu.isNotSelectedBorder()
     

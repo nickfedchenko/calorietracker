@@ -44,8 +44,14 @@ extension RecipesScreenPresenter: RecipesScreenPresenterInterface {
     }
     
     func notifySectionsUpdated(sectionUpdated: Int, shouldRemoveActivity: Bool) {
-        DispatchQueue.main.async { [weak self] in
-            self?.view.shouldReloadDishesCollection(in: sectionUpdated, shouldRemoveActivity: shouldRemoveActivity)
+        if Thread.current.isMainThread {
+            DispatchQueue.main.async { [weak self] in
+                self?.view.shouldReloadDishesCollection(in: sectionUpdated, shouldRemoveActivity: shouldRemoveActivity)
+            }
+        } else {
+            DispatchQueue.main.sync { [weak self] in
+                self?.view.shouldReloadDishesCollection(in: sectionUpdated, shouldRemoveActivity: shouldRemoveActivity)
+            }
         }
     }
     

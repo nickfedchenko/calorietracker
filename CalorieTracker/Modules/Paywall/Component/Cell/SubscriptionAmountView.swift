@@ -21,6 +21,12 @@ final class SubscriptionAmount: UIView {
     var isSelected: Bool = false {
         didSet { didChageIsSelected() }
     }
+    private let shadowView: ViewWithShadow = {
+        let shadow = ViewWithShadow(Constants.shadows)
+        shadow.backgroundColor = .white
+        shadow.layer.cornerRadius = 8
+        return shadow
+    }()
     
     var isProfitable: Bool = false {
         didSet {
@@ -73,7 +79,7 @@ final class SubscriptionAmount: UIView {
     }
     
     private func configureViews() {
-        backgroundColor = R.color.mainBackground()
+        backgroundColor = .clear
         checkMarkImageView.alpha = 0
         layer.borderColor = UIColor(named: R.color.onboardings.radialGradientFirst.name)?.cgColor
 
@@ -95,6 +101,7 @@ final class SubscriptionAmount: UIView {
     }
     
     private func configureLayouts() {
+        addSubview(shadowView)
         addSubview(stackView)
         addSubview(profitBackgroundView)
         addSubview(priceLabel)
@@ -121,6 +128,10 @@ final class SubscriptionAmount: UIView {
             $0.bottom.equalTo(snp.bottom).offset(-8)
         }
         
+        shadowView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
         checkMarkImageView.snp.makeConstraints {
             $0.left.equalTo(stackView.snp.right).offset(16)
             $0.right.equalTo(snp.right).offset(-16)
@@ -139,8 +150,11 @@ final class SubscriptionAmount: UIView {
             layer.borderColor = UIColor(hex: "179458").cgColor
             layer.borderWidth = 2
             checkMarkImageView.image = R.image.onboardings.complet()
+            shadowView.alpha = 1
         } else {
             layer.borderColor = UIColor(hex: "568189").cgColor
+            layer.borderWidth = 1
+            shadowView.alpha = 0
             checkMarkImageView.image = R.image.paywall.dottedLine()
         }
     }
@@ -158,5 +172,15 @@ final class SubscriptionAmount: UIView {
     
     private func setIsProfitable(_ isProfitable: Bool) {
         profitBackgroundView.alpha = isProfitable ? 1 : 0
+    }
+}
+
+extension SubscriptionAmount {
+    enum Constants{
+        static let shadows: [Shadow] = [
+            .init(color: .black, opacity: 0.15, offset: .init(width: 0, height: 12), radius: 22, spread: 0),
+            .init(color: .black, opacity: 0.0529, offset: .init(width: 0, height: 2.26), radius: 6.57, spread: 0),
+            .init(color: .black, opacity: 0.0432, offset: .init(width: 0, height: 0.53), radius: 2.29, spread: 0)
+        ]
     }
 }

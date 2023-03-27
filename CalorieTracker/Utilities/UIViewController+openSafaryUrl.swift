@@ -20,4 +20,11 @@ extension UIViewController {
     var hasActiveSubscription: Bool {
         Apphud.hasActiveSubscription()
     }
+    
+    func showSimpleAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let alertAction = UIAlertAction(title: "Ok", style: .default)
+        alert.addAction(alertAction)
+        present(alert, animated: true, completion: nil)
+    }
 }

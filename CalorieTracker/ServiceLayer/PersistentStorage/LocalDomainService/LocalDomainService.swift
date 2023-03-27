@@ -154,7 +154,6 @@ final class LocalDomainService {
         withPredicate predicate: NSCompoundPredicate? = nil,
         withSortDescriptor sortDescriptors: [NSSortDescriptor]? = nil
     ) -> [T]? {
-        
         var fetchedResult: [T]?
         let request = T.fetchRequest()
         request.predicate = predicate

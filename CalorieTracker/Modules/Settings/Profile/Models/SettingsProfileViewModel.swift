@@ -37,7 +37,7 @@ struct SettingsProfileViewModel {
         case .title:
             let cell: SettingsProfileHeaderCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
             cell.type = type
-            cell.title = "PROFILE"
+            cell.title = R.string.localizable.settingsProfileTitle()
             return cell
         default:
             let cell: SettingsProfileTextFieldCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
@@ -91,7 +91,7 @@ struct SettingsProfileViewModel {
         let dietary = presenter?.getDietary() ?? .classic
         
         return .init(
-            title: "Dietary Preference",
+            title: R.string.localizable.settingsDietaryTitle(),
             description: nil,
             titleColor: R.color.foodViewing.basicDark(),
             descriptionColor: nil,
@@ -107,37 +107,37 @@ struct SettingsProfileViewModel {
         switch type {
         case .name:
             return .init(
-                title: "First Name",
+                title: R.string.localizable.settingsProfileNameTitle(),
                 isEnabled: true,
                 value: .required(nil)
             )
         case .lastName:
             return .init(
-                title: "Last Name",
+                title: R.string.localizable.settingsProfileLastNameTitle(),
                 isEnabled: true,
                 value: .required(nil)
             )
         case .city:
             return .init(
-                title: "City",
+                title: R.string.localizable.settingsProfileCityTitle(),
                 isEnabled: true,
                 value: .optional
             )
         case .sex:
             return .init(
-                title: "Sex",
+                title: R.string.localizable.settingsProfileSexTitle(),
                 isEnabled: false,
                 value: .required(nil)
             )
         case .date:
             return .init(
-                title: "Date of Birth",
+                title: R.string.localizable.settingsProfileDateTitle(),
                 isEnabled: false,
-                value: .required("Month Day, Year")
+                value: .required(R.string.localizable.settingsProfileDateDescription())
             )
         case .height:
             return .init(
-                title: "Height",
+                title: R.string.localizable.settingsProfileHeightTitle(),
                 isEnabled: false,
                 value: .required(nil)
             )

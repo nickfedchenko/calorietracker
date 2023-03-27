@@ -52,7 +52,7 @@ final class AddFoodViewController: UIViewController {
         )
         return view
     }()
-    private lazy var menuMealView = MenuView(Const.menuModels)
+    private lazy var menuMealView = MenuView(Const.menuModels, shouldShowTitleLabel: false)
     private lazy var menuNutrientView = ContextMenuTypeSecondView(Const.menuTypeSecondModels)
     private lazy var menuButton = MenuButton<MealTime>()
     private lazy var staticSearchTextField: SearchView = {
@@ -182,7 +182,7 @@ final class AddFoodViewController: UIViewController {
         )
         menuCreateController?.anchorPoint = CGPoint(
             x: (view.frame.width - Const.menuCreateViewWidth) / 2.0,
-            y: view.frame.height - 20
+            y: staticSearchTextField.frame.maxY
         )
         firstDraw = false
     }
@@ -798,6 +798,7 @@ final class AddFoodViewController: UIViewController {
         
         view.sendSubviewToBack(foodCollectionViewController.view)
         view.sendSubviewToBack(keyboardHeaderView)
+        foodCollectionViewController.shouldShowNothingFound = false
         UIView.animate(withDuration: 0.3) {
             self.searchHistoryViewController.view.alpha = 0
         } completion: { [weak self] _ in

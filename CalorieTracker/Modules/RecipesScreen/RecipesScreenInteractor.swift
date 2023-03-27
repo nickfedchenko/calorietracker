@@ -17,22 +17,25 @@ protocol RecipesScreenInteractorInterface: AnyObject {
     func requestUpdateSections()
     func getNumberOfItemInSection(section: Int) -> Int
     func getNumberOfSections() -> Int
-    func getDishModel(at indexPath: IndexPath) -> Dish
+    func getDishModel(at indexPath: IndexPath) -> Dish?
     func getSectionModel(at indexPath: IndexPath) -> RecipeSectionModel
     func updateFavoritesSection()
 }
 
 class RecipesScreenInteractor {
     let operationalQueue = DispatchQueue(label: "operations", qos: .userInteractive, attributes: .concurrent)
+    let syncQueue = DispatchQueue(label: "sync queue", qos: .userInteractive)
     weak var presenter: RecipesScreenPresenterInterface?
     var facade: DataServiceFacadeInterface = DSF.shared
     var foodService: FoodDataServiceInterface = FDS.shared
+    let lock = NSLock()
     var sections: [RecipeSectionModel] = [
         .init(title: "Loading", dishes: []),
         .init(title: "Loading", dishes: []),
         .init(title: "Loading", dishes: []),
         .init(title: "Loading", dishes: [])
     ]
+    
     //    private let dataService = DSF.shared
 }
 
@@ -46,6 +49,7 @@ extension RecipesScreenInteractor: RecipesScreenInteractorInterface {
     }
     
     func getNumberOfItemInSection(section: Int) -> Int {
+        print("dishes in section \(section) - \(sections[section].dishes.count)")
         return sections[section].dishes.count
     }
     
@@ -55,12 +59,17 @@ extension RecipesScreenInteractor: RecipesScreenInteractorInterface {
     
     func requestUpdateSections() {
         makeSections { [weak self] section in
-            self?.presenter?.notifySectionsUpdated(sectionUpdated: section, shouldRemoveActivity: true)
+            self?.syncQueue.async {
+                self?.presenter?.notifySectionsUpdated(sectionUpdated: section, shouldRemoveActivity: true)
+            }
         }
     }
     
-    func getDishModel(at indexPath: IndexPath) -> Dish {
-        sections[indexPath.section].dishes[indexPath.item]
+    func getDishModel(at indexPath: IndexPath) -> Dish? {
+        guard indexPath.section < sections.count else { return nil }
+        let section = sections[indexPath.section]
+        guard !section.dishes.isEmpty else { return nil }
+        return sections[indexPath.section].dishes[indexPath.item]
     }
     
     func getSectionModel(at indexPath: IndexPath) -> RecipeSectionModel {

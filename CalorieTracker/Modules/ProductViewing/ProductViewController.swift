@@ -71,6 +71,11 @@ final class ProductViewController: CTViewController {
         action: #selector(hideServingSelector(sender:))
     )
     
+    private lazy var collapseRecognizerTexfield = UITapGestureRecognizer(
+        target: self,
+        action: #selector(hideServingSelector(sender:))
+    )
+    
     // MARK: - Initialize
     
     init(_ openController: OpenController) {
@@ -137,8 +142,11 @@ final class ProductViewController: CTViewController {
             if !isCollapsed {
                 self.valueTextField.selectAll(nil)
                 self.mainScrollView.removeGestureRecognizer(self.collapseRecognizer)
+                self.valueTextField.removeGestureRecognizer(self.collapseRecognizerTexfield)
             }
             if isCollapsed {
+                self.valueTextField.resignFirstResponder()
+                self.valueTextField.addGestureRecognizer(self.collapseRecognizerTexfield)
                 self.mainScrollView.addGestureRecognizer(self.collapseRecognizer)
             }
         }
@@ -462,6 +470,10 @@ final class ProductViewController: CTViewController {
     }
     
     @objc private func hideServingSelector(sender: UITapGestureRecognizer) {
+        if sender.view === valueTextField {
+            textFieldDidBeginEditing(valueTextField)
+            return 
+        }
         showOverlayView(true)
         //        self?.selectedWeightType = type
         selectView.collapse()
@@ -643,9 +655,13 @@ final class ProductViewController: CTViewController {
         func textFieldDidBeginEditing(_ textField: UITextField) {
             guard textField === valueTextField else { return }
             textField.selectAll(textField)
+            if !selectView.isCollapsed {
+                selectView.collapse()
+            }
         }
         
         func textFieldDidEndEditing(_ textField: UITextField) {
         
         }
+        
     }

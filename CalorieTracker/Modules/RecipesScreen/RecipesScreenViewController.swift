@@ -255,7 +255,7 @@ extension RecipesScreenViewController: RecipesScreenViewControllerInterface {
         if shouldRemoveActivity {
             hideActivityIndicator()
         }
-        collectionView.reloadSections(IndexSet(integer: section))
+        collectionView.reloadData()
     }
 }
 
