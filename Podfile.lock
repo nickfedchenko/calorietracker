@@ -4,6 +4,40 @@ PODS:
     - AnalyticsConnector (~> 1.0.0)
   - AnalyticsConnector (1.0.0)
   - ApphudSDK (2.8.3)
+  - FirebaseCore (10.2.0):
+    - FirebaseCoreInternal (~> 10.0)
+    - GoogleUtilities/Environment (~> 7.8)
+    - GoogleUtilities/Logger (~> 7.8)
+  - FirebaseCoreInternal (10.2.0):
+    - "GoogleUtilities/NSData+zlib (~> 7.8)"
+  - FirebaseCrashlytics (10.2.0):
+    - FirebaseCore (~> 10.0)
+    - FirebaseInstallations (~> 10.0)
+    - GoogleDataTransport (~> 9.2)
+    - GoogleUtilities/Environment (~> 7.8)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+    - PromisesObjC (~> 2.1)
+  - FirebaseInstallations (10.2.0):
+    - FirebaseCore (~> 10.0)
+    - GoogleUtilities/Environment (~> 7.8)
+    - GoogleUtilities/UserDefaults (~> 7.8)
+    - PromisesObjC (~> 2.1)
+  - GoogleDataTransport (9.2.0):
+    - GoogleUtilities/Environment (~> 7.7)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+    - PromisesObjC (< 3.0, >= 1.2)
+  - GoogleUtilities/Environment (7.10.0):
+    - PromisesObjC (< 3.0, >= 1.2)
+  - GoogleUtilities/Logger (7.10.0):
+    - GoogleUtilities/Environment
+  - "GoogleUtilities/NSData+zlib (7.10.0)"
+  - GoogleUtilities/UserDefaults (7.10.0):
+    - GoogleUtilities/Logger
+  - nanopb (2.30909.0):
+    - nanopb/decode (= 2.30909.0)
+    - nanopb/encode (= 2.30909.0)
+  - nanopb/decode (2.30909.0)
+  - nanopb/encode (2.30909.0)
   - NVActivityIndicatorView (5.1.1):
     - NVActivityIndicatorView/Base (= 5.1.1)
   - NVActivityIndicatorView/Base (5.1.1)
@@ -22,6 +56,7 @@ PODS:
   - PINRemoteImage/PINCache (3.0.3):
     - PINCache (~> 3.0.3)
     - PINRemoteImage/Core
+  - PromisesObjC (2.1.1)
   - R.swift (6.1.0):
     - R.swift.Library (~> 5.3.0)
   - R.swift.Library (5.3.0)
@@ -51,6 +86,7 @@ DEPENDENCIES:
   - AlignedCollectionViewFlowLayout
   - Amplitude
   - ApphudSDK
+  - FirebaseCrashlytics
   - NVActivityIndicatorView
   - R.swift
   - SwiftLint
@@ -62,10 +98,18 @@ SPEC REPOS:
     - Amplitude
     - AnalyticsConnector
     - ApphudSDK
+    - FirebaseCore
+    - FirebaseCoreInternal
+    - FirebaseCrashlytics
+    - FirebaseInstallations
+    - GoogleDataTransport
+    - GoogleUtilities
+    - nanopb
     - NVActivityIndicatorView
     - PINCache
     - PINOperation
     - PINRemoteImage
+    - PromisesObjC
     - R.swift
     - R.swift.Library
     - SwiftLint
@@ -76,15 +120,23 @@ SPEC CHECKSUMS:
   Amplitude: bff4ceaad2a79e908682134d75dc862960594ea6
   AnalyticsConnector: 4c386d5972ac9da86e22d668564dbbac97558754
   ApphudSDK: a9d093a57d9fe5c7714380caad7bce5f9243f8a1
+  FirebaseCore: 813838072b797b64f529f3c2ee35e696e5641dd1
+  FirebaseCoreInternal: 091bde13e47bb1c5e9fe397634f3593dc390430f
+  FirebaseCrashlytics: df7406152189d48346deafb716806d7bd9ebb573
+  FirebaseInstallations: 004915af170935e3a583faefd5f8bc851afc220f
+  GoogleDataTransport: 1c8145da7117bd68bbbed00cf304edb6a24de00f
+  GoogleUtilities: bad72cb363809015b1f7f19beb1f1cd23c589f95
+  nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   NVActivityIndicatorView: 1f6c5687f1171810aa27a3296814dc2d7dec3667
   PINCache: 7a8fc1a691173d21dbddbf86cd515de6efa55086
   PINOperation: 00c935935f1e8cf0d1e2d6b542e75b88fc3e5e20
   PINRemoteImage: f1295b29f8c5e640e25335a1b2bd9d805171bd01
+  PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
   R.swift: ec98ff71c4ab2f6fd01dd077e5afd15e63a4834c
   R.swift.Library: 0fc583cb55a99e28901299cc451614cad1161962
   SwiftLint: f80f1be7fa96d30e0aa68e58d45d4ea1ccaac519
   Texture: 2e8ab2519452515f7f5a520f5a8f7e0a413abfa3
 
-PODFILE CHECKSUM: 857801a60d63219a50fdaf0a05eb004dd436a3b5
+PODFILE CHECKSUM: 18365d9f8ab9739b6beee6ea1416dc22440dadcf
 
 COCOAPODS: 1.11.3

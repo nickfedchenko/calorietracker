@@ -13,4 +13,5 @@ target 'CalorieTracker' do
   pod 'AlignedCollectionViewFlowLayout'
   pod 'NVActivityIndicatorView'
   pod 'Amplitude'
+  pod 'FirebaseCrashlytics'
 end
