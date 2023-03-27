@@ -5,8 +5,9 @@
 //  Created by Vladimir Banushkin on 24.01.2023.
 //
 
-import ApphudSDK
 import Amplitude
+import ApphudSDK
+import FirebaseCore
 import UIKit
 
 final class AppCoordinator: ApphudDelegate {
@@ -60,6 +61,10 @@ final class AppCoordinator: ApphudDelegate {
         startApphud()
         setupAmplitude()
         updateLogStreak()
+    }
+    
+    private func startFirebase() {
+        FirebaseApp.configure()
     }
     
     private func updateFoodData() {
