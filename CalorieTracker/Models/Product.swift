@@ -32,10 +32,30 @@ struct Product {
 }
 
 struct Composition: Codable {
-    var vitaminA, vitaminD, vitaminC, calcium,
-        sugar, fiber, satFat, unsatFat, transFat,
-        sodium, cholesterol, potassium, sugarAlc,
-        iron, addSugar: Double?
+    var totalFat,
+        saturatedFat,
+        transFat,
+        polyUnsatFat,
+        monoUnsatFat,
+        cholesterol,
+        sodium,
+        totalCarbs,
+        diataryFiber,
+        netCarbs,
+        totalSugars,
+        inclAddedSugars,
+        sugarAlc,
+        protein,
+        vitaminD,
+        calcium,
+        iron,
+        potassium,
+        vitaminA,
+        vitaminC: Double?
+//    var vitaminA, vitaminD, vitaminC, calcium,
+//        sugar, fiber, satFat, unsatFat, transFat,
+//        sodium, cholesterol, potassium, sugarAlc,
+//        iron, addSugar: Double?
 }
 
 struct Serving: Codable {
@@ -69,7 +89,7 @@ extension Product {
             self.servings = nil
         }
         
-        if let compositionData = managedModel.servings {
+        if let compositionData = managedModel.composition {
             self.composition = try? JSONDecoder().decode(Composition.self, from: compositionData)
         } else {
             self.composition = nil
@@ -124,35 +144,34 @@ extension Composition {
     init(_ nutritions: [Nutrition]) {
         for nutrition in nutritions {
             switch nutrition.nutritionType {
-            
             case .fatsOverall:
-                continue
+                self.totalFat = nutrition.value ?? .zero
             case .saturatedFats:
-                self.satFat = nutrition.value ?? .zero
+                self.saturatedFat = nutrition.value ?? .zero
             case .transFats:
                 self.transFat = nutrition.value ?? .zero
             case .polyUnsaturatedFats:
-                self.unsatFat = nutrition.value ?? .zero
+                self.polyUnsatFat = nutrition.value ?? .zero
             case .monoUnsaturatedFats:
-                continue
+                self.monoUnsatFat = nutrition.value ?? .zero
             case .cholesterol:
                 self.cholesterol = nutrition.value ?? .zero
             case .sodium:
                 self.sodium = nutrition.value ?? .zero
             case .carbsTotal:
-                continue
+                self.totalCarbs = nutrition.value ?? .zero
             case .alimentaryFiber:
-                self.fiber = nutrition.value ?? .zero
+                self.diataryFiber = nutrition.value ?? .zero
             case .netCarbs:
-                continue
+                self.netCarbs = nutrition.value ?? .zero
             case .sugarOverall:
-                self.sugar = nutrition.value ?? .zero
+                self.totalSugars = nutrition.value ?? .zero
             case .includingAdditionalSugars:
-                self.addSugar = nutrition.value ?? .zero
+                self.inclAddedSugars = nutrition.value ?? .zero
             case .sugarSpirits:
                 self.sugarAlc = nutrition.value ?? .zero
             case .protein:
-                continue
+                self.protein = nutrition.value ?? .zero
             case .vitaminD:
                 self.vitaminD = nutrition.value ?? .zero
             case .calcium:

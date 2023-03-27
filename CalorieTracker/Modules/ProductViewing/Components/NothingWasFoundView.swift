@@ -35,6 +35,7 @@ final class NothingWasFoundView: UIView {
         view.backgroundColor = .white
         view.layer.cornerCurve = .continuous
         view.layer.cornerRadius = 12
+        view.alpha = 0
         return view
     }()
     

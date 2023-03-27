@@ -15,6 +15,7 @@ final class AppMessageWidgetNode: CTWidgetNode {
     
     private lazy var textNode: ASTextNode = {
         let node = ASTextNode()
+        node.maximumNumberOfLines = 2
         return node
     }()
     
@@ -27,7 +28,7 @@ final class AppMessageWidgetNode: CTWidgetNode {
                     worldIndex: Array(0...string.split(separator: " ").count),
                     attributes: [
                         .color(R.color.messageWidget.text()),
-                        .font(R.font.sfProDisplaySemibold(size: 18.fontScale()))
+                        .font(R.font.sfProRoundedMedium(size: UIDevice.isSmallDevice ? 15 : 18.fontScale()))
                     ]
                 )
             ])

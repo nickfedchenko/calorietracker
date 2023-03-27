@@ -28,6 +28,7 @@ final class SliderStepperView: UIControl {
             backgroundColor = sliderBackgroundColor
         }
     }
+    
     var step: Int = 0 {
         didSet {
             if step != oldValue {
@@ -41,14 +42,29 @@ final class SliderStepperView: UIControl {
         }
     }
     
+    var shouldAddInnerShadow = true {
+        didSet {
+            if !shouldAddInnerShadow {
+                innerShadowLayer.opacity = 0
+            }
+        }
+    }
+    
     override var frame: CGRect {
         didSet {
             updateLayerFrames()
         }
     }
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        updateSupernodeInnerShadow()
+        updateLayerFrames()
+    }
+    
+    init(shouldAddInnerShadow: Bool = true) {
+        self.shouldAddInnerShadow = shouldAddInnerShadow
+        super.init(frame: .zero)
         setupView()
     }
     
@@ -62,7 +78,9 @@ final class SliderStepperView: UIControl {
         lineShape.cornerRadius = frame.height / 2.0
         setupCircleShape()
         lineShapeInnerShadow()
-        supernodeInnerShadow()
+        if shouldAddInnerShadow {
+            supernodeInnerShadow()
+        }
     }
     
     private func setupView() {
@@ -137,6 +155,7 @@ final class SliderStepperView: UIControl {
     }
     
     private func supernodeInnerShadow() {
+        print("Super node bounds\(bounds)")
         let innerShadowLayer = CALayer()
         innerShadowLayer.frame = bounds
         innerShadowLayer.shadowPath = getShadowPath(rect: bounds).cgPath
@@ -146,6 +165,16 @@ final class SliderStepperView: UIControl {
         innerShadowLayer.shadowOpacity = 1
         innerShadowLayer.shadowRadius = 16
         layer.addSublayer(innerShadowLayer)
+    }
+    
+    private func updateSupernodeInnerShadow() {
+        innerShadowLayer.frame = bounds
+        innerShadowLayer.shadowPath = getShadowPath(rect: bounds).cgPath
+        innerShadowLayer.masksToBounds = true
+        innerShadowLayer.shadowColor = R.color.waterSlider.backgroundShadow()?.cgColor
+        innerShadowLayer.shadowOffset = CGSize.zero
+        innerShadowLayer.shadowOpacity = 1
+        innerShadowLayer.shadowRadius = 16
     }
     
     private func getShadowPath(rect: CGRect) -> UIBezierPath {

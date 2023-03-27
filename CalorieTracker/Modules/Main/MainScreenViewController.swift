@@ -430,15 +430,17 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         switch widget.widgetType {
         case .calendar:
             LoggingService.postEvent(event: .calwopen)
-            presenter?.didTapWidget(widget.widgetType)
+            presenter?.didTapWidget(widget.widgetType, anchorView: calendarWidget.view)
         case .weight:
-            presenter?.didTapWidget(widget.widgetType)
+            presenter?.didTapWidget(widget.widgetType, anchorView: weightMeasureWidget.view)
             LoggingService.postEvent(event: .weightwopen)
         case .steps:
-            presenter?.didTapWidget(widget.widgetType)
+            presenter?.didTapWidget(widget.widgetType, anchorView: stepsWidget.view)
             LoggingService.postEvent(event: .stepswopen)
         case .water:
-            presenter?.didTapWidget(.water(specificDate: presenter?.getPointDate() ?? Date()))
+            presenter?.didTapWidget(
+                .water(specificDate: presenter?.getPointDate() ?? Date()), anchorView: waterBalanceWidget.view
+            )
             LoggingService.postEvent(event: .waterwopen)
         case .exercises:
             presenter?.didTapExerciseWidget()

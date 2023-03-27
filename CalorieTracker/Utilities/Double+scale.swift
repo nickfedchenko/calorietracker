@@ -31,3 +31,13 @@ extension Double {
         }
     }
 }
+
+extension Double {
+    func removeZerosFromEnd(maxPrecision: Int = 3) -> String {
+        let formatter = NumberFormatter()
+        let number = NSNumber(value: self)
+        formatter.minimumFractionDigits = 0
+        formatter.maximumFractionDigits = maxPrecision
+        return String(formatter.string(from: number) ?? "")
+    }
+}

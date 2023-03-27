@@ -5,7 +5,6 @@
 //  Created by Vadim Aleshin on 16.11.2022.
 //
 
-import Foundation
 import UIKit
 
 // swiftlint:disable: nesting
@@ -52,20 +51,21 @@ struct NutritionFactsVM {
     
     private var cells: [CellModel] = [
         .init(key: .kcal, type: .second),
-        .init(key: .fat, type: .third),
-        .init(key: .satFat, type: .fourth),
+        .init(key: .totalFat, type: .third),
+        .init(key: .saturatedFat, type: .fourth),
         .init(key: .transFat, type: .fourth),
         .init(key: .polyFat, type: .fourth),
         .init(key: .monoFat, type: .fourth),
         .init(key: .cholesterol, type: .third),
         .init(key: .sodium, type: .third),
-        .init(key: .carbs, type: .third),
+        .init(key: .totalCarbs, type: .third),
         .init(key: .dietaryFiber, type: .fourth),
-        .init(key: .sugar, type: .fourth),
+        .init(key: .totalSugar, type: .fourth),
         .init(key: .inAddSugar, type: .fifth),
+        .init(key: .sugarAlc, type: .fifth),
         .init(key: .protein, type: .first),
         .init(key: .vitaminD, type: .sixth),
-        .init(key: .calium, type: .sixth),
+        .init(key: .calcium, type: .sixth),
         .init(key: .iron, type: .sixth),
         .init(key: .potassium, type: .sixth),
         .init(key: .vitaminA, type: .sixth),
@@ -84,8 +84,8 @@ struct NutritionFactsVM {
                  indexPath: IndexPath) -> UICollectionViewCell {
         let cell: NutritionFactsCollectionViewCell = collectionView
             .dequeueReusableCell(for: indexPath)
-        
-        cell.viewModel = viewModels?[indexPath.row]
+        let viewModel = viewModels?[indexPath.row]
+        cell.viewModel = viewModel
         
         return cell
     }
@@ -118,7 +118,19 @@ extension NutritionFactsVM {
                 guard let value = product[model.key] else {
                     return "-"
                 }
-                return String(format: "%.1f", value)
+                let suffix =  {
+                    switch model.key {
+                    case .totalFat, .saturatedFat, .polyFat, .monoFat, .totalCarbs, .dietaryFiber, .netCarbs,
+                            .totalSugar, .inAddSugar, .sugarAlc, .protein:
+                        return BAMeasurement.measurmentSuffix(.serving)
+                    case .transFat, .vitaminD, .vitaminA:
+                        return BAMeasurement.measurmentSuffix(.microNutrients)
+                    default:
+                        return BAMeasurement.measurmentSuffix(.milliNutrients)
+                    }
+                }()
+                let targetValueString = value.removeZerosFromEnd()
+                return targetValueString + " \(suffix)"
             }(),
             font: configuration.font,
             cellWidth: configuration.cellWidth,
@@ -129,21 +141,24 @@ extension NutritionFactsVM {
 
 private extension Product {
     enum ProductKey {
-        case protein
-        case fat
-        case satFat
+      
+        case totalFat
+        case saturatedFat
         case transFat
         case polyFat
         case monoFat
-        case carbs
-        case dietaryFiber
-        case sugar
-        case inAddSugar
-        case kcal
         case cholesterol
         case sodium
+        case totalCarbs
+        case dietaryFiber
+        case netCarbs
+        case totalSugar
+        case inAddSugar
+        case sugarAlc
+        case kcal
+        case protein
         case vitaminD
-        case calium
+        case calcium
         case iron
         case potassium
         case vitaminA
@@ -154,33 +169,33 @@ private extension Product {
         switch key {
         case .protein:
             return self.protein
-        case .fat:
+        case .totalFat:
             return self.fat
-        case .carbs:
-            return self.carbs
+        case .totalCarbs:
+            return self.composition?.totalCarbs
         case .kcal:
             return Double(self.kcal)
         case .cholesterol:
             return self.composition?.cholesterol
-        case .satFat:
-            return self.composition?.satFat
+        case .saturatedFat:
+            return self.composition?.saturatedFat
         case .transFat:
             return self.composition?.transFat
         case .polyFat:
-            return self.composition?.unsatFat
+            return self.composition?.polyUnsatFat
         case .monoFat:
-            return self.composition?.unsatFat
+            return self.composition?.monoUnsatFat
         case .dietaryFiber:
-            return self.composition?.fiber
-        case .sugar:
-            return self.composition?.sugar
+            return self.composition?.diataryFiber
+        case .totalSugar:
+            return self.composition?.totalSugars
         case .inAddSugar:
-            return self.composition?.sugarAlc
+            return self.composition?.inclAddedSugars
         case .sodium:
             return self.composition?.sodium
         case .vitaminD:
             return self.composition?.vitaminD
-        case .calium:
+        case .calcium:
             return self.composition?.calcium
         case .iron:
             return self.composition?.iron
@@ -190,6 +205,10 @@ private extension Product {
             return self.composition?.vitaminA
         case .vitaminC:
             return self.composition?.vitaminC
+        case .sugarAlc:
+            return composition?.sugarAlc
+        case .netCarbs:
+            return composition?.netCarbs
         }
     }
     
@@ -198,15 +217,15 @@ private extension Product {
         switch key {
         case .protein:
             return R.string.localizable.protein()
-        case .fat:
+        case .totalFat:
             return R.string.localizable.fat()
-        case .carbs:
+        case .totalCarbs:
             return R.string.localizable.carb()
         case .kcal:
             return R.string.localizable.kcal()
         case .cholesterol:
             return R.string.localizable.choleterol()
-        case .satFat:
+        case .saturatedFat:
             return R.string.localizable.satFat()
         case .transFat:
             return R.string.localizable.transFat()
@@ -216,7 +235,7 @@ private extension Product {
             return R.string.localizable.monoFat()
         case .dietaryFiber:
             return R.string.localizable.dietaryFiber()
-        case .sugar:
+        case .totalSugar:
             return R.string.localizable.sugars()
         case .inAddSugar:
             return R.string.localizable.addSugars()
@@ -224,7 +243,7 @@ private extension Product {
             return R.string.localizable.sodium()
         case .vitaminD:
             return R.string.localizable.vitaminD()
-        case .calium:
+        case .calcium:
             return R.string.localizable.calcium()
         case .iron:
             return R.string.localizable.iron()
@@ -234,6 +253,10 @@ private extension Product {
             return R.string.localizable.vitaminA()
         case .vitaminC:
             return R.string.localizable.vitaminC()
+        case .sugarAlc:
+            return R.string.localizable.sugarAlco()
+        case .netCarbs:
+            return R.string.localizable.netCarbs()
         }
     }
 }

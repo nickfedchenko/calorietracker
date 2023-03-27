@@ -22,7 +22,9 @@ final class SliderTrackLayer: ActionCAShapeLayer {
     }
     
     override func draw(in ctx: CGContext) {
-        guard let slider = slider else { return }
+        guard let slider = slider else {
+            return
+        }
         let position = slider.positionCircle ?? .zero
         let rect = CGRect(
             origin: .zero,

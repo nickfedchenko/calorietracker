@@ -38,14 +38,10 @@ final class AppCoordinator: ApphudDelegate {
         if UDM.userData == nil {
             getStartedViewController = WelcomeRouter.setupModule()
             //            getStartedViewController = ChooseDietaryPreferenceRouter.setupModule()
-        } else if Apphud.hasActiveSubscription() {
+        } else {
             getStartedViewController = CTTabBarController()
             //            getStartedViewController = PaywallRouter.setupModule()
-        } else {
-            //            getStartedViewController = CTTabBarController()
-            getStartedViewController = PaywallRouter.setupModule()
-            //            getStartedViewController = RateUsScreenRouter.setupModule()
-        }
+        } 
         
         let navigationController = UINavigationController(rootViewController: getStartedViewController)
         rootNavigationController = navigationController
@@ -67,8 +63,10 @@ final class AppCoordinator: ApphudDelegate {
     }
     
     private func updateFoodData() {
-        DSF.shared.updateStoredDishes()
-        DSF.shared.updateStoredProducts()
+        if  abs(Calendar.current.dateComponents([.day], from: Date(), to: UDM.lastBaseUpdateDay).day ?? 0) > 6 {
+                DSF.shared.updateStoredDishes()
+                DSF.shared.updateStoredProducts()
+        }
     }
     
     private func updateHealthKitData() {
@@ -81,6 +79,10 @@ final class AppCoordinator: ApphudDelegate {
         
         HealthKitDataManager.shared.getWorkouts { [weak self] exercises  in
             self?.localDomainService.saveExercise(data: exercises)
+        }
+        
+        HealthKitDataManager.shared.getBurnedKcal { [weak self] burnedKCal in
+            self?.localDomainService.saveBurnedKcal(data: burnedKCal)
         }
         
         setupPeriodicUpdate()
@@ -131,6 +133,10 @@ final class AppCoordinator: ApphudDelegate {
             
             HealthKitDataManager.shared.getWorkouts { [weak self] exercises  in
                 self?.localDomainService.saveExercise(data: exercises)
+            }
+            
+            HealthKitDataManager.shared.getBurnedKcal { [weak self] burnedKcalData in
+                self?.localDomainService.saveBurnedKcal(data: burnedKcalData)
             }
         }
     }

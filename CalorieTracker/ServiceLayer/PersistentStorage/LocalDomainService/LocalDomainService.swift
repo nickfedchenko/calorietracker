@@ -11,6 +11,11 @@ import UIKit
 protocol LocalDomainServiceInterface {
     func fetchProducts() -> [Product]
     func fetchDishes() -> [Dish]
+    func fetchBreakfastDishes(completion: @escaping ([DomainDish]?) -> Void)
+    func fetchLunchDishes(completion: @escaping ([DomainDish]?) -> Void)
+    func fetchDinnerDishes(completion: @escaping ([DomainDish]?) -> Void)
+    func fetchSnackDishes(completion: @escaping ([DomainDish]?) -> Void)
+    func fetchDishesAsynchronously(completion: @escaping ([Dish]) -> Void)
     func fetchFoodData() -> [FoodData]
     func fetchMeals() -> [Meal]
     func fetchWater() -> [DailyData]
@@ -19,9 +24,11 @@ protocol LocalDomainServiceInterface {
     func fetchExercise() -> [Exercise]
     func fetchNotes() -> [Note]
     func fetchDailyMeals() -> [DailyMeal]
+    func fetchBurnedKcals() -> [DailyData]
     func saveProducts(products: [Product], saveInPriority: Bool)
     func saveDishes(dishes: [Dish])
     func saveFoodData(foods: [FoodData])
+    func saveBurnedKcal(data: [DailyData])
     func saveMeals(meals: [Meal])
     func saveWater(data: [DailyData])
     func saveSteps(data: [DailyData])
@@ -71,6 +78,7 @@ protocol LocalDomainServiceInterface {
 }
 
 final class LocalDomainService {
+    private lazy var specificDishesFetchingContext = container.newBackgroundContext()
     // MARK: - Constants
     private let savingQueue: OperationQueue = {
       let queue = OperationQueue()
@@ -159,6 +167,32 @@ final class LocalDomainService {
         return fetchedResult
     }
     
+    private func fetchDataAsynchronously<T: NSManagedObject> (
+        for entity: T.Type,
+        withPredicate predicate: NSCompoundPredicate? = nil,
+        withSortDescriptor sortDescriptors: [NSSortDescriptor]? = nil,
+        completion: @escaping ([T]?) -> Void
+    ) {
+        
+        let request = T.fetchRequest()
+        request.predicate = predicate
+        request.sortDescriptors = sortDescriptors
+        let fetchRequest = NSAsynchronousFetchRequest(fetchRequest: request) { result in
+            guard let result = result.finalResult as? [T] else {
+                completion([])
+                return
+            }
+            completion(result)
+        }
+        specificDishesFetchingContext.perform { [weak self] in
+            do {
+                try self?.specificDishesFetchingContext.execute(fetchRequest)
+            } catch {
+                debugPrint("Error occurred: \(error.localizedDescription)")
+            }
+        }
+    }
+    
     private func getDomainFoodData(_ foodDataId: String) -> DomainFoodData? {
         let format = "id == %@"
         
@@ -168,7 +202,6 @@ final class LocalDomainService {
         guard let domainFoodData = try? context.fetch(request).first else {
             return nil
         }
-        
         return domainFoodData
     }
     
@@ -227,6 +260,58 @@ final class LocalDomainService {
 
 // MARK: - LocalDomainServiceInterface
 extension LocalDomainService: LocalDomainServiceInterface {
+    func fetchBreakfastDishes(completion: @escaping ([DomainDish]?) -> Void) {
+        let p = NSPredicate(format: "(ANY eatingTags.id == %lld)", 8)
+        let compoundPredicate = NSCompoundPredicate(type: .and, subpredicates: [p])
+        let sortDescriptor = NSSortDescriptor(key: "title", ascending: true)
+        fetchDataAsynchronously(
+            for: DomainDish.self,
+            withPredicate: compoundPredicate,
+            withSortDescriptor: [sortDescriptor],
+            completion: completion
+        )
+    }
+    
+    func fetchLunchDishes(completion: @escaping ([DomainDish]?) -> Void) {
+        let p = NSPredicate(format: "(ANY eatingTags.id == %lld)", 9)
+        let compoundPredicate = NSCompoundPredicate(type: .and, subpredicates: [p])
+        let sortDescriptor = NSSortDescriptor(key: "title", ascending: true)
+        fetchDataAsynchronously(
+            for: DomainDish.self,
+            withPredicate: compoundPredicate,
+            withSortDescriptor: [sortDescriptor],
+            completion: completion
+        )
+    }
+
+    func fetchDinnerDishes(completion: @escaping ([DomainDish]?) -> Void) {
+        let p = NSPredicate(format: "(ANY eatingTags.id == %lld)", 10)
+        let compoundPredicate = NSCompoundPredicate(type: .and, subpredicates: [p])
+        let sortDescriptor = NSSortDescriptor(key: "title", ascending: true)
+        fetchDataAsynchronously(
+            for: DomainDish.self,
+            withPredicate: compoundPredicate,
+            withSortDescriptor: [sortDescriptor],
+            completion: completion
+        )
+    }
+
+    func fetchSnackDishes(completion: @escaping ([DomainDish]?) -> Void) {
+        let p = NSPredicate(format: "(ANY eatingTags.id == %lld)", 11)
+        let compoundPredicate = NSCompoundPredicate(type: .and, subpredicates: [p])
+        let sortDescriptor = NSSortDescriptor(key: "title", ascending: true)
+        fetchDataAsynchronously(
+            for: DomainDish.self,
+            withPredicate: compoundPredicate,
+            withSortDescriptor: [sortDescriptor],
+            completion: completion
+        )
+    }
+    
+    func fetchBurnedKcals() -> [DailyData] {
+        guard let domainKcals = fetchData(for: DomainBurnedEnergy.self) else { return [] }
+        return domainKcals.compactMap { DailyData(from: $0) }
+    }
     
     func fetchEatingTags() -> [DomainEatingTag] {
         guard let tags = fetchData(for: DomainEatingTag.self) else { return [] }
@@ -249,9 +334,24 @@ extension LocalDomainService: LocalDomainServiceInterface {
             return []
         }
         let secondsEnd = Date().timeIntervalSince1970
-        print("Tags found \(domainDishes.first?.eatingTags)")
         print("Dishes fetch without mapping \(secondsEnd - secondsStart)")
         return domainDishes.compactMap { Dish(from: $0) }
+    }
+    
+    func fetchDishesAsynchronously(completion: @escaping ([Dish]) -> Void) {
+        let currentTime = Date().timeIntervalSince1970
+        fetchDataAsynchronously(for: DomainDish.self) { dishes in
+            guard let dishes = dishes else {
+                completion([])
+                return
+            }
+            let fetchTime = Date().timeIntervalSince1970
+            print("Fetch time \(fetchTime - currentTime)")
+            let mappedDishes = dishes.compactMap { Dish(from: $0) }
+            let mappedTime = Date().timeIntervalSince1970
+            print("Mapping time \(mappedTime - currentTime)")
+            completion(mappedDishes)
+        }
     }
     
     func fetchFoodData() -> [FoodData] {
@@ -359,9 +459,10 @@ extension LocalDomainService: LocalDomainServiceInterface {
     func saveWater(data: [DailyData]) {
         let backgroundContext = container.newBackgroundContext()
         backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
-        let _: [DomainWater] = data
-            .map { DomainWater.prepare(fromPlainModel: $0, context: backgroundContext) }
+        
         backgroundContext.performAndWait {
+            let _: [DomainWater] = data
+                .map { DomainWater.prepare(fromPlainModel: $0, context: backgroundContext) }
             try? backgroundContext.save()
         }
     }
@@ -369,20 +470,32 @@ extension LocalDomainService: LocalDomainServiceInterface {
     func saveSteps(data: [DailyData]) {
         let backgroundContext = container.newBackgroundContext()
         backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
-        let _: [DomainSteps] = data
-            .map { DomainSteps.prepare(fromPlainModel: $0, context: backgroundContext) }
         backgroundContext.performAndWait {
+            let _: [DomainSteps] = data
+                .map { DomainSteps.prepare(fromPlainModel: $0, context: backgroundContext) }
             try? backgroundContext.save()
             NotificationCenter.default.post(name: NSNotification.Name("UpdateStepsWidget"), object: nil)
+        }
+    }
+    
+    func saveBurnedKcal(data: [DailyData]) {
+        let backgroundContext = container.newBackgroundContext()
+        backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
+        backgroundContext.performAndWait {
+            let _: [DomainBurnedEnergy] = data
+                .map { DomainBurnedEnergy.prepare(fromPlainModel: $0, context: backgroundContext) }
+            try? backgroundContext.save()
+            NotificationCenter.default.post(name: NSNotification.Name("UpdateMainWidget"), object: nil)
         }
     }
     
     func saveWeight(data: [DailyData]) {
         let backgroundContext = container.newBackgroundContext()
         backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
-        let _: [DomainWeight] = data
-            .map { DomainWeight.prepare(fromPlainModel: $0, context: backgroundContext) }
+       
         backgroundContext.performAndWait {
+            let _: [DomainWeight] = data
+                .map { DomainWeight.prepare(fromPlainModel: $0, context: backgroundContext) }
             try? backgroundContext.save()
         }
     }
@@ -390,9 +503,10 @@ extension LocalDomainService: LocalDomainServiceInterface {
     func saveExercise(data: [Exercise]) {
         let backgroundContext = container.newBackgroundContext()
         backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
-        let _: [DomainExercise] = data
-            .map { DomainExercise.prepare(fromPlainModel: $0, context: backgroundContext) }
+    
         backgroundContext.performAndWait {
+            let _: [DomainExercise] = data
+                .map { DomainExercise.prepare(fromPlainModel: $0, context: backgroundContext) }
             try? backgroundContext.save()
             NotificationCenter.default.post(name: NSNotification.Name("UpdateExercisesWidget"), object: nil)
         }

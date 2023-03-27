@@ -742,7 +742,7 @@
 "tabBar.progress" = "ПРОГРЕСС";
 "tabBar.food" = "ЕДА";
 
-"widget.main.including.title" = "В ТОМ ЧИСЛЕ СОЖЖЕННЫЙ";
+"widget.main.including.title" = "В ТОМ ЧИСЛЕ СОЖЖЕННЫЕ";
 "widget.main.excluding.title" = "ИСКЛЮЧАЯ СОЖЖЕННЫЕ";
 "widget.main.kcalLeft.title" = "ККАЛ ОСТАЛОСЬ";
 "widget.steps.title" = "шаги";
@@ -793,6 +793,7 @@
 "measurement.floz" = "ж. унц";
 "measurement.g" = "г";
 "measurement.oz" = "унц";
+"measurement.mcg" = "мкг";
 
 "universalSelector.currentSettingsByKcal" = "Основываясь на текущих настройках ваша цель по калориям ";
 "universalSelector.currentSettingsByKcalNew" = "Основываясь на текущих настройках ваша новая цель по калориям ";
@@ -917,3 +918,4 @@
 "Recommendations.diets.exercise.link.text.4" = "MET values: Activity Categories - Compendium of Physical Activities";
 
 "Have a nice day! Don't forget to track your breakfast" = "Хорошего дня! Не забудьте внести свой завтрак";
+"Net Carbs" = "Чистые углеводы";

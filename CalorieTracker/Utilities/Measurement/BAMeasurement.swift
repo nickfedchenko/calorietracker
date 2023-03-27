@@ -38,6 +38,10 @@ struct BAMeasurement {
                     return UDM.liquidCapacityIsMetric
                 case .serving:
                     return UDM.servingIsMetric
+                case .milliNutrients:
+                    return UDM.servingIsMetric
+                case .microNutrients:
+                    return UDM.servingIsMetric
                 }
             }()
         )
@@ -65,6 +69,14 @@ struct BAMeasurement {
             return isMetric
                 ? "measurement.g".localized
                 : "measurement.oz".localized
+        case .milliNutrients:
+            return isMetric
+                ? "measurement.ml".localized
+                : "measurement.ml".localized
+        case .microNutrients:
+            return isMetric
+                ? "measurement.mcg".localized
+                : "measurement.mcg".localized
         }
     }
     
@@ -121,6 +133,10 @@ struct BAMeasurement {
             return UDM.liquidCapacityIsMetric ? .metric : .imperial
         case .serving:
             return UDM.servingIsMetric ? .metric : .imperial
+        case .milliNutrients:
+            return UDM.servingIsMetric ? .metric : .imperial
+        case .microNutrients:
+            return UDM.servingIsMetric ? .metric : .imperial
         }
     }
     
@@ -143,7 +159,7 @@ extension Double {
         : self.truncatingRemainder(dividingBy: 1) > -0.049
         ? String(format: "%.0f", self)
         : String(format: "%.\(precision)f", self)
-        if string.hasSuffix(".0") { string = string.replacingOccurrences(of: ".00", with: "") }
+        if string.hasSuffix(".0") { string = string.replacingOccurrences(of: ".0", with: "") }
         if string != "0" && string.contains(".") && string.hasSuffix("00") {
             string = String(string.dropLast(2))
         }

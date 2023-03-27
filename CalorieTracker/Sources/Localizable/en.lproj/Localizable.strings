@@ -792,6 +792,7 @@
 "measurement.floz" = "floz";
 "measurement.g" = "g";
 "measurement.oz" = "oz";
+"measurement.mcg" = "mcg";
 
 "universalSelector.currentSettingsByKcal" = "Your calorie goal based on your current settings is ";
 "universalSelector.currentSettingsByKcalNew" = "Your new calorie goal based on your current settings is ";
@@ -914,3 +915,4 @@
 "Recommendations.diets.exercise.link.text.4" = "MET values: Activity Categories - Compendium of Physical Activities";
 
 "Have a nice day! Don't forget to track your breakfast" = "Have a nice day! Don't forget to track your breakfast";
+"Net Carbs" = "Net Carbs";

@@ -14,6 +14,7 @@ protocol StepsWidgetServiceInterface {
     func getStepsForDate(_ date: Date) -> Double
     func setDailyStepsGoal(_ value: Double)
     func getAllStepsData() -> [DailyData]
+    func getBurnedEnergyForDate(_ date: Date) -> Double
 }
 
 final class StepsWidgetService {
@@ -56,6 +57,13 @@ extension StepsWidgetService: StepsWidgetServiceInterface {
                 )
             ]
         )
+    }
+    
+    func getBurnedEnergyForDate(_ date: Date) -> Double {
+        let day = Day(date)
+        let kcalsData = localDomainService.fetchBurnedKcals()
+        let kcalsForDate = kcalsData.first(where: { day == $0.day })
+        return kcalsForDate?.value ?? 0
     }
     
     func setDailyStepsGoal(_ value: Double) {

@@ -134,7 +134,7 @@ struct ProductDTO: Codable {
                 )
             }
             
-            if let sugar = product.composition?.sugar {
+            if let totalSugar = product.composition?.totalSugars {
                 nutritions.append(
                     .init(id: 11,
                           title: "Total sugar",
@@ -144,12 +144,12 @@ struct ProductDTO: Codable {
                             shortTitle: ingredient.unitShorTitle ?? "",
                             isOnlyForMarket: ingredient.unitIsOnlyForMarket
                           ),
-                          value: sugar
+                          value: totalSugar
                          )
                 )
             }
             
-            if let fiber = product.composition?.fiber {
+            if let fiber = product.composition?.diataryFiber {
                 nutritions.append(
                     .init(id: 9,
                           title: "Fiber",
@@ -164,7 +164,7 @@ struct ProductDTO: Codable {
                 )
             }
             
-            if let satFat = product.composition?.satFat {
+            if let satFat = product.composition?.saturatedFat {
                 nutritions.append(
                     .init(id: 2,
                           title: "Saturated fat",
@@ -179,17 +179,32 @@ struct ProductDTO: Codable {
                 )
             }
             
-            if let unsatFat = product.composition?.unsatFat {
+            if let polyUnsatFat = product.composition?.polyUnsatFat {
                 nutritions.append(
                     .init(id: 4,
-                          title: "Unsaturated fat",
+                          title: "Polyunsaturated Fat",
                           unit: .init(
                             id: Int(ingredient.unitID),
                             title: ingredient.unitTitle ?? "",
                             shortTitle: ingredient.unitShorTitle ?? "",
                             isOnlyForMarket: ingredient.unitIsOnlyForMarket
                           ),
-                          value: unsatFat
+                          value: polyUnsatFat
+                         )
+                )
+            }
+            
+            if let monoUnsatFat = product.composition?.monoUnsatFat {
+                nutritions.append(
+                    .init(id: 5,
+                          title: "Monounsaturated Fat",
+                          unit: .init(
+                            id: Int(ingredient.unitID),
+                            title: ingredient.unitTitle ?? "",
+                            shortTitle: ingredient.unitShorTitle ?? "",
+                            isOnlyForMarket: ingredient.unitIsOnlyForMarket
+                          ),
+                          value: monoUnsatFat
                          )
                 )
             }
@@ -257,7 +272,7 @@ struct ProductDTO: Codable {
             if let sugarAlc = product.composition?.sugarAlc {
                 nutritions.append(
                     .init(id: 13,
-                          title: "Sugar spirits",
+                          title: "Sugar Alcohols",
                           unit: .init(
                             id: Int(ingredient.unitID),
                             title: ingredient.unitTitle ?? "",
@@ -272,7 +287,7 @@ struct ProductDTO: Codable {
             if let iron = product.composition?.iron {
                 nutritions.append(
                     .init(id: 17,
-                          title: "Ferrum",
+                          title: "Iron",
                           unit: .init(
                             id: Int(ingredient.unitID),
                             title: ingredient.unitTitle ?? "",
@@ -280,6 +295,51 @@ struct ProductDTO: Codable {
                             isOnlyForMarket: ingredient.unitIsOnlyForMarket
                           ),
                           value: iron
+                         )
+                )
+            }
+            
+            if let totalFat = product.composition?.totalFat {
+                nutritions.append(
+                    .init(id: 1,
+                          title: "Total Fat",
+                          unit: .init(
+                            id: Int(ingredient.unitID),
+                            title: ingredient.unitTitle ?? "",
+                            shortTitle: ingredient.unitShorTitle ?? "",
+                            isOnlyForMarket: ingredient.unitIsOnlyForMarket
+                          ),
+                          value: totalFat
+                         )
+                )
+            }
+            
+            if let totalCarbs = product.composition?.totalCarbs {
+                nutritions.append(
+                    .init(id: 8,
+                          title: "Total Carbohydrates",
+                          unit: .init(
+                            id: Int(ingredient.unitID),
+                            title: ingredient.unitTitle ?? "",
+                            shortTitle: ingredient.unitShorTitle ?? "",
+                            isOnlyForMarket: ingredient.unitIsOnlyForMarket
+                          ),
+                          value: totalCarbs
+                         )
+                )
+            }
+            
+            if let netCarbs = product.composition?.netCarbs {
+                nutritions.append(
+                    .init(id: 8,
+                          title: "Net Carbs",
+                          unit: .init(
+                            id: Int(ingredient.unitID),
+                            title: ingredient.unitTitle ?? "",
+                            shortTitle: ingredient.unitShorTitle ?? "",
+                            isOnlyForMarket: ingredient.unitIsOnlyForMarket
+                          ),
+                          value: netCarbs
                          )
                 )
             }
@@ -510,26 +570,26 @@ struct UnitElement: Codable {
 
 struct Nutrition: Codable {
     enum NutritionType: Int {
-        case fatsOverall = 1
-        case saturatedFats = 2
-        case transFats = 3
-        case polyUnsaturatedFats = 4
-        case monoUnsaturatedFats = 5
-        case cholesterol = 6
-        case sodium = 7
-        case carbsTotal = 8
-        case alimentaryFiber = 9
+        case fatsOverall = 1//
+        case saturatedFats = 2//
+        case transFats = 3//
+        case polyUnsaturatedFats = 4//
+        case monoUnsaturatedFats = 5//
+        case cholesterol = 6//
+        case sodium = 7//
+        case carbsTotal = 8//
+        case alimentaryFiber = 9//
         case netCarbs = 10
-        case sugarOverall = 11
+        case sugarOverall = 11//
         case includingAdditionalSugars = 12
-        case sugarSpirits = 13
-        case protein = 14
+        case sugarSpirits = 13//
+        case protein = 14//
         case vitaminD = 15
-        case calcium = 16
-        case ferrum = 17
-        case potassium = 18
-        case vitaminA = 19
-        case vitaminC = 20
+        case calcium = 16//
+        case ferrum = 17//
+        case potassium = 18//
+        case vitaminA = 19//
+        case vitaminC = 20//
         case kcal = 21
         case undefined = 22
     }

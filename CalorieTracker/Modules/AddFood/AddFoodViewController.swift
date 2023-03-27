@@ -694,7 +694,7 @@ final class AddFoodViewController: UIViewController {
                     self?.presenter?.dismissToCreateMeal(with: food)
                 }
                 
-                DispatchQueue.global(qos: .background).async {
+                DispatchQueue.main.async {
                     FDS.shared.foodUpdate(food: food, favorites: false)
                 }
             }

@@ -13,6 +13,8 @@ enum MeasurementValue {
     case energy
     case liquid
     case serving
+    case milliNutrients
+    case microNutrients
     
     func getMetricUnit() -> Dimension {
         switch self {
@@ -26,6 +28,10 @@ enum MeasurementValue {
             return UnitVolume.milliliters
         case .serving:
             return UnitMass.grams
+        case .milliNutrients:
+            return UnitMass.milligrams
+        case .microNutrients:
+            return UnitMass.micrograms
         }
     }
     
@@ -41,6 +47,10 @@ enum MeasurementValue {
             return UnitVolume.imperialFluidOunces
         case .serving:
             return UnitMass.ounces
+        case .milliNutrients:
+            return UnitMass.milligrams
+        case .microNutrients:
+            return UnitMass.micrograms
         }
     }
 }

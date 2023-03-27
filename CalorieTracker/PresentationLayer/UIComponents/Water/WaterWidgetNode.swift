@@ -20,7 +20,7 @@ final class WaterWidgetNode: CTWidgetNode {
         let node = ASTextNode()
         node.attributedText = getAttributedString(
             string: R.string.localizable.diagramChartTypeWaterTitle(),
-            size: 18.fontScale(),
+            size: 18,
             color: R.color.waterWidget.firstGradientColor()
         )
         return node

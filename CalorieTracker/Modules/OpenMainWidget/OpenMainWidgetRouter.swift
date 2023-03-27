@@ -49,10 +49,13 @@ extension OpenMainWidgetRouter: OpenMainWidgetRouterInterface {
     func openAddFoodVC(_ mealTime: MealTime) {
         let vc = AddFoodRouter.setupModule(
             mealTime: mealTime,
-            addFoodYCoordinate: UDM.mainScreenAddButtonOriginY
-        ) { [weak self] in
-            self?.presenter?.updateDailyMeals()
-        }
+            addFoodYCoordinate: UDM.mainScreenAddButtonOriginY,
+            needUpdate: { [weak self] in
+                self?.presenter?.updateDailyMeals()
+            },
+            navigationType: .navigationController
+        )
+        
         viewController?.navigationController?.pushViewController(vc, animated: true)
     }
     

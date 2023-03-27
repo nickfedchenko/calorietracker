@@ -6,6 +6,13 @@
 //
 
 import UIKit
+struct LabelAnimateAnchorPoint {
+    // You can add more suitable archon point for your needs
+    static let leadingCenterY         = CGPoint.init(x: 0, y: 0.5)
+    static let trailingCenterY        = CGPoint.init(x: 1, y: 0.5)
+    static let centerXCenterY         = CGPoint.init(x: 0.5, y: 0.5)
+    static let leadingTop             = CGPoint.init(x: 0, y: 0)
+}
 
 extension UILabel {
     func setMargins(margin: CGFloat = 10) {
@@ -82,4 +89,22 @@ extension UILabel {
         mutableString.setAttributes(attributes, range: range)
         attributedText = mutableString
     }
+    
+    func animate(font: UIFont, duration: TimeInterval) {
+            let oldFrame = frame
+           let labelScale = self.font.pointSize / font.pointSize
+           self.font = font
+        self.sizeToFit()
+           let oldTransform = transform
+           transform = transform.scaledBy(x: labelScale, y: labelScale)
+            let newOrigin = frame.origin
+            frame.origin = oldFrame.origin // only for left aligned text
+//            frame.origin = CGPoint(x: oldFrame.origin.x - 10, y: oldFrame.origin.y)
+//           setNeedsUpdateConstraints()
+        UIView.animate(withDuration: duration, delay: 0) {
+               self.frame.origin = newOrigin
+               self.transform = oldTransform
+//               self.layoutIfNeeded()
+           }
+       }
 }

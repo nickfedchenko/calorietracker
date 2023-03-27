@@ -16,7 +16,7 @@ final class WaterSliderView: UIView {
     weak var delegate: WaterSliderViewDelegate?
     
     private lazy var slider: SliderStepperView = {
-        let view = SliderStepperView()
+        let view = SliderStepperView(shouldAddInnerShadow: shouldShowInnerShadow)
         view.sliderTrackColor = R.color.waterSlider.background()
         view.innerShadowColor = R.color.waterSlider.shadow()
         view.circleColor = R.color.waterSlider.shadow()
@@ -29,7 +29,11 @@ final class WaterSliderView: UIView {
     private var textLabels: [UILabel] = []
     private var positionTextNode: Int = 0
     private var isFirstDraw = true
-    
+    var shouldShowInnerShadow: Bool {
+        didSet {
+            slider.shouldAddInnerShadow = shouldShowInnerShadow
+        }
+    }
     var countParts: Int = 15
     var minVolume: Int = 0
     var stepVolume: Int = 50
@@ -39,9 +43,9 @@ final class WaterSliderView: UIView {
         set { slider.step = newValue }
     }
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
+    init(shouldAddInnerShadow: Bool = true) {
+        self.shouldShowInnerShadow = shouldAddInnerShadow
+        super.init(frame: .zero)
         slider.didChangeStep = { oldStep, step in
             guard !self.circleLayers.isEmpty else { return }
             self.circleLayers[step].fillColor = R.color.waterSlider.shadow()?.cgColor
@@ -72,6 +76,11 @@ final class WaterSliderView: UIView {
         drawCircleses(count: countParts)
         setupWaterTextNodes(width: frame.width - 48)
         isFirstDraw = false
+    }
+    
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        updateCircles()
     }
 
     private func setupView() {
@@ -126,6 +135,40 @@ final class WaterSliderView: UIView {
             
             circleLayers.append(shape)
             layer.addSublayer(shape)
+        }
+    }
+    
+    private func updateCircles() {
+   
+        for (index, circleShape) in circleLayers.enumerated() {
+            let radius = slider.frame.height / 2.0
+            let startX = slider.frame.minX + radius
+            let width = slider.frame.width - 2 * radius
+            
+            if let circleShape = circleShape as? CAShapeLayer {
+                circleShape.path = UIBezierPath(
+                    arcCenter: CGPoint(
+                        x: startX + CGFloat(index) * width / CGFloat(circleLayers.count),
+                        y: slider.frame.minY - 9
+                    ),
+                    radius: 2,
+                    startAngle: 0,
+                    endAngle: 2 * CGFloat.pi,
+                    clockwise: true
+                ).cgPath
+                circleShape.fillColor = index == 0
+                ? R.color.waterSlider.shadow()?.cgColor
+                : R.color.waterSlider.circles()?.cgColor
+            }
+            
+//            circleShape.frame = getCircle(
+//                point: CGPoint(
+//                    x: startX + CGFloat(i) * width / CGFloat(count),
+//                    y: slider.frame.minY - 9
+//                ),
+//                radius: 2,
+//                color: i == 0 ? R.color.waterSlider.shadow() : R.color.waterSlider.circles()
+//            )
         }
     }
     

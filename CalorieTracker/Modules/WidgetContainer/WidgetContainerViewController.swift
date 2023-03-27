@@ -18,7 +18,7 @@ protocol WidgetContainerOutput: AnyObject {
 
 final class WidgetContainerViewController: UIViewController {
     typealias Size = CTWidgetNodeConfiguration
-    
+    private let anchorView: UIView?
     enum WidgetType {
         case water(specificDate: Date)
         case steps
@@ -76,8 +76,9 @@ final class WidgetContainerViewController: UIViewController {
     
     private let widgetView: UIView
     
-    init(_ type: WidgetType) {
+    init(_ type: WidgetType, anchorView: UIView? = nil) {
         self.widgetType = type
+        self.anchorView = anchorView
         self.widgetView = type.getWidget()
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .custom
@@ -93,6 +94,10 @@ final class WidgetContainerViewController: UIViewController {
         setupView()
         configureOutput()
         setupConstraints()
+    }
+    
+    func getWidgetView () -> UIView {
+        widgetType.getWidget()
     }
     
     private func configureOutput() {
@@ -256,6 +261,8 @@ final class WidgetContainerViewController: UIViewController {
         
         presenter?.didTapView()
     }
+    
+  
 }
 
 extension WidgetContainerViewController: WidgetContainerInterface {
@@ -320,7 +327,13 @@ extension WidgetContainerViewController: UIViewControllerTransitioningDelegate {
         presenting _: UIViewController,
         source _: UIViewController
     ) -> UIViewControllerAnimatedTransitioning? {
-        TopDownPresentTransition()
+        switch widgetType {
+        case .water:
+            return  WidgetPresentTransitionController(anchorView: anchorView ?? UIView())
+//            return TopDownPresentTransition()
+        default:
+            return  TopDownPresentTransition()
+        }
     }
 
     func animationController(

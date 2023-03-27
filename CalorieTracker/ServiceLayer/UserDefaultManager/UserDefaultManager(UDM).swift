@@ -37,6 +37,7 @@ final class UDM {
         case tempWeeklyGoal
         case didShowAskingOpinion
         case openCreateProductCounter
+        case lastBaseUpdateDay
     }
     
     
@@ -49,6 +50,18 @@ final class UDM {
         }
         set {
             setValue(value: newValue, for: .openCreateProductCounter)
+        }
+    }
+    
+    static var lastBaseUpdateDay: Date {
+        get {
+            guard let value: Date = getValue(for: .lastBaseUpdateDay) else {
+                return Calendar.current.date(byAdding: .day, value: 7, to: Date()) ?? Date()
+            }
+            return value
+        }
+        set {
+            setValue(value: newValue, for: .lastBaseUpdateDay)
         }
     }
     

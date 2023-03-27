@@ -18,6 +18,7 @@ extension CreateProductViewController {
         case choleterol
         case sodium
         case carb
+        case netCarbs
         case dietaryFiber
         case sugars
         case addSugars
@@ -101,6 +102,8 @@ extension CreateProductViewController.ProductFormSegment: WithGetTitleProtocol {
             return R.string.localizable.vitaminA()
         case .vitaminC:
             return R.string.localizable.vitaminC()
+        case .netCarbs:
+            return R.string.localizable.netCarbs()
         }
     }
 }

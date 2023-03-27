@@ -12,7 +12,7 @@ import UIKit
 
 protocol MainScreenRouterInterface: AnyObject {
     func openAddFoodVC()
-    func openWidget(_ type: WidgetContainerViewController.WidgetType)
+    func openWidget(_ type: WidgetContainerViewController.WidgetType, anchorView: UIView?)
     func openSettingsVC()
     func openOnboarding()
     func openCreateNotesVC()
@@ -61,13 +61,14 @@ extension MainScreenRouter: MainScreenRouterInterface {
         }
         let vc = AddFoodRouter.setupModule(
             addFoodYCoordinate: UDM.mainScreenAddButtonOriginY,
-            needShowReviewController: handler
+            needShowReviewController: handler,
+            navigationType: .modal
         )
         viewController?.navigationController?.delegate = self
         viewController?.navigationController?.pushViewController(vc, animated: true)
     }
     
-    func openWidget(_ type: WidgetContainerViewController.WidgetType) {
+    func openWidget(_ type: WidgetContainerViewController.WidgetType, anchorView: UIView? = nil) {
         switch type {
         case.steps:
             if !UDM.isAuthorisedHealthKit {
@@ -114,7 +115,8 @@ extension MainScreenRouter: MainScreenRouterInterface {
         default:
             print()
         }
-        let vc = WidgetContainerRouter.setupModule(type)
+    
+        let vc = WidgetContainerRouter.setupModule(type, anchorView: anchorView)
         vc.output = self
         
         viewController?.present(vc, animated: true)
@@ -235,7 +237,8 @@ extension MainScreenRouter: WidgetContainerOutput {
     private func openAddFoodVCandPerformSearch(with barcode: String) {
         let vc = AddFoodRouter.setupModule(
             shouldInitiallyPerformSearchWith: barcode,
-            addFoodYCoordinate: UDM.mainScreenAddButtonOriginY
+            addFoodYCoordinate: UDM.mainScreenAddButtonOriginY,
+            navigationType: .modal
         )
         viewController?.navigationController?.pushViewController(vc, animated: true)
     }

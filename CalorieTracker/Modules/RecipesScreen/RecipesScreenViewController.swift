@@ -10,7 +10,7 @@ import NVActivityIndicatorView
 import UIKit
 
 protocol RecipesScreenViewControllerInterface: AnyObject {
-    func shouldReloadDishesCollection(shouldRemoveActivity: Bool)
+    func shouldReloadDishesCollection(in section: Int, shouldRemoveActivity: Bool)
 }
 
 class RecipesScreenViewController: UIViewController {
@@ -25,7 +25,7 @@ class RecipesScreenViewController: UIViewController {
             frame: .zero,
             type: .ballRotate,
             color: UIColor(hex: "62D3B4"),
-            padding: 60
+            padding: 120
         )
         return activityIndicator
     }()
@@ -251,17 +251,16 @@ class RecipesScreenViewController: UIViewController {
 }
 
 extension RecipesScreenViewController: RecipesScreenViewControllerInterface {
-    func shouldReloadDishesCollection(shouldRemoveActivity: Bool) {
+    func shouldReloadDishesCollection(in section: Int, shouldRemoveActivity: Bool) {
         if shouldRemoveActivity {
             hideActivityIndicator()
         }
-        collectionView.reloadData()
+        collectionView.reloadSections(IndexSet(integer: section))
     }
 }
 
 extension RecipesScreenViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print("Got recipes count \(presenter?.numberOfItemsInSection(section: section) ?? 0)")
         return presenter?.numberOfItemsInSection(section: section) ?? 0
     }
     

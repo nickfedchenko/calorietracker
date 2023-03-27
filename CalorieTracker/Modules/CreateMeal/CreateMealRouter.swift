@@ -43,7 +43,8 @@ extension CreateMealRouter: CreateMealRouterInterface {
             didSelectFood: { [weak self] food in
                 self?.presenter?.addFood(food: food)
                 LoggingService.postEvent(event: .diaryaddtomeal)
-            }
+            },
+            navigationType: .modal
         ) 
         
         vc.modalPresentationStyle = .fullScreen

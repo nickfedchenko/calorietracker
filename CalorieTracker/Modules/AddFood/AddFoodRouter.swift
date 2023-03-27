@@ -23,6 +23,10 @@ protocol AddFoodRouterInterface: AnyObject {
     func dismissToCreateMeal(with food: Food)
 }
 
+enum AddFoodnavigationType {
+    case navigationController, modal
+}
+
 class AddFoodRouter: NSObject {
 
     weak var presenter: AddFoodPresenterInterface?
@@ -31,6 +35,7 @@ class AddFoodRouter: NSObject {
     var wasFromMealCreateVC: Bool = false
     var didSelectFood: ((Food) -> Void)?
     var needShowReviewController: (() -> Void)?
+    var navigationType: AddFoodnavigationType = .modal
 
     static func setupModule(
         shouldInitiallyPerformSearchWith barcode: String? = nil,
@@ -41,7 +46,8 @@ class AddFoodRouter: NSObject {
         tabBarIsHidden: Bool? = false,
         searchRequest: String? = nil,
         wasFromMealCreateVC: Bool = false,
-        didSelectFood: ((Food) -> Void)? = nil
+        didSelectFood: ((Food) -> Void)? = nil,
+        navigationType: AddFoodnavigationType
     ) -> AddFoodViewController {
       
         let vc = AddFoodViewController(searchFieldYCoordinate: addFoodYCoordinate)
@@ -58,6 +64,7 @@ class AddFoodRouter: NSObject {
         router.presenter = presenter
         router.viewController = vc
         router.needUpdate = needUpdate
+        router.navigationType = navigationType
         router.wasFromMealCreateVC = wasFromMealCreateVC
         router.needShowReviewController = needShowReviewController
 //        router.didSelectProduct = didSelectProduct
@@ -107,9 +114,13 @@ extension AddFoodRouter: AddFoodRouterInterface {
                 }
             }
         )
-        
-        productVC.modalPresentationStyle = .fullScreen
-        viewController?.present(productVC, animated: true)
+        if navigationType == .modal {
+            productVC.modalPresentationStyle = .fullScreen
+            viewController?.present(productVC, animated: true)
+        } else {
+            viewController?.navigationController?.pushViewController(productVC, animated: true)
+        }
+       
     }
     
     func openSelectedFoodCellsVC(
@@ -180,7 +191,11 @@ extension AddFoodRouter: AddFoodRouterInterface {
         )
         
         vc.modalPresentationStyle = .fullScreen
-        viewController?.present(vc, animated: true)
+        if navigationType == .modal {
+            viewController?.navigationController?.present(vc, animated: true)
+        } else {
+            viewController?.navigationController?.pushViewController(vc, animated: true)
+        }
     }
     
     func openCustomEntryViewController(mealTime: MealTime) {

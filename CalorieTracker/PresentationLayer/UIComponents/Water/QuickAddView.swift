@@ -62,7 +62,7 @@ final class QuickAddView: ViewWithShadow {
     }
     
     private func configureView(_ model: QuickAddModel) {
-        let value = BAMeasurement(Double(model.value ?? 0), .liquid, isMetric: true).string
+        let value = BAMeasurement(Double(model.value ?? 0), .liquid, isMetric: true).string(with: 1)
 
         imageView.image = model.type.getImage()
         imageView.contentMode = .scaleAspectFill

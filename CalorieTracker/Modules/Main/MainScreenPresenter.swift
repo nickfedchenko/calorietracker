@@ -12,7 +12,7 @@ protocol MainScreenPresenterInterface: AnyObject {
     func didTapAddButton()
     func didTapMenuButton()
     func didTapBarcodeScannerButton()
-    func didTapWidget(_ type: WidgetContainerViewController.WidgetType)
+    func didTapWidget(_ type: WidgetContainerViewController.WidgetType, anchorView: UIView?)
     func updateWaterWidgetModel()
     func updateStepsWidget()
     func updateWeightWidget()
@@ -79,8 +79,8 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
         router?.openOpenMainWidget(pointDate ?? Date())
     }
     
-    func didTapWidget(_ type: WidgetContainerViewController.WidgetType) {
-        router?.openWidget(type)
+    func didTapWidget(_ type: WidgetContainerViewController.WidgetType, anchorView: UIView? = nil) {
+        router?.openWidget(type, anchorView: anchorView)
     }
     
     func updateWaterWidgetModel() {
@@ -96,7 +96,7 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
             .liquid,
             isMetric: true
         ).localized
-        let suffix = BAMeasurement.measurmentSuffix(.liquid)
+        let suffix = BAMeasurement.measurmentSuffix(.liquid).uppercased()
         
         let model = WaterWidgetNode.Model(
             progress: CGFloat(waterNow / goal),
@@ -186,9 +186,8 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
         if kcalToday >= kcalGoal {
             LoggingService.postEvent(event: .diarycaloriegoal)
         }
-        let burnedKcalFromExercises = ExerciseWidgetServise.shared.getBurnedKcalForDate(date)
-        let burnedKCalFromSteps = StepsWidgetService.shared.getStepsNow() * 0.0608
-        let includingBurned = kcalGoal + burnedKCalFromSteps + burnedKcalFromExercises - kcalToday
+        let burnedKcalTotal = StepsWidgetService.shared.getBurnedEnergyForDate(UDM.currentlyWorkingDay.date ?? Date())
+        let includingBurned = kcalGoal + burnedKcalTotal - kcalToday
         let includingBurnedInt: Int = includingBurned < 0 ? 0 : Int(includingBurned)
         let model: MainWidgetViewNode.Model = .init(
             text: MainWidgetViewNode.Model.Text(

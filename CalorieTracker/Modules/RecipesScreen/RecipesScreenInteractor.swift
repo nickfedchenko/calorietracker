@@ -27,17 +27,22 @@ class RecipesScreenInteractor {
     weak var presenter: RecipesScreenPresenterInterface?
     var facade: DataServiceFacadeInterface = DSF.shared
     var foodService: FoodDataServiceInterface = FDS.shared
-    var sections: [RecipeSectionModel] = []
-//    private let dataService = DSF.shared
+    var sections: [RecipeSectionModel] = [
+        .init(title: "Loading", dishes: []),
+        .init(title: "Loading", dishes: []),
+        .init(title: "Loading", dishes: []),
+        .init(title: "Loading", dishes: [])
+    ]
+    //    private let dataService = DSF.shared
 }
 
 extension RecipesScreenInteractor: RecipesScreenInteractorInterface {
-    func requestAllDishes() -> [Dish] {
-        let secondsStart = Date().timeIntervalSince1970
-        let dishes = facade.getAllStoredDishes()
-        let secondsDoneFetch = Date().timeIntervalSince1970
-        print("Dishes fetch time \(secondsDoneFetch - secondsStart)")
-        return dishes
+    func requestAllDishes(completion: @escaping ([Dish]) -> Void) {
+        let dishes = facade.getAllStoredDishes(completion: completion)
+    }
+    
+    func requestLunchDishes(completion: @escaping ([Dish]) -> Void) {
+        DSF.shared.getBreakfastDishes(completion: completion)
     }
     
     func getNumberOfItemInSection(section: Int) -> Int {
@@ -49,8 +54,8 @@ extension RecipesScreenInteractor: RecipesScreenInteractorInterface {
     }
     
     func requestUpdateSections() {
-        makeSections { [weak self] in
-            self?.presenter?.notifySectionsUpdated(shouldRemoveActivity: true)
+        makeSections { [weak self] section in
+            self?.presenter?.notifySectionsUpdated(sectionUpdated: section, shouldRemoveActivity: true)
         }
     }
     
@@ -62,45 +67,103 @@ extension RecipesScreenInteractor: RecipesScreenInteractorInterface {
         sections[indexPath.section]
     }
     
-    func makeSections(completion: @escaping () -> Void) {
-        operationalQueue.async { [weak self] in
+    func makeSections(completion: @escaping (Int) -> Void) {
+        //        operationalQueue.async { [weak self] in
+        //            guard let self = self else { return }
+        //            var sections: [RecipeSectionModel] = []
+        DSF.shared.getBreakfastDishes { [weak self] dishes in
             guard let self = self else { return }
-            var sections: [RecipeSectionModel] = []
-            let dishes = self.requestAllDishes().sorted(by: { $0.title < $1.title })
-            let breakFastDishes = dishes.filter { $0.eatingTags.contains(where: { $0.convenientTag == .breakfast }) }
-            let dinnerDishes = dishes.filter { $0.eatingTags.contains(where: { $0.convenientTag == .dinner }) }
-            let lunchDishes = dishes.filter { $0.eatingTags.contains(where: { $0.convenientTag == .lunch }) }
-            let snacksDishes = dishes.filter { $0.eatingTags.contains(where: { $0.convenientTag == .snack }) }
-            sections.append(
-                .init(
-                    title: breakFastDishes.first?.eatingTags.first(
-                        where: { $0.convenientTag == .breakfast }
-                    )?.title ?? "",
-                    dishes: breakFastDishes.shuffled()
+            if self.sections.count > 4 {
+                self.sections[1] = .init(
+                    title: dishes
+                        .first?
+                        .eatingTags
+                        .first(where: { $0.convenientTag == .breakfast })?.title ?? "",
+                    dishes: dishes
                 )
-            )
-            sections.append(
-                .init(
-                    title: lunchDishes.first?.eatingTags.first(where: { $0.convenientTag == .lunch })?.title ?? "",
-                    dishes: lunchDishes.shuffled()
+                completion(1)
+            } else {
+                self.sections[0] = .init(
+                    title: dishes
+                        .first?
+                        .eatingTags
+                        .first(where: { $0.convenientTag == .breakfast })?.title ?? "",
+                    dishes: dishes
                 )
-            )
-            sections.append(
-                .init(
-                    title: dinnerDishes.first?.eatingTags.first(where: { $0.convenientTag == .dinner })?.title ?? "",
-                    dishes: dinnerDishes.shuffled()
-                )
-            )
-            sections.append(
-                .init(
-                    title: snacksDishes.first?.eatingTags.first(where: { $0.convenientTag == .snack })?.title ?? "",
-                    dishes: snacksDishes.shuffled()
-                )
-            )
-            self.sections = sections
-            self.updateFavoritesSection()
-            completion()
+                completion(0)
+            }
         }
+        
+        DSF.shared.getLunchDishes { [weak self] dishes in
+            guard let self = self else { return }
+            if self.sections.count > 4 {
+                self.sections[2] = .init(
+                    title: dishes
+                        .first?
+                        .eatingTags
+                        .first(where: { $0.convenientTag == .lunch })?.title ?? "",
+                    dishes: dishes
+                )
+                completion(2)
+            } else {
+                self.sections[1] = .init(
+                    title: dishes
+                        .first?
+                        .eatingTags
+                        .first(where: { $0.convenientTag == .lunch })?.title ?? "",
+                    dishes: dishes
+                )
+                completion(1)
+            }
+        }
+        
+        DSF.shared.getDinnerDishes { [weak self] dishes in
+            guard let self = self else { return }
+            if self.sections.count > 4 {
+                self.sections[3] = .init(
+                    title: dishes
+                        .first?
+                        .eatingTags
+                        .first(where: { $0.convenientTag == .dinner })?.title ?? "",
+                    dishes: dishes
+                )
+                completion(3)
+            } else {
+                self.sections[2] = .init(
+                    title: dishes
+                        .first?
+                        .eatingTags
+                        .first(where: { $0.convenientTag == .dinner })?.title ?? "",
+                    dishes: dishes
+                )
+                completion(2)
+            }
+        }
+        
+        DSF.shared.getSnacksDishes { [weak self] dishes in
+            guard let self = self else { return }
+            if self.sections.count > 4 {
+                self.sections[4] = .init(
+                    title: dishes
+                        .first?
+                        .eatingTags
+                        .first(where: { $0.convenientTag == .snack })?.title ?? "",
+                    dishes: dishes
+                )
+                completion(4)
+            } else {
+                self.sections[3] = .init(
+                    title: dishes
+                        .first?
+                        .eatingTags
+                        .first(where: { $0.convenientTag == .snack })?.title ?? "",
+                    dishes: dishes
+                )
+                completion(3)
+            }
+            
+        }
+        self.updateFavoritesSection()
     }
     
     func updateFavoritesSection() {
@@ -109,14 +172,15 @@ extension RecipesScreenInteractor: RecipesScreenInteractorInterface {
             if sections.count > 4 {
                 _ = sections.removeFirst()
             }
-            presenter?.notifySectionsUpdated(shouldRemoveActivity: false)
+            presenter?.notifySectionsUpdated(sectionUpdated: 0, shouldRemoveActivity: false)
             return
         }
         if sections.count > 4 {
             sections[0] = .init(title: "Favorites".localized, dishes: favorites)
+            presenter?.notifySectionsUpdated(sectionUpdated: 0, shouldRemoveActivity: false)
         } else {
             sections.insert(.init(title: "Favorites".localized, dishes: favorites), at: 0)
+            presenter?.notifySectionsUpdated(sectionUpdated: 0, shouldRemoveActivity: false)
         }
-        presenter?.notifySectionsUpdated(shouldRemoveActivity: false)
     }
 }
