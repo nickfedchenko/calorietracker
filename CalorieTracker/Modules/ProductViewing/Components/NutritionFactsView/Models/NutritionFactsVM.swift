@@ -125,6 +125,8 @@ extension NutritionFactsVM {
                         return BAMeasurement.measurmentSuffix(.serving)
                     case .transFat, .vitaminD, .vitaminA:
                         return BAMeasurement.measurmentSuffix(.microNutrients)
+                    case .kcal:
+                        return BAMeasurement.measurmentSuffix(.energy)
                     default:
                         return BAMeasurement.measurmentSuffix(.milliNutrients)
                     }

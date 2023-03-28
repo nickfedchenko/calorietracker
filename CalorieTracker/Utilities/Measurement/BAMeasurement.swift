@@ -71,8 +71,8 @@ struct BAMeasurement {
                 : "measurement.oz".localized
         case .milliNutrients:
             return isMetric
-                ? "measurement.ml".localized
-                : "measurement.ml".localized
+                ? "measurement.mg".localized
+                : "measurement.mg".localized
         case .microNutrients:
             return isMetric
                 ? "measurement.mcg".localized

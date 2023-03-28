@@ -55,14 +55,20 @@ extension CreateProductPresenter: CreateProductPresenterInterface {
         var brand = view.getBrand()
         let barcode = view.getBarcode()
         let servingDescription = view.getServingDescription()
-        let servingWeight = view.getServingWeight()
-        
+        let servingWeight = view.getServingWeight() ?? 100
+        let coefficient = 100 / servingWeight
         guard let productName = view.getProductName(),
         let protein = stringFromDouble(formValues[.protein] ?? ""),
         let fat = stringFromDouble(formValues[.fat] ?? ""),
         let kcal = stringFromDouble(formValues[.kcal] ?? ""),
         let carbs = stringFromDouble(formValues[.carb] ?? "")
-        else { return }
+        else {
+            return
+        }
+        let hundredProtein = protein * coefficient
+        let hundredFat = fat * coefficient
+        let hundredKcal = kcal * coefficient
+        let hundredCarbs = carbs * coefficient
         brand = (brand ?? "").isEmpty ? nil : brand
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy hh:mm"
@@ -72,33 +78,33 @@ extension CreateProductPresenter: CreateProductPresenterInterface {
             isUserProduct: true,
             barcode: barcode,
             brand: brand,
-            protein: protein,
-            fat: fat,
-            carbs: carbs,
-            kcal: kcal,
+            protein: hundredProtein,
+            fat: hundredFat,
+            carbs: hundredCarbs,
+            kcal: hundredKcal,
             productURL: 8,
             photo: nil,
             composition: .init(
-                totalFat: stringFromDouble(formValues[.fat] ?? ""),
-                saturatedFat: stringFromDouble(formValues[.satFat] ?? ""),
-                transFat: stringFromDouble(formValues[.transFat] ?? ""),
-                polyUnsatFat: stringFromDouble(formValues[.polyFat] ?? ""),
-                monoUnsatFat: stringFromDouble(formValues[.monoFat] ?? ""),
-                cholesterol: stringFromDouble(formValues[.choleterol] ?? ""),
-                sodium: stringFromDouble(formValues[.sodium] ?? ""),
-                totalCarbs: stringFromDouble(formValues[.carb] ?? ""),
-                diataryFiber: stringFromDouble(formValues[.dietaryFiber] ?? ""),
-                netCarbs: stringFromDouble(formValues[.netCarbs] ?? ""),
-                totalSugars: stringFromDouble(formValues[.sugars] ?? ""),
-                inclAddedSugars: stringFromDouble(formValues[.addSugars] ?? ""),
-                sugarAlc: stringFromDouble(formValues[.sugarAlco] ?? ""),
-                protein: stringFromDouble(formValues[.protein] ?? ""),
-                vitaminD: stringFromDouble(formValues[.vitaminD] ?? ""),
-                calcium: stringFromDouble(formValues[.calcium] ?? ""),
-                iron: stringFromDouble(formValues[.iron] ?? ""),
-                potassium: stringFromDouble(formValues[.potassium] ?? ""),
-                vitaminA: stringFromDouble(formValues[.vitaminA] ?? ""),
-                vitaminC: stringFromDouble(formValues[.vitaminC] ?? "")
+                totalFat: (stringFromDouble(formValues[.fat] ?? "") ?? 0) * coefficient,
+                saturatedFat: (stringFromDouble(formValues[.satFat] ?? "") ?? 0) * coefficient,
+                transFat: (stringFromDouble(formValues[.transFat] ?? "") ?? 0) * coefficient,
+                polyUnsatFat: (stringFromDouble(formValues[.polyFat] ?? "") ?? 0) * coefficient,
+                monoUnsatFat: (stringFromDouble(formValues[.monoFat] ?? "") ?? 0) * coefficient,
+                cholesterol: (stringFromDouble(formValues[.choleterol] ?? "") ?? 0) * coefficient,
+                sodium: (stringFromDouble(formValues[.sodium] ?? "") ?? 0) * coefficient,
+                totalCarbs: (stringFromDouble(formValues[.carb] ?? "") ?? 0) * coefficient,
+                diataryFiber: (stringFromDouble(formValues[.dietaryFiber] ?? "") ?? 0) * coefficient,
+                netCarbs: (stringFromDouble(formValues[.netCarbs] ?? "") ?? 0) * coefficient,
+                totalSugars: (stringFromDouble(formValues[.sugars] ?? "") ?? 0) * coefficient,
+                inclAddedSugars: (stringFromDouble(formValues[.addSugars] ?? "") ?? 0) * coefficient,
+                sugarAlc: (stringFromDouble(formValues[.sugarAlco] ?? "") ?? 0) * coefficient,
+                protein: (stringFromDouble(formValues[.protein] ?? "") ?? 0) * coefficient,
+                vitaminD: (stringFromDouble(formValues[.vitaminD] ?? "") ?? 0) * coefficient,
+                calcium: (stringFromDouble(formValues[.calcium] ?? "") ?? 0) * coefficient,
+                iron: (stringFromDouble(formValues[.iron] ?? "") ?? 0) * coefficient,
+                potassium: (stringFromDouble(formValues[.potassium] ?? "") ?? 0) * coefficient,
+                vitaminA: (stringFromDouble(formValues[.vitaminA] ?? "") ?? 0) * coefficient,
+                vitaminC: (stringFromDouble(formValues[.vitaminC] ?? "") ?? 0) * coefficient
             ),
             servings: [
                 .init(

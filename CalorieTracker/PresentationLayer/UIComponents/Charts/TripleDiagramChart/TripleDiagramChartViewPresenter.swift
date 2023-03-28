@@ -23,14 +23,15 @@ class TripleDiagramChartViewPresenter {
     var data: [(date: Date, values: (CGFloat, CGFloat, CGFloat))] {
         switch view.getChartType() {
         case .dietary:
+            let allNutritions = FDS.shared.getAllNutrition()
             return FDS.shared.getAllNutrition().compactMap {
                 guard let date = $0.day.date else { return nil }
                 return (
                     date: date,
                     values: (
-                        CGFloat($0.nutrition.carbs),
-                        CGFloat($0.nutrition.protein),
-                        CGFloat($0.nutrition.fat)
+                        CGFloat($0.nutrition.carbs) > 0 ? CGFloat($0.nutrition.carbs) : 0.000000000000001,
+                        CGFloat($0.nutrition.protein) > 0 ? CGFloat($0.nutrition.protein) : 0.000000000000001,
+                        CGFloat($0.nutrition.fat) > 0 ? CGFloat($0.nutrition.fat) : 0.000000000000001
                     ))
             }
         }
@@ -86,7 +87,7 @@ extension TripleDiagramChartViewPresenter: TripleDiagramChartViewPresenterInterf
         guard let data = getDataForPeriod(period) else { return nil }
         let maxValue = max(100, (getMaxValue(data) / 100 + 1) * 100)
         
-        var newData: [Int: (CGFloat, CGFloat, CGFloat)] = [:]
+         var newData: [Int: (CGFloat, CGFloat, CGFloat)] = [:]
         var indexData: [Int: Int] = [:]
         
         switch period {

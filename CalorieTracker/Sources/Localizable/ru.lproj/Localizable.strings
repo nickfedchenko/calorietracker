@@ -794,6 +794,7 @@
 "measurement.g" = "г";
 "measurement.oz" = "унц";
 "measurement.mcg" = "мкг";
+"measurement.mg" = "мг";
 
 "universalSelector.currentSettingsByKcal" = "Основываясь на текущих настройках ваша цель по калориям ";
 "universalSelector.currentSettingsByKcalNew" = "Основываясь на текущих настройках ваша новая цель по калориям ";

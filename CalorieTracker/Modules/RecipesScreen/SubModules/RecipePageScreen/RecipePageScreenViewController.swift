@@ -299,6 +299,8 @@ class RecipePageScreenViewController: CTViewController {
     }
     
     @objc private func addToDiaryDidTapped() {
+       guard let amount = presenter?.getPossibleEatenAmount(),
+             amount > 0 else { return }
         Vibration.success.vibrate()
         presenter?.addToDiaryTapped()
     }

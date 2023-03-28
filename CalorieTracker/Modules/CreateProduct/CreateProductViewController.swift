@@ -361,7 +361,7 @@ extension CreateProductViewController: CreateProductViewControllerInterface {
     }
     
     func getServingDescription() -> String? {
-        return secondPageFormView.title
+        return secondPageFormView.title?.isEmpty ?? true ? R.string.localizable.gram() : secondPageFormView.title
     }
     
     func getServingWeight() -> Double? {

@@ -199,12 +199,12 @@ extension AddFoodRouter: AddFoodRouterInterface {
     }
     
     func openCustomEntryViewController(mealTime: MealTime) {
-        guard Apphud.hasActiveSubscription() else {
-            let paywall = PaywallRouter.setupModule()
-            paywall.modalPresentationStyle = .fullScreen
-            viewController?.navigationController?.present(paywall, animated: true)
-            return
-        }
+//        guard Apphud.hasActiveSubscription() else {
+//            let paywall = PaywallRouter.setupModule()
+//            paywall.modalPresentationStyle = .fullScreen
+//            viewController?.navigationController?.present(paywall, animated: true)
+//            return
+//        }
         let vc = CustomEntryViewController(mealTime: mealTime)
         
         vc.onSavedCustomEntry = { [weak self] customEntry in

@@ -793,6 +793,7 @@
 "measurement.g" = "g";
 "measurement.oz" = "oz";
 "measurement.mcg" = "mcg";
+"measurement.mg" = "mg";
 
 "universalSelector.currentSettingsByKcal" = "Basierend auf den aktuellen Einstellungen ist Ihr Kalorienziel ";
 "universalSelector.currentSettingsByKcalNew" = "Basierend auf den aktuellen Einstellungen ist Ihr neues Kalorienziel";

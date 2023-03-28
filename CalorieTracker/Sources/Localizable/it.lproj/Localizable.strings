@@ -806,6 +806,7 @@
 "measurement.g" = "G";
 "measurement.oz" = "oncia";
 "measurement.mcg" = "mcg";
+"measurement.mg" = "mg";
 
 "universalSelector.currentSettingsByKcal" = "In base alle tue impostazioni correnti, il tuo obiettivo calorico";
 "universalSelector.currentSettingsByKcalNew" = "In base alle tue impostazioni attuali, il tuo nuovo obiettivo calorico";

@@ -571,6 +571,25 @@ extension LocalDomainService: LocalDomainServiceInterface {
         }
     }
     
+    func cleanDailyMealsConditionally() {
+        let predicate = NSPredicate(format: "mealData.@count == 0")
+        let compoundPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [predicate])
+        guard let domainDailyMeals = fetchData(for: DomainDailyMeals.self, withPredicate: compoundPredicate) else {
+            return
+        }
+        domainDailyMeals.forEach { meal in
+           context.delete(meal)
+        }
+        
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch let error {
+                print(error)
+            }
+        }
+    }
+    
     func deleteMealData(_ id: String) -> Bool {
         let format = "id == %@"
 
@@ -583,6 +602,7 @@ extension LocalDomainService: LocalDomainServiceInterface {
             return false
         }
         deleteObject(object: mealData)
+        cleanDailyMealsConditionally()
         return true
     }
     

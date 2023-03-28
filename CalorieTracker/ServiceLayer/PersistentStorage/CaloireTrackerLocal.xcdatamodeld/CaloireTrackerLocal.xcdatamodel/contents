@@ -39,7 +39,7 @@
         <attribute name="mealTime" attributeType="String"/>
         <attribute name="month" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="year" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="mealData" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DomainMealData" inverseName="dailyMeal" inverseEntity="DomainMealData"/>
+        <relationship name="mealData" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="DomainMealData" inverseName="dailyMeal" inverseEntity="DomainMealData"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="day"/>
@@ -285,7 +285,7 @@
         <attribute name="units" optional="YES" attributeType="Binary"/>
         <relationship name="exceptionTags" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="DomainExceptionTag" inverseName="productsAssigned" inverseEntity="DomainExceptionTag"/>
         <relationship name="foodData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainFoodData" inverseName="product" inverseEntity="DomainFoodData"/>
-        <relationship name="mealsData" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DomainMealData" inverseName="product" inverseEntity="DomainMealData"/>
+        <relationship name="mealsData" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="DomainMealData" inverseName="product" inverseEntity="DomainMealData"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="id"/>

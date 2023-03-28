@@ -46,7 +46,9 @@ final class ProductViewController: CTViewController {
     private var contentViewBottomAnchor: NSLayoutConstraint?
     private var firstDraw = true
     private var weight: Double = 0
-    private var valueCount: Double = 100
+    private lazy var valueCount: Double = {
+        presenter?.getProduct()?.isUserProduct ?? false ? 1 : 100
+    }()
     var shouldUseCustomTransition = true
     
     private var addNutrition: DailyNutrition = .zero {
@@ -55,16 +57,27 @@ final class ProductViewController: CTViewController {
         }
     }
     
-    private lazy var selectedWeightType: UnitElement.ConvenientUnit = presenter?
-        .getProduct()?
-        .units?
-        .first?
-        .convenientUnit
-    ?? .custom(title: "Undefined", shortTitle: "Undefined", coefficient: 1) {
-        didSet {
-            didChangeWeight()
+    private lazy var selectedWeightType: UnitElement.ConvenientUnit = {
+        if let product = presenter?.getProduct() {
+            if !product.isUserProduct {
+                return product
+                    .units?
+                    .first?
+                    .convenientUnit
+                ?? .gram(title: R.string.localizable.gram(), shortTitle: R.string.localizable.gram(), coefficient: 1)
+            } else {
+                let units: [UnitElement.ConvenientUnit] = product.servings?.compactMap {
+                    .custom(title: $0.size ?? "", shortTitle: $0.size ?? "", coefficient: $0.weight ?? 1)
+                } ?? [
+                    .gram(title: R.string.localizable.gram(), shortTitle: R.string.localizable.gram(), coefficient: 1)
+                ]
+                return units.first
+                ?? .gram(title: R.string.localizable.gram(), shortTitle: R.string.localizable.gram(), coefficient: 1)
+            }
+        } else {
+            return .custom(title: "undefined", shortTitle: "undefined", coefficient: 1)
         }
-    }
+    }()
     
     private lazy var collapseRecognizer = UITapGestureRecognizer(
         target: self,
@@ -355,7 +368,7 @@ final class ProductViewController: CTViewController {
         
         if !isOz {
             let kcal = Double(product.kcal) / 100.0 * (value * coefficient)
-            let carbs = //NutrientMeasurment.convert(
+            let carbs = // NutrientMeasurment.convert(
             product.carbs / 100 * (coefficient * value)
             //                type: .carbs,
             //                from: .gram,
@@ -369,7 +382,7 @@ final class ProductViewController: CTViewController {
             //                to: .kcal
             //            )
             
-            let fat = //NutrientMeasurment.convert(
+            let fat = // NutrientMeasurment.convert(
             product.fat / 100.0 * (value * coefficient)
             //                type: .fat,
             //                from: .gram,
@@ -447,6 +460,7 @@ final class ProductViewController: CTViewController {
     
     @objc private func didTapSaveButton() {
         Vibration.success.vibrate()
+        guard weight > 0 else { return }
         presenter?.saveNutritionDaily(weight, unit: selectedWeightType, unitCount: valueCount)
         didChangeAddNutrition()
         
@@ -551,7 +565,8 @@ final class ProductViewController: CTViewController {
                 action: #selector(didChangeTextFieldValue),
                 for: .editingChanged
             )
-            textField.text = "100"
+            let product = presenter?.getProduct()
+            textField.text = product?.isUserProduct ?? false ? "1" : "100"
             textField.delegate = self
             return textField
         }
@@ -582,9 +597,13 @@ final class ProductViewController: CTViewController {
         }
         
         func getSelectView() -> SelectView<UnitElement.ConvenientUnit> {
-            SelectView(presenter?.getProduct()?.units?.compactMap { $0.convenientUnit } ?? [
-                .gram(title: R.string.localizable.gram(), shortTitle: R.string.localizable.gram(), coefficient: 1)],
-                       shouldHideAtStartup: true
+            let product = presenter?.getProduct()
+            
+            return SelectView(presenter?.getProduct()?.units?.compactMap { $0.convenientUnit }
+                              ?? product?.servings?.compactMap {
+                .custom(title: $0.size ?? "", shortTitle: $0.size ?? "", coefficient: $0.weight)
+            } ?? [.gram(title: R.string.localizable.gram(), shortTitle: R.string.localizable.gram(), coefficient: 1)],
+                              shouldHideAtStartup: true
             )
         }
         
