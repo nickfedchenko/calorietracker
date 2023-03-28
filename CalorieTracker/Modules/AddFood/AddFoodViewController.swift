@@ -165,6 +165,36 @@ final class AddFoodViewController: UIViewController {
         didChangeState()
         addTapToHideKeyboardGesture()
         transitioningDelegate = self
+        suggestMealTime()
+    }
+    
+    private func suggestMealTime() {
+        var mealTime: MealTime = .breakfast
+        let date = Date()
+        var mealIndex: Int = 0
+        let components = Calendar.current.dateComponents([.hour, .minute], from: date)
+        if
+            let hours = components.hour,
+            let minutes = components.minute {
+            switch (hours, minutes) {
+            case (4...11, 0...59), (12, 0):
+                mealTime = .breakfast
+                mealIndex = 0
+            case (12, 1), (12...15, 0...59), (16, 0) :
+                mealTime = .launch
+                mealIndex = 1
+            case (22, 0), (18...21, 0...59):
+                mealTime = .dinner
+                mealIndex = 2
+            default:
+                mealTime = .snack
+                mealIndex = 3
+            }
+        }
+        self.mealTime = mealTime
+        
+        menuMealView.selectCell(at: mealIndex)
+        menuButton.configure(mealTime)
     }
     
     override func viewDidLayoutSubviews() {

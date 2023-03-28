@@ -177,6 +177,12 @@ final class MenuView<ID: WithGetTitleProtocol
         complition?(view.model)
         showAndCloseView(false)
     }
+    
+    func selectCell(at index: Int) {
+        guard index < stackView.arrangedSubviews.count else { return }
+        guard let control = stackView.arrangedSubviews[index] as? UIControl else { return }
+        didSelectedCell(control)
+    }
 }
 
 private struct ShadowConst {

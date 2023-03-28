@@ -58,6 +58,9 @@ final class UDM {
             guard let value: Date = getValue(for: .lastBaseUpdateDay) else {
                 return Calendar.current.date(byAdding: .day, value: 7, to: Date()) ?? Date()
             }
+#if DEBUG
+            return Calendar.current.date(byAdding: .day, value: 7, to: Date()) ?? Date()
+#endif
             return value
         }
         set {

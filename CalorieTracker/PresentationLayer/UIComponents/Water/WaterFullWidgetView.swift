@@ -327,9 +327,9 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
         }
         
         percentageLabel.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().offset(-11)
+            make.centerX.equalToSuperview().offset(5)
             make.top.equalToSuperview().offset(30.5)
-            make.width.equalTo(34)
+            make.width.greaterThanOrEqualTo(34)
         }
         
         percentTitleLabel.snp.makeConstraints { make in
