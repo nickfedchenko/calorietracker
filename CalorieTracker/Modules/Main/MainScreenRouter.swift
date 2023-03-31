@@ -220,6 +220,7 @@ extension MainScreenRouter: WidgetContainerOutput {
     }
     
     func openBarcodeScannerVC() {
+        LoggingService.postEvent(event: .diaryscanfood)
         guard Apphud.hasActiveSubscription() else {
             let paywall = PaywallRouter.setupModule()
             paywall.modalPresentationStyle = .fullScreen
@@ -230,7 +231,6 @@ extension MainScreenRouter: WidgetContainerOutput {
         let vc = ScannerRouter.setupModule { [weak self] barcode in
             self?.openAddFoodVCandPerformSearch(with: barcode)
         }
-        LoggingService.postEvent(event: .diaryscanfood)
         viewController?.present(TopDownNavigationController(rootViewController: vc), animated: true)
     }
     

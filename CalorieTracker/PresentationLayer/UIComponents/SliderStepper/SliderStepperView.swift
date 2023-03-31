@@ -14,6 +14,7 @@ final class SliderStepperView: UIControl {
     private var innerShadowLayer = CALayer()
     private var lineShape = SliderTrackLayer()
     private(set) var positionCircle: CGPoint?
+    private(set) var innerShadowLayerSecond = CALayer()
     
     var didChangeStep: ((Int, Int) -> Void)?
     var sliderStep: CGFloat = 1 / 15
@@ -45,7 +46,19 @@ final class SliderStepperView: UIControl {
     var shouldAddInnerShadow = true {
         didSet {
             if !shouldAddInnerShadow {
-                innerShadowLayer.opacity = 0
+                innerShadowLayerSecond.shadowOpacity = 0
+            } else {
+                //                setNeedsLayout()
+                //                layoutIfNeeded()
+                //                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                let animator = CABasicAnimation(keyPath: "shadowOpacity")
+                animator.fromValue = self.innerShadowLayerSecond.shadowOpacity
+                animator.toValue = 1
+                animator.timingFunction = CAMediaTimingFunction(name: .easeIn)
+                animator.duration = 1
+                self.innerShadowLayerSecond.add(animator, forKey: animator.keyPath)
+                innerShadowLayerSecond.shadowOpacity = 1
+                //                }
             }
         }
     }
@@ -66,6 +79,7 @@ final class SliderStepperView: UIControl {
         self.shouldAddInnerShadow = shouldAddInnerShadow
         super.init(frame: .zero)
         setupView()
+
     }
     
     required init?(coder: NSCoder) {
@@ -78,9 +92,9 @@ final class SliderStepperView: UIControl {
         lineShape.cornerRadius = frame.height / 2.0
         setupCircleShape()
         lineShapeInnerShadow()
-        if shouldAddInnerShadow {
+//        if shouldAddInnerShadow {
             supernodeInnerShadow()
-        }
+//        }
     }
     
     private func setupView() {
@@ -101,6 +115,7 @@ final class SliderStepperView: UIControl {
         shapeContainer.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(3)
         }
+        layer.addSublayer(innerShadowLayerSecond)
     }
     
     private func setupCircleShape() {
@@ -156,20 +171,23 @@ final class SliderStepperView: UIControl {
     
     private func supernodeInnerShadow() {
         print("Super node bounds\(bounds)")
-        let innerShadowLayer = CALayer()
-        innerShadowLayer.frame = bounds
-        innerShadowLayer.shadowPath = getShadowPath(rect: bounds).cgPath
-        innerShadowLayer.masksToBounds = true
-        innerShadowLayer.shadowColor = R.color.waterSlider.backgroundShadow()?.cgColor
-        innerShadowLayer.shadowOffset = CGSize.zero
-        innerShadowLayer.shadowOpacity = 1
-        innerShadowLayer.shadowRadius = 16
-        layer.addSublayer(innerShadowLayer)
+//        innerShadowLayerSecond = CALayer()
+        let targetFrame = bounds.insetBy(dx: -20, dy: 0)
+        innerShadowLayerSecond.frame = targetFrame
+        innerShadowLayerSecond.shadowPath = getShadowPath(rect: targetFrame).cgPath
+//        innerShadowLayerSecond.frame = bounds
+//        innerShadowLayerSecond.shadowPath = getShadowPath(rect: bounds).cgPath
+        innerShadowLayerSecond.masksToBounds = true
+        innerShadowLayerSecond.shadowColor = R.color.waterSlider.backgroundShadow()?.cgColor
+        innerShadowLayerSecond.shadowOffset = CGSize.zero
+        innerShadowLayerSecond.shadowOpacity = 1
+        innerShadowLayerSecond.shadowRadius = 16
     }
     
     private func updateSupernodeInnerShadow() {
-        innerShadowLayer.frame = bounds
-        innerShadowLayer.shadowPath = getShadowPath(rect: bounds).cgPath
+        let frame = bounds.insetBy(dx: 20, dy: 0)
+        innerShadowLayer.frame = frame
+        innerShadowLayer.shadowPath = getShadowPath(rect: frame).cgPath
         innerShadowLayer.masksToBounds = true
         innerShadowLayer.shadowColor = R.color.waterSlider.backgroundShadow()?.cgColor
         innerShadowLayer.shadowOffset = CGSize.zero

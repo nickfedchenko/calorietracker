@@ -8,7 +8,7 @@
 import UIKit
 
 final class LineProgressView: UIView {
-    var colors: [UIColor?]? = [.red, .blue]
+    var colors: [UIColor?]? = [UIColor(hex: "42D7D7"), UIColor(hex: "00BCE5")]
     var backgroundLineColor: UIColor? = .white
     var progress: CGFloat = 0.5 {
         didSet {
@@ -84,13 +84,15 @@ final class LineProgressView: UIView {
                 )
             )
         }
-
+        gradientLayer.colors = colors?.compactMap { $0?.cgColor }
+        gradientLayer.startPoint = CGPoint(x: 0, y: 0)
+        gradientLayer.endPoint = CGPoint(x: 1, y: 0)
         gradientLayer.mask = shape
         layer.addSublayer(createShapeLine(size: frame.size, color: backgroundLineColor))
         layer.addSublayer(gradientLayer)
         
         addSubview(imageView)
-        imageView.snp.makeConstraints { make in
+        imageView.snp.remakeConstraints { make in
             make.height.equalTo(29)
             make.width.equalTo(11)
             make.trailing.equalToSuperview().offset(-bounds.height / 2.0)

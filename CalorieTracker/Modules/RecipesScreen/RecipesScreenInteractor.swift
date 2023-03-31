@@ -10,14 +10,14 @@ import Foundation
 
 struct RecipeSectionModel {
     let title: String
-    let dishes: [Dish]
+    let dishes: [LightweightRecipeModel]
 }
 
 protocol RecipesScreenInteractorInterface: AnyObject {
     func requestUpdateSections()
     func getNumberOfItemInSection(section: Int) -> Int
     func getNumberOfSections() -> Int
-    func getDishModel(at indexPath: IndexPath) -> Dish?
+    func getDishModel(at indexPath: IndexPath) -> LightweightRecipeModel?
     func getSectionModel(at indexPath: IndexPath) -> RecipeSectionModel
     func updateFavoritesSection()
 }
@@ -44,9 +44,9 @@ extension RecipesScreenInteractor: RecipesScreenInteractorInterface {
         let dishes = facade.getAllStoredDishes(completion: completion)
     }
     
-    func requestLunchDishes(completion: @escaping ([Dish]) -> Void) {
-        DSF.shared.getBreakfastDishes(completion: completion)
-    }
+//    func requestLunchDishes(completion: @escaping ([Dish]) -> Void) {
+//        DSF.shared.getBreakfastDishes(completion: completion)
+//    }
     
     func getNumberOfItemInSection(section: Int) -> Int {
         print("dishes in section \(section) - \(sections[section].dishes.count)")
@@ -65,7 +65,7 @@ extension RecipesScreenInteractor: RecipesScreenInteractorInterface {
         }
     }
     
-    func getDishModel(at indexPath: IndexPath) -> Dish? {
+    func getDishModel(at indexPath: IndexPath) -> LightweightRecipeModel? {
         guard indexPath.section < sections.count else { return nil }
         let section = sections[indexPath.section]
         guard !section.dishes.isEmpty else { return nil }
@@ -97,7 +97,7 @@ extension RecipesScreenInteractor: RecipesScreenInteractorInterface {
                         .first?
                         .eatingTags
                         .first(where: { $0.convenientTag == .breakfast })?.title ?? "",
-                    dishes: dishes
+                    dishes: dishes.shuffled()
                 )
                 completion(0)
             }
@@ -111,7 +111,7 @@ extension RecipesScreenInteractor: RecipesScreenInteractorInterface {
                         .first?
                         .eatingTags
                         .first(where: { $0.convenientTag == .lunch })?.title ?? "",
-                    dishes: dishes
+                    dishes: dishes.shuffled()
                 )
                 completion(2)
             } else {
@@ -120,7 +120,7 @@ extension RecipesScreenInteractor: RecipesScreenInteractorInterface {
                         .first?
                         .eatingTags
                         .first(where: { $0.convenientTag == .lunch })?.title ?? "",
-                    dishes: dishes
+                    dishes: dishes.shuffled()
                 )
                 completion(1)
             }
@@ -134,7 +134,7 @@ extension RecipesScreenInteractor: RecipesScreenInteractorInterface {
                         .first?
                         .eatingTags
                         .first(where: { $0.convenientTag == .dinner })?.title ?? "",
-                    dishes: dishes
+                    dishes: dishes.shuffled()
                 )
                 completion(3)
             } else {
@@ -143,7 +143,7 @@ extension RecipesScreenInteractor: RecipesScreenInteractorInterface {
                         .first?
                         .eatingTags
                         .first(where: { $0.convenientTag == .dinner })?.title ?? "",
-                    dishes: dishes
+                    dishes: dishes.shuffled()
                 )
                 completion(2)
             }
@@ -166,7 +166,7 @@ extension RecipesScreenInteractor: RecipesScreenInteractorInterface {
                         .first?
                         .eatingTags
                         .first(where: { $0.convenientTag == .snack })?.title ?? "",
-                    dishes: dishes
+                    dishes: dishes.shuffled()
                 )
                 completion(3)
             }
@@ -176,7 +176,8 @@ extension RecipesScreenInteractor: RecipesScreenInteractorInterface {
     }
     
     func updateFavoritesSection() {
-        let favorites = foodService.getFavoriteDishes()
+        let favoritesDishes = foodService.getFavoriteDishes()
+        let favorites = favoritesDishes.compactMap { LightweightRecipeModel(from: $0)}
         guard !favorites.isEmpty else {
             if sections.count > 4 {
                 _ = sections.removeFirst()

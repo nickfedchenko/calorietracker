@@ -40,8 +40,11 @@ final class AppCoordinator: ApphudDelegate {
             getStartedViewController = WelcomeRouter.setupModule()
             //            getStartedViewController = ChooseDietaryPreferenceRouter.setupModule()
         } else {
-            getStartedViewController = CTTabBarController()
-            //            getStartedViewController = PaywallRouter.setupModule()
+            if Apphud.hasActiveSubscription() {
+                getStartedViewController = CTTabBarController()
+            } else {
+                getStartedViewController = PaywallRouter.setupModule()
+            }
         } 
         
         let navigationController = UINavigationController(rootViewController: getStartedViewController)
@@ -61,6 +64,7 @@ final class AppCoordinator: ApphudDelegate {
         startApphud()
         setupAmplitude()
         updateLogStreak()
+        startFirebase()
     }
     
     private func startFirebase() {

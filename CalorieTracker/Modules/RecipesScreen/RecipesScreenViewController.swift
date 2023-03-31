@@ -158,6 +158,7 @@ class RecipesScreenViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
+        reinitBlurView()
         presenter?.updateFavorites()
         shouldHideTabBar = false
         guard isFirstLayout else { return }
@@ -176,7 +177,7 @@ class RecipesScreenViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        reinitBlurView()
+     
     }
     
 //    func updateTopViewHeight() {

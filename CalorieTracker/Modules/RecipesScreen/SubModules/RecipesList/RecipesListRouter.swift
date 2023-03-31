@@ -46,7 +46,7 @@ extension RecipesListRouter: RecipesListRouterInterface {
         let dishes = presenter?.getAllDishes() ?? []
         let searchVC = RecipesSearchRouter.setupModule(
             with: navigationController,
-            and: dishes
+            and: dishes.compactMap { FDS.shared.getDish(by: String($0.id)) }
         )
         navigationController?.pushViewController(searchVC, animated: true)
     }

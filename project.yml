@@ -22,7 +22,7 @@ packages:
       majorVersion: 5.2.0
     Kingfisher:
       url: https://github.com/onevcat/Kingfisher.git
-      majorVersion: 7.0.0
+      majorVersion: 7.6.0
     Lottie:
       url: https://github.com/airbnb/lottie-ios.git
       majorVersion: 3.0.0

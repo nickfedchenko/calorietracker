@@ -70,6 +70,7 @@ final class PaywallViewController: UIViewController {
         button.setImage(R.image.waterWidget.closeSettings(), for: .normal)
         button.tintColor = UIColor(hex: "192621").withAlphaComponent(0.3)
         button.addTarget(self, action: #selector(didTapCloseButton), for: .touchUpInside)
+        button.alpha = 0
         return button
     }()
     

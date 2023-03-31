@@ -173,18 +173,19 @@ final class LocalDomainService {
         completion: @escaping ([T]?) -> Void
     ) {
         
-        let request = T.fetchRequest()
-        request.predicate = predicate
-        request.sortDescriptors = sortDescriptors
-        let fetchRequest = NSAsynchronousFetchRequest(fetchRequest: request) { result in
-            guard let result = result.finalResult as? [T] else {
-                completion([])
-                return
-            }
-            completion(result)
-        }
+      
         specificDishesFetchingContext.perform { [weak self] in
             do {
+                let request = T.fetchRequest()
+                request.predicate = predicate
+                request.sortDescriptors = sortDescriptors
+                let fetchRequest = NSAsynchronousFetchRequest(fetchRequest: request) { result in
+                    guard let result = result.finalResult as? [T] else {
+                        completion([])
+                        return
+                    }
+                    completion(result)
+                }
                 try self?.specificDishesFetchingContext.execute(fetchRequest)
             } catch {
                 debugPrint("Error occurred: \(error.localizedDescription)")

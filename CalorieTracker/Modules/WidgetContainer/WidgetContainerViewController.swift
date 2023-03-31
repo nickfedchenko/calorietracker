@@ -141,9 +141,12 @@ final class WidgetContainerViewController: UIViewController {
         switch UIDevice.screenType {
         case .h19x414, .h19x428, .h19x375, .h19x390, .h19x393, .h19x430:
             return .init(
-                top: minTopInset,
+                top: Size(type: .widget).height
+                + Self.suggestedInterItemSpacing * 2
+                + Size(type: .compact).height
+                + Self.safeAreaTopInset,
                 left: Self.suggestedSideInset,
-                bottom: Self.bottomInset,
+                bottom: minBottomInset,
                 right: Self.suggestedSideInset
             )
         case .h16x414, .h16x375:
@@ -328,9 +331,17 @@ extension WidgetContainerViewController: UIViewControllerTransitioningDelegate {
         source _: UIViewController
     ) -> UIViewControllerAnimatedTransitioning? {
         switch widgetType {
-        case .water:
-            return  WidgetPresentTransitionController(anchorView: anchorView ?? UIView())
+        case .water(specificDate: let date):
+            return  WidgetPresentTransitionController(
+                anchorView: anchorView ?? UIView(),
+                widgetType: .water(specificDate: date)
+            )
 //            return TopDownPresentTransition()
+        case .calendar:
+//            return TopDownPresentTransition()
+            return  WidgetPresentTransitionController(anchorView: anchorView ?? UIView(), widgetType: .calendar)
+        case .weight:
+            return WidgetPresentTransitionController(anchorView: anchorView ?? UIView(), widgetType: .weight)
         default:
             return  TopDownPresentTransition()
         }
@@ -339,7 +350,21 @@ extension WidgetContainerViewController: UIViewControllerTransitioningDelegate {
     func animationController(
         forDismissed _: UIViewController
     ) -> UIViewControllerAnimatedTransitioning? {
-        TopDownDismissTransition()
+        switch widgetType {
+        case .water(specificDate: let date):
+            return  WidgetDismissTransitionController(
+                anchorView: anchorView ?? UIView(),
+                widgetType: .water(specificDate: date)
+            )
+//            return TopDownPresentTransition()
+        case .calendar:
+            return  WidgetDismissTransitionController(anchorView: anchorView ?? UIView(), widgetType: .calendar)
+        case .weight:
+//                        return TopDownDismissTransition()
+            return WidgetDismissTransitionController(anchorView: anchorView ?? UIView(), widgetType: .weight)
+        default:
+            return  TopDownDismissTransition()
+        }
     }
 }
 

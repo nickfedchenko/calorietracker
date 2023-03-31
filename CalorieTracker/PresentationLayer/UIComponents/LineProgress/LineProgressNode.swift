@@ -8,7 +8,7 @@
 import AsyncDisplayKit
 
 final class LineProgressNode: ASDisplayNode {
-    var colors: [UIColor?]? = [.red, .blue]
+    var colors: [UIColor?]? = [UIColor(hex: "42D7D7"), UIColor(hex: "00BCE5")]
     var backgroundLineColor: UIColor? = .white
     var progress: CGFloat = 0.5 {
         didSet {

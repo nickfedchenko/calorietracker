@@ -63,13 +63,13 @@ final class RecipePreviewCell: UICollectionViewCell {
         return imageView
     }()
     
-    func configure(with model: Dish) {
-        if let photoUrl = URL(string: model.photo) {
+    func configure(with model: LightweightRecipeModel) {
+        if let photoUrl = model.photoUrl {
             mainImage.kf.setImage(with: photoUrl)
         }
         titleLabel.text = model.title
-        timerValueLabel.text = String(model.cookTime)
-        calorieValueLabel.text = String(format: "%.0f", model.kcal)
+        timerValueLabel.text = String(model.cookingTime)
+        calorieValueLabel.text = String(format: "%.0f", model.servingKcal ?? 0)
     }
     
     override init(frame: CGRect) {

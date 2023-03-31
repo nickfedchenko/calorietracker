@@ -69,7 +69,7 @@ final class RecipeListCell: UICollectionViewCell {
         return imageView
     }()
     
-    func configure(with dish: Dish) {
+    func configure(with dish: LightweightRecipeModel) {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.maximumLineHeight = 17.9
         let title = NSAttributedString(
@@ -82,11 +82,11 @@ final class RecipeListCell: UICollectionViewCell {
             ]
         )
         titleLabel.attributedText = title
-        if let url = URL(string: dish.photo) {
+        if let url = dish.photoUrl {
             mainImage.kf.setImage(with: url)
         }
-        calorieValueLabel.text = String(format: "%.0f", dish.kcal)
-        timerValueLabel.text = String(dish.cookTime)
+        calorieValueLabel.text = String(format: "%.0f", dish.servingKcal)
+        timerValueLabel.text = String(dish.cookingTime)
     }
     
     override func layoutSubviews() {

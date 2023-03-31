@@ -137,6 +137,7 @@ extension AddFoodRouter: AddFoodRouterInterface {
     }
     
     func openScanner() {
+        LoggingService.postEvent(event: .diaryscanfromtabbar)
         guard Apphud.hasActiveSubscription() else {
             let paywall = PaywallRouter.setupModule()
             paywall.modalPresentationStyle = .fullScreen
@@ -148,7 +149,6 @@ extension AddFoodRouter: AddFoodRouterInterface {
         }
         vc.modalPresentationStyle = .fullScreen
         viewController?.present(vc, animated: true)
-        LoggingService.postEvent(event: .diaryscanfromtabbar)
     }
     
     func openCreateProduct() {
@@ -219,13 +219,13 @@ extension AddFoodRouter: AddFoodRouterInterface {
     }
     
     func openCreateMeal(mealTime: MealTime) {
+        LoggingService.postEvent(event: .diarycreatemeal)
         guard Apphud.hasActiveSubscription() else {
             let paywall = PaywallRouter.setupModule()
             paywall.modalPresentationStyle = .fullScreen
             viewController?.navigationController?.present(paywall, animated: true)
             return
         }
-        
         let vc = CreateMealRouter.setupModule(mealTime: mealTime)
         
         vc.needToUpdate = { [weak self] in
@@ -234,7 +234,7 @@ extension AddFoodRouter: AddFoodRouterInterface {
         
         vc.modalPresentationStyle = .fullScreen
         viewController?.present(vc, animated: true)
-        LoggingService.postEvent(event: .diarycreatemeal)
+       
     }
     
     func openEditMeal(meal: Meal) {

@@ -11,8 +11,8 @@ import Foundation
 protocol RecipesListInteractorInterface: AnyObject {
     func getTitleForHeader() -> String
     func getNumberOfItems() -> Int
-    func getDishModel(at indexPath: IndexPath) -> Dish
-    func getAllDishes() -> [Dish]
+    func getDishModel(at indexPath: IndexPath) -> LightweightRecipeModel
+    func getAllDishes() -> [LightweightRecipeModel]
 }
 
 class RecipesListInteractor {
@@ -25,7 +25,7 @@ class RecipesListInteractor {
 }
 
 extension RecipesListInteractor: RecipesListInteractorInterface {
-    func getAllDishes() -> [Dish] {
+    func getAllDishes() -> [LightweightRecipeModel] {
         section.dishes
     }
     
@@ -37,7 +37,7 @@ extension RecipesListInteractor: RecipesListInteractorInterface {
         section.title
     }
     
-    func getDishModel(at indexPath: IndexPath) -> Dish {
+    func getDishModel(at indexPath: IndexPath) -> LightweightRecipeModel {
         section.dishes[indexPath.item]
     }
     

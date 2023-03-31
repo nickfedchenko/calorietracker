@@ -38,6 +38,7 @@ final class UDM {
         case didShowAskingOpinion
         case openCreateProductCounter
         case lastBaseUpdateDay
+        case didShowMainScreenFirstTime
     }
     
     
@@ -140,6 +141,19 @@ final class UDM {
         
         set {
             setValue(value: newValue, for: .globalIsMetric)
+        }
+    }
+    
+    static var didShowMainScreenFirstTime: Bool {
+        get {
+            guard let value: Bool = getValue(for: .didShowMainScreenFirstTime) else {
+                return false
+            }
+            return value
+        }
+        
+        set {
+            setValue(value: newValue, for: .didShowMainScreenFirstTime)
         }
     }
     

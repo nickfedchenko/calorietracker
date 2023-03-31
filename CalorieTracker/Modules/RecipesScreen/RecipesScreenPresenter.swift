@@ -14,7 +14,7 @@ protocol RecipesScreenPresenterInterface: AnyObject {
     func numberOfItemsInSection(section: Int) -> Int
     func notifySectionsUpdated(sectionUpdated: Int, shouldRemoveActivity: Bool)
     func askForSections()
-    func getDishModel(at index: IndexPath) -> Dish?
+    func getDishModel(at index: IndexPath) -> LightweightRecipeModel?
     func getSectionModel(at indexPath: IndexPath) -> RecipeSectionModel?
     func didTapSectionHeader(at index: Int)
     func didTapRecipe(at index: IndexPath)
@@ -67,7 +67,7 @@ extension RecipesScreenPresenter: RecipesScreenPresenterInterface {
         interactor?.requestUpdateSections()
     }
     
-    func getDishModel(at index: IndexPath) -> Dish? {
+    func getDishModel(at index: IndexPath) -> LightweightRecipeModel? {
         interactor?.getDishModel(at: index)
     }
     
@@ -79,7 +79,9 @@ extension RecipesScreenPresenter: RecipesScreenPresenterInterface {
     
     func didTapRecipe(at index: IndexPath) {
         guard let dish = interactor?.getDishModel(at: index) else { return }
-        router?.showRecipeScreen(with: dish)
+        if  let dishProper = FDS.shared.getDish(by: String(dish.id)) {
+            router?.showRecipeScreen(with: dishProper)
+        }
     }
     
     func updateFavorites() {

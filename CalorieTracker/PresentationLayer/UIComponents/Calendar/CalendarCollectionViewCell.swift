@@ -86,6 +86,11 @@ final class CalendarCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        selectionBackgroundView.layer.cornerRadius = selectionBackgroundView.frame.height / 2
+    }
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         applyDefaultStyle()
@@ -103,9 +108,9 @@ final class CalendarCollectionViewCell: UICollectionViewCell {
         
         selectionBackgroundView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(4)
-            make.bottom.equalToSuperview().offset(-11)
+//            make.bottom.equalToSuperview().offset(-11)
             make.centerX.equalToSuperview()
-            make.height.width.equalTo(32)
+            make.width.height.equalTo(32)
         }
     }
     

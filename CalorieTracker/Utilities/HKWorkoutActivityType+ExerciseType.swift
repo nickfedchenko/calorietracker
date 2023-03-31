@@ -37,6 +37,7 @@ extension HKWorkoutActivityType {
         case .waterFitness: return .waterFitness
         case .waterPolo: return .waterPolo
         case .yoga: return .yoga
+        case .tableTennis: return .tableTennis
         default: return .run
         }
     }

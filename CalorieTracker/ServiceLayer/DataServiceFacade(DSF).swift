@@ -66,10 +66,10 @@ protocol DataServiceFacadeInterface {
 //    func getProduct(by id: String) -> DomainProduct
 //    func getDish(by id: String) -> DomainDish
 //    func getCustomEntry(by id: String) -> DomainDish
-    func getBreakfastDishes(completion: @escaping ([Dish]) -> Void)
-    func getLunchDishes(completion: @escaping ([Dish]) -> Void)
-    func getDinnerDishes(completion: @escaping ([Dish]) -> Void)
-    func getSnacksDishes(completion: @escaping ([Dish]) -> Void)
+    func getBreakfastDishes(completion: @escaping ([LightweightRecipeModel]) -> Void)
+    func getLunchDishes(completion: @escaping ([LightweightRecipeModel]) -> Void)
+    func getDinnerDishes(completion: @escaping ([LightweightRecipeModel]) -> Void)
+    func getSnacksDishes(completion: @escaping ([LightweightRecipeModel]) -> Void)
     
     func saveExercises(_ exercises: [Exercise])
     func saveSteps(_ steps: [DailyData])
@@ -86,12 +86,12 @@ final class DSF {
 }
 
 extension DSF: DataServiceFacadeInterface {
-    func getLunchDishes(completion: @escaping ([Dish]) -> Void) {
+    func getLunchDishes(completion: @escaping ([LightweightRecipeModel]) -> Void) {
         localPersistentStore.fetchLunchDishes() { [weak self] dishes in
             
 //            self?.mappingQueue.async {
                 let startTime = Date().timeIntervalSince1970
-                let normalDishes = dishes?.compactMap { Dish(from: $0) }
+                let normalDishes = dishes?.compactMap { LightweightRecipeModel(from: $0) }
                 let endTime = Date().timeIntervalSince1970
                 print("lunch dishes mapping time \(endTime - startTime)")
                 completion(normalDishes ?? [])
@@ -99,11 +99,11 @@ extension DSF: DataServiceFacadeInterface {
         }
     }
     
-    func getDinnerDishes(completion: @escaping ([Dish]) -> Void) {
+    func getDinnerDishes(completion: @escaping ([LightweightRecipeModel]) -> Void) {
         localPersistentStore.fetchDinnerDishes { [weak self] dishes in
 //            self?.mappingQueue.async {
                 let startTime = Date().timeIntervalSince1970
-                let normalDishes = dishes?.compactMap { Dish(from: $0) }
+                let normalDishes = dishes?.compactMap { LightweightRecipeModel(from: $0) }
                 let endTime = Date().timeIntervalSince1970
                 print("dinner dishes mapping time \(endTime - startTime)")
                 completion(normalDishes ?? [])
@@ -111,11 +111,11 @@ extension DSF: DataServiceFacadeInterface {
         }
     }
     
-    func getSnacksDishes(completion: @escaping ([Dish]) -> Void) {
+    func getSnacksDishes(completion: @escaping ([LightweightRecipeModel]) -> Void) {
         localPersistentStore.fetchSnackDishes { [weak self] dishes in
 //            self?.mappingQueue.async {
                 let startTime = Date().timeIntervalSince1970
-                let normalDishes = dishes?.compactMap { Dish(from: $0) }
+                let normalDishes = dishes?.compactMap { LightweightRecipeModel(from: $0) }
                 let endTime = Date().timeIntervalSince1970
                 print("snack dishes mapping time \(endTime - startTime)")
                 completion(normalDishes ?? [])
@@ -123,11 +123,11 @@ extension DSF: DataServiceFacadeInterface {
         }
     }
     
-    func getBreakfastDishes(completion: @escaping ([Dish]) -> Void) {
+    func getBreakfastDishes(completion: @escaping ([LightweightRecipeModel]) -> Void) {
         localPersistentStore.fetchBreakfastDishes { [weak self] dishes in
 //            self?.mappingQueue.async {
                 let startTime = Date().timeIntervalSince1970
-                let normalDishes = dishes?.compactMap { Dish(from: $0) }
+                let normalDishes = dishes?.compactMap { LightweightRecipeModel(from: $0) }
                 let endTime = Date().timeIntervalSince1970
                 print("breakfast dishes mapping time \(endTime - startTime)")
                 completion(normalDishes ?? [])
