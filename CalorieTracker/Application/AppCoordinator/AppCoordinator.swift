@@ -73,7 +73,6 @@ final class AppCoordinator: ApphudDelegate {
     
     private func updateFoodData() {
         if abs(Calendar.current.dateComponents([.day], from: Date(), to: UDM.lastBaseUpdateDay).day ?? 0) > 6 {
-
             DSF.shared.updateStoredDishes()
                 DSF.shared.updateStoredProducts()
         }
