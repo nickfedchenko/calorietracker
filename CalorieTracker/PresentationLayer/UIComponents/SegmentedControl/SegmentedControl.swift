@@ -82,6 +82,8 @@ final class SegmentedControl<ID: Equatable>: UIView {
         }
     }
     
+    var forceToBeDrawn: Bool = false
+    
     init(_ buttons: [Button.Model]) {
         self.buttons = buttons.map(Button.init)
         super.init(frame: .zero)
@@ -96,6 +98,14 @@ final class SegmentedControl<ID: Equatable>: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         setupShadow()
+        if forceToBeDrawn {
+            guard let button = getSelectedButton(selectedButtonType) else {
+                return
+            }
+            button.isSelected = true
+            selectedButton = button
+            setupShadow()
+        }
         guard firstDraw,
               let button = getSelectedButton(selectedButtonType),
               button.frame != .zero else { return }

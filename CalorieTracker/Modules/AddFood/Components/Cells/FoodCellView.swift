@@ -309,8 +309,7 @@ extension FoodCellView.FoodViewModel {
             tag = R.string.localizable.brandFood()
         } else if product.isUserProduct {
             tag
-        }
-        else {
+        } else {
             tag = R.string.localizable.baseFood()
         }
         self.tag = tag
@@ -327,7 +326,7 @@ extension FoodCellView.FoodViewModel {
                     if unit.id == 1 {
                         description = "\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string(with: 1))"
                     } else {
-                        description = "\(unit.title ?? "") "
+                        description = "\(unit.title) "
                         + "(\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string(with: 1)))"
                     }
                     self.description = description

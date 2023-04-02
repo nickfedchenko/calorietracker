@@ -626,7 +626,7 @@
 "manageHealthCondition" = "Manage a health condition";
 
 "male" = "Male";
-"famale" = "Famale";
+"famale" = "Female";
 
 "save" = "save";
 "apply" = "apply";
@@ -792,6 +792,8 @@
 "measurement.floz" = "floz";
 "measurement.g" = "g";
 "measurement.oz" = "oz";
+"measurement.mcg" = "mcg";
+"measurement.mg" = "mg";
 
 "universalSelector.currentSettingsByKcal" = "Your calorie goal based on your current settings is ";
 "universalSelector.currentSettingsByKcalNew" = "Your new calorie goal based on your current settings is ";
@@ -914,3 +916,5 @@
 "Recommendations.diets.exercise.link.text.4" = "MET values: Activity Categories - Compendium of Physical Activities";
 
 "Have a nice day! Don't forget to track your breakfast" = "Have a nice day! Don't forget to track your breakfast";
+"Net Carbs" = "Net Carbs";
+"Restore Purchases" = "Restore Purchases";

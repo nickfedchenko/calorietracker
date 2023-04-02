@@ -793,6 +793,8 @@
 "measurement.floz" = "G. oz";
 "measurement.g" = "g";
 "measurement.oz" = "oz";
+"measurement.mcg" = "mcg";
+"measurement.mg" = "mg";
 
 "universalSelector.currentSettingsByKcal" = "Basé sur les paramètres actuels, votre objectif calorique est";
 "universalSelector.currentSettingsByKcalNew" = "Basé sur les paramètres actuels, votre nouvel objectif calorique ";
@@ -917,3 +919,5 @@
 "Recommendations.diets.exercise.link.text.4" = "MET values: Activity Categories - Compendium of Physical Activities";
 
 "Have a nice day! Don't forget to track your breakfast" = "Passe une bonne journée! N'oubliez pas de suivre votre petit-déjeuner";
+"Net Carbs" = "Glucides nets";
+"Restore Purchases" = "Restaurer les achats";

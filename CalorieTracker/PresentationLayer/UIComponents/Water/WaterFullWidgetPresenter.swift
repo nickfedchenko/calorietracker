@@ -15,6 +15,7 @@ protocol WaterFullWidgetPresenterInterface: AnyObject {
     func getSliderStepVolume() -> Int
     func getCountSliderParts() -> Int
     func addQuickAddTypes(_ type: QuickAddModel)
+    func getPercentage() -> Double
 }
 
 class WaterFullWidgetPresenter {
@@ -39,6 +40,13 @@ class WaterFullWidgetPresenter {
 }
 
 extension WaterFullWidgetPresenter: WaterFullWidgetPresenterInterface {
+    
+    func getPercentage() -> Double {
+        let goal = getGoal()
+        let now = getValueNow()
+        return Double(now) / Double(goal)
+    }
+    
     func getGoal() -> Int {
         let value = WaterWidgetService.shared.getDailyWaterGoal()
         return Int(BAMeasurement(value, .liquid, isMetric: true).localized)

@@ -22,8 +22,34 @@ final class MenuView<ID: WithGetTitleProtocol
         return stack
     }()
     
-    init(_ model: [ID]) {
+    private lazy var title: UILabel = {
+        let label = UILabel()
+        label.font = R.font.sfProRoundedBold(size: 22)
+        label.textColor = UIColor(hex: "192621")
+        label.text = R.string.localizable.addFoodCreate()
+        label.alpha = shouldShowTitleLabel ? 1 : 0
+        return label
+    }()
+    
+    private lazy var closeButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(R.image.createMeal.close(), for: .normal)
+        button.tintColor = UIColor(hex: "7A948F")
+        button.alpha = shouldShowTitleLabel ? 1 : 0
+        button.addAction(
+            UIAction { [weak self] _ in
+                guard let self = self else { return }
+                self.closeView(index: self.model.count - 1)
+            },
+            for: .touchUpInside
+        )
+        return button
+    }()
+    
+    private var shouldShowTitleLabel: Bool
+    init(_ model: [ID], shouldShowTitleLabel: Bool = true) {
         self.model = model
+        self.shouldShowTitleLabel = shouldShowTitleLabel
         super.init([ShadowConst.firstShadow, ShadowConst.secondShadow])
         setupView()
         addSubviews()
@@ -96,11 +122,32 @@ final class MenuView<ID: WithGetTitleProtocol
     
     private func addSubviews() {
         addSubviews(stackView)
+        if shouldShowTitleLabel {
+            addSubviews(title, closeButton)
+        }
     }
     
     private func setupConstraints() {
+        if shouldShowTitleLabel {
+            title.snp.makeConstraints { make in
+                make.leading.equalToSuperview().offset(32)
+                make.top.equalToSuperview().offset(24)
+            }
+            
+            closeButton.snp.makeConstraints { make in
+                make.width.height.equalTo(40)
+                make.trailing.equalToSuperview().inset(16)
+                make.top.equalToSuperview().offset(16)
+            }
+        }
+        
         stackView.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(12)
+            if shouldShowTitleLabel {
+                make.top.equalTo(title.snp.bottom).offset(28)
+            } else {
+                make.top.equalToSuperview().offset(12)
+            }
+            make.leading.trailing.bottom.equalToSuperview().inset(12)
         }
     }
     
@@ -129,6 +176,12 @@ final class MenuView<ID: WithGetTitleProtocol
         view.isSelectedCell = true
         complition?(view.model)
         showAndCloseView(false)
+    }
+    
+    func selectCell(at index: Int) {
+        guard index < stackView.arrangedSubviews.count else { return }
+        guard let control = stackView.arrangedSubviews[index] as? UIControl else { return }
+        didSelectedCell(control)
     }
 }
 

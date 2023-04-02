@@ -18,8 +18,11 @@ class WidgetContainerRouter: NSObject {
     weak var viewController: UIViewController?
     weak var presenter: WidgetContainerPresenterInterface?
 
-    static func setupModule(_ type: WidgetContainerViewController.WidgetType) -> WidgetContainerViewController {
-        let vc = WidgetContainerViewController(type)
+    static func setupModule(
+        _ type: WidgetContainerViewController.WidgetType,
+        anchorView: UIView? = nil
+    ) -> WidgetContainerViewController {
+        let vc = WidgetContainerViewController(type, anchorView: anchorView)
         let router = WidgetContainerRouter()
         let presenter = WidgetContainerPresenter(router: router, view: vc)
 

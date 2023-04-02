@@ -151,6 +151,7 @@ extension SecondPageFormView {
         textField.textAlignment = .center
         textField.keyboardType = .decimalPad
         textField.keyboardAppearance = .light
+        textField.text = "100"
         return textField
     }
 }

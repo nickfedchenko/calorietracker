@@ -8,6 +8,7 @@
 
 import AsyncDisplayKit
 import AuthenticationServices
+import ApphudSDK
 
 protocol MainScreenViewControllerInterface: AnyObject {
     func setWaterWidgetModel(_ model: WaterWidgetNode.Model)
@@ -270,23 +271,28 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         presenter?.updateCalendarWidget(UDM.currentlyWorkingDay.date)
         presenter?.updateNoteWidget()
         let weights = WeightWidgetService.shared.getAllWeight()
+        guard
+            Apphud.hasActiveSubscription(),
+        !UDM.didShowMainScreenFirstTime else { return }
+        LoggingService.postEvent(event: .diaryfirsttimeopened)
+        UDM.didShowMainScreenFirstTime = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        let now = Date().timeIntervalSince1970
-//        navigationController?.setToolbarHidden(true, animated: true)
-//        navigationController?.navigationBar.isHidden = true
-//        presenter?.updateWaterWidgetModel()
-//        presenter?.updateStepsWidget()
-//        presenter?.updateWeightWidget()
-//        presenter?.updateExersiceWidget()
-//        presenter?.updateMessageWidget()
-//        presenter?.updateActivityWidget()
-//        presenter?.updateCalendarWidget(UDM.currentlyWorkingDay.date)
-//        presenter?.updateNoteWidget()
-//        let new = Date().timeIntervalSince1970
-//        print("main screen time passed \(new - now)")
+        //        let now = Date().timeIntervalSince1970
+        //        navigationController?.setToolbarHidden(true, animated: true)
+        //        navigationController?.navigationBar.isHidden = true
+        //        presenter?.updateWaterWidgetModel()
+        //        presenter?.updateStepsWidget()
+        //        presenter?.updateWeightWidget()
+        //        presenter?.updateExersiceWidget()
+        //        presenter?.updateMessageWidget()
+        //        presenter?.updateActivityWidget()
+        //        presenter?.updateCalendarWidget(UDM.currentlyWorkingDay.date)
+        //        presenter?.updateNoteWidget()
+        //        let new = Date().timeIntervalSince1970
+        //        print("main screen time passed \(new - now)")
     }
     
     // MARK: - Private methods
@@ -430,22 +436,35 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         switch widget.widgetType {
         case .calendar:
             LoggingService.postEvent(event: .calwopen)
-            presenter?.didTapWidget(widget.widgetType)
+            presenter?.didTapWidget(widget.widgetType, anchorView: calendarWidget.view)
+            scrollNode?.view.scrollRectToVisible(.zero, animated: false)
         case .weight:
-            presenter?.didTapWidget(widget.widgetType)
+            if UIDevice.isSmallDevice {
+                var targetFrame = sender.frame
+                targetFrame.origin.y += 40
+                scrollNode?.view.scrollRectToVisible(targetFrame, animated: true)
+            }
+            presenter?.didTapWidget(widget.widgetType, anchorView: weightMeasureWidget.view)
             LoggingService.postEvent(event: .weightwopen)
         case .steps:
-            presenter?.didTapWidget(widget.widgetType)
+            scrollNode?.view.scrollRectToVisible(.zero, animated: true)
+            presenter?.didTapWidget(widget.widgetType, anchorView: stepsWidget.view)
             LoggingService.postEvent(event: .stepswopen)
         case .water:
-            presenter?.didTapWidget(.water(specificDate: presenter?.getPointDate() ?? Date()))
+            scrollNode?.view.scrollRectToVisible(.zero, animated: true)
+            presenter?.didTapWidget(
+                .water(specificDate: presenter?.getPointDate() ?? Date()), anchorView: waterBalanceWidget.view
+            )
             LoggingService.postEvent(event: .waterwopen)
         case .exercises:
+            scrollNode?.view.scrollRectToVisible(.zero, animated: true)
             presenter?.didTapExerciseWidget()
         case .notes:
+            scrollNode?.view.scrollRectToVisible(.zero, animated: true)
             presenter?.didTapNotesWidget()
             LoggingService.postEvent(event: .notewopen)
         case .main:
+            scrollNode?.view.scrollRectToVisible(.zero, animated: true)
             presenter?.didTapMainWidget()
         default:
             return

@@ -236,7 +236,9 @@ extension RecipesSearchViewController: UICollectionViewDataSource {
             else {
                  return UICollectionViewCell()
              }
-            cell.configure(with: model)
+            if let targetModel = LightweightRecipeModel(from: model) {
+                cell.configure(with: targetModel)
+            }
             return cell
         }
     }

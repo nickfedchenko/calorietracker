@@ -226,41 +226,41 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
     }
     
     func search(_ request: String, complition: ((Bool) -> Void)?) {
-//            let frequents = self.searchAmongFrequent(request)
-//            let favorites = self.searchAmongFavorites(request)
-//            let recents = self.searchAmongRecent(request)
+        //            let frequents = self.searchAmongFrequent(request)
+        //            let favorites = self.searchAmongFavorites(request)
+        //            let recents = self.searchAmongRecent(request)
         searchQueue.cancelAllOperations()
         print(searchQueue.operationCount)
-        let operation = BlockOperation()
-        operation.addExecutionBlock { [weak self] in
-            guard !operation.isCancelled else {
-                return
-            }
-            let current = Date().timeIntervalSince1970
-            guard let self = self else { return }
-            guard !operation.isCancelled else {
-                return
-            }
-            let basicFood = self.searchAmongAll(request)
-            guard !operation.isCancelled else {
-                return
-            }
-            let searchByBarcode = self.search(byBarcode: request)
-            guard !operation.isCancelled else {
-                return
-            }
-            let foods = basicFood + searchByBarcode
-            let done = Date().timeIntervalSince1970 - current
-            DispatchQueue.main.async {
-                guard !operation.isCancelled else {
-                    return
-                }
-                self.foods = foods
-                complition?(!foods.isEmpty)
-            }
+        //        let operation = BlockOperation()
+        //        operation.addExecutionBlock { [weak self] in
+        //            guard !operation.isCancelled else {
+        //                return
+        //            }
+        let current = Date().timeIntervalSince1970
+        //            guard let self = self else { return }
+        //            guard !operation.isCancelled else {
+        //                return
+        //            }
+        let basicFood = self.searchAmongAll(request)
+        //            guard !operation.isCancelled else {
+        //                return
+        //            }
+        let searchByBarcode = self.search(byBarcode: request)
+        //            guard !operation.isCancelled else {
+        //                return
+        //            }
+        let foods = basicFood + searchByBarcode
+        let done = Date().timeIntervalSince1970 - current
+        DispatchQueue.main.async {
+            //                guard !operation.isCancelled else {
+            //                    return
+            //                }
+            self.foods = foods
+            complition?(!foods.isEmpty)
         }
-        operation.queuePriority = .high
-        searchQueue.addOperation(operation)
+        //        }
+        //        operation.queuePriority = .high
+        //        searchQueue.addOperation(operation)
     }
     
     func getSubInfo(_ food: Food?, _ type: FoodInfoCases) -> Int? {

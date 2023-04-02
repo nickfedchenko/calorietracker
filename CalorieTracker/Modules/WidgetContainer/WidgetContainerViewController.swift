@@ -18,7 +18,7 @@ protocol WidgetContainerOutput: AnyObject {
 
 final class WidgetContainerViewController: UIViewController {
     typealias Size = CTWidgetNodeConfiguration
-    
+    private let anchorView: UIView?
     enum WidgetType {
         case water(specificDate: Date)
         case steps
@@ -76,8 +76,9 @@ final class WidgetContainerViewController: UIViewController {
     
     private let widgetView: UIView
     
-    init(_ type: WidgetType) {
+    init(_ type: WidgetType, anchorView: UIView? = nil) {
         self.widgetType = type
+        self.anchorView = anchorView
         self.widgetView = type.getWidget()
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .custom
@@ -93,6 +94,10 @@ final class WidgetContainerViewController: UIViewController {
         setupView()
         configureOutput()
         setupConstraints()
+    }
+    
+    func getWidgetView () -> UIView {
+        widgetType.getWidget()
     }
     
     private func configureOutput() {
@@ -136,9 +141,12 @@ final class WidgetContainerViewController: UIViewController {
         switch UIDevice.screenType {
         case .h19x414, .h19x428, .h19x375, .h19x390, .h19x393, .h19x430:
             return .init(
-                top: minTopInset,
+                top: Size(type: .widget).height
+                + Self.suggestedInterItemSpacing * 2
+                + Size(type: .compact).height
+                + Self.safeAreaTopInset,
                 left: Self.suggestedSideInset,
-                bottom: Self.bottomInset,
+                bottom: minBottomInset,
                 right: Self.suggestedSideInset
             )
         case .h16x414, .h16x375:
@@ -256,6 +264,8 @@ final class WidgetContainerViewController: UIViewController {
         
         presenter?.didTapView()
     }
+    
+  
 }
 
 extension WidgetContainerViewController: WidgetContainerInterface {
@@ -320,13 +330,41 @@ extension WidgetContainerViewController: UIViewControllerTransitioningDelegate {
         presenting _: UIViewController,
         source _: UIViewController
     ) -> UIViewControllerAnimatedTransitioning? {
-        TopDownPresentTransition()
+        switch widgetType {
+        case .water(specificDate: let date):
+            return  WidgetPresentTransitionController(
+                anchorView: anchorView ?? UIView(),
+                widgetType: .water(specificDate: date)
+            )
+//            return TopDownPresentTransition()
+        case .calendar:
+//            return TopDownPresentTransition()
+            return  WidgetPresentTransitionController(anchorView: anchorView ?? UIView(), widgetType: .calendar)
+        case .weight:
+            return WidgetPresentTransitionController(anchorView: anchorView ?? UIView(), widgetType: .weight)
+        default:
+            return  TopDownPresentTransition()
+        }
     }
 
     func animationController(
         forDismissed _: UIViewController
     ) -> UIViewControllerAnimatedTransitioning? {
-        TopDownDismissTransition()
+        switch widgetType {
+        case .water(specificDate: let date):
+            return  WidgetDismissTransitionController(
+                anchorView: anchorView ?? UIView(),
+                widgetType: .water(specificDate: date)
+            )
+//            return TopDownPresentTransition()
+        case .calendar:
+            return  WidgetDismissTransitionController(anchorView: anchorView ?? UIView(), widgetType: .calendar)
+        case .weight:
+//                        return TopDownDismissTransition()
+            return WidgetDismissTransitionController(anchorView: anchorView ?? UIView(), widgetType: .weight)
+        default:
+            return  TopDownDismissTransition()
+        }
     }
 }
 

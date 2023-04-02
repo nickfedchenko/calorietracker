@@ -26,9 +26,9 @@ enum FormValue: WithGetTitleProtocol {
     func getTitle(_ lenght: Lenght) -> String? {
         switch self {
         case .optional:
-            return "Optional"
+            return R.string.localizable.textFieldOptional().capitalized
         case .required(let placeholder):
-            return placeholder ?? "Required"
+            return placeholder ?? R.string.localizable.textFieldRequired().capitalized
         }
     }
 }

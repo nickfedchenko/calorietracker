@@ -9,6 +9,7 @@ import Amplitude
 
 final class LoggingService {
     enum LoggingEvent {
+        case diaryfirsttimeopened
         case diarywopen
         case diarywinclactive
         case diaryitemopen
@@ -186,6 +187,8 @@ final class LoggingService {
                 return "ob_Apple_Health_write"
             case .obAppleHealthread:
                 return "ob_Apple Health_read"
+            case .diaryfirsttimeopened:
+                return "Diary_first_time_opened"
             }
         }
     }

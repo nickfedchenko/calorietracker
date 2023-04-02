@@ -19,9 +19,10 @@ struct MealTimeCellViewModel: Equatable {
     var sizeState: MealTimeCollectionViewCell.SizeState = .close
     
     private func calculateNutrient(_ type: FoodInfoCases) -> Int {
-        foods
+        Int(foods
             .compactMap { $0.foodInfo[type] }
-            .compactMap { Int($0) }
+            .compactMap { $0 }
             .sum()
+        )
     }
 }

@@ -8,7 +8,7 @@
 import UIKit
 
 final class LineProgressView: UIView {
-    var colors: [UIColor?]? = [.red, .blue]
+    var colors: [UIColor?]? = [UIColor(hex: "42D7D7"), UIColor(hex: "00BCE5")]
     var backgroundLineColor: UIColor? = .white
     var progress: CGFloat = 0.5 {
         didSet {
@@ -18,7 +18,13 @@ final class LineProgressView: UIView {
             }
             
             let newProgress = CGFloat(Int(progress * 1000) % 1000) / 1000.0
+//            let animator = CABasicAnimation(keyPath: "strokeEnd")
+//            animator.fromValue = shape?.strokeEnd
+//            animator.toValue = newProgress
+//            animator.duration = 0.4
+//            shape?.add(animator, forKey: "strokeEnd")
             shape?.strokeEnd = newProgress
+            
             gradientLayer.frame = CGRect(
                 origin: .zero,
                 size: CGSize(
@@ -62,24 +68,31 @@ final class LineProgressView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        guard isFirstDraw else { return }
+//        guard isFirstDraw else { return }
+        shape?.removeFromSuperlayer()
+        layer.sublayers?.forEach { $0.removeFromSuperlayer() }
+        imageView.removeFromSuperview()
         let newProgress = CGFloat(Int(progress * 1000) % 1000) / 1000.0
         shape = createShapeLine(size: frame.size, color: .black)
         shape?.strokeEnd = newProgress
-        gradientLayer.frame = CGRect(
-            origin: .zero,
-            size: CGSize(
-                width: bounds.width * newProgress + bounds.height / 2.0,
-                height: bounds.height
+        UIView.animate(withDuration: 0.4, delay: 0) {
+            self.gradientLayer.frame = CGRect(
+                origin: .zero,
+                size: CGSize(
+                    width: self.bounds.width * newProgress + self.bounds.height,
+                    height: self.bounds.height
+                )
             )
-        )
-        
+        }
+        gradientLayer.colors = colors?.compactMap { $0?.cgColor }
+        gradientLayer.startPoint = CGPoint(x: 0, y: 0)
+        gradientLayer.endPoint = CGPoint(x: 1, y: 0)
         gradientLayer.mask = shape
         layer.addSublayer(createShapeLine(size: frame.size, color: backgroundLineColor))
         layer.addSublayer(gradientLayer)
         
         addSubview(imageView)
-        imageView.snp.makeConstraints { make in
+        imageView.snp.remakeConstraints { make in
             make.height.equalTo(29)
             make.width.equalTo(11)
             make.trailing.equalToSuperview().offset(-bounds.height / 2.0)
@@ -105,8 +118,27 @@ final class LineProgressView: UIView {
             shape.lineCap = .round
             return shape
         }()
-        
         return lineShape
     }
 
+//    func updateShapes() {
+//        let progress = CGFloat(Int(progress * 1000) % 1000) / 1000.0
+//        let strokeAnimator = CABasicAnimation(keyPath: "strokeEnd")
+//        let frameAnimator = CABasicAnimation(keyPath: "frame")
+//        strokeAnimator.toValue = progress
+//        frameAnimator.toValue = CGRect(
+//            origin: .zero,
+//            size: CGSize(
+//                width: bounds.width * progress + bounds.height,
+//                height: bounds.height
+//            )
+//        )
+//        strokeAnimator.duration = 0.4
+//        frameAnimator.duration = 0.4
+//        strokeAnimator.timingFunction = CAMediaTimingFunction(name: .easeIn)
+//        frameAnimator.timingFunction = CAMediaTimingFunction(name: .easeIn)
+//        shape?.add(strokeAnimator, forKey: nil)
+//        gradientLayer.add(frameAnimator, forKey: nil)
+//
+//    }
 }

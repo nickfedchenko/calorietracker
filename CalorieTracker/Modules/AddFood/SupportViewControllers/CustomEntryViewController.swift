@@ -227,7 +227,8 @@ final class CustomEntryViewController: UIViewController {
         Vibration.rigid.vibrate()
         
         guard let title = descriptionForm.textField.text,
-              let kcal = Double(caloriesForm.textField.text ?? "")
+              let kcal = Double(caloriesForm.textField.text ?? ""),
+              kcal > 0
         else { return }
         
         let carbs = Double(carbsForm.textField.text ?? "")
@@ -433,7 +434,7 @@ extension CustomEntryViewController: UITextFieldDelegate {
         
         if (textField == caloriesForm.textField && descriptionForm.textField.text != "")
             || (textField == descriptionForm.textField && caloriesForm.textField.text != "") {
-            addEntryButton.setState(resultText.isEmpty ? .inactive : .active)
+            addEntryButton.setState(resultText.isEmpty ? .inactive : Double(resultText) ?? 0 > 0 ? .active : .inactive)
         }
         
         return true

@@ -12,9 +12,9 @@ import UIKit
 protocol RecipesScreenPresenterInterface: AnyObject {
     func numberOfSections() -> Int
     func numberOfItemsInSection(section: Int) -> Int
-    func notifySectionsUpdated(shouldRemoveActivity: Bool)
+    func notifySectionsUpdated(sectionUpdated: Int, shouldRemoveActivity: Bool)
     func askForSections()
-    func getDishModel(at index: IndexPath) -> Dish?
+    func getDishModel(at index: IndexPath) -> LightweightRecipeModel?
     func getSectionModel(at indexPath: IndexPath) -> RecipeSectionModel?
     func didTapSectionHeader(at index: Int)
     func didTapRecipe(at index: IndexPath)
@@ -43,9 +43,15 @@ extension RecipesScreenPresenter: RecipesScreenPresenterInterface {
         interactor?.getSectionModel(at: indexPath)
     }
     
-    func notifySectionsUpdated(shouldRemoveActivity: Bool) {
-        DispatchQueue.main.async { [weak self] in
-            self?.view.shouldReloadDishesCollection(shouldRemoveActivity: shouldRemoveActivity)
+    func notifySectionsUpdated(sectionUpdated: Int, shouldRemoveActivity: Bool) {
+        if Thread.current.isMainThread {
+            DispatchQueue.main.async { [weak self] in
+                self?.view.shouldReloadDishesCollection(in: sectionUpdated, shouldRemoveActivity: shouldRemoveActivity)
+            }
+        } else {
+            DispatchQueue.main.sync { [weak self] in
+                self?.view.shouldReloadDishesCollection(in: sectionUpdated, shouldRemoveActivity: shouldRemoveActivity)
+            }
         }
     }
     
@@ -61,7 +67,7 @@ extension RecipesScreenPresenter: RecipesScreenPresenterInterface {
         interactor?.requestUpdateSections()
     }
     
-    func getDishModel(at index: IndexPath) -> Dish? {
+    func getDishModel(at index: IndexPath) -> LightweightRecipeModel? {
         interactor?.getDishModel(at: index)
     }
     
@@ -73,7 +79,9 @@ extension RecipesScreenPresenter: RecipesScreenPresenterInterface {
     
     func didTapRecipe(at index: IndexPath) {
         guard let dish = interactor?.getDishModel(at: index) else { return }
-        router?.showRecipeScreen(with: dish)
+        if  let dishProper = FDS.shared.getDish(by: String(dish.id)) {
+            router?.showRecipeScreen(with: dishProper)
+        }
     }
     
     func updateFavorites() {

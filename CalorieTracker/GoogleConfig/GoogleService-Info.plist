@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>906863592253-3m7vgjuadj0f7ejum4i6pa3doj3pt199.apps.googleusercontent.com</string>
+	<string>906863592253-ie4d40iur299308qql936kcnqq59ern0.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.906863592253-3m7vgjuadj0f7ejum4i6pa3doj3pt199</string>
+	<string>com.googleusercontent.apps.906863592253-ie4d40iur299308qql936kcnqq59ern0</string>
 	<key>API_KEY</key>
 	<string>AIzaSyCCMu00UXMIJF2oxJKoWAe2l6GGYmFyqgw</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.BroadApps.CalorieTracker</string>
+	<string>com.FoodyApCalorie</string>
 	<key>PROJECT_ID</key>
 	<string>caloriecounter-b26cf</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:906863592253:ios:b79cc5cd36e180310b3b54</string>
+	<string>1:906863592253:ios:49240f3d6af51a880b3b54</string>
 </dict>
 </plist>

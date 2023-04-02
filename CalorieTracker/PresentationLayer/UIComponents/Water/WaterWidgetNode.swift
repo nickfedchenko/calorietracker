@@ -14,15 +14,20 @@ final class WaterWidgetNode: CTWidgetNode {
         let waterMl: String
     }
     
-    private let bottomTitleLabel = ASTextNode()
+    private let bottomTitleLabel: ASTextNode = {
+       let node = ASTextNode()
+        node.style.height = .init(unit: .points, value: 24)
+        return node
+    }()
     
     private lazy var topTitleLabel: ASTextNode = {
         let node = ASTextNode()
         node.attributedText = getAttributedString(
             string: R.string.localizable.diagramChartTypeWaterTitle(),
-            size: 18.fontScale(),
+            size: 18,
             color: R.color.waterWidget.firstGradientColor()
         )
+        node.style.height = .init(unit: .points, value: 24)
         return node
     }()
     
@@ -88,7 +93,7 @@ final class WaterWidgetNode: CTWidgetNode {
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         let firstStack = ASStackLayoutSpec.vertical()
-        firstStack.spacing = 20
+        firstStack.spacing = 16
         
         firstStack.children = [
             topTitleLabel,
@@ -179,7 +184,7 @@ final class WaterWidgetNode: CTWidgetNode {
                 .foregroundColor: UIColor.white
             ]
         )
-        
+        print(model.waterMl)
         bottomTitleLabel.attributedText = model.waterMl.attributedSring([
             .init(worldIndex: [0], attributes: leftAttributes),
             .init(worldIndex: [1, 2, 3, 4], attributes: rightAttributes)
@@ -191,8 +196,8 @@ final class WaterWidgetNode: CTWidgetNode {
         attributedString.addAttributes(
             [
                 .foregroundColor: color ?? .black,
-                .font: R.font.sfProRoundedBold(size: size) ?? .systemFont(ofSize: size),
-                .kern: 0.38
+                .font: R.font.sfProRoundedBold(size: size) ?? .systemFont(ofSize: size)
+//                .kern: 0.38
             ],
             range: NSRange(location: 0, length: string.count)
         )

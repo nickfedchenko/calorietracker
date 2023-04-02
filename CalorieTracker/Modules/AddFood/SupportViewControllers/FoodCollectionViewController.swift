@@ -102,8 +102,13 @@ final class FoodCollectionViewController: UIViewController {
         } else {
             collectionView.reloadData()
         }
-        guard shouldShowNothingFound else { return }
-        nothingWasFoundView.isHidden = (dataSource?.foodsCount() ?? 0) != 0
+        if shouldShowNothingFound {
+            nothingWasFoundView.isHidden = (dataSource?.foodsCount() ?? 0) != 0
+            return
+        } else {
+            nothingWasFoundView.isHidden = true
+        }
+        
     }
     
     private func registerCells() {

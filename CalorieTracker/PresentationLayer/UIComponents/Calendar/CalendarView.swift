@@ -16,14 +16,15 @@ final class CalendarView: UIView {
     var font: UIFont? = R.font.sfProDisplaySemibold(size: 16)
     var defaultCalendarFlag: Bool = true
     
-    private lazy var collectionView: UICollectionView = {
+    private(set) lazy var collectionView: DynamicCollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
         
-        let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        let view = DynamicCollectionView(frame: .zero, collectionViewLayout: layout)
         view.backgroundColor = .clear
         view.isScrollEnabled = false
+        view.clipsToBounds = false
         return view
     }()
     
@@ -56,7 +57,7 @@ final class CalendarView: UIView {
     private var cellSize: CGSize {
         return CGSize(
             width: Int(frame.width / 7),
-            height: 47
+            height: 39
         )
     }
     
@@ -92,8 +93,12 @@ final class CalendarView: UIView {
             calorieCorridorPartDays = getCalorieCorridorPartDays()
         }
         
-        collectionView.snp.makeConstraints { make in
+        collectionView.snp.remakeConstraints { make in
             make.width.equalTo(cellSize.width * 7)
+            make.top.equalToSuperview()
+            make.centerX.equalToSuperview()
+            make.height.equalTo(cellSize.height * CGFloat(numberOfWeeksInBaseDate))
+            make.bottom.equalToSuperview()
         }
     }
     
@@ -172,7 +177,7 @@ final class CalendarView: UIView {
         collectionView.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.centerX.equalToSuperview()
-            make.height.equalTo(cellSize.height * CGFloat(numberOfWeeksInBaseDate))
+//            make.height.equalTo(cellSize.height * CGFloat(numberOfWeeksInBaseDate))
             make.bottom.equalToSuperview()
         }
     }
@@ -200,9 +205,15 @@ final class CalendarView: UIView {
             calorieCorridorPartDays = getCalorieCorridorPartDays()
         }
         
-        collectionView.snp.updateConstraints { make in
-            make.height.equalTo(collectionViewHeight)
+        collectionView.snp.remakeConstraints { make in
+            make.width.equalTo(cellSize.width * 7)
+            make.top.equalToSuperview()
+            make.centerX.equalToSuperview()
+            make.height.equalTo(cellSize.height * CGFloat(numberOfWeeksInBaseDate))
+            make.bottom.equalToSuperview()
         }
+        
+        collectionView.invalidateIntrinsicContentSize()
         collectionView.performBatchUpdates {
             collectionView.reloadSections(IndexSet(integer: 0))
         }

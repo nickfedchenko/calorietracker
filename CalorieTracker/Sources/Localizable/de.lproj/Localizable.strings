@@ -792,6 +792,8 @@
 "measurement.floz" = "g. oz";
 "measurement.g" = "g";
 "measurement.oz" = "oz";
+"measurement.mcg" = "mcg";
+"measurement.mg" = "mg";
 
 "universalSelector.currentSettingsByKcal" = "Basierend auf den aktuellen Einstellungen ist Ihr Kalorienziel ";
 "universalSelector.currentSettingsByKcalNew" = "Basierend auf den aktuellen Einstellungen ist Ihr neues Kalorienziel";
@@ -916,3 +918,6 @@
 "Recommendations.diets.exercise.link.text.4" = "MET values: Activity Categories - Compendium of Physical Activities";
 
 "Have a nice day! Don't forget to track your breakfast" = "Einen schönen Tag noch! Vergessen Sie nicht, Ihr Frühstück zu verfolgen";
+
+"Net Carbs" = "Netto Kohlenhydrate";
+"Restore Purchases" = "Käufe wiederherstellen";

@@ -81,18 +81,19 @@ final class CalendarFullWidgetView: UIView, CTWidgetFullProtocol {
         addSubviews(headerView, calendarView, dismissChevron)
         headerView.addSubviews(leftButton, dateLabel, rightButton)
         
-        headerView.aspectRatio(0.147)
+       
         headerView.snp.makeConstraints { make in
             make.leading.trailing.top.equalToSuperview()
+            make.height.equalTo(56)
         }
         
-        leftButton.aspectRatio()
+//        leftButton.aspectRatio()
         leftButton.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(12)
             make.top.bottom.equalToSuperview().inset(8)
         }
         
-        rightButton.aspectRatio()
+//        rightButton.aspectRatio()
         rightButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().offset(-12)
             make.top.bottom.equalToSuperview().inset(8)
@@ -110,7 +111,7 @@ final class CalendarFullWidgetView: UIView, CTWidgetFullProtocol {
         dismissChevron.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.height.width.equalTo(64)
-            make.top.equalTo(calendarView.snp.bottom).offset(12)
+//            make.top.equalTo(calendarView.snp.bottom).offset(12)
             make.bottom.equalToSuperview().inset(5)
         }
     }
@@ -233,5 +234,84 @@ extension CalendarFullWidgetView {
                 spread: 0
             )
         ]
+    }
+}
+
+extension CalendarFullWidgetView: TransitionAnimationReady {
+    func prepareForAppearing(with anchorSnapshot: UIView?) {
+        headerView.alpha = 0
+        calendarView.alpha = 0
+        dismissChevron.alpha = 0
+        addSubview(anchorSnapshot ?? UIView())
+        anchorSnapshot?.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        layoutIfNeeded()
+    }
+    
+    func animateAppearingFirstStage(targetFrame: CGRect, completion: @escaping () -> Void) {
+        guard let snapshot = subviews.last else { return }
+     
+        snapshot.alpha = 0
+        CATransaction.begin()
+        CATransaction.setAnimationDuration(0.4)
+      
+        UIView.animate(
+            withDuration: 0.6,
+            delay: 0,
+            usingSpringWithDamping: 0.7,
+            initialSpringVelocity: 0.4
+        ) {
+            self.frame = targetFrame
+            self.layoutIfNeeded()
+            self.headerView.alpha = 1
+            self.calendarView.alpha = 1
+            self.dismissChevron.alpha = 1
+            self.calendarView.collectionView.reloadSections(IndexSet(integer: 0))
+            
+//            self.calendarView.setNeedsLayout()
+//            self.calendarView.layoutIfNeeded()
+         
+        } completion: { _ in
+            snapshot.removeFromSuperview()
+            completion()
+        }
+        CATransaction.commit()
+    }
+    
+    func prepareForDisappearing() {
+        layoutIfNeeded()
+    }
+    
+    
+    func animateDisappearing(targetFrame: CGRect, completion: @escaping () -> Void) {
+        calendarView.snp.removeConstraints()
+        leftButton.snp.removeConstraints()
+        rightButton.snp.removeConstraints()
+        headerView.snp.remakeConstraints { make in
+            make.leading.trailing.top.equalToSuperview()
+            make.height.equalTo(36)
+        }
+        UIView.animate(
+            withDuration: 0.4,
+            delay: 0,
+            usingSpringWithDamping: 0.7,
+            initialSpringVelocity: 0.4
+        ) {
+            self.frame = targetFrame
+            self.layoutIfNeeded()
+            self.calendarView.alpha = 0
+            self.leftButton.alpha = 0
+            self.rightButton.alpha = 0
+            self.dismissChevron.alpha = 0
+            self.headerView.alpha = 0
+            self.backgroundColor = .clear
+//            self.calendarView.setNeedsLayout()
+//            self.calendarView.layoutIfNeeded()
+         
+        } completion: { _ in
+            completion()
+        }
+
     }
 }

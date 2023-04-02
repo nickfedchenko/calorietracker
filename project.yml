@@ -17,15 +17,12 @@ packages:
     SnapKit:
       url: https://github.com/SnapKit/SnapKit.git
       majorVersion: 5.0.1
-    Firebase:
-      url: https://github.com/firebase/firebase-ios-sdk.git
-      majorVersion: 9.3.0
     Gzip:
       url: https://github.com/1024jp/GzipSwift.git
       majorVersion: 5.2.0
     Kingfisher:
       url: https://github.com/onevcat/Kingfisher.git
-      majorVersion: 7.0.0
+      majorVersion: 7.6.0
     Lottie:
       url: https://github.com/airbnb/lottie-ios.git
       majorVersion: 3.0.0
@@ -53,12 +50,6 @@ targets:
       # INFOPLIST_FILE:
     dependencies:
       - package: SnapKit    
-      - package: Firebase
-        product: FirebaseCrashlytics
-      - package: Firebase
-        product: FirebaseAnalytics
-      - package: Firebase
-        product: FirebaseRemoteConfig
       - package: Gzip
       - package: Kingfisher
       - package: Lottie
@@ -80,7 +71,7 @@ targets:
           - $SRCROOT/$TARGET_NAME/Sources/Generated/R.generated.swift
     postBuildScripts:
       - script: |
-              "${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
+              "${PODS_ROOT}/FirebaseCrashlytics/run"
         name: "Crashlytics"
         inputFiles:
           - ${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}

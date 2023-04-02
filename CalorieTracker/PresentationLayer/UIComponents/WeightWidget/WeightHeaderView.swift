@@ -23,7 +23,7 @@ final class WeightHeaderView: UIView {
     private lazy var leftLabel: UILabel = {
         let label = UILabel()
         label.textColor = R.color.weightWidget.backgroundLines()
-        label.font = R.font.sfProDisplaySemibold(size: 22.fontScale())
+        label.font = R.font.sfProRoundedBold(size: 22)
         label.textAlignment = .center
         return label
     }()
@@ -31,15 +31,15 @@ final class WeightHeaderView: UIView {
     private lazy var rightLabel: UILabel = {
         let label = UILabel()
         label.textColor = R.color.weightWidget.weightTextColor()
-        label.font = R.font.sfProDisplaySemibold(size: 22.fontScale())
+        label.font = R.font.sfProRoundedBold(size: 22)
         label.textAlignment = .center
         return label
     }()
     
     private lazy var middleLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .black
-        label.font = R.font.sfProDisplaySemibold(size: 22.fontScale())
+        label.textColor = R.color.weightWidget.textColor()
+        label.font = R.font.sfProRoundedBold(size: 22)
         label.textAlignment = .center
         return label
     }()
@@ -108,7 +108,8 @@ final class WeightHeaderView: UIView {
         ])
         
         middleLabel.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.top.bottom.equalToSuperview().inset(8)
         }
         
         rightLabel.snp.makeConstraints { make in
@@ -127,9 +128,7 @@ final class WeightHeaderView: UIView {
 //        }
         
         middleBackgroundView.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.top.bottom.equalToSuperview()
-            make.width.equalTo(114)
+            make.centerX.centerY.equalToSuperview()
         }
         
         leftImageView.snp.makeConstraints { make in
@@ -150,5 +149,9 @@ final class WeightHeaderView: UIView {
         leftLabel.text = model.start
         middleLabel.text = model.now
         rightLabel.text = model.goal
+    }
+    
+    func prepareForTransition() {
+        middleBackgroundView.alpha = 0
     }
 }

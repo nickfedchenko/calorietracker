@@ -29,6 +29,6 @@ final class CTTabBarGradientFooter: UIView {
         gradientLayer.colors = [UIColor(hex: "F3FFFE", alpha: 0.9).cgColor, UIColor(hex: "F3FFFE", alpha: 1).cgColor]
         gradientLayer.startPoint = CGPoint(x: 0.5, y: 0)
         gradientLayer.endPoint = CGPoint(x: 0.5, y: 1)
-        gradientLayer.locations = [0.5, 0]
+        gradientLayer.locations = [0.5, 1]
     }
 }

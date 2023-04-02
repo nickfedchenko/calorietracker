@@ -10,7 +10,7 @@ import NVActivityIndicatorView
 import UIKit
 
 protocol RecipesScreenViewControllerInterface: AnyObject {
-    func shouldReloadDishesCollection(shouldRemoveActivity: Bool)
+    func shouldReloadDishesCollection(in section: Int, shouldRemoveActivity: Bool)
 }
 
 class RecipesScreenViewController: UIViewController {
@@ -25,7 +25,7 @@ class RecipesScreenViewController: UIViewController {
             frame: .zero,
             type: .ballRotate,
             color: UIColor(hex: "62D3B4"),
-            padding: 60
+            padding: 120
         )
         return activityIndicator
     }()
@@ -158,6 +158,7 @@ class RecipesScreenViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
+        reinitBlurView()
         presenter?.updateFavorites()
         shouldHideTabBar = false
         guard isFirstLayout else { return }
@@ -176,7 +177,7 @@ class RecipesScreenViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        reinitBlurView()
+     
     }
     
 //    func updateTopViewHeight() {
@@ -251,7 +252,7 @@ class RecipesScreenViewController: UIViewController {
 }
 
 extension RecipesScreenViewController: RecipesScreenViewControllerInterface {
-    func shouldReloadDishesCollection(shouldRemoveActivity: Bool) {
+    func shouldReloadDishesCollection(in section: Int, shouldRemoveActivity: Bool) {
         if shouldRemoveActivity {
             hideActivityIndicator()
         }
@@ -261,7 +262,6 @@ extension RecipesScreenViewController: RecipesScreenViewControllerInterface {
 
 extension RecipesScreenViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print("Got recipes count \(presenter?.numberOfItemsInSection(section: section) ?? 0)")
         return presenter?.numberOfItemsInSection(section: section) ?? 0
     }
     

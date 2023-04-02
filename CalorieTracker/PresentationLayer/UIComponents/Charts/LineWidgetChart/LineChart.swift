@@ -21,7 +21,11 @@ final class LineChart: UIView {
     }
     var goalTitle: String?
     var startDate: Date?
-    var titles: [Int] = []
+    var titles: [Int] = [] {
+        didSet {
+            print("titles set")
+        }
+    }
     
     var backgroundLinesColor: UIColor? = R.color.diagramChart.backgroundLines()
     var goalLineColor: UIColor? = R.color.diagramChart.goal()
@@ -79,15 +83,13 @@ final class LineChart: UIView {
                 label.font = R.font.sfProDisplaySemibold(size: 13)
                 label.textColor = R.color.diagramChart.goal()
                 label.text = goalTitle
+                label.sizeToFit()
                 return label
             }()
             addSubview(label)
-            label.frame = CGRect(
-                origin: CGPoint(
-                    x: bounds.width + 2,
-                    y: pointY - labelSize.height / 2.0
-                ),
-                size: labelSize
+            label.frame.origin = CGPoint(
+                x: bounds.width + 2,
+                y: pointY - labelSize.height / 2.0
             )
         }
     }
@@ -141,15 +143,13 @@ final class LineChart: UIView {
                 label.font = R.font.sfProDisplaySemibold(size: 13)
                 label.textColor = R.color.diagramChart.backgroundLines()
                 label.text = "\(titles.reversed()[index]) kg"
+                label.sizeToFit()
                 return label
             }()
             addSubview(label)
-            label.frame = CGRect(
-                origin: CGPoint(
-                    x: bounds.width + 2,
-                    y: pointY - labelSize.height / 2.0
-                ),
-                size: labelSize
+            label.frame.origin = CGPoint(
+                x: bounds.width + 2,
+                y: pointY - labelSize.height / 2.0
             )
             
             layer.addSublayer(getLine(point: CGPoint(x: 0, y: pointY)))

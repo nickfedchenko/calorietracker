@@ -11,9 +11,9 @@ extension UserSex: WithGetTitleProtocol {
     func getTitle(_ lenght: Lenght) -> String? {
         switch self {
         case .male:
-            return "Male"
+            return "male".localized
         case .famale:
-            return "Famale"
+            return "famale".localized
         }
     }
 }

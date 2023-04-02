@@ -7,6 +7,28 @@
 
 import UIKit
 
+protocol TransitionAnimationReady: UIView {
+    func prepareForAppearing(with anchorSnapshot: UIView?)
+    func animateAppearingFirstStage(targetFrame: CGRect, completion: @escaping () -> Void)
+    func animateAppearingSecondStage()
+    func prepareForDisappearing()
+    func animateDisappearing(targetFrame: CGRect, completion: @escaping () -> Void)
+    func prepareShadows()
+    func showShadows()
+    func setToForceRedraw()
+}
+
+extension TransitionAnimationReady {
+    func prepareForAppearing(with anchorSnapshot: UIView? = nil) {}
+    func animateAppearingFirstStage(targetFrame: CGRect, completion: @escaping () -> Void) {}
+    func animateAppearingSecondStage() {}
+    func prepareForDisappearing() {}
+    func animateDisappearing(targetFrame: CGRect, completion: @escaping () -> Void) {}
+    func prepareShadows() {}
+    func showShadows() {}
+    func setToForceRedraw() {}
+}
+
 protocol WaterFullWidgetInterface: AnyObject {
     
 }
@@ -24,15 +46,17 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
     
     private lazy var waterTitleLabel: UILabel = {
         let label = UILabel()
-        label.font = R.font.sfProDisplaySemibold(size: 22.fontScale())
+        label.font = R.font.sfProRoundedBold(size: 22)
         label.textColor = R.color.waterWidget.firstGradientColor()
         label.text = R.string.localizable.diagramChartTypeWaterTitle()
+        label.clipsToBounds = false
+        label.textAlignment = .left
         return label
     }()
     
     private lazy var quickAddTitleLabel: UILabel = {
         let label = UILabel()
-        label.font = R.font.sfProDisplaySemibold(size: 18.fontScale())
+        label.font = R.font.sfProRoundedBold(size: 16)
         label.textColor = R.color.waterWidget.firstGradientColor()
         label.text = "Set up quick add"
         return label
@@ -40,7 +64,8 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
     
     private lazy var waterValueLabel: UILabel = {
         let view = UILabel()
-        view.font = R.font.sfProDisplaySemibold(size: 22.fontScale())
+        view.clipsToBounds = false
+        view.font = R.font.sfProRoundedBold(size: 22)
         return view
     }()
     
@@ -74,8 +99,8 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
         view.isHiddenFlag = true
         view.backgroundLineColor = R.color.waterWidget.backgroundColor()
         view.colors = [
-            R.color.waterWidget.firstGradientColor(),
-            R.color.waterWidget.secondGradientColor()
+            R.color.waterWidget.firstGradientColor() ?? .blue,
+            R.color.waterWidget.secondGradientColor() ?? .blue
         ]
         return view
     }()
@@ -152,6 +177,23 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
         return stack
     }()
     
+    let percentageLabel: UILabel = {
+        let label = UILabel()
+        label.font = R.font.sfProRoundedBold(size: 24)
+        label.textColor = .white
+        label.textAlignment = .center
+        return label
+    }()
+    
+    let percentTitleLabel: UILabel = {
+        let label = UILabel()
+        label.font = R.font.sfProRoundedBold(size: 13)
+        label.textColor = .white
+        label.textAlignment = .center
+        label.text = "%"
+        return label
+    }()
+    
     private var isSelectedSettingsButton = false
     private var presenter: WaterFullWidgetPresenterInterface?
     
@@ -181,30 +223,30 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
             quickAddStack.viewsType = viewsType
         }
     }
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//        presenter = WaterFullWidgetPresenter(view: self)
-//        setupView()
-//        setupConstraints()
-//        configureView()
-//
-//        quickAddStack.didTapQuickAdd = { value in
-//            self.presenter?.addWater(value)
-//            self.configureView()
-//        }
-//
-//        quickAddStack.didTapEdit = { complition in
-//            self.output?.setQuickAdd(self, complition: { model in
-//                self.presenter?.addQuickAddTypes(model)
-//                complition(model)
-//            })
-//        }
-//
-//        if let viewsType = presenter?.getQuickAddTypes() {
-//            quickAddStack.viewsType = viewsType
-//        }
-//    }
-
+    //    override init(frame: CGRect) {
+    //        super.init(frame: frame)
+    //        presenter = WaterFullWidgetPresenter(view: self)
+    //        setupView()
+    //        setupConstraints()
+    //        configureView()
+    //
+    //        quickAddStack.didTapQuickAdd = { value in
+    //            self.presenter?.addWater(value)
+    //            self.configureView()
+    //        }
+    //
+    //        quickAddStack.didTapEdit = { complition in
+    //            self.output?.setQuickAdd(self, complition: { model in
+    //                self.presenter?.addQuickAddTypes(model)
+    //                complition(model)
+    //            })
+    //        }
+    //
+    //        if let viewsType = presenter?.getQuickAddTypes() {
+    //            quickAddStack.viewsType = viewsType
+    //        }
+    //    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -251,6 +293,8 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
             quickAddStack,
             trackButton
         )
+        
+        logoView.addSubviews(percentageLabel, percentTitleLabel)
     }
     
     private func setupConstraints() {
@@ -276,7 +320,7 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
         }
         
         closeButton.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().offset(-20)
+            //            make.bottom.equalToSuperview().offset(-10)
             make.centerX.equalToSuperview()
             make.height.width.equalTo(25)
         }
@@ -284,16 +328,28 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
         mainStack.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(20)
             make.top.equalTo(waterValueLabel.snp.bottom).offset(17)
-            make.bottom.lessThanOrEqualTo(closeButton.snp.top).offset(-10)
+            make.bottom.lessThanOrEqualTo(closeButton.snp.top).offset(-25)
         }
         
         goalButton.aspectRatio(0.187)
         slider.aspectRatio(0.24)
         trackButton.aspectRatio(0.187)
         quickAddStack.aspectRatio(0.187)
+        mainStack.setCustomSpacing(20, after: slider)
         
         progressView.snp.makeConstraints { make in
             make.height.equalTo(12)
+        }
+        
+        percentageLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview().offset(6.5)
+            make.top.equalToSuperview().offset(30)
+            make.width.greaterThanOrEqualTo(34)
+        }
+        
+        percentTitleLabel.snp.makeConstraints { make in
+            make.centerX.equalTo(percentageLabel).offset(-0.5)
+            make.top.equalToSuperview().offset(54)
         }
     }
     
@@ -342,13 +398,15 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
         let suffix = BAMeasurement.measurmentSuffix(.liquid).uppercased()
         let string = goal == nil
         ? "TODAY \(value) \(suffix)"
-            : "\(value) / \(goal ?? 0) \(suffix)"
+        : "\(value) / \(goal ?? 0) \(suffix)"
         let colorLeft = R.color.waterWidget.secondGradientColor()
-        let colorRight = R.color.waterWidget.firstGradientColor()
-        let font = R.font.sfProDisplaySemibold(size: 22.fontScale())
+        let colorRight = UIColor(hex: "A7F0ED")
+        let font = R.font.sfProRoundedBold(size: 22)
         let leftAttributes: [StringSettings] = [.color(colorLeft), .font(font)]
         let rightAttributes: [StringSettings] = [.color(colorRight), .font(font)]
-        
+        let percentage = (presenter?.getPercentage() ?? 0) * 100
+        let percentageString = String(format: "%.0f", percentage)
+        percentageLabel.text = percentageString
         if goal != nil {
             waterValueLabel.attributedText = string.attributedSring([
                 .init(worldIndex: [0], attributes: leftAttributes),
@@ -420,4 +478,230 @@ extension WaterFullWidgetView: WaterSliderViewDelegate {
 
 extension WaterFullWidgetView: WaterFullWidgetInterface {
     
+}
+
+extension WaterFullWidgetView: TransitionAnimationReady {
+    
+    func prepareForAppearing(with anchorSnapshot: UIView?) {
+        settingsButton.snp.remakeConstraints { make in
+            make.centerY.equalTo(waterTitleLabel)
+            make.trailing.equalToSuperview().offset(23)
+        }
+        mainStack.snp.removeConstraints()
+        logoView.snp.updateConstraints { make in
+            make.top.equalToSuperview().offset(8)
+            make.trailing.equalTo(settingsButton.snp.leading).offset(-11)
+        }
+        
+        waterTitleLabel.snp.remakeConstraints { make in
+            make.top.equalTo(logoView)
+            make.leading.equalToSuperview().offset(8)
+            make.height.equalTo(24)
+        }
+        
+        waterValueLabel.snp.remakeConstraints { make in
+            make.top.equalTo(waterTitleLabel.snp.bottom).offset(20)
+            make.leading.equalToSuperview().offset(8)
+            make.height.equalTo(24)
+        }
+        
+        mainStack.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(8)
+            make.top.equalTo(waterValueLabel.snp.bottom).offset(20)
+            //            make.bottom.lessThanOrEqualTo(closeButton.snp.top).offset(-10)
+        }
+        
+        let goal = presenter?.getGoal()
+        let valueNow = presenter?.getValueNow() ?? 0
+        let suffix = BAMeasurement.measurmentSuffix(.liquid).uppercased()
+        let string = goal == nil
+        ? "TODAY \(valueNow) \(suffix)"
+        : "\(valueNow) / \(goal ?? 0) \(suffix)"
+        let colorLeft = R.color.waterWidget.secondGradientColor()
+        let colorRight = UIColor(hex: "A7F0ED")
+        let font = R.font.sfProRoundedBold(size: 18)
+        let leftAttributes: [StringSettings] = [.color(colorLeft), .font(font)]
+        let rightAttributes: [StringSettings] = [.color(colorRight), .font(font)]
+        print(string)
+        if goal != nil {
+            waterValueLabel.attributedText = string.attributedSring([
+                .init(worldIndex: [0], attributes: leftAttributes),
+                .init(worldIndex: [1, 2, 3, 4], attributes: rightAttributes)
+            ])
+        } else {
+            waterValueLabel.attributedText = string.attributedSring(
+                [
+                    .init(worldIndex: [0, 1], attributes: leftAttributes),
+                    .init(worldIndex: [2, 3], attributes: rightAttributes)
+                ],
+                image: .init(
+                    image: R.image.waterWidget.editText(),
+                    font: font,
+                    position: .right
+                )
+            )
+        }
+        settingsButton.alpha = 0
+        quickAddStack.alpha = 0
+        closeButton.alpha = 0
+        goalButton.alpha = 0
+        slider.alpha = 0
+        quickAddTitleLabel.alpha = 0
+        quickAddStack.alpha = 0
+        trackButton.alpha = 0
+        slider.alpha = 0
+        slider.shouldShowInnerShadow = false
+        layoutIfNeeded()
+        mainStack.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+    }
+    
+    func animateAppearingFirstStage(targetFrame: CGRect, completion: @escaping () -> Void) {
+        settingsButton.snp.updateConstraints { make in
+            make.trailing.equalToSuperview().offset(-22)
+        }
+        
+        logoView.snp.updateConstraints { make in
+            make.top.equalToSuperview().offset(20)
+        }
+        
+        waterTitleLabel.snp.remakeConstraints { make in
+            make.top.equalToSuperview().offset(20)
+            make.leading.equalToSuperview().offset(20)
+        }
+        
+        waterValueLabel.snp.remakeConstraints { make in
+            make.top.equalTo(waterTitleLabel.snp.bottom).offset(12)
+            make.leading.equalToSuperview().offset(20)
+            make.height.equalTo(24)
+        }
+        
+        mainStack.snp.remakeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(20)
+            make.top.equalTo(waterValueLabel.snp.bottom).offset(17)
+            make.bottom.lessThanOrEqualTo(closeButton.snp.top).offset(-25)
+        }
+        
+        self.waterValueLabel.animate(
+            font: R.font.sfProRoundedBold(size: 22) ?? .systemFont(ofSize: 22),
+            duration: 0.4
+        )
+        self.waterTitleLabel.animate(
+            font: R.font.sfProRoundedBold(size: 22) ?? .systemFont(ofSize: 22),
+            duration: 0.4
+        )
+        
+        UIView.animate(
+            withDuration: 0.6,
+            delay: 0,
+            usingSpringWithDamping: 0.7,
+            initialSpringVelocity: 0.4
+        ) {
+            self.layoutIfNeeded()
+            self.settingsButton.alpha = 1
+            self.frame = targetFrame
+            self.quickAddStack.alpha = 1
+            self.closeButton.alpha = 1
+            self.goalButton.alpha = 1
+            self.slider.alpha = 1
+            self.quickAddTitleLabel.alpha = 1
+            self.quickAddStack.alpha = 1
+            self.trackButton.alpha = 1
+            self.slider.alpha = 1
+            self.slider.shouldShowInnerShadow = true
+        } completion: { _ in
+            completion()
+        }
+    }
+    
+    func animateAppearingSecondStage() {
+        self.quickAddStack.alpha = 1
+        closeButton.alpha = 1
+        goalButton.alpha = 1
+        slider.alpha = 1
+        quickAddTitleLabel.alpha = 1
+        quickAddStack.alpha = 1
+        trackButton.alpha = 1
+    }
+    
+    func prepareForDisappearing() {
+        layoutIfNeeded()
+    }
+    
+    func animateDisappearing(targetFrame: CGRect, completion: @escaping () -> Void) {
+        settingsButton.snp.remakeConstraints { make in
+            make.centerY.equalTo(waterTitleLabel)
+            make.trailing.equalToSuperview().offset(23)
+        }
+        
+        mainStack.snp.removeConstraints()
+        
+        logoView.snp.updateConstraints { make in
+            make.top.equalToSuperview().offset(8)
+            make.trailing.equalTo(settingsButton.snp.leading).offset(-11)
+        }
+        
+        waterTitleLabel.snp.remakeConstraints { make in
+            make.top.equalToSuperview().offset(8)
+            make.leading.equalToSuperview().offset(8)
+            make.height.equalTo(24)
+        }
+        waterValueLabel.snp.remakeConstraints { make in
+            make.top.equalTo(waterTitleLabel.snp.bottom).offset(16)
+            make.leading.equalToSuperview().offset(8)
+            make.height.equalTo(24)
+        }
+        
+//        waterValueLabel.snp.remakeConstraints { make in
+//            make.top.equalTo(waterTitleLabel.snp.bottom).offset(20)
+//            make.leading.equalToSuperview().offset(8)
+//            make.height.equalTo(24)
+//        }
+        
+        mainStack.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(8)
+            make.top.equalTo(snp.bottom).offset(-20)
+            //            make.bottom.lessThanOrEqualTo(closeButton.snp.top).offset(-10)
+        }
+        
+        self.waterValueLabel.animate(
+            font: R.font.sfProRoundedBold(size: 18) ?? .systemFont(ofSize: 18),
+            duration: 0.4
+        )
+        
+        self.waterTitleLabel.animate(
+            font: R.font.sfProRoundedBold(size: 18) ?? .systemFont(ofSize: 18),
+            duration: 0.4
+        )
+        
+        UIView.animate(
+            withDuration: 0.4,
+            delay: 0,
+            usingSpringWithDamping: 0.7,
+            initialSpringVelocity: 0.8
+        ) {
+            self.frame = targetFrame
+            self.layoutIfNeeded()
+            self.settingsButton.alpha = 0
+            self.quickAddStack.alpha = 0
+            self.closeButton.alpha = 0
+            self.goalButton.alpha = 0
+            self.slider.alpha = 0
+            self.quickAddTitleLabel.alpha = 0
+            self.quickAddStack.alpha = 0
+            self.trackButton.alpha = 0
+            self.slider.alpha = 0
+            self.progressView.setNeedsDisplay()
+//            self.slider.shouldShowInnerShadow = false
+        } completion: { _ in
+            completion()
+        }
+    }
+    
+    func prepareShadows() {
+        slider.shouldShowInnerShadow = false
+    }
+    
+    func showShadows() {
+        slider.shouldShowInnerShadow = true
+    }
 }

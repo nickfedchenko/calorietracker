@@ -37,6 +37,8 @@ final class UDM {
         case tempWeeklyGoal
         case didShowAskingOpinion
         case openCreateProductCounter
+        case lastBaseUpdateDay
+        case didShowMainScreenFirstTime
     }
     
     
@@ -49,6 +51,21 @@ final class UDM {
         }
         set {
             setValue(value: newValue, for: .openCreateProductCounter)
+        }
+    }
+    
+    static var lastBaseUpdateDay: Date {
+        get {
+            guard let value: Date = getValue(for: .lastBaseUpdateDay) else {
+                return Calendar.current.date(byAdding: .day, value: 7, to: Date()) ?? Date()
+            }
+#if DEBUG
+            return Calendar.current.date(byAdding: .day, value: 7, to: Date()) ?? Date()
+#endif
+            return value
+        }
+        set {
+            setValue(value: newValue, for: .lastBaseUpdateDay)
         }
     }
     
@@ -124,6 +141,19 @@ final class UDM {
         
         set {
             setValue(value: newValue, for: .globalIsMetric)
+        }
+    }
+    
+    static var didShowMainScreenFirstTime: Bool {
+        get {
+            guard let value: Bool = getValue(for: .didShowMainScreenFirstTime) else {
+                return false
+            }
+            return value
+        }
+        
+        set {
+            setValue(value: newValue, for: .didShowMainScreenFirstTime)
         }
     }
     

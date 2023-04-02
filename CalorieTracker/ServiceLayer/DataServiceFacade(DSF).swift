@@ -18,7 +18,7 @@ protocol DataServiceFacadeInterface {
     func getAllStoredProducts() -> [Product]
     /// Возвращает все блюда сохраненные в локальной ДБ
     /// - Returns: массив Dish
-    func getAllStoredDishes() -> [Dish]
+    func getAllStoredDishes(completion: @escaping ([Dish]) -> Void)
     /// Возвращает все заметки сохраненные в локальной ДБ
     /// - Returns: массив Note
     func getAllStoredNotes() -> [Note]
@@ -66,6 +66,10 @@ protocol DataServiceFacadeInterface {
 //    func getProduct(by id: String) -> DomainProduct
 //    func getDish(by id: String) -> DomainDish
 //    func getCustomEntry(by id: String) -> DomainDish
+    func getBreakfastDishes(completion: @escaping ([LightweightRecipeModel]) -> Void)
+    func getLunchDishes(completion: @escaping ([LightweightRecipeModel]) -> Void)
+    func getDinnerDishes(completion: @escaping ([LightweightRecipeModel]) -> Void)
+    func getSnacksDishes(completion: @escaping ([LightweightRecipeModel]) -> Void)
     
     func saveExercises(_ exercises: [Exercise])
     func saveSteps(_ steps: [DailyData])
@@ -76,11 +80,61 @@ final class DSF {
     
     private let networkService: NetworkEngineInterface = NetworkEngine()
     private let localPersistentStore: LocalDomainServiceInterface = LocalDomainService()
-    
+    private let mappingQueue: DispatchQueue = DispatchQueue(label: "mappingQueue", qos: .userInitiated)
+
     private init() {}
 }
 
 extension DSF: DataServiceFacadeInterface {
+    func getLunchDishes(completion: @escaping ([LightweightRecipeModel]) -> Void) {
+        localPersistentStore.fetchLunchDishes() { [weak self] dishes in
+            
+//            self?.mappingQueue.async {
+                let startTime = Date().timeIntervalSince1970
+                let normalDishes = dishes?.compactMap { LightweightRecipeModel(from: $0) }
+                let endTime = Date().timeIntervalSince1970
+                print("lunch dishes mapping time \(endTime - startTime)")
+                completion(normalDishes ?? [])
+//            }
+        }
+    }
+    
+    func getDinnerDishes(completion: @escaping ([LightweightRecipeModel]) -> Void) {
+        localPersistentStore.fetchDinnerDishes { [weak self] dishes in
+//            self?.mappingQueue.async {
+                let startTime = Date().timeIntervalSince1970
+                let normalDishes = dishes?.compactMap { LightweightRecipeModel(from: $0) }
+                let endTime = Date().timeIntervalSince1970
+                print("dinner dishes mapping time \(endTime - startTime)")
+                completion(normalDishes ?? [])
+//            }
+        }
+    }
+    
+    func getSnacksDishes(completion: @escaping ([LightweightRecipeModel]) -> Void) {
+        localPersistentStore.fetchSnackDishes { [weak self] dishes in
+//            self?.mappingQueue.async {
+                let startTime = Date().timeIntervalSince1970
+                let normalDishes = dishes?.compactMap { LightweightRecipeModel(from: $0) }
+                let endTime = Date().timeIntervalSince1970
+                print("snack dishes mapping time \(endTime - startTime)")
+                completion(normalDishes ?? [])
+//            }
+        }
+    }
+    
+    func getBreakfastDishes(completion: @escaping ([LightweightRecipeModel]) -> Void) {
+        localPersistentStore.fetchBreakfastDishes { [weak self] dishes in
+//            self?.mappingQueue.async {
+                let startTime = Date().timeIntervalSince1970
+                let normalDishes = dishes?.compactMap { LightweightRecipeModel(from: $0) }
+                let endTime = Date().timeIntervalSince1970
+                print("breakfast dishes mapping time \(endTime - startTime)")
+                completion(normalDishes ?? [])
+//            }
+        }
+    }
+    
     func saveExercises(_ exercises: [Exercise]) {
         localPersistentStore.saveExercise(data: exercises)
     }
@@ -120,6 +174,7 @@ extension DSF: DataServiceFacadeInterface {
             case .failure(let error):
                 dump(error)
             case .success(let products):
+                UDM.lastBaseUpdateDay = Date()
                 print("Got \(products.count)")
                 let convProduct: [Product] = products.map { .init($0) }
                 let splittedProducts = convProduct.splitInSubArrays(into: 8)
@@ -144,6 +199,7 @@ extension DSF: DataServiceFacadeInterface {
             case .failure(let error):
                 print(error)
             case .success(let dishes):
+                UDM.lastBaseUpdateDay = Date()
                 print("dishes received \(dishes.count)")
                 let splitDishes = dishes.splitInSubArrays(into: 8)
                 self?.makeTagTitles(from: dishes)
@@ -159,9 +215,8 @@ extension DSF: DataServiceFacadeInterface {
         return products
     }
     
-    func getAllStoredDishes() -> [Dish] {
-        let dishes = localPersistentStore.fetchDishes()
-        return dishes
+    func getAllStoredDishes(completion: @escaping ([Dish]) -> Void) {
+        let dishes = localPersistentStore.fetchDishesAsynchronously(completion: completion)
     }
     
     func getAllStoredWater() -> [DailyData] {

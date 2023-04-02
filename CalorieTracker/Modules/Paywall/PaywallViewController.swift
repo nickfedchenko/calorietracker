@@ -52,12 +52,25 @@ final class PaywallViewController: UIViewController {
     private lazy var privacyPolicyButton: UIButton = getPolicyButton()
     private lazy var termOfUseButton: UIButton = getTermsButton()
     private lazy var collectionView: UICollectionView = getCollectionView()
-    
+    private lazy var restorePurchasesButton: UIButton = {
+        let button = UIButton(type: .system)
+        let attrTitle = NSAttributedString(
+            string: R.string.localizable.restorePurchases(),
+            attributes: [
+                .font: R.font.sfProRoundedBold(size: 16) ?? .systemFont(ofSize: 16),
+                .foregroundColor: UIColor(hex: "292D32")
+            ]
+        )
+        button.setAttributedTitle(attrTitle, for: .normal)
+        button.addTarget(self, action: #selector(restorePurchasesTapped), for: .touchUpInside)
+        return button
+    }()
     private lazy var closeButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(R.image.waterWidget.closeSettings(), for: .normal)
         button.tintColor = UIColor(hex: "192621").withAlphaComponent(0.3)
         button.addTarget(self, action: #selector(didTapCloseButton), for: .touchUpInside)
+        button.alpha = 0
         return button
     }()
     
@@ -152,7 +165,8 @@ final class PaywallViewController: UIViewController {
             startNowCommonButton,
             closeButton,
             logoView,
-            cancelAnyTime
+            cancelAnyTime,
+            restorePurchasesButton
         )
         
         subscriptionBenefitsContainerView.addSubviews(
@@ -168,7 +182,7 @@ final class PaywallViewController: UIViewController {
         
         cancelAnyTime.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.centerY.equalTo(termOfUseButton.snp.top)
+            make.bottom.equalToSuperview().inset(UIDevice.isSmallDevice ? 4 : 24)
         }
         
         logoView.snp.makeConstraints { make in
@@ -222,17 +236,22 @@ final class PaywallViewController: UIViewController {
         startNowCommonButton.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(40)
             $0.height.equalTo(64)
-            $0.bottom.equalToSuperview().offset(-80)
+            $0.bottom.equalToSuperview().offset(-96.fitH)
         }
         
         privacyPolicyButton.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(24)
-            $0.bottom.equalToSuperview().offset(-35)
+            $0.bottom.equalToSuperview().offset(UIDevice.isSmallDevice ? -5 : -26)
         }
         
         termOfUseButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().offset(-24)
-            $0.bottom.equalToSuperview().offset(-35)
+            $0.bottom.equalToSuperview().offset(UIDevice.isSmallDevice ? -5 : -26)
+        }
+        
+        restorePurchasesButton.snp.makeConstraints { make in
+            make.top.equalTo(startNowCommonButton.snp.bottom).offset(16)
+            make.centerX.equalTo(cancelAnyTime)
         }
         
         closeButton.snp.makeConstraints { make in
@@ -262,6 +281,27 @@ final class PaywallViewController: UIViewController {
     
     @objc private func didTapPrivacyPolicy() {
         presenter?.didTapPrivacyPolicy()
+    }
+    
+    @objc private func restorePurchasesTapped() {
+        Apphud.restorePurchases { [weak self] subscriptions, _, error in
+            if let error = error {
+                let alertController = 
+                self?.showSimpleAlert(title: "Error", message: error.localizedDescription)
+            }
+            
+            if subscriptions?.first?.isActive() ?? false {
+                self?.didTapCloseButton()
+                return
+            }
+            
+            if Apphud.hasActiveSubscription() {
+                self?.didTapCloseButton()
+                return
+            } else {
+                self?.showSimpleAlert(title: "No subscription", message: "No active subscriptions found")
+            }
+        }
     }
     
     @objc private func didTapTermOfUse() {

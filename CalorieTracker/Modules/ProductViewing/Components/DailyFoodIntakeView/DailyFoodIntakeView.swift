@@ -50,25 +50,25 @@ final class DailyFoodIntakeView: UIView {
         let goal = NutrientMeasurment.convertNutrition(nutrition: goal, from: .kcal, to: .gram)
         fatCircleView.configure(.init(
             percent: String(format: "%.1f", (from.fat + to.fat) / goal.fat * 100) + "%",
-            value: String(format: "%.1f g", from.fat + to.fat),
+            value: String(format: "%.1f g", to.fat),
             now: from.fat / goal.fat,
             add: to.fat / goal.fat
         ))
         carbCircleView.configure(.init(
             percent: String(format: "%.1f", (from.carbs + to.carbs) / goal.carbs * 100) + "%",
-            value: String(format: "%.1f g", from.carbs + to.carbs),
+            value: String(format: "%.1f g", to.carbs),
             now: from.carbs / goal.carbs,
             add: to.carbs / goal.carbs
         ))
         kcalCircleView.configure(.init(
             percent: String(format: "%.1f", (from.kcal + to.kcal) / goal.kcal * 100) + "%",
-            value: String(Int(from.kcal + to.kcal)),
+            value: String(Int(to.kcal)),
             now: from.kcal / goal.kcal,
             add: to.kcal / goal.kcal
         ))
         proteinCircleView.configure(.init(
             percent: String(format: "%.1f", (from.protein + to.protein) / goal.protein * 100) + "%",
-            value: String(format: "%.1f g", from.protein + to.protein),
+            value: String(format: "%.1f g", to.protein),
             now: from.protein / goal.protein,
             add: to.protein / goal.protein
         ))

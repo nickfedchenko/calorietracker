@@ -805,6 +805,8 @@
 "measurement.floz" = "E. oncia";
 "measurement.g" = "G";
 "measurement.oz" = "oncia";
+"measurement.mcg" = "mcg";
+"measurement.mg" = "mg";
 
 "universalSelector.currentSettingsByKcal" = "In base alle tue impostazioni correnti, il tuo obiettivo calorico";
 "universalSelector.currentSettingsByKcalNew" = "In base alle tue impostazioni attuali, il tuo nuovo obiettivo calorico";
@@ -929,3 +931,5 @@
 "Recommendations.diets.exercise.link.text.4" = "MET values: Activity Categories - Compendium of Physical Activities";
 
 "Have a nice day! Don't forget to track your breakfast" = "Buona giornata! Non dimenticare di tenere traccia della tua colazione";
+"Net Carbs" = "Glucides nets";
+"Restore Purchases" = "Ripristinare gli acquisti";

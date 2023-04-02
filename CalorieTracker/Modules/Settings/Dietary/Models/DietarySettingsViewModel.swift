@@ -33,7 +33,7 @@ struct DietarySettingsViewModel {
         switch type {
         case .title:
             let cell: SettingsProfileHeaderCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
-            cell.title = "DIETARY PREFERENCE"
+            cell.title = R.string.localizable.settingsDietaryTitle().uppercased()
             return cell
         default:
             let cell: SettingsCategoryCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
@@ -71,8 +71,8 @@ struct DietarySettingsViewModel {
         switch type {
         case .classic:
             return .init(
-                title: "Classic",
-                description: "I have no dietary preferences",
+                title: R.string.localizable.settingsDietaryClassicTitle(),
+                description: R.string.localizable.settingsDietaryClassicDecription(),
                 titleColor: R.color.foodViewing.basicDark(),
                 descriptionColor: R.color.foodViewing.basicDark(),
                 image: R.image.settings.dietaryClassic(),
@@ -81,8 +81,8 @@ struct DietarySettingsViewModel {
             )
         case .pescatarian:
             return .init(
-                title: "Pescatarian",
-                description: "I eat seafood but not meat",
+                title: R.string.localizable.settingsDietaryPescatarianTitle(),
+                description: R.string.localizable.settingsDietaryPescatarianDecription(),
                 titleColor: R.color.foodViewing.basicDark(),
                 descriptionColor: R.color.foodViewing.basicDark(),
                 image: R.image.settings.dietaryPescatarian(),
@@ -91,8 +91,8 @@ struct DietarySettingsViewModel {
             )
         case .vegetarian:
             return .init(
-                title: "Vegetarian",
-                description: "I don’t eat meat or seafood",
+                title: R.string.localizable.settingsDietaryVegetarianTitle(),
+                description: R.string.localizable.settingsDietaryVegetarianDecription(),
                 titleColor: R.color.foodViewing.basicDark(),
                 descriptionColor: R.color.foodViewing.basicDark(),
                 image: R.image.settings.dietaryVegetarian(),
@@ -101,8 +101,8 @@ struct DietarySettingsViewModel {
             )
         case .vegan:
             return .init(
-                title: "Vegan",
-                description: "I don’t eat any animal product",
+                title: R.string.localizable.settingsDietaryVeganTitle(),
+                description: R.string.localizable.settingsDietaryVeganDecription(),
                 titleColor: R.color.foodViewing.basicDark(),
                 descriptionColor: R.color.foodViewing.basicDark(),
                 image: R.image.settings.dietaryVegan(),

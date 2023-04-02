@@ -11,10 +11,10 @@ import Foundation
 protocol RecipesListPresenterInterface: AnyObject {
     func getTitleForHeader() -> String
     func getNumberOfItemsInSection() -> Int
-    func getDishModel(at indexPath: IndexPath) -> Dish?
+    func getDishModel(at indexPath: IndexPath) -> LightweightRecipeModel?
     func backButtonTapped()
     func searchButtonTapped()
-    func getAllDishes() -> [Dish]
+    func getAllDishes() -> [LightweightRecipeModel]
     func didSelectRecipe(at indexPath: IndexPath)
 }
 
@@ -38,10 +38,12 @@ class RecipesListPresenter {
 extension RecipesListPresenter: RecipesListPresenterInterface {
     func didSelectRecipe(at indexPath: IndexPath) {
         guard let dish = interactor?.getDishModel(at: indexPath) else { return }
-        router?.showRecipeScreen(with: dish)
+        if let properDish = FDS.shared.getDish(by: String(dish.id)) {
+            router?.showRecipeScreen(with: properDish)
+        }
     }
     
-    func getAllDishes() -> [Dish] {
+    func getAllDishes() -> [LightweightRecipeModel] {
         interactor?.getAllDishes() ?? []
     }
     
@@ -53,7 +55,7 @@ extension RecipesListPresenter: RecipesListPresenterInterface {
         interactor?.getNumberOfItems() ?? 0
     }
     
-    func getDishModel(at indexPath: IndexPath) -> Dish? {
+    func getDishModel(at indexPath: IndexPath) -> LightweightRecipeModel? {
         interactor?.getDishModel(at: indexPath)
     }
     

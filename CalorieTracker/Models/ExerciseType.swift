@@ -32,6 +32,7 @@ enum ExerciseType: Codable {
     case stepTraining
     case strengthTraining
     case swim
+    case tableTennis
     case walk
     case waterFitness
     case waterPolo
@@ -98,6 +99,8 @@ extension ExerciseType {
             return R.image.exercisesWidget.fitness.waterPolo()
         case .yoga:
             return R.image.exercisesWidget.fitness.yoga()
+        case .tableTennis:
+            return R.image.exercisesWidget.fitness.tableTennis()
         default:
             return nil
         }

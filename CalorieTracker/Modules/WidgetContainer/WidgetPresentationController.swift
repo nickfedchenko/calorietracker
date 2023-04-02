@@ -74,6 +74,19 @@ final class WidgetPresentationController: UIPresentationController {
             presentedView?.removeFromSuperview()
         }
     }
+    
+    override var frameOfPresentedViewInContainerView: CGRect {
+        let containerFrame = containerView?.frame ?? .zero
+        let containerHeight = containerFrame.height
+        let containerWidth = containerFrame.width
+        let targetFrame = CGRect(
+            x: controllerInsets.left,
+            y: controllerInsets.top,
+            width: containerWidth - controllerInsets.left - controllerInsets.right,
+            height: containerHeight - controllerInsets.top - controllerInsets.bottom
+        )
+        return targetFrame
+    }
 
     override func dismissalTransitionWillBegin() {
         super.dismissalTransitionWillBegin()

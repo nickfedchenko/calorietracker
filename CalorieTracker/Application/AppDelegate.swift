@@ -8,7 +8,6 @@
 import Alamofire
 import ApphudSDK
 import AsyncDisplayKit
-import Firebase
 import Gzip
 import Kingfisher
 import Lottie

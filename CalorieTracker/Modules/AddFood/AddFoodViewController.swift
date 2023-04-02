@@ -52,7 +52,7 @@ final class AddFoodViewController: UIViewController {
         )
         return view
     }()
-    private lazy var menuMealView = MenuView(Const.menuModels)
+    private lazy var menuMealView = MenuView(Const.menuModels, shouldShowTitleLabel: false)
     private lazy var menuNutrientView = ContextMenuTypeSecondView(Const.menuTypeSecondModels)
     private lazy var menuButton = MenuButton<MealTime>()
     private lazy var staticSearchTextField: SearchView = {
@@ -165,6 +165,36 @@ final class AddFoodViewController: UIViewController {
         didChangeState()
         addTapToHideKeyboardGesture()
         transitioningDelegate = self
+        suggestMealTime()
+    }
+    
+    private func suggestMealTime() {
+        var mealTime: MealTime = .breakfast
+        let date = Date()
+        var mealIndex: Int = 0
+        let components = Calendar.current.dateComponents([.hour, .minute], from: date)
+        if
+            let hours = components.hour,
+            let minutes = components.minute {
+            switch (hours, minutes) {
+            case (4...11, 0...59), (12, 0):
+                mealTime = .breakfast
+                mealIndex = 0
+            case (12, 1), (12...15, 0...59), (16, 0) :
+                mealTime = .launch
+                mealIndex = 1
+            case (22, 0), (18...21, 0...59):
+                mealTime = .dinner
+                mealIndex = 2
+            default:
+                mealTime = .snack
+                mealIndex = 3
+            }
+        }
+        self.mealTime = mealTime
+        
+        menuMealView.selectCell(at: mealIndex)
+        menuButton.configure(mealTime)
     }
     
     override func viewDidLayoutSubviews() {
@@ -182,7 +212,7 @@ final class AddFoodViewController: UIViewController {
         )
         menuCreateController?.anchorPoint = CGPoint(
             x: (view.frame.width - Const.menuCreateViewWidth) / 2.0,
-            y: view.frame.height - 20
+            y: staticSearchTextField.frame.maxY
         )
         firstDraw = false
     }
@@ -694,7 +724,7 @@ final class AddFoodViewController: UIViewController {
                     self?.presenter?.dismissToCreateMeal(with: food)
                 }
                 
-                DispatchQueue.global(qos: .background).async {
+                DispatchQueue.main.async {
                     FDS.shared.foodUpdate(food: food, favorites: false)
                 }
             }
@@ -798,6 +828,7 @@ final class AddFoodViewController: UIViewController {
         
         view.sendSubviewToBack(foodCollectionViewController.view)
         view.sendSubviewToBack(keyboardHeaderView)
+        foodCollectionViewController.shouldShowNothingFound = false
         UIView.animate(withDuration: 0.3) {
             self.searchHistoryViewController.view.alpha = 0
         } completion: { [weak self] _ in
