@@ -177,9 +177,9 @@ extension MainScreenRouter: MainScreenRouterInterface {
             let mail = MFMailComposeViewController()
             mail.mailComposeDelegate = self
             mail.setToRecipients(["po.fedchenko.top@gmail.com"])
-            mail.setSubject("Here is my feedback")
+            mail.setSubject("Here is my feedback for version \(Bundle.main.appVersionLong)(\(Bundle.main.appBuild))")
             mail.setMessageBody(
-                "<p style=\"color:white\">Version \(Bundle.main.appVersionLong)(\(Bundle.main.appBuild).</p>",
+                "<p>Version \(Bundle.main.appVersionLong)(\(Bundle.main.appBuild)).</p>",
                 isHTML: true
             )
             viewController?.navigationController?.present(mail, animated: true)

@@ -109,7 +109,7 @@ extension SettingsRouter: SettingsRouterInterface {
                 <p style=\"color:white\">Version \(Bundle.main.appVersionLong)(\(Bundle.main.appBuild)).</p>
                 """, isHTML: true
             )
-            mail.setSubject("Need help")
+            mail.setSubject("Need help for version \(Bundle.main.appVersionLong)(\(Bundle.main.appBuild))")
             viewController?.present(mail, animated: true)
         } else {
             print("Cant send an e-mail")
