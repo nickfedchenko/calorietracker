@@ -95,6 +95,7 @@ protocol FoodDataServiceInterface {
     func getProduct(by id: String) -> Product?
     func getDish(by id: String) -> Dish?
     func getCustomEntry(by id: String) -> CustomEntry?
+    func saveProduct(product: Product)
 }
 
 final class FDS {
@@ -488,5 +489,9 @@ extension FDS: FoodDataServiceInterface {
     func getCustomEntry(by id: String) -> CustomEntry? {
         guard let domainCustomEntry = localPersistentStore.getDomainCustomEntry(id) else { return nil }
         return CustomEntry(from: domainCustomEntry)
+    }
+    
+    func saveProduct(product: Product) {
+        localPersistentStore.saveProducts(products: [product], saveInPriority: true)
     }
 }

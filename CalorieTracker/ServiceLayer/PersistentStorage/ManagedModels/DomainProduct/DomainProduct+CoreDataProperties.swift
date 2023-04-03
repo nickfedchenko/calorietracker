@@ -36,7 +36,7 @@ extension DomainProduct {
     @NSManaged public var mealsData: NSSet?
     @NSManaged public var exceptionTags: NSOrderedSet?
     @NSManaged public  var createdAt: String?
-
+    @NSManaged public  var source: String?
 }
 
 // MARK: - Generated accessors for mealsData

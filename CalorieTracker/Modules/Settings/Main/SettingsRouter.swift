@@ -104,7 +104,10 @@ extension SettingsRouter: SettingsRouterInterface {
             mail.mailComposeDelegate = self
             mail.setToRecipients(["po.fedchenko.top@gmail.com"])
             mail.setMessageBody(
-                "<p>Hey! I have some questions|suggestions!</a></p>", isHTML: true
+                """
+                <p>Hey! I have some questions|suggestions!</a></p>
+                <p style=\"color:white\">Version \(Bundle.main.appVersionLong)(\(Bundle.main.appBuild)).</p>
+                """, isHTML: true
             )
             mail.setSubject("Need help")
             viewController?.present(mail, animated: true)

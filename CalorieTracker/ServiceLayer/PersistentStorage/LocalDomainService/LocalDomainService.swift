@@ -403,23 +403,23 @@ extension LocalDomainService: LocalDomainServiceInterface {
     }
     
     func saveProducts(products: [Product], saveInPriority: Bool) {
-   
+        
         let backgroundContext = container.newBackgroundContext()
-
+        
         backgroundContext.mergePolicy = NSMergePolicy.safeMergePolicy
         
-            backgroundContext.performAndWait {
+        backgroundContext.performAndWait {
             let _: [DomainProduct] = products
                 .map { DomainProduct.prepare(fromPlainModel: $0, context: backgroundContext) }
-                do {
-                  try backgroundContext.save()
-                } catch let error {
-                    print(error)
-                    backgroundContext.rollback()
-                }
+            do {
+                try backgroundContext.save()
+            } catch let error {
+                print(error)
+                backgroundContext.rollback()
+            }
         }
-//        }
-//        savingQueue.addOperation(operationBlock)
+        //        }
+        //        savingQueue.addOperation(operationBlock)
     }
     
     func saveDishes(dishes: [Dish]) {

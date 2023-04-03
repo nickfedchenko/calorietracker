@@ -178,6 +178,10 @@ extension MainScreenRouter: MainScreenRouterInterface {
             mail.mailComposeDelegate = self
             mail.setToRecipients(["po.fedchenko.top@gmail.com"])
             mail.setSubject("Here is my feedback")
+            mail.setMessageBody(
+                "<p style=\"color:white\">Version \(Bundle.main.appVersionLong)(\(Bundle.main.appBuild).</p>",
+                isHTML: true
+            )
             viewController?.navigationController?.present(mail, animated: true)
         } else {
             print("Cant send an e-mail")

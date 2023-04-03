@@ -33,6 +33,7 @@ public class DomainProduct: NSManagedObject {
             .compactMap { DomainExceptionTag.prepare(from: $0, context: context) }
         product.addToExceptionTags(NSOrderedSet(array: baseTags))
         product.createdAt = model.createdAt
+        product.source = model.source
         return product
     }
     

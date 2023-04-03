@@ -219,7 +219,6 @@ final class StepsWidgetNode: CTWidgetNode {
         shape.strokeColor = UIColor.black.cgColor
         shape.fillColor = UIColor.clear.cgColor
         shape.lineCap = .round
-        
         return shape
     }
     
@@ -260,7 +259,6 @@ final class StepsWidgetNode: CTWidgetNode {
             x: rect.maxX,
             y: rect.maxY
         ))
-        
         return path
     }
 }

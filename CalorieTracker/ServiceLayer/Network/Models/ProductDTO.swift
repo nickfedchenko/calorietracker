@@ -1,7 +1,12 @@
 import Foundation
 // swiftlint:disable cyclomatic_complexity
 typealias ProductsResult = (Result<[ProductDTO], ErrorDomain>) -> Void
+typealias ProductsSearchResult = (Result<ProductsRemoteSearch, ErrorDomain>) -> Void
 
+struct ProductsRemoteSearch: Codable {
+    let error: Bool?
+    let products: [SearchProductNew]
+}
 /// Product
 struct ProductDTO: Codable {
     let id: Int
