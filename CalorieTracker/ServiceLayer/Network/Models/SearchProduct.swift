@@ -299,3 +299,63 @@ enum MixedValue: Codable {
         }
     }
 }
+
+struct SearchProductNew: Codable {
+    var id: String
+    var title: String?
+    var productTypeId: Int?
+    var brand: String?
+    var barcode: String?
+    var productUrl: Int?
+    var units: [UnitElement]?
+    var serving: Serving?
+    var nutritions: [Nutrition]?
+    var photo: String?
+    var isDraft: Bool?
+    var createdAt: String?
+    var countries: [String]?
+    var isVerified: Bool?
+    var isFavorite: Bool? = false
+    var ketoRating: String?
+    var baseTags: [ExceptionTag]?
+    var source: String?
+    
+    var protein: Double {
+        guard let nutritions = nutritions,
+                let protein = nutritions.first(where: { $0.nutritionType == .protein }) else {
+            return .zero
+        }
+        return protein.value ?? .zero
+    }
+    
+    var fat: Double {
+        guard let nutritions = nutritions,
+                let fat = nutritions.first(where: { $0.nutritionType == .fatsOverall }) else {
+            return .zero
+        }
+        return fat.value ?? .zero
+    }
+    
+    var kcal: Double {
+        guard let nutritions = nutritions,
+                let kcal = nutritions.first(where: { $0.nutritionType == .kcal }) else {
+            return .zero
+        }
+        return kcal.value ?? .zero
+    }
+    
+    var carbs: Double {
+        guard let nutritions = nutritions,
+                let carbs = nutritions.first(where: { $0.nutritionType == .carbsTotal }) else {
+            return .zero
+        }
+        return carbs.value ?? .zero
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case productUrl = "product_url"
+        case id, title, productTypeId, brand, barcode,
+             units, serving, nutritions, countries, createdAt,
+             isDraft, photo, isVerified, isFavorite, ketoRating, baseTags, source
+    }
+}

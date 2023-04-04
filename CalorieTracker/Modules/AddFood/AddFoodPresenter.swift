@@ -39,6 +39,7 @@ final class AddFoodPresenter {
     unowned var view: AddFoodViewControllerInterface
     let router: AddFoodRouterInterface?
     let interactor: AddFoodInteractorInterface?
+
     let searchQueue: OperationQueue =  {
         let queue = OperationQueue()
         queue.qualityOfService = .userInteractive
@@ -171,19 +172,21 @@ final class AddFoodPresenter {
 extension AddFoodPresenter: AddFoodPresenterInterface {
 
     func scannerDidRecognized(barcode: String) {
-        searchQueue.cancelAllOperations()
-        let operation = BlockOperation { [weak self] in
-            guard let self = self else { return }
-            let foundFood = self.search(byBarcode: barcode)
+//        searchQueue.cancelAllOperations()
+//        let operation = BlockOperation { [weak self] in
+            let foundFood = search(byBarcode: barcode)
+        
+        DSF.shared.searchRemoteProduct(byBarcode: barcode) { products in
+            DispatchQueue.main.async {
+                self.foods?.append(contentsOf: products.foods)
+            }
+        }
             DispatchQueue.main.async {
                 LoggingService.postEvent(event: .diaryscanfound(succeeded: !foundFood.isEmpty))
                 self.foods = foundFood
                 self.view.updateState(for: .search(foundFood.isEmpty ? .noResults : .foundResults))
                 self.view.setSearchField(to: barcode)
             }
-        }
-        operation.queuePriority = .high
-        searchQueue.addOperation(operation)
     }
     
     func setFoodType(_ type: AddFood) {
@@ -230,7 +233,7 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
         //            let favorites = self.searchAmongFavorites(request)
         //            let recents = self.searchAmongRecent(request)
         searchQueue.cancelAllOperations()
-        print(searchQueue.operationCount)
+        print("Currently searching \(searchQueue.operationCount)")
         //        let operation = BlockOperation()
         //        operation.addExecutionBlock { [weak self] in
         //            guard !operation.isCancelled else {
@@ -258,9 +261,28 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
             self.foods = foods
             complition?(!foods.isEmpty)
         }
+        
+        let operation = BlockOperation()
+        operation.addExecutionBlock {
+            DSF.shared.searchRemoteProduct(by: request) { [operation] products in
+                guard !operation.isCancelled else {
+                    print("cancelled with phrase \(request)")
+                    return
+                }
+                DispatchQueue.main.async {
+                    //                guard !operation.isCancelled else {
+                    //                    return
+                    //                }
+                    print("Added to foods with phrase \(request)")
+                    self.foods?.append(contentsOf: products.foods)
+                    complition?(!foods.isEmpty)
+                }
+            }
+        }
+        
         //        }
-        //        operation.queuePriority = .high
-        //        searchQueue.addOperation(operation)
+        operation.queuePriority = .high
+        searchQueue.addOperation(operation)
     }
     
     func getSubInfo(_ food: Food?, _ type: FoodInfoCases) -> Int? {

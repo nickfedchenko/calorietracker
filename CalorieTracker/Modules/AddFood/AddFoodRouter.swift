@@ -189,7 +189,6 @@ extension AddFoodRouter: AddFoodRouterInterface {
                 }
             }
         )
-        
         vc.modalPresentationStyle = .fullScreen
         if navigationType == .modal {
             viewController?.navigationController?.present(vc, animated: true)
@@ -257,5 +256,4 @@ extension AddFoodRouter: AddFoodRouterInterface {
             self?.didSelectFood?(food)
         }
     }
-    
 }

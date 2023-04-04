@@ -25,6 +25,10 @@ final class AppCoordinator: ApphudDelegate {
     }
     
     func start() {
+        startApphud()
+        setupAmplitude()
+        updateLogStreak()
+        startFirebase()
         UDM.currentlyWorkingDay = Day(Date())
         var getStartedViewController: UIViewController
         //        let trueFlag = true
@@ -35,7 +39,8 @@ final class AppCoordinator: ApphudDelegate {
         //            window?.makeKeyAndVisible()
         //            return
         //        }
-        
+        updateHealthKitData()
+        updateFoodData()
         if UDM.userData == nil {
             getStartedViewController = WelcomeRouter.setupModule()
             //            getStartedViewController = ChooseDietaryPreferenceRouter.setupModule()
@@ -52,19 +57,14 @@ final class AppCoordinator: ApphudDelegate {
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
         
-        updateHealthKitData()
-        updateFoodData()
-        
+    
         let appearance = UINavigationBarAppearance()
         appearance.backgroundEffect = nil
         UINavigationBar.appearance().standardAppearance = appearance
         #if DEBUG
         UDM.didShowAskingOpinion = false
         #endif
-        startApphud()
-        setupAmplitude()
-        updateLogStreak()
-        startFirebase()
+       
     }
     
     private func startFirebase() {

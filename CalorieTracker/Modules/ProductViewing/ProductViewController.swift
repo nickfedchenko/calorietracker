@@ -463,7 +463,6 @@ final class ProductViewController: CTViewController {
         guard weight > 0 else { return }
         presenter?.saveNutritionDaily(weight, unit: selectedWeightType, unitCount: valueCount)
         didChangeAddNutrition()
-        
         if let product = presenter?.getProduct() {
             FDS.shared.foodUpdate(food: .product(product, customAmount: nil, unit: nil), favorites: nil)
         }

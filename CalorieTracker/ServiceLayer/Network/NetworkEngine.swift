@@ -14,6 +14,8 @@ protocol NetworkEngineInterface {
     func fetchProducts(completion: @escaping ProductsResult )
     func fetchDishes(completion: @escaping DishesResponse)
     func remoteSearch(by phrase: String, completion: @escaping SearchProductsResponse)
+    func remoteSearchSecond(by phrase: String, completion: @escaping ProductsSearchResult)
+    func remoteSearchByBarcode(by barcode: String, completion: @escaping ProductsSearchResult)
 }
 
 enum ErrorDomain: Error {
@@ -50,13 +52,19 @@ enum RequestGenerator {
                 } else {
                     return .en
                 }
+            case .searchProductByBarcode(barcode: _):
+                if let targetCode = LinkLanguageCodes.allCases.first(where: { $0.rawValue == currentLanguageCode }) {
+                    return targetCode
+                } else {
+                    return .en
+                }
             }
         }
     }
-    
-    case fetchProductZipped
+        case fetchProductZipped
     case fetchDishesZipped
     case searchProduct(by: String)
+    case searchProductByBarcode(barcode: String)
     
     private var backendToken: String {
         guard let filePath = Bundle.main.path(forResource: "Info", ofType: "plist") else {
@@ -74,34 +82,48 @@ enum RequestGenerator {
         let langCode = LinkLanguageCodes.suggestLanguagePrefix(request: self)
         var url: URL
         
-        func injectTokenQuery(for url: inout URL) {
-            var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
-            components?.queryItems == nil
-            ? components?.queryItems = [.init(name: "token", value: backendToken)]
-            : components?.queryItems?.append(.init(name: "token", value: backendToken))
-            guard let newUrl = components?.url else {
-                return
-                
-            }
-            url = newUrl
+        func injectTokenQuery(for request: inout URLRequest) {
+            request.addValue(backendToken, forHTTPHeaderField: "Authorization")
         }
         
         func prepareSearchUrl(url: inout URL, by phrase: String) {
             var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
-            components?.queryItems?.append(.init(name: "lang", value: langCode.rawValue))
-            components?.queryItems?.append(.init(name: "q", value: phrase))
+            components?.queryItems = [
+                .init(name: "langCode", value: langCode.rawValue),
+                .init(name: "search_term", value: phrase)
+            ]
             guard let newUrl = components?.url else {
                 return
             }
             url = newUrl
+            print("search url \(url)")
+        }
+        
+        func prepareSearchUrl(url: inout URL, byBarcode: String) {
+            var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
+            components?.queryItems = [
+                .init(name: "langCode", value: langCode.rawValue),
+                .init(name: "barcode", value: byBarcode)
+            ]
+            guard let newUrl = components?.url else {
+                return
+            }
+            url = newUrl
+            print("search url \(url)")
         }
         
         switch self {
-        case .searchProduct(by: let phrase):
-            guard var optUrl = URL(string: "http://tracker.finanse.space/api/search") else {
+        case let .searchProductByBarcode(barcode: barcode):
+            guard var optUrl = URL(string: "https://ketodietapplication.site/api/search/barcode/off") else {
                 fatalError("wrong url")
             }
-            injectTokenQuery(for: &optUrl)
+            prepareSearchUrl(url: &optUrl, byBarcode: barcode)
+            url = optUrl
+            
+        case .searchProduct(by: let phrase):
+            guard var optUrl = URL(string: "https://ketodietapplication.site/api/search/barcode/off") else {
+                fatalError("wrong url")
+            }
             prepareSearchUrl(url: &optUrl, by: phrase)
             url = optUrl
         case .fetchProductZipped:
@@ -116,12 +138,19 @@ enum RequestGenerator {
             url = optUrl
         }
        
-        let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData)
+        var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData)
+        injectTokenQuery(for: &request)
+        request.cachePolicy = .reloadIgnoringLocalCacheData
         return request
     }
 }
 
 final class NetworkEngine {
+    let searchSession: Session = {
+      let configuration = URLSessionConfiguration.af.default
+      configuration.timeoutIntervalForRequest = 30
+      return Session(configuration: configuration)
+    }()
     
     static let shared: NetworkEngineInterface = NetworkEngine()
     
@@ -150,6 +179,28 @@ final class NetworkEngine {
                 completion(.success(data))
             }
     }
+    
+    func performDecodableSearchRequest<T: Codable>(
+        request: RequestGenerator,
+        completion: @escaping ((Result<T, ErrorDomain>) -> Void)
+    ) {
+        searchSession.cancelAllRequests()
+        let secondsNow = Date().timeIntervalSince1970
+        searchSession.request(request.request)
+            .validate()
+            .responseDecodable(
+                of: T.self,
+                queue: .global(qos: .userInitiated),
+                dataPreprocessor: .gzipPreprocessor
+            ) { result in
+                guard let data = result.value else {
+                    completion(.failure(.AFError(error: result.error)))
+                    return
+                }
+                print("received data in \(Date().timeIntervalSince1970 - secondsNow) seconds")
+                completion(.success(data))
+            }
+    }
 }
 
 extension NetworkEngine: NetworkEngineInterface {
@@ -163,5 +214,13 @@ extension NetworkEngine: NetworkEngineInterface {
     
     func remoteSearch(by phrase: String, completion: @escaping SearchProductsResponse) {
         performDecodableRequest(request: .searchProduct(by: phrase), completion: completion)
+    }
+    
+    func remoteSearchSecond(by phrase: String, completion: @escaping ProductsSearchResult) {
+        performDecodableSearchRequest(request: .searchProduct(by: phrase), completion: completion)
+    }
+    
+    func remoteSearchByBarcode(by barcode: String, completion: @escaping ProductsSearchResult) {
+        performDecodableSearchRequest(request: .searchProductByBarcode(barcode: barcode), completion: completion)
     }
 }

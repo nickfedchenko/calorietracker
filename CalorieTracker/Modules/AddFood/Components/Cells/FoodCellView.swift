@@ -306,12 +306,13 @@ extension FoodCellView.FoodViewModel {
         self.verified = !product.isUserProduct
         var tag = ""
         if product.brand != nil && !product.isUserProduct {
-            tag = R.string.localizable.brandFood()
+            tag = (product.brand ?? "").isEmpty ? R.string.localizable.brandFood() : (product.brand ?? "")
         } else if product.isUserProduct {
-            tag
+            tag = R.string.localizable.tagUserProduct()
         } else {
             tag = R.string.localizable.baseFood()
         }
+        
         self.tag = tag
         if !product.isUserProduct {
             if let weight = weight {

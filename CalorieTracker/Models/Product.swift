@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct Product {
+struct Product: Codable {
     let id: String
     let title: String
     let isUserProduct: Bool
@@ -22,7 +22,7 @@ struct Product {
     let ketoRating: String?
     let baseTags: [ExceptionTag]
     let createdAt: String
-    
+    var source: String?
     var foodDataId: String?
     
     enum Photo: Codable {
@@ -64,6 +64,31 @@ struct Serving: Codable {
 }
 
 extension Product {
+    
+    init?(from searchProduct: SearchProductNew) {
+        self.id = searchProduct.id
+        self.barcode = searchProduct.barcode
+        self.title = (searchProduct.title ?? "").replacingOccurrences(of: "&quot;", with: "\"")
+        self.brand = searchProduct.brand
+        self.protein = searchProduct.protein
+        self.fat = searchProduct.fat
+        self.kcal = Double(searchProduct.kcal)
+        self.carbs = searchProduct.carbs
+        self.isUserProduct = false
+        self.servings = [searchProduct.serving ?? .init(size: "g", weight: 100)]
+        self.units = searchProduct.units
+        self.productURL = searchProduct.productUrl
+        self.composition = Composition(searchProduct.nutritions ?? [])
+        self.createdAt = searchProduct.createdAt ?? ""
+        self.photo = {
+            guard let url = URL(string: searchProduct.photo ?? "") else { return nil }
+            return .url(url)
+        }()
+        self.ketoRating = searchProduct.ketoRating
+        self.baseTags = searchProduct.baseTags ?? []
+        self.source = searchProduct.source
+    }
+    
     init?(from managedModel: DomainProduct) {
         self.id = String(managedModel.id)
         self.barcode = managedModel.barcode
