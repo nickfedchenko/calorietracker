@@ -6,7 +6,7 @@
 //
 
 import ApphudSDK
-import Foundation
+import Amplitude
 
 protocol PaywallPresenterInterface: AnyObject {
     func didTapPrivacyPolicy()
@@ -61,11 +61,14 @@ extension PaywallPresenter: PaywallPresenterInterface {
             
             if let subscription = result.subscription, subscription.isActive() {
                 self?.router?.navigateToApp()
+                Amplitude.instance().setUserProperties(["isPaid": true])
             } else if let purchase = result.nonRenewingPurchase, purchase.isActive() {
                 self?.router?.navigateToApp()
+                Amplitude.instance().setUserProperties(["isPaid": true])
             } else {
                 if Apphud.hasActiveSubscription() {
                     self?.router?.navigateToApp()
+                    Amplitude.instance().setUserProperties(["isPaid": true])
                 }
             }
         }

@@ -1,22 +1,25 @@
 //
-//  StepsWidgetNode.swift
+//  StepsWidgetCompactView.swift
 //  CalorieTracker
 //
-//  Created by Vadim Aleshin on 27.07.2022.
+//  Created by Vladimir Banushkin on 04.04.2023.
 //
 
-import AsyncDisplayKit
+import UIKit
 
-final class StepsWidgetNode: CTWidgetNode {
+final class StepsWidgetAnimatableContainer:  UIView {
     
-    private lazy var topTextNode: ASTextNode = {
-        let node = ASTextNode()
+}
+
+final class StepsWidgetCompactView: UIView {
+    private lazy var topTitleLabel: UILabel = {
+        let label = UILabel()
         let string = Text.steps
         let font = R.font.sfProRoundedBold(size: 5 / Double(string.count) * 18)
         let color = R.color.stepsWidget.secondGradientColor()
         let image = R.image.stepsWidget.foot()
         
-        node.attributedText = string.attributedSring(
+        label.attributedText = string.attributedSring(
             [.init(
                 worldIndex: [0],
                 attributes: [.color(color), .font(font)]
@@ -27,20 +30,19 @@ final class StepsWidgetNode: CTWidgetNode {
                 position: .left
             )
         )
-        return node
+        return label
     }()
     
-    private lazy var bottomTextNode: ASTextNode = {
-        let node = ASTextNode()
-        node.style.alignSelf = .center
-        return node
+    private lazy var bottomLabel: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .center
+        return label
     }()
     
-    private lazy var imageNode: ASImageNode = {
-        let node = ASImageNode()
-        node.image = R.image.stepsWidget.flaG()
-        node.contentMode = UIView.ContentMode.center
-        return node
+    private let imageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = R.image.stepsWidget.flaG()
+        return imageView
     }()
     
     private var layers: [(shape: CAShapeLayer, gradient: CAGradientLayer)] = []
@@ -56,44 +58,8 @@ final class StepsWidgetNode: CTWidgetNode {
         }
     }
     
-    override var widgetType: WidgetContainerViewController.WidgetType { .steps }
-    
-    override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
-        let stack = ASStackLayoutSpec.vertical()
-        stack.justifyContent = .spaceBetween
-        stack.children = [
-            topTextNode,
-            bottomTextNode
-        ]
-        
-        let mainSpec = ASInsetLayoutSpec(
-            insets: UIEdgeInsets(
-                top: 22,
-                left: 9,
-                bottom: 22,
-                right: 9
-            ),
-            child: stack
-        )
-        
-        imageNode.style.layoutPosition = CGPoint(
-            x: constrainedSize.min.width - 12 - imageNode.image!.size.width,
-            y: constrainedSize.min.height - 12 - imageNode.image!.size.height
-        )
-        let flagSpec = ASAbsoluteLayoutSpec(children: [imageNode])
-        
-        return ASWrapperLayoutSpec(layoutElements: [mainSpec, flagSpec])
-    }
-    
-    override func willEnterHierarchy() {
-        super.willEnterHierarchy()
-        drawBackgroundCurve(rect: bounds)
-        layer.addSublayer(getCircle(point: CGPoint(x: 14, y: 14)))
-        drawProgressCurve(rect: bounds, progress: progress)
-    }
-    
     private func didChangeSteps() {
-        bottomTextNode.attributedText = String(steps).attributedSring([
+        bottomLabel.attributedText = String(steps).attributedSring([
             .init(
                 worldIndex: [0],
                 attributes: [
@@ -106,7 +72,7 @@ final class StepsWidgetNode: CTWidgetNode {
     
     private func didChangeProgress() {
         if progress <= 1 {
-            imageNode.image = progress < 1
+            imageView.image = progress < 1
             ? R.image.stepsWidget.flaG()
             : R.image.stepsWidget.performedFlag()
             
@@ -126,7 +92,7 @@ final class StepsWidgetNode: CTWidgetNode {
                 )
                 progressLayer.shape.strokeEnd = progress
             } else {
-                imageNode.image = R.image.stepsWidget.overfulfilledFlag()
+                imageView.image = R.image.stepsWidget.overfulfilledFlag()
                 
                 guard let progressLayerFirst = layers.first else { return }
                 let progressLayerLast = getProgressLayers(
@@ -260,19 +226,19 @@ final class StepsWidgetNode: CTWidgetNode {
         ))
         return path
     }
+    
 }
 
-// MARK: - Const
+
+extension StepsWidgetCompactView {
+    struct Text {
+        static let steps = " \(R.string.localizable.diagramChartTypeStepsTitle())"
+    }
+}
 
 private extension UIColor {
     static let gradient = [
         R.color.stepsWidget.firstGradientColor(),
         R.color.stepsWidget.secondGradientColor()
     ]
-}
-
-extension StepsWidgetNode {
-    struct Text {
-        static let steps = " \(R.string.localizable.diagramChartTypeStepsTitle())"
-    }
 }

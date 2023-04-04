@@ -497,7 +497,7 @@ final class UDM {
     static var dailyStepsGoal: Double? {
         get {
             guard let value: Double = getValue(for: .dailyStepsGoal) else {
-                return nil
+                return 10000
             }
             return value
         }

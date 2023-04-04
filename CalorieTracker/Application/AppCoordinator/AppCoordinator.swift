@@ -51,20 +51,19 @@ final class AppCoordinator: ApphudDelegate {
                 getStartedViewController = PaywallRouter.setupModule()
             }
         } 
-        
+        checkIsPaid()
         let navigationController = UINavigationController(rootViewController: getStartedViewController)
         rootNavigationController = navigationController
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
         
-    
         let appearance = UINavigationBarAppearance()
         appearance.backgroundEffect = nil
         UINavigationBar.appearance().standardAppearance = appearance
+
         #if DEBUG
         UDM.didShowAskingOpinion = false
         #endif
-       
     }
     
     private func startFirebase() {
@@ -152,5 +151,9 @@ final class AppCoordinator: ApphudDelegate {
     
     func invalidateUpdateTimer() {
         hkUpdateTimer?.invalidate()
+    }
+    
+    func checkIsPaid() {
+        Amplitude.instance().setUserProperties(["isPaid": Apphud.hasActiveSubscription()])
     }
 }
