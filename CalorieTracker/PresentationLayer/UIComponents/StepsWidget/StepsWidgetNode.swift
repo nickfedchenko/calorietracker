@@ -27,6 +27,7 @@ final class StepsWidgetNode: CTWidgetNode {
                 position: .left
             )
         )
+        node.style.preferredSize.height = 24
         return node
     }()
     
@@ -68,9 +69,9 @@ final class StepsWidgetNode: CTWidgetNode {
         
         let mainSpec = ASInsetLayoutSpec(
             insets: UIEdgeInsets(
-                top: 22,
+                top: 24,
                 left: 9,
-                bottom: 22,
+                bottom: 23,
                 right: 9
             ),
             child: stack
@@ -90,6 +91,8 @@ final class StepsWidgetNode: CTWidgetNode {
         drawBackgroundCurve(rect: bounds)
         layer.addSublayer(getCircle(point: CGPoint(x: 14, y: 14)))
         drawProgressCurve(rect: bounds, progress: progress)
+        didChangeProgress()
+        backgroundColor = .white
     }
     
     private func didChangeSteps() {

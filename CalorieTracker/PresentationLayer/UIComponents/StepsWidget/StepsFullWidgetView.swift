@@ -15,6 +15,11 @@ protocol StepsFullWidgetInterface: AnyObject {
     func setModel(_ model: StepsFullWidgetView.Model)
 }
 
+// TODO: - Нужно получать данные 
+protocol StepsFullWidgetAnimatableDataInterface: AnyObject {
+    
+}
+
 final class StepsFullWidgetView: UIView, CTWidgetFullProtocol {
     var didChangeSelectedDate: ((Date) -> Void)?
     
@@ -91,11 +96,11 @@ final class StepsFullWidgetView: UIView, CTWidgetFullProtocol {
             lineProgressView.progress = CGFloat(model.nowSteps) / CGFloat(model.goalSteps ?? 1)
             lineProgressView.isHidden = model.goalSteps == nil
             mainButton.defaultTitle = model.goalSteps == nil
-                ? " SET DAILY GOAL"
-                : " CHANGE DAILY GOAL"
+            ? " \(R.string.localizable.stepsWidgetSetDailyGoal())"
+            : " \(R.string.localizable.stepsWidgetChangeDailyGoal())"
             mainButton.isPressTitle = model.goalSteps == nil
-                ? " SET DAILY GOAL"
-                : " CHANGE DAILY GOAL"
+                ? " \(R.string.localizable.stepsWidgetSetDailyGoal())"
+                : " \(R.string.localizable.stepsWidgetChangeDailyGoal())"
         }
     }
     
@@ -150,7 +155,7 @@ final class StepsFullWidgetView: UIView, CTWidgetFullProtocol {
         connectAHView.aspectRatio(0.182)
         
         closeButton.snp.makeConstraints { make in
-            make.height.width.equalTo(40)
+//            make.height.width.equalTo(40)
         }
     }
     
@@ -162,14 +167,14 @@ final class StepsFullWidgetView: UIView, CTWidgetFullProtocol {
     private func configureLabel(value: Int, goal: Int?) {
         let leftColor = R.color.stepsWidget.secondGradientColor()
         let rightColor = R.color.stepsWidget.ringColor()
-        let font = R.font.sfProDisplayBold(size: 22.fontScale())
+        let font = R.font.sfProRoundedBold(size: 22)
         let image = R.image.stepsWidget.foot()
         let leftAtributes: [StringSettings] = [.font(font), .color(leftColor)]
         let rightAtributes: [StringSettings] = [.font(font), .color(rightColor)]
         
         let string = goal != nil
-            ? "STEPS \(value) / \(goal ?? 0)"
-            : "STEPS \(value)"
+            ? "\(R.string.localizable.diagramChartTypeStepsTitle()) \(value) / \(goal ?? 0)"
+            : "\(R.string.localizable.diagramChartTypeStepsTitle()) \(value)"
         
         if goal == nil {
             topLabel.attributedText = string.attributedSring(
@@ -180,7 +185,7 @@ final class StepsFullWidgetView: UIView, CTWidgetFullProtocol {
             topLabel.attributedText = string.attributedSring(
                 [
                     .init(worldIndex: [0, 1], attributes: leftAtributes),
-                    .init(worldIndex: [3, 4], attributes: rightAtributes)
+                    .init(worldIndex: [2, 3], attributes: rightAtributes)
                 ],
                 image: .init(image: image, font: font, position: .left)
             )

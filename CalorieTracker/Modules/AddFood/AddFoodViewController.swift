@@ -803,6 +803,7 @@ final class AddFoodViewController: UIViewController {
                 setupSearchRecentState()
             case .noResults:
                 setupSearchFoundResultsState()
+                foodCollectionViewController.shouldShowNothingFound = true
             case .foundResults:
                 setupSearchFoundResultsState(shouldAnimate: shouldAnimate)
             }

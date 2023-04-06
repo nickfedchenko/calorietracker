@@ -71,46 +71,47 @@ extension MainScreenRouter: MainScreenRouterInterface {
     func openWidget(_ type: WidgetContainerViewController.WidgetType, anchorView: UIView? = nil) {
         switch type {
         case.steps:
-            if !UDM.isAuthorisedHealthKit {
-                HealthKitAccessManager.shared.askPermission { result in
-                    switch result {
-                    case .success(let success):
-                        UDM.isAuthorisedHealthKit = success
-                        HealthKitDataManager.shared.getSteps { steps in
-                            DSF.shared.saveSteps(steps)
-                        }
-                        
-                        HealthKitDataManager.shared.getWorkouts { exercises  in
-                            DSF.shared.saveExercises(exercises)
-                        }
-                        
-                    case .failure(let failure):
-                        print(failure)
-                    }
-                }
-                return
-            }
-            
+//            #if AppStore
+//            if !UDM.isAuthorisedHealthKit {
+//                HealthKitAccessManager.shared.askPermission { result in
+//                    switch result {
+//                    case .success(let success):
+//                        UDM.isAuthorisedHealthKit = success
+//                        HealthKitDataManager.shared.getSteps { steps in
+//                            DSF.shared.saveSteps(steps)
+//                        }
+//
+//                        HealthKitDataManager.shared.getWorkouts { exercises  in
+//                            DSF.shared.saveExercises(exercises)
+//                        }
+//
+//                    case .failure(let failure):
+//                        print(failure)
+//                    }
+//                }
+//                return
+//            }
+//            #endif
             fallthrough
         case .exercises:
-            if !UDM.isAuthorisedHealthKit {
-                HealthKitAccessManager.shared.askPermission { result in
-                    switch result {
-                    case .success(let success):
-                        UDM.isAuthorisedHealthKit = success
-                        HealthKitDataManager.shared.getSteps { steps in
-                            DSF.shared.saveSteps(steps)
-                        }
-                        
-                        HealthKitDataManager.shared.getWorkouts { exercises  in
-                            DSF.shared.saveExercises(exercises)
-                        }
-                    case .failure(let failure):
-                        print(failure)
-                    }
-                }
-                return
-            }
+//            if !UDM.isAuthorisedHealthKit {
+//                HealthKitAccessManager.shared.askPermission { result in
+//                    switch result {
+//                    case .success(let success):
+//                        UDM.isAuthorisedHealthKit = success
+//                        HealthKitDataManager.shared.getSteps { steps in
+//                            DSF.shared.saveSteps(steps)
+//                        }
+//                        
+//                        HealthKitDataManager.shared.getWorkouts { exercises  in
+//                            DSF.shared.saveExercises(exercises)
+//                        }
+//                    case .failure(let failure):
+//                        print(failure)
+//                    }
+//                }
+//                return
+//            }
             fallthrough
         default:
             print()
@@ -247,7 +248,6 @@ extension MainScreenRouter: WidgetContainerOutput {
         viewController?.navigationController?.pushViewController(vc, animated: true)
     }
 }
-
 
 extension MainScreenRouter: UINavigationControllerDelegate {
     func navigationController(

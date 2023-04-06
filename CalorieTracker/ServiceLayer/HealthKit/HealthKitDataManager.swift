@@ -36,7 +36,6 @@ final class HealthKitDataManager {
         var anchorComponents = calendar.dateComponents(
             [.day, .month, .year],
             from: syncDate ?? Date.distantPast
-        
         )
         anchorComponents.hour = 0
         guard let anchorDate = calendar.date(from: anchorComponents) else { return }

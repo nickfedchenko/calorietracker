@@ -74,6 +74,30 @@ final class PaywallViewController: UIViewController {
         return button
     }()
     
+    private let label3days: UILabel = {
+        let label = UILabel()
+        label.font = R.font.sfProRoundedBold(size: 16)
+        
+        let attrText = NSAttributedString(
+            string: "Try 3 days\nfor free",
+            attributes: [
+                .font: R.font.sfProRoundedBold(size: 16.fitH) ?? .systemFont(ofSize: 16),
+                .foregroundColor: UIColor.white,
+                .kern: 0.8
+            ]
+        )
+        label.textAlignment = .right
+        label.attributedText = attrText
+        label.numberOfLines = 2
+        return label
+    }()
+    
+    let label3daysBackground: UIView = {
+       let view = UIView()
+        view.backgroundColor = UIColor(hex: "FF8A00")
+        return view
+    }()
+    
     // MARK: - Lifecycle methods
     
     override func viewDidLoad() {
@@ -139,7 +163,7 @@ final class PaywallViewController: UIViewController {
             for: .touchUpInside
         )
         
-        subscriptionViewModel?.reloadHandler = { [weak self] in
+        subscriptionViewModel?.reloadHandler = { [weak self] experimentType in
             DispatchQueue.main.async {
                 UIView.animate(withDuration: 0.4) {
                     self?.collectionView.reloadData()
@@ -149,7 +173,68 @@ final class PaywallViewController: UIViewController {
                         scrollPosition: .top
                     )
                 }
+                
+                if let experimentType,
+                   experimentType == .variant2 {
+                    self?.updateForExperiment()
+                }
             }
+        }
+    }
+    
+    private func updateForExperiment() {
+        let attrTitle = NSAttributedString(
+            string: R.string.localizable.tryFreeSubscribe(),
+            attributes: [
+                .font: R.font.sfProRoundedBold(size: 18) ?? .systemFont(ofSize: 18),
+                .foregroundColor: UIColor.white
+            ]
+        )
+        titleLabel.numberOfLines = 0
+        titleLabel.lineBreakMode = .byWordWrapping
+        label3days.setContentCompressionResistancePriority(.required, for: .horizontal)
+        
+        titleLabel.font = R.font.sfProRoundedBold(size: 24)
+        titleLabel.textAlignment = .left
+        
+        startNowCommonButton.setAttributedTitle(attrTitle, for: .normal)
+        
+        view.addSubviews(label3daysBackground, label3days)
+        
+        label3days.snp.makeConstraints { make in
+//            make.leading.equalToSuperview().offset(10)
+            make.trailing.equalTo(self.view.snp.leading)
+            make.centerY.equalTo(titleLabel)
+        }
+        
+        label3daysBackground.snp.makeConstraints { make in
+            make.top.equalTo(label3days).offset(-12)
+            make.bottom.equalTo(label3days).offset(12)
+            make.leading.equalToSuperview()
+            make.trailing.equalTo(label3days).offset(16)
+        }
+        
+        self.view.layoutIfNeeded()
+        
+        titleLabel.snp.remakeConstraints { make in
+            make.trailing.equalToSuperview().offset(-24)
+            make.top.equalTo(imageView.snp.top).offset(UIDevice.isSmallDevice ? 50 : 257.fitH)
+        }
+        
+        label3days.snp.remakeConstraints { make in
+            make.leading.equalToSuperview().offset(10)
+            make.trailing.lessThanOrEqualTo(titleLabel.snp.leading).offset(-28)
+            make.centerY.equalTo(titleLabel)
+        }
+        
+      
+        
+//        titleLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+//        titleLabel.setContentHuggingPriority(.defaultLow, for: .vertical)
+        
+        UIView.animate(withDuration: 0.4) {
+            self.view.layoutIfNeeded()
+            self.titleLabel.sizeToFit()
         }
     }
     
@@ -191,10 +276,10 @@ final class PaywallViewController: UIViewController {
             make.top.equalToSuperview().offset(95.fitH )
         }
         
-        titleLabel.snp.makeConstraints {
-            $0.left.equalToSuperview().offset(24)
-            $0.right.equalToSuperview().offset(-24)
-            $0.top.equalTo(imageView.snp.top).offset(UIDevice.isSmallDevice ? 60 : 257.fitH)
+        titleLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(24)
+            make.trailing.equalToSuperview().offset(-24)
+            make.top.equalTo(imageView.snp.top).offset(UIDevice.isSmallDevice ? 60 : 257.fitH)
         }
         
         subscriptionBenefitsContainerView.snp.makeConstraints {

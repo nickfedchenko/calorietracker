@@ -27,6 +27,8 @@ class WidgetPresentTransitionController: NSObject, UIViewControllerAnimatedTrans
             showCalendarWidget(with: transitionContext)
         case .weight:
             showWeightWidget(with: transitionContext)
+        case .steps:
+            showStepsWidget(with: transitionContext)
         default:
             showWaterWidget(with: transitionContext)
         }
@@ -109,5 +111,52 @@ class WidgetPresentTransitionController: NSObject, UIViewControllerAnimatedTrans
             toView.alpha = 1
             transitionContext.completeTransition(true)
         }
+    }
+    
+    func showStepsWidget(with transitionContext: UIViewControllerContextTransitioning) {
+        guard
+            let toView = transitionContext.view(forKey: .to),
+            let toController = transitionContext.viewController(forKey: .to) as? WidgetContainerViewController  else {
+            return
+        }
+        guard let presentationController = toController.presentationController as? WidgetPresentationController else {
+            return
+        }
+        let container = transitionContext.containerView
+        let toViewFrame = presentationController.frameOfPresentedViewInContainerView
+        toView.alpha = 0
+        anchorView.alpha = 0
+        let anchorViewFrame = anchorView.frame
+        let date = UDM.currentlyWorkingDay.date ?? Date()
+        let goal = StepsWidgetService.shared.getDailyStepsGoal()
+        let now = StepsWidgetService.shared.getStepsForDate(date)
+        let progress = Double(now) / Double(goal ?? 1)
+        
+        let animatableView = StepsWidgetAnimatableContainer(
+            initialState: .compactToFull(compactFrame: anchorViewFrame, steps: Int(now), progress: progress)
+        )
+        animatableView.frame = container.bounds
+        container.addSubview(animatableView)
+        animatableView.startTransitionAnimation(targetFrame: toViewFrame) { [weak self] in
+            self?.anchorView.alpha = 1
+            UIView.animate(withDuration: 0.3) {
+                animatableView.alpha = 1
+                toView.alpha = 1
+            } completion: { _ in
+                animatableView.removeFromSuperview()
+                transitionContext.completeTransition(true)
+            }
+        }
+//        targetWidget?.frame = anchorViewFrame
+//        targetWidget?.setToForceRedraw()
+//        anchorView.clipsToBounds = true
+//        let anchorSnapshot = anchorView.snapshotView(afterScreenUpdates: true)
+//        anchorView.clipsToBounds = false
+//        targetWidget?.prepareForAppearing(with: anchorSnapshot)
+//        targetWidget?.animateAppearingFirstStage(targetFrame: toViewFrame) {
+//            targetWidget?.removeFromSuperview()
+//            toView.alpha = 1
+//            transitionContext.completeTransition(true)
+//        }
     }
 }

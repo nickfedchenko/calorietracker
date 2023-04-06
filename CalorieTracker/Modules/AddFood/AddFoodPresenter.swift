@@ -174,11 +174,12 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
     func scannerDidRecognized(barcode: String) {
 //        searchQueue.cancelAllOperations()
 //        let operation = BlockOperation { [weak self] in
-            let foundFood = search(byBarcode: barcode)
+        var foundFood = search(byBarcode: barcode)
         
         DSF.shared.searchRemoteProduct(byBarcode: barcode) { products in
             DispatchQueue.main.async {
-                self.foods?.append(contentsOf: products.foods)
+                self.foods = foundFood + products.foods
+                self.view.updateState(for: .search((foundFood + products.foods).isEmpty ? .noResults : .foundResults))
             }
         }
             DispatchQueue.main.async {
