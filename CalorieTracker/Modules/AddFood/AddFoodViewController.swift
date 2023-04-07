@@ -315,6 +315,8 @@ final class AddFoodViewController: UIViewController {
                 if self.state != .search(.recent) {
                     self.state = .search(.recent)
                 }
+                timer?.invalidate()
+                timer = nil
                 return
             }
             
