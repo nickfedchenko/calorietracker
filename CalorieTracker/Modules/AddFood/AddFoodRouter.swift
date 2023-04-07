@@ -138,12 +138,12 @@ extension AddFoodRouter: AddFoodRouterInterface {
     
     func openScanner() {
         LoggingService.postEvent(event: .diaryscanfromtabbar)
-        guard Apphud.hasActiveSubscription() else {
-            let paywall = PaywallRouter.setupModule()
-            paywall.modalPresentationStyle = .fullScreen
-            viewController?.navigationController?.present(paywall, animated: true)
-            return
-        }
+//        guard Apphud.hasActiveSubscription() else {
+//            let paywall = PaywallRouter.setupModule()
+//            paywall.modalPresentationStyle = .fullScreen
+//            viewController?.navigationController?.present(paywall, animated: true)
+//            return
+//        }
         let vc = ScannerRouter.setupModule { [weak self] barcode in
             self?.presenter?.scannerDidRecognized(barcode: barcode)
         }

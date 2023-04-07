@@ -411,7 +411,7 @@ extension FoodCellView.FoodViewModel {
             let descriptionWeight = BAMeasurement(weight, .serving, isMetric: true).string(with: 1)
             let unit = unitData.unit
             let unitCount = unitData.count
-            let unitTitle = unit.getTitle(.short) ?? "error geting title"
+            let unitTitle = unit.getTitle(.short) ?? "error getting title"
             self.description = "\(unitCount) \(unitTitle) (\(descriptionWeight))"
         } else {
             self.kcal = BAMeasurement(product.kcal, .energy, isMetric: true).localized

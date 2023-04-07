@@ -177,7 +177,7 @@ final class AddFoodPresenter {
     
     private func search(byBarcode: String) -> [Food] {
         var products = [Product]()
-        let semaphore = DispatchSemaphore(value: 1)
+        let semaphore = DispatchSemaphore(value: 0)
         DSF.shared.searchProducts(barcode: byBarcode) { productsFound in
             products = productsFound
             semaphore.signal()

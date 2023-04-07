@@ -226,12 +226,12 @@ extension MainScreenRouter: WidgetContainerOutput {
     
     func openBarcodeScannerVC() {
         LoggingService.postEvent(event: .diaryscanfood)
-        guard Apphud.hasActiveSubscription() else {
-            let paywall = PaywallRouter.setupModule()
-            paywall.modalPresentationStyle = .fullScreen
-            viewController?.navigationController?.present(paywall, animated: true)
-            return
-        }
+//        guard Apphud.hasActiveSubscription() else {
+//            let paywall = PaywallRouter.setupModule()
+//            paywall.modalPresentationStyle = .fullScreen
+//            viewController?.navigationController?.present(paywall, animated: true)
+//            return
+//        }
         
         let vc = ScannerRouter.setupModule { [weak self] barcode in
             self?.openAddFoodVCandPerformSearch(with: barcode)
