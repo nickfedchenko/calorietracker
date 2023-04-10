@@ -11,8 +11,8 @@ import Foundation
 final class SubscriptionViewModel {
     
     enum ExperimentType: String {
-        case variant1 = "Variant_1"
-        case variant2 = "Variant_2"
+        case variant1 = "Variation_1"
+        case variant2 = "Variation_2"
     }
     
     // MARK: - Property list

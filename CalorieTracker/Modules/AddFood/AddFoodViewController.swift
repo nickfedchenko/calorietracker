@@ -315,8 +315,8 @@ final class AddFoodViewController: UIViewController {
                 if self.state != .search(.recent) {
                     self.state = .search(.recent)
                 }
-                timer?.invalidate()
-                timer = nil
+                self.timer?.invalidate()
+                self.timer = nil
                 return
             }
             
@@ -342,7 +342,6 @@ final class AddFoodViewController: UIViewController {
                     self.state = .default
                     return
                 }
-                
             }
             self.staticSearchTextField.endEditing(true)
             self.staticSearchTextField.text = text
