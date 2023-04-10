@@ -287,7 +287,8 @@ final class MealsCollectionViewCell: UICollectionViewCell {
                     let kcal = product.kcal * (amount / 100)
                     return partialResult + kcal
                 } else if let customAmount = amount {
-                    let kcal = (customAmount / 100) * product.kcal
+                    let servingAmount = product.servings?.first?.weight ?? 100
+                    let kcal = (customAmount / servingAmount) * product.kcal
                     return partialResult + kcal
                 } else {
                     return partialResult + product.kcal
@@ -345,7 +346,8 @@ final class MealsCollectionViewCell: UICollectionViewCell {
                 kcal = tempKcal
                 weight = count * coefficient
             } else if let amount = amount {
-                kcal = product.kcal * (amount / 100)
+                let servingAmount = product.servings?.first?.weight ?? 100
+                kcal = product.kcal * (amount / servingAmount)
                 weight = amount
             } else {
                 kcal = product.kcal

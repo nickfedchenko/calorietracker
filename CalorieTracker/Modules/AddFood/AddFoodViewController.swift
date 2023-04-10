@@ -788,6 +788,8 @@ final class AddFoodViewController: UIViewController {
         }
         updateCounterAppearanceIfNeeded()
         let sumKcal = selectedFood.compactMap { $0.foodInfo[.kcal] }.sum()
+        print(selectedFood.count)
+        print(sumKcal)
         counterKcalControl.isHidden = false
         showDoneButton(true)
         counterKcalControl.configure(.init(

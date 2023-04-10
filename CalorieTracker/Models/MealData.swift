@@ -30,7 +30,7 @@ extension MealData {
                 let unit = product.units?.first(where: { $0.id == Int(managedModel.unitId) })?.convenientUnit
                 ?? .gram(title: "gram", shortTitle: "g", coefficient: 1)
                 self.food = .product(
-                    product, customAmount: weight, unit: (unit: unit, count: managedModel.unitCount)
+                    product, customAmount: nil, unit: (unit: unit, count: managedModel.unitCount)
                 )
             } else {
                 self.food = .product(product, customAmount: managedModel.weight, unit: nil)

@@ -179,7 +179,6 @@ final class FoodCellView: UIView {
             imageView.image = nil
             widthImageViewConstraints?.isActive = true
         }
-        
     }
     
     private func setupView() {

@@ -15,6 +15,7 @@ protocol CreateMealPresenterInterface: AnyObject {
     func addFoods(from meal: Meal)
     func addFood(food: Food)
     func setChildMeal(for meal: Meal)
+    func getFoods() -> [Food]
 }
 
 class CreateMealPresenter {
@@ -87,5 +88,9 @@ extension CreateMealPresenter: CreateMealPresenterInterface {
             dishesID: dishesID,
             productsID: productsID,
             customEntriesID: [])
+    }
+    
+    func getFoods() -> [Food] {
+        return foods ?? []
     }
 }

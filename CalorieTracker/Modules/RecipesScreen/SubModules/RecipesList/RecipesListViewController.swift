@@ -92,7 +92,7 @@ class RecipesListViewController: UIViewController {
     }
     
     private func makeListLayoutSection() -> NSCollectionLayoutSection {
-        let itemCount = CGFloat(presenter?.getNumberOfItemsInSection() ?? 0)
+        let itemCount = CGFloat(presenter?.getNumberOfItemsInSection() ?? 1)
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: .absolute(64)

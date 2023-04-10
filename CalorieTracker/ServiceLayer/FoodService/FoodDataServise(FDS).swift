@@ -124,11 +124,12 @@ final class FDS {
         
         mealData.forEach {
             switch $0.food {
-            case .product(let product, _, _):
-                protein += product.protein / 100 * $0.weight
-                fat += product.fat / 100 * $0.weight
-                carbs += product.carbs / 100 * $0.weight
-                kcal += product.kcal / 100 * $0.weight
+            case .product(let product, let customAmount, let unitData):
+                guard let serving = product.servings?.first?.weight else { return }
+                protein += product.protein / serving * $0.weight
+                fat += product.fat / serving * $0.weight
+                carbs += product.carbs / serving * $0.weight
+                kcal += product.kcal / serving * $0.weight
             case  .dishes(let dish, _):
                 if let dishWeight = dish.dishWeight {
                     protein += dish.protein / dishWeight * $0.weight
