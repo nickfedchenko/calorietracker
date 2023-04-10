@@ -212,7 +212,6 @@ extension DSF: DataServiceFacadeInterface {
             case .failure(let error):
                 dump(error)
             case .success(let products):
-                UDM.lastBaseUpdateDay = Date()
                 print("Got \(products.count)")
                 let convProduct: [Product] = products.map { .init($0) }
                 let splittedProducts = convProduct.splitInSubArrays(into: 8)
@@ -222,11 +221,7 @@ extension DSF: DataServiceFacadeInterface {
                         saveInPriority: false
                     )
                 }
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 40) { [weak self] in
-                    let products = self?.localPersistentStore.fetchProducts()
-                    print("got fetched \(products?.count) products")
-                }
+                UDM.productsLastUpdateDate = Date()
             }
         }
     }
@@ -237,13 +232,13 @@ extension DSF: DataServiceFacadeInterface {
             case .failure(let error):
                 print(error)
             case .success(let dishes):
-                UDM.lastBaseUpdateDay = Date()
                 print("dishes received \(dishes.count)")
                 let splitDishes = dishes.splitInSubArrays(into: 8)
                 self?.makeTagTitles(from: dishes)
                 splitDishes.forEach { [weak self] dishes in
                     self?.localPersistentStore.saveDishes(dishes: dishes)
                 }
+                UDM.dishesLastUpdateDate = Date()
             }
         }
     }

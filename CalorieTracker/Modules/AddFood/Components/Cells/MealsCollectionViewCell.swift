@@ -328,7 +328,6 @@ final class MealsCollectionViewCell: UICollectionViewCell {
         guard let foodType = foods[safe: indexPath.row] else {
             return
         }
-        
         var viewModel: CreateMealCellViewModel
         
         switch foodType {
