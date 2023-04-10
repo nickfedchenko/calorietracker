@@ -39,6 +39,8 @@ final class UDM {
         case openCreateProductCounter
         case lastBaseUpdateDay
         case didShowMainScreenFirstTime
+        case productsLastUpdateDate
+        case dishesLastUpdateDate
     }
     
     
@@ -55,8 +57,16 @@ final class UDM {
     }
     
     static var lastBaseUpdateDay: Date {
+        if productsLastUpdateDate.day == dishesLastUpdateDate.day {
+            return productsLastUpdateDate
+        } else {
+            return Calendar.current.date(byAdding: .day, value: 7, to: Date()) ?? Date()
+        }
+    }
+    
+    static var productsLastUpdateDate: Date {
         get {
-            guard let value: Date = getValue(for: .lastBaseUpdateDay) else {
+            guard let value: Date = getValue(for: .productsLastUpdateDate) else {
                 return Calendar.current.date(byAdding: .day, value: 7, to: Date()) ?? Date()
             }
 #if DEBUG
@@ -65,7 +75,22 @@ final class UDM {
             return value
         }
         set {
-            setValue(value: newValue, for: .lastBaseUpdateDay)
+            setValue(value: newValue, for: .productsLastUpdateDate)
+        }
+    }
+    
+    static var dishesLastUpdateDate: Date {
+        get {
+            guard let value: Date = getValue(for: .dishesLastUpdateDate) else {
+                return Calendar.current.date(byAdding: .day, value: 7, to: Date()) ?? Date()
+            }
+#if DEBUG
+            return Calendar.current.date(byAdding: .day, value: 7, to: Date()) ?? Date()
+#endif
+            return value
+        }
+        set {
+            setValue(value: newValue, for: .dishesLastUpdateDate)
         }
     }
     

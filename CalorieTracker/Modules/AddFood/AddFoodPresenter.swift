@@ -196,7 +196,8 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
         
         DSF.shared.searchRemoteProduct(byBarcode: barcode) { products in
             DispatchQueue.main.async {
-                self.foods = foundFood + products.foods
+                print(foundFood)
+                self.foods = foundFood + products.filter { $0.kcal > 0 }.foods
                 self.view.updateState(for: .search((foundFood + products.foods).isEmpty ? .noResults : .foundResults))
             }
         }
@@ -291,7 +292,7 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
                     //                    return
                     //                }
                     print("Added to foods with phrase \(request)")
-                    self.foods?.append(contentsOf: products.foods)
+                    self.foods = foods + products.filter { $0.kcal > 0 }.foods
                     complition?(!foods.isEmpty)
                 }
             }

@@ -94,6 +94,7 @@ final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
             guard let foodType = self.viewModel?.food else { return }
             switch foodType {
             case .product(let product, _, _):
+                FDS.shared.saveProduct(product: product)
                 self.didTapButton?(
                     .product(product, customAmount: product.servings?.first?.weight ?? 0, unit: nil), buttonType
                 )

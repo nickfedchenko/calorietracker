@@ -476,7 +476,7 @@ private lazy var collapseRecognizer = UITapGestureRecognizer(
         Vibration.success.vibrate()
         guard weight > 0 else { return }
         presenter?.saveNutritionDaily(weight, unit: selectedWeightType, unitCount: valueCount)
-        didChangeAddNutrition()
+         ()
         if let product = presenter?.getProduct() {
             FDS.shared.foodUpdate(
                 food: .product(product, customAmount: nil, unit: (selectedWeightType, valueCount)), favorites: nil

@@ -18,21 +18,22 @@ extension Food {
     var foodInfo: [FoodInfoCases: Double] {
         switch self {
         case .product(let product, let customAmount, let foodUnitData):
+            let servingAmount = product.servings?.first?.weight ?? 100
             if let unitData = foodUnitData {
                 let coefficient = unitData.unit.getCoefficient() ?? 1
-                let amount = unitData.count * coefficient
+                let amount = unitData.count
                 return [
-                    .kcal: product.kcal * (amount / 100),
-                    .carb: product.carbs * (amount / 100),
-                    .fat: product.fat * (amount / 100),
-                    .protein: product.protein * (amount / 100)
+                    .kcal: product.kcal / servingAmount * (amount * coefficient),
+                    .carb: product.carbs / servingAmount * (amount * coefficient),
+                    .fat: product.fat / servingAmount * (amount * coefficient),
+                    .protein: product.protein / servingAmount * (amount * coefficient)
                 ]
             }
             return [
-                .kcal: product.kcal * ((customAmount ?? 100) / 100),
-                .carb: product.carbs * ((customAmount ?? 100) / 100),
-                .fat: product.fat * ((customAmount ?? 100) / 100),
-                .protein: product.protein * ((customAmount ?? 100) / 100)
+                .kcal: product.kcal / servingAmount * (customAmount ?? servingAmount),
+                .carb: product.carbs / servingAmount * (customAmount ?? servingAmount),
+                .fat: product.fat / servingAmount * (customAmount ?? servingAmount),
+                .protein: product.protein / servingAmount * (customAmount ?? servingAmount)
             ]
         case .dishes(let dish, let amount):
             if let amount = amount {
@@ -96,7 +97,12 @@ extension Food {
     
     var weight: Double? {
         switch self {
-        case .product(_, let customAmount, _):
+        case .product(_, let customAmount, let unitData):
+            if let customAmount = customAmount {
+                return customAmount
+            } else if let unitData = unitData {
+                return (unitData.unit.getCoefficient() ?? 1) * unitData.count
+            }
             return customAmount
         case .dishes(_, let customAmount):
             return customAmount

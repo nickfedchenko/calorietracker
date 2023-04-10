@@ -184,7 +184,7 @@ extension FoodCollectionViewController: UICollectionViewDelegateFlowLayout {
         
         let height: CGFloat = isSelectedType == .myMeals ?
         mealCellsHeight[indexPath.row] : 62
-        let width = view.frame.width - 40
+        let width = collectionView.frame.width - 40
         let size = CGSize(width: width, height: height)
         return size
     }

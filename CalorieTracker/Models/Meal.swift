@@ -79,6 +79,14 @@ struct Meal {
         self.foods = foods
         self.id = UUID().uuidString
     }
+    
+    init(id: String, mealTime: MealTime, title: String, photoURL: String?, foods: [Food]) {
+        self.mealTime = mealTime
+        self.title = title
+        self.photoURL = photoURL ?? ""
+        self.foods = foods
+        self.id = id
+    }
 }
 
 struct MealNutrients: Codable {

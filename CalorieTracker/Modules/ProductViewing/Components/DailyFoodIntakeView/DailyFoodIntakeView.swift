@@ -5,6 +5,7 @@
 //  Created by Vadim Aleshin on 17.11.2022.
 //
 
+import FirebaseCrashlytics
 import UIKit
 
 final class DailyFoodIntakeView: UIView {
@@ -72,6 +73,18 @@ final class DailyFoodIntakeView: UIView {
             now: from.protein / goal.protein,
             add: to.protein / goal.protein
         ))
+        
+        let infoDict: [String: Double] = [
+            "from.kcal": from.kcal,
+            "from.fat": from.fat,
+            "from.carbs": from.carbs,
+            "from.protein": from.protein,
+            "to.kcal": to.kcal,
+            "to.fat": to.fat,
+            "to.carbs": to.carbs,
+            "to.protein": to.protein
+        ]
+        Crashlytics.crashlytics().log("DailyGoodIntake \(infoDict)")
     }
     
     required init?(coder: NSCoder) {

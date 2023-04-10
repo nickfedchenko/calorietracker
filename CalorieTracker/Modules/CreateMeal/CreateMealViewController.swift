@@ -330,11 +330,13 @@ class CreateMealViewController: UIViewController {
             if let unit = unit {
                 let coefficient = unit.unit.getCoefficient() ?? 1
                 let count = unit.count
-                let tempKcal = product.kcal * ((coefficient * count) / 100)
+                let servingAmount = product.servings?.first?.weight ?? 100
+                let tempKcal = product.kcal * ((coefficient * count) / servingAmount)
                 kcal = tempKcal
                 weight = count * coefficient
             } else if let amount = amount {
-                kcal = product.kcal * (amount / 100)
+                let servingAmount = product.servings?.first?.weight ?? 100
+                kcal = product.kcal * (amount / servingAmount)
                 weight = amount
             } else {
                 kcal = product.kcal
@@ -417,7 +419,13 @@ class CreateMealViewController: UIViewController {
     private func updateMeal(for meal: Meal) {
         guard let title = descriptionForm.textField.text else { return }
         let photoURL = mealImageURL?.absoluteString ?? ""
-        var newMeal = Meal(mealTime: meal.mealTime, title: title, photoURL: photoURL, foods: meal.foods)
+        let newMeal = Meal(
+            id: meal.id,
+            mealTime: meal.mealTime,
+            title: title,
+            photoURL: photoURL,
+            foods: presenter?.getFoods() ?? []
+        )
         FDS.shared.updateMeal(meal: newMeal)
     }
     
@@ -770,11 +778,11 @@ extension CreateMealViewController: UITableViewDataSource, UITableViewDelegate {
         _ tableView: UITableView,
         trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath
     ) -> UISwipeActionsConfiguration? {
-        let deleteAction = UIContextualAction(style: .destructive, title: nil) { _, _, completionHandler in
+        let deleteAction = UIContextualAction(style: .destructive, title: nil) { [weak self] _, _, completionHandler in
+            guard let self = self else { return }
             self.removeFood(at: indexPath.row)
             self.didChangeFoods()
             completionHandler(true)
-
         }
 
         deleteAction.image = deleteRowImage()

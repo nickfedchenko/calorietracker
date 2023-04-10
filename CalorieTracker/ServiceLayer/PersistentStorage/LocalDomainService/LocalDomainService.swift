@@ -586,12 +586,20 @@ extension LocalDomainService: LocalDomainServiceInterface {
             debugPrint("No DomainMeal found with ID: \(meal.id)")
             return
         }
-    
-        if let components = domainMeal.components {
-            domainMeal.removeFromComponents(components)
+       
+        if let components = domainMeal.components?.array as? [DomainMealComponent] {
+            components.forEach { component in
+                context.delete(component)
+            }
+            context.performAndWait {
+                do {
+                    try context.save()
+                } catch {
+                    debugPrint("Error occurred: \(error.localizedDescription)")
+                }
+            }
         }
-        
-        let newDomainMeal = DomainMeal.prepare(from: meal, context: context)
+        var newDomainMeal = DomainMeal.prepare(from: meal, context: context)
         context.performAndWait {
             do {
                 try context.save()

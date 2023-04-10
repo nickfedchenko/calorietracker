@@ -73,6 +73,7 @@ extension RecipesScreenPresenter: RecipesScreenPresenterInterface {
     
     func didTapSectionHeader(at index: Int) {
         if let sectionModel = interactor?.getSectionModel(at: IndexPath(item: 0, section: index)) {
+            guard !sectionModel.dishes.isEmpty else { return }
             router?.navigateToRecipesList(for: sectionModel)
         }
     }
