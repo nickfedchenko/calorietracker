@@ -219,12 +219,12 @@ extension AddFoodRouter: AddFoodRouterInterface {
     
     func openCreateMeal(mealTime: MealTime) {
         LoggingService.postEvent(event: .diarycreatemeal)
-//        guard Apphud.hasActiveSubscription() else {
-//            let paywall = PaywallRouter.setupModule()
-//            paywall.modalPresentationStyle = .fullScreen
-//            viewController?.navigationController?.present(paywall, animated: true)
-//            return
-//        }
+        guard Apphud.hasActiveSubscription() else {
+            let paywall = PaywallRouter.setupModule()
+            paywall.modalPresentationStyle = .fullScreen
+            viewController?.navigationController?.present(paywall, animated: true)
+            return
+        }
         let vc = CreateMealRouter.setupModule(mealTime: mealTime)
         
         vc.needToUpdate = { [weak self] in
