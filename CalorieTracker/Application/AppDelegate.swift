@@ -6,6 +6,8 @@
 //
 
 import Alamofire
+import AdServices
+import Amplitude
 import ApphudSDK
 import AsyncDisplayKit
 import Gzip
@@ -27,6 +29,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     ) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
         coordinator.start()
+        registerForNotifications()
+        trackAppleSearchAds()
         print("Documents Directory: ",
               FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last ?? "Not Found!")
         return true
@@ -56,5 +60,68 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func applicationDidEnterBackground(_ application: UIApplication) {
         coordinator.invalidateUpdateTimer()
+    }
+    
+    func registerForNotifications() {
+        UNUserNotificationCenter.current().delegate = self
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { _, _ in
+          
+        }
+        UIApplication.shared.registerForRemoteNotifications()
+    }
+    
+    private func trackAppleSearchAds() {
+        if #available(iOS 14.3, *) {
+            DispatchQueue.global(qos: .default).async {
+                if let token = try? AAAttribution.attributionToken() {
+                    DispatchQueue.main.async {
+                        Apphud.addAttribution(data: nil, from: .appleAdsAttribution, identifer: token, callback: nil)
+                    }
+                }
+            }
+        }
+    }
+}
+
+extension AppDelegate: UNUserNotificationCenterDelegate {
+    
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        Apphud.submitPushNotificationsToken(token: deviceToken, callback: nil)
+        Amplitude.instance().logEvent("Successfully registered for remote notifications")
+    }
+    
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        print("Failed to register for push notifications")
+        Amplitude.instance().logEvent("Failed to register remote notifications")
+    }
+    
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse,
+        withCompletionHandler completionHandler: @escaping () -> Void
+    ) {
+        if Apphud.handlePushNotification(apsInfo: response.notification.request.content.userInfo) {
+            // Push Notification was handled by Apphud, probably do nothing
+            print("Handled succesfully")
+        } else {
+            // Handle other types of push notifications
+            print("Need to manually handle push notification")
+        }
+        completionHandler()
+    }
+
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        willPresent notification: UNNotification,
+        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
+    ) {
+        if Apphud.handlePushNotification(apsInfo: notification.request.content.userInfo) {
+            // Push Notification was handled by Apphud, probably do nothing
+            print("Handled succesfully")
+        } else {
+            // Handle other types of push notifications
+            print("Need to manually handle push notification")
+        }
+        completionHandler([]) // return empty array to skip showing notification banner
     }
 }

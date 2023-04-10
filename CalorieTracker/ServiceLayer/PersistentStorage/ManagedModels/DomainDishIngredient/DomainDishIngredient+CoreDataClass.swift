@@ -31,6 +31,19 @@ public class DomainDishIngredient: NSManagedObject {
     }
 
     var product: Product? {
-        FDS.shared.getProduct(by: String(productID))
+        if Thread.current.isMainThread {
+            return FDS.shared.getProduct(by: String(self.productID))
+        } else {
+            var product: Product?
+            let semaphore = DispatchSemaphore(value: 0)
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                let foundProduct = FDS.shared.getProduct(by: String(self.productID))
+                product = foundProduct
+                semaphore.signal()
+            }
+            semaphore.wait()
+            return product
+        }
     }
 }

@@ -919,3 +919,10 @@
 "Net Carbs" = "Net Carbs";
 "Restore Purchases" = "Restore Purchases";
 "tag.userProduct" = "My product";
+"steps.widget.setDailyGoal" = "SET DAILY GOAL";
+"steps.widget.changeDailyGoal" = "CHANGE DAILY GOAL";
+"monthlySubscription" = "Monthly subscription";
+"weeklySubscription" = "Weekly subscription";
+"yearlySubscription" = "Yearly subscription";
+"tryFreeSubscribe" = "TRY FREE & SUBSCRIBE";
+"Try 3 days for free, then  " = "Try 3 days for free, then  ";

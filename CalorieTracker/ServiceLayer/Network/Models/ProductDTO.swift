@@ -61,7 +61,6 @@ struct ProductDTO: Codable {
     
     // swiftlint:disable:next function_body_length
     init?(from ingredient: DomainDishIngredient) {
-     
         guard  let product: Product = ingredient.product else { return nil }
         if let id = Int(product.id) {
             self.id = id

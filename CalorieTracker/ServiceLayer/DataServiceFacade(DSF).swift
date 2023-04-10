@@ -30,22 +30,22 @@ protocol DataServiceFacadeInterface {
     ///   - phrase: search query
     ///   - userNetwork: флаг отвечающий за поиск через бэк
     ///   - completion: результат приходит сюда.
-    func searchProducts(by phrase: String, useNetwork: Bool, completion: @escaping ([Product]) -> Void)
+//    func searchProducts(by phrase: String, useNetwork: Bool, completion: @escaping ([Product]) -> Void)
     /// Метода поиска продуктов
     /// - Parameters:
     ///   - phrase: search query
     /// - Returns: массив Product
-    func searchProducts(by phrase: String) -> [Product]
+    func searchProducts(by phrase: String, completion: @escaping ([Product]) -> Void)
     /// Метода поиска продуктов
     /// - Parameters:
     ///   - barcode: barcode
     /// - Returns: массив Product
-    func searchProducts(barcode: String) -> [Product]
+    func searchProducts(barcode: String, completion: @escaping ([Product]) -> Void)
     /// Метода поиска блюд
     /// - Parameters:
     ///   - phrase: search query
     /// - Returns: массив Dish
-    func searchDishes(by phrase: String) -> [Dish]
+    func searchDishes(by phrase: String, completion: @escaping ([Dish]) -> Void)
     /// Связывает модель FoodData с Dish
     /// - Parameters:
     ///   - foodDataId: id модели FoodData
@@ -87,6 +87,18 @@ final class DSF {
 }
 
 extension DSF: DataServiceFacadeInterface {
+    func searchProducts(by phrase: String, completion: @escaping ([Product]) -> Void) {
+        localPersistentStore.searchProducts(by: phrase, completion: completion)
+    }
+    
+    func searchProducts(barcode: String, completion: @escaping ([Product]) -> Void) {
+        localPersistentStore.searchProducts(barcode: barcode, completion: completion)
+    }
+    
+    func searchDishes(by phrase: String, completion: @escaping ([Dish]) -> Void) {
+        localPersistentStore.searchDishes(by: phrase, completion: completion)
+    }
+    
     func searchRemoteProduct(byBarcode: String, completion: @escaping ([Product]) -> Void) {
         networkService.remoteSearchByBarcode(by: byBarcode) {result in
             switch result {
@@ -253,35 +265,18 @@ extension DSF: DataServiceFacadeInterface {
         return localPersistentStore.fetchNotes()
     }
     
-    func searchProducts(by phrase: String, useNetwork: Bool = false, completion: @escaping ([Product]) -> Void) {
-        var products = localPersistentStore.searchProducts(by: phrase)
-        guard useNetwork else {
-            completion(products)
-            return
-        }
-        
-        networkService.remoteSearch(by: phrase) { result in
-            switch result {
-            case .failure(let error):
-                print(error)
-            case .success(let searchedProducts):
-                products.append(contentsOf: searchedProducts.data.compactMap { $0.getConventionalProduct() })
-                completion(products.sorted { $0.title.count < $1.title.count })
-            }
-        }
-    }
     
-    func searchProducts(by phrase: String) -> [Product] {
-        localPersistentStore.searchProducts(by: phrase)
-    }
-    
-    func searchProducts(barcode: String) -> [Product] {
-        localPersistentStore.searchProducts(barcode: barcode)
-    }
-    
-    func searchDishes(by phrase: String) -> [Dish] {
-        localPersistentStore.searchDishes(by: phrase)
-    }
+//    func searchProducts(by phrase: String, comple) -> [Product] {
+//        localPersistentStore.searchProducts(by: phrase, completion: <#([Product]) -> Void#>)
+//    }
+//
+//    func searchProducts(barcode: String) -> [Product] {
+//        localPersistentStore.searchProducts(barcode: barcode)
+//    }
+//
+//    func searchDishes(by phrase: String) -> [Dish] {
+//        localPersistentStore.searchDishes(by: phrase)
+//    }
     
     private func makeTagTitles(from allDishes: [Dish]) {
         var possibleFilterTags: Set<AdditionalTag> = []

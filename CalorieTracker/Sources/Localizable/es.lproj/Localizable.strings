@@ -921,3 +921,11 @@
 "Net Carbs" = "Carbohidratos netos";
 "Restore Purchases" = "Restaurar las compras";
 "tag.userProduct" = "Mi producto";
+"steps.widget.setDailyGoal" = "ESTABLECER META DIARIA";
+"steps.widget.changeDailyGoal" = "CAMBIAR OBJETIVO DIARIO";
+
+"monthlySubscription" = "Suscripción mensual";
+"weeklySubscription" = "Suscripción semanal";
+"yearlySubscription" = "Suscripción anual";
+"tryFreeSubscribe" = "PRUEBA GRATIS Y SUSCRÍBETE";
+"Try 3 days for free, then  " = "Prueba 3 días gratis, luego ";

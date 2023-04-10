@@ -29,7 +29,7 @@ final class ExercisesWidgetNode: CTWidgetNode {
                 worldIndex: [0],
                 attributes: [
                     .color(R.color.exercisesWidget.secondGradientColor()),
-                    .font(R.font.sfProDisplaySemibold(size: 16.fontScale()))
+                    .font(R.font.sfProRoundedBold(size: 18))
                 ]
             )
         ])
@@ -87,7 +87,7 @@ final class ExercisesWidgetNode: CTWidgetNode {
     
     var isConnectAH = true {
         didSet {
-            transitionLayout(withAnimation: false, shouldMeasureAsync: false)
+//            transitionLayout(withAnimation: false, shouldMeasureAsync: false)
         }
     }
     
@@ -140,6 +140,7 @@ final class ExercisesWidgetNode: CTWidgetNode {
     }
     
     private func isConnectedState(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
+   
         let topTextStack = ASStackLayoutSpec.horizontal()
         topTextStack.justifyContent = .spaceBetween
         topTextStack.children = [
@@ -154,6 +155,7 @@ final class ExercisesWidgetNode: CTWidgetNode {
                 elementChart: $0.elementChart
             )
         }
+        print("exercisesStackChildren count is \(exercisesStackChildren.count)")
         let exercisesStack = ASStackLayoutSpec.horizontal()
         exercisesStack.children = exercisesStackChildren
         
@@ -183,7 +185,7 @@ final class ExercisesWidgetNode: CTWidgetNode {
         }
         mainStack.justifyContent = .spaceBetween
         mainStack.children = mainStackChildren
-        
+      
         return ASInsetLayoutSpec(
             insets: UIEdgeInsets(
                 top: 5,
@@ -207,10 +209,9 @@ final class ExercisesWidgetNode: CTWidgetNode {
     
     private func didChangeModel() {
         guard let model = model else { return }
-
         let leftColor = R.color.exercisesWidget.secondGradientColor()
         let rightColor = R.color.exercisesWidget.backgroundLine()
-        let font = R.font.sfProDisplaySemibold(size: 16.fontScale())
+        let font = R.font.sfProRoundedSemibold(size: 12)
         let leftAttributes: [StringSettings] = [.font(font), .color(leftColor)]
         let rightAttributes: [StringSettings] = [.font(font), .color(rightColor)]
         let string = model.goalBurnedKcal == nil

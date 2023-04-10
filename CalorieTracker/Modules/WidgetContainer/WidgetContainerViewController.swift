@@ -342,6 +342,9 @@ extension WidgetContainerViewController: UIViewControllerTransitioningDelegate {
             return  WidgetPresentTransitionController(anchorView: anchorView ?? UIView(), widgetType: .calendar)
         case .weight:
             return WidgetPresentTransitionController(anchorView: anchorView ?? UIView(), widgetType: .weight)
+        case .steps:
+//            return TopDownPresentTransition()
+            return WidgetPresentTransitionController(anchorView: anchorView ?? UIView(), widgetType: .steps)
         default:
             return  TopDownPresentTransition()
         }

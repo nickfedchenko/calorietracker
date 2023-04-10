@@ -922,3 +922,11 @@
 "Net Carbs" = "Glucides nets";
 "Restore Purchases" = "Restaurer les achats";
 "tag.userProduct" = "Mon produit";
+"steps.widget.setDailyGoal" = "FIXER UN OBJECTIF QUOTIDIEN";
+"steps.widget.changeDailyGoal" = "CHANGER L'OBJECTIF QUOTIDIEN";
+
+"monthlySubscription" = "Souscription mensuelle";
+"weeklySubscription" = "Abonnement hebdomadaire";
+"yearlySubscription" = "Abonnement annuel";
+"tryFreeSubscribe" = "ESSAYER GRATUITEMENT";
+"Try 3 days for free, then  " = "Essayez 3 jours gratuitement, puis ";

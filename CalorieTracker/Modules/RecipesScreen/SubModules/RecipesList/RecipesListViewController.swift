@@ -119,7 +119,7 @@ class RecipesListViewController: UIViewController {
     }
     
     private func makeTwoColumnsSection() -> NSCollectionLayoutSection {
-        let itemCount = CGFloat(presenter?.getNumberOfItemsInSection() ?? 0)
+        let itemCount = CGFloat(presenter?.getNumberOfItemsInSection() ?? 1)
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .absolute((view.bounds.width - 48) / 2),
             heightDimension: .absolute(143)
@@ -148,7 +148,7 @@ class RecipesListViewController: UIViewController {
         let group = NSCollectionLayoutGroup.vertical(
             layoutSize: groupSize,
             subitem: subgroup,
-            count: Int(itemCount / 2)
+            count: Int(itemCount > 1 ? itemCount / 2 : 1)
         )
         group.contentInsets.leading = 20
         group.interItemSpacing = .fixed(8)

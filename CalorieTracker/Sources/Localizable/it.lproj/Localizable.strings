@@ -934,3 +934,11 @@
 "Net Carbs" = "Glucides nets";
 "Restore Purchases" = "Ripristinare gli acquisti";
 "tag.userProduct" = "Il mio prodotto";
+"steps.widget.setDailyGoal" = "IMPOSTA UN OBIETTIVO GIORNALIERO";
+"steps.widget.changeDailyGoal" = "CAMBIA OBIETTIVO GIORNALIERO";
+
+"monthlySubscription" = "Abbonamento mensile";
+"weeklySubscription" = "Abbonamento settimanale";
+"yearlySubscription" = "Abbonamento annuale";
+"tryFreeSubscribe" = "PROVA GRATIS E ISCRIVITI";
+"Try 3 days for free, then  " = "Prova 3 giorni gratis, poi ";

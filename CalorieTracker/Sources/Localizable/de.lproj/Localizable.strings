@@ -922,3 +922,11 @@
 "Net Carbs" = "Netto Kohlenhydrate";
 "Restore Purchases" = "Käufe wiederherstellen";
 "tag.userProduct" = "Mein Produkt";
+"steps.widget.setDailyGoal" = "TÄGLICHES ZIEL FESTLEGEN";
+"steps.widget.changeDailyGoal" = "TÄGLICHES ZIEL ÄNDERN";
+
+"monthlySubscription" = "Monatliches Abo";
+"weeklySubscription" = "Wöchentliches Abonnement";
+"yearlySubscription" = "Jahresabonnement";
+"tryFreeSubscribe" = "KOSTENLOS TESTEN & ABONNIEREN";
+"Try 3 days for free, then  " = "3 Tage kostenlos testen, dann ";

@@ -141,8 +141,20 @@ final class AddFoodPresenter {
     }
     
     private func searchAmongAll(_ request: String) -> [Food] {
-        let dishes = DSF.shared.searchDishes(by: request)
-        let products = DSF.shared.searchProducts(by: request)
+        var dishes = [Dish]()
+        var products = [Product]()
+        let semaphore = DispatchSemaphore(value: 0)
+        DSF.shared.searchDishes(by: request) { dishesFound in
+            dishes = dishesFound
+            semaphore.signal()
+        }
+        
+        DSF.shared.searchProducts(by: request) { productsFound in
+            products = productsFound
+            semaphore.signal()
+        }
+        semaphore.wait()
+        semaphore.wait()
         let genericProducts = products.filter { $0.brand == nil && !$0.isUserProduct }
         let brandProducts = products.filter { $0.brand != nil && !$0.isUserProduct }
         let userProducts = products.filter { $0.isUserProduct }
@@ -164,7 +176,13 @@ final class AddFoodPresenter {
     }
     
     private func search(byBarcode: String) -> [Food] {
-        let products = DSF.shared.searchProducts(barcode: byBarcode)
+        var products = [Product]()
+        let semaphore = DispatchSemaphore(value: 0)
+        DSF.shared.searchProducts(barcode: byBarcode) { productsFound in
+            products = productsFound
+            semaphore.signal()
+        }
+        semaphore.wait()
         return products.foods
     }
 }
@@ -174,11 +192,12 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
     func scannerDidRecognized(barcode: String) {
 //        searchQueue.cancelAllOperations()
 //        let operation = BlockOperation { [weak self] in
-            let foundFood = search(byBarcode: barcode)
+        var foundFood = search(byBarcode: barcode)
         
         DSF.shared.searchRemoteProduct(byBarcode: barcode) { products in
             DispatchQueue.main.async {
-                self.foods?.append(contentsOf: products.foods)
+                self.foods = foundFood + products.foods
+                self.view.updateState(for: .search((foundFood + products.foods).isEmpty ? .noResults : .foundResults))
             }
         }
             DispatchQueue.main.async {
@@ -234,36 +253,34 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
         //            let recents = self.searchAmongRecent(request)
         searchQueue.cancelAllOperations()
         print("Currently searching \(searchQueue.operationCount)")
-        //        let operation = BlockOperation()
-        //        operation.addExecutionBlock { [weak self] in
-        //            guard !operation.isCancelled else {
-        //                return
-        //            }
-        let current = Date().timeIntervalSince1970
-        //            guard let self = self else { return }
-        //            guard !operation.isCancelled else {
-        //                return
-        //            }
-        let basicFood = self.searchAmongAll(request)
-        //            guard !operation.isCancelled else {
-        //                return
-        //            }
-        let searchByBarcode = self.search(byBarcode: request)
-        //            guard !operation.isCancelled else {
-        //                return
-        //            }
-        let foods = basicFood + searchByBarcode
-        let done = Date().timeIntervalSince1970 - current
-        DispatchQueue.main.async {
-            //                guard !operation.isCancelled else {
-            //                    return
-            //                }
-            self.foods = foods
-            complition?(!foods.isEmpty)
-        }
-        
         let operation = BlockOperation()
-        operation.addExecutionBlock {
+        operation.addExecutionBlock { [weak self] in
+            guard !operation.isCancelled else {
+                return
+            }
+            let current = Date().timeIntervalSince1970
+            guard let self = self else { return }
+            guard !operation.isCancelled else {
+                return
+            }
+            let basicFood = self.searchAmongAll(request)
+            guard !operation.isCancelled else {
+                return
+            }
+            let searchByBarcode = self.search(byBarcode: request)
+            guard !operation.isCancelled else {
+                return
+            }
+            let foods = basicFood + searchByBarcode
+            let done = Date().timeIntervalSince1970 - current
+            DispatchQueue.main.async {
+                guard !operation.isCancelled else {
+                    return
+                }
+                self.foods = foods
+                complition?(!foods.isEmpty)
+            }
+            
             DSF.shared.searchRemoteProduct(by: request) { [operation] products in
                 guard !operation.isCancelled else {
                     print("cancelled with phrase \(request)")
@@ -279,8 +296,6 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
                 }
             }
         }
-        
-        //        }
         operation.queuePriority = .high
         searchQueue.addOperation(operation)
     }

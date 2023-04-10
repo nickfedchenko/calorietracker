@@ -53,8 +53,8 @@ final class LineChart: UIView {
     
     private func didChangeData() {
         guard let data = data, frame != .zero else { return }
-        layer.sublayers?.forEach { $0.removeFromSuperlayer() }
-        subviews.forEach { $0.removeFromSuperview() }
+//        layer.sublayers?.forEach { $0.removeFromSuperlayer() }
+//        subviews.forEach { $0.removeFromSuperview() }
         let newSize = CGSize(
             width: bounds.width - lineSpasingSize.width * 2,
             height: bounds.height - lineSpasingSize.height * 2

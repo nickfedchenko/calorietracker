@@ -95,6 +95,9 @@ final class FoodCollectionViewController: UIViewController {
     }
     
     func reloadData() {
+        guard collectionView.frame.height > 0 && collectionView.frame.width > 0 else {
+            return
+        }
         if (dataSource?.foodsCount() ?? 0) > 0 {
             collectionView.performBatchUpdates {
                 self.collectionView.reloadSections(IndexSet(integer: 0))

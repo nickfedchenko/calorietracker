@@ -47,7 +47,13 @@ final class ProductViewController: CTViewController {
     private var firstDraw = true
     private var weight: Double = 0
     private lazy var valueCount: Double = {
-        presenter?.getProduct()?.isUserProduct ?? false ? 1 : 100
+        switch selectedWeightType {
+        case .gram:
+            return 100
+        case .oz:
+            return 100
+        default: return 1
+        }
     }()
     var shouldUseCustomTransition = true
     
@@ -60,26 +66,32 @@ final class ProductViewController: CTViewController {
     private lazy var selectedWeightType: UnitElement.ConvenientUnit = {
         if let product = presenter?.getProduct() {
             if !product.isUserProduct {
+                if
+                    let servings = product.servings,
+                    let targetUnit = product.units?.first(where: { $0.isReference } ) {
+                    return targetUnit.convenientUnit
+                } else {
                 return product
                     .units?
                     .first?
                     .convenientUnit
                 ?? .gram(title: R.string.localizable.gram(), shortTitle: R.string.localizable.gram(), coefficient: 1)
-            } else {
-                let units: [UnitElement.ConvenientUnit] = product.servings?.compactMap {
-                    .custom(title: $0.size ?? "", shortTitle: $0.size ?? "", coefficient: $0.weight ?? 1)
-                } ?? [
-                    .gram(title: R.string.localizable.gram(), shortTitle: R.string.localizable.gram(), coefficient: 1)
-                ]
-                return units.first
-                ?? .gram(title: R.string.localizable.gram(), shortTitle: R.string.localizable.gram(), coefficient: 1)
             }
         } else {
-            return .custom(title: "undefined", shortTitle: "undefined", coefficient: 1)
+            let units: [UnitElement.ConvenientUnit] = product.servings?.compactMap {
+                .custom(title: $0.size ?? "", shortTitle: $0.size ?? "", coefficient: $0.weight ?? 1)
+            } ?? [
+                .gram(title: R.string.localizable.gram(), shortTitle: R.string.localizable.gram(), coefficient: 1)
+            ]
+            return units.first
+            ?? .gram(title: R.string.localizable.gram(), shortTitle: R.string.localizable.gram(), coefficient: 1)
         }
-    }()
-    
-    private lazy var collapseRecognizer = UITapGestureRecognizer(
+    } else {
+        return .custom(title: "undefined", shortTitle: "undefined", coefficient: 1)
+    }
+}()
+
+private lazy var collapseRecognizer = UITapGestureRecognizer(
         target: self,
         action: #selector(hideServingSelector(sender:))
     )
@@ -366,58 +378,59 @@ final class ProductViewController: CTViewController {
             return
         }
         
+        guard let servingValue = product.servings?.first?.weight else { return }
         if !isOz {
-            let kcal = Double(product.kcal) / 100.0 * (value * coefficient)
+                let kcal = Double(product.kcal) / servingValue * (value * coefficient)
+                let carbs = // NutrientMeasurment.convert(
+                product.carbs / 100 * (coefficient * value)
+                //                type: .carbs,
+                //                from: .gram,
+                //                to: .kcal
+                //            )
+                
+                let protein = // NutrientMeasurment.convert(
+                product.protein / servingValue * (value * coefficient)
+                //                type: .protein,
+                //                from: .gram,
+                //                to: .kcal
+                //            )
+                
+                let fat = // NutrientMeasurment.convert(
+                product.fat / servingValue * (value * coefficient)
+                //                type: .fat,
+                //                from: .gram,
+                //                to: .kcal
+                //            )
+                weight = value * coefficient
+                addNutrition = .init(
+                    kcal: kcal,
+                    carbs: carbs,
+                    protein: protein,
+                    fat: fat
+                )
+        } else {
+            let kcal = Double(product.kcal) / servingValue * (value / coefficient)
             let carbs = // NutrientMeasurment.convert(
-            product.carbs / 100 * (coefficient * value)
+            product.carbs / servingValue * (value / coefficient)
             //                type: .carbs,
             //                from: .gram,
             //                to: .kcal
             //            )
             
             let protein = // NutrientMeasurment.convert(
-            product.protein / 100.0 * (value * coefficient)
+            product.protein / servingValue * (value / coefficient)
             //                type: .protein,
             //                from: .gram,
             //                to: .kcal
             //            )
             
             let fat = // NutrientMeasurment.convert(
-            product.fat / 100.0 * (value * coefficient)
+            product.fat / servingValue * (value / coefficient)
             //                type: .fat,
             //                from: .gram,
             //                to: .kcal
             //            )
             weight = value * coefficient
-            addNutrition = .init(
-                kcal: kcal,
-                carbs: carbs,
-                protein: protein,
-                fat: fat
-            )
-        } else {
-            let kcal = Double(product.kcal) / 100.0 * (value / coefficient)
-            let carbs = // NutrientMeasurment.convert(
-            product.carbs / 100 * (value / coefficient)
-            //                type: .carbs,
-            //                from: .gram,
-            //                to: .kcal
-            //            )
-            
-            let protein = // NutrientMeasurment.convert(
-            product.protein / 100.0 * (value / coefficient)
-            //                type: .protein,
-            //                from: .gram,
-            //                to: .kcal
-            //            )
-            
-            let fat = // NutrientMeasurment.convert(
-            product.fat / 100.0 * (value / coefficient)
-            //                type: .fat,
-            //                from: .gram,
-            //                to: .kcal
-            //            )
-            weight = value / coefficient
             addNutrition = .init(
                 kcal: kcal,
                 carbs: carbs,
@@ -456,6 +469,7 @@ final class ProductViewController: CTViewController {
     
     @objc private func didChangeTextFieldValue() {
         didChangeWeight()
+        mainScrollView.scrollRectToVisible(dailyFoodIntakeView.frame, animated: true)
     }
     
     @objc private func didTapSaveButton() {
@@ -464,7 +478,9 @@ final class ProductViewController: CTViewController {
         presenter?.saveNutritionDaily(weight, unit: selectedWeightType, unitCount: valueCount)
         didChangeAddNutrition()
         if let product = presenter?.getProduct() {
-            FDS.shared.foodUpdate(food: .product(product, customAmount: nil, unit: nil), favorites: nil)
+            FDS.shared.foodUpdate(
+                food: .product(product, customAmount: nil, unit: (selectedWeightType, valueCount)), favorites: nil
+            )
         }
         switch getOpenController() {
         case .createProduct:
@@ -564,8 +580,7 @@ final class ProductViewController: CTViewController {
                 action: #selector(didChangeTextFieldValue),
                 for: .editingChanged
             )
-            let product = presenter?.getProduct()
-            textField.text = product?.isUserProduct ?? false ? "1" : "100"
+            textField.text = valueCount.clean(with: 0)
             textField.delegate = self
             return textField
         }
@@ -598,7 +613,8 @@ final class ProductViewController: CTViewController {
         func getSelectView() -> SelectView<UnitElement.ConvenientUnit> {
             let product = presenter?.getProduct()
             
-            return SelectView(presenter?.getProduct()?.units?.compactMap { $0.convenientUnit }
+            return SelectView(presenter?.getProduct()?.units?
+                .sorted(by: { $0.isReference != $1.isReference }).compactMap { $0.convenientUnit }
                               ?? product?.servings?.compactMap {
                 .custom(title: $0.size ?? "", shortTitle: $0.size ?? "", coefficient: $0.weight)
             } ?? [.gram(title: R.string.localizable.gram(), shortTitle: R.string.localizable.gram(), coefficient: 1)],

@@ -40,9 +40,9 @@ protocol LocalDomainServiceInterface {
     func saveCustomEntries(entries: [CustomEntry])
     func fetchCustomEntries() -> [CustomEntry]
     func deleteCustomEntry(_ id: String)
-    func searchProducts(by phrase: String) -> [Product]
-    func searchProducts(barcode: String) -> [Product]
-    func searchDishes(by phrase: String) -> [Dish]
+    func searchProducts(by phrase: String, completion: @escaping ([Product]) -> Void)
+    func searchProducts(barcode: String, completion: @escaping ([Product]) -> Void)
+    func searchDishes(by phrase: String, completion: @escaping ([Dish]) -> Void)
     func setChildFoodData(foodDataId: String, dishID: Int)
     func setChildFoodData(foodDataId: String, productID: String)
     func setChildFoodData(foodDataId: String, customEntryID: String)
@@ -172,8 +172,6 @@ final class LocalDomainService {
         withSortDescriptor sortDescriptors: [NSSortDescriptor]? = nil,
         completion: @escaping ([T]?) -> Void
     ) {
-        
-      
         specificDishesFetchingContext.perform { [weak self] in
             do {
                 let request = T.fetchRequest()
@@ -260,6 +258,55 @@ final class LocalDomainService {
 
 // MARK: - LocalDomainServiceInterface
 extension LocalDomainService: LocalDomainServiceInterface {
+    func searchProducts(by phrase: String, completion: @escaping ([Product]) -> Void) {
+        let phrases = phrase.split(whereSeparator: { $0.isWhitespace }).map { $0.lowercased() }.map { string in
+            var newString = string
+            newString.removeAll(where: { $0.isPunctuation || $0.isNumber || $0.isMathSymbol })
+            return newString
+        }
+        let predicates: [NSCompoundPredicate] = phrases.compactMap { string in
+            guard string.count > 2 else { return nil }
+            let titlePredicate = NSPredicate(format: "title CONTAINS[cd] %@", string)
+            let brandPredicate = NSPredicate(format: "brand CONTAINS[cd] %@", string)
+            let compoundPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [titlePredicate, brandPredicate])
+            return compoundPredicate
+        }
+        
+//        let titlePredicate = NSPredicate(format: "title CONTAINS[cd] %@", phrase)
+//        let brandPredicate = NSPredicate(format: "brand CONTAINS[cd] %@", phrase)
+        let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+        fetchDataAsynchronously(for: DomainProduct.self, withPredicate: compoundPredicate) { products in
+            completion(products?.compactMap { Product(from: $0) } ?? [])
+        }
+    }
+    
+    func searchProducts(barcode: String, completion: @escaping ([Product]) -> Void) {
+        let barcodePredicate = NSPredicate(format: "barcode CONTAINS[cd] %@", barcode)
+        let compoundPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [barcodePredicate])
+        fetchDataAsynchronously(for: DomainProduct.self, withPredicate: compoundPredicate) { products in
+            completion(products?.compactMap { Product(from: $0) } ?? [])
+        }
+    }
+    
+    func searchDishes(by phrase: String, completion: @escaping ([Dish]) -> Void) {
+        let phrases = phrase.split(whereSeparator: { $0.isWhitespace }).map { $0.lowercased() }.map { string in
+            var newString = string
+            newString.removeAll(where: { $0.isPunctuation || $0.isNumber || $0.isMathSymbol })
+            return newString
+        }
+        
+        let predicates: [NSPredicate] = phrases.compactMap { string in
+            guard string.count > 2 else { return nil }
+            let predicate = NSPredicate(format: "title CONTAINS[cd] %@", string)
+            return predicate
+        }
+
+        let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+        fetchDataAsynchronously(for: DomainDish.self, withPredicate: compoundPredicate) { products in
+            completion(products?.compactMap { Dish(from: $0) } ?? [])
+        }
+    }
+    
     func fetchBreakfastDishes(completion: @escaping ([DomainDish]?) -> Void) {
         let p = NSPredicate(format: "(ANY eatingTags.id == %lld)", 8)
         let compoundPredicate = NSCompoundPredicate(type: .and, subpredicates: [p])
@@ -977,9 +1024,9 @@ extension LocalDomainService: LocalDomainServiceInterface {
     }
     
     func searchDishes(by phrase: String) -> [Dish] {
-        var phrases = phrase.split(whereSeparator: { $0.isWhitespace }).map { $0.lowercased() }.map { string in
+        let phrases = phrase.split(whereSeparator: { $0.isWhitespace }).map { $0.lowercased() }.map { string in
             var newString = string
-            newString.removeAll(where: { $0.isPunctuation || $0.isNumber || $0.isMathSymbol})
+            newString.removeAll(where: { $0.isPunctuation || $0.isNumber || $0.isMathSymbol })
             return newString
         }
         

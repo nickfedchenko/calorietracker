@@ -26,8 +26,8 @@ class WaterFullWidgetPresenter {
     private let stepMl: Double = 50
     
     private var quickAddTypes: [QuickAddModel] = [
-        .init(type: .bottle, value: 100),
-        .init(type: .cup, value: 50)
+        .init(type: .bottle, value: 500),
+        .init(type: .cup, value: 200)
     ]
     
     init(view: WaterFullWidgetInterface, specificDate: Date = Date()) {

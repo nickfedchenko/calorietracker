@@ -71,6 +71,7 @@ extension MainScreenRouter: MainScreenRouterInterface {
     func openWidget(_ type: WidgetContainerViewController.WidgetType, anchorView: UIView? = nil) {
         switch type {
         case.steps:
+//            #if AppStore
             if !UDM.isAuthorisedHealthKit {
                 HealthKitAccessManager.shared.askPermission { result in
                     switch result {
@@ -79,18 +80,18 @@ extension MainScreenRouter: MainScreenRouterInterface {
                         HealthKitDataManager.shared.getSteps { steps in
                             DSF.shared.saveSteps(steps)
                         }
-                        
+
                         HealthKitDataManager.shared.getWorkouts { exercises  in
                             DSF.shared.saveExercises(exercises)
                         }
-                        
+
                     case .failure(let failure):
                         print(failure)
                     }
                 }
                 return
             }
-            
+//            #endif
             fallthrough
         case .exercises:
             if !UDM.isAuthorisedHealthKit {
@@ -247,7 +248,6 @@ extension MainScreenRouter: WidgetContainerOutput {
         viewController?.navigationController?.pushViewController(vc, animated: true)
     }
 }
-
 
 extension MainScreenRouter: UINavigationControllerDelegate {
     func navigationController(

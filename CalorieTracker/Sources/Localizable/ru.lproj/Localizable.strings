@@ -660,7 +660,7 @@
 "keyboard.weight.title.set" = "Я буду взвешивать:";
 "keyboard.steps.title" = "Я буду ходить пешком по крайней мере ежедневно:";
 "keyboard.water.title" = "Выберите значок:";
-"keyboard.water.description" = "Выберите громкость:";
+"keyboard.water.description" = "Укажите объем:";
 
 "paywall.convenientCalorie" = "Удобный трекер калорий и активности";
 "paywall.effectiveWeight" = "Эффективная потеря веса или увеличение веса";
@@ -922,3 +922,11 @@
 "Net Carbs" = "Чистые углеводы";
 "Restore Purchases" = "Восстановить Покупки";
 "tag.userProduct" = "Мой продукт";
+"steps.widget.setDailyGoal" = "УСТ. ДНЕВНУЮ ЦЕЛЬ";
+"steps.widget.changeDailyGoal" = "ИЗМ. ДНЕВНУЮ ЦЕЛЬ";
+
+"monthlySubscription" = "Ежемесячная подписка";
+"weeklySubscription" = "Недельная подписка";
+"yearlySubscription" = "Годовая подписка";
+"tryFreeSubscribe" = "ПОПРОБУЙ БЕСПЛАТНО";
+"Try 3 days for free, then  " = "3 дня бесплатно, далее ";

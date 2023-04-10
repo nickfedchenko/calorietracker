@@ -51,20 +51,19 @@ final class AppCoordinator: ApphudDelegate {
                 getStartedViewController = PaywallRouter.setupModule()
             }
         } 
-        
+        checkIsPaid()
         let navigationController = UINavigationController(rootViewController: getStartedViewController)
         rootNavigationController = navigationController
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
         
-    
         let appearance = UINavigationBarAppearance()
         appearance.backgroundEffect = nil
         UINavigationBar.appearance().standardAppearance = appearance
+
         #if DEBUG
         UDM.didShowAskingOpinion = false
         #endif
-       
     }
     
     private func startFirebase() {
@@ -74,26 +73,26 @@ final class AppCoordinator: ApphudDelegate {
     private func updateFoodData() {
         if abs(Calendar.current.dateComponents([.day], from: Date(), to: UDM.lastBaseUpdateDay).day ?? 0) > 6 {
             DSF.shared.updateStoredDishes()
-                DSF.shared.updateStoredProducts()
+            DSF.shared.updateStoredProducts()
         }
     }
     
     private func updateHealthKitData() {
         HealthKitAccessManager.shared.updateAuthorizationStatus()
-        guard UDM.isAuthorisedHealthKit else { return }
-        
-        HealthKitDataManager.shared.getSteps { [weak self] steps in
-            self?.localDomainService.saveSteps(data: steps)
-        }
-        
-        HealthKitDataManager.shared.getWorkouts { [weak self] exercises  in
-            self?.localDomainService.saveExercise(data: exercises)
-        }
-        
-        HealthKitDataManager.shared.getBurnedKcal { [weak self] burnedKCal in
-            self?.localDomainService.saveBurnedKcal(data: burnedKCal)
-        }
-        
+//        guard UDM.isAuthorisedHealthKit else { return }
+//        
+//        HealthKitDataManager.shared.getSteps { [weak self] steps in
+//            self?.localDomainService.saveSteps(data: steps)
+//        }
+//        
+//        HealthKitDataManager.shared.getWorkouts { [weak self] exercises  in
+//            self?.localDomainService.saveExercise(data: exercises)
+//        }
+//        
+//        HealthKitDataManager.shared.getBurnedKcal { [weak self] burnedKCal in
+//            self?.localDomainService.saveBurnedKcal(data: burnedKCal)
+//        }
+//        
         setupPeriodicUpdate()
     }
     
@@ -152,5 +151,9 @@ final class AppCoordinator: ApphudDelegate {
     
     func invalidateUpdateTimer() {
         hkUpdateTimer?.invalidate()
+    }
+    
+    func checkIsPaid() {
+        Amplitude.instance().setUserProperties(["isPaid": Apphud.hasActiveSubscription()])
     }
 }

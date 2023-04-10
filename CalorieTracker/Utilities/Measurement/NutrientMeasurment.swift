@@ -8,9 +8,9 @@
 import Foundation
 
 struct NutrientMeasurment {
-    private static let kcalPerGramOfProtein: Double = 4
-    private static let kcalPerGramOfFat: Double = 9
-    private static let kcalPerGramOfCarb: Double = 4
+    private static let kcalPerGramOfProtein: Double = 4.2
+    private static let kcalPerGramOfFat: Double = 9.29
+    private static let kcalPerGramOfCarb: Double = 4.2
     
     static func convert(
         value: Double,
