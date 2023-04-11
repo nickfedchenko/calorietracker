@@ -288,6 +288,7 @@ final class AddFoodViewController: UIViewController {
                 DispatchQueue.main.async {
 //                    self?.selectedFood = []
 //                    self?.presenter?.setFoodType(self?.previousSelectedType ?? .recent)
+                    RateRequestManager.increment(for: .addFood)
                     self?.presenter?.didTapBackButton(shouldShowReview: true)
                 }
             },

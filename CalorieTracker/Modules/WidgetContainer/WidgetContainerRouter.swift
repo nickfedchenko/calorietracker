@@ -41,6 +41,7 @@ extension WidgetContainerRouter: WidgetContainerRouterInterface {
     func openChangeWeightViewController(_ type: WeightKeyboardHeaderView.ActionType) {
         let vc = KeyboardEnterValueViewController(.weight(type))
         vc.needUpdate = {
+            RateRequestManager.increment(for: .addWeight)
             self.presenter?.updateView()
         }
         

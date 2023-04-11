@@ -274,7 +274,7 @@ extension LocalDomainService: LocalDomainServiceInterface {
         
 //        let titlePredicate = NSPredicate(format: "title CONTAINS[cd] %@", phrase)
 //        let brandPredicate = NSPredicate(format: "brand CONTAINS[cd] %@", phrase)
-        let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+        let compoundPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: predicates)
         fetchDataAsynchronously(for: DomainProduct.self, withPredicate: compoundPredicate) { products in
             completion(products?.compactMap { Product(from: $0) } ?? [])
         }

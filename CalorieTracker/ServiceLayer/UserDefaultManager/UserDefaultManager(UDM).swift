@@ -35,12 +35,13 @@ final class UDM {
         case tempScannerImage
         case tempActivityLevel
         case tempWeeklyGoal
-        case didShowAskingOpinion
+        case askingOpinionLastDate
         case openCreateProductCounter
         case lastBaseUpdateDay
         case didShowMainScreenFirstTime
         case productsLastUpdateDate
         case dishesLastUpdateDate
+        case didTapToWriteReview
     }
     
     
@@ -599,16 +600,29 @@ final class UDM {
         }
     }
     
-    static var didShowAskingOpinion: Bool {
+    static var didShowAskingOpinionDate: Date {
         get {
-            guard let didShow: Bool = getValue(for: .didShowAskingOpinion) else {
-                return false
+            guard let didShow: Date = getValue(for: .askingOpinionLastDate) else {
+                return Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
             }
             return didShow
         }
         
         set {
-            setValue(value: newValue, for: .didShowAskingOpinion)
+            setValue(value: newValue, for: .askingOpinionLastDate)
+        }
+    }
+    
+    static var didTapToWriteReview: Bool {
+        get {
+            guard let didTap: Bool = getValue(for: .didTapToWriteReview) else {
+                return false
+            }
+            return didTap
+        }
+        
+        set {
+            setValue(value: newValue, for: .didTapToWriteReview)
         }
     }
 }

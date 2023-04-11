@@ -451,6 +451,7 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
         Vibration.success.vibrate()
         presenter?.addWater(slider.stepVolume * slider.step)
         configureView()
+        RateRequestManager.increment(for: .addWater)
         LoggingService.postEvent(event: .watersetmanual)
     }
     

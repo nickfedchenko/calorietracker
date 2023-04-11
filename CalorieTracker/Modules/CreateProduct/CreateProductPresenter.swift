@@ -117,6 +117,7 @@ extension CreateProductPresenter: CreateProductPresenterInterface {
             createdAt: dateFormatter.string(from: Date())
         )
         
+        RateRequestManager.increment(for: .createFood)
         localDomainService.saveProducts(products: [product], saveInPriority: true)
         router?.openProductViewController(product)
     }

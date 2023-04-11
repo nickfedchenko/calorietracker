@@ -19,7 +19,7 @@ class RateUsScreenRouter: NSObject {
     weak var presenter: RateUsScreenPresenterInterface?
     weak var viewController: UIViewController?
     
-    private var didShowReviewRequest: Bool = false
+    private var didShowReviewRequest: Bool = true
     
     static func setupModule() -> RateUsScreenViewController {
         let vc = RateUsScreenViewController()
@@ -36,6 +36,7 @@ class RateUsScreenRouter: NSObject {
 }
 
 extension RateUsScreenRouter: RateUsScreenRouterInterface {
+    
     func didTapNextButton() {
         if didShowReviewRequest {
             if Apphud.hasActiveSubscription() {
@@ -64,8 +65,8 @@ extension RateUsScreenRouter: RateUsScreenRouterInterface {
                 return
             }
              
-             SKStoreReviewController.requestReview(in: scene)
-            didShowReviewRequest.toggle()
+            SKStoreReviewController.requestReview(in: scene)
+//            didShowReviewRequest.toggle()
         }
       
     }

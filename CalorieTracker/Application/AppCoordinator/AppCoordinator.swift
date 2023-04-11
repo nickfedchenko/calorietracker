@@ -62,7 +62,7 @@ final class AppCoordinator: ApphudDelegate {
         UINavigationBar.appearance().standardAppearance = appearance
 
         #if DEBUG
-        UDM.didShowAskingOpinion = false
+//        UDM.didShowAskingOpinion = false
         #endif
     }
     
