@@ -46,6 +46,9 @@ final class WhatImportantToYouViewController: UIViewController {
     }
     
     private func configureViews() {
+        nutritionOfMyFoodCommonButton.titleEdgeInsets.left = 16
+        nutritionOfMyFoodCommonButton.titleEdgeInsets.right = 16
+        nutritionOfMyFoodCommonButton.titleLabel?.adjustsFontSizeToFitWidth = true
         title = R.string.localizable.onboardingFourthWhatImportantToYouTitle()
         
         view.backgroundColor = R.color.mainBackground()

@@ -1,4 +1,4 @@
-/* 
+/*
   Localizable.strings
   CalorieTracker
 
@@ -7,44 +7,44 @@
 */
 
 "onboarding.first.achievementByWillPower.title" = "History";
-"onboarding.first.achievementByWillPower.button" = "Let’s do it!";
-"onboarding.first.achievementByWillPower.title.first" = "It doesn’t take unlimited willpower to ";
-"onboarding.first.achievementByWillPower.title.second" = "achieve your goals.";
-"onboarding.first.achievementByWillPower.description" = "Learning and implementing some new habits can go a long way in getting you there. Are you ready to take the first steps towards building your own strong habits?";
+"onboarding.first.achievementByWillPower.button" = "Let's do it!";
+"onboarding.first.achievementByWillPower.title.first" = "It doesn't require much effort ";
+"onboarding.first.achievementByWillPower.title.second" = "to achieve your goals.";
+"onboarding.first.achievementByWillPower.description" = "Learning and instilling some new habits into your life can go a long way toward your goals. Are you ready to make the first steps toward the formation of your own strong habits?";
 
 "onboarding.first.achievingDifficultGoal.button" = "Next";
-"onboarding.first.achievingDifficultGoal.title.first" = "Think about someone in your life ";
-"onboarding.first.achievingDifficultGoal.title.second" = "who has achieved a difficult goal.";
+"onboarding.first.achievingDifficultGoal.title.first" = "Think of someone in your life";
+"onboarding.first.achievingDifficultGoal.title.second" = "who has reached a difficult goal.";
 "onboarding.first.achievingDifficultGoal.title" = "History";
 "onboarding.first.achievingDifficultGoal.description" = "What do you think helped them become successful?";
-"onboarding.first.achievingDifficultGoal.naturalWillpowerAndMentalStrength" = "Natural willpower and mental strength";
-"onboarding.first.achievingDifficultGoal.aPlanAndGoodHabits" = "A plan and good habits";
+"onboarding.first.achievingDifficultGoal.naturalWillpowerAndMentalStrength" = "Innate willpower and mental toughness";
+"onboarding.first.achievingDifficultGoal.aPlanAndGoodHabits" = "Plan and good habits";
 
 "onboarding.first.callToAchieveGoal.title" = "History";
 "onboarding.first.callToAchieveGoal.button" = "Continue";
-"onboarding.first.callToAchieveGoal.title.first" = "Awesome! ";
-"onboarding.first.callToAchieveGoal.title.second" = "Kcalс will help you build the habits you need to reach your goals.";
+"onboarding.first.callToAchieveGoal.title.first" = "Cool! ";
+"onboarding.first.callToAchieveGoal.title.second" = "Kcalс will help you develop the habits you need to achieve your goals.";
 
 "onboarding.first.calorieCount.title" = "History";
 "onboarding.first.calorieCount.approval" = "Yes";
 "onboarding.first.calorieCount.rejection" = "No";
-"onboarding.first.calorieCount.title.first" = "Have you ";
+"onboarding.first.calorieCount.title.first" = "Have you ever ";
 "onboarding.first.calorieCount.title.second" = "counted calories ";
 "onboarding.first.calorieCount.title.third" = "before??";
 
 "onboarding.first.descriptionOfExperience.title" = "History";
 "onboarding.first.descriptionOfExperience.button" = "Next";
-"onboarding.first.descriptionOfExperience.title.first" = "What best describes ";
+"onboarding.first.descriptionOfExperience.title.first" = "What best describes";
 "onboarding.first.descriptionOfExperience.title.second" = "your past experiences with weight loss?";
-"onboarding.first.descriptionOfExperience.iHaveNeverLostMuchWeightBefore" = "I’ve never lost much weight before";
-"onboarding.first.descriptionOfExperience.iLostWeightAndGainedItAllBack" = "I lost weight and gained it all back";
-"onboarding.first.descriptionOfExperience.iLostWeightAndGainedSomeBack" = "I lost weight and gained some back";
-"onboarding.first.descriptionOfExperience.iLostWeightAndHaveMoreLose" = "I lost weight and have more lose";
-"onboarding.first.descriptionOfExperience.iLostWeightAndAmMaintainingIt" = "I lost weight and am maintaining it";
+"onboarding.first.descriptionOfExperience.iHaveNeverLostMuchWeightBefore" = "I had never lost a lot of weight before";
+"onboarding.first.descriptionOfExperience.iLostWeightAndGainedItAllBack" = "I've lost weight and gained the same weight back";
+"onboarding.first.descriptionOfExperience.iLostWeightAndGainedSomeBack" = "I've lost weight and gained a little bit more";
+"onboarding.first.descriptionOfExperience.iLostWeightAndHaveMoreLose" = "I've lost weight and continue to lose even more";
+"onboarding.first.descriptionOfExperience.iLostWeightAndAmMaintainingIt" = "I've lost weight and keep it off";
 
-"onboarding.first.final.button" = "keep it coming!";
-"onboarding.first.final.description" = "We’re happy to have you here. We’ll walk you through these steps to get you set up for weight loss success: ";
-"onboarding.first.final.title.first" = "1 down ";
+"onboarding.first.final.button" = "keep it up!";
+"onboarding.first.final.description" = "We're happy you're here. We'll guide you through these steps to set you up for weight loss success: ";
+"onboarding.first.final.title.first" = "1 ready";
 "onboarding.first.final.title.second" = ", 3 to go!";
 "onboarding.first.final.history" = "History";
 "onboarding.first.final.user.data" = "User data";
@@ -53,134 +53,134 @@
 
 "onboarding.first.formationGoodHabits.button" = "Continue";
 "onboarding.first.formationGoodHabits.title" = "History";
-"onboarding.first.formationGoodHabits.title.first" = "Building good habits takes a plan ";
+"onboarding.first.formationGoodHabits.title.first" = "Good habits require a plan ";
 "onboarding.first.formationGoodHabits.title.second" = "and accountability.";
 "onboarding.first.formationGoodHabits.description" = "How do you plan to stay on track?";
 "onboarding.first.formationGoodHabits.logEveryMealBefore" = "Log every meal before I eat it";
-"onboarding.first.formationGoodHabits.logOnDaysEvenWhenKnow" = "Log on days even when I know I’m going over budget";
-"onboarding.first.formationGoodHabits.stayOnTrackWithAnAccountabilityBuddy" = "Stay on track with an accountability buddy";
-"onboarding.first.formationGoodHabits.planOutMyMealsInAdvance" = "Plan out my meals in advance";
-"onboarding.first.formationGoodHabits.seeHowLongOfTrackingStreak" = "See how long of a tracking streak I can keep up";
-"onboarding.first.formationGoodHabits.planOutDaysWhereKnow" = "Plan out days where I know I’ll be eating indulgent foods";
+"onboarding.first.formationGoodHabits.logOnDaysEvenWhenKnow" = "Log even on the days I know I'm over my limit";
+"onboarding.first.formationGoodHabits.stayOnTrackWithAnAccountabilityBuddy" = "Stay on my track with an accountability partner";
+"onboarding.first.formationGoodHabits.planOutMyMealsInAdvance" = "Planning my meals in advance";
+"onboarding.first.formationGoodHabits.seeHowLongOfTrackingStreak" = "See how long I can keep track of these events";
+"onboarding.first.formationGoodHabits.planOutDaysWhereKnow" = "Plan days when I know I will eat gourmet food";
 
 "onboarding.first.getStarted.title" = "History";
-"onboarding.first.getStarted.track" = "Track what you eat";
-"onboarding.first.getStarted.follow" = "Follow a calorie budget";
+"onboarding.first.getStarted.track" = "Keep track of what you eat";
+"onboarding.first.getStarted.follow" = "Monitor your calorie consumption";
 "onboarding.first.getStarted.reach" = "Reach your goals";
-"onboarding.first.getStarted.getStarted" = "Get started";
+"onboarding.first.getStarted.getStarted" = "Get Started";
 
 "onboarding.first.lastCalorieCount.title" = "History";
 "onboarding.first.lastCalorieCount.button" = "Next";
-"onboarding.first.lastCalorieCount.title.first" = "The last time you ";
-"onboarding.first.lastCalorieCount.title.second" = "counted calories";
-"onboarding.first.lastCalorieCount.title.third" = ", how were you doing it?";
-"onboarding.first.lastCalorieCount.usingAnApp" = "Using an app";
-"onboarding.first.lastCalorieCount.onWebsite" = "On a website";
-"onboarding.first.lastCalorieCount.byTakingNotes" = "By taking notes";
-"onboarding.first.lastCalorieCount.usingSpreadsheet" = "Using a spreadsheet";
+"onboarding.first.lastCalorieCount.title.first" = "The last time";
+"onboarding.first.lastCalorieCount.title.second" = "you counted calories";
+"onboarding.first.lastCalorieCount.title.third" = ",how did you do it?";
+"onboarding.first.lastCalorieCount.usingAnApp" = "Used the app";
+"onboarding.first.lastCalorieCount.onWebsite" = "On the website";
+"onboarding.first.lastCalorieCount.byTakingNotes" = "Taking notes";
+"onboarding.first.lastCalorieCount.usingSpreadsheet" = "Used a spreadsheet";
 "onboarding.first.lastCalorieCount.anotherWay" = "Another way";
 
 "onboarding.first.obsessingOverFood.title" = "History";
 "onboarding.first.obsessingOverFood.button" = "Next";
-"onboarding.first.obsessingOverFood.title.first" = "Have you ever found yourself ";
-"onboarding.first.obsessingOverFood.title.second" = "obsessing over food?";
+"onboarding.first.obsessingOverFood.title.first" = "Have you ever noticed that you're";
+"onboarding.first.obsessingOverFood.title.second" = "obsessed with food?";
 "onboarding.first.obsessingOverFood.yesDefinitely" = "Yes, definitely";
-"onboarding.first.obsessingOverFood.sureSometimes" = "Sure, sometimes";
+"onboarding.first.obsessingOverFood.sureSometimes" = "Of course, sometimes";
 "onboarding.first.obsessingOverFood.noNotReall" = "No, not really";
 
 "onboarding.first.previousApplication.title" = "History";
 "onboarding.first.previousApplication.button" = "Next";
-"onboarding.first.previousApplication.title.first" = "Which app did you use?";
+"onboarding.first.previousApplication.title.first" = "What app did you use?";
 "onboarding.first.previousApplication.myFitnessPal" = "MyFitnessPal";
-"onboarding.first.previousApplication.formerlyWeightWatchers" = "WW (formerly Weight Watchers)";
+"onboarding.first.previousApplication.formerlyWeightWatchers" = "WW (formerly  Weight Watchers)";
 "onboarding.first.previousApplication.noom" = "Noom";
 "onboarding.first.previousApplication.kcalc" = "Kcalc";
 "onboarding.first.previousApplication.fitbit" = "Fitbit";
 "onboarding.first.previousApplication.loseIt" = "Lose It!";
-"onboarding.first.previousApplication.anotherApp" = "Another app";
-"onboarding.first.previousApplication.iDontRemember" = "I don’t remember";
+"onboarding.first.previousApplication.anotherApp" = "Another App";
+"onboarding.first.previousApplication.iDontRemember" = "I don't remember";
 
 "onboarding.first.purposeOfTheParish.title" = "History";
 "onboarding.first.purposeOfTheParish.button" = "Next";
 "onboarding.first.purposeOfTheParish.title.first" = "What brings ";
-"onboarding.first.purposeOfTheParish.title.second" = "you here now?";
-"onboarding.first.purposeOfTheParish.thisTimeToGetBackToHealthyHabits" = "It’s time to get back to healthy habits";
-"onboarding.first.purposeOfTheParish.iUnhappyWithMyWeight" = "I’m unhappy with my weight";
-"onboarding.first.purposeOfTheParish.iHaveSomeFreshMotivation" = "I have some fresh motivation";
-"onboarding.first.purposeOfTheParish.iReadyToStartFeelingGoodAgain" = "I’m ready to start feeling good again";
-"onboarding.first.purposeOfTheParish.iAmCuriousToCheckOutKcalc" = "I am curious to check out Kcalc";
+"onboarding.first.purposeOfTheParish.title.second" = "You here now";
+"onboarding.first.purposeOfTheParish.thisTimeToGetBackToHealthyHabits" = "It's time to get back into healthy habits";
+"onboarding.first.purposeOfTheParish.iUnhappyWithMyWeight" = "I'm unhappy with my weight";
+"onboarding.first.purposeOfTheParish.iHaveSomeFreshMotivation" = "I became motivated";
+"onboarding.first.purposeOfTheParish.iReadyToStartFeelingGoodAgain" = "I'm ready to start feeling good again";
+"onboarding.first.purposeOfTheParish.iAmCuriousToCheckOutKcalc" = "I'm interested in checking out Kcalc";
 "onboarding.first.purposeOfTheParish.somethingElse" = "Something else";
 
 "onboarding.first.questionAboutTheChange.title" = "History";
 "onboarding.first.questionAboutTheChange.button" = "Next";
-"onboarding.first.questionAboutTheChange.title.first" = "What’s defferent ";
-"onboarding.first.questionAboutTheChange.title.second" = "from last time?";
-"onboarding.first.questionAboutTheChange.description" = "Other than you using Kcalс, of cource";
-"onboarding.first.questionAboutTheChange.iHaveDifferentMindset" = "I have a different mindset";
-"onboarding.first.questionAboutTheChange.iHadSomeBigChangesInMyLife" = "I’ve had some big changes in my life";
-"onboarding.first.questionAboutTheChange.iWeightMoreThanIdidLastTime" = "I weight more than I did last time";
-"onboarding.first.questionAboutTheChange.iTryingDifferentWayOfEating" = "I’m trying a different way of eating";
-"onboarding.first.questionAboutTheChange.iTryingNewExercisePlan" = "I’m trying a new exercise plan";
+"onboarding.first.questionAboutTheChange.title.first" = "How is this different ";
+"onboarding.first.questionAboutTheChange.title.second" = "from the last time";
+"onboarding.first.questionAboutTheChange.description" = "Except that you use Kcal, of course";
+"onboarding.first.questionAboutTheChange.iHaveDifferentMindset" = "I have a different mindset.";
+"onboarding.first.questionAboutTheChange.iHadSomeBigChangesInMyLife" = "I've had big life change";
+"onboarding.first.questionAboutTheChange.iWeightMoreThanIdidLastTime" = "I weigh more than I did last time.";
+"onboarding.first.questionAboutTheChange.iTryingDifferentWayOfEating" = "I'm trying a different nutritional method";
+"onboarding.first.questionAboutTheChange.iTryingNewExercisePlan" = "I'm trying a new exercise plan";
 "onboarding.first.questionAboutTheChange.iHadSomeHealthChanges" = "I’ve had some health changes";
 
 "onboarding.first.questionOfLosingWeight.title" = "History";
 "onboarding.first.questionOfLosingWeight.approval" = "Yes";
 "onboarding.first.questionOfLosingWeight.rejection" = "No";
-"onboarding.first.questionOfLosingWeight.title.first" = "Have you tried ";
-"onboarding.first.questionOfLosingWeight.title.second" = "to lose weight befor?";
+"onboarding.first.questionOfLosingWeight.title.first" = "Have You ever tried";
+"onboarding.first.questionOfLosingWeight.title.second" = "losing weight before?";
 
 "onboarding.first.recentWeightChanges.title" = "History";
 "onboarding.first.recentWeightChanges.approval" = "Yes";
 "onboarding.first.recentWeightChanges.rejection" = "No";
-"onboarding.first.recentWeightChanges.title.first" = "Think back to when you last worked on your weight. ";
-"onboarding.first.recentWeightChanges.title.second" = "Is anything different about this time than last time?";
+"onboarding.first.recentWeightChanges.title.first" = "Remember the last time you managed your weight.";
+"onboarding.first.recentWeightChanges.title.second" = "Is there anything different this time from last time?";
 
 "onboarding.first.thanksForTheInformation.title" = "History";
 "onboarding.first.thanksForTheInformation.button" = "Continue";
-"onboarding.first.thanksForTheInformation.title.first" = "Thanks ";
+"onboarding.first.thanksForTheInformation.title.first" = "Thank you ";
 "onboarding.first.thanksForTheInformation.title.second" = "for the information!";
-"onboarding.first.thanksForTheInformation.description" = "We know that losing weight can be difficult. Remember, it's not about the numbers on the scale, it's about becoming a better and healthier version of yourself.";
+"onboarding.first.thanksForTheInformation.description" = "We know that losing weight can be quite difficult. Remember, it's not about the results on the scale, it's about seeing yourself in a better and healthier state.";
 
 "onboarding.first.theEffectOfWeight.title" = "History";
 "onboarding.first.theEffectOfWeight.button" = "Next";
-"onboarding.first.theEffectOfWeight.title.first" = "Have you ever found yourself ";
-"onboarding.first.theEffectOfWeight.title.second" = "obsessing over food?";
-"onboarding.first.theEffectOfWeight.yesLot" = "Yes, a lot";
-"onboarding.first.theEffectOfWeight.sureBit" = "Sure, a bit";
+"onboarding.first.theEffectOfWeight.title.first" = "Have you ever noticed that you're ";
+"onboarding.first.theEffectOfWeight.title.second" = "obsessed with food";
+"onboarding.first.theEffectOfWeight.yesLot" = "Yes, a lot of times";
+"onboarding.first.theEffectOfWeight.sureBit" = "Sure, a little bit";
 "onboarding.first.theEffectOfWeight.noNotReall" = "No, not really";
 
-"onboarding.first.welcome.button" = "Let’s Go!";
+"onboarding.first.welcome.button" = "Let's go!";
 "onboarding.first.welcome.title.first" = "Welcome!";
-"onboarding.first.welcome.description" = "We’re happy to have you here. We’ll walk walk you through these steps to get you  set upfor weight loss success:";
+"onboarding.first.welcome.description" = "We're happy you're here. We'll guide you through these steps to set you up for weight loss success:";
 "onboarding.first.welcome.history" = "History";
 "onboarding.first.welcome.user.data" = "User data";
-"onboarding.first.welcome.motivation" = "Motivation / Goal";
+"onboarding.first.welcome.motivation" = "Motivation / Goals";
 "onboarding.first.welcome.habits" = "Habits";
 
 "onboarding.chart.description" = "At this rate, we expect you to reach your target weight around December";
 "onboarding.chart.now" = "Now";
-"onboarding.chart.title" = "Weight change chart";
+"onboarding.chart.title" = "Weight Change Chart";
 
-"onboarding.second.allergicRestrictions.title" = "Allergic restrictions";
-"onboarding.second.allergicRestrictions.button" = "continue";
+"onboarding.second.allergicRestrictions.title" = "Allergic Restrictions";
+"onboarding.second.allergicRestrictions.button" = "Continue";
 "onboarding.second.allergicRestrictions.gluten" = "Gluten";
 "onboarding.second.allergicRestrictions.fish" = "Fish";
 "onboarding.second.allergicRestrictions.shellfish" = "Shellfish";
-"onboarding.second.allergicRestrictions.dairy" = "Dairy";
+"onboarding.second.allergicRestrictions.dairy" = "Dairy products";
 "onboarding.second.allergicRestrictions.eggs" = "Eggs";
 "onboarding.second.allergicRestrictions.nuts" = "Nuts";
 "onboarding.second.allergicRestrictions.peanut" = "Peanut";
-"onboarding.second.allergicRestrictions.soya" = "Soya";
+"onboarding.second.allergicRestrictions.soya" = "Soybeans";
 "onboarding.second.allergicRestrictions.wheat" = "Wheat";
 
 "onboarding.second.dateOfBirth.button" = "Continue";
 "onboarding.second.dateOfBirth.title" = "Your date of birth";
 
 "onboarding.second.enterYourName.button" = "Continue";
-"onboarding.second.enterYourName.title" = "Enter your name";
+"onboarding.second.enterYourName.title" = "Type your name";
 
-"onboarding.second.final.button" = "keep it coming!";
-"onboarding.second.final.title.first" = "2 down ";
+"onboarding.second.final.button" = "keep it up!";
+"onboarding.second.final.title.first" = "2 ready";
 "onboarding.second.final.title.second" = ", 2 to go!";
 "onboarding.second.final.description" = "We’re happy to have you here. We’ll walk you through these steps to get you set up for weight loss success:";
 "onboarding.second.final.history" = "History";
@@ -188,33 +188,33 @@
 "onboarding.second.final.motivation" = "Motivation / Goal";
 "onboarding.second.final.habits" = "Habits";
 
-"onboarding.second.measurementSystem.button" = "continue";
+"onboarding.second.measurementSystem.button" = "Continue";
 "onboarding.second.measurementSystem.title" = "Measurement system";
-"onboarding.second.measurementSystem.description.metricSystem" = "Metric system";
-"onboarding.second.measurementSystem.description.imperialSystem" = "Imperial system";
+"onboarding.second.measurementSystem.description.metricSystem" = "Metric System";
+"onboarding.second.measurementSystem.description.imperialSystem" = "U.S. Standart";
 "onboarding.second.measurementSystem.describe.imperialSystem" = "feet, pounds, calories";
 "onboarding.second.measurementSystem.describe.metricSystem" = "cm, kg, calories";
 
-"onboarding.second.presenceOfAllergies.button" = "continue";
-"onboarding.second.presenceOfAllergies.title.first" = "Do you have any ";
-"onboarding.second.presenceOfAllergies.title.second" = "allergic ";
+"onboarding.second.presenceOfAllergies.button" = "Continue";
+"onboarding.second.presenceOfAllergies.title.first" = "Do you have any";
+"onboarding.second.presenceOfAllergies.title.second" = "allergic  ";
 "onboarding.second.presenceOfAllergies.title.third" = "restrictions?";
 "onboarding.second.presenceOfAllergies.description.yes" = "Yes";
 "onboarding.second.presenceOfAllergies.description.no" = "No";
 
-"onboarding.second.risksOfDiseases.button" = "continue";
-"onboarding.second.risksOfDiseases.title.first" = "Are you at risk for any of the following ";
-"onboarding.second.risksOfDiseases.title.second" = "diseases?";
+"onboarding.second.risksOfDiseases.button" = "Continue";
+"onboarding.second.risksOfDiseases.title.first" = "Are you at risk for any of ";
+"onboarding.second.risksOfDiseases.title.second" = "the following diseases?";
 "onboarding.second.risksOfDiseases.highBloodPressure" = "High blood pressure";
-"onboarding.second.risksOfDiseases.heartDiseaseOrStroke" = "Heart disease or stroke)";
+"onboarding.second.risksOfDiseases.heartDiseaseOrStroke" = "Heart disease or stroke";
 "onboarding.second.risksOfDiseases.diabetes" = "Diabetes";
 "onboarding.second.risksOfDiseases.osteoarthritis" = "Osteoarthritis";
 "onboarding.second.risksOfDiseases.kidneyDisease" = "Kidney disease";
 "onboarding.second.risksOfDiseases.depression" = "Depression";
-"onboarding.second.risksOfDiseases.noneOfThese" = "None of these";
+"onboarding.second.risksOfDiseases.noneOfThese" = "None of These";
 
-"onboarding.second.whatsYourGender.button" = "continue";
-"onboarding.second.whatsYourGender.title" = "What's your gender";
+"onboarding.second.whatsYourGender.button" = "Continue";
+"onboarding.second.whatsYourGender.title" = "Your gender";
 "onboarding.second.whatsYourGender.male" = "Male";
 "onboarding.second.whatsYourGender.female" = "Female";
 
@@ -228,352 +228,352 @@
 "onboarding.second.yourWeight.title.weight" = "0.0 kg";
 
 "onboarding.third.chooseYourGoal.button" = "Continue";
-"onboarding.third.chooseYourGoal.title" = "Motivation/Goal";
-"onboarding.third.chooseYourGoal.title.first" = "Choose your ";
-"onboarding.third.chooseYourGoal.title.second" = "goal";
+"onboarding.third.chooseYourGoal.title" = "Motivation / Goal";
+"onboarding.third.chooseYourGoal.title.first" = "Choose ";
+"onboarding.third.chooseYourGoal.title.second" = "a goal";
 
 "onboarding.third.deficitAndSurplusCalorie.button" = "Continue";
-"onboarding.third.deficitAndSurplusCalorie.title" = "Motivation/Goal";
+"onboarding.third.deficitAndSurplusCalorie.title" = "Motivation / Goal";
 "onboarding.third.deficitAndSurplusCalorie.surplus" = "Calorie surplus";
 "onboarding.third.deficitAndSurplusCalorie.result" = "kg per week";
 "onboarding.third.deficitAndSurplusCalorie.deficit" = "Calorie deficit";
 
-"onboarding.third.final.button" = "keep it coming!";
-"onboarding.third.final.title.first" = "3 down ";
+"onboarding.third.final.button" = "keep it up!";
+"onboarding.third.final.title.first" = "3 ready";
 "onboarding.third.final.title.second" = ", 1 to go!";
-"onboarding.third.final.description" = "We’re happy to have you here. We’ll walk you through these steps to get you set up for weight loss success:";
+"onboarding.third.final.description" = "We're happy you're here. We'll guide you through these steps to set you up for weight loss success:";
 "onboarding.third.final.history" = "History";
 "onboarding.third.final.user.data" = "User data";
 "onboarding.third.final.motivation" = "Motivation / Goal";
 "onboarding.third.final.habits" = "Habits";
 
-"onboarding.third.importanceOfWeightLoss.button" = "continue";
-"onboarding.third.importanceOfWeightLoss.title" = "Motivation/Goal";
-"onboarding.third.importanceOfWeightLoss.title.first" = "How importans is it for you to ";
-"onboarding.third.importanceOfWeightLoss.title.second.loseWeight" = "lose weight ";
+"onboarding.third.importanceOfWeightLoss.button" = "Continue";
+"onboarding.third.importanceOfWeightLoss.title" = "Motivation / Goal";
+"onboarding.third.importanceOfWeightLoss.title.first" = "How important is it to You";
+"onboarding.third.importanceOfWeightLoss.title.second.loseWeight" = "to lose weight ";
 "onboarding.third.importanceOfWeightLoss.title.second.gainMuscleMass" = "gain muscle mass ";
-"onboarding.third.importanceOfWeightLoss.title.second.manageHealthCondition" = "manage health condition ";
+"onboarding.third.importanceOfWeightLoss.title.second.manageHealthCondition" = "maintain your health ";
 "onboarding.third.importanceOfWeightLoss.title.third" = "right now?";
-"onboarding.third.importanceOfWeightLoss.itIsMyTopPriority" = "It is my top priority";
-"onboarding.third.importanceOfWeightLoss.itIsVeryImportant" = "It is very important";
-"onboarding.third.importanceOfWeightLoss.itIsFairlyImportant" = "It is fairly important";
-"onboarding.third.importanceOfWeightLoss.itIsNotThatImportant" = "It is not that important";
+"onboarding.third.importanceOfWeightLoss.itIsMyTopPriority" = "It's my top priority";
+"onboarding.third.importanceOfWeightLoss.itIsVeryImportant" = "It's very important";
+"onboarding.third.importanceOfWeightLoss.itIsFairlyImportant" = "It's pretty important";
+"onboarding.third.importanceOfWeightLoss.itIsNotThatImportant" = "It's not so important";
 
 "onboarding.third.lifeChangesAfterWeightLoss.button" = "Continue";
-"onboarding.third.lifeChangesAfterWeightLoss.title" = "Motivation/Goal";
-"onboarding.third.lifeChangesAfterWeightLoss.title.first" = "Think about how your life will be different once you've achieved your goal. ";
-"onboarding.third.lifeChangesAfterWeightLoss.title.second" = "What are you most excited about?";
-"onboarding.third.lifeChangesAfterWeightLoss.beingProudOfMyself" = "Being proud of myself";
-"onboarding.third.lifeChangesAfterWeightLoss.feelingGreat" = "Feeling great";
+"onboarding.third.lifeChangesAfterWeightLoss.title" = "Motivation / Goal";
+"onboarding.third.lifeChangesAfterWeightLoss.title.first" = "Think about what changes will happen in your life when you achieve your goal.";
+"onboarding.third.lifeChangesAfterWeightLoss.title.second" = "What excites you most?";
+"onboarding.third.lifeChangesAfterWeightLoss.beingProudOfMyself" = "Being proud of yourself";
+"onboarding.third.lifeChangesAfterWeightLoss.feelingGreat" = "Feeling great about myself";
 "onboarding.third.lifeChangesAfterWeightLoss.wearingDifferentClothes" = "Wearing different clothes";
-"onboarding.third.lifeChangesAfterWeightLoss.havingBetterHealthMetrics" = "Having better health metrics";
+"onboarding.third.lifeChangesAfterWeightLoss.havingBetterHealthMetrics" = "Improving health outcomes";
 "onboarding.third.lifeChangesAfterWeightLoss.settingGoodExampleForOthers" = "Setting a good example for others";
 "onboarding.third.lifeChangesAfterWeightLoss.havingMoreEnergy" = "Having more energy";
 "onboarding.third.lifeChangesAfterWeightLoss.beingMoreFit" = "Being more fit";
 
 "onboarding.third.reflectToAchievedSomethingDifficult.button" = "Continue";
-"onboarding.third.reflectToAchievedSomethingDifficult.title" = "Motivation/Goal";
-"onboarding.third.reflectToAchievedSomethingDifficult.title.first" = "Reflect on the last time you achieved something difficult.";
-"onboarding.third.reflectToAchievedSomethingDifficult.description.first" = "What made that work successful? How did you achieving that goal make you feel?";
-"onboarding.third.reflectToAchievedSomethingDifficult.description.second" = "Keep these thoughts in mind as you navigate your health journey. You’ve done hard work before; you can definitely do it again!";
+"onboarding.third.reflectToAchievedSomethingDifficult.title" = "Motivation / Goal";
+"onboarding.third.reflectToAchievedSomethingDifficult.title.first" = "Think about the last time you accomplished something difficult.";
+"onboarding.third.reflectToAchievedSomethingDifficult.description.first" = "What made it a success? How did you feel after achieving that goal?";
+"onboarding.third.reflectToAchievedSomethingDifficult.description.second" = "Keep these thoughts in mind as you create your path to health. You've done the hard work before; you can definitely do it again!";
 
-"onboarding.third.thoughtsAboutChangingFeelings.button" = "continue";
-"onboarding.third.thoughtsAboutChangingFeelings.title" = "Motivation/Goal";
-"onboarding.third.thoughtsAboutChangingFeelings.title.first" = "When you think about changing how you feel, what’s ";
-"onboarding.third.thoughtsAboutChangingFeelings.title.second" = "most important?";
+"onboarding.third.thoughtsAboutChangingFeelings.button" = "Continue";
+"onboarding.third.thoughtsAboutChangingFeelings.title" = "Motivation / Goal";
+"onboarding.third.thoughtsAboutChangingFeelings.title.first" = "When you think about changing the way you feel,";
+"onboarding.third.thoughtsAboutChangingFeelings.title.second" = "what is most important?";
 "onboarding.third.thoughtsAboutChangingFeelings.havingMoreEnergy" = "Having more energy";
 "onboarding.third.thoughtsAboutChangingFeelings.feelingBetterInMyClothes" = "Feeling better in my clothes";
-"onboarding.third.thoughtsAboutChangingFeelings.havingMoreConfidence" = "Having more confidence";
-"onboarding.third.thoughtsAboutChangingFeelings.physicallyFeelingMoreComfortable" = "Physically feeling more comfortable";
+"onboarding.third.thoughtsAboutChangingFeelings.havingMoreConfidence" = "Gaining more confidence";
+"onboarding.third.thoughtsAboutChangingFeelings.physicallyFeelingMoreComfortable" = "Feeling more comfortable physically";
 
 "onboarding.third.timeToSeeYourGoalWeight.button" = "Continue";
-"onboarding.third.timeToSeeYourGoalWeight.title" = "Motivation/Goal";
-"onboarding.third.timeToSeeYourGoalWeight.title.first" = "It’s time to see your ";
-"onboarding.third.timeToSeeYourGoalWeight.title.second" = "goal weight";
-"onboarding.third.timeToSeeYourGoalWeight.description" = "Some people prefer to start with a smaller goal, while others prefer to keep the focus on their long term goal. Do whichever feels best to you!";
+"onboarding.third.timeToSeeYourGoalWeight.title" = "Motivation / Goal";
+"onboarding.third.timeToSeeYourGoalWeight.title.first" = "It's time to see ";
+"onboarding.third.timeToSeeYourGoalWeight.title.second" = "your target weight";
+"onboarding.third.timeToSeeYourGoalWeight.description" = "Some people prefer to start with a smaller goal, while others prefer to focus on their long-term goal. Do what you find best!";
 
 "onboarding.third.whatIsYourGoalWeight.button" = "Continue";
-"onboarding.third.whatIsYourGoalWeight.title" = "Motivation/Goal";
-"onboarding.third.whatIsYourGoalWeight.title.first" = "What is ";
-"onboarding.third.whatIsYourGoalWeight.title.second" = "your goal weight?";
+"onboarding.third.whatIsYourGoalWeight.title" = "Motivation / Goal";
+"onboarding.third.whatIsYourGoalWeight.title.first" = "What is  ";
+"onboarding.third.whatIsYourGoalWeight.title.second" = "your target weight?";
 "onboarding.third.whatIsYourGoalWeight.title.weight" = "0.0 kg";
 
-"onboarding.fourth.bestDescriptionOfTheSituation.button" = "continue";
+"onboarding.fourth.bestDescriptionOfTheSituation.button" = "Continue";
 "onboarding.fourth.bestDescriptionOfTheSituation.title" = "Habits";
 "onboarding.fourth.bestDescriptionOfTheSituation.title.first" = "What best describes your living situation?";
-"onboarding.fourth.bestDescriptionOfTheSituation.liveOnMyOwn" = "I live on my own";
+"onboarding.fourth.bestDescriptionOfTheSituation.liveOnMyOwn" = "I live by myself";
 "onboarding.fourth.bestDescriptionOfTheSituation.liveWithMyFamily" = "I live with my family";
-"onboarding.fourth.bestDescriptionOfTheSituation.liveWithPartner" = "I live with a partner";
-"onboarding.fourth.bestDescriptionOfTheSituation.livewithRoommates" = "I live with roommates";
+"onboarding.fourth.bestDescriptionOfTheSituation.liveWithPartner" = "I live with my partner";
+"onboarding.fourth.bestDescriptionOfTheSituation.livewithRoommates" = "I live with my roommates";
 "onboarding.fourth.bestDescriptionOfTheSituation.liveInSharedHousing" = "I live in shared housing";
 "onboarding.fourth.bestDescriptionOfTheSituation.somethingElse" = "Something else";
 
-"onboarding.fourth.calorieTrackingViaKcalc.title.first" = "Get the best calorie tracking recommendations and ";
-"onboarding.fourth.calorieTrackingViaKcalc.title.second" = "stay fit with Kcalc";
-"onboarding.fourth.calorieTrackingViaKcalc.button" = "Сontinue without registration";
+"onboarding.fourth.calorieTrackingViaKcalc.title.first" = "Get the best calorie-tracking recommendations and ";
+"onboarding.fourth.calorieTrackingViaKcalc.title.second" = "stay in good shape with Kcalc";
+"onboarding.fourth.calorieTrackingViaKcalc.button" = "Continue without signing";
 
-"onboarding.fourth.currentLifestile.button" = "continue";
+"onboarding.fourth.currentLifestile.button" = "Continue";
 "onboarding.fourth.currentLifestile.title" = "Habits";
-"onboarding.fourth.currentLifestile.title.first" = "How would you describe your current ";
+"onboarding.fourth.currentLifestile.title.first" = "How would you describe your current  ";
 "onboarding.fourth.currentLifestile.title.second" = "lifestyle?";
-"onboarding.fourth.currentLifestile.iEatWellAndAmActive" = "I eat well and am active";
+"onboarding.fourth.currentLifestile.iEatWellAndAmActive" = "I eat well and have an active lifestyle";
 "onboarding.fourth.currentLifestile.iEatWellButAmNotVeryActive" = "I eat well but am not very active";
-"onboarding.fourth.currentLifestile.iDontEatVeryWellButiAmActive" = "I don’t eat very well but I am active";
+"onboarding.fourth.currentLifestile.iDontEatVeryWellButiAmActive" = "I don't eat well, but I'm active";
 "onboarding.fourth.currentLifestile.iHaveSomeHealthyHabits" = "I have some healthy habits";
-"onboarding.fourth.currentLifestile.myDietAndActivityNeedImprovement" = "My diet and activity need improvement";
+"onboarding.fourth.currentLifestile.myDietAndActivityNeedImprovement" = "My diet and activity need to be improved";
 
 "onboarding.fourth.descriptionOfCulinarySkills.button" = "Continue";
 "onboarding.fourth.descriptionOfCulinarySkills.title" = "Habits";
 "onboarding.fourth.descriptionOfCulinarySkills.title.first" = "How would you describe your ";
-"onboarding.fourth.descriptionOfCulinarySkills.title.second" = "cooking skills?";
-"onboarding.fourth.descriptionOfCulinarySkills.imPrettyGoodCook" = "I’m a pretty good cook";
+"onboarding.fourth.descriptionOfCulinarySkills.title.second" = "culinary skills?";
+"onboarding.fourth.descriptionOfCulinarySkills.imPrettyGoodCook" = "I'm a pretty good cooker";
 "onboarding.fourth.descriptionOfCulinarySkills.iDoWellEnough" = "I do well enough";
-"onboarding.fourth.descriptionOfCulinarySkills.imLearning" = "I’m learning";
-"onboarding.fourth.descriptionOfCulinarySkills.imNotMuchOfCook" = "I’m not much of a cook";
+"onboarding.fourth.descriptionOfCulinarySkills.imLearning" = "I'm learning";
+"onboarding.fourth.descriptionOfCulinarySkills.imNotMuchOfCook" = "I'm not a good cooker";
 
 "onboarding.fourth.difficultyChoosingLifestyle.button.yes" = "Yes";
 "onboarding.fourth.difficultyChoosingLifestyle.button.no" = "No";
 "onboarding.fourth.difficultyChoosingLifestyle.title" = "Habits";
-"onboarding.fourth.difficultyChoosingLifestyle.title.first" = "Is it harder for you to make healthy choices on the weekend?";
+"onboarding.fourth.difficultyChoosingLifestyle.title.first" = "Do you find it hard to make healthy choices over the weekend?";
 
 "onboarding.fourth.difficultyOfMakingHealthyChoices.button" = "Continue";
-"onboarding.fourth.difficultyOfMakingHealthyChoices.title" = "Motivation/Goal";
-"onboarding.fourth.difficultyOfMakingHealthyChoices.title.first" = "It is hard to make healthy choices when the people around you are not.";
-"onboarding.fourth.difficultyOfMakingHealthyChoices.description.first" = "Try to be aware of these moments, and break the mold of mirroring the behavior of other people. you are in charge of your own behavior.";
-"onboarding.fourth.difficultyOfMakingHealthyChoices.description.second" = "You may besurprised at the effect it has on those around you!";
+"onboarding.fourth.difficultyOfMakingHealthyChoices.title" = "Motivation / Goal";
+"onboarding.fourth.difficultyOfMakingHealthyChoices.title.first" = "It's hard to make healthy choices when the people around you don't.";
+"onboarding.fourth.difficultyOfMakingHealthyChoices.description.first" = "Try to be aware of this and drive away from yourself the habit of imitating the behavior of other people. You are responsible for your own behavior.";
+"onboarding.fourth.difficultyOfMakingHealthyChoices.description.second" = "You may be surprised at the effect that people around you experience thanks to this!";
 
-"onboarding.fourth.emotionalSupportSystem.button" = "continue";
+"onboarding.fourth.emotionalSupportSystem.button" = "Continue";
 "onboarding.fourth.emotionalSupportSystem.title" = "Habits";
-"onboarding.fourth.emotionalSupportSystem.title.first" = "How would you describe your emotional support system?";
-"onboarding.fourth.emotionalSupportSystem.haveSomeCanLeanOnForSupport" = "I have some I can lean on for support";
-"onboarding.fourth.emotionalSupportSystem.knowWhereCanGoForsupportWhenNeedIt" = "I know where I can go for support when I need it";
+"onboarding.fourth.emotionalSupportSystem.title.first" = " How would you describe your emotional support system?";
+"onboarding.fourth.emotionalSupportSystem.haveSomeCanLeanOnForSupport" = "I have someone I can lean on for support";
+"onboarding.fourth.emotionalSupportSystem.knowWhereCanGoForsupportWhenNeedIt" = "I know where to go for support when I need it";
 "onboarding.fourth.emotionalSupportSystem.wishMySupportSystemWasBetter" = "I wish my support system was better";
-"onboarding.fourth.emotionalSupportSystem.dontUsuallyNeedSupportSystem" = "I don’t usually need a support system";
+"onboarding.fourth.emotionalSupportSystem.dontUsuallyNeedSupportSystem" = "I usually don't need a support system";
 
-"onboarding.fourth.activityLevel.description.low" = "Little to no daily activity. Bank teller, desk job. Reading, playing video games or watching tv in spare time.";
-"onboarding.fourth.activityLevel.description.moderate" = "Light daily activity. Teacher, sales clerk. Walking or cycling to work and do light chores in spare time.";
-"onboarding.fourth.activityLevel.description.high" = "Physical activity throughout the day. Postal worker, waitstaff. Being active in spare time.";
-"onboarding.fourth.activityLevel.description.verHigh" = "Any exercise or training that is beyong everyday activities should be tracked manually in the diary.  Don't forget to sync with a partner device for more accurate tracking.";
-"onboarding.fourth.activityLevel.keepInMind" = "Keep in mind";
-"onboarding.fourth.activityLevel.keepInMindAwareness" = "Any exercise or training that is beyond everyday activities should be tracked manually in the diary.";
+"onboarding.fourth.activityLevel.description.low" = "Virtually no daily activity. Bank clerk, office work. Reading, playing video games or watching TV in spare time.";
+"onboarding.fourth.activityLevel.description.moderate" = "Light daily activity. Teacher, seller. Walk or bike to work and do light work in your spare time.";
+"onboarding.fourth.activityLevel.description.high" = "Physical activity throughout the day. Postman, waiter. Free time activities";
+"onboarding.fourth.activityLevel.description.verHigh" = "Any exercises or workouts performed outside of daily activities should be tracked manually in a diary. Don't forget to sync with your partner device for more accurate tracking.";
+"onboarding.fourth.activityLevel.keepInMind" = "Remember";
+"onboarding.fourth.activityLevel.keepInMindAwareness" = "Any exercises or workouts performed outside of daily activities should be tracked manually in a diary.";
 "onboarding.fourth.activityLevel.title.firstPart" = "Your everyday";
-"onboarding.fourth.activityLevel.title.secondPart" = "activity lifestyle";
+"onboarding.fourth.activityLevel.title.secondPart" = "active lifestyle";
 
-"onboarding.fourth.environmentInfluencesTheChoice.button" = "continue";
+"onboarding.fourth.environmentInfluencesTheChoice.button" = "Continue";
 "onboarding.fourth.environmentInfluencesTheChoice.title" = "Habits";
 "onboarding.fourth.environmentInfluencesTheChoice.title.first" = "Our environment ";
 "onboarding.fourth.environmentInfluencesTheChoice.title.second" = "influences our choices";
-"onboarding.fourth.environmentInfluencesTheChoice.description" = "Sometimes we want something simply because we see it! What are some ways you can change your space to inspire healthy choices?";
-"onboarding.fourth.environmentInfluencesTheChoice.keepMySneakersByTheDoor" = "Keep my sneakers by the door";
-"onboarding.fourth.environmentInfluencesTheChoice.keepWaterNearby" = "Keep water nearby";
-"onboarding.fourth.environmentInfluencesTheChoice.keepHealthySnacksOnHand" = "Keep healthy snacks on hand";
-"onboarding.fourth.environmentInfluencesTheChoice.stockUpOnFruitsAndVeggies" = "Stock up on fruits and veggies";
-"onboarding.fourth.environmentInfluencesTheChoice.keepDistractionsAwayWhileEating" = "Keep distractions away while eating";
-"onboarding.fourth.environmentInfluencesTheChoice.displayMyMealPlanOrCalendarOnTheFridge" = "Display my meal plan or calendar on the fridge";
+"onboarding.fourth.environmentInfluencesTheChoice.description" = "Sometimes we want something just because we see it! How can you change your space so that it helps you tune in to healthy choices?";
+"onboarding.fourth.environmentInfluencesTheChoice.keepMySneakersByTheDoor" = "Leave your sneakers at the door";
+"onboarding.fourth.environmentInfluencesTheChoice.keepWaterNearby" = "Keep the water close to you";
+"onboarding.fourth.environmentInfluencesTheChoice.keepHealthySnacksOnHand" = "Keep healthy snacks at hand";
+"onboarding.fourth.environmentInfluencesTheChoice.stockUpOnFruitsAndVeggies" = "Stock up on fruits and vegetables";
+"onboarding.fourth.environmentInfluencesTheChoice.keepDistractionsAwayWhileEating" = "Don't get distracted while eating";
+"onboarding.fourth.environmentInfluencesTheChoice.displayMyMealPlanOrCalendarOnTheFridge" = "Hang your meal plan or calendar on the fridge";
 
-"onboarding.fourth.final.button" = "keep it coming!";
-"onboarding.fourth.final.title" = "Magnificently!";
-"onboarding.fourth.final.description" = "We’re happy to have you here. We’ll walk you through these steps to get you set up for weight loss success:";
+"onboarding.fourth.final.button" = "keep it up!";
+"onboarding.fourth.final.title" = "Great!";
+"onboarding.fourth.final.description" = "We're happy you're here. We'll guide you through these steps to set you up for weight loss success:";
 "onboarding.fourth.final.history" = "History";
 "onboarding.fourth.final.user.data" = "User data";
 "onboarding.fourth.final.motivation" = "Motivation / Goal";
 
-"onboarding.fourth.healthApp.button" = "continue";
-"onboarding.fourth.healthApp.title.first" = "Want to integrate ";
+"onboarding.fourth.healthApp.button" = "Continue";
+"onboarding.fourth.healthApp.title.first" = "Do you want to integrate ";
 "onboarding.fourth.healthApp.title.second" = "the Health App?";
-"onboarding.fourth.healthApp.description" = "We’re happy to have you here. We’ll walk you through these steps to get you set up for weight loss success: ";
+"onboarding.fourth.healthApp.description" = "We're happy you're here. We'll guide you through these steps to set you up for weight loss success:";
 "onboarding.fourth.healthApp.title.health" = "Apple Health";
 "onboarding.fourth.healthApp.description.health" = "Workout, Nutrition";
 
-"onboarding.fourth.helpingPeopleTrackCalories.button" = "continue";
+"onboarding.fourth.helpingPeopleTrackCalories.button" = "Continue";
 "onboarding.fourth.helpingPeopleTrackCalories.title" = "Habits";
-"onboarding.fourth.helpingPeopleTrackCalories.title.first" = "We’ve been helping people track calories since 2015.";
+"onboarding.fourth.helpingPeopleTrackCalories.title.first" = "We have been helping people track their amount of calories consumed since 2015.";
 
 "onboarding.fourth.howImproveYourEfficiency.button" = "Continue";
 "onboarding.fourth.howImproveYourEfficiency.title" = "Habits";
-"onboarding.fourth.howImproveYourEfficiency.title.first" = "What are some ways you can see yourself increasing your ";
-"onboarding.fourth.howImproveYourEfficiency.title.second" = "activity level?";
-"onboarding.fourth.howImproveYourEfficiency.exploringNewTypesOfActivity" = "Exploring new types of activity";
-"onboarding.fourth.howImproveYourEfficiency.hittingDailyStepGoal" = "Hitting a daily step goal";
-"onboarding.fourth.howImproveYourEfficiency.takingMoreWalks" = "Taking more walks";
-"onboarding.fourth.howImproveYourEfficiency.buildingActivityIntoMyDailyRoutine" = "Building activity into my daily routine";
-"onboarding.fourth.howImproveYourEfficiency.tryingNewWorkoutPlan" = "Trying a new workout plan";
-"onboarding.fourth.howImproveYourEfficiency.findingWorkoutsCanDoAtHome" = "Finding workouts I can do at home";
+"onboarding.fourth.howImproveYourEfficiency.title.first" = "What ways can you increase ";
+"onboarding.fourth.howImproveYourEfficiency.title.second" = "your activity level?";
+"onboarding.fourth.howImproveYourEfficiency.exploringNewTypesOfActivity" = "Learning new activities";
+"onboarding.fourth.howImproveYourEfficiency.hittingDailyStepGoal" = "Achieving a daily step-by-step goal";
+"onboarding.fourth.howImproveYourEfficiency.takingMoreWalks" = "More walking";
+"onboarding.fourth.howImproveYourEfficiency.buildingActivityIntoMyDailyRoutine" = "Adding activity to my daily routine";
+"onboarding.fourth.howImproveYourEfficiency.tryingNewWorkoutPlan" = "Trying out a new workout plan";
+"onboarding.fourth.howImproveYourEfficiency.findingWorkoutsCanDoAtHome" = "I find workouts that can be done at home";
 
 "onboarding.fourth.improvingNutrition.button" = "Continue";
 "onboarding.fourth.improvingNutrition.title" = "Habits";
-"onboarding.fourth.improvingNutrition.title.first" = "What would you consider trying when it comes to improving the way ";
-"onboarding.fourth.improvingNutrition.title.second" = "you eat?";
-"onboarding.fourth.improvingNutrition.beingMoreAwareOfFoodChoice" = "Being more aware of food choice";
+"onboarding.fourth.improvingNutrition.title.first" = "What would you like to try when it comes to improving ";
+"onboarding.fourth.improvingNutrition.title.second" = "the way you eat?";
+"onboarding.fourth.improvingNutrition.beingMoreAwareOfFoodChoice" = "Have more information about food choices";
 "onboarding.fourth.improvingNutrition.focusingOnWholeFoods" = "Focusing on whole foods";
-"onboarding.fourth.improvingNutrition.aimingForMoreFruitVeggies" = "Aiming for more fruit & veggies";
-"onboarding.fourth.improvingNutrition.learningMoreAboutNutrition" = "Learning more about nutrition";
-"onboarding.fourth.improvingNutrition.avoidHavingTemptingFoodNearby" = "Avoid having tempting food nearby";
-"onboarding.fourth.improvingNutrition.payAttentionToPortionSizes" = "Pay attention to portion sizes";
+"onboarding.fourth.improvingNutrition.aimingForMoreFruitVeggies" = "Strive for an increase in the diet of fruits and vegetables";
+"onboarding.fourth.improvingNutrition.learningMoreAboutNutrition" = "Learn more about nutrition";
+"onboarding.fourth.improvingNutrition.avoidHavingTemptingFoodNearby" = "Avoid being near tempting food";
+"onboarding.fourth.improvingNutrition.payAttentionToPortionSizes" = "Pay attention to the portion sizes";
 
 "onboarding.fourth.increasingYourActivityLevel.button.yes" = "Yes";
 "onboarding.fourth.increasingYourActivityLevel.button.no" = "No";
 "onboarding.fourth.increasingYourActivityLevel.title" = "Habits";
-"onboarding.fourth.increasingYourActivityLevel.title.first" = "Are you planning to increase your ";
-"onboarding.fourth.increasingYourActivityLevel.title.second" = "activity level?";
+"onboarding.fourth.increasingYourActivityLevel.title.first" = "Are you planning to increase ";
+"onboarding.fourth.increasingYourActivityLevel.title.second" = "your activity level?";
 
 "onboarding.fourth.interestInUsingTechnology.button.yes" = "Yes";
 "onboarding.fourth.interestInUsingTechnology.button.no" = "NO, not really";
 "onboarding.fourth.interestInUsingTechnology.title" = "Habits";
-"onboarding.fourth.interestInUsingTechnology.title.first" = "Do you love looking at data ";
-"onboarding.fourth.interestInUsingTechnology.title.second" = "and using technology?";
+"onboarding.fourth.interestInUsingTechnology.title.first" = "Do you like to view data ";
+"onboarding.fourth.interestInUsingTechnology.title.second" = "and use technology?";
 
 "onboarding.fourth.jointWeightLoss.title" = "Habits";
-"onboarding.fourth.jointWeightLoss.button" = "continue";
-"onboarding.fourth.jointWeightLoss.title.first" = "Is your partner also trying to lose weight?";
+"onboarding.fourth.jointWeightLoss.button" = "Continue";
+"onboarding.fourth.jointWeightLoss.title.first" = "Is your partner trying to lose weight too?";
 "onboarding.fourth.jointWeightLoss.description.yes" = "Yes";
-"onboarding.fourth.jointWeightLoss.description.imNotSure" = "I’m not sure";
+"onboarding.fourth.jointWeightLoss.description.imNotSure" = "I'm not sure";
 "onboarding.fourth.jointWeightLoss.description.no" = "No";
 
-"onboarding.fourth.lifestyleOfOthers.button" = "continue";
+"onboarding.fourth.lifestyleOfOthers.button" = "Continue";
 "onboarding.fourth.lifestyleOfOthers.title" = "Habits";
-"onboarding.fourth.lifestyleOfOthers.title.first" = "Think about the people you spend the most time with. What best describes their ";
-"onboarding.fourth.lifestyleOfOthers.title.second" = "lifestyle?";
-"onboarding.fourth.lifestyleOfOthers.theyMostlyEatWellAndAreActive" = "They mostly eat well and are active";
-"onboarding.fourth.lifestyleOfOthers.theyHaveSomeHealthyHabits" = "They have some healthy habits";
-"onboarding.fourth.lifestyleOfOthers.dontHaveManyHealthyHabitsount" = "They don’t have many healthy habits";
-"onboarding.fourth.lifestyleOfOthers.imNotSure" = "I’m not sure";
+"onboarding.fourth.lifestyleOfOthers.title.first" = "Think about the people who most often surround you. What best describes ";
+"onboarding.fourth.lifestyleOfOthers.title.second" = "their lifestyle?";
+"onboarding.fourth.lifestyleOfOthers.theyMostlyEatWellAndAreActive" = "Mostly they eat well and they are active";
+"onboarding.fourth.lifestyleOfOthers.theyHaveSomeHealthyHabits" = "They have few healthy habits";
+"onboarding.fourth.lifestyleOfOthers.dontHaveManyHealthyHabitsount" = "They don't have many healthy habits";
+"onboarding.fourth.lifestyleOfOthers.imNotSure" = "I'm not sure";
 
 "onboarding.fourth.nutritionImprovement.button.no" = "No";
 "onboarding.fourth.nutritionImprovement.button.yes" = "Yes";
 "onboarding.fourth.nutritionImprovement.title" = "Habits";
-"onboarding.fourth.nutritionImprovement.title.first" = "Are you hoping to improve the way ";
-"onboarding.fourth.nutritionImprovement.title.second" = "you eat?";
+"onboarding.fourth.nutritionImprovement.title.first" = "Are you hoping to improve, ";
+"onboarding.fourth.nutritionImprovement.title.second" = "the way you eat?";
 
-"onboarding.fourth.placeOfResidence.button" = "continue";
+"onboarding.fourth.placeOfResidence.button" = "Continue";
 "onboarding.fourth.placeOfResidence.title" = "Habits";
-"onboarding.fourth.placeOfResidence.title.first" = "Your environment can influence your weight loss a lot. So where do you live?";
-"onboarding.fourth.placeOfResidence.inRuralArea" = "In a rural area";
-"onboarding.fourth.placeOfResidence.inSuburbanArea" = "In a suburban area";
-"onboarding.fourth.placeOfResidence.inCity" = "In a city";
+"onboarding.fourth.placeOfResidence.title.first" = "Your environment can greatly affect your weight loss. So where do you live?";
+"onboarding.fourth.placeOfResidence.inRuralArea" = "In rural area";
+"onboarding.fourth.placeOfResidence.inSuburbanArea" = "In suburban area";
+"onboarding.fourth.placeOfResidence.inCity" = "In the city";
 
 "onboarding.fourth.representationOfIncreasedActivityLevels.button.no" = "No";
 "onboarding.fourth.representationOfIncreasedActivityLevels.button.yes" = "Yes";
 "onboarding.fourth.representationOfIncreasedActivityLevels.title" = "Habits";
-"onboarding.fourth.representationOfIncreasedActivityLevels.title.first" = "Do you ";
-"onboarding.fourth.representationOfIncreasedActivityLevels.title.second" = "typically eat ";
-"onboarding.fourth.representationOfIncreasedActivityLevels.title.third" = "your meals around the same times each day?";
+"onboarding.fourth.representationOfIncreasedActivityLevels.title.first" = "Do you typically ";
+"onboarding.fourth.representationOfIncreasedActivityLevels.title.second" = "eat";
+"onboarding.fourth.representationOfIncreasedActivityLevels.title.third" = "at about the same time every day?";
 
 "onboarding.fourth.sequenceOfHabitFormation.button" = "Continue";
 "onboarding.fourth.sequenceOfHabitFormation.title" = "Habits";
-"onboarding.fourth.sequenceOfHabitFormation.title.first" = "Consistency is key with ";
-"onboarding.fourth.sequenceOfHabitFormation.title.second" = "habit building";
-"onboarding.fourth.sequenceOfHabitFormation.description" = "The first step is to track, and the second is to make it meaningful. For your first few days, which do you think will work best for you?";
-"onboarding.fourth.sequenceOfHabitFormation.logEachMealBeforeYouTakeTheFirstBite" = "Log each meal before you take the first bite";
-"onboarding.fourth.sequenceOfHabitFormation.logImmediatelyAfterEachMeal" = "Log immediately after each meal";
-"onboarding.fourth.sequenceOfHabitFormation.logAllOfYoutMealsBeforeTheDayStarts" = "Log all of yout meals before the day starts";
-"onboarding.fourth.sequenceOfHabitFormation.logAllOfYourMealsAtTheEndOfTheDay" = "Log all of your meals at the end of the day";
-"onboarding.fourth.sequenceOfHabitFormation.imNotSureImStillFiguringOutWhatWillWorkForMe" = "I’m not sure, I’m still figuring out what will work for me";
+"onboarding.fourth.sequenceOfHabitFormation.title.first" = "The sequence of actions is the key ";
+"onboarding.fourth.sequenceOfHabitFormation.title.second" = "to forming a habit";
+"onboarding.fourth.sequenceOfHabitFormation.description" = "The first step is to start tracking, and the second is to make it meaningful. What do you think is best for you in the first few days?";
+"onboarding.fourth.sequenceOfHabitFormation.logEachMealBeforeYouTakeTheFirstBite" = "Record every meal before eating";
+"onboarding.fourth.sequenceOfHabitFormation.logImmediatelyAfterEachMeal" = "Record immediately after each meal";
+"onboarding.fourth.sequenceOfHabitFormation.logAllOfYoutMealsBeforeTheDayStarts" = "Record all planned meals before starting my day";
+"onboarding.fourth.sequenceOfHabitFormation.logAllOfYourMealsAtTheEndOfTheDay" = "Record all meals at the end of the day";
+"onboarding.fourth.sequenceOfHabitFormation.imNotSureImStillFiguringOutWhatWillWorkForMe" = "I'm not sure, I'm trying to figure out what is the best option for me";
 
 "onboarding.fourth.dietaryPreference.title.first" = "Dietary";
-"onboarding.fourth.dietaryPreference.title.second" = "preference";
+"onboarding.fourth.dietaryPreference.title.second" = "Preferences";
 "onboarding.fourth.dietaryPreference.diet.classic.title" = "Classic";
 "onboarding.fourth.dietaryPreference.diet.classic.subtitle" = "I have no dietary preferences";
-"onboarding.fourth.dietaryPreference.diet.pescatarian.title" = "Pescatarian";
-"onboarding.fourth.dietaryPreference.diet.pescatarian.subtitle" = "I eat seafood but not meat";
+"onboarding.fourth.dietaryPreference.diet.pescatarian.title" = "Pescetarian";
+"onboarding.fourth.dietaryPreference.diet.pescatarian.subtitle" = "I eat seafood, but I don't eat meat";
 "onboarding.fourth.dietaryPreference.diet.vegetarian.title" = "Vegetarian";
-"onboarding.fourth.dietaryPreference.diet.vegetarian.subtitle" = "I don't eat meat or seafood";
+"onboarding.fourth.dietaryPreference.diet.vegetarian.subtitle" = "I don't eat meat and seafood";
 "onboarding.fourth.dietaryPreference.diet.vegan.title" = "Vegan";
-"onboarding.fourth.dietaryPreference.diet.vegan.subtitle" = "I don't eat any animal product";
+"onboarding.fourth.dietaryPreference.diet.vegan.subtitle" = "I don't eat products of animal origin";
 
-"onboarding.fourth.soundsGood.button" = "continue";
+"onboarding.fourth.soundsGood.button" = "Continue";
 "onboarding.fourth.soundsGood.title" = "Habits";
-"onboarding.fourth.soundsGood.title.first" = "Sounds good!";
-"onboarding.fourth.soundsGood.description" = "Setting this plan for logging, at least to start, can help you maintain motivation and progree towards your goals.";
+"onboarding.fourth.soundsGood.title.first" = "Sounds attractive!";
+"onboarding.fourth.soundsGood.description" = "Setting this plan for your journaling, at least to begin with, can help you stay motivated and move towards your goals.";
 
 "onboarding.fourth.soundsLikePlan.button" = "Continue";
 "onboarding.fourth.soundsLikePlan.title" = "Habits";
 "onboarding.fourth.soundsLikePlan.title.first" = "Sounds like a plan!";
-"onboarding.fourth.soundsLikePlan.description" = "Making smart food decisions is a big part of weight loss. Just don’t do anything to lose the weight that you won’t do to keep it off!";
+"onboarding.fourth.soundsLikePlan.description" = "Making smart nutritional decisions is an important part of the weight loss process. Just don't do things that make you less likely to lose weight, then you will lose it!";
 
-"onboarding.fourth.StressAndEmotionsAreInevitable.button" = "continue";
+"onboarding.fourth.StressAndEmotionsAreInevitable.button" = "Continue";
 "onboarding.fourth.StressAndEmotionsAreInevitable.title" = "Habits";
 "onboarding.fourth.StressAndEmotionsAreInevitable.title.first" = "Stress and emotions are inevitable.";
-"onboarding.fourth.StressAndEmotionsAreInevitable.description" = "If you end up going your calorie limit, that’s okay! Don’t let one slip up define you. Tracking everything you eat is more important early on in your health journey than staying under budget.";
+"onboarding.fourth.StressAndEmotionsAreInevitable.description" = "If you end up exceeding your calorie limit, that's okay! Don't let a single slip stop you. Keeping track of everything you eat is more important early on in your path to wellness than keeping the budget.";
 
 "onboarding.fourth.thoughtsOnStressEating.button.no" = "No";
 "onboarding.fourth.thoughtsOnStressEating.button.yes" = "Yes";
 "onboarding.fourth.thoughtsOnStressEating.title" = "Habits";
 "onboarding.fourth.thoughtsOnStressEating.title.first" = "Do you consider yourself an emotional ";
-"onboarding.fourth.thoughtsOnStressEating.title.second" = "or stress-based eater?";
+"onboarding.fourth.thoughtsOnStressEating.title.second" = "or prone to stress eater?";
 
 "onboarding.fourth.timeForYourself.title" = "Habits";
-"onboarding.fourth.timeForYourself.button" = "continue";
-"onboarding.fourth.timeForYourself.title.first" = "How much time do you have for yourself in a typical week?";
-"onboarding.fourth.timeForYourself.nearlyNone" = "Nearly none";
-"onboarding.fourth.timeForYourself.littleBitHereAndThere" = "A little bit, here and there";
-"onboarding.fourth.timeForYourself.goodAmount" = "A good amount";
+"onboarding.fourth.timeForYourself.button" = "Continue";
+"onboarding.fourth.timeForYourself.title.first" = "How much time do you have to set aside for yourself in a typical week?";
+"onboarding.fourth.timeForYourself.nearlyNone" = "Almost no time";
+"onboarding.fourth.timeForYourself.littleBitHereAndThere" = "A little, here and there";
+"onboarding.fourth.timeForYourself.goodAmount" = "Good amount of time";
 "onboarding.fourth.timeForYourself.asMuchAsWant" = "As much as I want";
 
-"onboarding.fourth.whatImportantToYou.button.calorie" = "The calories in my food";
-"onboarding.fourth.whatImportantToYou.button.nutrition" = "The nutrition of my food";
+"onboarding.fourth.whatImportantToYou.button.calorie" = "Calories in my food";
+"onboarding.fourth.whatImportantToYou.button.nutrition" = "Nutritional value of my food";
 "onboarding.fourth.whatImportantToYou.title" = "Habits";
-"onboarding.fourth.whatImportantToYou.title.first" = "What is more important to you?";
+"onboarding.fourth.whatImportantToYou.title.first" = "What matters most to you?";
 
-"onboarding.fourth.youreNotAlone.button" = "continue";
+"onboarding.fourth.youreNotAlone.button" = "Continue";
 "onboarding.fourth.youreNotAlone.title" = "Habits";
-"onboarding.fourth.youreNotAlone.title.first" = "You’re not alone!";
-"onboarding.fourth.youreNotAlone.description" = "A lot of people save calories during the week so that they have some wiggle room on the weekends.";
+"onboarding.fourth.youreNotAlone.title.first" = "You are not alone!";
+"onboarding.fourth.youreNotAlone.description" = "Many people save calories during the week so they have room to loosen up over the weekend.";
 
 "addFood.placeholder" = "SEARCH FOOD";
 "addFood.create" = "CREATE";
-"addFood.scan" = "SCAN";
+"addFood.scan" = "BARCODE";
 "addFood.calories" = "CALORIES";
 "addFood.done" = "DONE";
 "addFood.title.recent" = "recent searches";
-"addFood.customEntry" = "CUSTOM ENTRY";
-"addFood.mealCreation" = "MEAL CREATION";
-"addFood.editMeal" = "Edit Meal";
+"addFood.customEntry" = "CUSTOM INPUT";
+"addFood.mealCreation" = "CREATING MEAL";
+"addFood.editMeal" = "Edit";
 
 "mealCreation.addFoodButton" = "ADD FOOD";
-"mealCreation.accessToPhotosTitle" = "Access to Photos";
-"mealCreation.accessToPhotosMesage" = "Please grant access to your photos in Settings";
-"mealCreation.addToNewMeal" = "Add to new meal";
+"mealCreation.accessToPhotosTitle" = "Access to photos";
+"mealCreation.accessToPhotosMesage" = "Allow access to your photos in settings";
+"mealCreation.addToNewMeal" = "Add to new food";
 
 "breakfast" = "BREAKFAST";
 "lunch" = "LUNCH";
 "dinner" = "DINNER";
 "snack" = "SNACK";
 "food" = "Product";
-"recipe" = "Recipe";
+"recipe" = "recipes";
 "meal" = "Meal";
 "frequent" = "Frequent";
 "recent" = "Recent";
 "favorites" = "Favorites";
-"myMeals" = "My Meals";
-"myRecipes" = "My Recipes";
-"myFood" = "My Food";
+"myMeals" = "My meals";
+"myRecipes" = "My recipes";
+"myFood" = "My food";
 "nutrition" = "Nutrition";
 
 "description" = "Description";
-"kcal.short" = "Kcal";
-"carbs.short" = "Carbs";
-"fat.short" = "Fat";
+"kcal.short" = "kcal";
+"carbs.short" = "carbs";
+"fat.short" = "Fats";
 "proteins" = "Proteins";
 "kcal" = "Calories";
-"fat" = "Total Fat";
-"carbs.long" = "Carbs";
-"protein.long" = "Protein";
-"protein.short" = "Prot.";
-"fat.short" = "Fat";
-"fat.long" = "Fat";
+"fat" = "Fats";
+"carbs.long" = "Carbohydrates";
+"protein.long" = "Proteins";
+"protein.short" = "proteins";
+"fat.short" = "Fats";
+"fat.long" = "Fats";
 "off" = "Off";
-"satFat" = "Saturated Fat";
-"transFat" = "Trans Fat";
-"polyFat" = "Polyunsaturated Fat";
-"monoFat" = "Monounsaturated Fat";
+"satFat" = "Saturated fat";
+"transFat" = "Trans fats";
+"polyFat" = "Polyunsaturated fats";
+"monoFat" = "Monounsaturated fats";
 "choleterol" = "Cholesterol";
 "sodium" = "Sodium";
-"carb" = "Total Carbohydrate";
-"dietaryFiber" = "Dietary Fiber";
-"sugars" = "Total Sugars";
-"addSugars" = "Includes Added Sugars";
-"sugarAlco" = "Sugar Alcohols";
+"carb" = "Carbohydrates";
+"dietaryFiber" = "Dietary fiber";
+"sugars" = "Total amount of sugars";
+"addSugars" = "Includes added Sugar";
+"sugarAlco" = "Sugar alcohols";
 "protein" = "Protein";
 "vitaminD" = "Vitamin D";
 "calcium" = "Calcium";
@@ -591,14 +591,14 @@
 "gram" = "Gram";
 "piece" = "Piece";
 
-"daily" = "DAILY";
-"weekly" = "WEEKLY";
-"monthly" = "MONTHLY";
+"daily" = "DAY";
+"weekly" = "WEEK";
+"monthly" = "MONTH";
 
-"viewing" = "Viewing";
+"viewing" = "Overview";
 
 "length" = "Length";
-"energy" = "Energy Value";
+"energy" = "Energy value";
 "liquid" = "Liquid";
 "serving" = "Serving";
 "weight" = "Weight";
@@ -608,28 +608,28 @@
 "default" = "Default";
 "share" = "Share";
 
-"lowCarb" = "Low Carb";
-"highProtein" = "High Protein";
-"lowFat" = "Low Fat";
-"custom" = "Custom";
+"lowCarb" = "Low-carb";
+"highProtein" = "High protein";
+"lowFat" = "Low fat";
+"custom" = "Customizable";
 "Keto" = "Keto";
 
 "low" = "Low";
 "moderate" = "Moderate";
 "high" = "High";
-"veryHigh" = "Very High";
-"loseWeight" = "Lose Weight";
-"buildMuscle" = "Build Muscle";
-"maintainWeight" = "Maintain Weight";
+"veryHigh" = "Very high";
+"loseWeight" = "Lose weight";
+"buildMuscle" = "Build muscle mass";
+"maintainWeight" = "Maintain weight";
 "loseYourWeight" = "Lose weight";
 "gainMuscleMass" = "Gain muscle mass";
-"manageHealthCondition" = "Manage a health condition";
+"manageHealthCondition" = "Manage your health";
 
 "male" = "Male";
 "famale" = "Female";
 
-"save" = "save";
-"apply" = "apply";
+"save" = "Save";
+"apply" = "Apply";
 
 "last" = "Last";
 "days" = "Days";
@@ -637,89 +637,89 @@
 "months" = "Months";
 "day" = "day";
 
-"track" = "TRACK";
+"track" = "Track";
 
 "exercises" = "exercises";
 
 "textField.required" = "required";
 "textField.optional" = "optional";
 
-"create.title" = "Food Creation";
+"create.title" = "Food creation";
 "create.description.first" = "Step";
-"create.description.second" = "of";
-"create.nutrition" = "Nutrition Facts";
-"create.serving" = "Serving Size";
+"create.description.second" = "from";
+"create.nutrition" = "Nutritional value";
+"create.serving" = "Serving size";
 "create.form.name" = "Name";
-"create.form.brand" = "Brand / Producer";
+"create.form.brand" = "Brand / Manufacturer";
 "create.form.barcode" = "Barcode";
-"create.form.barcode.placeholder" = "enter or scan";
+"create.form.barcode.placeholder" = "input or scan";
 "create.form.serving.weight" = "Serving weight";
 "create.form.serving.description" = "Serving size description";
 
-"keyboard.weight.title.add" = "My weight today:";
+"keyboard.weight.title.add" = "My current weight:";
 "keyboard.weight.title.set" = "I will weigh:";
 "keyboard.steps.title" = "I will walk at least daily:";
-"keyboard.water.title" = "Choose Icon:";
-"keyboard.water.description" = "Choose volume:";
+"keyboard.water.title" = "Select icon:";
+"keyboard.water.description" = "Specify the volume:";
 
 "paywall.convenientCalorie" = "Convenient calorie and activity tracker";
 "paywall.effectiveWeight" = "Effective weight loss or weight gain";
-"paywall.recipesForDifferent" = "10000+ recipes for different types of diets";
-"paywall.bestWay" = "The best way to keep your body in shape";
+"paywall.recipesForDifferent" = "More than 10,000 recipes for different types of diets";
+"paywall.bestWay" = "Best way to keep your body in good shape";
 "paywall.startNow" = "Start now!";
-"paywall.title" = "Losing weight has never been so easy!";
+"paywall.title" = "Losing weight has never been easier!";
 
-"product.nothingWasFound.title" = "nothing was found";
-"product.dailyFoodIntake.title" = "Percent of daily goal";
+"product.nothingWasFound.title" = "nothing found";
+"product.dailyFoodIntake.title" = "Percentage of daily goal";
 
 "progress.title" = "PROGRESS";
-"progress.settings.title" = "EDIT PROGRESS VIEW";
+"progress.settings.title" = "VIEW THE EDITING PROGRESS";
 
 "scan.alert.title" = "Barcode already exists";
-"scan.alert.description" = "A product with this barcode already exists. Do you want to see it?";
+"scan.alert.description" = "Product with this barcode already exists. Do you want to see it?";
 
 "settings" = "Settings";
-"settings.app" = "App Settings";
+"settings.app" = "Application settings";
 "settings.preferences.title" = "PREFERENCES";
 "settings.units.title" = "UNITS";
 "settings.app.account" = "Account";
-"settings.app.units" = "Units of Measurement";
+"settings.app.units" = "Units of measurement";
 "settings.app.sync" = "Sync";
 "settings.app.database" = "Database";
-"settings.app.haptic" = "Haptic Feedback";
-"settings.app.meal" = "Rename Meal Types";
+"settings.app.haptic" = "Feedback";
+"settings.app.meal" = "Rename types of meals";
 "settings.app.about" = "About KCALC";
 "settings.myGoals.title" = "My Goals";
-"settings.calorieGoal.title" = "Calorie Goal";
-"settings.calorieGoal.recalculate" = "RECALCULATE CALORIE GOAL";
-"settings.calorieGoal.description" = "Calorie Distribution";
-"settings.nutrientGoal.title" = "Nutrition Goal";
+"settings.calorieGoal.title" = "Calorie goal";
+"settings.calorieGoal.recalculate" = "RECALCULATE GOAL";
+"settings.calorieGoal.description" = "Distribution of calories";
+"settings.nutrientGoal.title" = "PFC goal";
 "settings.nutrientGoal.reset" = "RESET";
 "settings.goal.goal" = "Goal";
-"settings.goal.startWeight" = "Starting Weight";
-"settings.goal.weight" = "Goal Weight";
-"settings.goal.activityLevel" = "Activity Level";
-"settings.goal.weekly" = "Weekly Goal";
+"settings.goal.startWeight" = "Starting weight";
+"settings.goal.weight" = "Target weight";
+"settings.goal.activityLevel" = "Activity level";
+"settings.goal.weekly" = "Weekly goal";
 "settings.profile.title" = "Profile";
-"settings.dietary.title" = "Dietary Preference";
+"settings.dietary.title" = "Dietary preferences";
 "settings.dietary.classic.title" = "Classic";
-"settings.dietary.classic.decription" = "I have no dietary preferences";
-"settings.dietary.pescatarian.title" = "Pescatarian";
-"settings.dietary.pescatarian.decription" = "I eat seafood but not meat";
+"settings.dietary.classic.decription" = "I don't have any dietary preferences";
+"settings.dietary.pescatarian.title" = "Pescetarian";
+"settings.dietary.pescatarian.decription" = "I eat seafood, but not meat";
 "settings.dietary.vegetarian.title" = "Vegetarian";
-"settings.dietary.vegetarian.decription" = "I don’t eat meat or seafood";
+"settings.dietary.vegetarian.decription" = "I don't eat meat or seafood";
 "settings.dietary.vegan.title" = "Vegan";
-"settings.dietary.vegan.decription" = "I don’t eat any animal product";
-"settings.main.chat.title" = "Live Chat Support";
+"settings.dietary.vegan.decription" = "I don't eat any products of animal origin";
+"settings.main.chat.title" = "Live chat support";
 "settings.main.reminders.title" = "Reminders";
-"settings.main.rate.title" = "Rate this App";
-"settings.main.help.title" = "Problems? Write to us";
-"settings.profile.name.title" = "First Name";
-"settings.profile.lastName.title" = "Last Name";
+"settings.main.rate.title" = "Rate this app";
+"settings.main.help.title" = "Problems ? Write to us";
+"settings.profile.name.title" = "Name";
+"settings.profile.lastName.title" = "Last name";
 "settings.profile.city.title" = "City";
-"settings.profile.sex.title" = "Sex";
-"settings.profile.date.title" = "Date of Birth";
-"settings.profile.date.description" = "Month Day, Year";
+"settings.profile.sex.title" = "Gender";
+"settings.profile.date.title" = "Date of birth";
+"settings.profile.date.description" = "Month, day, year";
 "settings.profile.height.title" = "Height";
 
 "diagramChartType.calories.title" = "CALORIES";
@@ -727,16 +727,16 @@
 "diagramChartType.steps.title" = "STEPS";
 "diagramChartType.water.title" = "WATER";
 "diagramChartType.activity.title" = "ACTIVITY ENERGY";
-"diagramChartType.protein.title" = "PROTEIN";
-"doubleDiagramChart.exercises.title" = "EXERSISE ENERGY";
+"diagramChartType.protein.title" = "PROTEINS";
+"doubleDiagramChart.exercises.title" = "TRAIN ENERGY";
 "lineChartType.bmi.title" = "BODY MASS INDEX";
-"tripleDiagramChartType.dietary.title" = "DIETARY INTAKE";
+"tripleDiagramChartType.dietary.title" = "INTAKE THROUGH FOOD";
 
-"chart.message.title.first" = "There are no measurements. Your first";
-"chart.message.title.second" = "has not yet passed";
-"chart.right.bottom.title" = "Daily Average";
-"lineChart.right.bottom.first" = "Starting Weight: ";
-"lineChart.right.bottom.second" = "Starting: ";
+"chart.message.title.first" = "There are no dimensions here. Your first one";
+"chart.message.title.second" = "hasn't passed yet";
+"chart.right.bottom.title" = "daily average";
+"lineChart.right.bottom.first" = "Initial weight: ";
+"lineChart.right.bottom.second" = "Beginning: ";
 
 "tabBar.myDay" = "MY DAY";
 "tabBar.progress" = "PROGRESS";
@@ -749,15 +749,16 @@
 
 "widget.water.setGoal.title" = "I will drink daily:";
 "widget.water.title" = "WATER";
-"widget.water.quickAdd.title" = "Set up quick add";
-"widget.water.quickAdd.goalbutton.title" = "CHANGE DAILY GOAL";
+"widget.water.quickAdd.title" = "Quick add settings";
+"widget.water.quickAdd.goalbutton.title" ="CHANGE DAILY GOAL";
 
 "widget.weight.title" = "WEIGHT";
-"widget.weight.add" = " ADD WEIGHTING";
+"widget.weight.add" = " ADD WEIGHT";
 
-"ah.connect.title" = "Connect to Apple Health";
+"ah.connect.title" = "Connect Apple Health";
 
-"bmi.short" = "BMI";
+
+"bmi.short" = "PFC";
 "active" = "Active Energy";
 
 "min" = "min";
@@ -767,7 +768,7 @@
 "servings-2-4" = "servings";
 "servings>4" = "servings";
 "Instructions" = "Instructions";
-"ByTaste" = "by taste";
+"ByTaste" = "to taste";
 
 "Recipes" = "Recipes";
 "Search" = "Search";
@@ -789,7 +790,7 @@
 "measurement.kcal" = "kcal";
 "measurement.kj" = "kj";
 "measurement.ml" = "ml";
-"measurement.floz" = "floz";
+"measurement.floz" = "fl. oz ";
 "measurement.g" = "g";
 "measurement.oz" = "oz";
 "measurement.mcg" = "mcg";
@@ -797,28 +798,29 @@
 "measurements.ft" = "ft";
 "measurements.m" = "m";
 
-"universalSelector.currentSettingsByKcal" = "Your calorie goal based on your current settings is ";
-"universalSelector.currentSettingsByKcalNew" = "Your new calorie goal based on your current settings is ";
+"universalSelector.currentSettingsByKcal" = "Based on current settings, your calorie goal is ";
+"universalSelector.currentSettingsByKcalNew" = "Based on current settings, your new calorie goal is ";
 "universalSelector.new" = "new";
-"enterkcal.headerview.description" = "When you set your individual calorie intake, activity level settings and weekly goals will no longer work.";
+"enterkcal.headerview.description" = "When you set an personal consumption limit, the activity level and weekly goal settings will not take into consideration";
 "settings.emptyCell.set" = "Set";
-"brand.food" = "Brand food";
-"base.food" = "Base food";
+"brand.food" = "Branded food";
+"base.food" = "Basic food";
 "alert.yourGoal.title" = "YOUR GOAL";
-"alert.willBeChanged" = "Will be changed to\n";
+"alert.willBeChanged" = "Will be changed to \n";
 
 "calendar.topTitle.today" = "TODAY";
 "calendar.topTitle.yesterday" = "YESTERDAY";
-"calendar.logStreak" = " days\nlog streak";
+"calendar.logStreak" = " days\n in a row";
 
 "reviews.writeAReview" = "Write a review";
-"reviews.sendUsFeedback" = "Send us feedback";
+"reviews.sendUsFeedback" = "Contact us";
 
 "rateUs.title" = "Rate the app";
-"rateUs.subtitle" = "This helps to make it even better";
+"rateUs.subtitle" = "This will help to improve it";
 
-"Annualy" = "Annualy";
+"Annualy" = "Annually";
 "week" = "week";
+
 "onboarding.currentWeight" = "Your current weight";
 "onboarding.targetweight" = "Your target weight";
 
@@ -833,12 +835,12 @@
 "weightWidget.full.segment.alltime" = "All time";
 
 "nomeasurements.first" = "There are no measurements. Your first ";
-"nomeasurements.second" = " has not yet passed";
+"nomeasurements.second" = " hasn't passed yet";
 
-"camera.roll" = "Camera roll";
+"camera.roll" = "Camera";
 
-"ask.opinion.title" = "Your opinion matter to us!";
-"ask.opinion.subtitle" = "Like the app?";
+"ask.opinion.title" = "Your opinion does matter to us!";
+"ask.opinion.subtitle" = "Do you like the app?";
 
 "last.plural" = "Last";
 "dney" = "days";
@@ -846,11 +848,12 @@
 "mesyacev" = "months";
 
 "EXERCISE ENERGY" = "EXERCISE ENERGY";
+
 "calendar.tomorrow" = "TOMORROW";
 
-"settings.recommendations.sources" = "Sources of recommendations";
+"settings.recommendations.sources" = "Recommendations Sources";
 
-"Recommendations.title" = "Sources of recommendations";
+"Recommendations.title" = "Recommendations Sources";
 "Recommendations.description" = "Kcalc App is a health and lifestyle app that provides guidelines and recommendations to help you on your journey towards a healthier life. While encouraging your understanding of what nutrition, exercise and healthy habits can do for you, Kcalc is not intended to be used for any diagnosis, advice, prevention or treatment of a disease or medical condition (Kcalc is not a medical device or app). Always consult with a doctor or healthcare professional for medical advice and treatments before making any medical decisions.";
 
 "Recommendations.calorieRec.title" = "Calorie recommendations";
@@ -917,17 +920,17 @@
 "Recommendations.diets.exercise.link.text.3" = "U.S. DEPARTMENT OF AGRICULTURE - Choose my Plate - Physical activity amount";
 "Recommendations.diets.exercise.link.text.4" = "MET values: Activity Categories - Compendium of Physical Activities";
 
-"Have a nice day! Don't forget to track your breakfast" = "Have a nice day! Don't forget to track your breakfast";
-"Net Carbs" = "Net Carbs";
+"Have a nice day! Don't forget to track your breakfast" = "Have a good day! Don't forget to record your breakfast";
+"Net Carbs" = "Net carbs";
 "Restore Purchases" = "Restore Purchases";
-"tag.userProduct" = "My product";
+"tag.userProduct" = "My Product";
 "steps.widget.setDailyGoal" = "SET DAILY GOAL";
-"steps.widget.changeDailyGoal" = "CHANGE DAILY GOAL";
-"monthlySubscription" = "Monthly subscription";
-"weeklySubscription" = "Weekly subscription";
-"yearlySubscription" = "Yearly subscription";
-"tryFreeSubscribe" = "TRY FREE & SUBSCRIBE";
-"Try 3 days for free, then  " = "Try 3 days for free, then  ";
-"CALORIE GOAL" = "CALORIE GOAL";
-"Filter your search" = "Filter your search";
+"steps.widget.changeDailyGoal" = "EDIT DAILY GOAL";
 
+"monthlySubscription" = "Monthly subscription";
+"weeklySubscription" = "Weekly Subscription";
+"yearlySubscription" = "Annual Subscription";
+"tryFreeSubscribe" = "TRY IT FOR FREE";
+"Try 3 days for free, then  " = "3 day free trial, then ";
+"CALORIE GOAL" = "CALORIE GOAL";
+"Filter your search" = "Search using filter";

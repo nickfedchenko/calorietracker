@@ -191,7 +191,7 @@
 "onboarding.second.measurementSystem.button" = "Continuar";
 "onboarding.second.measurementSystem.title" = "Sistema de medición";
 "onboarding.second.measurementSystem.description.metricSystem" = "Sistema métrico";
-"onboarding.second.measurementSystem.description.imperialSystem" = "Sistema Imperial";
+"onboarding.second.measurementSystem.description.imperialSystem" = "U.S. Standart";
 "onboarding.second.measurementSystem.describe.imperialSystem" = "pies, libras, calorías";
 "onboarding.second.measurementSystem.describe.metricSystem" = "cm, kg, calorías";
 

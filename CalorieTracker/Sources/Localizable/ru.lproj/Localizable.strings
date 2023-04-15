@@ -191,7 +191,7 @@
 "onboarding.second.measurementSystem.button" = "Продолжить";
 "onboarding.second.measurementSystem.title" = "Измерительная система";
 "onboarding.second.measurementSystem.description.metricSystem" = "Метрическая система";
-"onboarding.second.measurementSystem.description.imperialSystem" = "Имперская система";
+"onboarding.second.measurementSystem.description.imperialSystem" = "U.S. стандарт";
 "onboarding.second.measurementSystem.describe.imperialSystem" = "футы, фунты, калории";
 "onboarding.second.measurementSystem.describe.metricSystem" = "см, кг, калории";
 
