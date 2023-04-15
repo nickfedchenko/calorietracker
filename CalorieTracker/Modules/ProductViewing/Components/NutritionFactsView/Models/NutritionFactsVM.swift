@@ -122,16 +122,33 @@ extension NutritionFactsVM {
                     switch model.key {
                     case .totalFat, .saturatedFat, .polyFat, .monoFat, .totalCarbs, .dietaryFiber, .netCarbs,
                             .totalSugar, .inAddSugar, .sugarAlc, .protein:
-                        return BAMeasurement.measurmentSuffix(.serving)
+                        return BAMeasurement.measurmentSuffix(.serving, isMetric: UDM.servingIsMetric)
                     case .transFat, .vitaminD, .vitaminA:
                         return BAMeasurement.measurmentSuffix(.microNutrients)
                     case .kcal:
-                        return BAMeasurement.measurmentSuffix(.energy)
+                        return BAMeasurement.measurmentSuffix(.energy, isMetric: UDM.energyIsMetric)
                     default:
                         return BAMeasurement.measurmentSuffix(.milliNutrients)
                     }
                 }()
-                let targetValueString = value.removeZerosFromEnd()
+                let targetValue = {
+                    switch model.key {
+                    case .kcal:
+                        return BAMeasurement(value, .energy, isMetric: UDM.energyIsMetric).localized
+                            .removeZerosFromEnd(maxPrecision: 2)
+                    case .totalFat, .saturatedFat, .polyFat, .monoFat, .totalCarbs, .dietaryFiber, .netCarbs,
+                            .totalSugar, .inAddSugar, .sugarAlc, .protein:
+                        return BAMeasurement(value, .serving, isMetric: UDM.servingIsMetric).localized
+                            .removeZerosFromEnd(maxPrecision: 2)
+                    case .transFat, .vitaminD, .vitaminA:
+                        return BAMeasurement(value, .microNutrients, isMetric: true).localized
+                            .removeZerosFromEnd(maxPrecision: 2)
+                    default:
+                        return BAMeasurement(value, .milliNutrients, isMetric: true).localized
+                            .removeZerosFromEnd(maxPrecision: 2)
+                    }
+                }()
+                let targetValueString = String(targetValue)
                 return targetValueString + " \(suffix)"
             }(),
             font: configuration.font,

@@ -139,6 +139,7 @@ protocol OnboardingManagerInterface {
     func set(chooseYourGoal: ChooseYourGoal)
     func getAllChooseYourGoal() -> [ChooseYourGoal]
     func getYourGoal() -> ChooseYourGoal?
+    func getMeasurementSystem() -> MeasurementSystem
 }
 
 class OnboardingManager {
@@ -333,6 +334,10 @@ extension OnboardingManager: OnboardingManagerInterface {
     
     func set(lifeChangesAfterWeightLoss: LifeChangesAfterWeightLoss) {
         onboardingInfo.lifeChangesAfterWeightLoss = lifeChangesAfterWeightLoss
+    }
+    
+    func getMeasurementSystem() -> MeasurementSystem {
+        onboardingInfo.measurementSystem ?? .metricSystem
     }
     
     func getAllChooseYourGoal() -> [ChooseYourGoal] {

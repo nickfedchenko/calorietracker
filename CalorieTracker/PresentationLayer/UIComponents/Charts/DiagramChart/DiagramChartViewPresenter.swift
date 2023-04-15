@@ -121,29 +121,57 @@ extension DiagramChartViewPresenter: DiagramChartViewPresenterInterface {
     
     func getData(_ period: ChartFormat) -> ChartData? {
         guard let data = getDataForPeriod(period) else { return nil }
-        let maxValue = max(3000, (getMaxValue(data) / 1000 + 1) * 1000, ((goal ?? 0) / 1000 + 1) * 1000)
+        var maxFloor: Int = {
+            switch view.getChartType() {
+            case .calories:
+                return 200
+            case .carb:
+                return 200
+            case .steps:
+                return Int(UDM.dailyStepsGoal ?? 10000)
+            case .water:
+                return Int(UDM.dailyWaterGoal ?? 2000)
+            case .activity:
+                return 30
+            case .protein:
+                return 200
+            }
+        }()
+        
+        let maxValue = max(maxFloor, (getMaxValue(data) / 1000 + 1) * 1000, ((goal ?? 0) / 1000 + 1) * 1000)
         
         var newData: [Int: CGFloat] = [:]
         var indexData: [Int: Int] = [:]
-        
+        let coefficient: Int = {
+            switch view.getChartType() {
+            case .carb, .protein:
+                return 4
+            default:
+                return 1
+            }
+        }()
         switch period {
         case .daily:
             data.forEach {
                 if let index = Date().days(to: $0.date) {
-                    newData[abs(index)] = CGFloat($0.value) / CGFloat(maxValue)
+                    newData[abs(index)] = CGFloat($0.value * coefficient) / CGFloat(maxValue)
                 }
             }
         case .weekly:
             data.forEach {
                 if let index = Date().weeks(to: $0.date) {
-                    newData[abs(index)] = (newData[abs(index)] ?? 0) + CGFloat($0.value) / CGFloat(maxValue)
+                    newData[abs(index)] = (newData[abs(index)] ?? 0)
+                    + CGFloat($0.value * coefficient)
+                    / CGFloat(maxValue)
                     indexData[abs(index)] = (indexData[abs(index)] ?? 0) + 1
                 }
             }
         case .monthly:
             data.forEach {
                 if let index = Date().months(to: $0.date) {
-                    newData[abs(index)] = (newData[abs(index)] ?? 0) + CGFloat($0.value) / CGFloat(maxValue)
+                    newData[abs(index)] = (newData[abs(index)] ?? 0)
+                    + CGFloat($0.value * coefficient)
+                    / CGFloat(maxValue)
                     indexData[abs(index)] = (indexData[abs(index)] ?? 0) + 1
                 }
             }

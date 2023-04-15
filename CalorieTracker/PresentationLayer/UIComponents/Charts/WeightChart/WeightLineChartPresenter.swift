@@ -52,6 +52,8 @@ extension WeightLineChartPresenter: WeightLineChartPresenterInterface {
     
     func countTheNumberOfHorizontalLines() -> [Int] {
         guard let weight = view.getWeight() else { return [] }
+        let coefficient: Int = UDM.weightIsMetric ? 1 : 2
+        let fortyAndMoreReminder = 10 * coefficient
         switch weight.max - weight.min {
         case 0...5:
             return Array(weight.min...weight.max).reversed()

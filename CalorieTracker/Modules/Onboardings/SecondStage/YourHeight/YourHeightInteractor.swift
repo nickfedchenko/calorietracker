@@ -37,6 +37,7 @@ extension YourHeightInteractor: YourHeightInteractorInterface {
     }
     
     func set(yourHeight: Double) {
-        onboardingManager.set(yourHeight: yourHeight)
+        let standartValue = BAMeasurement(yourHeight, .lenght, isMetric: UDM.lengthIsMetric).value
+        onboardingManager.set(yourHeight: standartValue)
     }
 }

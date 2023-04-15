@@ -139,6 +139,7 @@ final class AddFoodViewController: UIViewController {
     var mealTime: MealTime = .breakfast
     var tabBarIsHidden = false
     var searchText: String?
+    var shouldSuggestMealTime: Bool = true
     var wasFromMealCreateVC: Bool = false {
         didSet {
             wasFromMealCreateVC ? changeSegmentControl() : ()
@@ -169,6 +170,7 @@ final class AddFoodViewController: UIViewController {
     }
     
     private func suggestMealTime() {
+        guard shouldSuggestMealTime else { return }
         var mealTime: MealTime = .breakfast
         let date = Date()
         var mealIndex: Int = 0

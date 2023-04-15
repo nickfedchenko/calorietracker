@@ -68,7 +68,8 @@ extension GoalsSettingsRouter: GoalsSettingsRouterInterface {
     func openEnterGoalWeightVC() {
         let vc = KeyboardEnterValueViewController(.standart(R.string.localizable.settingsGoalWeight()))
         
-        vc.complition = { [weak self] value in
+        vc.complition = { [weak self] enteredValue in
+            let value = BAMeasurement(enteredValue, .weight, isMetric: UDM.weightIsMetric).value
             if UDM.weeklyGoal != 0 {
                 UDM.tempWeeklyGoal = UDM.weeklyGoal
             }
@@ -151,7 +152,7 @@ extension GoalsSettingsRouter: GoalsSettingsRouterInterface {
             WeightWidgetService.shared.setWeeklyGoal(BAMeasurement(value, .weight).value)
             self.presenter?.updateCell(type: .weekly)
         }
-        
+
         viewController?.present(vc, animated: true)
     }
     

@@ -31,7 +31,7 @@ class LineChartViewPresenter {
 //            let weights = WeightWidgetService.shared.getAllWeight()
             return WeightWidgetService.shared.getAllWeight().compactMap {
                 guard let date = $0.day.date else { return nil }
-                return (date: date, value: CGFloat($0.value))
+                return (date: date, value: CGFloat(BAMeasurement($0.value, .weight, isMetric: true).localized))
             }
         case .bmi:
             return WeightWidgetService.shared.getAllWeight().compactMap {
@@ -48,7 +48,8 @@ class LineChartViewPresenter {
         var goal: Double?
         switch view.getChartType() {
         case .weight:
-            goal = UDM.weightGoal
+            guard let weightGoal = UDM.weightGoal else { return nil }
+            return BAMeasurement(weightGoal, .weight, isMetric: true).localized
         case .bmi:
             guard let height = UDM.userData?.height, let weightGoal = UDM.weightGoal else { return nil }
             goal = BMIMeasurment(weight: weightGoal, height: height).bmi

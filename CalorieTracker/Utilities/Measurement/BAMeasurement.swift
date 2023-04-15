@@ -42,6 +42,8 @@ struct BAMeasurement {
                     return UDM.servingIsMetric
                 case .microNutrients:
                     return UDM.servingIsMetric
+                case .lengthLong:
+                    return UDM.lengthIsMetric
                 }
             }()
         )
@@ -51,32 +53,36 @@ struct BAMeasurement {
         switch measurement {
         case .weight:
             return isMetric
-                ? "measurement.kg".localized
-                : "measurement.lb".localized
+            ? "measurement.kg".localized
+            : "measurement.lb".localized
         case .lenght:
             return isMetric
-                ? "measurement.cm".localized
-                : "measurement.in".localized
+            ? "measurement.cm".localized
+            : "measurement.in".localized
         case .energy:
             return isMetric
-                ? "measurement.kcal".localized
-                : "measurement.kj".localized
+            ? "measurement.kcal".localized
+            : "measurement.kj".localized
         case .liquid:
             return isMetric
-                ? "measurement.ml".localized
-                : "measurement.floz".localized
+            ? "measurement.ml".localized
+            : "measurement.floz".localized
         case .serving:
             return isMetric
-                ? "measurement.g".localized
-                : "measurement.oz".localized
+            ? "measurement.g".localized
+            : "measurement.oz".localized
         case .milliNutrients:
             return isMetric
-                ? "measurement.mg".localized
-                : "measurement.mg".localized
+            ? "measurement.mg".localized
+            : "measurement.mg".localized
         case .microNutrients:
             return isMetric
-                ? "measurement.mcg".localized
-                : "measurement.mcg".localized
+            ? "measurement.mcg".localized
+            : "measurement.mcg".localized
+        case .lengthLong:
+            return isMetric
+            ? "measurements.m".localized
+            : "measurements.ft".localized
         }
     }
     
@@ -105,10 +111,12 @@ struct BAMeasurement {
             .value
     }
     
-    private static func convert(value: Double,
-                                from: Units,
-                                to: Units,
-                                measurement: MeasurementValue) -> Double {
+    private static func convert(
+        value: Double,
+        from: Units,
+        to: Units,
+        measurement: MeasurementValue
+    ) -> Double {
         Measurement(
             value: value,
             unit: from == .metric
@@ -137,6 +145,8 @@ struct BAMeasurement {
             return UDM.servingIsMetric ? .metric : .imperial
         case .microNutrients:
             return UDM.servingIsMetric ? .metric : .imperial
+        case .lengthLong:
+            return UDM.lengthIsMetric ? .metric : .imperial
         }
     }
     

@@ -166,7 +166,7 @@ extension FirstPageFormView {
         let form = FormView<EmptyGetTitle>()
         form.model = .init(
             width: .large,
-            value: .required(R.string.localizable.createFormBarcodePlaceholder())
+            value: .optional
         )
         return form
     }

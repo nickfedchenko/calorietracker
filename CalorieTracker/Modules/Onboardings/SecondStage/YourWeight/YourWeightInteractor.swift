@@ -37,6 +37,7 @@ extension YourWeightInteractor: YourWeightInteractorInterface {
     }
     
     func set(yourWeight: Double) {
-        onboardingManager.set(yourWeight: yourWeight)
+        let standartValue = BAMeasurement(yourWeight, .weight, isMetric: UDM.weightIsMetric).value
+        onboardingManager.set(yourWeight: standartValue)
     }
 }

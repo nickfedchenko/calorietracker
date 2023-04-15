@@ -160,7 +160,7 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
         let date = pointDate ?? Date()
         let nutritionDailyGoal = FDS.shared.getNutritionGoals() ?? .zero
         let nutritionToday = FDS.shared.getNutritionForDate(date).nutrition
-        let kcalGoal = nutritionDailyGoal.kcal
+        let kcalGoal = BAMeasurement(nutritionDailyGoal.kcal, .energy, isMetric: true).localized
         let carbsGoal = NutrientMeasurment.convert(
             value: nutritionDailyGoal.carbs,
             type: .carbs,
@@ -182,16 +182,19 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
         let carbsToday = nutritionToday.carbs
         let proteinToday = nutritionToday.protein
         let fatToday = nutritionToday.fat
-        let kcalToday = nutritionToday.kcal
+        let kcalToday = BAMeasurement(nutritionToday.kcal, .energy, isMetric: true).localized
         if kcalToday >= kcalGoal {
             LoggingService.postEvent(event: .diarycaloriegoal)
         }
         let burnedKcalTotal = StepsWidgetService.shared.getBurnedEnergyForDate(UDM.currentlyWorkingDay.date ?? Date())
         let includingBurned = kcalGoal + burnedKcalTotal - kcalToday
-        let includingBurnedInt: Int = includingBurned < 0 ? 0 : Int(includingBurned)
+        let includingBurnedInt: Int = includingBurned < 0
+        ? 0
+        : Int(BAMeasurement(includingBurned, .energy, isMetric: true).localized)
         let model: MainWidgetViewNode.Model = .init(
             text: MainWidgetViewNode.Model.Text(
-                firstLine: "\(Int(kcalToday)) / \(Int(kcalGoal)) " + R.string.localizable.kcalShort().uppercased(),
+                firstLine: "\(Int(kcalToday)) / \(Int(kcalGoal)) "
+                + BAMeasurement.measurmentSuffix(.energy, isMetric: UDM.energyIsMetric).uppercased(),
                 secondLine: "\(Int(carbsToday)) / \(Int(carbsGoal)) " + R.string.localizable.carbsShort().uppercased(),
                 thirdLine: "\(Int(proteinToday)) / \(Int(proteinGoal)) " + R.string.localizable.protein().uppercased(),
                 fourthLine: "\(Int(fatToday)) / \(Int(fatGoal)) " + R.string.localizable.fatShort().uppercased(),

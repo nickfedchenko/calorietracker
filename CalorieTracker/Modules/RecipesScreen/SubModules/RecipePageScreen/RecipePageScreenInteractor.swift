@@ -167,9 +167,21 @@ extension RecipePageScreenInteractor: RecipePageScreenInteractorInterface {
             if
                 let referenceUnit = ingredient.product.units.first(where: { $0.id == ingredient.unit?.id }),
                 let referenceKCal = referenceUnit.kcal {
-                let unitAmount = ingredient.quantity * ratio
-                let unitTitle = ingredient.unit?.shortTitle ?? ""
-                let kcal = unitAmount * referenceKCal
+                let unitAmount = {
+                    if referenceUnit.id != 1 && referenceUnit.id != 2 {
+                        return ingredient.quantity * ratio
+                    } else {
+                        return BAMeasurement(ingredient.quantity * ratio, .serving, isMetric: true).localized
+                    }
+                }()
+                let unitTitle = {
+                    if referenceUnit.id != 1 && referenceUnit.id != 2 {
+                        return ingredient.unit?.shortTitle ?? ""
+                    } else {
+                        return BAMeasurement.measurmentSuffix(.serving, isMetric: UDM.servingIsMetric)
+                    }
+                }()
+                let kcal = BAMeasurement(ingredient.quantity * ratio * referenceKCal, .energy, isMetric: true).localized
                 let title = ingredient.product.title
                 return RecipeIngredientModel(title: title, unitTitle: unitTitle, unitsAmount: unitAmount, kcal: kcal)
             } else {

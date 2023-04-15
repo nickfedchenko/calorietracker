@@ -794,6 +794,8 @@
 "measurement.oz" = "oz";
 "measurement.mcg" = "mcg";
 "measurement.mg" = "mg";
+"measurements.ft" = "ft";
+"measurements.m" = "m";
 
 "universalSelector.currentSettingsByKcal" = "Your calorie goal based on your current settings is ";
 "universalSelector.currentSettingsByKcalNew" = "Your new calorie goal based on your current settings is ";
@@ -926,3 +928,6 @@
 "yearlySubscription" = "Yearly subscription";
 "tryFreeSubscribe" = "TRY FREE & SUBSCRIBE";
 "Try 3 days for free, then  " = "Try 3 days for free, then  ";
+"CALORIE GOAL" = "CALORIE GOAL";
+"Filter your search" = "Filter your search";
+

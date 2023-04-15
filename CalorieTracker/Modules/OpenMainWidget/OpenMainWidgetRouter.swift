@@ -53,7 +53,8 @@ extension OpenMainWidgetRouter: OpenMainWidgetRouterInterface {
             needUpdate: { [weak self] in
                 self?.presenter?.updateDailyMeals()
             },
-            navigationType: .navigationController
+            navigationType: .navigationController,
+            shouldSuggestMealTime: false
         )
         
         viewController?.navigationController?.pushViewController(vc, animated: true)

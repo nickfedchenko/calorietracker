@@ -794,6 +794,8 @@
 "measurement.oz" = "oz";
 "measurement.mcg" = "mcg";
 "measurement.mg" = "mg";
+"measurements.ft" = "ft";
+"measurements.m" = "m";
 
 "universalSelector.currentSettingsByKcal" = "Basado en la configuración actual, su objetivo de calorías ";
 "universalSelector.currentSettingsByKcalNew" = "Basado en la configuración actual, su nuevo objetivo de calorías ";
@@ -929,3 +931,5 @@
 "yearlySubscription" = "Suscripción anual";
 "tryFreeSubscribe" = "PRUEBA GRATIS Y SUSCRÍBETE";
 "Try 3 days for free, then  " = "Prueba 3 días gratis, luego ";
+"CALORIE GOAL" = "OBJETIVO DE CALORÍAS";
+"Filter your search" = "Filtra tu búsqueda";

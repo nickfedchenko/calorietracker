@@ -20,7 +20,7 @@ import UIKit
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
-
+    
     lazy var coordinator = AppCoordinator(with: window)
     
     func application(
@@ -41,31 +41,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         open url: URL,
         options: [UIApplication.OpenURLOptionsKey: Any] = [:]
     ) -> Bool {
-                if let scheme = url.scheme,
-                        scheme.localizedCaseInsensitiveCompare("com.Calorie.Tracker") == .orderedSame,
-                        let view = url.host,
-                   let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
-                   let id = components.queryItems?.first?.value,
-                   let route = AppCoordinator.Route(rawValue: view) {
-                    coordinator.navigateTo(route: route, with: id)
-                } else {
-                    print("Something goes wrong")
-                }
+        if let scheme = url.scheme,
+           scheme.localizedCaseInsensitiveCompare("com.Calorie.Tracker") == .orderedSame,
+           let view = url.host,
+           let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+           let id = components.queryItems?.first?.value,
+           let route = AppCoordinator.Route(rawValue: view) {
+            coordinator.navigateTo(route: route, with: id)
+        } else {
+            print("Something goes wrong")
+        }
         return true
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
         coordinator.setupPeriodicUpdate()
+        UDM.currentlyWorkingDay = Date().day
+        NotificationCenter.default.post(Notification(name: NSNotification.Name("UpdateMainScreen")))
     }
     
     func applicationDidEnterBackground(_ application: UIApplication) {
         coordinator.invalidateUpdateTimer()
+        UDM.currentlyWorkingDay = Date().day
     }
     
     func registerForNotifications() {
         UNUserNotificationCenter.current().delegate = self
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { _, _ in
-          
         }
         UIApplication.shared.registerForRemoteNotifications()
     }
@@ -109,7 +111,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         }
         completionHandler()
     }
-
+    
     func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification,
@@ -123,5 +125,9 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
             print("Need to manually handle push notification")
         }
         completionHandler([]) // return empty array to skip showing notification banner
+    }
+    
+    func applicationWillTerminate(_ application: UIApplication) {
+        UDM.currentlyWorkingDay = Date().day
     }
 }

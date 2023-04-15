@@ -37,7 +37,7 @@ final class TripleDiagramChartView: UIView {
         func getPostfix() -> String {
             switch self {
             case .dietary:
-                return "kcal.short".localized
+                return BAMeasurement.measurmentSuffix(.serving, isMetric: true)
             }
         }
         

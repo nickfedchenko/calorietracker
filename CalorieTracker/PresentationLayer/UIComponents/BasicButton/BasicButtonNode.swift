@@ -220,8 +220,8 @@ extension BasicButtonNode {
 
 extension BasicButtonNode {
     struct Text {
-        static let save = "SAVE"
-        static let apply = "APPLY"
+        static let save = R.string.localizable.save().uppercased()
+        static let apply = R.string.localizable.apply().uppercased()
         static let next = "Next".localized
         static let addToNewMeal = R.string.localizable.mealCreationAddToNewMeal().uppercased()
     }

@@ -167,7 +167,7 @@ final class KeyboardEnterValueViewController: TouchPassingViewController {
         case .water:
             return WaterKeyboardHeaderView("")
         case .settingsKcal:
-            return KcalKeyboardHeaderView("CALORIE GOAL")
+            return KcalKeyboardHeaderView("CALORIE GOAL".localized)
         }
     }
     

@@ -6,6 +6,7 @@
 //  Copyright © 2022 Mov4D. All rights reserved.
 //
 
+import ApphudSDK
 import UIKit
 
 protocol SettingsViewControllerInterface: AnyObject {
@@ -49,6 +50,11 @@ final class SettingsViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         presenter?.updateCell(.profile)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        NotificationCenter.default.post(Notification(name: NSNotification.Name("UpdateMainScreen")))
     }
     
     private func setupView() {
@@ -205,6 +211,7 @@ extension SettingsViewController {
     
     private func getPremiumButton() -> PremiumButton {
         let button = PremiumButton()
+        button.alpha = Apphud.hasActiveSubscription() ? 0 : 1
         button.addTarget(self, action: #selector(didTapPremiumButton), for: .touchUpInside)
         return button
     }
@@ -213,7 +220,7 @@ extension SettingsViewController {
         let button = UIButton()
         button.addTarget(self, action: #selector(didTapShareButton), for: .touchUpInside)
         button.setAttributedTitle(
-            "Share".attributedSring(
+            "share".localized.attributedSring(
                 [
                     StringSettingsModel(
                         worldIndex: [0],

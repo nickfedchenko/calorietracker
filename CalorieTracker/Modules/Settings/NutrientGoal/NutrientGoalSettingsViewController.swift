@@ -263,7 +263,7 @@ extension NutrientGoalSettingsViewController {
         let button = UIButton()
         button.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
         button.setAttributedTitle(
-            "MY GOALS".attributedSring(
+            "settings.myGoals.title".localized.uppercased().attributedSring(
                 [
                     StringSettingsModel(
                         worldIndex: [0, 1],

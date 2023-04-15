@@ -20,7 +20,7 @@ final class YourWeightViewController: UIViewController {
     
     // MARK: - Private properties
     
-    private var weight: Double = 70.0
+    private var weight: Double = UDM.weightIsMetric ? 70.0 : 153.0
     
     // MARK: - Views properties
     
@@ -65,7 +65,10 @@ final class YourWeightViewController: UIViewController {
             action: #selector(didTapContinueCommonButton),
             for: .touchUpInside
         )
-        borderTextField.text = "70.0 \(R.string.localizable.measurementKg())"
+        
+        let startWeight = UDM.weightIsMetric ? 70.0 : 153.0
+        
+        borderTextField.text = BAMeasurement(startWeight, .weight, isMetric: UDM.weightIsMetric).string(with: 1)
         
         containerPickerView.backgroundColor = .white
         containerPickerView.layer.cornerRadius = 12
@@ -77,8 +80,11 @@ final class YourWeightViewController: UIViewController {
         
         pickerView.dataSource = self
         pickerView.delegate = self
-        pickerView.selectRow(70, inComponent: 0, animated: false)
-
+        if UDM.weightIsMetric {
+            pickerView.selectRow(70, inComponent: 0, animated: false)
+        } else {
+            pickerView.selectRow(153, inComponent: 0, animated: false)
+        }
         continueCommonButton.addTarget(self, action: #selector(didTapContinueCommonButton), for: .touchUpInside)
     }
     
@@ -187,11 +193,15 @@ extension YourWeightViewController: UIPickerViewDataSource {
 
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         if component == 0 {
-            return 200
+            if UDM.weightIsMetric {
+                return 200
+            } else {
+                return 440
+            }
         } else if component == 1 {
             return 1
         } else if component == 2 {
-            return 1000
+            return 10
         } else {
             return 1
         }
@@ -207,7 +217,8 @@ extension YourWeightViewController: UIPickerViewDelegate {
         
         weight = Double(kilograms) + Double(grams) / 10
         
-        borderTextField.text = "\(kilograms).\(grams) \(R.string.localizable.measurementKg())"
+        let string = BAMeasurement(weight, .weight, isMetric: UDM.weightIsMetric).string(with: 1)
+        borderTextField.text = BAMeasurement(weight, .weight, isMetric: UDM.weightIsMetric).string(with: 1)
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {

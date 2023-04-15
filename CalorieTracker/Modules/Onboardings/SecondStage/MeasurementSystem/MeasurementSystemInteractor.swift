@@ -43,6 +43,14 @@ extension MeasurementSystemInteractor: MeasurementSystemInteractorInterface {
     
     func set(measurementSystem: MeasurementSystem) {
         onboardingManager.set(measurementSystem: measurementSystem)
+        if measurementSystem == .imperialSystem {
+            UDM.lengthIsMetric = false
+            UDM.weightIsMetric = false
+
+        } else {
+            UDM.lengthIsMetric = true
+            UDM.weightIsMetric = true
+        }
     }
 }
  
