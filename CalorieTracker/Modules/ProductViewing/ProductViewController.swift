@@ -430,7 +430,7 @@ private lazy var collapseRecognizer = UITapGestureRecognizer(
             //                from: .gram,
             //                to: .kcal
             //            )
-            weight = value * coefficient
+            weight = value / coefficient
             addNutrition = .init(
                 kcal: kcal,
                 carbs: carbs,
@@ -623,6 +623,7 @@ private lazy var collapseRecognizer = UITapGestureRecognizer(
                         unitsList.insert(referenceUnit, at: 0)
                     }
                     let convenientUnitsList = unitsList.compactMap { $0.convenientUnit }
+                    selectedWeightType = convenientUnitsList.first ?? selectedWeightType
                     return SelectView(convenientUnitsList, shouldHideAtStartup: true)
                 } else {
                     unitsList.sort { $0.id == 2 || $1.id != 2 }
@@ -635,9 +636,12 @@ private lazy var collapseRecognizer = UITapGestureRecognizer(
                     }
                     
                     let convenientUnitsList = unitsList.compactMap { $0.convenientUnit }
+                    selectedWeightType = convenientUnitsList.first ?? selectedWeightType
                     return SelectView(convenientUnitsList, shouldHideAtStartup: true)
                 }
             }
+            
+          
             return SelectView(presenter?.getProduct()?.units?
                 .sorted(by: { $0.isReference != $1.isReference }).compactMap { $0.convenientUnit }
                               ?? product?.servings?.compactMap {

@@ -412,19 +412,46 @@ extension FoodCellView.FoodViewModel {
         self.verified = !product.isUserProduct
         
         if let serving = product.servings?.first?.weight {
-            self.kcal = BAMeasurement(
-                product.kcal / serving * (unitData.unit.getCoefficient() ?? 1) * unitData.count, .energy, isMetric: true
-            ).localized
-            let descriptionWeight = BAMeasurement(
-                (unitData.unit.getCoefficient() ?? 1) * unitData.count, .serving, isMetric: true
-            ).string(with: 1)
+            if unitData.unit.id != 2 {
+                self.kcal = BAMeasurement(
+                    product.kcal / serving * (unitData.unit.getCoefficient() ?? 1) * unitData.count, .energy,
+                    isMetric: true
+                ).localized
+            } else {
+                self.kcal = BAMeasurement(
+                    product.kcal / serving * unitData.count / (unitData.unit.getCoefficient() ?? 1), .energy,
+                    isMetric: true
+                ).localized
+            }
+            var descriptionWeight = ""
+            if unitData.unit.id != 2 {
+                descriptionWeight = BAMeasurement(
+                    (unitData.unit.getCoefficient() ?? 1) * unitData.count, .serving, isMetric: true
+                ).string(with: 1)
+            } else {
+                descriptionWeight = BAMeasurement(
+                    unitData.count / (unitData.unit.getCoefficient() ?? 1), .serving, isMetric: true
+                ).string(with: 1)
+            }
             let unit = unitData.unit
             let unitCount = unitData.count
             let unitTitle = unit.getTitle(.short) ?? "error getting title"
-            if unitData.unit.id != 1 || unitData.unit.id != 2 {
+            if unitData.unit.id != 1 && unitData.unit.id != 2 {
                 self.description = "\(unitCount) \(unitTitle) (\(descriptionWeight))"
             } else {
-                self.description = "\(descriptionWeight)"
+                if UDM.servingIsMetric {
+                    if unitData.unit.id == 1 {
+                        self.description = "\(descriptionWeight)"
+                    } else {
+                        self.description = "\(unitCount) \(unitTitle) (\(descriptionWeight))"
+                    }
+                } else {
+                    if unitData.unit.id == 2 {
+                        self.description = "\(descriptionWeight)"
+                    } else {
+                        self.description = "\(unitCount) \(unitTitle) (\(descriptionWeight))"
+                    }
+                }
             }
         } else {
             self.kcal = BAMeasurement(product.kcal, .energy, isMetric: true).localized
@@ -434,7 +461,7 @@ extension FoodCellView.FoodViewModel {
                 if unit.id == 1 {
                     description = "\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string(with: 1)))"
                 } else {
-                    description = "\(unit.title) "
+                    description = "\(unit.title)"
                     + "(\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string(with: 1)))"
                 }
                 self.description = description
