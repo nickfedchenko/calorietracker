@@ -80,16 +80,14 @@ final class AddFoodPresenter {
         switch foodType {
         case .frequent:
             let dishes = FDS.shared.getFrequentDishes(10)
-            let products = FDS.shared.getFrequentProducts(10)
+            var products = FDS.shared.getFrequentProducts(10)
             let customEntries = FDS.shared.getFrequentCustomEntries(10)
-            
             self.foods = products.foods + dishes.foods + customEntries.foods
         case .recent:
             let dishes = FDS.shared.getRecentDishes(10)
             let products = FDS.shared.getRecentProducts(10)
             let customEntries = FDS.shared.getRecentCustomEntries(10)
-            
-            self.foods = products.foods + dishes.foods + customEntries.foods
+            self.foods = products + dishes.foods + customEntries.foods
         case .favorites:
             let dishes = FDS.shared.getFavoriteDishes()
             let products = FDS.shared.getFavoriteProducts()
@@ -127,17 +125,17 @@ final class AddFoodPresenter {
     }
     
     private func searchAmongRecent(_ request: String) -> [Food] {
-        let recentDishes = FDS.shared.getRecentDishes(10)
-        let recentProducts = FDS.shared.getRecentProducts(10)
-        
-        let smartSearch: SmartSearch = .init(request)
-        
-        let filteredDishes = recentDishes.filter { smartSearch.matches($0.title) }
-        let filteredProducts = recentProducts.filter {
-            smartSearch.matches($0.title) || smartSearch.matches($0.brand ?? "")
-        }
-        
-        return filteredProducts.foods + filteredDishes.foods
+//        let recentDishes = FDS.shared.getRecentDishes(10)
+//        let recentProducts = FDS.shared.getRecentProducts(10)
+//
+//        let smartSearch: SmartSearch = .init(request)
+//
+//        let filteredDishes = recentDishes.filter { smartSearch.matches($0.title) }
+//        let filteredProducts = recentProducts.filter {
+//            smartSearch.matches($0.title) || smartSearch.matches($0.brand ?? "")
+//        }
+//
+        return  []// filteredProducts.foods + filteredDishes.foods
     }
     
     private func searchAmongAll(_ request: String) -> [Food] {
@@ -150,6 +148,7 @@ final class AddFoodPresenter {
         }
         
         DSF.shared.searchProducts(by: request) { productsFound in
+            print(productsFound)
             products = productsFound
             semaphore.signal()
         }
@@ -199,6 +198,9 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
                 print(foundFood)
                 self.foods = foundFood + products.filter { $0.kcal > 0 }.foods
                 self.view.updateState(for: .search((foundFood + products.foods).isEmpty ? .noResults : .foundResults))
+                if (self.foods?.count ?? 0) > 0 {
+                    RateRequestManager.increment(for: .scanner)
+                }
             }
         }
             DispatchQueue.main.async {

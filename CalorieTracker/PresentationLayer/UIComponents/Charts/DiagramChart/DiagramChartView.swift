@@ -45,9 +45,9 @@ final class DiagramChartView: UIView {
         func getPostfix() -> String {
             switch self {
             case .calories:
-                return "Cal"
+                return BAMeasurement.measurmentSuffix(.energy, isMetric: UDM.energyIsMetric)
             case .carb:
-                return "g"
+                return BAMeasurement.measurmentSuffix(.serving, isMetric: UDM.servingIsMetric)
             case .steps:
                 return ""
             case .water:
@@ -55,7 +55,7 @@ final class DiagramChartView: UIView {
             case .activity:
                 return BAMeasurement.measurmentSuffix(.energy)
             case .protein:
-                return BAMeasurement.measurmentSuffix(.energy)
+                return BAMeasurement.measurmentSuffix(.serving)
             }
         }
         
@@ -191,7 +191,11 @@ final class DiagramChartView: UIView {
         }
     }
     
-    var data: ChartData?
+    var data: ChartData? {
+        didSet {
+            print("data set")
+        }
+    }
     let chartType: DiagramChartType
     
     init(_ type: DiagramChartType) {

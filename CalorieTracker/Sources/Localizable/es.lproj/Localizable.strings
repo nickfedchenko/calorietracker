@@ -191,7 +191,7 @@
 "onboarding.second.measurementSystem.button" = "Continuar";
 "onboarding.second.measurementSystem.title" = "Sistema de medición";
 "onboarding.second.measurementSystem.description.metricSystem" = "Sistema métrico";
-"onboarding.second.measurementSystem.description.imperialSystem" = "Sistema Imperial";
+"onboarding.second.measurementSystem.description.imperialSystem" = "U.S. Standart";
 "onboarding.second.measurementSystem.describe.imperialSystem" = "pies, libras, calorías";
 "onboarding.second.measurementSystem.describe.metricSystem" = "cm, kg, calorías";
 
@@ -794,6 +794,8 @@
 "measurement.oz" = "oz";
 "measurement.mcg" = "mcg";
 "measurement.mg" = "mg";
+"measurements.ft" = "ft";
+"measurements.m" = "m";
 
 "universalSelector.currentSettingsByKcal" = "Basado en la configuración actual, su objetivo de calorías ";
 "universalSelector.currentSettingsByKcalNew" = "Basado en la configuración actual, su nuevo objetivo de calorías ";
@@ -929,3 +931,5 @@
 "yearlySubscription" = "Suscripción anual";
 "tryFreeSubscribe" = "PRUEBA GRATIS Y SUSCRÍBETE";
 "Try 3 days for free, then  " = "Prueba 3 días gratis, luego ";
+"CALORIE GOAL" = "OBJETIVO DE CALORÍAS";
+"Filter your search" = "Filtra tu búsqueda";

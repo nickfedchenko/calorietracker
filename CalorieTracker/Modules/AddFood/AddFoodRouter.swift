@@ -47,7 +47,8 @@ class AddFoodRouter: NSObject {
         searchRequest: String? = nil,
         wasFromMealCreateVC: Bool = false,
         didSelectFood: ((Food) -> Void)? = nil,
-        navigationType: AddFoodnavigationType
+        navigationType: AddFoodnavigationType,
+        shouldSuggestMealTime: Bool = true
     ) -> AddFoodViewController {
       
         let vc = AddFoodViewController(searchFieldYCoordinate: addFoodYCoordinate)
@@ -61,6 +62,7 @@ class AddFoodRouter: NSObject {
         vc.tabBarIsHidden = tabBarIsHidden ?? false
         vc.searchText = searchRequest
         vc.wasFromMealCreateVC = wasFromMealCreateVC ?? false
+        vc.shouldSuggestMealTime = shouldSuggestMealTime
         router.presenter = presenter
         router.viewController = vc
         router.needUpdate = needUpdate

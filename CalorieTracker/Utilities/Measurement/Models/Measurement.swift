@@ -10,6 +10,7 @@ import Foundation
 enum MeasurementValue {
     case weight
     case lenght
+    case lengthLong
     case energy
     case liquid
     case serving
@@ -32,6 +33,8 @@ enum MeasurementValue {
             return UnitMass.milligrams
         case .microNutrients:
             return UnitMass.micrograms
+        case .lengthLong:
+            return UnitLength.meters
         }
     }
     
@@ -51,6 +54,8 @@ enum MeasurementValue {
             return UnitMass.milligrams
         case .microNutrients:
             return UnitMass.micrograms
+        case .lengthLong:
+            return UnitLength.feet
         }
     }
 }

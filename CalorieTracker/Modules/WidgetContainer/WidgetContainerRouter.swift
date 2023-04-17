@@ -41,6 +41,7 @@ extension WidgetContainerRouter: WidgetContainerRouterInterface {
     func openChangeWeightViewController(_ type: WeightKeyboardHeaderView.ActionType) {
         let vc = KeyboardEnterValueViewController(.weight(type))
         vc.needUpdate = {
+            RateRequestManager.increment(for: .addWeight)
             self.presenter?.updateView()
         }
         
@@ -57,7 +58,7 @@ extension WidgetContainerRouter: WidgetContainerRouterInterface {
     }
     
     func openSetGoalWaterVC() {
-        let vc = KeyboardEnterValueViewController(.standart("I will drink daily:"))
+        let vc = KeyboardEnterValueViewController(.standart("widget.water.setGoal.title".localized))
         
         vc.complition = { value in
             WaterWidgetService.shared.setDailyWaterGoal(BAMeasurement(value, .liquid).value)

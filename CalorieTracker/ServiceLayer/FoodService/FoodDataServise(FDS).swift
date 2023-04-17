@@ -31,7 +31,7 @@ protocol FoodDataServiceInterface {
     /// - Parameters:
     ///   - count: количество результатов
     /// - Returns: массив Product
-    func getRecentProducts(_ count: Int) -> [Product]
+    func getRecentProducts(_ count: Int) -> [Food]
     /// Возвращает недавно использованные блюда
     /// - Parameters:
     ///   - count: количество результатов
@@ -395,7 +395,7 @@ extension FDS: FoodDataServiceInterface {
         localPersistentStore.deleteCustomEntry(id)
     }
     
-    func getRecentProducts(_ count: Int) -> [Product] {
+    func getRecentProducts(_ count: Int) -> [Food] {
         let allFoodData = localPersistentStore.fetchFoodData()
             .sorted(by: { $0.dateLastUse >= $1.dateLastUse })
             .filter { $0.food != nil }
@@ -404,12 +404,7 @@ extension FDS: FoodDataServiceInterface {
             : allFoodData
         
         return foodData.compactMap {
-            switch $0.food {
-            case .product(let product, _, _):
-                return product
-            default:
-                return nil
-            }
+            $0.food
         }
     }
     

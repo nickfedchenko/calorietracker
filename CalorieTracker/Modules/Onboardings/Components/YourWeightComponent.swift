@@ -99,10 +99,10 @@ class YourWeightComponent: UIView {
 
 extension YourWeightComponent {
     func set(yourCurrentWeight: Double) {
-        weightLabel.text = String(yourCurrentWeight)
+        weightLabel.text = BAMeasurement(yourCurrentWeight, .weight, isMetric: true).string(with: 1)
     }
     
     func set(yourTargetWeight: Double) {
-        weightLabel.text = String(yourTargetWeight)
+        weightLabel.text = BAMeasurement(yourTargetWeight, .weight, isMetric: true).string(with: 1)
     }
 }

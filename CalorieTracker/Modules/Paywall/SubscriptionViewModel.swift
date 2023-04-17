@@ -6,6 +6,7 @@
 //
 
 import ApphudSDK
+import Amplitude
 import Foundation
 
 final class SubscriptionViewModel {
@@ -38,10 +39,15 @@ final class SubscriptionViewModel {
     
     func loadProducts() {
         Apphud.paywallsDidLoadCallback { [weak self] paywalls in
-            
+            print(paywalls)
             guard
                 let paywall = paywalls.first(where: { $0.identifier == "Main" }),
                 let products = paywalls.first(where: { $0.identifier == "Main" })?.products	 else { return }
+            Amplitude.instance().logEvent("Got_paywall", withEventProperties: [
+                "paywalID": paywall.identifier,
+                "productsCount": paywall.products.count
+            ])
+        
             self?.targetPaywall = paywall
             self?.products = products.reversed()
         }

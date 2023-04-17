@@ -9,11 +9,11 @@
 import CoreData
 
 extension DomainMealComponent {
-
+    
     @nonobjc public class func fetchRequest() -> NSFetchRequest<DomainMealComponent> {
         return NSFetchRequest<DomainMealComponent>(entityName: "DomainMealComponent")
     }
-
+    
     @NSManaged public var dishID: String?
     @NSManaged public var productID: String?
     @NSManaged public var customEntryID: String?
@@ -21,7 +21,7 @@ extension DomainMealComponent {
     @NSManaged public var productAmount: Double
     @NSManaged public var mealComponentId: String?
     @NSManaged public var meal: DomainMeal?
-    @NSManaged public var  productUnitID: Int32
+    @NSManaged public var productUnitID: Int32
     
     var product: Product? {
         if let productID = productID {

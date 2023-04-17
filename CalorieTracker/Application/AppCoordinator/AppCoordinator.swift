@@ -25,11 +25,11 @@ final class AppCoordinator: ApphudDelegate {
     }
     
     func start() {
+        UDM.currentlyWorkingDay = Day(Date())
         startApphud()
         setupAmplitude()
         updateLogStreak()
         startFirebase()
-        UDM.currentlyWorkingDay = Day(Date())
         var getStartedViewController: UIViewController
         //        let trueFlag = true
         //        guard !trueFlag else {
@@ -62,7 +62,7 @@ final class AppCoordinator: ApphudDelegate {
         UINavigationBar.appearance().standardAppearance = appearance
 
         #if DEBUG
-        UDM.didShowAskingOpinion = false
+//        UDM.didShowAskingOpinion = false
         #endif
     }
     

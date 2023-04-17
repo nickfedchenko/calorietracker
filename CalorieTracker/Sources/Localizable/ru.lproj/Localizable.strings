@@ -191,7 +191,7 @@
 "onboarding.second.measurementSystem.button" = "Продолжить";
 "onboarding.second.measurementSystem.title" = "Измерительная система";
 "onboarding.second.measurementSystem.description.metricSystem" = "Метрическая система";
-"onboarding.second.measurementSystem.description.imperialSystem" = "Имперская система";
+"onboarding.second.measurementSystem.description.imperialSystem" = "U.S. стандарт";
 "onboarding.second.measurementSystem.describe.imperialSystem" = "футы, фунты, калории";
 "onboarding.second.measurementSystem.describe.metricSystem" = "см, кг, калории";
 
@@ -795,6 +795,8 @@
 "measurement.oz" = "унц";
 "measurement.mcg" = "мкг";
 "measurement.mg" = "мг";
+"measurements.ft" = "фт";
+"measurements.m" = "м";
 
 "universalSelector.currentSettingsByKcal" = "Основываясь на текущих настройках ваша цель по калориям ";
 "universalSelector.currentSettingsByKcalNew" = "Основываясь на текущих настройках ваша новая цель по калориям ";
@@ -930,3 +932,5 @@
 "yearlySubscription" = "Годовая подписка";
 "tryFreeSubscribe" = "ПОПРОБУЙ БЕСПЛАТНО";
 "Try 3 days for free, then  " = "3 дня бесплатно, далее ";
+"CALORIE GOAL" = "ЦЕЛЬ ПО КАЛОРИЯМ";
+"Filter your search" = "Поиск. фильтр";

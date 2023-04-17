@@ -58,7 +58,7 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
         let label = UILabel()
         label.font = R.font.sfProRoundedBold(size: 16)
         label.textColor = R.color.waterWidget.firstGradientColor()
-        label.text = "Set up quick add"
+        label.text = "widget.water.quickAdd.title".localized
         return label
     }()
     
@@ -129,8 +129,8 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
             )
         )
         
-        button.defaultTitle = "TRACK"
-        button.isPressTitle = "TRACK"
+        button.defaultTitle = "track".localized.uppercased()
+        button.isPressTitle = "track".localized.uppercased()
         
         return button
     }()
@@ -139,11 +139,7 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
         let button = BasicButtonView(
             type: .custom(
                 CustomType(
-                    image: CustomType.Image(
-                        isPressImage: R.image.waterWidget.goalPress(),
-                        defaultImage: R.image.waterWidget.goalDefault(),
-                        inactiveImage: nil
-                    ),
+                    image: nil,
                     title: CustomType.Title(
                         isPressTitleColor: UIColor.white,
                         defaultTitleColor: UIColor.white
@@ -159,8 +155,8 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
             )
         )
         
-        button.defaultTitle = "CHANGE DAILY GOAL"
-        button.isPressTitle = "CHANGE DAILY GOAL"
+        button.defaultTitle = "steps.widget.changeDailyGoal".localized
+        button.isPressTitle = "steps.widget.changeDailyGoal".localized
         
         return button
     }()
@@ -293,7 +289,7 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
             quickAddStack,
             trackButton
         )
-        
+        mainStack.setCustomSpacing(20.fitH, after: goalButton)
         logoView.addSubviews(percentageLabel, percentTitleLabel)
     }
     
@@ -397,7 +393,7 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
     private func configureLabel(value: Int, goal: Int?) {
         let suffix = BAMeasurement.measurmentSuffix(.liquid).uppercased()
         let string = goal == nil
-        ? "TODAY \(value) \(suffix)"
+        ? "\("calendar.topTitle.today".localized) \(value) \(suffix)"
         : "\(value) / \(goal ?? 0) \(suffix)"
         let colorLeft = R.color.waterWidget.secondGradientColor()
         let colorRight = UIColor(hex: "A7F0ED")
@@ -417,12 +413,7 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
                 [
                     .init(worldIndex: [0, 1], attributes: leftAttributes),
                     .init(worldIndex: [2, 3], attributes: rightAttributes)
-                ],
-                image: .init(
-                    image: R.image.waterWidget.editText(),
-                    font: font,
-                    position: .right
-                )
+                ]
             )
         }
     }
@@ -451,6 +442,7 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
         Vibration.success.vibrate()
         presenter?.addWater(slider.stepVolume * slider.step)
         configureView()
+        RateRequestManager.increment(for: .addWater)
         LoggingService.postEvent(event: .watersetmanual)
     }
     

@@ -52,10 +52,9 @@ extension MainScreenRouter: MainScreenRouterInterface {
     func openAddFoodVC() {
         LoggingService.postEvent(event: .diaryaddfood)
         let handler: (() -> Void) = { [weak self] in
-            if !UDM.didShowAskingOpinion {
+            if RateRequestManager.shouldAskOpinion {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0) { [weak self] in
                     self?.showRateUsView()
-                    UDM.didShowAskingOpinion = true
                 }
             }
         }
@@ -169,6 +168,7 @@ extension MainScreenRouter: MainScreenRouterInterface {
         }
         vc.shouldOpenWriteReviewPage = { [weak self] in
             self?.openReviewPage()
+            UDM.didTapToWriteReview = true
         }
         viewController?.navigationController?.present(vc, animated: true)
     }

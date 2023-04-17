@@ -39,7 +39,7 @@ class RecipesFilterScreenViewController: UIViewController {
     private let applyButton: UIButton = {
         let button = UIButton(type: .system)
         let attrTitle = NSAttributedString(
-            string: "Apply".localized,
+            string: "apply".localized.capitalized,
             attributes: [
                 .font: R.font.sfProRoundedBold(size: 22) ?? .systemFont(ofSize: 22),
                 .foregroundColor: UIColor.white

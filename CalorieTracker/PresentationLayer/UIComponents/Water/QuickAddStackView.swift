@@ -107,6 +107,7 @@ final class QuickAddStackView: UIView {
             }
         } else {
             didTapQuickAdd?(view.model.value ?? 0)
+            RateRequestManager.increment(for: .addWater)
         }
     }
 }

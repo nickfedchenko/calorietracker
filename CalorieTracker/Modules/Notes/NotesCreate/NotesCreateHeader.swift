@@ -219,14 +219,14 @@ extension NotesCreateHeader {
     private func getDoneButton() -> UIButton {
         let button = UIButton()
         let attrTitleDisabled = NSAttributedString(
-            string: "DONE".localized.localized,
+            string: "OK",
             attributes: [
                 .font: R.font.sfProRoundedBold(size: 18) ?? .systemFont(ofSize: 18),
                 .foregroundColor: UIColor(hex: "D9D9D9")
             ]
         )
         let attrTitleEnabled = NSAttributedString(
-            string: "DONE".localized.localized,
+            string: "OK",
             attributes: [
                 .font: R.font.sfProRoundedBold(size: 18) ?? .systemFont(ofSize: 18),
                 .foregroundColor: UIColor(hex: "C07036")

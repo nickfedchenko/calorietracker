@@ -32,7 +32,7 @@ final class YourHeightViewController: UIViewController {
     )
     private let pickerView: UIPickerView = .init()
     
-    private var height: Double? = 160.0
+    private var height: Double? = UDM.lengthIsMetric ? 160 : 69
     
     // MARK: - Lifecycle methods
     
@@ -62,7 +62,8 @@ final class YourHeightViewController: UIViewController {
             action: #selector(didTapContinueCommonButton),
             for: .touchUpInside
         )
-        borderTextField.text = BAMeasurement(160, .lenght, isMetric: true).string(with: 0)
+        let startHeight: Double = UDM.lengthIsMetric ? 160 : 69
+        borderTextField.text = BAMeasurement(startHeight, .lenght, isMetric: UDM.lengthIsMetric).string(with: 0)
         
         containerPickerView.backgroundColor = .white
         containerPickerView.layer.cornerRadius = 12
@@ -75,8 +76,13 @@ final class YourHeightViewController: UIViewController {
         pickerView.dataSource = self
         pickerView.delegate = self
         
-        pickerView.selectRow(0, inComponent: 0, animated: false)
-        pickerView.selectRow(60, inComponent: 2, animated: false)
+        if UDM.lengthIsMetric {
+            pickerView.selectRow(0, inComponent: 0, animated: false)
+            pickerView.selectRow(60, inComponent: 2, animated: false)
+        } else {
+            pickerView.selectRow(4, inComponent: 0, animated: false)
+            pickerView.selectRow(9, inComponent: 2, animated: false)
+        }
         
         continueCommonButton.addTarget(self, action: #selector(didTapContinueCommonButton), for: .touchUpInside)
     }
@@ -188,11 +194,19 @@ extension YourHeightViewController: UIPickerViewDataSource {
 
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         if component == 0 {
-            return 2
+            if UDM.lengthIsMetric {
+                return 2
+            } else {
+                return 10
+            }
         } else if component == 1 {
             return 1
         } else if component == 2 {
-            return 100
+            if UDM.lengthIsMetric {
+                return 100
+            } else {
+                return 12
+            }
         } else {
             return 1
         }
@@ -205,17 +219,18 @@ extension YourHeightViewController: UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         let meters = pickerView.selectedRow(inComponent: 0) + 1
         let centimeters = pickerView.selectedRow(inComponent: 2)
-        let height = Double(meters * 100 + centimeters)
+        let coefficient = UDM.lengthIsMetric ? 100 : 12
+        let height = Double(meters * coefficient + centimeters)
         
         self.height = height
-        borderTextField.text = BAMeasurement(height, .lenght, isMetric: true).string(with: 1)
+        borderTextField.text = BAMeasurement(height, .lenght, isMetric: UDM.lengthIsMetric).string(with: 1)
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         if component == 0 {
             return "\(row + 1)"
         } else if component == 1 {
-            return R.string.localizable.onboardingSecondYourHeightM()
+            return BAMeasurement.measurmentSuffix(.lengthLong)
         } else if component == 2 {
             return "\(row * 1)"
         } else if component == 3 {

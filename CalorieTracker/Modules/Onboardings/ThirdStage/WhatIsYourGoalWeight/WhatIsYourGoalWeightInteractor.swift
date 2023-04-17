@@ -38,7 +38,8 @@ extension WhatIsYourGoalWeightInteractor: WhatIsYourGoalWeightInteractorInterfac
     }
     
     func set(whatIsYourGoalWeight: Double) {
-        onboardingManager.set(whatIsYourGoalWeight: whatIsYourGoalWeight)
+        let standartValue = BAMeasurement(whatIsYourGoalWeight, .weight, isMetric: UDM.weightIsMetric).value
+        onboardingManager.set(whatIsYourGoalWeight: standartValue)
     }
     
     func getWeightRange() -> Double {

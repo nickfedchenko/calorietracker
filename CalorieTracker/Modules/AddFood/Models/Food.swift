@@ -22,12 +22,21 @@ extension Food {
             if let unitData = foodUnitData {
                 let coefficient = unitData.unit.getCoefficient() ?? 1
                 let amount = unitData.count
-                return [
-                    .kcal: product.kcal / servingAmount * (amount * coefficient),
-                    .carb: product.carbs / servingAmount * (amount * coefficient),
-                    .fat: product.fat / servingAmount * (amount * coefficient),
-                    .protein: product.protein / servingAmount * (amount * coefficient)
-                ]
+                if unitData.unit.id != 2 {
+                    return [
+                        .kcal: product.kcal / servingAmount * (amount * coefficient),
+                        .carb: product.carbs / servingAmount * (amount * coefficient),
+                        .fat: product.fat / servingAmount * (amount * coefficient),
+                        .protein: product.protein / servingAmount * (amount * coefficient)
+                    ]
+                } else {
+                    return [
+                        .kcal: product.kcal / servingAmount * (amount / coefficient),
+                        .carb: product.carbs / servingAmount * (amount / coefficient),
+                        .fat: product.fat / servingAmount * (amount / coefficient),
+                        .protein: product.protein / servingAmount * (amount / coefficient)
+                    ]
+                }
             }
             return [
                 .kcal: product.kcal / servingAmount * (customAmount ?? servingAmount),

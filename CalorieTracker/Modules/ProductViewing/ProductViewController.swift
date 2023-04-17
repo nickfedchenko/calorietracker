@@ -430,7 +430,7 @@ private lazy var collapseRecognizer = UITapGestureRecognizer(
             //                from: .gram,
             //                to: .kcal
             //            )
-            weight = value * coefficient
+            weight = value / coefficient
             addNutrition = .init(
                 kcal: kcal,
                 carbs: carbs,
@@ -612,7 +612,36 @@ private lazy var collapseRecognizer = UITapGestureRecognizer(
         
         func getSelectView() -> SelectView<UnitElement.ConvenientUnit> {
             let product = presenter?.getProduct()
+            if var unitsList = presenter?.getProduct()?.units {
+                if UDM.servingIsMetric {
+                    unitsList.sort { $0.id == 1 && $1.id != 1 }
+                    if let referenceIndex = unitsList.firstIndex(
+                        where: { $0.isReference && $0.id != 1 && $0.id != 2 }
+                    ) {
+                        let referenceUnit = unitsList[referenceIndex]
+                        unitsList.remove(at: referenceIndex)
+                        unitsList.insert(referenceUnit, at: 0)
+                    }
+                    let convenientUnitsList = unitsList.compactMap { $0.convenientUnit }
+                    selectedWeightType = convenientUnitsList.first ?? selectedWeightType
+                    return SelectView(convenientUnitsList, shouldHideAtStartup: true)
+                } else {
+                    unitsList.sort { $0.id == 2 || $1.id != 2 }
+                    if let referenceIndex = unitsList.firstIndex(
+                        where: { $0.isReference && $0.id != 1 && $0.id != 2 }
+                    ) {
+                        let referenceUnit = unitsList[referenceIndex]
+                        unitsList.remove(at: referenceIndex)
+                        unitsList.insert(referenceUnit, at: 0)
+                    }
+                    
+                    let convenientUnitsList = unitsList.compactMap { $0.convenientUnit }
+                    selectedWeightType = convenientUnitsList.first ?? selectedWeightType
+                    return SelectView(convenientUnitsList, shouldHideAtStartup: true)
+                }
+            }
             
+          
             return SelectView(presenter?.getProduct()?.units?
                 .sorted(by: { $0.isReference != $1.isReference }).compactMap { $0.convenientUnit }
                               ?? product?.servings?.compactMap {

@@ -262,20 +262,7 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         super.viewDidAppear(animated)
         navigationController?.setToolbarHidden(true, animated: true)
         navigationController?.navigationBar.isHidden = true
-        presenter?.updateWaterWidgetModel()
-        presenter?.updateStepsWidget()
-        presenter?.updateWeightWidget()
-        presenter?.updateExersiceWidget()
-        presenter?.updateMessageWidget()
-        presenter?.updateActivityWidget()
-        presenter?.updateCalendarWidget(UDM.currentlyWorkingDay.date)
-        presenter?.updateNoteWidget()
-        let weights = WeightWidgetService.shared.getAllWeight()
-        guard
-            Apphud.hasActiveSubscription(),
-        !UDM.didShowMainScreenFirstTime else { return }
-        LoggingService.postEvent(event: .diaryfirsttimeopened)
-        UDM.didShowMainScreenFirstTime = true
+        updateWidgets()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -293,6 +280,27 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         //        presenter?.updateNoteWidget()
         //        let new = Date().timeIntervalSince1970
         //        print("main screen time passed \(new - now)")
+    }
+    
+    private func updateWidgets() {
+        presenter?.updateWaterWidgetModel()
+        presenter?.updateStepsWidget()
+        presenter?.updateWeightWidget()
+        presenter?.updateExersiceWidget()
+        presenter?.updateMessageWidget()
+        presenter?.updateActivityWidget()
+        presenter?.updateCalendarWidget(UDM.currentlyWorkingDay.date)
+        presenter?.updateNoteWidget()
+        let weights = WeightWidgetService.shared.getAllWeight()
+        guard
+            Apphud.hasActiveSubscription(),
+        !UDM.didShowMainScreenFirstTime else { return }
+        LoggingService.postEvent(event: .diaryfirsttimeopened)
+        UDM.didShowMainScreenFirstTime = true
+    }
+    
+    @objc private func updateWidgetsSelector() {
+        updateWidgets()
     }
     
     // MARK: - Private methods
@@ -392,6 +400,13 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
             self,
             selector: #selector(updateHKExercisesWidgetByObserver),
             name: Notification.Name("UpdateExercisesWidget"),
+            object: nil
+        )
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(updateWidgetsSelector),
+            name: Notification.Name("UpdateMainScreen"),
             object: nil
         )
     }

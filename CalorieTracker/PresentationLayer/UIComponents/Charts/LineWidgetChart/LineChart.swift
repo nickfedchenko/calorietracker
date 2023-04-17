@@ -11,14 +11,14 @@ final class LineChart: UIView {
     private let lineSpasingSize = CGSize(width: 14, height: 7)
     
     var countColumns: Int = 8
-    var countHorizontalLines: Int = 4
-    var countVerticalLines: Int = 4
-    var startValue: Int = 0
-    var goalValue: CGFloat? {
+    var countHorizontalLines: Int = 4 {
         didSet {
-            print(goalValue)
+            print("count changed to \(countHorizontalLines)")
         }
     }
+    var countVerticalLines: Int = 4
+    var startValue: Int = 0
+    var goalValue: CGFloat?
     var goalTitle: String?
     var startDate: Date?
     var titles: [Int] = [] {
@@ -36,12 +36,14 @@ final class LineChart: UIView {
             didChangeData()
         }
     }
+    let type: LineChartView.LineChartType
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(type: LineChartView.LineChartType) {
+        self.type = type
+        super.init(frame: .zero)
         clipsToBounds = false
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -53,8 +55,9 @@ final class LineChart: UIView {
     
     private func didChangeData() {
         guard let data = data, frame != .zero else { return }
-//        layer.sublayers?.forEach { $0.removeFromSuperlayer() }
-//        subviews.forEach { $0.removeFromSuperview() }
+        subviews.forEach { $0.removeFromSuperview() }
+        layer.sublayers?.forEach { $0.removeFromSuperlayer() }
+
         let newSize = CGSize(
             width: bounds.width - lineSpasingSize.width * 2,
             height: bounds.height - lineSpasingSize.height * 2
@@ -138,11 +141,19 @@ final class LineChart: UIView {
         for index in 0..<titles.count {
             let pointY = lineSpasingSize.height + newHeight - CGFloat(index) * spasing
             
+            let suffix: String = {
+                switch type {
+                case .weight:
+                    return BAMeasurement.measurmentSuffix(.weight, isMetric: UDM.weightIsMetric)
+                case .bmi:
+                    return ""
+                }
+            }()
             let label: UILabel = {
                 let label = UILabel()
                 label.font = R.font.sfProDisplaySemibold(size: 13)
                 label.textColor = R.color.diagramChart.backgroundLines()
-                label.text = "\(titles.reversed()[index]) kg"
+                label.text = "\(titles.reversed()[index]) " + suffix
                 label.sizeToFit()
                 return label
             }()

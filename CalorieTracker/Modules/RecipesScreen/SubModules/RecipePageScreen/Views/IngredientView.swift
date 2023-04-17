@@ -32,6 +32,7 @@ final class IngredientView: UIView {
         label.font = R.font.sfProRoundedSemibold(size: 17)
         label.textAlignment = .right
         label.textColor = UIColor(hex: "FF764B")
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     

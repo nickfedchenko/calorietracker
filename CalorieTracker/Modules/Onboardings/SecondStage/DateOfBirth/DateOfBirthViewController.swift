@@ -84,7 +84,12 @@ final class DateOfBirthViewController: UIViewController {
         if let defaultDate {
             datePicker.setDate(defaultDate, animated: true)
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "dd.MM.yyyy"
+            dateFormatter.dateFormat = DateFormatter.dateFormat(
+                fromTemplate: "dd.MM.yyyy",
+                options: 0,
+                locale: Locale.current
+            )?.replacingOccurrences(of: "/", with: ".")
+
             let dateString = dateFormatter.string(from: defaultDate)
             borderTextField.text = dateString
         }
@@ -102,8 +107,11 @@ final class DateOfBirthViewController: UIViewController {
     
     @objc private func didChangedDatePicker(_ sender: UIDatePicker) {
         let dateFormatter = DateFormatter()
-        
-        dateFormatter.dateFormat = "MM.dd.yyyy"
+        dateFormatter.dateFormat = DateFormatter.dateFormat(
+            fromTemplate: "dd.MM.yyyy",
+            options: 0,
+            locale: Locale.current
+        )?.replacingOccurrences(of: "/", with: ".")
         
         borderTextField.text = dateFormatter.string(from: sender.date)
     }

@@ -6,6 +6,7 @@
 //  Copyright © 2023 FedmanCassad. All rights reserved.
 //
 
+import StoreKit
 import UIKit
 
 protocol RateUsScreenViewControllerInterface: AnyObject {
@@ -89,6 +90,18 @@ class RateUsScreenViewController: UIViewController {
             },
             for: .touchUpInside
         )
+        
+        guard
+            !["US", "GB", "CA", "AU"].contains(Locale.current.regionCode ?? "US")
+        &&
+        !(Locale.current.languageCode ?? "en_US").contains("en") else {
+            return
+        }
+        
+        guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene else {
+            return
+        }
+        SKStoreReviewController.requestReview(in: scene)
     }
     
     private func setupSubviews() {

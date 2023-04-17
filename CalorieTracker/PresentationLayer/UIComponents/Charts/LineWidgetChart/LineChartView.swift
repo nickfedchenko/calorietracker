@@ -13,7 +13,7 @@ protocol LineChartViewInterface: AnyObject {
 }
 
 final class LineChartView: UIView {
-    enum LineChartType {
+    public enum LineChartType {
         case weight
         case bmi
         
@@ -38,7 +38,7 @@ final class LineChartView: UIView {
         func getPostfix() -> String {
             switch self {
             case .weight:
-                return " kg ("
+                return " \(BAMeasurement.measurmentSuffix(.weight, isMetric: UDM.weightIsMetric)) ("
             case .bmi:
                 return " ("
             }
@@ -47,7 +47,7 @@ final class LineChartView: UIView {
     
     private var presenter: LineChartViewPresenter?
     
-    private let lineChart = LineChart()
+    private lazy var lineChart = LineChart(type: chartType)
     
     private lazy var leftTopLabel: UILabel = {
         let label = UILabel()

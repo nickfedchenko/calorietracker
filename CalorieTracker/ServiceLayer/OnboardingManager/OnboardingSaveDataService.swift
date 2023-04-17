@@ -46,10 +46,9 @@ struct OnboardingSaveDataService {
         
         UDM.energyIsMetric = isMetric
         UDM.lengthIsMetric = isMetric
-        UDM.liquidCapacityIsMetric = isMetric
         UDM.servingIsMetric = isMetric
         UDM.weightIsMetric = isMetric
-        UDM.isGloballyMetric = isMetric
+        UDM.isGloballyMetric = true
     }
     
     private func saveValueData() {

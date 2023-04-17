@@ -21,6 +21,7 @@ final class LoggingService {
         case diaryaddfromfoodscreen
         case diarysearch
         case diaryaddfromsearch
+        case foundFoodByBarcode(isSuccessful: Bool)
         case diaryscanfromtabbar
         case diarybarcoderead(succeeded: Bool)
         case diaryscanfound(succeeded: Bool)
@@ -189,12 +190,18 @@ final class LoggingService {
                 return "ob_Apple Health_read"
             case .diaryfirsttimeopened:
                 return "Diary_first_time_opened"
+            case .foundFoodByBarcode(isSuccessful: let isSuccessful):
+                return "Diary_barcode_found"
             }
         }
     }
     
     static func postEvent(event: LoggingEvent) {
         switch event {
+        case .foundFoodByBarcode(isSuccessful: let isSuccessful):
+            Amplitude.instance().logEvent(
+                event.eventName, withEventProperties: ["isSuccessful": isSuccessful ? "Yes" : "No"]
+            )
         case .diarybarcoderead(succeeded: let isSuccess):
             Amplitude.instance().logEvent(
                 event.eventName, withEventProperties: ["scan_succeeded": isSuccess ? "Yes" : "No"]

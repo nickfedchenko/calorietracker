@@ -137,6 +137,7 @@ final class AskingOpinionViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         animateAppearing()
+        UDM.didShowAskingOpinionDate = Date()
     }
     
     @objc private func dismissTapGesture(sender: UITapGestureRecognizer) {
