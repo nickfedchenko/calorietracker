@@ -1,0 +1,30 @@
+{
+  "images" : [
+    {
+      "filename" : "weightsImage.png",
+      "idiom" : "universal"
+    },
+    {
+      "filename" : "weightsImage 1.png",
+      "idiom" : "universal",
+      "locale" : "en"
+    },
+    {
+      "filename" : "weightsImage 2.png",
+      "idiom" : "universal",
+      "locale" : "ru"
+    },
+    {
+      "filename" : "weightsImage 3.png",
+      "idiom" : "universal",
+      "locale" : "de"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  },
+  "properties" : {
+    "localizable" : true
+  }
+}

@@ -269,7 +269,7 @@ final class ScannerViewController: UIViewController {
 
 // MARK: - AVCaptureMetadataOutputObjects Delegate
 
-extension ScannerViewController: AVCaptureMetadataOutputObjectsDelegate {
+    extension ScannerViewController: AVCaptureMetadataOutputObjectsDelegate {
     func metadataOutput(_ output: AVCaptureMetadataOutput,
                         didOutput metadataObjects: [AVMetadataObject],
                         from connection: AVCaptureConnection) {

@@ -52,7 +52,7 @@ final class LineProgressView: UIView {
     private var shape: CAShapeLayer?
     private var isFirstDraw = true
     
-    private lazy var gradientLayer: CAGradientLayer = {
+    lazy var gradientLayer: CAGradientLayer = {
         let layer = CAGradientLayer()
         layer.colors = colors?.compactMap { $0?.cgColor }
         layer.startPoint = CGPoint(x: 0, y: 0)
@@ -60,7 +60,7 @@ final class LineProgressView: UIView {
         return layer
     }()
     
-    private lazy var imageView: UIImageView = {
+    lazy var imageView: UIImageView = {
         let view = UIImageView()
         view.image = R.image.stepsWidget.flaG()
         return view
@@ -141,4 +141,8 @@ final class LineProgressView: UIView {
 //        gradientLayer.add(frameAnimator, forKey: nil)
 //
 //    }
+    
+    func getLineShape() -> CGPath? {
+        shape?.path
+    }
 }

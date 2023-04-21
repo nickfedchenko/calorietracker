@@ -934,3 +934,33 @@
 "Try 3 days for free, then  " = "Essayez 3 jours gratuitement, puis ";
 "CALORIE GOAL" = "OBJECTIF CALORIQUE";
 "Filter your search" = "Filtrez votre recherche";
+
+"landing.topSection.titleMainText" = "Reach @weightTarget@ by @dateTarget@";
+"landing.topSection.description" = "Here is your personal program, @username@";
+
+"landing.checkmarksSection.title" = "This program is build specially for you!";
+"landing.checkmarksSection.physicallyFeeling" = "Physically feeling more comfortable";
+"landing.checkmarksSection.perfectFor" = "Perfect for @sex@ over @age@";
+"landing.checkmarksSection.allergicRestrictions" = "Allergic restrictions: ";
+"landing.checkmarksSection.activityLifeStyle" = "Activity lifestyle: ";
+"landing.checkmarksSection.weeklyGoal" = "Weekly Goal: ";
+
+"landing.circlesSection.title" = "Here are your personal daily macros";
+"landing.circlesSection.description" = "Our main goal is to develop healthy habits: follow your personal macros, put food in a diary in order to control your daily nutrition.
+In our program, we have developed macros especially for you. Based on them, the Kcalc app will help you easily select recipes and foods to reach your weight loss goal faster.";
+"landing.circlesSection.description.fontPart" = "personal macros";
+
+"landing.benefitsSection.headerTitle" = "Here are all the great benefits you get";
+"landing.benefitsSection.title" = "Convenient food tracker and visual control of indicators";
+
+"landing.activitySection.title" = "Activity tracker with Fitness Apps Integration";
+
+"landing.recipesSection.title" = "Over 2000 recipes that are easy to customize";
+
+"landing.measurementsSection.title" = "Measures of change in weight and BMI";
+
+"landing.waterSection.title" = "Tracking the amount of water you drink and steps taken";
+"landing.waterSection.descriptionFull" = "Your personal daily recommendation for the amount of water: ";
+
+"landing.finalSection.title" = "Why choose our app?";
+"landing.finalSection.descriptionFull" = "Because this technique works! And our application allows you to make the whole process transparent and fun. You will quickly become a habit, take control of your diet and body weight. You don’t have to pay for overpriced teas, detoxes, and other \"cures\", you just need to know more about what you eat. By sticking to an individual plan, you will undoubtedly achieve the desired result!";

@@ -11,6 +11,8 @@ protocol AllergicRestrictionsInteractorInterface: AnyObject {
     func getAllAllergicRestrictions() -> [AllergicRestrictions]
     func set(allergicRestrictions: AllergicRestrictions)
     func getCurrentOnboardingStage() -> OnboardingStage
+    func restrictionTapped(at index: Int)
+    func saveRestrictions()
 }
 
 class AllergicRestrictionsInteractor {
@@ -18,7 +20,8 @@ class AllergicRestrictionsInteractor {
     // MARK: - Public properties
     
     weak var presenter: AllergicRestrictionsPresenterInterface?
-    
+    let allRestrictions: [AllergicRestrictions] = AllergicRestrictions.allCases
+    var selectedRestrictions: [AllergicRestrictions] = []
     // MARK: - Managers
     
     private let onboardingManager: OnboardingManagerInterface
@@ -43,5 +46,18 @@ extension AllergicRestrictionsInteractor: AllergicRestrictionsInteractorInterfac
     
     func set(allergicRestrictions: AllergicRestrictions) {
         onboardingManager.set(allergicRestrictions: allergicRestrictions)
+    }
+    
+    func restrictionTapped(at index: Int) {
+        let tappedRestriction = allRestrictions[index]
+            if selectedRestrictions.contains(where: { $0 == tappedRestriction }) {
+                selectedRestrictions.removeAll(where: { $0 == tappedRestriction })
+            } else {
+                selectedRestrictions.append(tappedRestriction)
+            }
+    }
+    
+    func saveRestrictions() {
+        UDM.restrictions = selectedRestrictions
     }
 }

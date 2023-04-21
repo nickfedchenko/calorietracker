@@ -810,7 +810,7 @@
 
 "calendar.topTitle.today" = "TODAY";
 "calendar.topTitle.yesterday" = "YESTERDAY";
-"calendar.logStreak" = " days\n in a row";
+"calendar.logStreak" = " days\n continuously";
 
 "reviews.writeAReview" = "Write a review";
 "reviews.sendUsFeedback" = "Contact us";
@@ -934,3 +934,33 @@
 "Try 3 days for free, then  " = "3 day free trial, then ";
 "CALORIE GOAL" = "CALORIE GOAL";
 "Filter your search" = "Search using filter";
+
+"landing.topSection.titleMainText" = "Reach @weightTarget@ by @dateTarget@";
+"landing.topSection.description" = "Here is your personal program, @username@";
+
+"landing.checkmarksSection.title" = "This program is specially build  for you!!";
+"landing.checkmarksSection.physicallyFeeling" = "Feeling more comfortable physically";
+"landing.checkmarksSection.perfectFor" = "Perfect for @sex@ over @age@";
+"landing.checkmarksSection.allergicRestrictions" = "Allergic restrictions: ";
+"landing.checkmarksSection.activityLifeStyle" = "Activity lifestyle: ";
+"landing.checkmarksSection.weeklyGoal" = "Weekly Goal: ";
+
+"landing.circlesSection.title" = "Here are your personal daily macros";
+"landing.circlesSection.description" = "Our main goal is to develop healthy habits: follow your personal plan, enter your food in diary to control your daily nutrition.
+In our program we have developed macros especially for you. Based on them Kcalc app helps you easily to choose recipes and reach your weight loss goal faster.";
+"landing.circlesSection.description.fontPart" = "personal plan";
+
+"landing.benefitsSection.headerTitle" = "Here are all the great benefits for you";
+"landing.benefitsSection.title" = "Convenient food tracker\nand visual indicator control";
+
+"landing.activitySection.title" = "Activity tracker integrated with Fitness Apps";
+
+"landing.recipesSection.title" = "Over 2000 recipes that are easy to customize";
+
+"landing.measurementsSection.title" = "Weight Change Chart, BMI\nand more";
+
+"landing.waterSection.title" = "Tracking your water intake and steps activity";
+"landing.waterSection.descriptionFull" = "You personal recommendation for daily water intake: ";
+
+"landing.finalSection.title" = "Why choose our app?";
+"landing.finalSection.descriptionFull" = "Because this technique really works! Our application makes the whole process transparent and fun. You will quickly become a habit; control your weight and dietary intake. You don’t need to pay for doubtful wonder tees, detox and other \“cures\”. All you need is just to track what you’re eating. Stick to your individual plan and you will for sure reach your goal!";

@@ -8,11 +8,6 @@
 import UIKit
 
 class InnerShadowTextField: UITextField {
-    override var backgroundColor: UIColor? {
-        didSet {
-            print("color changed")
-        }
-    }
     
     var innerShadowColors: [UIColor] {
         get {

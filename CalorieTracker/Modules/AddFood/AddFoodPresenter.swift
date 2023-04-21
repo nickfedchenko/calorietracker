@@ -148,7 +148,6 @@ final class AddFoodPresenter {
         }
         
         DSF.shared.searchProducts(by: request) { productsFound in
-            print(productsFound)
             products = productsFound
             semaphore.signal()
         }
@@ -195,16 +194,15 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
         
         DSF.shared.searchRemoteProduct(byBarcode: barcode) { products in
             DispatchQueue.main.async {
-                print(foundFood)
                 self.foods = foundFood + products.filter { $0.kcal > 0 }.foods
                 self.view.updateState(for: .search((foundFood + products.foods).isEmpty ? .noResults : .foundResults))
                 if (self.foods?.count ?? 0) > 0 {
+                    LoggingService.postEvent(event: .diaryscanfound(succeeded: !foundFood.isEmpty))
                     RateRequestManager.increment(for: .scanner)
                 }
             }
         }
             DispatchQueue.main.async {
-                LoggingService.postEvent(event: .diaryscanfound(succeeded: !foundFood.isEmpty))
                 self.foods = foundFood
                 self.view.updateState(for: .search(foundFood.isEmpty ? .noResults : .foundResults))
                 self.view.setSearchField(to: barcode)

@@ -514,7 +514,7 @@ extension WaterFullWidgetView: TransitionAnimationReady {
         let font = R.font.sfProRoundedBold(size: 18)
         let leftAttributes: [StringSettings] = [.color(colorLeft), .font(font)]
         let rightAttributes: [StringSettings] = [.color(colorRight), .font(font)]
-        print(string)
+
         if goal != nil {
             waterValueLabel.attributedText = string.attributedSring([
                 .init(worldIndex: [0], attributes: leftAttributes),

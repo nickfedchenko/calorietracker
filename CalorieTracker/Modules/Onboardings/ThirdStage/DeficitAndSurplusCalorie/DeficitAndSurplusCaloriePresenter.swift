@@ -21,6 +21,7 @@ class DeficitAndSurplusCaloriePresenter {
     unowned var view: DeficitAndSurplusCalorieViewControllerInterface
     let router: DeficitAndSurplusCalorieRouterInterface?
     let interactor: DeficitAndSurplusCalorieInteractorInterface?
+    private var currentRate: Double = 0.1
 
     // MARK: - Initialization
     
@@ -36,6 +37,7 @@ class DeficitAndSurplusCaloriePresenter {
 }
 
 extension DeficitAndSurplusCaloriePresenter: DeficitAndSurplusCaloriePresenterInterface {
+    
     func getGoal() -> WeightGoal {
         interactor?.getWeightGoal(rate: 0) ?? .loss(calorieDeficit: 0)
     }
@@ -64,10 +66,12 @@ extension DeficitAndSurplusCaloriePresenter: DeficitAndSurplusCaloriePresenterIn
     
     func didTapContinueCommonButton(with weightGoal: WeightGoal) {
         interactor?.set(weightGoal: weightGoal)
+        interactor?.setTargetDate(for: currentRate)
         router?.openThanksForTheInformation()
     }
     
     func didChangeRate(on value: Double) {
+        currentRate = value
         if let weightGoal = interactor?.getWeightGoal(rate: value) {
             view.set(weightGoal: weightGoal)
         }

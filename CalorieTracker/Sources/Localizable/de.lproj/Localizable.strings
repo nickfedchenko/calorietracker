@@ -809,7 +809,7 @@
 
 "calendar.topTitle.today" = "heute";
 "calendar.topTitle.yesterday" = "gestern";
-"calendar.logStreak" = " Tage \nhintereinander";
+"calendar.logStreak" = " Tage \npausenlos";
 
 "reviews.writeAReview" = "Schreiben Sie eine Bewertung";
 "reviews.sendUsFeedback" = "Lass es uns wissen";
@@ -934,3 +934,33 @@
 "Try 3 days for free, then  " = "3 Tage kostenlos testen, dann ";
 "CALORIE GOAL" = "KALORIENZIEL";
 "Filter your search" = "Filtern Sie Ihre Suche";
+
+"landing.topSection.titleMainText" = "Erreichen Sie @weightTarget@ zum @dateTarget@";
+"landing.topSection.description" = "Das ist Ihre Personalprogramm, @username@";
+
+"landing.checkmarksSection.title" = "Dieses Programm ist speziell für Sie ausgearbeitet!";
+"landing.checkmarksSection.physicallyFeeling" = "Sich körperlich wohler fühlen";
+"landing.checkmarksSection.perfectFor" = "Perfekt für @sex@ über @age@";
+"landing.checkmarksSection.allergicRestrictions" = "Allergieauslöser: ";
+"landing.checkmarksSection.activityLifeStyle" = "Aktiver Lebensstill: ";
+"landing.checkmarksSection.weeklyGoal" = "Wöchentliches Ziel: ";
+
+"landing.circlesSection.title" = "Hier ist Ihr persönlicher Tagesnährwert";
+"landing.circlesSection.description" = "Unser Hauptziel ist die gesunde Gewohnheiten zu etablieren: folgen Sie Ihren täglichen Nährwert, tragen Sie Ihr Essen ins Tagebuch ein, um Ihre tägliche Nahrung zu verfolgen.
+Wir haben in unserem Programm die Macros speziell für Sie vorgesehen. Drauf basierend hilft Ihnen die Kcalc Anwendung, Rezepte leichter auszuwählen, um Ihr Zielgewicht schneller zu erreichen.";
+"landing.circlesSection.description.fontPart" = "täglichen Nährwert";
+
+"landing.benefitsSection.headerTitle" = "Hier sind alle überragenden Vorteile für Sie";
+"landing.benefitsSection.title" = "Praktischer Essen-Tracker und visuelle Indexkontrolle";
+
+"landing.activitySection.title" = "Aktivitätstracker intergriert mit Fitness App";
+
+"landing.recipesSection.title" = "Über 2000 Rezepte, die leicht angepasst werden können";
+
+"landing.measurementsSection.title" = "Abnahmetabelle, KMI und mehr";
+
+"landing.waterSection.title" = "Wasser-und Schrittverfolgung";
+"landing.waterSection.descriptionFull" = "Ihre personelle Empfehlung der Wassermenge: ";
+
+"landing.finalSection.title" = "Warum wählt man unsere Anwendung?";
+"landing.finalSection.descriptionFull" = "Weil diese Methode funktioniert! Unsere Anwendung macht den ganzen Prozess durchsichtig und spaßhaft. Sie werden schnell die Gewohnheiten etablieren, Diäten und Gewicht kontrollieren. Sie brauchen keine Wundertees, Entgiftungen\nund andere Mittel. Sie brauchen nur Ihre Nahrung zu beachten. Halten Sie an Ihren individuellen Plan, um Ihr gewünschtes Ergebnis sicherlich zu erreichen!";

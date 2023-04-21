@@ -96,7 +96,6 @@ enum RequestGenerator {
                 return
             }
             url = newUrl
-            print("search url \(url)")
         }
         
         func prepareSearchUrl(url: inout URL, byBarcode: String) {
@@ -109,12 +108,11 @@ enum RequestGenerator {
                 return
             }
             url = newUrl
-            print("search url \(url)")
         }
         
         switch self {
         case let .searchProductByBarcode(barcode: barcode):
-            guard var optUrl = URL(string: "https://ketodietapplication.site/api/search/barcode/off") else {
+            guard var optUrl = URL(string: "https://ketodietapplication.site/api/search/barcode.off") else {
                 fatalError("wrong url")
             }
             prepareSearchUrl(url: &optUrl, byBarcode: barcode)

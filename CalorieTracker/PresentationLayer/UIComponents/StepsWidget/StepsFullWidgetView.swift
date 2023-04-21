@@ -7,6 +7,18 @@
 
 import UIKit
 
+protocol StepsFullWidgetAnimatableProtocol: UIView {
+    func getWidgetContainerFrame() -> CGRect
+    func getFrameForTopTitle() -> CGRect
+    func getMainButtonFrame() -> CGRect
+    func getProgressContainerFrame() -> CGRect
+    func getStraightLinePath() -> CGPath?
+    func getFlagFrame() -> CGRect
+    func closeButtonFrame() -> CGRect
+    func getGradientControlPoints() -> (startPoint: CGPoint, endPoint: CGPoint)
+    func getBackgroundLinePath() -> CGPath?
+}
+
 protocol StepsFullWidgetOutput: AnyObject {
     func setGoal(_ widget: StepsFullWidgetView)
 }
@@ -193,6 +205,8 @@ final class StepsFullWidgetView: UIView, CTWidgetFullProtocol {
     }
     
     @objc private func didTapBottomCloseButton(_ sender: UIButton) {
+        Vibration.medium
+            .vibrate()
         didTapCloseButton?()
     }
     
@@ -204,5 +218,58 @@ final class StepsFullWidgetView: UIView, CTWidgetFullProtocol {
 extension StepsFullWidgetView: StepsFullWidgetInterface {
     func setModel(_ model: Model) {
         self.model = model
+    }
+}
+
+extension StepsFullWidgetView: StepsFullWidgetAnimatableProtocol {
+    func getBackgroundLinePath() -> CGPath? {
+        return CGPath(ellipseIn: .zero, transform: .none)
+    }
+    
+    func closeButtonFrame() -> CGRect {
+        guard let superview = superview else {
+            return .zero
+        }
+        return superview.getConvertedFrame(fromSubview: closeButton) ?? .zero
+    }
+    
+    func getMainButtonFrame() -> CGRect {
+        guard let superview = superview else {
+            return .zero
+        }
+        return superview.getConvertedFrame(fromSubview: mainButton) ?? .zero
+    }
+    
+    func getWidgetContainerFrame() -> CGRect {
+        return self.frame
+    }
+    
+    func getFrameForTopTitle() -> CGRect {
+        guard let superview = superview else {
+            return .zero
+        }
+        return superview.getConvertedFrame(fromSubview: topLabel) ?? .zero
+    }
+    
+    func getProgressContainerFrame() -> CGRect {
+        guard let superview = superview else {
+            return .zero
+        }
+        return superview.getConvertedFrame(fromSubview: lineProgressView) ?? .zero
+    }
+    
+    func getStraightLinePath() -> CGPath? {
+        lineProgressView.getLineShape()
+    }
+    
+    func getFlagFrame() -> CGRect {
+        guard let superview = superview else {
+            return .zero
+        }
+        return superview.getConvertedFrame(fromSubview: lineProgressView.imageView) ?? .zero
+    }
+    
+    func getGradientControlPoints() -> (startPoint: CGPoint, endPoint: CGPoint) {
+        return (lineProgressView.gradientLayer.startPoint, lineProgressView.gradientLayer.endPoint)
     }
 }

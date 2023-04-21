@@ -459,7 +459,7 @@ extension FoodCellView.FoodViewModel {
                let unit = product.units?.first(where: { $0.isReference }) {
                 var description = ""
                 if unit.id == 1 {
-                    description = "\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string(with: 1)))"
+                    description = "\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string(with: 1))"
                 } else {
                     description = "\(unit.title)"
                     + "(\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string(with: 1)))"

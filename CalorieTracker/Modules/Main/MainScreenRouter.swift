@@ -71,46 +71,46 @@ extension MainScreenRouter: MainScreenRouterInterface {
         switch type {
         case.steps:
 //            #if AppStore
-            if !UDM.isAuthorisedHealthKit {
-                HealthKitAccessManager.shared.askPermission { result in
-                    switch result {
-                    case .success(let success):
-                        UDM.isAuthorisedHealthKit = success
-                        HealthKitDataManager.shared.getSteps { steps in
-                            DSF.shared.saveSteps(steps)
-                        }
-
-                        HealthKitDataManager.shared.getWorkouts { exercises  in
-                            DSF.shared.saveExercises(exercises)
-                        }
-
-                    case .failure(let failure):
-                        print(failure)
-                    }
-                }
-                return
-            }
+//            if !UDM.isAuthorisedHealthKit {
+//                HealthKitAccessManager.shared.askPermission { result in
+//                    switch result {
+//                    case .success(let success):
+//                        UDM.isAuthorisedHealthKit = success
+//                        HealthKitDataManager.shared.getSteps { steps in
+//                            DSF.shared.saveSteps(steps)
+//                        }
+//
+//                        HealthKitDataManager.shared.getWorkouts { exercises  in
+//                            DSF.shared.saveExercises(exercises)
+//                        }
+//
+//                    case .failure(let failure):
+//                        print(failure)
+//                    }
+//                }
+//                return
+//            }
 //            #endif
             fallthrough
         case .exercises:
-            if !UDM.isAuthorisedHealthKit {
-                HealthKitAccessManager.shared.askPermission { result in
-                    switch result {
-                    case .success(let success):
-                        UDM.isAuthorisedHealthKit = success
-                        HealthKitDataManager.shared.getSteps { steps in
-                            DSF.shared.saveSteps(steps)
-                        }
-                        
-                        HealthKitDataManager.shared.getWorkouts { exercises  in
-                            DSF.shared.saveExercises(exercises)
-                        }
-                    case .failure(let failure):
-                        print(failure)
-                    }
-                }
-                return
-            }
+//            if !UDM.isAuthorisedHealthKit {
+//                HealthKitAccessManager.shared.askPermission { result in
+//                    switch result {
+//                    case .success(let success):
+//                        UDM.isAuthorisedHealthKit = success
+//                        HealthKitDataManager.shared.getSteps { steps in
+//                            DSF.shared.saveSteps(steps)
+//                        }
+//                        
+//                        HealthKitDataManager.shared.getWorkouts { exercises  in
+//                            DSF.shared.saveExercises(exercises)
+//                        }
+//                    case .failure(let failure):
+//                        print(failure)
+//                    }
+//                }
+//                return
+//            }
             fallthrough
         default:
             print()

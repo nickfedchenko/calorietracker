@@ -8,11 +8,21 @@
 import Charts
 import UIKit
 
+// swiftlint:disable function_body_length
+// swiftlint:disable type_body_length
+// swiftlint:disable file_length
+
 final class StepsWidgetAnimatableContainer: UIView {
     private var appearingCompletion: (() -> Void)?
+    private var disappearingCompletion: (() -> Void)?
     enum StepsAnimatableViewInitialState {
         case compactToFull(compactFrame: CGRect, steps: Int, progress: CGFloat)
-        case fullToCompact(fullFrame: CGRect)
+        case fullToCompact(
+            fullFrame: CGRect,
+            steps: Int,
+            progress: CGFloat,
+            fullWidget: StepsFullWidgetAnimatableProtocol
+        )
     }
     
     private var apearingAnimationFinishGroup: CAAnimationGroup?
@@ -20,6 +30,7 @@ final class StepsWidgetAnimatableContainer: UIView {
        let view = UIView()
         view.backgroundColor = .white
         view.layer.cornerRadius = 16
+        view.clipsToBounds = false
         return view
     }()
     
@@ -27,6 +38,7 @@ final class StepsWidgetAnimatableContainer: UIView {
        let view = UIView()
         view.backgroundColor = .white
         view.layer.cornerRadius = 16
+        view.clipsToBounds = false
         return view
     }()
     
@@ -91,6 +103,7 @@ final class StepsWidgetAnimatableContainer: UIView {
                 position: .left
             )
         )
+        label.textAlignment = .right
         return label
     }()
     
@@ -139,9 +152,58 @@ final class StepsWidgetAnimatableContainer: UIView {
             self.progress = progress
             setupInitialStateCompact(targetFrame: frame)
             drawInitialProgress()
-        case .fullToCompact(fullFrame: let frame):
-            return
+        case .fullToCompact(fullFrame: let frame, steps: let steps, progress: let progress, fullWidget: let widget):
+            self.steps = steps
+            self.progress = progress
+            setupInitialStateFull(targetFrame: frame, initialWidget: widget)
+            drawInitialProgressForFullState()
+//            drawInitialProgress()
         }
+    }
+    
+    private func setupInitialStateFull(targetFrame: CGRect, initialWidget: StepsFullWidgetAnimatableProtocol) {
+        addSubviews(
+            fullWidgetContainer,
+            topTitleLabel,
+            bottomLabel,
+            progressLineContainerView,
+            imageView,
+            mainButton,
+            closeButton
+        )
+        let string = Text.steps
+        let font = R.font.sfProRoundedBold(size: 22)
+        let color = R.color.stepsWidget.secondGradientColor()
+        let image = R.image.stepsWidget.foot()
+        
+        topTitleLabel.attributedText = string.attributedSring(
+            [.init(
+                worldIndex: [0],
+                attributes: [.color(color), .font(font)]
+            )],
+            image: .init(
+                image: image,
+                font: font,
+                position: .left
+            )
+        )
+        topTitleLabel.textAlignment = .right
+        var adjustmentFrame = initialWidget.getFrameForTopTitle()
+        updateTopLabelFull()
+        topTitleLabel.sizeToFit()
+        bottomLabel.sizeToFit()
+        
+     
+        adjustmentFrame.size.width = topTitleLabel.frame.width + 4 + bottomLabel.frame.width
+        adjustmentFrame.origin.x = targetFrame.midX - adjustmentFrame.width / 2
+        fullWidgetContainer.frame = targetFrame
+        topTitleLabel.frame.origin = adjustmentFrame.origin
+        bottomLabel.frame.origin.y = adjustmentFrame.origin.y
+        bottomLabel.frame.origin.x = topTitleLabel.frame.maxX + 5
+        progressLineContainerView.frame = initialWidget.getProgressContainerFrame()
+        mainButton.frame = initialWidget.getMainButtonFrame()
+        closeButton.frame = initialWidget.closeButtonFrame()
+        imageView.frame = initialWidget.getFlagFrame()
     }
     
     private func setupInitialStateCompact(targetFrame: CGRect) {
@@ -201,7 +263,78 @@ final class StepsWidgetAnimatableContainer: UIView {
         self.circleLayer = circleLayer
         progressLineContainerView.layer.addSublayer(circleLayer)
         drawProgressCurve(rect: progressLineContainerView.bounds, progress: progress)
-//        didChangeProgress()
+    }
+    
+    private func drawInitialProgressForFullState() {
+        let newProgress = CGFloat(Int(progress * 1000) % 1000) / 1000.0
+        let linePath: UIBezierPath = {
+            let path = UIBezierPath()
+            path.move(
+                to: CGPoint(
+                    x: progressLineContainerView.frame.height / 2.0,
+                    y: progressLineContainerView.frame.height / 2.0
+                )
+            )
+            path.addLine(
+                to: CGPoint(
+                    x: progressLineContainerView.frame.width - progressLineContainerView.frame.height / 2.0,
+                    y: progressLineContainerView.frame.height / 2.0
+                )
+            )
+            return path
+        }()
+        
+        let lineShape: CAShapeLayer = {
+            let shape = CAShapeLayer()
+            shape.path = linePath.cgPath
+            shape.strokeColor = UIColor.black.cgColor
+            shape.lineWidth = progressLineContainerView.frame.height
+            shape.lineCap = .round
+            return shape
+        }()
+        
+        lineShape.fillColor = UIColor.clear.cgColor
+        
+       let gradientLayer = CAGradientLayer()
+        let colors = [
+            R.color.stepsWidget.firstGradientColor(),
+            R.color.stepsWidget.secondGradientColor()
+        ]
+        gradientLayer.colors = colors.compactMap { $0?.cgColor }
+        gradientLayer.startPoint = CGPoint(x: 0.1, y: 0)
+        gradientLayer.endPoint = CGPoint(x: 1, y: 0)
+        gradientLayer.frame = CGRect(
+            origin: .zero,
+            size: CGSize(
+                width: progressLineContainerView.frame.width * newProgress + progressLineContainerView.frame.height,
+                height: progressLineContainerView.frame.height
+            )
+        )
+        
+        let lineShapeForGradient: CAShapeLayer = {
+            let shape = CAShapeLayer()
+            shape.path = linePath.cgPath
+            shape.strokeColor = UIColor.black.cgColor
+            shape.lineWidth = progressLineContainerView.frame.height
+            shape.lineCap = .round
+            return shape
+        }()
+        progressLineContainerView.layer.addSublayer(lineShape)
+        lineShapeForGradient.strokeEnd = newProgress
+        progressLineContainerView.layer.addSublayer(lineShapeForGradient)
+        progressLineContainerView.layer.addSublayer(gradientLayer)
+        gradientLayer.mask = lineShapeForGradient
+        backgroundLayer = lineShape
+        layers.append((shape: lineShapeForGradient, gradient: gradientLayer))
+        backgroundLayer.strokeColor = R.color.stepsWidget.backgroundLine()?.cgColor
+      
+//        self.gradientLayer.frame = CGRect(
+//            origin: .zero,
+//            size: CGSize(
+//                width: self.bounds.width * newProgress + self.bounds.height,
+//                height: self.bounds.height
+//            )
+//        )
     }
     
     private func didChangeSteps() {
@@ -378,13 +511,18 @@ final class StepsWidgetAnimatableContainer: UIView {
         ))
         return path
     }
-    // swiftlint:disable:next function_body_length
-    func startTransitionAnimation(targetFrame: CGRect, completion: @escaping () -> Void) {
+
+    func startTransitionAnimationAppearing(
+        targetView: StepsFullWidgetAnimatableProtocol,
+        targetFrame: CGRect,
+        completion: @escaping () -> Void
+    ) {
         appearingCompletion = completion
         fullWidgetContainer.frame = targetFrame
         fullWidgetContainer.frame.origin.x = compactContainer.frame.origin.x
         fullWidgetContainer.alpha = 0
         
+        topTitleLabel.font = R.font.sfProRoundedBold(size: 22)
         updateTopLabelFull()
         mainButton.sizeToFit()
         closeButton.sizeToFit()
@@ -392,15 +530,10 @@ final class StepsWidgetAnimatableContainer: UIView {
         mainButton.layer.zPosition = 2
         closeButton.layer.zPosition = 2
         fullWidgetContainer.addSubviews(mainButton, closeButton)
-       
-        closeButton.frame.origin.x = fullWidgetContainer.frame.midX - closeButton.frame.width / 2
-        closeButton.frame.origin.y = fullWidgetContainer.frame.maxY - closeButton.frame.height - 16
-        
-        mainButton.frame.origin.x = fullWidgetContainer.frame.midX - mainButton.frame.width / 2
-        mainButton.frame.size.height = 62.fitW
-        mainButton.frame.origin.y = closeButton.frame.origin.y - 22.fitH - mainButton.frame.size.height
-        mainButton.frame.size.width = targetFrame.width - 32
-       
+        closeButton.frame = targetView.closeButtonFrame()
+        closeButton.frame.origin.x = targetFrame.maxX
+        mainButton.frame = targetView.getMainButtonFrame()
+        mainButton.frame.origin.x = targetFrame.maxX
         CATransaction.begin()
         CATransaction.setDisableActions(true)
       
@@ -433,18 +566,37 @@ final class StepsWidgetAnimatableContainer: UIView {
         progressContainerLayerZPositionAnimation.keyTimes = [0, 0.5]
         progressContainerLayerZPositionAnimation.duration = 0.6
         progressContainerLayerZPositionAnimation.isAdditive = true
-        let adjustmentFrame = calculateAdjustmentRectForFullWidget(for: targetFrame)
+        var adjustmentFrame = targetView.getFrameForTopTitle()
+        adjustmentFrame.size.width = topTitleLabel.frame.width + 4 + bottomLabel.frame.width
+        adjustmentFrame.origin.x = targetFrame.midX - adjustmentFrame.width / 2
+        let string = Text.steps
+        let font = R.font.sfProRoundedBold(size: 22)
+        let color = R.color.stepsWidget.secondGradientColor()
+        let image = R.image.stepsWidget.foot()
+        
+        topTitleLabel.attributedText = string.attributedSring(
+            [.init(
+                worldIndex: [0],
+                attributes: [.color(color), .font(font)]
+            )],
+            image: .init(
+                image: image,
+                font: font,
+                position: .left
+            )
+        )
         let imageViewLayerZPositionAnimation = CAKeyframeAnimation(keyPath: "zPosition")
         imageViewLayerZPositionAnimation.values = [imageView.layer.zPosition, 5]
         imageViewLayerZPositionAnimation.keyTimes = [0, 0.5]
         imageViewLayerZPositionAnimation.duration = 0.6
         imageViewLayerZPositionAnimation.isAdditive = true
         
+        let flagImageFrame = targetView.getFlagFrame()
         let imageViewLayerPositionAnimation = CASpringAnimation(keyPath: "position")
-        imageViewLayerPositionAnimation.fromValue = topTitleLabel.layer.position
+        imageViewLayerPositionAnimation.fromValue = imageView.layer.position
         imageViewLayerPositionAnimation.toValue = CGPoint(
-            x: targetFrame.maxX - 27.5,
-            y: adjustmentFrame.maxY + 32.5 * 1.fitH - imageView.intrinsicContentSize.height / 2
+            x: flagImageFrame.midX,
+            y: flagImageFrame.midY
         )
 //        didChangeProgress()
         circleLayer.opacity = 0
@@ -483,22 +635,23 @@ final class StepsWidgetAnimatableContainer: UIView {
         bottomLabelGroup.fillMode = .forwards
         bottomLabelGroup.isRemovedOnCompletion = false
         
+        let mainButtonFrame = targetView.getMainButtonFrame()
         let mainButtonLayerPositionAnimation = CASpringAnimation(keyPath: "position")
         mainButtonLayerPositionAnimation.fromValue = mainButton.layer.position
         mainButtonLayerPositionAnimation.toValue = CGPoint(
-            x: targetFrame.midX,
-            y: mainButton.layer.position.y
+            x: mainButtonFrame.midX,
+            y: mainButtonFrame.midY
         )
         
         mainButtonLayerPositionAnimation.mass = 0.5
-        mainButtonLayerPositionAnimation.initialVelocity = 0.8
+        mainButtonLayerPositionAnimation.initialVelocity = 0.3
         mainButtonLayerPositionAnimation.damping = 11
         mainButtonLayerPositionAnimation.duration = mainButtonLayerPositionAnimation.settlingDuration
         mainButtonLayerPositionAnimation.isRemovedOnCompletion = false
         mainButtonLayerPositionAnimation.isCumulative = true
         mainButtonLayerPositionAnimation.fillMode = .forwards
         mainButton.layer.add(mainButtonLayerPositionAnimation, forKey: nil)
-      
+        let closeButtonFrame = targetView.closeButtonFrame()
         let closeButtonLayerPositionAnimation = CASpringAnimation(keyPath: "position")
         closeButtonLayerPositionAnimation.fromValue = mainButton.layer.position
         closeButtonLayerPositionAnimation.toValue = CGPoint(
@@ -507,7 +660,7 @@ final class StepsWidgetAnimatableContainer: UIView {
         )
         
         closeButtonLayerPositionAnimation.mass = 0.5
-        closeButtonLayerPositionAnimation.initialVelocity = 0.8
+        closeButtonLayerPositionAnimation.initialVelocity = 0.3
         closeButtonLayerPositionAnimation.damping = 11
         closeButtonLayerPositionAnimation.duration = mainButtonLayerPositionAnimation.settlingDuration
         closeButtonLayerPositionAnimation.isRemovedOnCompletion = false
@@ -522,13 +675,14 @@ final class StepsWidgetAnimatableContainer: UIView {
         topTitleGroup.fillMode = .forwards
         topTitleGroup.isRemovedOnCompletion = false
   
+        let targetProgressLineContainerFrame = targetView.getProgressContainerFrame()
         let progressLineBoundsAnimator = CASpringAnimation(keyPath: "bounds")
         progressLineBoundsAnimator.fromValue = progressLineContainerView.bounds
         progressLineBoundsAnimator.toValue = CGRect(
             x: 0,
             y: 0,
-            width: targetFrame.width - 32,
-            height: 33
+            width: targetProgressLineContainerFrame.width,
+            height: targetProgressLineContainerFrame.height
         )
         progressLineBoundsAnimator.mass = 0.5
         progressLineBoundsAnimator.initialVelocity = 0.8
@@ -538,8 +692,8 @@ final class StepsWidgetAnimatableContainer: UIView {
         let progressLinePositionAnimator = CASpringAnimation(keyPath: "position")
         progressLinePositionAnimator.fromValue = progressLineContainerView.layer.position
         progressLinePositionAnimator.toValue = CGPoint(
-            x: targetFrame.midX,
-            y: adjustmentFrame.maxY + 16.5
+            x: targetProgressLineContainerFrame.midX,
+            y: targetProgressLineContainerFrame.midY
         )
         progressLinePositionAnimator.mass = 0.5
         progressLinePositionAnimator.initialVelocity = 0.8
@@ -567,25 +721,11 @@ final class StepsWidgetAnimatableContainer: UIView {
         imageViewGroup.fillMode = .forwards
         imageViewGroup.isRemovedOnCompletion = false
         
-        let linePath: UIBezierPath = {
-            let path = UIBezierPath()
-            path.move(to: CGPoint(x: 6, y: 30.5 * 1.fitH))
-            path.addLine(to: CGPoint(x: targetFrame.width - 38.2, y: 30.5 * 1.fitH))
-            //           path.close()
-            return path
-        }()
-        
-        let linePath2: UIBezierPath = {
-            let path = UIBezierPath()
-            path.move(to: CGPoint(x: 6, y: 30.5 * 1.fitH))
-            path.addLine(to: CGPoint(x: targetFrame.width - 38.2, y: 30.5 * 1.fitH))
-            //           path.close()
-            return path
-        }()
+        let linePath = targetView.getStraightLinePath()
     
         let backgroundPathAnimator = CABasicAnimation(keyPath: #keyPath(CAShapeLayer.path))
         backgroundPathAnimator.fromValue = backgroundLayer.path
-        backgroundPathAnimator.toValue = linePath2.cgPath
+        backgroundPathAnimator.toValue = linePath
         backgroundPathAnimator.duration = 0.3
         backgroundPathAnimator.isCumulative = true
         backgroundPathAnimator.fillMode = .forwards
@@ -595,7 +735,7 @@ final class StepsWidgetAnimatableContainer: UIView {
        
         let progressLinePathAnimator = CABasicAnimation(keyPath: #keyPath(CAShapeLayer.path))
         progressLinePathAnimator.fromValue = layers.first?.shape.path
-        progressLinePathAnimator.toValue = linePath.cgPath
+        progressLinePathAnimator.toValue = linePath
         progressLinePathAnimator.duration = 0.3
         progressLinePathAnimator.isCumulative = true
         progressLinePathAnimator.isAdditive = true
@@ -616,15 +756,14 @@ final class StepsWidgetAnimatableContainer: UIView {
         backgroundLayer.add(backgroundPathAnimator, forKey: "path")
 
         imageView.layer.add(imageViewGroup, forKey: nil)
-      
 
         layers.first?.shape.add(progressLinePathAnimator, forKey: "path")
-        progressLineContainerView.frame = CGRect(
-            x: targetFrame.origin.x + 10,
-            y: adjustmentFrame.maxY,
-            width: targetFrame.width - 32,
-            height: 33.fitH
-        )
+//        progressLineContainerView.frame = CGRect(
+//            x: targetFrame.origin.x + 10,
+//            y: adjustmentFrame.maxY,
+//            width: targetFrame.width - 32,
+//            height: 33.fitH
+//        )
         layers.first?.gradient.frame = CGRect(
             x: 0,
             y: 0,
@@ -647,7 +786,7 @@ final class StepsWidgetAnimatableContainer: UIView {
 //        mainWidgetPositionAnimation.mass = 0.5
 //        mainWidgetPositionAnimation.initialVelocity = 0.8
 //        mainWidgetPositionAnimation.damping = 10
-        mainWidgetPositionAnimation.duration = 0.3//mainWidgetPositionAnimation.settlingDuration
+        mainWidgetPositionAnimation.duration = 0.3 // mainWidgetPositionAnimation.settlingDuration
 //        fullWidgetContainer.layer.add(mainWidgetFrameAnimation, forKey: "frame")
         let fullWidgetAlphaAnimator = CABasicAnimation(keyPath: "opacity")
         fullWidgetAlphaAnimator.fromValue = fullWidgetContainer.layer.opacity
@@ -660,6 +799,7 @@ final class StepsWidgetAnimatableContainer: UIView {
         fullWidgetGroup.timingFunction = CAMediaTimingFunction(name: .easeIn)
         fullWidgetGroup.fillMode = .forwards
         fullWidgetGroup.isRemovedOnCompletion = false
+     
 //        self.apearingAnimationFinishGroup = fullWidgetGroup
         fullWidgetGroup.delegate = self
         fullWidgetContainer.layer.add(fullWidgetGroup, forKey: nil)
@@ -669,12 +809,409 @@ final class StepsWidgetAnimatableContainer: UIView {
         bottomLabel.layer.zPosition = 2
         progressLineContainerView.layer.zPosition = 2
         imageView.layer.zPosition = 2
-        updateGradient()
+        let controlPoints = targetView.getGradientControlPoints()
+        let newProgress = CGFloat(Int(progress * 1000) % 1000) / 1000.0
+        let gradientLayerBoundsAnimator = CABasicAnimation(keyPath: "bounds")
+        gradientLayerBoundsAnimator.duration = 0.3
+        gradientLayerBoundsAnimator.fromValue = layers.first?.gradient.bounds
+        gradientLayerBoundsAnimator.toValue = CGRect(
+            x: .zero,
+            y: .zero,
+            width: targetProgressLineContainerFrame.width * newProgress + targetProgressLineContainerFrame.height,
+            height: targetProgressLineContainerFrame.height
+        )
+        gradientLayerBoundsAnimator.fillMode = .forwards
+        gradientLayerBoundsAnimator.isRemovedOnCompletion = false
+        gradientLayerBoundsAnimator.timingFunction = CAMediaTimingFunction(name: .easeIn)
+        gradientLayerBoundsAnimator.isCumulative = true
+        let targetGradientFrame = CGRect(
+            x: 0,
+            y: 0,
+            width: targetProgressLineContainerFrame.width * newProgress + targetProgressLineContainerFrame.height,
+            height: targetProgressLineContainerFrame.height
+        )
+        let gradientLayerPositionAnimator = CABasicAnimation(keyPath: "position")
+        gradientLayerPositionAnimator.duration = 0.3
+        gradientLayerPositionAnimator.fromValue = layers.first?.gradient.position
+        gradientLayerPositionAnimator.toValue = CGPoint(
+            x: targetGradientFrame.midX,
+            y: targetGradientFrame.midY
+        )
+        gradientLayerPositionAnimator.fillMode = .forwards
+        gradientLayerPositionAnimator.isRemovedOnCompletion = false
+        gradientLayerPositionAnimator.timingFunction = CAMediaTimingFunction(name: .easeIn)
+//        gradientLayerPositionAnimator.isCumulative = true
+      
+        let shapeLayerStrokeEndAnimator = CABasicAnimation(keyPath: "strokeEnd")
+        shapeLayerStrokeEndAnimator.fromValue = layers.first?.shape.strokeEnd
+        shapeLayerStrokeEndAnimator.toValue = newProgress
+        shapeLayerStrokeEndAnimator.duration = 0.3
+        shapeLayerStrokeEndAnimator.timingFunction = CAMediaTimingFunction(name: .easeIn)
+        shapeLayerStrokeEndAnimator.fillMode = .forwards
+        shapeLayerStrokeEndAnimator.isRemovedOnCompletion = false
+        
+        let gradientGroup = CAAnimationGroup()
+        gradientGroup.animations = [
+            gradientLayerBoundsAnimator,
+            gradientLayerPositionAnimator
+        ]
+        gradientGroup.duration = 0.3
+        gradientGroup.fillMode = .forwards
+        gradientGroup.isRemovedOnCompletion = false
+        layers.first?.gradient.add(gradientGroup, forKey: nil)
+        layers.first?.shape.add(shapeLayerStrokeEndAnimator, forKey: "strokeEnd")
+        layers.first?.gradient.startPoint = controlPoints.startPoint
+        layers.first?.gradient.endPoint = controlPoints.endPoint
         CATransaction.commit()
+     
+//        layers.first?.shape.strokeEnd = newProgress
+      
     }
     
     func showMainAndCloseButton() {
         
+    }
+    
+    func startTransitionAnimationDisappearing(
+        targetView: StepsWidgetFullToCompactAnimatableProtocol,
+        targetFrame: CGRect,
+        completion: @escaping () -> Void
+    ) {
+        disappearingCompletion = completion
+        let date = UDM.currentlyWorkingDay.date ?? Date()
+        let now = StepsWidgetService.shared.getStepsForDate(date)
+        bottomLabel.attributedText = String(Int(now)).attributedSring([
+            .init(
+                worldIndex: [0],
+                attributes: [
+                    .color(R.color.stepsWidget.secondGradientColor()),
+                    .font(R.font.sfProRoundedBold(size: 18))
+                ]
+            )
+        ])
+       
+        
+        // Individual animators
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        if
+            
+            let topTitleString = topTitleLabel.text,
+            let bottomTitleString = bottomLabel.text {
+            topTitleLabel.animate(
+                font: R.font.sfProRoundedBold(size: 7 / Double(topTitleString.count) * 18) ?? .systemFont(ofSize: 22),
+                duration: 0.3
+            )
+            
+            bottomLabel.animate(
+                font: R.font.sfProRoundedBold(
+                    size: 18
+                ) ?? .systemFont(ofSize: 22),
+                duration: 0.3
+            )
+        }
+        let topTitleLayerZPositionAnimation = CAKeyframeAnimation(keyPath: "zPosition")
+        topTitleLayerZPositionAnimation.values = [topTitleLabel.layer.zPosition, 2]
+        topTitleLayerZPositionAnimation.keyTimes = [0, 0.5]
+        topTitleLayerZPositionAnimation.duration = 0.6
+        topTitleLayerZPositionAnimation.isAdditive = true
+        
+        let bottomTitleLayerZPositionAnimation = CAKeyframeAnimation(keyPath: "zPosition")
+        bottomTitleLayerZPositionAnimation.values = [topTitleLabel.layer.zPosition, 2]
+        bottomTitleLayerZPositionAnimation.keyTimes = [0, 0.5]
+        bottomTitleLayerZPositionAnimation.duration = 0.6
+        bottomTitleLayerZPositionAnimation.isAdditive = true
+        
+        let progressContainerLayerZPositionAnimation = CAKeyframeAnimation(keyPath: "zPosition")
+        progressContainerLayerZPositionAnimation.values = [topTitleLabel.layer.zPosition, 2]
+        progressContainerLayerZPositionAnimation.keyTimes = [0, 0.5]
+        progressContainerLayerZPositionAnimation.duration = 0.6
+        progressContainerLayerZPositionAnimation.isAdditive = true
+        topTitleLabel.layer.add(topTitleLayerZPositionAnimation, forKey: "zPosition")
+        bottomLabel.layer.add(bottomTitleLayerZPositionAnimation, forKey: "zPosition")
+        // MARK: - Container
+        let containerBoundsAnimator = CABasicAnimation(keyPath: "bounds")
+        containerBoundsAnimator.duration = 0.4
+        containerBoundsAnimator.fromValue = targetFrame
+        containerBoundsAnimator.toValue = CGRect(
+            x: 0,
+            y: 0,
+            width: targetFrame.width,
+            height: targetFrame.height
+        )
+        containerBoundsAnimator.duration = 0.4
+        containerBoundsAnimator.isCumulative = true
+        containerBoundsAnimator.isRemovedOnCompletion = false
+        
+        let containerPositionAnimation = CASpringAnimation(keyPath: "position")
+        containerPositionAnimation.fromValue = fullWidgetContainer.layer.position
+        containerPositionAnimation.toValue = CGPoint(x: targetFrame.midX, y: targetFrame.midY)
+        containerPositionAnimation.duration = 0.4
+        containerPositionAnimation.initialVelocity = 0.8
+        containerPositionAnimation.damping = 12
+        containerPositionAnimation.mass = 0.5
+        containerPositionAnimation.isCumulative = true
+        containerPositionAnimation.isRemovedOnCompletion = false
+        containerPositionAnimation.fillMode = .forwards
+        
+        let fullWidgetContainerGroup = CAAnimationGroup()
+        fullWidgetContainerGroup.animations = [containerBoundsAnimator, containerPositionAnimation]
+        fullWidgetContainerGroup.fillMode = .forwards
+        fullWidgetContainerGroup.isRemovedOnCompletion = false
+        fullWidgetContainerGroup.duration = 0.4
+        fullWidgetContainerGroup.timingFunction = CAMediaTimingFunction(name: .easeOut)
+        fullWidgetContainerGroup.delegate = self
+        fullWidgetContainer.layer.add(fullWidgetContainerGroup, forKey: "nil")
+//        fullWidgetContainer.frame = targetFrame
+        // MARK: - Top title
+        let targetTopTitleLabelFrame = targetView.getTopTilteFrame()
+        
+        let topTitleBoundsAnimator = CABasicAnimation(keyPath: "bounds")
+        topTitleBoundsAnimator.duration = 0.3
+        topTitleBoundsAnimator.fromValue = topTitleLabel.bounds
+        topTitleBoundsAnimator.toValue = CGRect(
+            x: 0,
+            y: 0,
+            width: targetTopTitleLabelFrame.width,
+            height: targetTopTitleLabelFrame.height
+        )
+        topTitleBoundsAnimator.duration = 0.3
+        topTitleBoundsAnimator.isCumulative = true
+        topTitleBoundsAnimator.fillMode = .forwards
+        topTitleBoundsAnimator.isRemovedOnCompletion = false
+        
+        let topTitlePositionAnimator = CABasicAnimation(keyPath: "position")
+        topTitlePositionAnimator.fromValue = topTitleLabel.layer.position
+        topTitlePositionAnimator.toValue = CGPoint(x: targetTopTitleLabelFrame.midX, y: targetTopTitleLabelFrame.midY)
+        topTitlePositionAnimator.duration = 0.3
+        topTitlePositionAnimator.isRemovedOnCompletion = false
+        topTitlePositionAnimator.isCumulative = true
+        topTitlePositionAnimator.fillMode = .forwards
+        
+        let targetTopTitleGroup = CAAnimationGroup()
+        targetTopTitleGroup.animations = [topTitlePositionAnimator, topTitleBoundsAnimator]
+        targetTopTitleGroup.fillMode = .forwards
+        targetTopTitleGroup.isRemovedOnCompletion = false
+        targetTopTitleGroup.duration = 0.3
+        targetTopTitleGroup.timingFunction = CAMediaTimingFunction(name: .easeOut)
+        topTitleLabel.layer.add(targetTopTitleGroup, forKey: nil)
+        
+        // MARK: - Bottom title
+        let targetBottomTitleLabelFrame = targetView.getBottomTitleFrame()
+        
+        let bottomTitleBoundsAnimator = CABasicAnimation(keyPath: "bounds")
+        bottomTitleBoundsAnimator.duration = 0.3
+        bottomTitleBoundsAnimator.fromValue = bottomLabel.bounds
+        bottomTitleBoundsAnimator.toValue = CGRect(
+            x: 0,
+            y: 0,
+            width: targetBottomTitleLabelFrame.width,
+            height: targetBottomTitleLabelFrame.height
+        )
+        bottomTitleBoundsAnimator.duration = 0.3
+        bottomTitleBoundsAnimator.isCumulative = true
+        bottomTitleBoundsAnimator.fillMode = .forwards
+        bottomTitleBoundsAnimator.isRemovedOnCompletion = false
+        
+        let bottomTitlePositionAnimator = CABasicAnimation(keyPath: "position")
+        bottomTitlePositionAnimator.fromValue = bottomLabel.layer.position
+        bottomTitlePositionAnimator.toValue = CGPoint(
+            x: targetBottomTitleLabelFrame.midX,
+            y: targetBottomTitleLabelFrame.midY
+        )
+        bottomTitlePositionAnimator.duration = 0.3
+        bottomTitlePositionAnimator.isCumulative = true
+        bottomTitlePositionAnimator.isRemovedOnCompletion = false
+        bottomTitlePositionAnimator.fillMode = .forwards
+        
+        let targetBottomTitleGroup = CAAnimationGroup()
+        targetBottomTitleGroup.animations = [bottomTitlePositionAnimator, bottomTitleBoundsAnimator]
+        targetBottomTitleGroup.fillMode = .forwards
+        targetBottomTitleGroup.isRemovedOnCompletion = false
+        targetBottomTitleGroup.duration = 0.3
+        targetBottomTitleGroup.timingFunction = CAMediaTimingFunction(name: .easeOut)
+        bottomLabel.layer.add(targetBottomTitleGroup, forKey: nil)
+        
+        // MARK: - Flag image
+        let targetFlagFrame = targetView.getFlagFrame()
+        
+        let flagBoundsAnimator = CABasicAnimation(keyPath: "bounds")
+        flagBoundsAnimator.duration = 0.4
+        flagBoundsAnimator.fromValue = imageView.bounds
+        flagBoundsAnimator.toValue = CGRect(
+            x: 0,
+            y: 0,
+            width: targetFlagFrame.width,
+            height: targetFlagFrame.height
+        )
+ 
+        let flagPositionAnimator = CABasicAnimation(keyPath: "position")
+        flagPositionAnimator.fromValue = imageView.layer.position
+        flagPositionAnimator.toValue = CGPoint(
+            x: targetFlagFrame.midX,
+            y: targetFlagFrame.midY
+        )
+        flagPositionAnimator.duration = 0.4
+        
+        let flagGroupGroup = CAAnimationGroup()
+        flagGroupGroup.animations = [flagPositionAnimator, flagBoundsAnimator]
+        flagGroupGroup.fillMode = .forwards
+        flagGroupGroup.isRemovedOnCompletion = false
+        flagGroupGroup.duration = 0.4
+        flagGroupGroup.timingFunction = CAMediaTimingFunction(name: .easeOut)
+        imageView.layer.add(flagGroupGroup, forKey: nil)
+        
+        // MARK: - Progress container
+        let targetProgerssFrame = targetView.getProgressLineFrame()
+        
+        let progressContainerBoundsAnimator = CABasicAnimation(keyPath: "bounds")
+        progressContainerBoundsAnimator.duration = 0.4
+        progressContainerBoundsAnimator.fromValue = progressLineContainerView.bounds
+        progressContainerBoundsAnimator.toValue = CGRect(
+            x: 0,
+            y: 0,
+            width: targetProgerssFrame.width,
+            height: targetProgerssFrame.height
+        )
+        progressContainerBoundsAnimator.duration = 0.4
+        progressContainerBoundsAnimator.isRemovedOnCompletion = false
+        progressContainerBoundsAnimator.fillMode = .forwards
+        progressContainerBoundsAnimator.isCumulative = true
+        
+        let progressContainerPositionAnimator = CABasicAnimation(keyPath: "position")
+        progressContainerPositionAnimator.fromValue = imageView.layer.position
+        progressContainerPositionAnimator.toValue = CGPoint(
+            x: targetProgerssFrame.midX,
+            y: targetProgerssFrame.midY
+        )
+        progressContainerPositionAnimator.duration = 0.4
+        progressContainerPositionAnimator.isCumulative = true
+        progressContainerPositionAnimator.isRemovedOnCompletion = false
+        progressContainerPositionAnimator.fillMode = .forwards
+        
+        
+        let progressContainerGroup = CAAnimationGroup()
+        progressContainerGroup.animations = [progressContainerPositionAnimator, progressContainerBoundsAnimator]
+        progressContainerGroup.fillMode = .forwards
+        progressContainerGroup.isRemovedOnCompletion = false
+        progressContainerGroup.duration = 0.4
+        progressContainerGroup.beginTime = 1
+        progressContainerGroup.timingFunction = CAMediaTimingFunction(name: .easeOut)
+        progressLineContainerView.layer.add(progressContainerGroup, forKey: nil)
+        progressLineContainerView.frame = targetProgerssFrame
+        // MARK: - Progress shapes
+        let targetBackgroundPath = targetView.getBackgroundLinePath()
+        var targetBackgroundBounds = targetProgerssFrame
+        targetBackgroundBounds.origin = .zero
+        let shape = getProgressLayers(rect: targetBackgroundBounds, progress: 1).shape
+
+        let progressBackgroundPathAnimator = CABasicAnimation(keyPath: "path")
+        progressBackgroundPathAnimator.fromValue = backgroundLayer.path
+        progressBackgroundPathAnimator.toValue = shape.path
+        progressBackgroundPathAnimator.duration = 0.01
+        progressBackgroundPathAnimator.isCumulative = true
+        progressBackgroundPathAnimator.fillMode = .forwards
+        progressBackgroundPathAnimator.timingFunction = CAMediaTimingFunction(name: .easeIn)
+        progressBackgroundPathAnimator.isRemovedOnCompletion = false
+        backgroundLayer.add(progressBackgroundPathAnimator, forKey: nil)
+        layers.first?.shape.frame = targetBackgroundBounds
+        layers.first?.gradient.frame = targetBackgroundBounds
+        layers.first?.shape.path = shape.path
+        layers.first?.gradient.mask = shape
+        shape.strokeEnd = progress
+        let mainButtonPositionAnimator = CABasicAnimation(keyPath: "position")
+        mainButtonPositionAnimator.duration = 0.01
+        mainButtonPositionAnimator.fromValue = mainButton.layer.position
+        mainButtonPositionAnimator.toValue = CGPoint(
+            x: frame.maxX + mainButton.frame.width,
+            y: mainButton.layer.position.y
+        )
+        mainButtonPositionAnimator.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        mainButtonPositionAnimator.isRemovedOnCompletion = false
+        mainButtonPositionAnimator.fillMode = .forwards
+        let mainButtonOpacityAnimator = CABasicAnimation(keyPath: "opacity")
+        mainButtonOpacityAnimator.duration = 0.01
+        mainButtonOpacityAnimator.fromValue = 1
+        mainButtonOpacityAnimator.toValue = 0
+        mainButtonOpacityAnimator.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        mainButtonOpacityAnimator.isRemovedOnCompletion = false
+        mainButtonOpacityAnimator.fillMode = .forwards
+        let closeButtonPositionAnimator = CABasicAnimation(keyPath: "position")
+        closeButtonPositionAnimator.duration = 0.01
+        mainButtonPositionAnimator.toValue = CGPoint(
+            x: frame.maxX + closeButton.frame.width,
+            y: closeButton.layer.position.y
+        )
+        closeButtonPositionAnimator.fromValue = closeButton.layer.position
+        closeButtonPositionAnimator.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        closeButtonPositionAnimator.isRemovedOnCompletion = false
+        closeButtonPositionAnimator.fillMode = .forwards
+        let closeButtonOpacityAnimator = CABasicAnimation(keyPath: "opacity")
+        closeButtonOpacityAnimator.duration = 0.01
+        closeButtonOpacityAnimator.toValue = 0
+        closeButtonOpacityAnimator.fromValue = 1
+        closeButtonOpacityAnimator.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        closeButtonOpacityAnimator.isRemovedOnCompletion = false
+        closeButtonOpacityAnimator.fillMode = .forwards
+        let closeButtonGroup = CAAnimationGroup()
+        closeButtonGroup.animations = [closeButtonOpacityAnimator, closeButtonPositionAnimator]
+        closeButtonGroup.duration = 0.4
+        closeButtonGroup.isRemovedOnCompletion = false
+        closeButtonGroup.timingFunction = CAMediaTimingFunction(name: .easeOut)
+        closeButtonGroup.fillMode = .forwards
+        let mainButtonGroup = CAAnimationGroup()
+        mainButtonGroup.animations = [mainButtonOpacityAnimator, mainButtonPositionAnimator]
+        mainButtonGroup.duration = 0.01
+        mainButtonGroup.isRemovedOnCompletion = false
+        mainButtonGroup.timingFunction = CAMediaTimingFunction(name: .easeOut)
+        mainButtonGroup.fillMode = .forwards
+        closeButton.layer.add(closeButtonGroup, forKey: nil)
+        mainButton.layer.add(mainButtonGroup, forKey: nil)
+        CATransaction.commit()
+        adjustGradientFrame()
+        //        layers.first?.shape.strokeEnd = newProgress
+      
+    }
+    
+    private func adjustGradientFrame() {
+        if progress <= 1 {
+            imageView.image = progress < 1
+            ? R.image.stepsWidget.flaG()
+            : R.image.stepsWidget.performedFlag()
+            
+            guard let progressLayer = layers.first else { return }
+            progressLayer.gradient.endPoint = CGPoint(
+                x: progress <= 0.4 ? progress + 0.2 : 0.2,
+                y: progress <= 0.4 ? 0 : progress
+            )
+            progressLayer.shape.strokeEnd = progress
+        } else {
+            if layers.count == 2 {
+                guard let progressLayer = layers.last else { return }
+                let progress = progress.truncatingRemainder(dividingBy: 1)
+                progressLayer.gradient.endPoint = CGPoint(
+                    x: progress <= 0.4 ? progress + 0.2 : 0.2,
+                    y: progress <= 0.4 ? 0 : progress
+                )
+                progressLayer.shape.strokeEnd = progress
+            } else {
+                imageView.image = R.image.stepsWidget.overfulfilledFlag()
+                
+                guard let progressLayerFirst = layers.first else { return }
+                let progressLayerLast = getProgressLayers(
+                    rect: bounds,
+                    progress: progress.truncatingRemainder(dividingBy: 1)
+                )
+                layers.append(progressLayerLast)
+                layer.addSublayer(progressLayerLast.gradient)
+
+                progressLayerFirst.gradient.endPoint = CGPoint(
+                    x: 0.2,
+                    y: 1
+                )
+                progressLayerFirst.shape.strokeEnd = 1
+            }
+        }
     }
     
     private func updateGradient() {
@@ -725,7 +1262,7 @@ final class StepsWidgetAnimatableContainer: UIView {
         var frame = CGRect(
             x: 0,
             y: 0,
-            width: topTitleLabel.intrinsicContentSize.width + 4 + bottomLabel.intrinsicContentSize.width,
+            width: topTitleLabel.intrinsicContentSize.width + 5 + bottomLabel.intrinsicContentSize.width,
             height: 24
         )
         
@@ -751,11 +1288,13 @@ private extension UIColor {
 extension StepsWidgetAnimatableContainer: CAAnimationDelegate {
     func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
         if flag {
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-                appearingCompletion?()
-//            }
+            //            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+            appearingCompletion?()
+            disappearingCompletion?()
+            //            }
         } else {
             appearingCompletion?()
+            disappearingCompletion?()
         }
     }
 }

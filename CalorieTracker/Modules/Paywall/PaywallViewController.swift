@@ -39,6 +39,7 @@ final class PaywallViewController: UIViewController {
         text: R.string.localizable.paywallBestWay()
     )
     private let subscriptionAmount: SubscriptionAmount = .init()
+    
     private let startNowCommonButton: CommonButton = .init(
         style: .gradientBordered,
         text: R.string.localizable.paywallStartNow().uppercased()
@@ -65,6 +66,7 @@ final class PaywallViewController: UIViewController {
         button.addTarget(self, action: #selector(restorePurchasesTapped), for: .touchUpInside)
         return button
     }()
+    
     private lazy var closeButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(R.image.waterWidget.closeSettings(), for: .normal)
