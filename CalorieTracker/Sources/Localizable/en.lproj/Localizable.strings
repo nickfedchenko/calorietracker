@@ -938,7 +938,7 @@
 "landing.topSection.titleMainText" = "Reach @weightTarget@ by @dateTarget@";
 "landing.topSection.description" = "Here is your personal program, @username@";
 
-"landing.checkmarksSection.title" = "This program is specially build  for you!!";
+"landing.checkmarksSection.title" = "This program is specially build  for you!";
 "landing.checkmarksSection.physicallyFeeling" = "Feeling more comfortable physically";
 "landing.checkmarksSection.perfectFor" = "Perfect for @sex@ over @age@";
 "landing.checkmarksSection.allergicRestrictions" = "Allergic restrictions: ";

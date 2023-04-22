@@ -64,6 +64,259 @@ struct Serving: Codable {
 }
 
 extension Product {
+    // swiftlint:disable:next function_body_length
+    func generateBackendSubmitProduct() -> BackendSubmitProduct {
+        let imageData: Data? = {
+            if let photo = photo {
+                switch photo {
+                case .data(let data):
+                    return data
+                case .url(let url):
+                    let data = try? Data(contentsOf: url)
+                    return data
+                }
+            } else {
+                return nil
+            }
+        }()
+        
+        var nutritions: [Nutrition] = []
+        
+        if let saturatedFats = composition?.saturatedFat {
+            nutritions.append(
+                .init(
+                    id: 2,
+                    title: "",
+                    unit: .init(id: -1, title: "", shortTitle: "", isOnlyForMarket: false),
+                    value: saturatedFats
+                )
+            )
+        }
+        
+        if let transFats = composition?.transFat {
+            nutritions.append(
+                .init(
+                    id: 3,
+                    title: "",
+                    unit: .init(id: -1, title: "", shortTitle: "", isOnlyForMarket: false),
+                    value: transFats
+                )
+            )
+        }
+        
+        if let polyUnsaturatedFats = composition?.polyUnsatFat {
+            nutritions.append(
+                .init(
+                    id: 4,
+                    title: "",
+                    unit: .init(id: -1, title: "", shortTitle: "", isOnlyForMarket: false),
+                    value: polyUnsaturatedFats
+                )
+            )
+        }
+        
+        if let monoUnsaturatedFats = composition?.monoUnsatFat {
+            nutritions.append(
+                .init(
+                    id: 5,
+                    title: "",
+                    unit: .init(id: -1, title: "", shortTitle: "", isOnlyForMarket: false),
+                    value: monoUnsaturatedFats
+                )
+            )
+        }
+        
+        if let cholesterol = composition?.cholesterol {
+            nutritions.append(
+                .init(
+                    id: 6,
+                    title: "",
+                    unit: .init(id: -1, title: "", shortTitle: "", isOnlyForMarket: false),
+                    value: cholesterol
+                )
+            )
+        }
+        
+        if let sodium = composition?.sodium {
+            nutritions.append(
+                .init(
+                    id: 7,
+                    title: "",
+                    unit: .init(id: -1, title: "", shortTitle: "", isOnlyForMarket: false),
+                    value: sodium
+                )
+            )
+        }
+        
+        if let carbsTotal = composition?.totalCarbs {
+            nutritions.append(
+                .init(
+                    id: 8,
+                    title: "",
+                    unit: .init(id: -1, title: "", shortTitle: "", isOnlyForMarket: false),
+                    value: carbsTotal
+                )
+            )
+        }
+        
+        if let alimentaryFiber = composition?.diataryFiber {
+            nutritions.append(
+                .init(
+                    id: 9,
+                    title: "",
+                    unit: .init(id: -1, title: "", shortTitle: "", isOnlyForMarket: false),
+                    value: alimentaryFiber
+                )
+            )
+        }
+        
+        if let netCarbs = composition?.netCarbs {
+            nutritions.append(
+                .init(
+                    id: 10,
+                    title: "",
+                    unit: .init(id: -1, title: "", shortTitle: "", isOnlyForMarket: false),
+                    value: netCarbs
+                )
+            )
+        }
+        
+        if let sugarOverall = composition?.totalSugars {
+            nutritions.append(
+                .init(
+                    id: 11,
+                    title: "",
+                    unit: .init(id: -1, title: "", shortTitle: "", isOnlyForMarket: false),
+                    value: sugarOverall
+                )
+            )
+        }
+        
+        if let includingAdditionalSugars = composition?.inclAddedSugars {
+            nutritions.append(
+                .init(
+                    id: 12,
+                    title: "",
+                    unit: .init(id: -1, title: "", shortTitle: "", isOnlyForMarket: false),
+                    value: includingAdditionalSugars
+                )
+            )
+        }
+        
+        if let sugarSpirits = composition?.sugarAlc {
+            nutritions.append(
+                .init(
+                    id: 13,
+                    title: "",
+                    unit: .init(id: -1, title: "", shortTitle: "", isOnlyForMarket: false),
+                    value: sugarSpirits
+                )
+            )
+        }
+        
+        if let protein = composition?.protein {
+            nutritions.append(
+                .init(
+                    id: 14,
+                    title: "",
+                    unit: .init(id: -1, title: "", shortTitle: "", isOnlyForMarket: false),
+                    value: protein
+                )
+            )
+        }
+        
+        if let vitaminD = composition?.vitaminD {
+            nutritions.append(
+                .init(
+                    id: 15,
+                    title: "",
+                    unit: .init(id: -1, title: "", shortTitle: "", isOnlyForMarket: false),
+                    value: vitaminD
+                )
+            )
+        }
+        
+        if let calcium = composition?.calcium {
+            nutritions.append(
+                .init(
+                    id: 16,
+                    title: "",
+                    unit: .init(id: -1, title: "", shortTitle: "", isOnlyForMarket: false),
+                    value: calcium
+                )
+            )
+        }
+        
+        if let ferrum = composition?.iron {
+            nutritions.append(
+                .init(
+                    id: 17,
+                    title: "",
+                    unit: .init(id: -1, title: "", shortTitle: "", isOnlyForMarket: false),
+                    value: ferrum
+                )
+            )
+        }
+        
+        if let potassium = composition?.potassium {
+            nutritions.append(
+                .init(
+                    id: 18,
+                    title: "",
+                    unit: .init(id: -1, title: "", shortTitle: "", isOnlyForMarket: false),
+                    value: potassium
+                )
+            )
+        }
+        
+        if let vitaminA = composition?.vitaminA {
+            nutritions.append(
+                .init(
+                    id: 19,
+                    title: "",
+                    unit: .init(id: -1, title: "", shortTitle: "", isOnlyForMarket: false),
+                    value: vitaminA
+                )
+            )
+        }
+        
+        if let vitaminC = composition?.vitaminC {
+            nutritions.append(
+                .init(
+                    id: 20,
+                    title: "",
+                    unit: .init(id: -1, title: "", shortTitle: "", isOnlyForMarket: false),
+                    value: vitaminC
+                )
+            )
+        }
+        
+        nutritions.append(
+            .init(
+                id: 21,
+                title: "",
+                unit: .init(id: -1, title: "", shortTitle: "", isOnlyForMarket: false),
+                value: kcal
+            )
+        )
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yyyy hh:mm"
+        
+        let serving = servings?.first
+        return .init(
+            id: id,
+            title: title,
+            productTypeID: 999,
+            barcode: barcode,
+            brand: brand,
+            photo: imageData?.base64EncodedString(),
+            nutritions: nutritions,
+            serving: serving,
+            units: [],
+            createdAt: dateFormatter.string(from: Date())
+        )
+    }
     
     init?(from searchProduct: SearchProductNew) {
         self.id = searchProduct.id

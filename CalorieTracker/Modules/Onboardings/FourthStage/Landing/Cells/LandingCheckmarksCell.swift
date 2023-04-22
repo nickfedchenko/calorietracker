@@ -14,6 +14,7 @@ final class LandingCheckmarksCell: UICollectionViewCell {
         let label = UILabel()
         label.textAlignment = .left
         label.numberOfLines = 0
+//        label.setContentCompressionResistancePriority(.required, for: .vertical)
         return label
     }()
     
@@ -21,9 +22,10 @@ final class LandingCheckmarksCell: UICollectionViewCell {
         let stack = UIStackView()
         stack.axis = .vertical
         stack.spacing = 12
-        stack.distribution = .fillEqually
+        stack.distribution = .fillProportionally
         stack.alignment = .leading
-        stack.setContentHuggingPriority(.required, for: .vertical)
+//        stack.setContentHuggingPriority(.required, for: .vertical)
+        stack.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
         return stack
     }()
     
@@ -87,26 +89,27 @@ final class LandingCheckmarksCell: UICollectionViewCell {
         perfectLabel.text = perfectText
         horizontalPerfect.addArrangedSubviews(checkmarkPerfect, perfectLabel)
         mainStack.addArrangedSubview(horizontalPerfect)
-        // third line
-//        if !UDM.restrictions.isEmpty {
-//            let horizontalRestrictions = UIStackView()
-//            horizontalRestrictions.axis = .horizontal
-//            horizontalRestrictions.spacing = 8
-//            horizontalRestrictions.distribution = .fillProportionally
-//            horizontalRestrictions.alignment = .leading
-//            let checkmarkRestrictions = UIImageView(image: R.image.landing.benefitsSection.chekmark())
-//            let restrictionsLabel = UILabel()
-//            restrictionsLabel.textAlignment = .left
-//            restrictionsLabel.textColor = model.allTextColor
-//            restrictionsLabel.font = R.font.sfProDisplayMedium(size: 18)
-//            var restrictionsTextBody = R.string.localizable.landingCheckmarksSectionAllergicRestrictions()
-//            let restrictionsActualString = UDM.restrictions.compactMap { $0.description }.joined(separator: ",")
-//            restrictionsTextBody += restrictionsActualString
-//            restrictionsLabel.text = restrictionsTextBody
-//            restrictionsLabel.numberOfLines = 0
-//            horizontalRestrictions.addArrangedSubviews(checkmarkRestrictions, restrictionsLabel)
-//            mainStack.addArrangedSubview(horizontalRestrictions)
-//        }
+         // third line
+        if !UDM.restrictions.isEmpty {
+            let horizontalRestrictions = UIStackView()
+            horizontalRestrictions.axis = .horizontal
+            horizontalRestrictions.spacing = 8
+            horizontalRestrictions.distribution = .equalSpacing
+            horizontalRestrictions.alignment = .leading
+            let checkmarkRestrictions = UIImageView(image: R.image.landing.benefitsSection.chekmark())
+            checkmarkRestrictions.setContentCompressionResistancePriority(.required, for: .horizontal)
+            let restrictionsLabel = UILabel()
+            restrictionsLabel.numberOfLines = 0
+            restrictionsLabel.textAlignment = .left
+            restrictionsLabel.textColor = model.allTextColor
+            restrictionsLabel.font = R.font.sfProDisplayMedium(size: 18)
+            var restrictionsTextBody = R.string.localizable.landingCheckmarksSectionAllergicRestrictions()
+            let restrictionsActualString = UDM.restrictions.compactMap { $0.description }.joined(separator: ", ")
+            restrictionsTextBody += restrictionsActualString
+            horizontalRestrictions.addArrangedSubviews(checkmarkRestrictions, restrictionsLabel)
+            restrictionsLabel.text = restrictionsTextBody
+            mainStack.addArrangedSubview(horizontalRestrictions)
+        }
         
         // fourth line
         let horizontalActivityStack = UIStackView()
@@ -151,10 +154,9 @@ final class LandingCheckmarksCell: UICollectionViewCell {
         }
         
         mainStack.snp.makeConstraints { make in
-            make.top.equalTo(mainTitle.snp.bottom).offset(28)
+            make.top.greaterThanOrEqualTo(mainTitle.snp.bottom).offset(28)
             make.leading.trailing.equalToSuperview().inset(24)
             make.bottom.equalToSuperview().inset(32)
         }
     }
 }
-

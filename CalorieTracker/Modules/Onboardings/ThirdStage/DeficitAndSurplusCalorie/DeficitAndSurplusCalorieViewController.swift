@@ -164,7 +164,6 @@ final class DeficitAndSurplusCalorieViewController: UIViewController {
         let snapshot = chartView.snapshotNewView()
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         if let filePath = paths.first?.appendingPathComponent("chartImage.png") {
-
             do {
                try snapshot?.pngData()?.write(to: filePath, options: .atomic)
             } catch {

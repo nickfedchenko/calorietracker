@@ -73,6 +73,7 @@ final class AddFoodPresenter {
     }
     
     private func configureView() {
+        let now = Date().timeIntervalSince1970
         guard let foodType = foodType else {
             return
         }
@@ -91,20 +92,14 @@ final class AddFoodPresenter {
         case .favorites:
             let dishes = FDS.shared.getFavoriteDishes()
             let products = FDS.shared.getFavoriteProducts()
-            
             self.foods = products.foods + dishes.foods
         case .myMeals:
             self.foods = getAllMeals().foods
         case .myRecipes:
             self.foods = []
         case .myFood:
-            self.foods = []
-            DispatchQueue.global(qos: .userInteractive).async {
-                let product = DSF.shared.getAllStoredProducts().filter { $0.isUserProduct }
-                DispatchQueue.main.async {
-                    self.foods = product.foods
-                }
-            }
+            let products = DSF.shared.getMyProducts()
+            self.foods = products.foods
         case .search:
             return
         }

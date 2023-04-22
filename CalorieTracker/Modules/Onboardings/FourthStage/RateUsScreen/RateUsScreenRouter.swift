@@ -54,8 +54,9 @@ extension RateUsScreenRouter: RateUsScreenRouterInterface {
                     viewController?.dismiss(animated: true)
                 }
             } else {
-                let paywall = PaywallRouter.setupModule()
-                viewController?.navigationController?.pushViewController(paywall, animated: true)
+                let landing = LandingRouter.setupModule()
+//                let paywall = PaywallRouter.setupModule()
+                viewController?.navigationController?.pushViewController(landing, animated: true)
             }
             _ = OnboardingSaveDataService(OnboardingManager.shared.getOnboardingInfo())
         } else {
@@ -68,6 +69,5 @@ extension RateUsScreenRouter: RateUsScreenRouterInterface {
             SKStoreReviewController.requestReview(in: scene)
 //            didShowReviewRequest.toggle()
         }
-      
     }
 }

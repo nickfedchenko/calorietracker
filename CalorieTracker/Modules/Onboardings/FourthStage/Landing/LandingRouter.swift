@@ -10,13 +10,13 @@ import Foundation
 import UIKit
 
 protocol LandingRouterInterface: AnyObject {
-
+    func didTapContinueButton()
 }
 
 class LandingRouter: NSObject {
 
     weak var presenter: LandingPresenterInterface?
-
+    weak var viewController: UIViewController?
     static func setupModule() -> LandingViewController {
         let vc = LandingViewController()
         let interactor = LandingInteractor()
@@ -25,11 +25,15 @@ class LandingRouter: NSObject {
 
         vc.presenter = presenter
         router.presenter = presenter
+        router.viewController = vc
         interactor.presenter = presenter
         return vc
     }
 }
 
 extension LandingRouter: LandingRouterInterface {
-
+    func didTapContinueButton() {
+        let paywall = PaywallRouter.setupModule()
+        viewController?.navigationController?.pushViewController(paywall, animated: true)
+    }
 }

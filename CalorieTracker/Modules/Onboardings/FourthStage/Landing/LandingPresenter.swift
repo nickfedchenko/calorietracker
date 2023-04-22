@@ -13,6 +13,7 @@ protocol LandingPresenterInterface: AnyObject {
     func getNumberOfItemsInSection(section: Int) -> Int
     func makeCell(for indexPath: IndexPath, for collectionView: UICollectionView) -> UICollectionViewCell?
     func makeHeader(for indexPath: IndexPath, for collectionView: UICollectionView) -> UICollectionReusableView?
+    func didTapContinueButton()
 }
 
 class LandingPresenter {
@@ -34,6 +35,10 @@ class LandingPresenter {
 }
 
 extension LandingPresenter: LandingPresenterInterface {
+    func didTapContinueButton() {
+        router?.didTapContinueButton()
+    }
+    
     func getNumberOfSections() -> Int {
         sections.count
     }

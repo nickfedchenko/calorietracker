@@ -58,14 +58,16 @@ class LandingViewController: UIViewController {
         super.viewDidLoad()
         setupSubviews()
         navigationController?.setNavigationBarHidden(true, animated: false)
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+        setupActions()
+        continueButton.isEnabled = true
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    private func setupActions() {
+        continueButton.addTarget(self, action: #selector(didTapContinue), for: .touchUpInside)
+    }
+    
+    @objc private func didTapContinue() {
+        presenter?.didTapContinueButton()
     }
     
     private func setupSubviews() {
@@ -183,9 +185,9 @@ class LandingViewController: UIViewController {
         case 0:
             return .estimated(198.fitH)
         case 1:
-            return .absolute(263)
+            return .estimated(279)
         case 2:
-            return .estimated(340)
+            return .estimated(420)
         case 3:
             return .estimated(482)
         case 4:
@@ -231,7 +233,7 @@ class LandingViewController: UIViewController {
         case 1:
             return .estimated(279)
         case 2:
-            return .estimated(340)
+            return .estimated(420)
         case 3:
             return .estimated(482)
         case 4:

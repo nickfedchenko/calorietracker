@@ -43,7 +43,8 @@ final class LandingChartCell: UICollectionViewCell {
         shadowView.addSubview(chartImage)
         shadowView.snp.makeConstraints { make in
             make.horizontalEdges.equalToSuperview().inset(24)
-            make.verticalEdges.equalToSuperview()
+            make.verticalEdges.equalToSuperview().inset(24)
+            make.height.equalTo(215)
         }
         
         chartImage.snp.makeConstraints { make in

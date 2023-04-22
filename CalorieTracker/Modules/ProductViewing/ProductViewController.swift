@@ -52,7 +52,10 @@ final class ProductViewController: CTViewController {
             return 100
         case .oz:
             return 100
-        default: return 1
+        case .custom(title: _, shortTitle: _, coefficient: let coefficient):
+            return coefficient ?? 1 > 1 ? 1 : presenter?.getProduct()?.servings?.first?.weight ?? 100
+        default:
+            return 1
         }
     }()
     var shouldUseCustomTransition = true
@@ -64,11 +67,23 @@ final class ProductViewController: CTViewController {
     }
     
     private lazy var selectedWeightType: UnitElement.ConvenientUnit = {
+        let coefficient: Double = {
+            if let serving = presenter?.getProduct()?.servings?.first {
+                if serving.size == R.string.localizable.measurementMl()
+                    || serving.size == R.string.localizable.gram() {
+                    return 1
+                } else {
+                    return serving.weight ?? 1
+                }
+            } else {
+                return 1
+            }
+        }()
         if let product = presenter?.getProduct() {
             if !product.isUserProduct {
                 if
                     let servings = product.servings,
-                    let targetUnit = product.units?.first(where: { $0.isReference } ) {
+                    let targetUnit = product.units?.first(where: { $0.isReference }) {
                     return targetUnit.convenientUnit
                 } else {
                 return product
@@ -79,7 +94,7 @@ final class ProductViewController: CTViewController {
             }
         } else {
             let units: [UnitElement.ConvenientUnit] = product.servings?.compactMap {
-                .custom(title: $0.size ?? "", shortTitle: $0.size ?? "", coefficient: $0.weight ?? 1)
+                .custom(title: $0.size ?? "", shortTitle: $0.size ?? "", coefficient: coefficient)
             } ?? [
                 .gram(title: R.string.localizable.gram(), shortTitle: R.string.localizable.gram(), coefficient: 1)
             ]
@@ -89,7 +104,7 @@ final class ProductViewController: CTViewController {
     } else {
         return .custom(title: "undefined", shortTitle: "undefined", coefficient: 1)
     }
-}()
+    }()
 
 private lazy var collapseRecognizer = UITapGestureRecognizer(
         target: self,
@@ -641,13 +656,28 @@ private lazy var collapseRecognizer = UITapGestureRecognizer(
                 }
             }
             
-          
-            return SelectView(presenter?.getProduct()?.units?
-                .sorted(by: { $0.isReference != $1.isReference }).compactMap { $0.convenientUnit }
-                              ?? product?.servings?.compactMap {
-                .custom(title: $0.size ?? "", shortTitle: $0.size ?? "", coefficient: $0.weight)
-            } ?? [.gram(title: R.string.localizable.gram(), shortTitle: R.string.localizable.gram(), coefficient: 1)],
-                              shouldHideAtStartup: true
+            let coefficient: Double = {
+                if let serving = product?.servings?.first {
+                    if serving.size == R.string.localizable.measurementMl()
+                        || serving.size == R.string.localizable.gram() {
+                        return 1
+                    } else {
+                        return serving.weight ?? 1
+                    }
+                } else {
+                    return 1
+                }
+            }()
+            
+            return SelectView(
+                presenter?.getProduct()?.units?
+                    .sorted(by: {
+                        $0.isReference != $1.isReference }).compactMap { $0.convenientUnit }
+                ?? product?.servings?.compactMap {
+                    .custom(title: $0.size ?? "", shortTitle: $0.size ?? "", coefficient: coefficient)
+                }
+                ?? [.gram(title: R.string.localizable.gram(), shortTitle: R.string.localizable.gram(), coefficient: 1)],
+                shouldHideAtStartup: true
             )
         }
         

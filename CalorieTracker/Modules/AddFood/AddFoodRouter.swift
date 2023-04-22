@@ -156,12 +156,12 @@ extension AddFoodRouter: AddFoodRouterInterface {
     func openCreateProduct() {
         guard !wasFromMealCreateVC else { return }
         if UDM.openCreateProductCounter >= 1 {
-            guard Apphud.hasActiveSubscription() else {
-                let paywall = PaywallRouter.setupModule()
-                paywall.modalPresentationStyle = .fullScreen
-                viewController?.navigationController?.present(paywall, animated: true)
-                return
-            }
+//            guard Apphud.hasActiveSubscription() else {
+//                let paywall = PaywallRouter.setupModule()
+//                paywall.modalPresentationStyle = .fullScreen
+//                viewController?.navigationController?.present(paywall, animated: true)
+//                return
+//            }
             LoggingService.postEvent(event: .diarycreatefood)
             let vc = CreateProductRouter.setupModule()
             vc.modalPresentationStyle = .overFullScreen

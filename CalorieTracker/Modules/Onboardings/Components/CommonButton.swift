@@ -57,6 +57,15 @@ class CommonButton: UIButton {
         }
     }
     
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        if let titleLabel = titleLabel,
+           titleLabel.frame.contains(point) {
+            return self
+        } else {
+            return super.hitTest(point, with: event)
+        }
+    }
+    
     override func layoutSubviews() {
         super.layoutSubviews()
     }

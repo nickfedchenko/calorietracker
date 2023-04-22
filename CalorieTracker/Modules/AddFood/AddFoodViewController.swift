@@ -278,6 +278,7 @@ final class AddFoodViewController: UIViewController {
     }
     
     // swiftlint:disable:next function_body_length
+    // swiftlint:disable:next cyclomatic_complexity
     private func setupHandlers() {
         addToEatenButton.addAction(
             UIAction { [weak self] _ in

@@ -32,8 +32,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         coordinator.start()
         registerForNotifications()
         trackAppleSearchAds()
-        print("Documents Directory: ",
-              FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last ?? "Not Found!")
         return true
     }
     
