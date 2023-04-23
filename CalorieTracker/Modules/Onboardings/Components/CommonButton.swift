@@ -16,6 +16,7 @@ class CommonButton: UIButton {
         case filled
         case bordered
         case gradientBordered
+        case gradientBorderedWithBlur
     }
     
     override var isEnabled: Bool {
@@ -27,6 +28,9 @@ class CommonButton: UIButton {
     private var backgroundGradientLayer: CAGradientLayer?
     private var strokeGradientLayer: CAGradientLayer?
     private var maskLayer: CAShapeLayer?
+    var blurView: UIVisualEffectView?
+    var blurRadiusDriver: UIViewPropertyAnimator?
+    let strokeMaskLayer = CAShapeLayer()
     
     // MARK: - Private properties
     
@@ -46,8 +50,24 @@ class CommonButton: UIButton {
     
     override func draw(_ rect: CGRect) {
         super.draw(rect)
-        guard style == .gradientBordered else { return }
-        makeGradients()
+        if style == .gradientBordered {
+            makeGradientsForBorderedWithGradient()
+        } else if style == .gradientBorderedWithBlur {
+            makeGradientsForBorderedWithGradientWithBlur()
+        }
+    }
+    
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        if let titleLabel = titleLabel,
+           titleLabel.frame.contains(point) {
+            return self
+        } else {
+            return super.hitTest(point, with: event)
+        }
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
     }
     
     private func configureViews() {
@@ -79,6 +99,38 @@ class CommonButton: UIButton {
             layer.insertSublayer(backgroundGradientLayer!, at: 0)
             layer.insertSublayer(strokeGradientLayer!, at: 0)
             startAnimating()
+        case .gradientBorderedWithBlur:
+            let backgroundView = UIView()
+            addSubview(backgroundView)
+            backgroundView.backgroundColor = .clear
+            backgroundView.snp.makeConstraints { make in
+                make.edges.equalToSuperview()
+            }
+            backgroundGradientLayer = CAGradientLayer()
+            strokeGradientLayer = CAGradientLayer()
+            backgroundGradientLayer?.opacity = 0.8
+            strokeGradientLayer?.opacity = 1
+            maskLayer = CAShapeLayer()
+            backgroundView.layer.insertSublayer(backgroundGradientLayer!, at: 0)
+            backgroundView.layer.insertSublayer(strokeGradientLayer!, at: 0)
+          
+            blurView = UIVisualEffectView(effect: nil)
+            blurView?.layer.cornerRadius = layer.cornerRadius
+            blurView?.layer.cornerCurve = .continuous
+            blurView?.clipsToBounds = true
+            backgroundView.addSubview(blurView!)
+            blurView?.snp.makeConstraints { make in
+                make.edges.equalToSuperview().inset(2)
+            }
+            if let textFiled = titleLabel {
+                textFiled.removeFromSuperview()
+                blurView?.contentView.addSubview(textFiled)
+                textFiled.snp.makeConstraints { make in
+                    make.centerX.centerY.equalToSuperview()
+                }
+            }
+            adjustBlur()
+            startAnimating()
         }
     }
     
@@ -86,7 +138,17 @@ class CommonButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func makeGradients() {
+    private func adjustBlur() {
+        blurRadiusDriver?.stopAnimation(true)
+        blurRadiusDriver?.finishAnimation(at: .current)
+        blurRadiusDriver = nil
+        blurRadiusDriver = .init(duration: 1, curve: .linear) {
+            self.blurView?.effect = UIBlurEffect(style: .dark)
+        }
+        blurRadiusDriver?.fractionComplete = 0.1
+    }
+    
+    private func makeGradientsForBorderedWithGradient() {
         let path = UIBezierPath(roundedRect: bounds.insetBy(dx: 2, dy: 2), cornerRadius: 16).cgPath
       
         let strokePath = UIBezierPath(roundedRect: bounds, cornerRadius: 16).cgPath
@@ -146,5 +208,35 @@ class CommonButton: UIButton {
 //        group.autoreverses = true
         group.repeatCount = .greatestFiniteMagnitude
         strokeGradientLayer?.add(group, forKey: nil)
+    }
+    
+    private func makeGradientsForBorderedWithGradientWithBlur() {
+        let path = UIBezierPath(roundedRect: bounds.insetBy(dx: 2, dy: 2), cornerRadius: 16).cgPath
+      
+        let strokePath = UIBezierPath(roundedRect: bounds, cornerRadius: 16).cgPath
+        backgroundGradientLayer?.frame = bounds
+        backgroundGradientLayer?.type = .radial
+        backgroundGradientLayer?.colors = [
+            UIColor(hex: "18995B").cgColor,
+            UIColor(hex: "12834D").cgColor
+        ]
+        backgroundGradientLayer?.startPoint = CGPoint(x: 0.5, y: 0.5)
+        backgroundGradientLayer?.endPoint = CGPoint(x: 1, y: 1)
+        backgroundGradientLayer?.locations = [0, 1]
+        maskLayer?.path = path
+        maskLayer?.fillColor = UIColor.white.cgColor
+        maskLayer?.frame = bounds
+        strokeGradientLayer?.frame = bounds
+//        strokeGradientLayer?.frame = bounds.insetBy(dx: -2, dy: -2)
+        strokeGradientLayer?.colors = [
+            UIColor(hex: "CBF4E9").withAlphaComponent(0.9).cgColor,
+            UIColor(hex: "6BECAE").withAlphaComponent(0.9).cgColor
+        ]
+        strokeGradientLayer?.startPoint = CGPoint(x: 0.5, y: 0.5)
+        strokeGradientLayer?.endPoint = CGPoint(x: 0, y: 1)
+        strokeMaskLayer.path = strokePath
+        strokeMaskLayer.fillColor = UIColor.white.cgColor
+        backgroundGradientLayer?.mask = maskLayer
+        strokeGradientLayer?.mask = strokeMaskLayer
     }
 }

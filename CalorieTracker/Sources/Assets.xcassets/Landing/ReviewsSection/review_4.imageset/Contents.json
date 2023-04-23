@@ -1,0 +1,30 @@
+{
+  "images" : [
+    {
+      "filename" : "review_4.png",
+      "idiom" : "universal"
+    },
+    {
+      "filename" : "review_4 1.png",
+      "idiom" : "universal",
+      "locale" : "en"
+    },
+    {
+      "filename" : "review_4 2.png",
+      "idiom" : "universal",
+      "locale" : "ru"
+    },
+    {
+      "filename" : "review_4 3.png",
+      "idiom" : "universal",
+      "locale" : "de"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  },
+  "properties" : {
+    "localizable" : true
+  }
+}

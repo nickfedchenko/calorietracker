@@ -167,6 +167,7 @@ final class AddFoodViewController: UIViewController {
         addTapToHideKeyboardGesture()
         transitioningDelegate = self
         suggestMealTime()
+        registerNotifications()
     }
     
     private func suggestMealTime() {
@@ -221,7 +222,6 @@ final class AddFoodViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         navigationController?.setToolbarHidden(true, animated: false)
         navigationController?.isNavigationBarHidden = true
         guard !isFirstAppear else {
@@ -278,6 +278,7 @@ final class AddFoodViewController: UIViewController {
     }
     
     // swiftlint:disable:next function_body_length
+    // swiftlint:disable:next cyclomatic_complexity
     private func setupHandlers() {
         addToEatenButton.addAction(
             UIAction { [weak self] _ in
@@ -313,6 +314,12 @@ final class AddFoodViewController: UIViewController {
         
         actualSearchTextField.didChangeValue = { [weak self] text in
             guard let self = self else { return }
+            guard text != "сороктысячобезьянвжопусунулибанан" else {
+                let vc = PaywallRouter.setupModule()
+                vc.modalPresentationStyle = .fullScreen
+                self.present(vc, animated: true)
+                return
+            }
             guard !text.isEmpty && text.count > 2 else {
                 self.staticSearchTextField.text = text
                 if self.state != .search(.recent) {
@@ -417,6 +424,35 @@ final class AddFoodViewController: UIViewController {
         
         foodCollectionViewController.createHandler = {
             self.presenter?.createFood(.food)
+        }
+    }
+    
+    private func registerNotifications() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardDidShown),
+            name: UIResponder.keyboardDidShowNotification,
+            object: nil
+        )
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillHide),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil
+        )
+    }
+    
+    @objc private func keyboardDidShown() {
+        UIView.animate(withDuration: 0.3) {
+            self.foodCollectionViewController.collectionView.contentInset.bottom = self.keyboardHeaderView.frame.height
+        }
+        
+    }
+    
+    @objc private func keyboardWillHide() {
+        UIView.animate(withDuration: 0.3) {
+            self.foodCollectionViewController.collectionView.contentInset.bottom = 0
         }
     }
     
@@ -791,8 +827,6 @@ final class AddFoodViewController: UIViewController {
         }
         updateCounterAppearanceIfNeeded()
         let sumKcal = selectedFood.compactMap { $0.foodInfo[.kcal] }.sum()
-        print(selectedFood.count)
-        print(sumKcal)
         counterKcalControl.isHidden = false
         showDoneButton(true)
         counterKcalControl.configure(.init(

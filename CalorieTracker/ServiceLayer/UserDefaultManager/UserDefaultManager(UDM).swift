@@ -42,8 +42,21 @@ final class UDM {
         case productsLastUpdateDate
         case dishesLastUpdateDate
         case didTapToWriteReview
+        case reachTargetDate
+        case allergicRestrictions
     }
     
+    static var reachTargetDate: Date {
+        get {
+            guard let date: Date = getValue(for: .reachTargetDate) else {
+                return Date()
+            }
+            return date
+        }
+        set {
+            setValue(value: newValue, for: .reachTargetDate)
+        }
+    }
     
     static var openCreateProductCounter: Int {
         get {
@@ -311,6 +324,22 @@ final class UDM {
         set {
             let data = try? JSONEncoder().encode(newValue)
             setValue(value: data, for: .searchHistory)
+        }
+    }
+    
+    static var restrictions: [AllergicRestrictions] {
+        get {
+            guard
+                let allergicData: Data = getValue(for: .allergicRestrictions),
+                let restrictions = try? JSONDecoder().decode([AllergicRestrictions].self, from: allergicData) else {
+                return []
+                
+            }
+            return restrictions
+        }
+        set {
+            let data = try? JSONEncoder().encode(newValue)
+            setValue(value: data, for: .allergicRestrictions)
         }
     }
     

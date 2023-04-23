@@ -7,12 +7,22 @@
 
 import AsyncDisplayKit
 
+protocol StepsWidgetFullToCompactAnimatableProtocol: ASDisplayNode {
+    func getProgressLineFrame() -> CGRect
+    func getBackgroundLinePath() -> CGPath?
+    func getProgressLineOath() -> CGPath?
+    func getTopTilteFrame() -> CGRect
+    func getBottomTitleFrame() -> CGRect
+    func getFlagFrame() -> CGRect
+}
+
 final class StepsWidgetNode: CTWidgetNode {
     
     private lazy var topTextNode: ASTextNode = {
         let node = ASTextNode()
         let string = Text.steps
-        let font = R.font.sfProRoundedBold(size: 5 / Double(string.count) * 18)
+        let font = R.font.sfProRoundedBold(size: 18.fitW)
+        
         let color = R.color.stepsWidget.secondGradientColor()
         let image = R.image.stepsWidget.foot()
         
@@ -45,7 +55,7 @@ final class StepsWidgetNode: CTWidgetNode {
     }()
     
     private var layers: [(shape: CAShapeLayer, gradient: CAGradientLayer)] = []
-    
+    var backgroundLayer = CAShapeLayer()
     var steps: Int = 0 {
         didSet {
             didChangeSteps()
@@ -163,7 +173,7 @@ final class StepsWidgetNode: CTWidgetNode {
         let shape = getProgressLayers(rect: rect, progress: 1).shape
         shape.strokeColor = R.color.stepsWidget.backgroundLine()?.cgColor
         shape.zPosition = -1
-        
+        backgroundLayer = shape
         layer.addSublayer(shape)
     }
     
@@ -277,5 +287,47 @@ private extension UIColor {
 extension StepsWidgetNode {
     struct Text {
         static let steps = " \(R.string.localizable.diagramChartTypeStepsTitle())"
+    }
+}
+
+extension StepsWidgetNode: StepsWidgetFullToCompactAnimatableProtocol {
+    func getProgressLineFrame() -> CGRect {
+        if let rect = view.superview?.getConvertedFrame(fromSubview: view) {
+            return rect
+        } else {
+            return .zero
+        }
+    }
+    
+    func getBackgroundLinePath() -> CGPath? {
+        backgroundLayer.path
+    }
+    
+    func getProgressLineOath() -> CGPath? {
+        layers.first?.shape.path
+    }
+    
+    func getTopTilteFrame() -> CGRect {
+        if let rect = view.superview?.getConvertedFrame(fromSubview: topTextNode.view) {
+            return rect
+        } else {
+            return .zero
+        }
+    }
+    
+    func getBottomTitleFrame() -> CGRect {
+        if let rect = view.superview?.getConvertedFrame(fromSubview: bottomTextNode.view) {
+            return rect
+        } else {
+            return .zero
+        }
+    }
+    
+    func getFlagFrame() -> CGRect {
+        if let rect = view.superview?.getConvertedFrame(fromSubview: imageNode.view) {
+            return rect
+        } else {
+            return .zero
+        }
     }
 }

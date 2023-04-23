@@ -33,7 +33,28 @@ extension MealData {
                     product, customAmount: nil, unit: (unit: unit, count: managedModel.unitCount)
                 )
             } else {
-                self.food = .product(product, customAmount: managedModel.weight, unit: nil)
+                if let serving = product.servings?.first {
+                    var coefficient: Double = {
+                        if serving.size == R.string.localizable.measurementMl()
+                            || serving.size == R.string.localizable.gram() {
+                            return 1
+                        } else {
+                            return serving.weight ?? 1
+                        }
+                    }()
+                    let unit: UnitElement.ConvenientUnit = .custom(
+                        title: serving.size ?? "",
+                        shortTitle: serving.size,
+                        coefficient: coefficient
+                    )
+                    self.food = .product(
+                        product,
+                        customAmount: managedModel.weight, unit: (unit: unit, count: managedModel.unitCount)
+                    )
+                } else {
+                    self.food = .product(product, customAmount: weight, unit: nil)
+                }
+              
             }
         } else if let domainDish = managedModel.dish,
                   let dish = Dish(from: domainDish) {

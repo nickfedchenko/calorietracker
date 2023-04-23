@@ -108,10 +108,9 @@ final class FDS {
     }
     
     private func getFrequentFood(_ count: Int) -> [FoodData] {
-        let allFoods = localPersistentStore.fetchFoodData()
-        return Array(allFoods.sorted(by: { $0.numberUses > $1.numberUses })
-            .filter { $0.food != nil }
-            .prefix(count))
+        let sortDescriptor = NSSortDescriptor(key: "numberUses", ascending: false)
+        let frequentFood = localPersistentStore.fetchFoodData(with: count, sortDescriptor: sortDescriptor)
+        return frequentFood
     }
     
     private func dailyMealConverNutrients(_ dailyMeal: [DailyMeal]) -> DailyNutrition {
@@ -396,27 +395,22 @@ extension FDS: FoodDataServiceInterface {
     }
     
     func getRecentProducts(_ count: Int) -> [Food] {
-        let allFoodData = localPersistentStore.fetchFoodData()
-            .sorted(by: { $0.dateLastUse >= $1.dateLastUse })
-            .filter { $0.food != nil }
-        let foodData = allFoodData.count >= count
-            ? Array(allFoodData[0..<count])
-            : allFoodData
-        
-        return foodData.compactMap {
-            $0.food
+        let descriptor = NSSortDescriptor(key: "dateLastUse", ascending: false)
+        let allFoodData = localPersistentStore.fetchFoodData(with: count, sortDescriptor: descriptor)
+        return allFoodData.compactMap {
+            switch $0.food {
+            case .product(let product, customAmount: _, unit: _):
+                return .product(product, customAmount: nil, unit: nil)
+            default:
+                return nil
+            }
         }
     }
     
     func getRecentDishes(_ count: Int) -> [Dish] {
-        let allFoodData = localPersistentStore.fetchFoodData()
-            .sorted(by: { $0.dateLastUse >= $1.dateLastUse })
-            .filter { $0.food != nil }
-        let foodData = allFoodData.count >= count
-            ? Array(allFoodData[0..<count])
-            : allFoodData
-        
-        return foodData.compactMap {
+        let descriptor = NSSortDescriptor(key: "dateLastUse", ascending: false)
+        let allFoodData = localPersistentStore.fetchFoodData(with: count, sortDescriptor: descriptor)
+        return allFoodData.compactMap {
             switch $0.food {
             case .dishes(let dish, _):
                 return dish

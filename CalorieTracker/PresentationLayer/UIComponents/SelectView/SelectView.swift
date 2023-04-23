@@ -95,7 +95,7 @@ final class SelectView<ID: WithGetTitleProtocol>: UIView {
     }
     
     private func configureStack() {
-        print(models)
+
         models.forEach {
             let cell = SelectViewCell($0)
             cell.addTarget(self, action: #selector(cellDidTapped), for: .touchUpInside)

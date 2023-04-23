@@ -53,6 +53,9 @@ final class FoodCellView: UIView {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
+        view.layer.cornerRadius = 8
+        view.layer.cornerCurve = .continuous
+        view.layer.maskedCorners = [.topLeft, .bottomLeft]
         return view
     }()
     
@@ -228,7 +231,7 @@ final class FoodCellView: UIView {
         
         tagLabel.snp.makeConstraints { make in
             make.bottom.equalToSuperview()
-            make.leading.equalTo(imageView.snp.trailing).offset(6)
+            make.leading.equalTo(imageView.snp.trailing).offset(9)
         }
         
         checkImageView.aspectRatio()
@@ -301,7 +304,7 @@ extension FoodCellView.FoodViewModel {
     private init(_ product: Product, weight: Double?) {
         self.id = product.id
         self.title = product.title
-        self.image = product.isUserProduct ? product.photo : nil
+        self.image = nil //product.isUserProduct ? product.photo : nil
         self.verified = !product.isUserProduct
         var tag = ""
         if product.brand != nil && !product.isUserProduct {
@@ -341,13 +344,31 @@ extension FoodCellView.FoodViewModel {
                 }
             }
         } else {
-            if let serving = product.servings?.first {
-                let kcal = (serving.weight ?? 100) / servingValue * product.kcal
-                self.kcal = BAMeasurement(kcal, .energy, isMetric: true).localized
-                description = "(\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string(with: 1)))"
+            if let weight = weight {
+                if let serving = product.servings?.first {
+                    let kcal = (weight / servingValue) * product.kcal
+                    self.kcal = BAMeasurement(kcal, .energy, isMetric: true).localized
+                    description = "\(BAMeasurement(weight, .serving, isMetric: true).string(with: 1))"
+                } else {
+                    self.kcal = BAMeasurement(product.kcal, .energy, isMetric: true).localized
+                    description = ""
+                }
             } else {
-                self.kcal = BAMeasurement(product.kcal, .energy, isMetric: true).localized
-                description = ""
+                if let serving = product.servings?.first {
+                    let kcal = (serving.weight ?? 100) / servingValue * product.kcal
+                    self.kcal = BAMeasurement(kcal, .energy, isMetric: true).localized
+                    if serving.size == R.string.localizable.measurementMl()
+                        || serving.size == R.string.localizable.gram() {
+                        description =
+                        BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string(with: 1)
+                    } else {
+                        description = "\(serving.size ?? "") " +
+                        "(\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string(with: 1)))"
+                    }
+                } else {
+                    self.kcal = BAMeasurement(product.kcal, .energy, isMetric: true).localized
+                    description = ""
+                }
             }
         }
     }
@@ -408,7 +429,7 @@ extension FoodCellView.FoodViewModel {
         self.id = product.id
         self.title = product.title
         self.tag = product.brand ?? ""
-        self.image = product.isUserProduct ? product.photo : nil
+        self.image = nil //product.isUserProduct ? product.photo : nil
         self.verified = !product.isUserProduct
         
         if let serving = product.servings?.first?.weight {
@@ -459,7 +480,7 @@ extension FoodCellView.FoodViewModel {
                let unit = product.units?.first(where: { $0.isReference }) {
                 var description = ""
                 if unit.id == 1 {
-                    description = "\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string(with: 1)))"
+                    description = "\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string(with: 1))"
                 } else {
                     description = "\(unit.title)"
                     + "(\(BAMeasurement(serving.weight ?? 1, .serving, isMetric: true).string(with: 1)))"

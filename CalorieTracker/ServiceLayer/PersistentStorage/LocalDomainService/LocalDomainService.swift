@@ -16,7 +16,7 @@ protocol LocalDomainServiceInterface {
     func fetchDinnerDishes(completion: @escaping ([DomainDish]?) -> Void)
     func fetchSnackDishes(completion: @escaping ([DomainDish]?) -> Void)
     func fetchDishesAsynchronously(completion: @escaping ([Dish]) -> Void)
-    func fetchFoodData() -> [FoodData]
+    func fetchFoodData(with batchSize: Int?, sortDescriptor: NSSortDescriptor?) -> [FoodData]
     func fetchMeals() -> [Meal]
     func fetchWater() -> [DailyData]
     func fetchSteps() -> [DailyData]
@@ -75,6 +75,13 @@ protocol LocalDomainServiceInterface {
     func getDomainProduct(_ id: String) -> DomainProduct?
     func getDomainDish(_ id: Int) -> DomainDish?
     func getDomainCustomEntry(_ id: String) -> DomainCustomEntry?
+    func getMyDomainProducts() -> [DomainProduct]
+}
+
+extension LocalDomainServiceInterface {
+    func fetchFoodData(with batchSize: Int? = nil, sortDescriptor: NSSortDescriptor? = nil) -> [FoodData] {
+     fetchFoodData(with: batchSize, sortDescriptor: sortDescriptor)
+    }
 }
 
 final class LocalDomainService {
@@ -152,12 +159,16 @@ final class LocalDomainService {
     private func fetchData<T: NSManagedObject> (
         for entity: T.Type,
         withPredicate predicate: NSCompoundPredicate? = nil,
-        withSortDescriptor sortDescriptors: [NSSortDescriptor]? = nil
+        withSortDescriptor sortDescriptors: [NSSortDescriptor]? = nil,
+        fetchBatchSize: Int? = nil
     ) -> [T]? {
         var fetchedResult: [T]?
         let request = T.fetchRequest()
         request.predicate = predicate
         request.sortDescriptors = sortDescriptors
+        if let fetchBatchSize = fetchBatchSize {
+            request.fetchBatchSize = fetchBatchSize
+        }
         do {
             fetchedResult = try context.fetch(request) as? [T]
         } catch {
@@ -258,6 +269,15 @@ final class LocalDomainService {
 
 // MARK: - LocalDomainServiceInterface
 extension LocalDomainService: LocalDomainServiceInterface {
+    func getMyDomainProducts() -> [DomainProduct] {
+        let predicate = NSPredicate(format: "%K == YES",#keyPath(DomainProduct.isUserProduct))
+        let domainProducts = fetchData(
+            for: DomainProduct.self,
+            withPredicate: NSCompoundPredicate(orPredicateWithSubpredicates: [predicate])
+        )
+        return domainProducts ?? []
+    }
+    
     func searchProducts(by phrase: String, completion: @escaping ([Product]) -> Void) {
         let phrases = phrase.split(whereSeparator: { $0.isWhitespace }).map { $0.lowercased() }.map { string in
             var newString = string
@@ -271,10 +291,9 @@ extension LocalDomainService: LocalDomainServiceInterface {
             let compoundPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [titlePredicate, brandPredicate])
             return compoundPredicate
         }
-        
 //        let titlePredicate = NSPredicate(format: "title CONTAINS[cd] %@", phrase)
 //        let brandPredicate = NSPredicate(format: "brand CONTAINS[cd] %@", phrase)
-        let compoundPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: predicates)
+        let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
         fetchDataAsynchronously(for: DomainProduct.self, withPredicate: compoundPredicate) { products in
             completion(products?.compactMap { Product(from: $0) } ?? [])
         }
@@ -401,8 +420,12 @@ extension LocalDomainService: LocalDomainServiceInterface {
         }
     }
     
-    func fetchFoodData() -> [FoodData] {
-        guard let domainFoodData = fetchData(for: DomainFoodData.self) else { return [] }
+    func fetchFoodData(with batchSize: Int? = nil, sortDescriptor: NSSortDescriptor? = nil) -> [FoodData] {
+        guard let domainFoodData = fetchData(
+            for: DomainFoodData.self,
+            withSortDescriptor: sortDescriptor != nil ? [sortDescriptor!] : nil,
+            fetchBatchSize: batchSize ?? nil
+        ) else { return [] }
         print("Domain food data ")
         return domainFoodData.compactMap { FoodData(from: $0) }
     }

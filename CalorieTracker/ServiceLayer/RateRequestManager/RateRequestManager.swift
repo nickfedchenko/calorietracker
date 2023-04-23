@@ -31,6 +31,15 @@ final class RateRequestManager {
         case scanner
     }
     
+    static var shouldShowRateUsOnOnboarding: Bool {
+        switch Locale.current.languageCode {
+        case "ru", "uk":
+            return true
+        default:
+            return false
+        }
+    }
+    
     static var shouldAskOpinion: Bool {
         if UDM.didTapToWriteReview {
             return false

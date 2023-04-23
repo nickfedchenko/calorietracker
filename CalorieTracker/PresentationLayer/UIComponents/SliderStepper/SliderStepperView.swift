@@ -170,7 +170,6 @@ final class SliderStepperView: UIControl {
     }
     
     private func supernodeInnerShadow() {
-        print("Super node bounds\(bounds)")
 //        innerShadowLayerSecond = CALayer()
         let targetFrame = bounds.insetBy(dx: -20, dy: 0)
         innerShadowLayerSecond.frame = targetFrame

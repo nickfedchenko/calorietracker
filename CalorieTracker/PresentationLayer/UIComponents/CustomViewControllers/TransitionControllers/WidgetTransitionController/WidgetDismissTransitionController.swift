@@ -27,6 +27,8 @@ class WidgetDismissTransitionController: NSObject, UIViewControllerAnimatedTrans
             dismissCalendarWidget(with: transitionContext)
         case .weight:
             dismissWeightWidget(with: transitionContext)
+        case .steps:
+            dismissStepsWidget(with: transitionContext)
         default:
             dismissWaterWidget(with: transitionContext)
         }
@@ -131,5 +133,73 @@ class WidgetDismissTransitionController: NSObject, UIViewControllerAnimatedTrans
             fromWidget.removeFromSuperview()
             transitionContext.completeTransition(true)
         }
+    }
+    
+    func dismissStepsWidget(with transitionContext: UIViewControllerContextTransitioning) {
+        guard
+            let fromView = transitionContext.view(forKey: .from),
+            let fromController = transitionContext
+                .viewController(forKey: .from) as? WidgetContainerViewController  else {
+            return
+        }
+        guard let presentationController = fromController.presentationController as? WidgetPresentationController else {
+            return
+        }
+        let container = transitionContext.containerView
+        let fromViewFrame = presentationController.frameOfPresentedViewInContainerView
+        fromView.alpha = 0
+        anchorView.alpha = 0
+        let anchorViewFrame = anchorView.frame
+        let date = UDM.currentlyWorkingDay.date ?? Date()
+        let goal = StepsWidgetService.shared.getDailyStepsGoal()
+        let now = StepsWidgetService.shared.getStepsForDate(date)
+        let progress = Double(now) / Double(goal ?? 1)
+        let fromViewMock = StepsFullWidgetView(frame: fromViewFrame)
+        fromViewMock.alpha = 0
+        container.addSubview(fromViewMock)
+        fromViewMock.setNeedsLayout()
+        fromViewMock.layoutIfNeeded()
+        let animatableView = StepsWidgetAnimatableContainer(
+            initialState: .fullToCompact(
+                fullFrame: fromViewFrame,
+                steps: Int(now),
+                progress: progress,
+                fullWidget: fromViewMock
+            )
+        )
+        animatableView.frame = container.bounds
+        let compactWidgetMock = StepsWidgetNode(with: .init(type: .compact))
+        container.addSubnode(compactWidgetMock)
+        compactWidgetMock.frame = anchorViewFrame
+        compactWidgetMock.steps = Int(now)
+        compactWidgetMock.progress = Double(now) / Double(goal ?? 1)
+        compactWidgetMock.setNeedsLayout()
+        compactWidgetMock.layoutIfNeeded()
+        let progressFrame = compactWidgetMock.getProgressLineFrame()
+//        animatableView.frame = container.bounds
+        container.addSubview(animatableView)
+        animatableView.startTransitionAnimationDisappearing(
+            targetView: compactWidgetMock,
+            targetFrame: anchorViewFrame
+        ) {
+            animatableView.removeFromSuperview()
+            self.anchorView.alpha = 1
+            transitionContext.completeTransition(true)
+        }
+//        let toViewMock = StepsFullWidgetView(frame: toViewFrame)
+//        toViewMock.alpha = 0
+//        container.addSubview(toViewMock)
+//        toViewMock.setNeedsLayout()
+//        toViewMock.layoutIfNeeded()
+//        animatableView.startTransitionAnimation(targetView: toViewMock, targetFrame: toViewFrame) { [weak self] in
+//            self?.anchorView.alpha = 1
+//            UIView.animate(withDuration: 0.3) {
+//                animatableView.alpha = 1
+//                fromView.alpha = 1
+//            } completion: { _ in
+//                animatableView.removeFromSuperview()
+//                transitionContext.completeTransition(true)
+//            }
+//        }
     }
 }

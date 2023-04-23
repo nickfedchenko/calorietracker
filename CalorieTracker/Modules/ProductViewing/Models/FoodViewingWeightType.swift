@@ -9,17 +9,14 @@ import Foundation
 
 enum FoodViewingWeightType: WithGetTitleProtocol, CaseIterable {
     case gram
-    case ounce
-    case piece
+    case mL
     
     func getTitle(_ lenght: Lenght) -> String? {
         switch self {
-        case .ounce:
-            return R.string.localizable.ounce()
+        case .mL:
+            return R.string.localizable.measurementMl()
         case .gram:
             return R.string.localizable.gram()
-        case .piece:
-            return R.string.localizable.piece()
         }
     }
 }

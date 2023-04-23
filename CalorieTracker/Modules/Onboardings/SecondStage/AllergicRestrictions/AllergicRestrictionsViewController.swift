@@ -115,10 +115,10 @@ final class AllergicRestrictionsViewController: UIViewController {
     }
     
     @objc func didTapVariabilityResponse(_ sender: VariabilityResponse) {
+        presenter?.restrictionTapped(at: sender.tag)
         variabilityResponses.forEach { variabilityResponses in
             if variabilityResponses == sender {
                 let isSelected = !variabilityResponses.isSelected
-                
                 variabilityResponses.isSelected = isSelected
             }
         }
@@ -142,42 +142,15 @@ extension AllergicRestrictionsViewController: AllergicRestrictionsViewController
         stackView.removeAllArrangedSubviews()
         variabilityResponses = []
         
-        for allergicRestrictions in allergicRestrictions {
+        for (i, allergicRestrictions) in allergicRestrictions.enumerated() {
             let variabilityResponse = VariabilityResponse()
-            
+            variabilityResponse.tag = i
             variabilityResponse.title = allergicRestrictions.description
             
             variabilityResponse.addTarget(self, action: #selector(didTapVariabilityResponse), for: .touchUpInside)
             
             stackView.addArrangedSubview(variabilityResponse)
             variabilityResponses.append(variabilityResponse)
-        }
-    }
-}
-
-// MARK: - AllergicRestrictions + description
-
-fileprivate extension AllergicRestrictions {
-    var description: String {
-        switch self {
-        case .gluten:
-            return R.string.localizable.onboardingSecondAllergicRestrictionsGluten()
-        case .fish:
-            return R.string.localizable.onboardingSecondAllergicRestrictionsFish()
-        case .shellfish:
-            return R.string.localizable.onboardingSecondAllergicRestrictionsShellfish()
-        case .dairy:
-            return R.string.localizable.onboardingSecondAllergicRestrictionsDairy()
-        case .eggs:
-            return R.string.localizable.onboardingSecondAllergicRestrictionsEggs()
-        case .nuts:
-            return R.string.localizable.onboardingSecondAllergicRestrictionsNuts()
-        case .peanut:
-            return R.string.localizable.onboardingSecondAllergicRestrictionsPeanut()
-        case .soya:
-            return R.string.localizable.onboardingSecondAllergicRestrictionsSoya()
-        case .wheat:
-            return R.string.localizable.onboardingSecondAllergicRestrictionsWheat()
         }
     }
 }

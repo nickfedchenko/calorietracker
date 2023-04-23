@@ -107,7 +107,7 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
     }
     
     func updateStepsWidget() {
-        let date = pointDate ?? Date()
+        let date = UDM.currentlyWorkingDay.date ?? Date()
         let goal = StepsWidgetService.shared.getDailyStepsGoal()
         let now = StepsWidgetService.shared.getStepsForDate(date)
         

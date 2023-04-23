@@ -16,6 +16,7 @@ protocol NetworkEngineInterface {
     func remoteSearch(by phrase: String, completion: @escaping SearchProductsResponse)
     func remoteSearchSecond(by phrase: String, completion: @escaping ProductsSearchResult)
     func remoteSearchByBarcode(by barcode: String, completion: @escaping ProductsSearchResult)
+    func uploadUserProduct(product: BackendSubmitModel, completion: @escaping BackendSubmitResult)
 }
 
 enum ErrorDomain: Error {
@@ -58,6 +59,12 @@ enum RequestGenerator {
                 } else {
                     return .en
                 }
+            case .uploadProduct(product: let product):
+                if let targetCode = LinkLanguageCodes.allCases.first(where: { $0.rawValue == currentLanguageCode }) {
+                    return targetCode
+                } else {
+                    return .en
+                }
             }
         }
     }
@@ -65,6 +72,7 @@ enum RequestGenerator {
     case fetchDishesZipped
     case searchProduct(by: String)
     case searchProductByBarcode(barcode: String)
+    case uploadProduct(product: BackendSubmitModel)
     
     private var backendToken: String {
         guard let filePath = Bundle.main.path(forResource: "Info", ofType: "plist") else {
@@ -96,7 +104,6 @@ enum RequestGenerator {
                 return
             }
             url = newUrl
-            print("search url \(url)")
         }
         
         func prepareSearchUrl(url: inout URL, byBarcode: String) {
@@ -109,7 +116,6 @@ enum RequestGenerator {
                 return
             }
             url = newUrl
-            print("search url \(url)")
         }
         
         switch self {
@@ -133,6 +139,11 @@ enum RequestGenerator {
             url = optUrl
         case .fetchDishesZipped:
             guard let optUrl = URL(string: "https://ketodietapplication.site/storage/json/dish_\(langCode).json.gz") else {
+                fatalError("wrong url")
+            }
+            url = optUrl
+        case .uploadProduct(product: _):
+            guard let optUrl = URL(string: "https://ketodietapplication.site/api/userProduct") else {
                 fatalError("wrong url")
             }
             url = optUrl
@@ -201,9 +212,40 @@ final class NetworkEngine {
                 completion(.success(data))
             }
     }
+    
+    func performDecodableUploadRequest<T: Codable>(
+        request: RequestGenerator,
+        completion: @escaping ((Result<T, ErrorDomain>) -> Void)
+    ) {
+        
+        var urlRequest = request.request
+        urlRequest.method = .post
+        if case let .uploadProduct(product: product) = request {
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = .prettyPrinted
+            let data = try? encoder.encode(product)
+            AF.upload(data ?? Data(), with: urlRequest).validate()
+            .responseDecodable(
+                of: T.self,
+                queue: .global(qos: .userInitiated)
+            ) { result in
+                guard let data = result.value else {
+                    if let error = result.error {
+                        completion(.failure(.AFError(error: error)))
+                    }
+                    return
+                }
+                completion(.success(data))
+            }
+        }
+    }
 }
 
 extension NetworkEngine: NetworkEngineInterface {
+    func uploadUserProduct(product: BackendSubmitModel, completion: @escaping BackendSubmitResult) {
+        performDecodableUploadRequest(request: .uploadProduct(product: product), completion: completion)
+    }
+    
     func fetchProducts(completion: @escaping ProductsResult ) {
         performDecodableRequest(request: .fetchProductZipped, completion: completion)
     }

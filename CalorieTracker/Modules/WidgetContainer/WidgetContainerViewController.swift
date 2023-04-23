@@ -359,12 +359,12 @@ extension WidgetContainerViewController: UIViewControllerTransitioningDelegate {
                 anchorView: anchorView ?? UIView(),
                 widgetType: .water(specificDate: date)
             )
-//            return TopDownPresentTransition()
         case .calendar:
             return  WidgetDismissTransitionController(anchorView: anchorView ?? UIView(), widgetType: .calendar)
         case .weight:
-//                        return TopDownDismissTransition()
             return WidgetDismissTransitionController(anchorView: anchorView ?? UIView(), widgetType: .weight)
+        case .steps:
+            return WidgetDismissTransitionController(anchorView: anchorView ?? UIView(), widgetType: .steps)
         default:
             return  TopDownDismissTransition()
         }

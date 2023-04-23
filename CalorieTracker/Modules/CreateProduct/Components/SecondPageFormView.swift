@@ -42,6 +42,8 @@ final class SecondPageFormView: UIView, UIGestureRecognizerDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+    
     private func addSubviews() {
         addSubviews(
             servingSizeLabel,
@@ -113,6 +115,19 @@ final class SecondPageFormView: UIView, UIGestureRecognizerDelegate {
 // MARK: - Factory
 
 extension SecondPageFormView {
+    
+    private func getServingSizeTitle() -> String {
+        if let title = title {
+            guard !title.isEmpty else {
+                let size = selectView.selectedCellType?.getTitle(.long) ?? ""
+                return size
+            }
+            return title
+        } else {
+            return selectView.selectedCellType?.getTitle(.long) ?? ""
+        }
+    }
+    
     private func getServingWeightLabel() -> UILabel {
         let label = UILabel()
         label.font = R.font.sfProTextMedium(size: 17)

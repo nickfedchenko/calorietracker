@@ -10,6 +10,7 @@ import Foundation
 protocol AllergicRestrictionsPresenterInterface: AnyObject {
     func viewDidLoad()
     func didTapContinueCommonButton()
+    func restrictionTapped(at index: Int)
 }
 
 class AllergicRestrictionsPresenter {
@@ -40,6 +41,10 @@ class AllergicRestrictionsPresenter {
 // MARK: - AllergicRestrictionsPresenterInterface
 
 extension AllergicRestrictionsPresenter: AllergicRestrictionsPresenterInterface {
+    func restrictionTapped(at index: Int) {
+        interactor?.restrictionTapped(at: index)
+    }
+    
     func viewDidLoad() {
         allergicRestrictions = interactor?.getAllAllergicRestrictions() ?? []
         
@@ -52,6 +57,7 @@ extension AllergicRestrictionsPresenter: AllergicRestrictionsPresenterInterface 
     
     func didTapContinueCommonButton() {
         interactor?.set(allergicRestrictions: .dairy)
+        interactor?.saveRestrictions()
         router?.openThanksForTheInformation()
     }
 }

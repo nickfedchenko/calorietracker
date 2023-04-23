@@ -538,7 +538,7 @@
 "breakfast" = "ЗАВТРАК";
 "lunch" = "ОБЕД";
 "dinner" = "УЖИН";
-"snack" = "ЗАКУСКА";
+"snack" = "ПЕРЕКУС";
 "food" = "Продукт";
 "recipe" = "Рецепты";
 "meal" = "Прием пищи";
@@ -810,7 +810,7 @@
 
 "calendar.topTitle.today" = "СЕГОДНЯ";
 "calendar.topTitle.yesterday" = "ВЧЕРА";
-"calendar.logStreak" = " дней\nподряд";
+"calendar.logStreak" = " дней\nнепрерывно";
 
 "reviews.writeAReview" = "Написать отзыв";
 "reviews.sendUsFeedback" = "Сообщите нам";
@@ -934,3 +934,33 @@
 "Try 3 days for free, then  " = "3 дня бесплатно, далее ";
 "CALORIE GOAL" = "ЦЕЛЬ ПО КАЛОРИЯМ";
 "Filter your search" = "Поиск. фильтр";
+
+"landing.topSection.titleMainText" = "Достигните @weightTarget@ к \n @dateTarget@";
+"landing.topSection.description" = "Вот ваша персональная программа, @username@";
+
+"landing.checkmarksSection.title" = "Это программа построена специально для тебя!";
+"landing.checkmarksSection.physicallyFeeling" = "Чувствовать себя более комфортно";
+"landing.checkmarksSection.perfectFor" = "Для @sex@ старше @age@";
+"landing.checkmarksSection.allergicRestrictions" = "Аллергические ограничения: ";
+"landing.checkmarksSection.activityLifeStyle" = "Активный образ жизни: ";
+"landing.checkmarksSection.weeklyGoal" = "Цель на неделю: ";
+
+"landing.circlesSection.title" = "Вот ваши личные ежедневные макросы";
+"landing.circlesSection.description" = "Наша главная цель — выработать здоровые привычки: следуйте своему личному плану, записывайте свою еду в дневник, чтобы контролировать свое ежедневное питание.
+В нашей программе мы разработали макросы специально для вас. На их основе приложение Kcalc помогает легко выбирать рецепты и быстрее достигать цели по снижению веса.";
+"landing.circlesSection.description.fontPart" = "личному плану";
+
+"landing.benefitsSection.headerTitle" = "Вот  преимущества, которые вы получаете";
+"landing.benefitsSection.title" = "Удобный трекер еды и визуальный контроль";
+
+"landing.activitySection.title" = "Трекер активности интегрированный с фитнес-приложениями";
+
+"landing.recipesSection.title" = "Более 2000 рецептов, которые легко настроить";
+
+"landing.measurementsSection.title" = "График изменения веса, ИМТ и многое другое";
+
+"landing.waterSection.title" = "Отслеживание потребления воды и активности движения";
+"landing.waterSection.descriptionFull" = "Ваша личная ежедневная рекомендация по количеству воды: ";
+
+"landing.finalSection.title" = "Почему выбирают наше приложение?";
+"landing.finalSection.descriptionFull" = "Потому что эта методика работает! А наше приложение позволяет сделать весь процесс прозрачным и увлекательным. Вы быстро войдете в привычку, возьмете под контроль свое питание и вес тела. Не нужно платить за сомнительные средства и «лекарства», нужно просто больше знать о том что вы едите. Придерживаясь индивидуального плана вы, несомненно, добьетесь нужного результата!";

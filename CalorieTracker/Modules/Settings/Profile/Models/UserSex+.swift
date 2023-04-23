@@ -27,3 +27,15 @@ extension UserSex: WithGetImageProtocol, WithGetDescriptionProtocol {
         return nil
     }
 }
+
+extension UserSex {
+    func getNominativeTitle() -> String {
+        switch self {
+        case .male:
+            return "onboarding.second.whatsYourGender.male".localized
+        case .famale:
+            return "onboarding.second.whatsYourGender.female".localized
+        }
+    }
+
+}

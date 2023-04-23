@@ -27,6 +27,7 @@ class TopDownDismissTransition: NSObject, UIViewControllerAnimatedTransitioning 
 //            size: fromViewInitialFrame.size
 //        )
         
+        
         UIView.animate(withDuration: transitionDuration(using: transitionContext)) {
             fromView.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
         } completion: { _ in

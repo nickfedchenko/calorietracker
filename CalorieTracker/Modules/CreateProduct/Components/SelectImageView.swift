@@ -58,7 +58,13 @@ final class SelectImageView: UIView {
             imageView.image = R.image.createProduct.camera()
             return
         }
-        imageView.contentMode = .scaleAspectFill
+        
+        switch image.imageOrientation {
+        case .up, .down, .downMirrored, .upMirrored:
+            imageView.contentMode = .scaleAspectFill
+        default:
+            imageView.contentMode = .scaleAspectFit
+        }
         imageView.image = image
     }
     
@@ -68,6 +74,7 @@ final class SelectImageView: UIView {
     }
     
     private func showAlert() {
+        viewController?.view.endEditing(true)
         let alert = UIAlertController(
             title: R.string.localizable.select(),
             message: nil,
@@ -114,9 +121,10 @@ final class SelectImageView: UIView {
     }
     
     private func showImagePicker() {
+        viewController?.view.endEditing(true)
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
-        imagePicker.allowsEditing = true
+        imagePicker.allowsEditing = false
         viewController?.present(imagePicker, animated: true)
     }
     
@@ -124,7 +132,7 @@ final class SelectImageView: UIView {
         let imagePicker = UIImagePickerController()
         imagePicker.sourceType = .camera
         imagePicker.delegate = self
-        imagePicker.allowsEditing = true
+        imagePicker.allowsEditing = false
         viewController?.present(imagePicker, animated: true)
     }
     
@@ -137,7 +145,7 @@ final class SelectImageView: UIView {
 extension SelectImageView: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-        guard let image = info[.editedImage] as? UIImage else {
+        guard let image = info[.originalImage] as? UIImage else {
             picker.dismiss(animated: true)
             return
         }

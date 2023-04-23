@@ -74,6 +74,7 @@ protocol DataServiceFacadeInterface {
     func searchRemoteProduct(byBarcode: String, completion: @escaping ([Product]) -> Void)
     func saveExercises(_ exercises: [Exercise])
     func saveSteps(_ steps: [DailyData])
+    func getMyProducts() -> [Product]
 }
 
 final class DSF {
@@ -87,6 +88,10 @@ final class DSF {
 }
 
 extension DSF: DataServiceFacadeInterface {
+    func getMyProducts() -> [Product] {
+        return localPersistentStore.getMyDomainProducts().compactMap { Product(from: $0) }
+    }
+    
     func searchProducts(by phrase: String, completion: @escaping ([Product]) -> Void) {
         localPersistentStore.searchProducts(by: phrase, completion: completion)
     }

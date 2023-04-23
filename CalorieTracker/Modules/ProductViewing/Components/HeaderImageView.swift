@@ -72,15 +72,7 @@ final class HeaderImageView: UIView {
         
         switch photo {
         case .url(let url):
-            imageView.kf.setImage(
-                with: url,
-                placeholder: UIImage(),
-                options: [
-                    .processor(DownsamplingImageProcessor(
-                        size: CGSize(width: 374, height: 244)
-                    ))
-                ]
-            )
+            imageView.kf.setImage(with: url)
         case .data(let data):
             imageView.image = UIImage(data: data)
         default:

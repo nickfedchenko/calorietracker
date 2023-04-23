@@ -137,7 +137,15 @@ class WidgetPresentTransitionController: NSObject, UIViewControllerAnimatedTrans
         )
         animatableView.frame = container.bounds
         container.addSubview(animatableView)
-        animatableView.startTransitionAnimation(targetFrame: toViewFrame) { [weak self] in
+        let toViewMock = StepsFullWidgetView(frame: toViewFrame)
+        toViewMock.alpha = 0
+        container.addSubview(toViewMock)
+        toViewMock.setNeedsLayout()
+        toViewMock.layoutIfNeeded()
+        animatableView.startTransitionAnimationAppearing(
+            targetView: toViewMock,
+            targetFrame: toViewFrame
+        ) { [weak self] in
             self?.anchorView.alpha = 1
             UIView.animate(withDuration: 0.3) {
                 animatableView.alpha = 1
@@ -147,16 +155,5 @@ class WidgetPresentTransitionController: NSObject, UIViewControllerAnimatedTrans
                 transitionContext.completeTransition(true)
             }
         }
-//        targetWidget?.frame = anchorViewFrame
-//        targetWidget?.setToForceRedraw()
-//        anchorView.clipsToBounds = true
-//        let anchorSnapshot = anchorView.snapshotView(afterScreenUpdates: true)
-//        anchorView.clipsToBounds = false
-//        targetWidget?.prepareForAppearing(with: anchorSnapshot)
-//        targetWidget?.animateAppearingFirstStage(targetFrame: toViewFrame) {
-//            targetWidget?.removeFromSuperview()
-//            toView.alpha = 1
-//            transitionContext.completeTransition(true)
-//        }
     }
 }
