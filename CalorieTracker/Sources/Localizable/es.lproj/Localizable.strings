@@ -499,7 +499,7 @@
 "onboarding.fourth.thoughtsOnStressEating.title" = "Hábitos";
 "onboarding.fourth.thoughtsOnStressEating.title.first" = "¿Crees que eres una persona emocional?";
 "onboarding.fourth.thoughtsOnStressEating.title.second" = "o eres un comilón propenso al estrés?";
-nota
+                                                                                                    
 "onboarding.fourth.timeForYourself.title" = "Hábitos";
 "onboarding.fourth.timeForYourself.button" = "Continuar";
 "onboarding.fourth.timeForYourself.title.first" = "¿Cuánto tiempo tienes para darte a ti mismo en una semana normal?";
@@ -931,7 +931,6 @@ nota
 "Try 3 days for free, then"   = "Prueba 3 días gratis, luego ";
 "CALORIE GOAL" = "OBJETIVO DE CALORÍAS";
 "Filter your search" = "Filtra tu búsqueda";
-
 
 "landing.topSection.titleMainText" = "Reach @weightTarget@ by @dateTarget@";
 "landing.topSection.description" = "Here is your personal program, @username@";
