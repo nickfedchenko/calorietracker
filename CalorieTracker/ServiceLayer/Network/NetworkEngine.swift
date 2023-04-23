@@ -221,7 +221,9 @@ final class NetworkEngine {
         var urlRequest = request.request
         urlRequest.method = .post
         if case let .uploadProduct(product: product) = request {
-            let data = try? JSONEncoder().encode(product)
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = .prettyPrinted
+            let data = try? encoder.encode(product)
             AF.upload(data ?? Data(), with: urlRequest).validate()
             .responseDecodable(
                 of: T.self,

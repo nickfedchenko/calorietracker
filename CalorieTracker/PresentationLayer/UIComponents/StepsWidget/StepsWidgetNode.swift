@@ -21,7 +21,8 @@ final class StepsWidgetNode: CTWidgetNode {
     private lazy var topTextNode: ASTextNode = {
         let node = ASTextNode()
         let string = Text.steps
-        let font = R.font.sfProRoundedBold(size: 6 / Double(string.count) * 18)
+        let font = R.font.sfProRoundedBold(size: 18.fitW)
+        
         let color = R.color.stepsWidget.secondGradientColor()
         let image = R.image.stepsWidget.foot()
         

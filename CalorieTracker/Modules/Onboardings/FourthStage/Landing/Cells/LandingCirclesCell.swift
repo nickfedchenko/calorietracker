@@ -47,7 +47,7 @@ final class LandingCirclesCell: UICollectionViewCell {
     
     override func draw(_ rect: CGRect) {
         super.draw(rect)
-        gradientLayer.frame = bounds
+        gradientLayer.frame = contentView.bounds
     }
     
     override init(frame: CGRect) {
@@ -59,9 +59,15 @@ final class LandingCirclesCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        gradientLayer.frame = contentView.bounds
+    }
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         bjuStack.removeAllArrangedSubviews()
+        gradientLayer.frame = contentView.bounds
     }
     
     func configure(with model: CirclesSectionModel) {

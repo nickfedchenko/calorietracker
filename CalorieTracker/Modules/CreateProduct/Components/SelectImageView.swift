@@ -74,6 +74,7 @@ final class SelectImageView: UIView {
     }
     
     private func showAlert() {
+        viewController?.view.endEditing(true)
         let alert = UIAlertController(
             title: R.string.localizable.select(),
             message: nil,
@@ -120,6 +121,7 @@ final class SelectImageView: UIView {
     }
     
     private func showImagePicker() {
+        viewController?.view.endEditing(true)
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         imagePicker.allowsEditing = false

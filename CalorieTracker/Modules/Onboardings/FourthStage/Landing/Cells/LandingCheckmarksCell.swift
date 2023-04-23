@@ -154,7 +154,7 @@ final class LandingCheckmarksCell: UICollectionViewCell {
         }
         
         mainStack.snp.makeConstraints { make in
-            make.top.greaterThanOrEqualTo(mainTitle.snp.bottom).offset(28)
+            make.top.lessThanOrEqualTo(mainTitle.snp.bottom).offset(28)
             make.leading.trailing.equalToSuperview().inset(24)
             make.bottom.equalToSuperview().inset(32)
         }

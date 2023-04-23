@@ -899,14 +899,14 @@ final class StepsWidgetAnimatableContainer: UIView {
             let topTitleString = topTitleLabel.text,
             let bottomTitleString = bottomLabel.text {
             topTitleLabel.animate(
-                font: R.font.sfProRoundedBold(size: 7 / Double(topTitleString.count) * 18) ?? .systemFont(ofSize: 22),
+                font: R.font.sfProRoundedBold(size: 18.fitW) ?? .systemFont(ofSize: 22),
                 duration: 0.3
             )
             
             bottomLabel.animate(
                 font: R.font.sfProRoundedBold(
                     size: 18
-                ) ?? .systemFont(ofSize: 22),
+                ) ?? .systemFont(ofSize: 18.fitW),
                 duration: 0.3
             )
         }

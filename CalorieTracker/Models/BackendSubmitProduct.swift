@@ -14,28 +14,22 @@ struct BackendUploadResponse: Codable {
     let success: Bool
 }
 
-struct BackendSubmitModel: Encodable {
+struct BackendSubmitModel: Codable {
     let userToken: String
     let lang: String
     let type: String
-    let product: String
+    let model: [BackendSubmitProduct]
     
     init(product: Product) {
+        let submitProduct = product.generateBackendSubmitProduct()
+        self.model = [submitProduct]
         self.userToken = Apphud.userID()
         self.lang = Locale.current.languageCode ?? "en"
         self.type = "product"
-        let encoder = JSONEncoder()
-        let submitProduct = product.generateBackendSubmitProduct()
-        let submitProductData = (try? encoder.encode(submitProduct)) ?? Data()
-        if let productJson = String(data: submitProductData, encoding: .utf8) {
-            self.product = productJson
-        } else {
-            self.product = ""
-        }
     }
 }
 
-struct BackendSubmitProduct: Encodable {
+struct BackendSubmitProduct: Codable {
     let id: String
     let title: String
     let productTypeID: Int
