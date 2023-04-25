@@ -37,7 +37,7 @@ final class WeightFullWidgetView: UIView, CTWidgetFullProtocol {
             R.image.weightWidget.settings(),
             for: .normal
         )
-        button.alpha = 0
+//        button.alpha = 0
         return button
     }()
     
@@ -177,6 +177,12 @@ final class WeightFullWidgetView: UIView, CTWidgetFullProtocol {
         
         segmentedControl.onSegmentChanged = { [weak self] type in
             self?.configureView(period: type.id)
+        }
+        
+        headerView.userWantsChangeGoalWeight = { [weak self] in
+            guard let self = self else { return }
+            Vibration.rigid.vibrate()
+            self.output?.setGoal(self)
         }
     }
     

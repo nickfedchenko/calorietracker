@@ -51,9 +51,9 @@ final class AppCoordinator: ApphudDelegate {
                 getStartedViewController = PaywallRouter.setupModule()
             }
         }
-#if DEBUG
-getStartedViewController = LandingRouter.setupModule()
-#endif
+//#if DEBUG
+//getStartedViewController = LandingRouter.setupModule()
+//#endif
         checkIsPaid()
         let navigationController = UINavigationController(rootViewController: getStartedViewController)
         rootNavigationController = navigationController

@@ -657,7 +657,7 @@
 "create.form.serving.description" = "Описание размера порции";
 
 "keyboard.weight.title.add" = "Мой вес сегодня:";
-"keyboard.weight.title.set" = "Я буду взвешивать:";
+"keyboard.weight.title.set" = "Я буду весить:";
 "keyboard.steps.title" = "Я буду ходить пешком по крайней мере ежедневно:";
 "keyboard.water.title" = "Выберите значок:";
 "keyboard.water.description" = "Укажите объем:";

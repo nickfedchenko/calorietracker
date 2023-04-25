@@ -40,6 +40,7 @@ final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
     }()
     
     private let foodView = FoodCellView()
+   
     private let shadowView = ViewWithShadow([
         ShadowConst.firstShadow,
         ShadowConst.secondShadow
@@ -76,6 +77,7 @@ final class FoodCollectionViewCell: UICollectionViewCell, FoodCellProtocol {
         guard let model = viewModel else { return }
         foodView.configure(.init(model.food))
         foodView.color = model.colorSubInfo
+        foodView.shouldShowCloseButton = viewModel?.isFromSelectedFoodController ?? true
         foodView.subInfo = model.subInfo
         foodView.cellButtonType = model.buttonType
         cellType = model.cellType

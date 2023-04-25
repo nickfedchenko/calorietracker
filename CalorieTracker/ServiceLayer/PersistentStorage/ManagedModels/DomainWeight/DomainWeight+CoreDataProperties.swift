@@ -17,4 +17,5 @@ extension DomainWeight: DomainDailyProtocol {
     @NSManaged public var month: Int32
     @NSManaged public var year: Int32
     @NSManaged public var value: Double
+    @NSManaged public var preciseDate: Date?
 }

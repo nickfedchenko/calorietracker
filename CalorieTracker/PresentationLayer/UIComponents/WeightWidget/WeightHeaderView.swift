@@ -8,6 +8,7 @@
 import UIKit
 
 final class WeightHeaderView: UIView {
+    var userWantsChangeGoalWeight: (() -> Void)?
     struct Model {
         let start: String
         let now: String
@@ -28,12 +29,18 @@ final class WeightHeaderView: UIView {
         return label
     }()
     
-    private lazy var rightLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = R.color.weightWidget.weightTextColor()
-        label.font = R.font.sfProRoundedBold(size: 22)
-        label.textAlignment = .center
-        return label
+    private lazy var rightLabel: UIButton = {
+        let button = UIButton(type: .system)
+        
+        let attrTitle = NSAttributedString(
+            string: "60",
+            attributes: [
+                .foregroundColor: R.color.weightWidget.weightTextColor() ?? UIColor.white,
+                .font: R.font.sfProRoundedBold(size: 22) ?? .systemFont(ofSize: 22)
+            ]
+        )
+        button.setAttributedTitle(attrTitle, for: .normal)
+        return button
     }()
     
     private lazy var middleLabel: UILabel = {
@@ -52,20 +59,20 @@ final class WeightHeaderView: UIView {
         return view
     }()
     
-//    private lazy var rightBackgroundView: UIView = {
-//        let view = UIView()
-//        view.backgroundColor = .white
-//        view.layer.cornerRadius = 16
-//        view.layer.cornerCurve = .circular
-//        view.layer.borderWidth = 1
-//        view.layer.borderColor = R.color.weightWidget.backgroundLabelColor()?.cgColor
-//        view.layer.shadowColor = UIColor.gray.cgColor
-//        view.layer.shadowRadius = 10
-//        view.layer.shadowOffset = CGSize(width: 0, height: 4)
-//        view.layer.shadowOpacity = 0.2
+    private lazy var rightBackgroundView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.layer.cornerRadius = 16
+        view.layer.cornerCurve = .circular
+        view.layer.borderWidth = 1
+        view.layer.borderColor = R.color.weightWidget.backgroundLabelColor()?.cgColor
+        view.layer.shadowColor = UIColor.gray.cgColor
+        view.layer.shadowRadius = 10
+        view.layer.shadowOffset = CGSize(width: 0, height: 4)
+        view.layer.shadowOpacity = 0.2
 //        view.alpha = 0
-//        return view
-//    }()
+        return view
+    }()
     
     var model: Model? {
         didSet {
@@ -76,10 +83,20 @@ final class WeightHeaderView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
+        setupActions()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupActions() {
+        rightLabel.addAction(
+            UIAction { [weak self] _ in
+                self?.userWantsChangeGoalWeight?()
+        },
+            for: .touchUpInside
+        )
     }
     
     private func setupView() {
@@ -96,13 +113,13 @@ final class WeightHeaderView: UIView {
         }()
         
         middleBackgroundView.addSubview(middleLabel)
-//        rightBackgroundView.addSubview(rightLabel)
+        rightBackgroundView.addSubview(rightLabel)
         
         addSubviews([
             leftLabel,
             middleBackgroundView,
-            rightLabel,
-//            rightBackgroundView,
+//            rightLabel,
+            rightBackgroundView,
             leftImageView,
             rightImageView
         ])
@@ -122,10 +139,10 @@ final class WeightHeaderView: UIView {
             make.width.equalTo(75)
         }
         
-//        rightBackgroundView.snp.makeConstraints { make in
-//            make.trailing.top.bottom.equalToSuperview()
-//            make.width.equalTo(75)
-//        }
+        rightBackgroundView.snp.makeConstraints { make in
+            make.trailing.top.bottom.equalToSuperview()
+            make.width.equalTo(75)
+        }
         
         middleBackgroundView.snp.makeConstraints { make in
             make.centerX.centerY.equalToSuperview()
@@ -148,7 +165,14 @@ final class WeightHeaderView: UIView {
         guard let model = model else { return }
         leftLabel.text = model.start
         middleLabel.text = model.now
-        rightLabel.text = model.goal
+        let attrTitle = NSAttributedString(
+            string: model.goal,
+            attributes: [
+                .foregroundColor: R.color.weightWidget.weightTextColor() ?? UIColor.white,
+                .font: R.font.sfProRoundedBold(size: 22) ?? .systemFont(ofSize: 22)
+            ]
+        )
+        rightLabel.setAttributedTitle(attrTitle, for: .normal)
     }
     
     func prepareForTransition() {

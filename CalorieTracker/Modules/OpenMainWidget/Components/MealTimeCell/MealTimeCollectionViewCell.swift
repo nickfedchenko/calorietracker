@@ -208,7 +208,8 @@ extension MealTimeCollectionViewCell: UICollectionViewDataSource {
             food: viewModel.foods[safe: indexPath.row],
             buttonType: .delete,
             subInfo: nil,
-            colorSubInfo: nil
+            colorSubInfo: nil,
+            isFromSelectedFoodController: false
         )
         cell.turnIntoOpenMainWidgetState()
         cell.didTapButton = { [weak self] food, _ in

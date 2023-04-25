@@ -7,12 +7,22 @@
 
 import UIKit
 
+final class PassThroughScrollView: UIScrollView {
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        if CGRect(x: 0, y: 0, width: contentSize.width, height: contentSize.height).contains(point) {
+            return subviews.first?.hitTest(point, with: event)
+        } else {
+            return superview?.subviews.first?.hitTest(point, with: event)
+        }
+    }
+}
+
 final class SelectedFoodCellsViewController: UIViewController {
     var router: SelectedFoodCellsRouterInterface?
-    var didChangeSeletedFoods: (([Food]) -> Void)?
+    var didChangeSelectedFoods: (([Food]) -> Void)?
     
-    private lazy var scrollView: UIScrollView = {
-        let view = UIScrollView()
+    private lazy var scrollView: PassThroughScrollView = {
+        let view = PassThroughScrollView()
         view.backgroundColor = .clear
         view.showsVerticalScrollIndicator = false
         view.showsHorizontalScrollIndicator = false
@@ -39,6 +49,7 @@ final class SelectedFoodCellsViewController: UIViewController {
         let view = UIView()
         view.backgroundColor = R.color.foodViewing.basicPrimary()?.withAlphaComponent(0.25)
         view.alpha = 0
+        view.isUserInteractionEnabled = true
         return view
     }()
     
@@ -48,6 +59,8 @@ final class SelectedFoodCellsViewController: UIViewController {
         didSet {
             if foods.isEmpty {
                 closeVC()
+            } else {
+                foodCollectionViewController.collectionView.reloadSections(IndexSet(integer: 0))
             }
         }
     }
@@ -65,7 +78,7 @@ final class SelectedFoodCellsViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         setupConstraints()
-        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapToHideTapped)))
+        dimmingView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapToHideTapped)))
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -98,9 +111,20 @@ final class SelectedFoodCellsViewController: UIViewController {
         let location = sender.location(in: scrollView)
         print(containerView.frame)
         print(location)
-        guard !containerView.frame.contains(location) else { return }
-       
+        guard !containerView.frame.contains(location) else {
+            return
+        }
         dismiss(animated: true)
+    }
+    
+    func getFoods() -> [Food] {
+        return foods
+    }
+    
+    func updateFoods(with food: Food) {
+        if let index = foods.firstIndex(where: { $0.id == food.id }) {
+            foods[index] = food
+        }
     }
     
     private func setupView() {
@@ -148,7 +172,7 @@ final class SelectedFoodCellsViewController: UIViewController {
     }
     
     private func closeVC() {
-        didChangeSeletedFoods?(foods)
+        didChangeSelectedFoods?(foods)
         router?.close()
     }
     
@@ -164,6 +188,8 @@ extension SelectedFoodCellsViewController: FoodCollectionViewControllerDelegate 
         switch type {
         case .product(let product, _, _):
             router?.openProductViewController(product)
+        case .dishes(let dish, customAmount: _):
+            router?.openDishViewController(dish)
         default:
             return
         }
@@ -183,7 +209,8 @@ extension SelectedFoodCellsViewController: FoodCollectionViewControllerDataSourc
             food: foods[safe: indexPath.row],
             buttonType: .delete,
             subInfo: nil,
-            colorSubInfo: nil
+            colorSubInfo: nil,
+            isFromSelectedFoodController: true
         )
     }
     
@@ -193,8 +220,11 @@ extension SelectedFoodCellsViewController: FoodCollectionViewControllerDataSourc
         cell.didTapButton = { food, _ in
             guard let index = self.foods.firstIndex(where: { $0 == food }) else { return }
             self.foods.remove(at: index)
-            self.foodCollectionViewController.collectionView
-                .deleteItems(at: [IndexPath(row: index, section: 0)])
+//            self.foodCollectionViewController.collectionView.performBatchUpdates {
+//                self.foodCollectionViewController.collectionView
+//                    .deleteItems(at: [IndexPath(row: index, section: 0)])
+//            }
+          
         }
         return cell
     }

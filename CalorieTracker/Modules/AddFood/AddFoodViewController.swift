@@ -747,11 +747,12 @@ final class AddFoodViewController: UIViewController {
                 cellType: .table,
                 food: finalFoodModel,
                 buttonType: (selectedFood ?? [])
-                    .contains(food ?? foodPlaceholder) && state != .default
+                    .contains(food ?? foodPlaceholder) && state == .default
                 ? .delete
                 : wasFromMealCreateVC ? .addToMeal : .add,
                 subInfo: presenter?.getSubInfo(food, selectedFoodInfo),
-                colorSubInfo: selectedFoodInfo.getColor()
+                colorSubInfo: selectedFoodInfo.getColor(),
+                isFromSelectedFoodController: false
             )
             cell.didTapButton = { [weak self] food, buttonType in
                 switch buttonType {
@@ -803,7 +804,8 @@ final class AddFoodViewController: UIViewController {
                 food: food,
                 buttonType: .add,
                 subInfo: presenter?.getSubInfo(food, selectedFoodInfo),
-                colorSubInfo: selectedFoodInfo.getColor()
+                colorSubInfo: selectedFoodInfo.getColor(),
+                isFromSelectedFoodController: false
             )
             cell.didTapButton = { food, buttonType in
                 if buttonType == .add {
@@ -823,6 +825,7 @@ final class AddFoodViewController: UIViewController {
             }
             showDoneButton(false)
             updateCounterAppearanceIfNeeded()
+            foodCollectionViewController.reloadData()
             return
         }
         updateCounterAppearanceIfNeeded()
@@ -833,6 +836,7 @@ final class AddFoodViewController: UIViewController {
             kcal: sumKcal,
             count: selectedFood.count
         ))
+        foodCollectionViewController.reloadData()
     }
     
     private func didChangeState(shouldAnimate: Bool = true) {

@@ -13,6 +13,7 @@ struct FoodCellViewModel {
     let buttonType: CellButtonType
     let subInfo: Int?
     let colorSubInfo: UIColor?
+    let isFromSelectedFoodController: Bool
 }
 
 enum CellType {

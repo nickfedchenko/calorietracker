@@ -17,6 +17,7 @@ final class FoodCellView: UIView {
         let kcal: Double
         let image: Product.Photo?
         let verified: Bool
+        let isFromSelectedFoodsController: Bool = false
     }
     
     var didTapButton: ((CellButtonType) -> Void)?
@@ -32,6 +33,8 @@ final class FoodCellView: UIView {
             updateInfoLabelLayout()
         }
     }
+    
+    var shouldShowCloseButton: Bool = false
     
     var cellButtonType: CellButtonType = .add {
         didSet {
@@ -271,7 +274,13 @@ final class FoodCellView: UIView {
     private func didChangeButtonType() {
         switch cellButtonType {
         case .delete:
-            selectButton.setImage(R.image.addFood.recipesCell.addedCheckmark(), for: .normal)
+            model
+            if shouldShowCloseButton {
+                selectButton.setImage(R.image.addFood.recipesCell.delete(), for: .normal)
+            } else {
+                selectButton.setImage(R.image.addFood.recipesCell.addedCheckmark(), for: .normal)
+            }
+            
             UIView.animate(withDuration: 0.2) {
                 self.selectButton.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
             } completion: { _ in
