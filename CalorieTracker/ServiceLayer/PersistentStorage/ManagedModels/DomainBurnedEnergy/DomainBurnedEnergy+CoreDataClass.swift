@@ -17,6 +17,7 @@ public class DomainBurnedEnergy: NSManagedObject {
         energy.month = Int32(model.day.month)
         energy.year = Int32(model.day.year)
         energy.value = model.value
+        energy.isFromHK = model.isFromHK
         return energy
     }
 }

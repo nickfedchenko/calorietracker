@@ -135,8 +135,7 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
     }
     
     func updateMessageWidget() {
-        let message: String = "Have a nice day! Don't forget to track your breakfast".localized
-        view.setMessageWidget(message)
+        MessagesTextService.shared.anyEventTriggered()
     }
     
     func updateNoteWidget() {
@@ -248,6 +247,7 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
             }
             return Int(goal)
         }()
+        
         let model: ExercisesWidgetNode.Model = .init(
             exercises: exercises.map {
                 .init(burnedKcal: Int($0.burnedKcal), exerciseType: $0.type)
@@ -257,11 +257,21 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
             goalBurnedKcal: burnedKcalGoal
         )
         
-        view.setExersiceWidget(model, UDM.isAuthorisedHealthKit)
+        HealthKitAccessManager.shared.askPermission { [weak self] result in
+            switch result {
+            case .success:
+                DispatchQueue.main.async {
+                    self?.view.setExersiceWidget(model, true)
+                }
+            case .failure:
+                DispatchQueue.main.async {
+                    self?.view.setExersiceWidget(model, false)
+                }
+            }
+        }
     }
     
     func didTapExerciseWidget() {
-        if !UDM.isAuthorisedHealthKit {
             HealthKitAccessManager.shared.askPermission { result in
                 switch result {
                 case .success(let success):
@@ -274,12 +284,13 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
                         DSF.shared.saveExercises(exercises)
                     }
                     
+                    HealthKitDataManager.shared.getWeights { weights in
+                        DSF.shared.saveWeights(weights)
+                    }
                 case .failure(let failure):
                     print(failure)
                 }
             }
-            return
-        }
     }
     
     func didTapNotesWidget() {

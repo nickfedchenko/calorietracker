@@ -40,7 +40,7 @@ final class SegmentedControl<ID: Equatable>: UIView {
     private lazy var stack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
-        stack.distribution = .fill
+        stack.distribution = .fillProportionally
         stack.spacing = 1
         return stack
     }()
@@ -126,6 +126,7 @@ final class SegmentedControl<ID: Equatable>: UIView {
         buttons.forEach { button in
             let view = UIView()
             view.addSubview(button)
+//            button.titleLabel?.adjustsFontSizeToFitWidth = true
             button.snp.makeConstraints { make in
                 make.top.bottom.equalToSuperview()
                 make.leading.trailing.lessThanOrEqualToSuperview().inset(26.5)
@@ -191,6 +192,9 @@ private struct ShadowConst {
 }
 
 enum HistoryHeaderButtonType {
+    case listDaily
+    case listWeekly
+    case listMonthly
     case weak
     case months
     case twoMonths
@@ -215,6 +219,12 @@ enum HistoryHeaderButtonType {
             return R.string.localizable.weightWidgetFullSegmentYear()
         case .allTheTime:
             return R.string.localizable.weightWidgetFullSegmentAlltime()
+        case .listDaily:
+            return R.string.localizable.weightWidgetListSegmentDaily()
+        case .listWeekly:
+            return R.string.localizable.weightWidgetListSegmentWeekly()
+        case .listMonthly:
+            return R.string.localizable.weightWidgetListSegmentMonthly()
         }
     }
 }

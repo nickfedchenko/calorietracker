@@ -14,6 +14,7 @@ protocol WeightFullWidgetInterface: AnyObject {
 protocol WeightFullWidgetOutput: AnyObject {
     func setGoal(_ widget: WeightFullWidgetView)
     func addWeight(_ widget: WeightFullWidgetView)
+    func shouldShowWeightsList()
 }
 
 final class WeightFullWidgetView: UIView, CTWidgetFullProtocol {
@@ -34,7 +35,7 @@ final class WeightFullWidgetView: UIView, CTWidgetFullProtocol {
     private lazy var settingsButton: UIButton = {
         let button = UIButton()
         button.setImage(
-            R.image.weightWidget.settings(),
+            R.image.weightWidget.listIcon(),
             for: .normal
         )
 //        button.alpha = 0
@@ -247,6 +248,12 @@ final class WeightFullWidgetView: UIView, CTWidgetFullProtocol {
             chart.drawPoints = true
         case .twoMonths, .threeMonths, .sixMonths, .year, .allTheTime:
             chart.drawPoints = false
+        case .listDaily:
+            chart.drawPoints = false
+        case .listWeekly:
+            chart.drawPoints = false
+        case .listMonthly:
+            chart.drawPoints = false
         }
     }
     
@@ -311,7 +318,7 @@ final class WeightFullWidgetView: UIView, CTWidgetFullProtocol {
     
     @objc private func didTapSettingsButton() {
         Vibration.rigid.vibrate()
-        output?.setGoal(self)
+        output?.shouldShowWeightsList()
     }
 }
 
@@ -417,6 +424,7 @@ extension WeightFullWidgetView: TransitionAnimationReady {
             self.chart.alpha = 1
             self.addButton.alpha = 1
             self.closeButton.alpha = 1
+            self.settingsButton.alpha = 1
         } completion: { _ in
             completion()
         }

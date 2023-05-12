@@ -76,6 +76,7 @@ protocol LocalDomainServiceInterface {
     func getDomainDish(_ id: Int) -> DomainDish?
     func getDomainCustomEntry(_ id: String) -> DomainCustomEntry?
     func getMyDomainProducts() -> [DomainProduct]
+    func deleteWeightRecord(at day: Day)
 }
 
 extension LocalDomainServiceInterface {
@@ -269,8 +270,26 @@ final class LocalDomainService {
 
 // MARK: - LocalDomainServiceInterface
 extension LocalDomainService: LocalDomainServiceInterface {
+    func deleteWeightRecord(at day: Day) {
+        let dayPredicate = NSPredicate(format: "day == %i", day.day)
+        let monthPredicate = NSPredicate(format: "month == %i", day.month)
+        let yearPredicate = NSPredicate(format: "year == %i", day.year)
+        let compoundPredicate = NSCompoundPredicate(
+            andPredicateWithSubpredicates: [dayPredicate, monthPredicate, yearPredicate]
+        )
+        let weights = fetchData(for: DomainWeight.self, withPredicate: compoundPredicate)
+        weights?.forEach {
+            context.delete($0)
+        }
+        do {
+            try context.save()
+        } catch {
+            context.rollback()
+        }
+    }
+    
     func getMyDomainProducts() -> [DomainProduct] {
-        let predicate = NSPredicate(format: "%K == YES",#keyPath(DomainProduct.isUserProduct))
+        let predicate = NSPredicate(format: "%K == YES", #keyPath(DomainProduct.isUserProduct))
         let domainProducts = fetchData(
             for: DomainProduct.self,
             withPredicate: NSCompoundPredicate(orPredicateWithSubpredicates: [predicate])

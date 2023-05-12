@@ -14,7 +14,7 @@ extension MealTime: WithGetImageProtocol, WithGetTitleProtocol, WithGetDescripti
         switch self {
         case .breakfast:
             return R.image.addFood.menu.breakfast()
-        case .launch:
+        case .lunch:
             return R.image.addFood.menu.lunch()
         case .dinner:
             return R.image.addFood.menu.dinner()
@@ -27,7 +27,7 @@ extension MealTime: WithGetImageProtocol, WithGetTitleProtocol, WithGetDescripti
         switch self {
         case .breakfast:
             return R.string.localizable.breakfast().uppercased()
-        case .launch:
+        case .lunch:
             return R.string.localizable.lunch().uppercased()
         case .dinner:
             return R.string.localizable.dinner().uppercased()
@@ -82,7 +82,7 @@ extension AddFoodViewController {
         
         static let menuModels: [MealTime] = [
             .breakfast,
-            .launch,
+            .lunch,
             .dinner,
             .snack
         ]

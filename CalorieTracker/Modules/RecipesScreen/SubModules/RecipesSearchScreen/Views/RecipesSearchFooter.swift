@@ -149,8 +149,8 @@ final class RecipesSearchFooter: UIView {
         textField.snp.makeConstraints { make in
             make.height.equalTo(64)
             make.leading.equalTo(mainFilterButton.snp.trailing).offset(12)
-            make.trailing.equalToSuperview().inset(34)
-            make.top.equalToSuperview().offset(51)
+            make.trailing.equalToSuperview().inset(20)
+            make.top.equalToSuperview().offset(20)
         }
         
         backButton.snp.makeConstraints { make in

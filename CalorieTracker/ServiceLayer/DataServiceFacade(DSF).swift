@@ -74,6 +74,7 @@ protocol DataServiceFacadeInterface {
     func searchRemoteProduct(byBarcode: String, completion: @escaping ([Product]) -> Void)
     func saveExercises(_ exercises: [Exercise])
     func saveSteps(_ steps: [DailyData])
+    func saveWeights(_ weights: [DailyData])
     func getMyProducts() -> [Product]
 }
 
@@ -88,6 +89,10 @@ final class DSF {
 }
 
 extension DSF: DataServiceFacadeInterface {
+    func saveWeights(_ weights: [DailyData]) {
+        localPersistentStore.saveWeight(data: weights)
+    }
+    
     func getMyProducts() -> [Product] {
         return localPersistentStore.getMyDomainProducts().compactMap { Product(from: $0) }
     }

@@ -19,6 +19,7 @@ protocol WeightWidgetServiceInterface {
     func setWeeklyGoal(_ value: Double)
     func setStartWeight(_ value: Double)
     func addWeight(_ value: Double, to date: Date?)
+    func deleteRecordAt(day: Day)
 }
 
 final class WeightWidgetService {
@@ -28,6 +29,10 @@ final class WeightWidgetService {
 }
 
 extension WeightWidgetService: WeightWidgetServiceInterface {
+    func deleteRecordAt(day: Day) {
+    localDomainService.deleteWeightRecord(at: day)
+    }
+    
     func getAllWeight() -> [DailyData] {
         localDomainService.fetchWeight()
     }
@@ -46,9 +51,16 @@ extension WeightWidgetService: WeightWidgetServiceInterface {
     func getWeightForDate(_ date: Date) -> Double? {
         let day = Day(date)
         let weightData = localDomainService.fetchWeight()
-            .compactMap { $0.day <= day ? $0 : nil }
+        let targetWeightData = weightData
+            .compactMap { inputData in
+                if inputData.day <= day {
+                    return inputData
+                } else {
+                    return nil
+                }
+            }
             .sorted(by: { $0.day > $1.day })
-        let weightForDate = weightData.first
+        let weightForDate = targetWeightData.first
         
         return weightForDate?.value
     }

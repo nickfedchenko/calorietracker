@@ -15,6 +15,7 @@ public class DomainWeight: NSManagedObject {
         weight.month = Int32(model.day.month)
         weight.year = Int32(model.day.year)
         weight.value = model.value
+        weight.isFromHK = model.isFromHK
         return weight
     }
 }

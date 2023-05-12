@@ -196,6 +196,7 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
     
     init(with pointDate: Date) {
         super.init(frame: .zero)
+        print("didAddWater \(MessagesTextService.shared.didAddWater)")
         presenter = WaterFullWidgetPresenter(view: self, specificDate: pointDate)
         setupView()
         setupConstraints()
@@ -441,9 +442,11 @@ final class WaterFullWidgetView: UIView, CTWidgetFullProtocol {
     @objc private func didTapTrackButton(_ sender: UIButton) {
         Vibration.success.vibrate()
         presenter?.addWater(slider.stepVolume * slider.step)
+        print("didAddWater \(MessagesTextService.shared.didAddWater)")
         configureView()
         RateRequestManager.increment(for: .addWater)
         LoggingService.postEvent(event: .watersetmanual)
+        MessagesTextService.shared.anyEventTriggered()
     }
     
     @objc private func didTapBottomCloseButton() {
@@ -472,6 +475,7 @@ extension WaterFullWidgetView: WaterFullWidgetInterface {
     
 }
 
+// swiftlint:disable:next function_body_length
 extension WaterFullWidgetView: TransitionAnimationReady {
     
     func prepareForAppearing(with anchorSnapshot: UIView?) {
@@ -479,7 +483,9 @@ extension WaterFullWidgetView: TransitionAnimationReady {
             make.centerY.equalTo(waterTitleLabel)
             make.trailing.equalToSuperview().offset(23)
         }
+        
         mainStack.snp.removeConstraints()
+        
         logoView.snp.updateConstraints { make in
             make.top.equalToSuperview().offset(8)
             make.trailing.equalTo(settingsButton.snp.leading).offset(-11)

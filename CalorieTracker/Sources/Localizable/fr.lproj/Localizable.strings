@@ -833,6 +833,9 @@
 "weightWidget.full.segment.halfYear" = "Semi-année";
 "weightWidget.full.segment.year" = "Année";
 "weightWidget.full.segment.alltime" = "Tout le temps";
+"weightWidget.list.segment.daily" = "Quotidien";
+"weightWidget.list.segment.weekly" = "Hebdomadaire";
+"weightWidget.list.segment.monthly" = "Mensuel";
 
 "nomeasurements.first" = "Aucune mesure. Votre première ";
 "nomeasurements.second" = " n'est pas encore passé";
@@ -964,3 +967,18 @@ In our program, we have developed macros especially for you. Based on them, the 
 
 "landing.finalSection.title" = "Why choose our app?";
 "landing.finalSection.descriptionFull" = "Because this technique works! And our application allows you to make the whole process transparent and fun. You will quickly become a habit, take control of your diet and body weight. You don’t have to pay for overpriced teas, detoxes, and other \"cures\", you just need to know more about what you eat. By sticking to an individual plan, you will undoubtedly achieve the desired result!";
+"weights.list.healthRecords" = "Inclure les dossiers de santé";
+"messages.breakfastReminder.case.1" = "Bonjour! Écrivons ce qu'il y a pour le petit-déjeuner";
+"messages.breakfastReminder.case.2" = "Bonne journée ! N'oubliez pas de noter votre petit-déjeuner";
+"messages.lunchReminder.case.1" = "N'oubliez pas de noter tout ce que vous avez mangé pour le déjeuner";
+"messages.lunchReminder.case.2" = "Je préfère déjeuner et l'écrire dans mon journal";
+"messages.dinnerReminder.case.1" = "Qu'est-ce qu'on mange ce soir ?";
+"messages.dinnerReminder.case.2" = "N'oubliez pas de noter tout ce que vous avez mangé pour le dîner";
+"messages.snacksReminder.case.1" = "N'oubliez pas de noter tout ce que vous mangez entre les repas";
+"messages.snacksReminder.case.2" = "Même les boissons autres que l'eau plate ou l'eau citronnée doivent être enregistrées dans le journal";
+"messages.waterReminder.case.1" = "N'oubliez pas de boire et marquez l'eau que vous buvez";
+"messages.waterReminder.case.2" = "Enregistrer rapidement et facilement la quantité d'eau que vous buvez";
+"messages.weightReminder.case.1" = "Vous n'avez pas enregistré votre poids depuis un moment, nous vous recommandons de le faire le matin";
+"messages.weightReminder.case.2" = "Cela fait une semaine, il est temps de se peser";
+"messages.allSet.case.1" = "Bravo ! Continuez votre bon travail !";
+"messages.allSet.case.2" = "Vous semblez sérieux. Continuez comme ça !💪";

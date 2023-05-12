@@ -845,6 +845,9 @@
 "weightWidget.full.segment.halfYear" = "Semestre anno";
 "weightWidget.full.segment.year" = "Anno";
 "weightWidget.full.segment.alltime" = "Sempre";
+"weightWidget.list.segment.daily" = "Giornaliero";
+"weightWidget.list.segment.weekly" = "Settimanale";
+"weightWidget.list.segment.monthly" = "Mensile";
 
 "nomeasurements.first" = "Non ci sono misurazioni. La tua prima ";
 "nomeasurements.second" = " non è ancora passato";
@@ -976,3 +979,18 @@ In our program, we have developed macros especially for you. Based on them, the 
 
 "landing.finalSection.title" = "Why choose our app?";
 "landing.finalSection.descriptionFull" = "Because this technique works! And our application allows you to make the whole process transparent and fun. You will quickly become a habit, take control of your diet and body weight. You don’t have to pay for overpriced teas, detoxes, and other \"cures\", you just need to know more about what you eat. By sticking to an individual plan, you will undoubtedly achieve the desired result!";
+"weights.list.healthRecords" = "Includi le cartelle cliniche";
+"messages.breakfastReminder.case.1" = "Buongiorno! Scriviamo cosa c'è per colazione";
+"messages.breakfastReminder.case.2" = "Buona giornata! Non dimenticare di scrivere la tua colazione";
+"messages.lunchReminder.case.1" = "Ricorda di annotare tutto ciò che hai mangiato a pranzo";
+"messages.lunchReminder.case.2" = "Preferisco pranzare e scriverlo nel mio diario";
+"messages.dinnerReminder.case.1" = "Cosa c'è per cena stasera?";
+"messages.dinnerReminder.case.2" = "Ricorda di annotare tutto ciò che hai mangiato a cena";
+"messages.snacksReminder.case.1" = "Ricorda di annotare tutto ciò che mangi tra un pasto e l'altro";
+"messages.snacksReminder.case.2" = "Anche le bevande diverse dall'acqua naturale o dall'acqua con limone devono essere registrate nel diario";
+"messages.waterReminder.case.1" = "Ricordati di bere e segna l'acqua che bevi";
+"messages.waterReminder.case.2" = "Registra quanta acqua bevi velocemente e facilmente";
+"messages.weightReminder.case.1" = "Non registri il tuo peso da un po', ti consigliamo di farlo al mattino";
+"messages.weightReminder.case.2" = "È passata una settimana, è ora di valutare";
+"messages.allSet.case.1" = "Ben fatto! Continua così!";
+"messages.allSet.case.2" = "Sembri serio. Continua così!💪";

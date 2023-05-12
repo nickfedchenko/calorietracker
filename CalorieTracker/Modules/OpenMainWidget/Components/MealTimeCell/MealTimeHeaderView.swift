@@ -85,7 +85,7 @@ final class MealTimeHeaderView: UIView {
         switch viewModel.mealTime {
         case .breakfast:
             leftBottomChevron.tintColor = R.color.openMainWidget.breakfast()
-        case .launch:
+        case .lunch:
             leftBottomChevron.tintColor = R.color.openMainWidget.lunch()
         case .dinner:
             leftBottomChevron.tintColor = R.color.openMainWidget.dinner()

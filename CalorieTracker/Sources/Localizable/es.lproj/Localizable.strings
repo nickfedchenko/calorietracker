@@ -830,6 +830,9 @@
 "weightWidget.full.segment.halfYear" = "Medio año";
 "weightWidget.full.segment.year" = "Año";
 "weightWidget.full.segment.alltime" = "Todo el tiempo";
+"weightWidget.list.segment.daily" = "Diario";
+"weightWidget.list.segment.weekly" = "Semanalmente";
+"weightWidget.list.segment.monthly" = "Mensual";
                                                                                                     
 "nomeasurements.first" = "No hay mediciones. Es tu primera ";
 "nomeasurements.second" = " aún no ha pasado";
@@ -961,3 +964,18 @@ In our program, we have developed macros especially for you. Based on them, the 
 
 "landing.finalSection.title" = "Why choose our app?";
 "landing.finalSection.descriptionFull" = "Because this technique works! And our application allows you to make the whole process transparent and fun. You will quickly become a habit, take control of your diet and body weight. You don’t have to pay for overpriced teas, detoxes, and other \"cures\", you just need to know more about what you eat. By sticking to an individual plan, you will undoubtedly achieve the desired result!";
+"weights.list.healthRecords" = "Incluir registros de salud";
+"messages.breakfastReminder.case.1" = "¡Buenos días! Escribamos lo que hay para el desayuno";
+"messages.breakfastReminder.case.2" = "¡Que tengas un buen día! No olvides anotar tu desayuno";
+"messages.lunchReminder.case.1" = "Recuerde anotar todo lo que comió en el almuerzo";
+"messages.lunchReminder.case.2" = "Prefiero almorzar y escribirlo en mi diario";
+"messages.dinnerReminder.case.1" = "¿Qué hay para cenar esta noche?";
+"messages.dinnerReminder.case.2" = "Recuerde anotar todo lo que comió en la cena";
+"messages.snacksReminder.case.1" = "Recuerde anotar todo lo que come entre comidas";
+"messages.snacksReminder.case.2" = "Incluso las bebidas que no sean agua corriente o agua con limón deben registrarse en el diario";
+"messages.waterReminder.case.1" = "Recuerda beber y marcar el agua que bebes";
+"messages.waterReminder.case.2" = "Registre cuánta agua bebe rápida y fácilmente";
+"messages.weightReminder.case.1" = "Hace tiempo que no registra su peso, le recomendamos que lo haga por la mañana";
+"messages.weightReminder.case.2" = "Ha pasado una semana, es hora de pesarse";
+"messages.allSet.case.1" = "¡Bien hecho! ¡Sigan así!";
+"messages.allSet.case.2" = "Parece que hablas en serio. ¡Sigue así!💪";

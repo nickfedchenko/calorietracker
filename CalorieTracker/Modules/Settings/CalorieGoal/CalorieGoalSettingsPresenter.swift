@@ -146,7 +146,7 @@ extension CalorieGoalSettingsPresenter: CalorieGoalSettingsPresenterInterface {
         case .breakfast:
             router?.openMealEnterPercentVC(.breakfast)
         case .lunch:
-            router?.openMealEnterPercentVC(.launch)
+            router?.openMealEnterPercentVC(.lunch)
         case .dinner:
             router?.openMealEnterPercentVC(.dinner)
         case .snacks:
@@ -194,7 +194,7 @@ extension CalorieGoalSettingsPresenter: CalorieGoalSettingsPresenterInterface {
                 snacks: oldMealKcalPercent.snacks
             )
             view.updateCell(.breakfast)
-        case .launch:
+        case .lunch:
             self.mealPercent = .init(
                 breakfast: oldMealKcalPercent.breakfast,
                 lunch: value,

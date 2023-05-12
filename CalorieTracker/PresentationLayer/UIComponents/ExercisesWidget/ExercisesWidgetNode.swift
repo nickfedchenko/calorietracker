@@ -57,6 +57,8 @@ final class ExercisesWidgetNode: CTWidgetNode {
     private lazy var connectAHImageNode: ASImageNode = {
         let node = ASImageNode()
         node.image = R.image.onboardings.healthApp()
+        node.contentMode = .scaleAspectFit
+        node.style.preferredSize = CGSize(width: 64, height: 64)
         return node
     }()
     
@@ -85,9 +87,9 @@ final class ExercisesWidgetNode: CTWidgetNode {
         }
     }
     
-    var isConnectAH = true {
+    var isConnectAH = false {
         didSet {
-//            transitionLayout(withAnimation: false, shouldMeasureAsync: false)
+            transitionLayout(withAnimation: false, shouldMeasureAsync: false)
         }
     }
     
@@ -123,6 +125,7 @@ final class ExercisesWidgetNode: CTWidgetNode {
         
         let mainStack = ASStackLayoutSpec.horizontal()
         mainStack.justifyContent = .spaceBetween
+        //        mainStack.style.preferredSize.width = constrainedSize.min.width
         mainStack.children = [
             leftTextStack,
             connectAHImageNode
@@ -133,7 +136,7 @@ final class ExercisesWidgetNode: CTWidgetNode {
                 top: 24.fontScale(),
                 left: 12.fontScale(),
                 bottom: 24.fontScale(),
-                right: 24.fontScale()
+                right: 12
             ),
             child: mainStack
         )
@@ -227,7 +230,7 @@ final class ExercisesWidgetNode: CTWidgetNode {
             .init(worldIndex: [1, 2], attributes: rightAttributes)
         ])
         
-        transitionLayout(withAnimation: true, shouldMeasureAsync: false)
+        transitionLayout(withAnimation: false, shouldMeasureAsync: false)
     }
     
     // MARK: - setup ElementExercisesChartNodes

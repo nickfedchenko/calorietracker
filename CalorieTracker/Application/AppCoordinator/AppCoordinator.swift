@@ -63,7 +63,7 @@ final class AppCoordinator: ApphudDelegate {
         let appearance = UINavigationBarAppearance()
         appearance.backgroundEffect = nil
         UINavigationBar.appearance().standardAppearance = appearance
-
+        LocalNotificationsManager.askPermission()
         #if DEBUG
 //        UDM.didShowAskingOpinion = false
         #endif
@@ -81,7 +81,7 @@ final class AppCoordinator: ApphudDelegate {
     }
     
     private func updateHealthKitData() {
-        HealthKitAccessManager.shared.updateAuthorizationStatus()
+//        HealthKitAccessManager.shared.updateAuthorizationStatus()
 //        guard UDM.isAuthorisedHealthKit else { return }
 //        
 //        HealthKitDataManager.shared.getSteps { [weak self] steps in
@@ -137,7 +137,7 @@ final class AppCoordinator: ApphudDelegate {
     
     func setupPeriodicUpdate() {
         hkUpdateTimer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { _ in
-            HealthKitAccessManager.shared.updateAuthorizationStatus()
+            
             HealthKitDataManager.shared.getSteps { [weak self] steps in
                 self?.localDomainService.saveSteps(data: steps)
             }
@@ -148,6 +148,10 @@ final class AppCoordinator: ApphudDelegate {
             
             HealthKitDataManager.shared.getBurnedKcal { [weak self] burnedKcalData in
                 self?.localDomainService.saveBurnedKcal(data: burnedKcalData)
+            }
+            
+            HealthKitDataManager.shared.getWeights { [weak self] data in
+                self?.localDomainService.saveWeight(data: data)
             }
         }
     }

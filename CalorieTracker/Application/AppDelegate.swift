@@ -121,9 +121,8 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
             print("Handled succesfully")
         } else {
             // Handle other types of push notifications
-            print("Need to manually handle push notification")
         }
-        completionHandler([]) // return empty array to skip showing notification banner
+        completionHandler([ .banner, .badge, .sound]) // return empty array to skip showing notification banner
     }
     
     func applicationWillTerminate(_ application: UIApplication) {

@@ -149,14 +149,21 @@ final class CircleActivityNode: ASDisplayNode {
         guard let numberOfActivityCircles = numberOfActivityCircles else { return }
         
         for indexShape in 0..<numberOfActivityCircles {
-            layer.addSublayer(createRingShape(
+            let activityShape = createRingShape(
                 center: CGPoint(x: self.frame.width / 2.0, y: self.frame.height / 2.0),
                 radius: startRadius + radiusStep * CGFloat(indexShape),
                 start: 0,
                 end: dataSource?.circleActivityNode(self, percentageOfFilling: indexShape) ?? 0,
                 color: dataSource?.circleActivityNode(self, strokeColor: indexShape) ?? .white,
                 lineWidth: lineWidth
-            ))
+            )
+            let animator = CABasicAnimation(keyPath: "strokeEnd")
+            animator.fromValue = 0
+            animator.toValue = 1
+            animator.duration = 0.3
+            animator.timingFunction = CAMediaTimingFunction(name: .easeIn)
+            layer.addSublayer(activityShape)
+            activityShape.add(animator, forKey: "stroke")
         }
     }
     

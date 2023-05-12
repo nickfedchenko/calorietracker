@@ -34,6 +34,9 @@ struct Day: Hashable, Comparable, Codable {
             year: year,
             month: month,
             day: day
+//            hour: Int.random(in: 0...59),
+//            minute: Int.random(in: 0...59),
+//            second: Int.random(in: 0...59)
         ))
     }
     

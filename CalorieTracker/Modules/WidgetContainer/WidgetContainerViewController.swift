@@ -127,6 +127,10 @@ final class WidgetContainerViewController: UIViewController {
             }
             self.presenter?.didTapView()
         }
+        
+        widgetFull?.didChangeSelectedDate = { date in
+            self.output?.needUpdateCalendarWidget(date)
+        }
     }
     
     private func setupConstraints() {
@@ -281,6 +285,13 @@ extension WidgetContainerViewController: WeightFullWidgetOutput {
     
     func addWeight(_ widget: WeightFullWidgetView) {
         presenter?.openChangeWeightViewController(.add)
+    }
+    
+    func shouldShowWeightsList() {
+        let listVC = WeightsListRouter.setupModule()
+        print(presentationController?.presentedView)
+        listVC.modalPresentationStyle = .overFullScreen
+        present(listVC, animated: true)
     }
 }
 

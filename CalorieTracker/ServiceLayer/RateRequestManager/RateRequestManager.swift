@@ -100,7 +100,6 @@ final class RateRequestManager {
             }
             return value
         }
-        
         set {
             setValue(value: newValue, for: .postAddWeightCounter)
         }
@@ -207,7 +206,7 @@ final class RateRequestManager {
             }
         case .addWeight:
             if initialAddWeightCounter > 2 {
-                postAddWaterCounter += 1
+                postAddWeightCounter += 1
             } else {
                 initialAddWeightCounter += 1
             }

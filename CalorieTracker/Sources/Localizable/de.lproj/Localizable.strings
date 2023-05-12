@@ -831,6 +831,9 @@
 "weightWidget.full.segment.halfYear" = "Ein halbes Jahr";
 "weightWidget.full.segment.year" = "Jahr";
 "weightWidget.full.segment.alltime" = "Die ganze Zeit";
+"weightWidget.list.segment.daily" = "Täglich";
+"weightWidget.list.segment.weekly" = "Wöchentlich";
+"weightWidget.list.segment.monthly" = "Monatlich";
                                                   
 "nomeasurements.first" = "Es sind keine Messungen vorhanden. Ihre erste ";
 "nomeasurements.second" = " ist noch nicht durchgeführt";
@@ -962,3 +965,18 @@ Wir haben in unserem Programm die Macros speziell für Sie vorgesehen. Drauf bas
 
 "landing.finalSection.title" = "Warum wählt man unsere Anwendung?";
 "landing.finalSection.descriptionFull" = "Weil diese Methode funktioniert! Unsere Anwendung macht den ganzen Prozess durchsichtig und spaßhaft. Sie werden schnell die Gewohnheiten etablieren, Diäten und Gewicht kontrollieren. Sie brauchen keine Wundertees, Entgiftungen\nund andere Mittel. Sie brauchen nur Ihre Nahrung zu beachten. Halten Sie an Ihren individuellen Plan, um Ihr gewünschtes Ergebnis sicherlich zu erreichen!";
+"weights.list.healthRecords" = "Gesundheitsakten einschließen";
+"messages.breakfastReminder.case.1" = "Guten Morgen! Schreiben wir auf, was es zum Frühstück gibt";
+"messages.breakfastReminder.case.2" = "Schönen Tag noch! Vergessen Sie nicht, Ihr Frühstück aufzuschreiben";
+"messages.lunchReminder.case.1" = "Denken Sie daran, alles aufzuschreiben, was Sie zum Mittagessen gegessen haben";
+"messages.lunchReminder.case.2" = "Ich würde lieber zu Mittag essen und es in mein Tagebuch schreiben";
+"messages.dinnerReminder.case.1" = "Was gibt es heute Abend zum Abendessen?";
+"messages.dinnerReminder.case.2" = "Denken Sie daran, alles aufzuschreiben, was Sie zum Abendessen gegessen haben";
+"messages.snacksReminder.case.1" = "Denken Sie daran, alles aufzuschreiben, was Sie zwischen den Mahlzeiten essen";
+"messages.snacksReminder.case.2" = "Auch andere Getränke als reines Wasser oder Wasser mit Zitrone müssen im Tagebuch eingetragen werden";
+"messages.waterReminder.case.1" = "Denken Sie daran zu trinken und markieren Sie das Wasser, das Sie trinken";
+"messages.waterReminder.case.2" = "Schnell und einfach aufzeichnen, wie viel Wasser Sie trinken";
+"messages.weightReminder.case.1" = "Sie haben Ihr Gewicht eine Weile nicht aufgezeichnet, wir empfehlen, dies morgens zu tun";
+"messages.weightReminder.case.2" = "Es ist eine Woche her, Zeit zum Wiegen";
+"messages.allSet.case.1" = "Gut gemacht! Machen Sie weiter so!";
+"messages.allSet.case.2" = "Sie scheinen es ernst zu meinen. Weiter so!💪";

@@ -70,7 +70,7 @@ final class SearchRecipesSearchField: UITextField {
     private func setupAppearance() {
         layer.insertSublayer(shapeLayer, at: 0)
         layer.insertSublayer(shadowLayer, at: 0)
-        backgroundColor = UIColor(hex: "B3EFDE")
+        backgroundColor = UIColor(hex: "E2FBF4")
         clipsToBounds = false
         attributedPlaceholder = NSAttributedString(
             string: "SEARCH RECIPE".localized,
@@ -110,7 +110,7 @@ final class SearchRecipesSearchField: UITextField {
     }
     
     override func resignFirstResponder() -> Bool {
-        backgroundColor = UIColor(hex: "B3EFDE")
+        backgroundColor = UIColor(hex: "E2FBF4")
         return super.resignFirstResponder()
     }
     

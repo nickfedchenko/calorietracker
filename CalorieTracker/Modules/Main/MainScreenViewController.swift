@@ -221,7 +221,6 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
                     child: overlayStack
                 )
                 let overlay = ASOverlayLayoutSpec(child: insetSpecs, overlay: overlayInset)
-                
                 return overlay
             } else {
                 return self.setupStacks(node: node, size: size)
@@ -263,6 +262,7 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
         navigationController?.setToolbarHidden(true, animated: true)
         navigationController?.navigationBar.isHidden = true
         updateWidgets()
+//        MessagesTextService.shared.anyEventTriggered()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -409,6 +409,10 @@ class MainScreenViewController: ASDKViewController<ASDisplayNode> {
             name: Notification.Name("UpdateMainScreen"),
             object: nil
         )
+        
+        MessagesTextService.shared.subscribeToChanges { [weak self] string in
+            self?.messageNode.attributedText = string
+        }
     }
     
     private func addTapGestureRecognizer() {

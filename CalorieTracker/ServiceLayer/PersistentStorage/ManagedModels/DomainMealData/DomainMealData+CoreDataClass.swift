@@ -17,7 +17,7 @@ public class DomainMealData: NSManagedObject {
         switch model.food {
         case .product(_, customAmount: _, unit: let unitData):
             domainMealData.unitId = Int16(unitData?.unit.id ?? -1)
-            domainMealData.unitCount = unitData?.count ?? -1
+            domainMealData.unitCount = unitData?.count ?? 1
         default: return domainMealData
         }
         return domainMealData

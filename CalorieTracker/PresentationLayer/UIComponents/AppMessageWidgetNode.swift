@@ -13,9 +13,11 @@ final class AppMessageWidgetNode: CTWidgetNode {
     
     private var isFirstDraw = true
     
+    private var scrollAnimator: UIViewPropertyAnimator?
+    
     private lazy var textNode: ASTextNode = {
         let node = ASTextNode()
-        node.maximumNumberOfLines = 2
+        node.maximumNumberOfLines = 0
         return node
     }()
     
@@ -35,6 +37,45 @@ final class AppMessageWidgetNode: CTWidgetNode {
         }
     }
     
+    var attributedText: NSAttributedString? {
+        get {
+            textNode.attributedText
+        }
+        
+        set {
+            let transition = CATransition()
+            transition.duration = 0.3
+            transition.type = .fade
+            textNode.layer.add(transition, forKey: nil)
+            textNode.attributedText = newValue
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { [weak self] in
+                self?.setupScrollAnimationsDown()
+            }
+        }
+    }
+    
+    let scrollNode: ASScrollNode = {
+  
+        let sampleNode = CTWidgetNode(with: CTWidgetNodeConfiguration(type: .compact))
+        let safeAreaInset = sampleNode.constants.suggestedTopSafeAreaOffset
+
+        let scrollNode = ASScrollNode()
+        scrollNode.view.showsVerticalScrollIndicator = false
+        scrollNode.view.showsHorizontalScrollIndicator = false
+        scrollNode.automaticallyManagesSubnodes = true
+        scrollNode.automaticallyRelayoutOnSafeAreaChanges = true
+        scrollNode.automaticallyManagesContentSize = true
+        scrollNode.view.contentInsetAdjustmentBehavior = .never
+//        scrollNode.view.contentInset = .init(
+//            top: 10,
+//            left: 21,
+//            bottom: 10,
+//            right: 12
+//        )
+        scrollNode.view.contentInsetAdjustmentBehavior = .never
+        return scrollNode
+    }()
+    
     override init(with configuration: CTWidgetNodeConfiguration) {
         super.init(with: configuration)
     }
@@ -44,14 +85,23 @@ final class AppMessageWidgetNode: CTWidgetNode {
     }
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
+        scrollNode.layoutSpecBlock = { scrollNode, range in
+            let insetLayout = ASInsetLayoutSpec(insets: .zero, child: self.textNode)
+            return insetLayout
+        }
+        
+        let insets = ASInsetLayoutSpec(
+            insets: .init(top: 0, left: 0, bottom: 0, right: 0),
+            child: scrollNode
+        )
         return ASInsetLayoutSpec(
             insets: UIEdgeInsets(
                 top: 10,
-                left: self.triangleSize.width + 12,
+                left: self.triangleSize.width + 11,
                 bottom: 10,
                 right: 12
             ),
-            child: textNode
+            child: scrollNode
         )
     }
     
@@ -59,6 +109,24 @@ final class AppMessageWidgetNode: CTWidgetNode {
         guard isFirstDraw else { return }
         layer.addSublayer(getShape(size: frame.size))
         isFirstDraw = false
+    }
+    
+    private func setupScrollAnimationsDown() {
+        scrollNode.view.setContentOffset(.zero, animated: false)
+        scrollAnimator?.stopAnimation(false)
+        scrollAnimator?.finishAnimation(at: .current)
+        scrollAnimator = nil
+        scrollAnimator = UIViewPropertyAnimator.runningPropertyAnimator(
+            withDuration: 5,
+            delay: 0.3,
+            options: [.repeat, .autoreverse]
+        ) {
+            // Block-based animation API нихера не работает к слову. Анимация не повторяется и не реверсится
+            UIView.setAnimationRepeatCount(.greatestFiniteMagnitude)
+            UIView.setAnimationRepeatAutoreverses(true)
+            self.scrollNode.view.scrollRectToVisible(self.textNode.frame, animated: false)
+        }
+
     }
     
     private func getShape(size: CGSize) -> CAShapeLayer {

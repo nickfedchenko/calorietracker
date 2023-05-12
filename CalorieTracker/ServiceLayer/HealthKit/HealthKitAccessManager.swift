@@ -16,7 +16,7 @@ enum HealthkitSetupError: Error {
 
 protocol HealthKitAccessManagerProtocol {
     func askPermission(completion: @escaping (Result<Bool, Error>) -> Void)
-    func updateAuthorizationStatus()
+    func isAuthorizated() -> Bool
 }
 
 final class HealthKitAccessManager {
@@ -28,9 +28,19 @@ final class HealthKitAccessManager {
 
 extension HealthKitAccessManager: HealthKitAccessManagerProtocol {
     
-    func updateAuthorizationStatus() {
-        HealthKitDataManager.shared.getSteps { data in
-            UDM.isAuthorisedHealthKit = !data.isEmpty
+    func isAuthorizated() -> Bool {
+        if let type = HKObjectType.quantityType(forIdentifier: .bodyMass) {
+            let status = store.authorizationStatus(for: type)
+            switch status {
+            case .notDetermined:
+                return false
+            case .sharingDenied:
+                return false
+            case .sharingAuthorized:
+                return true
+            }
+        } else {
+            return false
         }
     }
     // swiftlint:disable cyclomatic_complexity
@@ -44,9 +54,10 @@ extension HealthKitAccessManager: HealthKitAccessManagerProtocol {
         
         let workoutQuantityType = HKObjectType.workoutType()
         guard let activeEnergyQuantityType = HKObjectType.quantityType(forIdentifier: .activeEnergyBurned),
-               let basalEnergyQuantityType = HKObjectType.quantityType(forIdentifier: .basalEnergyBurned),
-               let stepsQuantityType = HKObjectType.quantityType(forIdentifier: .stepCount),
-               let distanceQuantityType = HKObjectType.quantityType(forIdentifier: .distanceWalkingRunning)
+              let basalEnergyQuantityType = HKObjectType.quantityType(forIdentifier: .basalEnergyBurned),
+              let stepsQuantityType = HKObjectType.quantityType(forIdentifier: .stepCount),
+              let distanceQuantityType = HKObjectType.quantityType(forIdentifier: .distanceWalkingRunning),
+              let weightsQuantityType = HKObjectType.quantityType(forIdentifier: .bodyMass)
         else {
             completion(.failure(HealthkitSetupError.dataTypeNotAvailable))
             return
@@ -57,11 +68,16 @@ extension HealthKitAccessManager: HealthKitAccessManagerProtocol {
             basalEnergyQuantityType,
             stepsQuantityType,
             distanceQuantityType,
-            workoutQuantityType
+            workoutQuantityType,
+            weightsQuantityType
+        ]
+        
+        let healthKitTypesToShare: Set<HKSampleType> = [
+            weightsQuantityType
         ]
         
         store.getRequestStatusForAuthorization(
-            toShare: [],
+            toShare: healthKitTypesToShare,
             read: healthKitTypesToRead
         ) { [weak self] status, error in
             if let error {
@@ -69,16 +85,18 @@ extension HealthKitAccessManager: HealthKitAccessManagerProtocol {
             }
             
             switch status {
-            case .unnecessary, .unknown:
+            case .unknown:
                 guard let url = URL(string: "x-apple-health://") else { return }
                 if UIApplication.shared.canOpenURL(url) {
                     DispatchQueue.main.async {
                         UIApplication.shared.open(url)
                     }
                 }
+            case .unnecessary:
+                completion(.success(true))
             case .shouldRequest:
                 self?.store.requestAuthorization(
-                    toShare: nil,
+                    toShare: healthKitTypesToShare,
                     read: healthKitTypesToRead
                 ) { success, error in
                     if let error = error {

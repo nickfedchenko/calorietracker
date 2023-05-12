@@ -141,7 +141,6 @@ final class FDS {
                 fat += customEntry.nutrients.fats
                 carbs += customEntry.nutrients.carbs
                 kcal += customEntry.nutrients.kcal
-                
             case .meal(let meal):
                 protein += meal.nutrients.proteins
                 fat += meal.nutrients.fats

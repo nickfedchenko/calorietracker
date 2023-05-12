@@ -254,7 +254,7 @@ extension RecipePageScreenInteractor: RecipePageScreenInteractorInterface {
             case (4...11, 0...59), (12, 0):
                 mealTime = .breakfast
             case (12, 1), (12...15, 0...59), (16, 0) :
-                mealTime = .launch
+                mealTime = .lunch
             case (22, 0), (18...21, 0...59):
                 mealTime = .dinner
             default:

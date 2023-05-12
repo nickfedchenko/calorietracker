@@ -16,6 +16,7 @@ public class DomainWater: NSManagedObject {
         water.month = Int32(model.day.month)
         water.year = Int32(model.day.year)
         water.value = model.value
+        water.isFromHK = model.isFromHK
         return water
     }
 }

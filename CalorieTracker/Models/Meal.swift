@@ -98,7 +98,7 @@ struct MealNutrients: Codable {
 
 enum MealTime: String {
     case breakfast
-    case launch
+    case lunch
     case dinner
     case snack
 }

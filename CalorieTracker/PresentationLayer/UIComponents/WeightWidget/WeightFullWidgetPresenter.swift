@@ -89,6 +89,9 @@ extension WeightFullWidgetPresenter: WeightFullWidgetPresenterInterface {
         case .allTheTime:
             let newDate = chartData.min(by: { $0.date < $1.date })?.date
             date = newDate?.resetDate ?? Date()
+        default:
+            let newDate = calendar.date(byAdding: .day, value: -6, to: dateNow)
+            date = newDate?.resetDate ?? Date()
         }
         
         return date

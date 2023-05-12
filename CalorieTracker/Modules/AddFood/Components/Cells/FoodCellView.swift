@@ -437,10 +437,17 @@ extension FoodCellView.FoodViewModel {
     private init(product: Product, weight: Double?, unitData: FoodUnitData) {
         self.id = product.id
         self.title = product.title
-        self.tag = product.brand ?? ""
         self.image = nil //product.isUserProduct ? product.photo : nil
         self.verified = !product.isUserProduct
-        
+        var tag = ""
+        if product.brand != nil && !product.isUserProduct {
+            tag = (product.brand ?? "").isEmpty ? R.string.localizable.brandFood() : (product.brand ?? "")
+        } else if product.isUserProduct {
+            tag = R.string.localizable.tagUserProduct()
+        } else {
+            tag = R.string.localizable.baseFood()
+        }
+        self.tag = tag
         if let serving = product.servings?.first?.weight {
             if unitData.unit.id != 2 {
                 self.kcal = BAMeasurement(

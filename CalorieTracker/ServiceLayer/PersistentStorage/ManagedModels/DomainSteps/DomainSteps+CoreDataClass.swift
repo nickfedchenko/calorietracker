@@ -15,6 +15,7 @@ public class DomainSteps: NSManagedObject {
         steps.month = Int32(model.day.month)
         steps.year = Int32(model.day.year)
         steps.value = model.value
+        steps.isFromHK = model.isFromHK
         return steps
     }
 }

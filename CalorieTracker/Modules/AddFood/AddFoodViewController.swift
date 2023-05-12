@@ -184,7 +184,7 @@ final class AddFoodViewController: UIViewController {
                 mealTime = .breakfast
                 mealIndex = 0
             case (12, 1), (12...15, 0...59), (16, 0) :
-                mealTime = .launch
+                mealTime = .lunch
                 mealIndex = 1
             case (22, 0), (18...21, 0...59):
                 mealTime = .dinner

@@ -13,17 +13,19 @@ protocol HealthKitDataManagerProtocol {
     func getSteps(_ complition: @escaping ([DailyData]) -> Void)
     func getBurnedKcal(_ complition: @escaping ([DailyData]) -> Void)
     func getDistanceWalked(_ complition: @escaping ([DailyData]) -> Void)
+    func getWeights(_ completion: @escaping ([DailyData]) -> Void)
+    func deleteWeights(at day: Day)
+    func addWeight(at day: Day?, value: Double)
 }
 
 final class HealthKitDataManager {
     enum Error: Swift.Error {
         case commonError
     }
-    
+    let healthStore = HKHealthStore()
     static let shared: HealthKitDataManagerProtocol = HealthKitDataManager()
 
     private func getDailyTotalSteps(completion: @escaping (Result<[DailyData], Error>) -> Void) {
-        let healthStore = HKHealthStore()
         guard let type = HKSampleType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount) else {
             return
         }
@@ -70,7 +72,6 @@ final class HealthKitDataManager {
     }
     
     private func getDailyAtciveEnergy(completion: @escaping (Result<[DailyData], Error>) -> Void) {
-        let healthStore = HKHealthStore()
         guard let type = HKSampleType.quantityType(forIdentifier: HKQuantityTypeIdentifier.activeEnergyBurned) else {
             return
         }
@@ -117,7 +118,6 @@ final class HealthKitDataManager {
     }
     
     private func getDailyDistanceWalked(completion: @escaping (Result<[DailyData], Error>) -> Void) {
-        let healthStore = HKHealthStore()
         guard let type = HKSampleType.quantityType(
             forIdentifier: HKQuantityTypeIdentifier.distanceWalkingRunning
         ) else {
@@ -167,7 +167,6 @@ final class HealthKitDataManager {
     // MARK: - Workkout Data
     
     private func getWorkoutData(completion: @escaping (Result<[Exercise], Error>) -> Void) {
-        let healthStore = HKHealthStore()
         let type = HKObjectType.workoutType()
         let syncDate = UDM.dateHealthKitSync
 
@@ -200,9 +199,122 @@ final class HealthKitDataManager {
         }
         healthStore.execute(query)
     }
+    
+    private func getWeights(at specificDate: Day, completion: @escaping (Bool) -> Void) {
+        guard
+            let type = HKSampleType.quantityType(forIdentifier: .bodyMass),
+            let startOfDay = specificDate.date?.resetDate,
+            let endOfDay = specificDate.date?.endOfDay else {
+            return
+        }
+        let predicate = HKQuery.predicateForSamples(
+            withStart: startOfDay,
+            end: endOfDay,
+            options: .strictEndDate
+        )
+        
+        let weightsQuery = HKSampleQuery(
+            sampleType: type,
+            predicate: predicate,
+            limit: HKObjectQueryNoLimit,
+            sortDescriptors: nil) { _, samples, error in
+                samples?.forEach { [weak self] in
+                    self?.healthStore.delete($0) { isSuccessful, error in
+                        if let error = error {
+                            print(error)
+                        } else {
+                            print(isSuccessful)
+                        }
+                    }
+                }
+            }
+        healthStore.execute(weightsQuery)
+    }
+    
+    private func getDailyWeights(completion: @escaping (Result<[DailyData], Error>) -> Void) {
+       
+        guard let type = HKSampleType.quantityType(forIdentifier: .bodyMass) else {
+            return
+        }
+
+        let calendar = NSCalendar.current
+        var interval = DateComponents()
+        interval.day = 1
+        let syncDate = UDM.dateHealthKitSync
+ 
+        var anchorComponents = calendar.dateComponents(
+            [.day, .month, .year], from: Calendar.current.startOfDay(for: Date())
+        )
+        anchorComponents.hour = 0
+        guard let anchorDate = calendar.date(from: anchorComponents) else { return }
+
+        let caloriesQuery = HKStatisticsCollectionQuery(
+            quantityType: type,
+            quantitySamplePredicate: nil,
+            options: [.mostRecent],
+            anchorDate: anchorDate,
+            intervalComponents: interval
+        )
+        
+        caloriesQuery.initialResultsHandler = { _, results, _ in
+            let endDate = Date()
+            let startDate = UDM.dateHealthKitSync ?? .distantPast
+            if let myResults = results {
+                var weights: [DailyData] = []
+                myResults.enumerateStatistics(from: startDate, to: anchorDate) { statistics, _ in
+                    if let quantity = statistics.mostRecentQuantity(){
+                        let date = statistics.startDate
+                        let totalWeight = quantity.doubleValue(for: HKUnit.gramUnit(with: .kilo))
+    
+                        weights.append(.init(day: date.day, value: totalWeight, isFromHK: true))
+                    }
+                }
+                completion(.success(weights))
+            } else {
+                completion(.failure(Error.commonError))
+            }
+        }
+        
+        healthStore.execute(caloriesQuery)
+    }
 }
 
 extension HealthKitDataManager: HealthKitDataManagerProtocol {
+    func addWeight(at day: Day? = nil, value: Double) {
+        guard let type = HKSampleType.quantityType(forIdentifier: .bodyMass) else { return }
+        let count = HKQuantity(
+            unit: .gramUnit(with: .kilo),
+            doubleValue: BAMeasurement(value, .weight, isMetric: UDM.weightIsMetric).value
+        )
+        
+        let sample = HKQuantitySample(type: type, quantity: count, start: day?.date ?? Date(), end: day?.date ?? Date())
+        healthStore.save(sample) { isSuccess, error in
+            if let error {
+                print(error)
+                LocalNotificationsManager.performUserNotification(for: .HKNoShareRights)
+            } else {
+                print(isSuccess)
+            }
+        }
+    }
+    
+    func deleteWeights(at day: Day) {
+        getWeights(at: day) { isSuccessful in
+            print("Successfull - \(isSuccessful)")
+        }
+    }
+    
+    func  getWeights(_ completion: @escaping ([DailyData]) -> Void) {
+        getDailyWeights { result in
+            switch result {
+            case .success(let data):
+                completion(data)
+            case .failure:
+                completion([])
+            }
+        }
+    }
+    
     func getWorkouts(_ complition: @escaping ([Exercise]) -> Void) {
         getWorkoutData { result in
             switch result {

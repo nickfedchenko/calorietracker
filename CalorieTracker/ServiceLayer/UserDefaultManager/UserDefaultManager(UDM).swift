@@ -44,6 +44,20 @@ final class UDM {
         case didTapToWriteReview
         case reachTargetDate
         case allergicRestrictions
+        case weightsListShouldShowHK
+    }
+    
+    static var weightsListShouldShowHKRecords: Bool {
+        get {
+            guard let value: Bool = getValue(for: .weightsListShouldShowHK) else {
+                return false
+            }
+            return value
+        }
+        
+        set {
+            setValue(value: newValue, for: .weightsListShouldShowHK)
+        }
     }
     
     static var reachTargetDate: Date {
@@ -281,6 +295,9 @@ final class UDM {
             guard let value: Bool = getValue(for: .isAuthorisedHealthKit) else {
                 return false
             }
+            #if DEBUG
+            return false
+            #endif
             return value
         }
         set { 

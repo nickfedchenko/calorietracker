@@ -834,6 +834,10 @@
 "weightWidget.full.segment.year" = "Year";
 "weightWidget.full.segment.alltime" = "All time";
 
+"weightWidget.list.segment.daily" = "Daily";
+"weightWidget.list.segment.weekly" = "Weekly";
+"weightWidget.list.segment.monthly" = "Monthly";
+
 "nomeasurements.first" = "There are no measurements. Your first ";
 "nomeasurements.second" = " hasn't passed yet";
 
@@ -964,3 +968,19 @@ In our program we have developed macros especially for you. Based on them Kcalc 
 
 "landing.finalSection.title" = "Why choose our app?";
 "landing.finalSection.descriptionFull" = "Because this technique really works! Our application makes the whole process transparent and fun. You will quickly become a habit; control your weight and dietary intake. You don’t need to pay for doubtful wonder tees, detox and other \“cures\”. All you need is just to track what you’re eating. Stick to your individual plan and you will for sure reach your goal!";
+"weights.list.healthRecords" = "Include Health records";
+
+"messages.breakfastReminder.case.1" = "Good morning! Let's write down what's for breakfast";
+"messages.breakfastReminder.case.2" = "Have a nice day! Don't forget to write down your breakfast";
+"messages.lunchReminder.case.1" = "Remember to write down everything you ate for lunch";
+"messages.lunchReminder.case.2" = "I'd rather eat lunch and write it in my diary";
+"messages.dinnerReminder.case.1" = "What's for dinner tonight?";
+"messages.dinnerReminder.case.2" = "Remember to write down everything you ate for dinner";
+"messages.snacksReminder.case.1" = "Remember to write down everything you eat between meals";
+"messages.snacksReminder.case.2" = "Even drinks other than plain water or water with lemon are required to be logged in the diary";
+"messages.waterReminder.case.1" = "Remember to drink and mark the water you drink";
+"messages.waterReminder.case.2" = "Record how much water you drink quickly and easily";
+"messages.weightReminder.case.1" = "You haven't recorded your weight in a while, we recommend doing it in the morning";
+"messages.weightReminder.case.2" = "It's been a week, time to weigh in";
+"messages.allSet.case.1" = "Well done! Keep up the good work!";
+"messages.allSet.case.2" = "You seem to be serious. Keep it up!💪";

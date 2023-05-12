@@ -13,15 +13,18 @@ protocol DomainDailyProtocol: NSManagedObject {
     var month: Int32 { get }
     var year: Int32 { get }
     var value: Double { get }
+    var isFromHK: Bool { get }
 }
 
 struct DailyData {
     let day: Day
     let value: Double
+    let isFromHK: Bool
     
-    init(day: Day, value: Double) {
+    init(day: Day, value: Double, isFromHK: Bool = false) {
         self.day = day
         self.value = value
+        self.isFromHK = isFromHK
     }
     
     init?(from managedModel: DomainDailyProtocol) {
@@ -31,5 +34,6 @@ struct DailyData {
             month: Int(managedModel.month),
             year: Int(managedModel.year)
         )
+        self.isFromHK = managedModel.isFromHK
     }
 }

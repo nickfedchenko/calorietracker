@@ -179,7 +179,7 @@ class RecipesSearchViewController: UIViewController {
         
         footer.snp.remakeConstraints { make in
             make.leading.bottom.trailing.equalToSuperview()
-            make.height.equalTo(120 + height)
+            make.height.equalTo(102 + height)
         }
         
         footer.state = .expanded
@@ -193,7 +193,7 @@ class RecipesSearchViewController: UIViewController {
     ) {
         footer.snp.remakeConstraints { make in
             make.leading.bottom.trailing.equalToSuperview()
-            make.height.equalTo(215)
+            make.height.equalTo(128)
         }
         footer.state = .compact
         UIView.animate(withDuration: 0.3) {

@@ -26,7 +26,7 @@ class OpenMainWidgetPresenter {
 
     private let mealTimes: [MealTime] = [
         .breakfast,
-        .launch,
+        .lunch,
         .dinner,
         .snack
     ]
@@ -48,8 +48,8 @@ class OpenMainWidgetPresenter {
        let dailyMeal = FDS.shared.getAllStoredDailyMeals()
         let breakfast = dailyMeal.first(where: { $0.mealTime == .breakfast && $0.date == day })
         ?? .init(date: Date().day, mealTime: .breakfast, mealData: [])
-        let lunch = dailyMeal.first(where: { $0.mealTime == .launch && $0.date == day })
-        ?? .init(date: Date().day, mealTime: .launch, mealData: [])
+        let lunch = dailyMeal.first(where: { $0.mealTime == .lunch && $0.date == day })
+        ?? .init(date: Date().day, mealTime: .lunch, mealData: [])
         let dinner = dailyMeal.first(where: { $0.mealTime == .dinner && $0.date == day })
         ?? .init(date: Date().day, mealTime: .dinner, mealData: [])
         let snack = dailyMeal.first(where: { $0.mealTime == .snack && $0.date == day })

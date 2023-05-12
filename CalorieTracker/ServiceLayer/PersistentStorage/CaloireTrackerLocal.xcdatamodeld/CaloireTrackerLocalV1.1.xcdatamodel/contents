@@ -12,6 +12,7 @@
     </entity>
     <entity name="DomainBurnedEnergy" representedClassName="DomainBurnedEnergy" syncable="YES">
         <attribute name="day" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="isFromHK" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="month" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="value" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="year" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
@@ -295,6 +296,7 @@
     </entity>
     <entity name="DomainSteps" representedClassName="DomainSteps" syncable="YES">
         <attribute name="day" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="isFromHK" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="month" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="value" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="year" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
@@ -308,6 +310,7 @@
     </entity>
     <entity name="DomainWater" representedClassName="DomainWater" syncable="YES">
         <attribute name="day" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="isFromHK" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="month" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="value" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="year" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
@@ -321,8 +324,8 @@
     </entity>
     <entity name="DomainWeight" representedClassName="DomainWeight" syncable="YES">
         <attribute name="day" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="isFromHK" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="month" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="preciseDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="value" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="year" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <uniquenessConstraints>
@@ -330,6 +333,7 @@
                 <constraint value="day"/>
                 <constraint value="month"/>
                 <constraint value="year"/>
+                <constraint value="isFromHK"/>
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
