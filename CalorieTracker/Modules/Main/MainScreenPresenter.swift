@@ -272,25 +272,35 @@ extension MainScreenPresenter: MainScreenPresenterInterface {
     }
     
     func didTapExerciseWidget() {
-            HealthKitAccessManager.shared.askPermission { result in
-                switch result {
-                case .success(let success):
-                    UDM.isAuthorisedHealthKit = success
-                    HealthKitDataManager.shared.getSteps { steps in
-                        DSF.shared.saveSteps(steps)
+        HealthKitAccessManager.shared.askPermission { result in
+            switch result {
+            case .success(let success):
+                UDM.isAuthorisedHealthKit = success
+                HealthKitDataManager.shared.getSteps { steps in
+                    DSF.shared.saveSteps(steps)
+                }
+                
+                HealthKitDataManager.shared.getWorkouts { exercises  in
+                    DSF.shared.saveExercises(exercises)
+                }
+                
+                HealthKitDataManager.shared.getWeights { weights in
+                    DSF.shared.saveWeights(weights)
+                }
+            case .failure:
+                guard let url = URL(string: "x-apple-health://") else { return }
+                if UIApplication.shared.canOpenURL(url) {
+                    DispatchQueue.main.async {
+                        if UIApplication.shared.canOpenURL(url) {
+                            DispatchQueue.main.async {
+                                UIApplication.shared.open(url)
+                                LocalNotificationsManager.performUserNotification(for: .HKNoShareRights)
+                            }
+                        }
                     }
-                    
-                    HealthKitDataManager.shared.getWorkouts { exercises  in
-                        DSF.shared.saveExercises(exercises)
-                    }
-                    
-                    HealthKitDataManager.shared.getWeights { weights in
-                        DSF.shared.saveWeights(weights)
-                    }
-                case .failure(let failure):
-                    print(failure)
                 }
             }
+        }
     }
     
     func didTapNotesWidget() {

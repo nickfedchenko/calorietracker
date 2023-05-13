@@ -83,7 +83,7 @@ final class AddFoodPresenter {
             let dishes = FDS.shared.getFrequentDishes(10)
             var products = FDS.shared.getFrequentProducts(10)
             let customEntries = FDS.shared.getFrequentCustomEntries(10)
-            self.foods = products.foods + dishes.foods + customEntries.foods
+            self.foods = products + dishes + customEntries
         case .recent:
             let dishes = FDS.shared.getRecentDishes(10)
             let products = FDS.shared.getRecentProducts(10)
@@ -161,11 +161,11 @@ final class AddFoodPresenter {
         let smartSearch: SmartSearch = .init(request)
         
         let filteredDishes = frequentDishes.filter { smartSearch.matches($0.title) }
-        let filteredProducts = frequentProducts.filter {
-            smartSearch.matches($0.title) || smartSearch.matches($0.brand ?? "")
-        }
+//        let filteredProducts = frequentProducts.filter {
+//            smartSearch.matches($0.title) || smartSearch.matches($0.brand ?? "")
+//        }
         
-        return filteredDishes.foods + filteredProducts.foods
+        return filteredDishes//.foods + filteredProducts.foods
     }
     
     private func search(byBarcode: String) -> [Food] {

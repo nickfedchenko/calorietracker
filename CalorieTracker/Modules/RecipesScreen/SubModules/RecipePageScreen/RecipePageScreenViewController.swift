@@ -234,7 +234,7 @@ class RecipePageScreenViewController: CTViewController {
         setupActions()
         setupKeyboardObservers()
         setupDelegates()
-        presenter?.createFoodData()
+//        presenter?.createFoodData()
     }
     
     override func viewWillDisappear(_ animated: Bool) {

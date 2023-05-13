@@ -22,6 +22,9 @@ extension DomainMeal {
     @NSManaged public var title: String?
     @NSManaged public var components: NSOrderedSet?
     @NSManaged public var foodData: DomainFoodData?
+    @NSManaged public var foodDataNew: NSOrderedSet?
+    @NSManaged public var mealData: DomainMealData?
+
 }
 
 // MARK: Generated accessors for components
@@ -56,5 +59,40 @@ extension DomainMeal {
 
     @objc(removeComponents:)
     @NSManaged public func removeFromComponents(_ values: NSOrderedSet)
+
+}
+
+// MARK: Generated accessors for foodDataNew
+extension DomainMeal {
+
+    @objc(insertObject:inFoodDataNewAtIndex:)
+    @NSManaged public func insertIntoFoodDataNew(_ value: DomainFoodDataNew, at idx: Int)
+
+    @objc(removeObjectFromFoodDataNewAtIndex:)
+    @NSManaged public func removeFromFoodDataNew(at idx: Int)
+
+    @objc(insertFoodDataNew:atIndexes:)
+    @NSManaged public func insertIntoFoodDataNew(_ values: [DomainFoodDataNew], at indexes: NSIndexSet)
+
+    @objc(removeFoodDataNewAtIndexes:)
+    @NSManaged public func removeFromFoodDataNew(at indexes: NSIndexSet)
+
+    @objc(replaceObjectInFoodDataNewAtIndex:withObject:)
+    @NSManaged public func replaceFoodDataNew(at idx: Int, with value: DomainFoodDataNew)
+
+    @objc(replaceFoodDataNewAtIndexes:withFoodDataNew:)
+    @NSManaged public func replaceFoodDataNew(at indexes: NSIndexSet, with values: [DomainFoodDataNew])
+
+    @objc(addFoodDataNewObject:)
+    @NSManaged public func addToFoodDataNew(_ value: DomainFoodDataNew)
+
+    @objc(removeFoodDataNewObject:)
+    @NSManaged public func removeFromFoodDataNew(_ value: DomainFoodDataNew)
+
+    @objc(addFoodDataNew:)
+    @NSManaged public func addToFoodDataNew(_ values: NSOrderedSet)
+
+    @objc(removeFoodDataNew:)
+    @NSManaged public func removeFromFoodDataNew(_ values: NSOrderedSet)
 
 }

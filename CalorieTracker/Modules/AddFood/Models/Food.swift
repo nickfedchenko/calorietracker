@@ -121,6 +121,19 @@ extension Food {
             return nil
         }
     }
+    
+    var title: String {
+        switch self {
+        case .product(let product, _, _):
+            return product.title
+        case .dishes(let dish, _):
+            return dish.title
+        case .meal(let meal):
+            return meal.title
+        case .customEntry(let customEntry):
+            return customEntry.title
+        }
+    }
 }
 
 extension Food: Equatable {

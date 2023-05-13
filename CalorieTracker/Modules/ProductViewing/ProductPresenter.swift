@@ -45,7 +45,7 @@ extension ProductPresenter: ProductPresenterInterface {
     }
     
     func didTapFavoriteButton(_ flag: Bool) {
-        interactor?.updateFoodData(flag)
+//        interactor?.updateFoodData(flag)
     }
     
     func createFoodData() {

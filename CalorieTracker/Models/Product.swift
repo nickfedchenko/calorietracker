@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+// swiftlint:disable cyclomatic_complexity
 struct Product: Codable {
     let id: String
     let title: String
@@ -24,6 +24,7 @@ struct Product: Codable {
     let createdAt: String
     var source: String?
     var foodDataId: String?
+    var foodDataIds: [String]
     
     enum Photo: Codable {
         case url(URL)
@@ -340,6 +341,8 @@ extension Product {
         self.ketoRating = searchProduct.ketoRating
         self.baseTags = searchProduct.baseTags ?? []
         self.source = searchProduct.source
+        // TODO:
+        self.foodDataIds = []
     }
     
     init?(from managedModel: DomainProduct) {
@@ -385,6 +388,8 @@ extension Product {
         } else {
             self.baseTags = []
         }
+        // TODO:
+        self.foodDataIds = []
     }
     
     init(_ product: ProductDTO) {
@@ -408,6 +413,8 @@ extension Product {
         }()
         self.ketoRating = product.ketoRating
         self.baseTags = product.baseTags
+        // TODO:
+        self.foodDataIds = []
     }
 }
 

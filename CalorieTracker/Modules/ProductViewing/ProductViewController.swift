@@ -135,7 +135,7 @@ private lazy var collapseRecognizer = UITapGestureRecognizer(
         setupView()
         addSubviews()
         setupConstraints()
-        presenter?.createFoodData()
+//        presenter?.createFoodData()
         
     }
     

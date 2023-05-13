@@ -33,13 +33,12 @@ final class LocalNotificationsManager {
     
     static private func scheduleHKNoShareRightsNotification() {
         let content = UNMutableNotificationContent()
-        content.title = "Seems like we can't share your record"
-        content.subtitle = "Please check permission in HealthKit settings"
+        content.title = "Check permissions"
+        content.subtitle = "Please check your Health permissions"
         content.sound = UNNotificationSound.default
 
         // show this notification five seconds from now
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-
         // choose a random identifier
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
         // add our notification request

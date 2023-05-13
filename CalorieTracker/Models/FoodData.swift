@@ -21,7 +21,6 @@ struct FoodData {
         dateLastUse = managedModel.dateLastUse
         favorites = managedModel.favorites
         numberUses = Int(managedModel.numberUses)
-        
         if let domainDish = managedModel.dish, let dish = Dish(from: domainDish) {
             food = .dishes(dish, customAmount: nil)
         } else if let domainProduct = managedModel.product, let product = Product(from: domainProduct) {
@@ -31,6 +30,46 @@ struct FoodData {
             food = .customEntry(customEntry)
         } else if let domainMeal = managedModel.meal,
                   let meal = Meal(from: domainMeal) {
+            food = .meal(meal)
+        } else {
+            food = nil
+        }
+    }
+    
+    init?(from managedModel: DomainFoodDataNew) {
+        id = managedModel.id
+        dateLastUse = managedModel.dateLastUse
+        favorites = managedModel.isFavorite
+        numberUses = Int(managedModel.numberOfUses)
+        if let domainDish = managedModel.dish, let dish = Dish(from: domainDish) {
+            if managedModel.unitID > 0 {
+                food = .dishes(dish, customAmount: managedModel.unitAmount * managedModel.unitCoefficient)
+            } else {
+                food = .dishes(dish, customAmount: nil)
+            }
+        } else if let domainProduct = managedModel.product, let product = Product(from: domainProduct) {
+            if managedModel.unitID > 0 {
+                let unit: UnitElement.ConvenientUnit = UnitElement(
+                    id: Int(managedModel.unitID),
+                    productUnitID: nil,
+                    title: managedModel.unitLongTitle ?? R.string.localizable.gram(),
+                    shortTitle: managedModel.unitShortTitle,
+                    value: managedModel.unitCoefficient,
+                    kcal: nil,
+                    isNamed: false,
+                    isReference: false,
+                    isDefault: true
+                ).convenientUnit
+                food = .product(product, customAmount: nil, unit: (unit, managedModel.unitAmount))
+            } else {
+                food = .product(product, customAmount: nil, unit: nil)
+            }
+        } else if let domainCustomEntry = managedModel.customEntry,
+                  let customEntry = CustomEntry(from: domainCustomEntry) {
+            food = .customEntry(customEntry)
+        } else if
+            let domainMeal = managedModel.meal,
+            let meal = Meal(from: domainMeal) {
             food = .meal(meal)
         } else {
             food = nil

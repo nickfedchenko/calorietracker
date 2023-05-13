@@ -86,14 +86,9 @@ extension HealthKitAccessManager: HealthKitAccessManagerProtocol {
             
             switch status {
             case .unknown:
-                guard let url = URL(string: "x-apple-health://") else { return }
-                if UIApplication.shared.canOpenURL(url) {
-                    DispatchQueue.main.async {
-                        UIApplication.shared.open(url)
-                    }
-                }
+                completion(.failure(error ?? ErrorDomain.AFError(error: nil)))
             case .unnecessary:
-                completion(.success(true))
+                completion(.failure(error ?? ErrorDomain.AFError(error: nil)))
             case .shouldRequest:
                 self?.store.requestAuthorization(
                     toShare: healthKitTypesToShare,

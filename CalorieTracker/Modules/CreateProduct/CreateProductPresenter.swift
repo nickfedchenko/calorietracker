@@ -138,9 +138,10 @@ extension CreateProductPresenter: CreateProductPresenterInterface {
             ],
             ketoRating: nil,
             baseTags: [],
-            createdAt: dateFormatter.string(from: Date())
+            createdAt: dateFormatter.string(from: Date()),
+            foodDataIds: []
         )
-        
+        // TODO:
         RateRequestManager.increment(for: .createFood)
         localDomainService.saveProducts(products: [product], saveInPriority: true)
         router?.openProductViewController(product)
