@@ -40,11 +40,34 @@ class SafeMergePolicy: NSMergePolicy {
                 let changedKeys = conflictObject.changedValues().keys
                 let keys = allKeys.filter { !changedKeys.contains($0) }
                 for key in keys {
-//                    if key == "foodData" {
+                    if key == "foodDataNew" {
                         let value = databaseObject.value(forKey: key)
                         conflictObject.setValue(value, forKey: key)
                         databaseObject.setValue(nil, forKey: key)
-//                    }
+                        if let product = conflictObject as? DomainProduct {
+                            product.setValue(value, forKey: key)
+                            guard let values = (value as? NSOrderedSet)?.array as? [DomainFoodDataNew] else {
+                                continue
+                            }
+                            values.forEach {
+                                $0.product = product
+                            }
+                        }
+                        
+                        if let dish = conflictObject as? DomainDish {
+                            dish.setValue(value, forKey: key)
+                            guard let values = (value as? NSOrderedSet)?.array as? [DomainFoodDataNew] else {
+                                continue
+                            }
+                            values.forEach {
+                                $0.dish = dish
+                            }
+                        }
+                        continue
+                    }
+                    let value = databaseObject.value(forKey: key)
+                    conflictObject.setValue(value, forKey: key)
+                    databaseObject.setValue(nil, forKey: key)
                 }
             }
         }
