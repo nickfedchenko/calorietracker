@@ -83,6 +83,14 @@ struct FoodData {
         self.numberUses = numberUses
         self.food = nil
     }
+    
+    init(dateLastUse: Date, favorites: Bool, numberUses: Int, food: Food) {
+        self.id = UUID().uuidString
+        self.dateLastUse = dateLastUse
+        self.favorites = favorites
+        self.numberUses = numberUses
+        self.food = food
+    }
 }
 
 extension FoodData {

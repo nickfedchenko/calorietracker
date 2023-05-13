@@ -263,36 +263,47 @@ extension FDS: FoodDataServiceInterface {
         return foodData.id
     }
     
-    func foodUpdateNew(food: Food, favorites: Bool?) -> String? {
-        guard let foodData = localPersistentStore.getFoodData(food) else {
-            let foodData = FoodData(
-                dateLastUse: Date(),
-                favorites: favorites ?? false,
-                numberUses: 1
-            )
-            localPersistentStore.saveFoodData(foods: [foodData])
-            
-            switch food {
-            case .product(let product, _, _):
-                foodData.setChild(product)
-            case .dishes(let dish, _):
-                foodData.setChild(dish)
-            case .customEntry(let customEntry):
-                foodData.setChild(customEntry)
-            default:
-                return nil
-            }
-            return foodData.id
-        }
-        
-        localPersistentStore.setFoodData(
-            favorites: favorites,
-            date: Date(),
-            numberUses: foodData.numberUses + 1,
-            food: food
+    func foodUpdateNew(food: Food, favorites: Bool?) {
+        localPersistentStore.updateFoodData(
+            food,
+            incrementingUses: 1,
+            dateLastUsed: Date(),
+            isFavorite: favorites ?? false
         )
-        
-        return foodData.id
+//        guard let foodData = localPersistentStore.updateFoodData(
+//            food,
+//            incrementingUses: 1,
+//            dateLastUsed: Date(),
+//            isFavorite: favorites
+//        ) else {
+//            let foodData = FoodData(
+//                dateLastUse: Date(),
+//                favorites: favorites ?? false,
+//                numberUses: 1
+//            )
+//            localPersistentStore.saveFoodData(foods: [foodData])
+//
+//            switch food {
+//            case .product(let product, _, _):
+//                foodData.setChild(product)
+//            case .dishes(let dish, _):
+//                foodData.setChild(dish)
+//            case .customEntry(let customEntry):
+//                foodData.setChild(customEntry)
+//            default:
+//                return nil
+//            }
+//            return foodData.id
+//        }
+//
+//        localPersistentStore.setFoodData(
+//            favorites: favorites,
+//            date: Date(),
+//            numberUses: foodData.numberUses + 1,
+//            food: food
+//        )
+//
+//        return foodData.id
     }
     
     func getFoodData(_ food: Food) -> FoodData? {

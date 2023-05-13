@@ -187,6 +187,11 @@
         <relationship name="dish" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainDish" inverseName="foodDataNew" inverseEntity="DomainDish"/>
         <relationship name="meal" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainMeal" inverseName="foodDataNew" inverseEntity="DomainMeal"/>
         <relationship name="product" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DomainProduct" inverseName="foodDataNew" inverseEntity="DomainProduct"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
     </entity>
     <entity name="DomainMarketUnit" representedClassName="DomainMarketUnit" syncable="YES" codeGenerationType="class">
         <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
