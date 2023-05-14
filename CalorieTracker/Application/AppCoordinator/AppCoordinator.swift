@@ -74,6 +74,7 @@ final class AppCoordinator: ApphudDelegate {
     }
     
     private func updateFoodData() {
+        DSF.shared.resaveOldFoodData()
         if abs(Calendar.current.dateComponents([.day], from: Date(), to: UDM.lastBaseUpdateDay).day ?? 0) > 6 {
             DSF.shared.updateStoredDishes()
             DSF.shared.updateStoredProducts()
@@ -162,5 +163,9 @@ final class AppCoordinator: ApphudDelegate {
     
     func checkIsPaid() {
         Amplitude.instance().setUserProperties(["isPaid": Apphud.hasActiveSubscription()])
+    }
+    
+    private func migrateOldFoodData() {
+        
     }
 }

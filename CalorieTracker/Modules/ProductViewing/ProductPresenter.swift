@@ -80,7 +80,7 @@ extension ProductPresenter: ProductPresenterInterface {
     
     func saveNutritionDaily(_ weight: Double, unit: UnitElement.ConvenientUnit?, unitCount: Double?) {
         guard let product = interactor?.getProduct() else { return }
-        FDS.shared.saveProduct(product: product)
+//        FDS.shared.saveProduct(product: product)
         router?.closeViewController(true) { [weak self] in
             if let unit = unit, let unitCount = unitCount {
                 self?.router?.addToDiary(.product(product, customAmount: weight, unit: (unit, unitCount)))

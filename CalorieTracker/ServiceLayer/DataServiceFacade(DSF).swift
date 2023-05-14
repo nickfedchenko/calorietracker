@@ -76,6 +76,7 @@ protocol DataServiceFacadeInterface {
     func saveSteps(_ steps: [DailyData])
     func saveWeights(_ weights: [DailyData])
     func getMyProducts() -> [Product]
+    func resaveOldFoodData()
 }
 
 final class DSF {
@@ -89,6 +90,10 @@ final class DSF {
 }
 
 extension DSF: DataServiceFacadeInterface {
+    func resaveOldFoodData() {
+        localPersistentStore.transformExistingFoodData()
+    }
+    
     func saveWeights(_ weights: [DailyData]) {
         localPersistentStore.saveWeight(data: weights)
     }

@@ -81,6 +81,7 @@ protocol LocalDomainServiceInterface {
     func getMyDomainProducts() -> [DomainProduct]
     func deleteWeightRecord(at day: Day)
     func updateFoodData(_ food: Food, incrementingUses: Int, dateLastUsed: Date, isFavorite: Bool?)
+    func transformExistingFoodData()
 }
 
 extension LocalDomainServiceInterface {
@@ -491,9 +492,9 @@ extension LocalDomainService: LocalDomainServiceInterface {
                     }
                     return domainFoodDataNewEntity
                 }
-            let batchDeleteRequest = NSBatchDeleteRequest(objectIDs: domainFoodDataOld.compactMap { $0.objectID })
+//            let batchDeleteRequest = NSBatchDeleteRequest(objectIDs: domainFoodDataOld.compactMap { $0.objectID })
             do {
-                try context.execute(batchDeleteRequest)
+//                try context.execute(batchDeleteRequest)
                 try context.save()
             } catch let error {
                 print(error)
@@ -502,6 +503,61 @@ extension LocalDomainService: LocalDomainServiceInterface {
         }
         
         return domainFoodDataNew.compactMap { FoodData(from: $0) }
+    }
+    
+    func transformExistingFoodData() {
+        guard
+            let domainFoodDataNew = fetchData(
+                for: DomainFoodDataNew.self,
+                withSortDescriptor: nil,
+                fetchBatchSize: nil
+            ),
+            !domainFoodDataNew.isEmpty else {
+            
+            guard let domainFoodDataOld = fetchData(
+                for: DomainFoodData.self,
+                withSortDescriptor: nil,
+                fetchBatchSize: nil
+            ) else {
+                return
+            }
+            let foodDataToSave: [FoodData] = domainFoodDataOld
+                .compactMap { FoodData(from: $0) }
+            let foodDataToSaveNew: [DomainFoodDataNew] = foodDataToSave
+                .compactMap { foodData -> DomainFoodDataNew? in
+                    guard let food = foodData.food else { return nil }
+                    let domainFoodDataNewEntity: DomainFoodDataNew = DomainFoodDataNew
+                        .prepare(fromPlainModel: foodData, context: context)
+                    switch food {
+                    case .product(let product, customAmount: _, unit: _):
+                        guard let domainProduct = getDomainProduct(product.id) else { return nil }
+                        domainFoodDataNewEntity.product = domainProduct
+                        domainProduct.addToFoodDataNew(domainFoodDataNewEntity)
+                        return domainFoodDataNewEntity
+                    case .dishes(let dish, customAmount: _):
+                        guard let domainDish = getDomainDish(dish.id) else { return nil }
+                        domainFoodDataNewEntity.dish = domainDish
+                        domainDish.addToFoodDataNew(domainFoodDataNewEntity)
+                    case .customEntry(let customEntry):
+                        guard let domainEntry = getDomainCustomEntry(customEntry.id) else { return nil }
+                        domainFoodDataNewEntity.customEntry = domainEntry
+                        domainEntry.addToFoodDataNew(domainFoodDataNewEntity)
+                    case .meal(let meal):
+                        guard let domainMeal = getDomainMeal(meal.id) else { return nil }
+                        domainFoodDataNewEntity.meal = domainMeal
+                        domainMeal.addToFoodDataNew(domainFoodDataNewEntity)
+                    }
+                    return domainFoodDataNewEntity
+                }
+//            let batchDeleteRequest = NSBatchDeleteRequest(objectIDs: domainFoodDataOld.compactMap { $0.objectID })
+            do {
+//                try context.execute(batchDeleteRequest)
+                try context.save()
+            } catch let error {
+                print(error)
+            }
+            return
+        }
     }
     
     func fetchMeals() -> [Meal] {
