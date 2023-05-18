@@ -71,8 +71,9 @@ extension MainScreenRouter: MainScreenRouterInterface {
         switch type {
         case.steps:
 //            #if AppStore
-            if !UDM.isAuthorisedHealthKit {
-                HealthKitAccessManager.shared.askPermission { result in
+//            if !UDM.isAuthorisedHealthKit {
+                HealthKitAccessManager.shared.askPermission { [weak self] result in
+                    guard let self = self else { return }
                     switch result {
                     case .success(let success):
                         UDM.isAuthorisedHealthKit = success
@@ -83,7 +84,12 @@ extension MainScreenRouter: MainScreenRouterInterface {
                         HealthKitDataManager.shared.getWorkouts { exercises  in
                             DSF.shared.saveExercises(exercises)
                         }
-
+                        DispatchQueue.main.async {
+                            let vc = WidgetContainerRouter.setupModule(type, anchorView: anchorView)
+                            vc.output = self
+                            
+                            self.viewController?.present(vc, animated: true)
+                        }
                     case .failure(let failure):
                         guard let url = URL(string: "x-apple-health://") else { return }
                         if UIApplication.shared.canOpenURL(url) {
@@ -94,12 +100,13 @@ extension MainScreenRouter: MainScreenRouterInterface {
                         }
                     }
                 }
+            
                 return
-            }
+//            }
 //            #endif
             fallthrough
         case .exercises:
-            if !UDM.isAuthorisedHealthKit {
+//            if !UDM.isAuthorisedHealthKit {
                 HealthKitAccessManager.shared.askPermission { result in
                     switch result {
                     case .success(let success):
@@ -121,8 +128,15 @@ extension MainScreenRouter: MainScreenRouterInterface {
                         }
                     }
                 }
-                return
+            
+            DispatchQueue.main.async {
+                let vc = WidgetContainerRouter.setupModule(type, anchorView: anchorView)
+                vc.output = self
+                
+                self.viewController?.present(vc, animated: true)
             }
+            return
+            //            }
             fallthrough
         default:
             print()

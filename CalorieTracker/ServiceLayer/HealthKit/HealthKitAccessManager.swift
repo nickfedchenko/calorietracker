@@ -88,7 +88,7 @@ extension HealthKitAccessManager: HealthKitAccessManagerProtocol {
             case .unknown:
                 completion(.failure(error ?? ErrorDomain.AFError(error: nil)))
             case .unnecessary:
-                completion(.failure(error ?? ErrorDomain.AFError(error: nil)))
+                completion(.success(true))
             case .shouldRequest:
                 self?.store.requestAuthorization(
                     toShare: healthKitTypesToShare,

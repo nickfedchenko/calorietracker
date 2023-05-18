@@ -88,11 +88,11 @@ final class AddFoodPresenter {
             let dishes = FDS.shared.getRecentDishes(10)
             let products = FDS.shared.getRecentProducts(10)
             let customEntries = FDS.shared.getRecentCustomEntries(10)
-            self.foods = products + dishes.foods + customEntries.foods
+            self.foods = products + dishes + customEntries
         case .favorites:
             let dishes = FDS.shared.getFavoriteDishes()
             let products = FDS.shared.getFavoriteProducts()
-            self.foods = products.foods + dishes.foods
+            self.foods = products + dishes
         case .myMeals:
             self.foods = getAllMeals().foods
         case .myRecipes:
@@ -112,11 +112,11 @@ final class AddFoodPresenter {
         let smartSearch: SmartSearch = .init(request)
         
         let filteredDishes = favoriteDishes.filter { smartSearch.matches($0.title) }
-        let filteredProducts = favoriteProducts.filter {
-            smartSearch.matches($0.title) || smartSearch.matches($0.brand ?? "")
-        }
+        let filteredProducts = favoriteProducts//.filter {
+//            smartSearch.matches($0.title) || smartSearch.matches($0.brand ?? "")
+//        }
         
-        return filteredDishes.foods + filteredProducts.foods
+        return filteredDishes + filteredProducts
     }
     
     private func searchAmongRecent(_ request: String) -> [Food] {
@@ -219,6 +219,7 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
     func didTapCell(_ type: Food) {
         switch type {
         case .product(let product, _, _):
+            print("Opened product with foodID \(product.foodDataId)")
             router?.openProductViewController(product)
         case .dishes(let dish, _):
             router?.openDishViewController(dish)

@@ -229,7 +229,7 @@ extension DSF: DataServiceFacadeInterface {
             case .success(let products):
                 print("Got \(products.count)")
                 let convProduct: [Product] = products.map { .init($0) }
-                let splittedProducts = convProduct.splitInSubArrays(into: 8)
+                let splittedProducts = convProduct.splitInSubArrays(into: 12)
                 splittedProducts.forEach { [weak self] in
                     self?.localPersistentStore.saveProducts(
                         products: $0,

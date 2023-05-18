@@ -141,6 +141,16 @@ struct SettingsСategoriesViewModel {
                 imageBackgroundColor: R.color.settings.help(),
                 remindersCount: 0
             )
+        case .contactUs:
+            return .init(
+                title: R.string.localizable.reviewsSendUsFeedback(),
+                description: nil,
+                titleColor: R.color.foodViewing.basicDark(),
+                descriptionColor: nil,
+                image: R.image.settings.whatsUp(),
+                imageBackgroundColor: R.color.settings.help(),
+                remindersCount: 0
+            )
         }
     }
 }

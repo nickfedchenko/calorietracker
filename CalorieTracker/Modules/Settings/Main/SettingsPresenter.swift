@@ -96,6 +96,8 @@ extension SettingsPresenter: SettingsPresenterInterface {
             router?.openHelpViewController()
         case .sources:
             router?.showSourcesViewController()
+        case .contactUs:
+            router?.goToWhatsUpPage()
         }
     }
 }

@@ -177,7 +177,15 @@ extension RecipesScreenInteractor: RecipesScreenInteractorInterface {
     
     func updateFavoritesSection() {
         let favoritesDishes = foodService.getFavoriteDishes()
-        let favorites = favoritesDishes.compactMap { LightweightRecipeModel(from: $0)}
+		        let favorites = favoritesDishes.compactMap {
+            switch $0 {
+            case .dishes(let dish, customAmount: _):
+                return LightweightRecipeModel(from: dish)
+            default:
+                return nil
+            }
+        }
+        
         guard !favorites.isEmpty else {
             if sections.count > 4 {
                 _ = sections.removeFirst()

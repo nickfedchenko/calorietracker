@@ -94,6 +94,7 @@ class AddFoodRouter: NSObject {
 
 extension AddFoodRouter: AddFoodRouterInterface {
     func closeViewController(shouldAskForReview: Bool = false) {
+        shouldAnimateRings = true
         viewController?.navigationController?.popToRootViewController(animated: true)
         needUpdate?()
         if shouldAskForReview {
@@ -182,8 +183,26 @@ extension AddFoodRouter: AddFoodRouterInterface {
             backButtonTitle: "Add food".localized,
             openController: wasFromMealCreateVC == true ? .createMeal : .addToDiary,
             addToDiaryHandler: { [weak self] food in
+               let foodId = FDS.shared.foodUpdateNew(food: food, favorites: nil)
+                let newFood: Food = {
+                    switch food {
+                    case .dishes(var dish, customAmount: let customAmount):
+                        dish.foodDataId = foodId
+                        return .dishes(dish, customAmount: customAmount)
+                    case .product(var product, customAmount: let customAMount, unit: let unitData):
+                        product.foodDataId = foodId
+                        return .product(product, customAmount: customAMount, unit: unitData)
+                    case .customEntry(var customEntry):
+                        customEntry.foodDataId = foodId
+                        return .customEntry(customEntry)
+                    case .meal(var meal):
+                        meal.foodDataId = foodId
+                        return .meal(meal)
+                    }
+                }()
+                
                 if !(self?.wasFromMealCreateVC ?? false) {
-                    self?.presenter?.updateSelectedFoodFromSearch(food: food)
+                    self?.presenter?.updateSelectedFoodFromSearch(food: newFood)
                 } else {
                     self?.viewController?.dismiss(animated: false) { [weak self] in
                         self?.didSelectFood?(food)
@@ -200,12 +219,12 @@ extension AddFoodRouter: AddFoodRouterInterface {
     }
     
     func openCustomEntryViewController(mealTime: MealTime) {
-        guard Apphud.hasActiveSubscription() else {
-            let paywall = PaywallRouter.setupModule()
-            paywall.modalPresentationStyle = .fullScreen
-            viewController?.navigationController?.present(paywall, animated: true)
-            return
-        }
+//        guard Apphud.hasActiveSubscription() else {
+//            let paywall = PaywallRouter.setupModule()
+//            paywall.modalPresentationStyle = .fullScreen
+//            viewController?.navigationController?.present(paywall, animated: true)
+//            return
+//        }
         let vc = CustomEntryViewController(mealTime: mealTime)
         
         vc.onSavedCustomEntry = { [weak self] customEntry in
@@ -235,7 +254,6 @@ extension AddFoodRouter: AddFoodRouterInterface {
         
         vc.modalPresentationStyle = .fullScreen
         viewController?.present(vc, animated: true)
-       
     }
     
     func openEditMeal(meal: Meal) {

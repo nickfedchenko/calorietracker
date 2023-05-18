@@ -46,7 +46,7 @@ class AddFoodControllerPopAnimationController: NSObject, UIViewControllerAnimate
         )
         let tabBar = toViewController.getTabBarSnapshot()
         let tabBarTargetFrame = toViewController.getTabBarTargetFrame()
-        
+        shouldAnimateRings = false
         let targetAddButtonFrame = toViewController.getCurrentAddButtonFrame()
         let targetScannerFrame = toViewController.getCurrentScannerFrame()
         let searchView = SearchView()
@@ -94,6 +94,7 @@ class AddFoodControllerPopAnimationController: NSObject, UIViewControllerAnimate
             fromController.setToEndTransitionState()
             toViewController.setToEndedTransition()
             toTabBarController.view.setNeedsDisplay()
+            shouldAnimateRings = true
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
         }
     }

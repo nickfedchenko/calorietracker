@@ -7,11 +7,16 @@
 
 import Foundation
 typealias FoodUnitData = (unit: UnitElement.ConvenientUnit, count: Double)
-enum Food {
+enum Food: Hashable {
     case product(Product, customAmount: Double?, unit: FoodUnitData?)
     case dishes(Dish, customAmount: Double?)
     case meal(Meal)
     case customEntry(CustomEntry)
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+        hasher.combine(title)
+    }
 }
 
 extension Food {

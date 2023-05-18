@@ -22,6 +22,7 @@ protocol SettingsRouterInterface: AnyObject {
     func openShareViewController(_ url: URL)
     func openPremiumViewController()
     func showSourcesViewController()
+    func goToWhatsUpPage()
 }
 
 class SettingsRouter: NSObject {
@@ -40,7 +41,7 @@ class SettingsRouter: NSObject {
                 .goals,
                 .app,
                 .rate,
-                .help,
+                .contactUs,
                 .sources
             ],
             presenter: presenter
@@ -139,6 +140,14 @@ extension SettingsRouter: SettingsRouterInterface {
         recVC.modalPresentationStyle = .fullScreen
         viewController?.present(recVC, animated: true)
     }
+    
+    func goToWhatsUpPage() {
+        guard
+            let url = URL(string: "https://wa.me/971529029703") else { return }
+      let safari = SFSafariViewController(url: url)
+        safari.delegate = self
+        viewController?.navigationController?.pushViewController(safari, animated: true)
+    }
 }
 
 extension SettingsRouter: MFMailComposeViewControllerDelegate {
@@ -149,4 +158,10 @@ extension SettingsRouter: MFMailComposeViewControllerDelegate {
     ) {
         controller.dismiss(animated: true)
     }
+}
+
+extension SettingsRouter: SFSafariViewControllerDelegate {
+//    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+//        viewController?.navigationController?.popViewController(animated: true)
+//    }
 }

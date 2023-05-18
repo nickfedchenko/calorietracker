@@ -23,6 +23,7 @@ struct Product: Codable {
     let baseTags: [ExceptionTag]
     let createdAt: String
     var source: String?
+    var isFavorite: Bool?
     var foodDataId: String?
     var foodDataIds: [String]
     
@@ -420,7 +421,7 @@ extension Product {
 
 extension Product: Equatable {
     static func == (lhs: Product, rhs: Product) -> Bool {
-        return lhs.id == rhs.id
+        return lhs.id == rhs.id && lhs.foodDataId == rhs.foodDataId
     }
 }
 

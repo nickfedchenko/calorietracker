@@ -430,7 +430,7 @@ extension CalendarView: UICollectionViewDelegateFlowLayout {
         let dayNow = Day(Date())
         
 //        guard Day(day.date) <= dayNow else { return }
-        
+        shouldAnimateRings = true
         let selectedCell = collectionView.cellForItem(at: indexPath) as? CalendarCollectionViewCell
      
 //        if selectedFlag {

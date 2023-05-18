@@ -14,9 +14,8 @@ protocol ProductPresenterInterface: AnyObject {
     func didTapCloseButton()
     func getProduct() -> Product?
     func saveNutritionDaily(_ weight: Double, unit: UnitElement.ConvenientUnit?, unitCount: Double?)
-    func createFoodData()
-    func didTapFavoriteButton(_ flag: Bool)
     func didTapAddToNewMeal(_ weight: Double, unit: UnitElement.ConvenientUnit?, unitCount: Double?)
+    func didTapToFavorites(isFavorite: Bool, weight: Double, unit: UnitElement.ConvenientUnit?, unitCount: Double?)
     var isFavoritesProduct: Bool? { get }
 }
 
@@ -38,20 +37,20 @@ class ProductPresenter {
 }
 
 extension ProductPresenter: ProductPresenterInterface {
+ 
+    func didTapToFavorites(isFavorite: Bool, weight: Double, unit: UnitElement.ConvenientUnit?, unitCount: Double?) {
+        guard let product = getProduct() else { return }
+        if let unit = unit, let unitCount = unitCount {
+            let unitData: FoodUnitData = (unit, unitCount)
+            interactor?.updateFoodData(isFavorite, with: .product(product, customAmount: weight, unit: unitData))
+        } else {
+            interactor?.updateFoodData(isFavorite, with: .product(product, customAmount: weight, unit: nil))
+        }
+    }
     
     var isFavoritesProduct: Bool? {
         guard let product = interactor?.getProduct() else { return nil }
         return FDS.shared.getFoodData(.product(product, customAmount: nil, unit: nil))?.favorites
-    }
-    
-    func didTapFavoriteButton(_ flag: Bool) {
-//        interactor?.updateFoodData(flag)
-    }
-    
-    func createFoodData() {
-        if interactor?.getProduct()?.foodDataId == nil {
-            interactor?.updateFoodData(nil)
-        }
     }
     
     func getNutritionDaily() -> DailyNutrition? {
@@ -79,7 +78,16 @@ extension ProductPresenter: ProductPresenterInterface {
     }
     
     func saveNutritionDaily(_ weight: Double, unit: UnitElement.ConvenientUnit?, unitCount: Double?) {
-        guard let product = interactor?.getProduct() else { return }
+        guard var product = interactor?.getProduct() else { return }
+        if let unit = unit, let unitCount = unitCount {
+            let unitData: FoodUnitData = (unit, unitCount)
+            product.foodDataId = FDS
+                .shared.foodUpdateNew(food: .product(product, customAmount: weight, unit: unitData), favorites: nil)
+        } else {
+            product.foodDataId = FDS
+                .shared.foodUpdateNew(food: .product(product, customAmount: weight, unit: nil), favorites: nil)
+        }
+      
 //        FDS.shared.saveProduct(product: product)
         router?.closeViewController(true) { [weak self] in
             if let unit = unit, let unitCount = unitCount {

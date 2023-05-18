@@ -14,6 +14,8 @@ struct LightweightRecipeModel {
     let cookingTime: Int
     let eatingTags: [AdditionalTag]
     let photoUrl: URL?
+    let foodDataID: String?
+    var isFavorite: Bool?
     
     init?(from managedModel: DomainDish) {
         self.id = Int(managedModel.id)
@@ -27,6 +29,8 @@ struct LightweightRecipeModel {
             self.eatingTags = []
         }
         self.photoUrl = managedModel.photo
+        self.foodDataID = nil
+        self.isFavorite = nil
     }
     
     init?(from model: Dish) {
@@ -36,5 +40,7 @@ struct LightweightRecipeModel {
         self.cookingTime = model.cookTime
         self.eatingTags = model.eatingTags
         self.photoUrl = URL(string: model.photo)
+        self.foodDataID = model.foodDataId
+        self.isFavorite = model.isFavorite
     }
 }

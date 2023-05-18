@@ -9,7 +9,7 @@
 import Foundation
 
 protocol ProductInteractorInterface: AnyObject {
-    func updateFoodData(_ flag: Bool?)
+    func updateFoodData(_ flag: Bool?, with food: Food)
     func getProduct() -> Product?
     func getMealTime() -> MealTime?
 }
@@ -30,13 +30,13 @@ extension ProductInteractor: ProductInteractorInterface {
         return mealTime
     }
     
-    func updateFoodData(_ flag: Bool?) {
+    func updateFoodData(_ flag: Bool?, with food: Food) {
         guard let product = product else {
             return
         }
         
-        self.product?.foodDataId = FDS.shared.foodUpdate(
-            food: .product(product, customAmount: nil, unit: nil),
+        FDS.shared.foodUpdateNew(
+            food: food,
             favorites: flag
         )
     }

@@ -44,7 +44,7 @@ struct CustomEntry {
 
 extension CustomEntry: Equatable {
     static func == (lhs: CustomEntry, rhs: CustomEntry) -> Bool {
-        return lhs.id == rhs.id
+        return lhs.id == rhs.id && lhs.foodDataId == rhs.foodDataId
     }
 }
 

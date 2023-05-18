@@ -59,7 +59,7 @@ final class CircleActivityNode: ASDisplayNode {
     
     override func willEnterHierarchy() {
         super.willEnterHierarchy()
-        reloadData()
+//        reloadData()
     }
     
     func reloadData() {
@@ -157,14 +157,20 @@ final class CircleActivityNode: ASDisplayNode {
                 color: dataSource?.circleActivityNode(self, strokeColor: indexShape) ?? .white,
                 lineWidth: lineWidth
             )
-            let animator = CABasicAnimation(keyPath: "strokeEnd")
-            animator.fromValue = 0
-            animator.toValue = 1
-            animator.duration = 0.3
-            animator.timingFunction = CAMediaTimingFunction(name: .easeIn)
-            layer.addSublayer(activityShape)
-            activityShape.add(animator, forKey: "stroke")
+            
+            if shouldAnimateRings {
+                let animator = CABasicAnimation(keyPath: "strokeEnd")
+                animator.fromValue = 0
+                animator.toValue = 1
+                animator.duration = 0.3
+                animator.timingFunction = CAMediaTimingFunction(name: .easeIn)
+                layer.addSublayer(activityShape)
+                activityShape.add(animator, forKey: "stroke")
+            } else {
+                layer.addSublayer(activityShape)
+            }
         }
+        shouldAnimateRings = false
     }
     
     private func drawBackgroundRings() {

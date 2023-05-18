@@ -154,7 +154,10 @@ class RecipePageScreenInteractor {
 
 extension RecipePageScreenInteractor: RecipePageScreenInteractorInterface {
     func updateFoodData(_ flag: Bool?) {
-        dish.foodDataId = FDS.shared.foodUpdate(food: .dishes(dish, customAmount: nil), favorites: flag)
+        FDS.shared.foodUpdateNew(
+            food: .dishes(dish, customAmount: possibleEatenWeight),
+            favorites: flag
+        )
     }
     
     func setCurrentSelectAmountToEat(amount: Double) {
@@ -275,6 +278,10 @@ extension RecipePageScreenInteractor: RecipePageScreenInteractorInterface {
                     food: .dishes(dish, customAmount: possibleEatenWeight)
                 )
             ]
+        )
+        FDS.shared.foodUpdateNew(
+            food: .dishes(dish, customAmount: possibleEatenWeight),
+            favorites: dish.isFavorite ?? false
         )
         LoggingService.postEvent(event: .recipeaddtodiary)
     }

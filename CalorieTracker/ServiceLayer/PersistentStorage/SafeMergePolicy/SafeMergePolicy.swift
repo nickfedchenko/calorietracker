@@ -49,7 +49,9 @@ class SafeMergePolicy: NSMergePolicy {
                             guard let values = (value as? NSOrderedSet)?.array as? [DomainFoodDataNew] else {
                                 continue
                             }
-                            guard !values.isEmpty else { return }
+//                            guard !values.isEmpty else {
+//                                return
+//                            }
                             values.forEach {
                                 $0.setValue(conflictObject, forKey: "product")
                             }
@@ -60,8 +62,11 @@ class SafeMergePolicy: NSMergePolicy {
                             guard let values = (value as? NSOrderedSet)?.array as? [DomainFoodDataNew] else {
                                 continue
                             }
-                            guard !values.isEmpty else { return }
+//                            guard !values.isEmpty else {
+//                                return
+//                            }
                             values.forEach {
+                                print("Setting to dish \(dish.id) ")
                                 $0.setValue(conflictObject, forKey: "dish")
                             }
                         }

@@ -28,6 +28,7 @@ struct Dish: Codable {
     let isDraft: Bool
     let createdAt: String
     var foodDataId: String?
+    var isFavorite: Bool?
     
     //    let id: Int
     //    let title: String
@@ -183,7 +184,7 @@ struct Dish: Codable {
 
 extension Dish: Equatable {
     static func == (lhs: Dish, rhs: Dish) -> Bool {
-        return lhs.id == rhs.id
+        return lhs.id == rhs.id && lhs.foodDataId == rhs.foodDataId
     }
 }
 

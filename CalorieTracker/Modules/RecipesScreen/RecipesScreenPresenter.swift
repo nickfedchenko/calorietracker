@@ -80,9 +80,23 @@ extension RecipesScreenPresenter: RecipesScreenPresenterInterface {
     
     func didTapRecipe(at index: IndexPath) {
         guard let dish = interactor?.getDishModel(at: index) else { return }
-        if  let dishProper = FDS.shared.getDish(by: String(dish.id)) {
-            router?.showRecipeScreen(with: dishProper)
+        if let dishByFoodId = FDS.shared.getAllStoredFoodData().first(where: { $0.id == dish.foodDataID }) {
+            let dishFood = dishByFoodId.food
+            switch dishFood {
+            case .dishes(let dish, customAmount: _):
+                router?.showRecipeScreen(with: dish)
+            default:
+                if let dishProper = FDS.shared.getDish(by: String(dish.id)) {
+                    router?.showRecipeScreen(with: dishProper)
+                }
+                return
+            }
+        } else {
+            if let dishProper = FDS.shared.getDish(by: String(dish.id)) {
+                router?.showRecipeScreen(with: dishProper)
+            }
         }
+        
     }
     
     func updateFavorites() {

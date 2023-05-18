@@ -41,13 +41,15 @@ struct FoodData {
         dateLastUse = managedModel.dateLastUse
         favorites = managedModel.isFavorite
         numberUses = Int(managedModel.numberOfUses)
-        if let domainDish = managedModel.dish, let dish = Dish(from: domainDish) {
+        if let domainDish = managedModel.dish, var dish = Dish(from: domainDish) {
+            dish.foodDataId = id
             if managedModel.unitID > 0 {
+                
                 food = .dishes(dish, customAmount: managedModel.unitAmount * managedModel.unitCoefficient)
             } else {
                 food = .dishes(dish, customAmount: nil)
             }
-        } else if let domainProduct = managedModel.product, let product = Product(from: domainProduct) {
+        } else if let domainProduct = managedModel.product, var product = Product(from: domainProduct) {
             if managedModel.unitID > 0 {
                 let unit: UnitElement.ConvenientUnit = UnitElement(
                     id: Int(managedModel.unitID),
@@ -60,16 +62,20 @@ struct FoodData {
                     isReference: false,
                     isDefault: true
                 ).convenientUnit
+                product.foodDataId = id
+                product.isFavorite = managedModel.isFavorite
                 food = .product(product, customAmount: nil, unit: (unit, managedModel.unitAmount))
             } else {
                 food = .product(product, customAmount: nil, unit: nil)
             }
         } else if let domainCustomEntry = managedModel.customEntry,
-                  let customEntry = CustomEntry(from: domainCustomEntry) {
+                  var customEntry = CustomEntry(from: domainCustomEntry) {
+            customEntry.foodDataId = id
             food = .customEntry(customEntry)
         } else if
             let domainMeal = managedModel.meal,
-            let meal = Meal(from: domainMeal) {
+            var meal = Meal(from: domainMeal) {
+            meal.foodDataId = id
             food = .meal(meal)
         } else {
             food = nil

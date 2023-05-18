@@ -16,4 +16,5 @@ enum SettingsCategoryType {
     case rate
     case help
     case sources
+    case contactUs
 }

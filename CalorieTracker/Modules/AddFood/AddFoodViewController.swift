@@ -765,10 +765,10 @@ final class AddFoodViewController: UIViewController {
                     self?.presenter?.dismissToCreateMeal(with: food)
                 }
                 
-                DispatchQueue.main.async {
-                    // TODO: newFoodData
-                    FDS.shared.foodUpdate(food: food, favorites: false)
-                }
+//                DispatchQueue.main.async {
+//                    // TODO: newFoodData
+//                    FDS.shared.foodUpdateNew(food: food, favorites: false)
+//                }
             }
             
             let frame = view.convert(infoButtonsView.getInfoButtonFrame(), from: infoButtonsView)

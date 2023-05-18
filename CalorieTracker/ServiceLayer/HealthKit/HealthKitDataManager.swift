@@ -113,7 +113,6 @@ final class HealthKitDataManager {
                 completion(.failure(Error.commonError))
             }
         }
-        
         healthStore.execute(caloriesQuery)
     }
     

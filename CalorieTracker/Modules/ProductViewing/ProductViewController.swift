@@ -79,6 +79,7 @@ final class ProductViewController: CTViewController {
                 return 1
             }
         }()
+        
         if let product = presenter?.getProduct() {
             if !product.isUserProduct {
                 if
@@ -86,27 +87,31 @@ final class ProductViewController: CTViewController {
                     let targetUnit = product.units?.first(where: { $0.isReference }) {
                     return targetUnit.convenientUnit
                 } else {
-                return product
-                    .units?
-                    .first?
-                    .convenientUnit
+                    return product
+                        .units?
+                        .first?
+                        .convenientUnit
+                    ?? .gram(
+                        title: R.string.localizable.gram(),
+                        shortTitle: R.string.localizable.gram(),
+                        coefficient: 1
+                    )
+                }
+            } else {
+                let units: [UnitElement.ConvenientUnit] = product.servings?.compactMap {
+                    .custom(title: $0.size ?? "", shortTitle: $0.size ?? "", coefficient: coefficient)
+                } ?? [
+                    .gram(title: R.string.localizable.gram(), shortTitle: R.string.localizable.gram(), coefficient: 1)
+                ]
+                return units.first
                 ?? .gram(title: R.string.localizable.gram(), shortTitle: R.string.localizable.gram(), coefficient: 1)
             }
         } else {
-            let units: [UnitElement.ConvenientUnit] = product.servings?.compactMap {
-                .custom(title: $0.size ?? "", shortTitle: $0.size ?? "", coefficient: coefficient)
-            } ?? [
-                .gram(title: R.string.localizable.gram(), shortTitle: R.string.localizable.gram(), coefficient: 1)
-            ]
-            return units.first
-            ?? .gram(title: R.string.localizable.gram(), shortTitle: R.string.localizable.gram(), coefficient: 1)
+            return .custom(title: "undefined", shortTitle: "undefined", coefficient: 1)
         }
-    } else {
-        return .custom(title: "undefined", shortTitle: "undefined", coefficient: 1)
-    }
     }()
-
-private lazy var collapseRecognizer = UITapGestureRecognizer(
+    
+    private lazy var collapseRecognizer = UITapGestureRecognizer(
         target: self,
         action: #selector(hideServingSelector(sender:))
     )
@@ -135,7 +140,7 @@ private lazy var collapseRecognizer = UITapGestureRecognizer(
         setupView()
         addSubviews()
         setupConstraints()
-//        presenter?.createFoodData()
+        //        presenter?.createFoodData()
         
     }
     
@@ -170,9 +175,15 @@ private lazy var collapseRecognizer = UITapGestureRecognizer(
             goal: presenter?.getNutritionDailyGoal() ?? .zero
         )
         
-        headerImageView.didTapLike = { value in
+        headerImageView.didTapLike = { [weak self] value in
             Vibration.selection.vibrate()
-            self.presenter?.didTapFavoriteButton(value)
+            guard let self = self else { return }
+            self.presenter?.didTapToFavorites(
+                isFavorite: value,
+                weight: self.weight,
+                unit: self.selectedWeightType,
+                unitCount: self.valueCount
+            )
         }
         
         selectView.didSelectedCell = { [weak self] type, isCollapsed in
@@ -395,34 +406,34 @@ private lazy var collapseRecognizer = UITapGestureRecognizer(
         
         guard let servingValue = product.servings?.first?.weight else { return }
         if !isOz {
-                let kcal = Double(product.kcal) / servingValue * (value * coefficient)
-                let carbs = // NutrientMeasurment.convert(
-                product.carbs / 100 * (coefficient * value)
-                //                type: .carbs,
-                //                from: .gram,
-                //                to: .kcal
-                //            )
-                
-                let protein = // NutrientMeasurment.convert(
-                product.protein / servingValue * (value * coefficient)
-                //                type: .protein,
-                //                from: .gram,
-                //                to: .kcal
-                //            )
-                
-                let fat = // NutrientMeasurment.convert(
-                product.fat / servingValue * (value * coefficient)
-                //                type: .fat,
-                //                from: .gram,
-                //                to: .kcal
-                //            )
-                weight = value * coefficient
-                addNutrition = .init(
-                    kcal: kcal,
-                    carbs: carbs,
-                    protein: protein,
-                    fat: fat
-                )
+            let kcal = Double(product.kcal) / servingValue * (value * coefficient)
+            let carbs = // NutrientMeasurment.convert(
+            product.carbs / 100 * (coefficient * value)
+            //                type: .carbs,
+            //                from: .gram,
+            //                to: .kcal
+            //            )
+            
+            let protein = // NutrientMeasurment.convert(
+            product.protein / servingValue * (value * coefficient)
+            //                type: .protein,
+            //                from: .gram,
+            //                to: .kcal
+            //            )
+            
+            let fat = // NutrientMeasurment.convert(
+            product.fat / servingValue * (value * coefficient)
+            //                type: .fat,
+            //                from: .gram,
+            //                to: .kcal
+            //            )
+            weight = value * coefficient
+            addNutrition = .init(
+                kcal: kcal,
+                carbs: carbs,
+                protein: protein,
+                fat: fat
+            )
         } else {
             let kcal = Double(product.kcal) / servingValue * (value / coefficient)
             let carbs = // NutrientMeasurment.convert(
@@ -491,17 +502,17 @@ private lazy var collapseRecognizer = UITapGestureRecognizer(
         Vibration.success.vibrate()
         guard weight > 0 else { return }
         presenter?.saveNutritionDaily(weight, unit: selectedWeightType, unitCount: valueCount)
-         ()
-        if let product = presenter?.getProduct() {
-            FDS.shared.foodUpdate(
-                food: .product(product, customAmount: nil, unit: (selectedWeightType, valueCount)), favorites: nil
-            )
-        }
+        ()
+//        if let product = presenter?.getProduct() {
+//            FDS.shared.foodUpdateNew(
+//                food: .product(product, customAmount: nil, unit: (selectedWeightType, valueCount)), favorites: nil
+//            )
+//        }
         switch getOpenController() {
         case .createProduct:
             LoggingService.postEvent(event: .diarycreatefoodsave)
         default:
-            return 
+            return
         }
     }
     
@@ -516,245 +527,245 @@ private lazy var collapseRecognizer = UITapGestureRecognizer(
     @objc private func hideServingSelector(sender: UITapGestureRecognizer) {
         if sender.view === valueTextField {
             textFieldDidBeginEditing(valueTextField)
-            return 
+            return
         }
         showOverlayView(true)
         //        self?.selectedWeightType = type
         selectView.collapse()
     }
 }
+
+// MARK: - ViewController Interface
+
+extension ProductViewController: ProductViewControllerInterface {
+    func getOpenController() -> OpenController {
+        return self.openController
+    }
     
-    // MARK: - ViewController Interface
-    
-    extension ProductViewController: ProductViewControllerInterface {
-        func getOpenController() -> OpenController {
-            return self.openController
+    func viewControllerShouldClose() {
+        self.shouldClose?()
+    }
+}
+
+// MARK: - ScrollView Delegate
+
+extension ProductViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.y > headerImageView.frame.maxY / 2.0 {
+            nutritionFactsView.animate(.opacity(1), 0.5)
+        } else {
+            nutritionFactsView.animate(.opacity(0.5), 0.5)
         }
+    }
+}
+
+// MARK: - Factory
+
+extension ProductViewController {
+    func getBottomCloseButton() -> UIButton {
+        let button = UIButton()
+        button.setImage(R.image.foodViewing.topChevron(), for: .normal)
+        button.imageView?.tintColor = R.color.foodViewing.basicGrey()
+        button.addTarget(self, action: #selector(didTapCloseButton), for: .touchUpInside)
+        return button
+    }
+    
+    func getMainScrollView() -> UIScrollView {
+        let view = UIScrollView()
+        view.backgroundColor = .clear
+        view.bounces = true
+        view.showsVerticalScrollIndicator = false
+        view.showsHorizontalScrollIndicator = false
+        view.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 30, right: 0)
+        view.delegate = self
+        return view
+    }
+    
+    func getTitleLabel() -> UILabel {
+        let label = UILabel()
+        label.font = R.font.sfProDisplayBold(size: 24)
+        label.textColor = R.color.foodViewing.basicPrimary()
+        label.numberOfLines = 0
+        return label
+    }
+    
+    func getValueTextField() -> InnerShadowTextField {
+        let textField = InnerShadowTextField()
+        textField.innerShadowColors = [R.color.foodViewing.basicSecondaryDark() ?? .clear]
+        textField.layer.borderWidth = 1
+        textField.layer.borderColor = R.color.foodViewing.basicSecondaryDark()?.cgColor
+        textField.layer.cornerCurve = .continuous
+        textField.layer.cornerRadius = 16
+        textField.layer.masksToBounds = true
+        textField.backgroundColor = .white
+        textField.textAlignment = .center
+        textField.keyboardType = .decimalPad
+        textField.keyboardAppearance = .light
+        textField.addTarget(
+            self,
+            action: #selector(didChangeTextFieldValue),
+            for: .editingChanged
+        )
+        textField.text = valueCount.clean(with: 0)
+        textField.delegate = self
+        return textField
+    }
+    
+    func getAddButton() -> BasicButtonView {
+        let button = BasicButtonView(type: .add)
         
-        func viewControllerShouldClose() {
-            self.shouldClose?()
-        }
-    }
-    
-    // MARK: - ScrollView Delegate
-    
-    extension ProductViewController: UIScrollViewDelegate {
-        func scrollViewDidScroll(_ scrollView: UIScrollView) {
-            if scrollView.contentOffset.y > headerImageView.frame.maxY / 2.0 {
-                nutritionFactsView.animate(.opacity(1), 0.5)
-            } else {
-                nutritionFactsView.animate(.opacity(0.5), 0.5)
-            }
-        }
-    }
-    
-    // MARK: - Factory
-    
-    extension ProductViewController {
-        func getBottomCloseButton() -> UIButton {
-            let button = UIButton()
-            button.setImage(R.image.foodViewing.topChevron(), for: .normal)
-            button.imageView?.tintColor = R.color.foodViewing.basicGrey()
-            button.addTarget(self, action: #selector(didTapCloseButton), for: .touchUpInside)
+        switch openController {
+        case .addFood, .createProduct:
+            button.addTarget(
+                self,
+                action: #selector(didTapSaveButton),
+                for: .touchUpInside
+            )
+            
+            return button
+            
+        case .createMeal:
+            button.updateNode(type: .addToNewMeal)
+            button.addTarget(
+                self,
+                action: #selector(didTapAddToNewMeal),
+                for: .touchUpInside
+            )
+            
             return button
         }
-        
-        func getMainScrollView() -> UIScrollView {
-            let view = UIScrollView()
-            view.backgroundColor = .clear
-            view.bounces = true
-            view.showsVerticalScrollIndicator = false
-            view.showsHorizontalScrollIndicator = false
-            view.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 30, right: 0)
-            view.delegate = self
-            return view
-        }
-        
-        func getTitleLabel() -> UILabel {
-            let label = UILabel()
-            label.font = R.font.sfProDisplayBold(size: 24)
-            label.textColor = R.color.foodViewing.basicPrimary()
-            label.numberOfLines = 0
-            return label
-        }
-        
-        func getValueTextField() -> InnerShadowTextField {
-            let textField = InnerShadowTextField()
-            textField.innerShadowColors = [R.color.foodViewing.basicSecondaryDark() ?? .clear]
-            textField.layer.borderWidth = 1
-            textField.layer.borderColor = R.color.foodViewing.basicSecondaryDark()?.cgColor
-            textField.layer.cornerCurve = .continuous
-            textField.layer.cornerRadius = 16
-            textField.layer.masksToBounds = true
-            textField.backgroundColor = .white
-            textField.textAlignment = .center
-            textField.keyboardType = .decimalPad
-            textField.keyboardAppearance = .light
-            textField.addTarget(
-                self,
-                action: #selector(didChangeTextFieldValue),
-                for: .editingChanged
-            )
-            textField.text = valueCount.clean(with: 0)
-            textField.delegate = self
-            return textField
-        }
-        
-        func getAddButton() -> BasicButtonView {
-            let button = BasicButtonView(type: .add)
-            
-            switch openController {
-            case .addFood, .createProduct:
-                button.addTarget(
-                    self,
-                    action: #selector(didTapSaveButton),
-                    for: .touchUpInside
-                )
-                
-                return button
-                
-            case .createMeal:
-                button.updateNode(type: .addToNewMeal)
-                button.addTarget(
-                    self,
-                    action: #selector(didTapAddToNewMeal),
-                    for: .touchUpInside
-                )
-                
-                return button
-            }
-        }
-        
-        func getSelectView() -> SelectView<UnitElement.ConvenientUnit> {
-            let product = presenter?.getProduct()
-            if var unitsList = presenter?.getProduct()?.units {
-                if UDM.servingIsMetric {
-                    unitsList.sort { $0.id == 1 && $1.id != 1 }
-                    if let referenceIndex = unitsList.firstIndex(
-                        where: { $0.isReference && $0.id != 1 && $0.id != 2 }
-                    ) {
-                        let referenceUnit = unitsList[referenceIndex]
-                        unitsList.remove(at: referenceIndex)
-                        unitsList.insert(referenceUnit, at: 0)
-                    }
-                    let convenientUnitsList = unitsList.compactMap { $0.convenientUnit }
-                    selectedWeightType = convenientUnitsList.first ?? selectedWeightType
-                    return SelectView(convenientUnitsList, shouldHideAtStartup: true)
-                } else {
-                    unitsList.sort { $0.id == 2 || $1.id != 2 }
-                    if let referenceIndex = unitsList.firstIndex(
-                        where: { $0.isReference && $0.id != 1 && $0.id != 2 }
-                    ) {
-                        let referenceUnit = unitsList[referenceIndex]
-                        unitsList.remove(at: referenceIndex)
-                        unitsList.insert(referenceUnit, at: 0)
-                    }
-                    
-                    let convenientUnitsList = unitsList.compactMap { $0.convenientUnit }
-                    selectedWeightType = convenientUnitsList.first ?? selectedWeightType
-                    return SelectView(convenientUnitsList, shouldHideAtStartup: true)
+    }
+    
+    func getSelectView() -> SelectView<UnitElement.ConvenientUnit> {
+        let product = presenter?.getProduct()
+        if var unitsList = presenter?.getProduct()?.units {
+            if UDM.servingIsMetric {
+                unitsList.sort { $0.id == 1 && $1.id != 1 }
+                if let referenceIndex = unitsList.firstIndex(
+                    where: { $0.isReference && $0.id != 1 && $0.id != 2 }
+                ) {
+                    let referenceUnit = unitsList[referenceIndex]
+                    unitsList.remove(at: referenceIndex)
+                    unitsList.insert(referenceUnit, at: 0)
                 }
+                let convenientUnitsList = unitsList.compactMap { $0.convenientUnit }
+                selectedWeightType = convenientUnitsList.first ?? selectedWeightType
+                return SelectView(convenientUnitsList, shouldHideAtStartup: true)
+            } else {
+                unitsList.sort { $0.id == 2 || $1.id != 2 }
+                if let referenceIndex = unitsList.firstIndex(
+                    where: { $0.isReference && $0.id != 1 && $0.id != 2 }
+                ) {
+                    let referenceUnit = unitsList[referenceIndex]
+                    unitsList.remove(at: referenceIndex)
+                    unitsList.insert(referenceUnit, at: 0)
+                }
+                
+                let convenientUnitsList = unitsList.compactMap { $0.convenientUnit }
+                selectedWeightType = convenientUnitsList.first ?? selectedWeightType
+                return SelectView(convenientUnitsList, shouldHideAtStartup: true)
             }
-            
-            let coefficient: Double = {
-                if let serving = product?.servings?.first {
-                    if serving.size == R.string.localizable.measurementMl()
-                        || serving.size == R.string.localizable.gram() {
-                        return 1
-                    } else {
-                        return serving.weight ?? 1
-                    }
-                } else {
+        }
+        
+        let coefficient: Double = {
+            if let serving = product?.servings?.first {
+                if serving.size == R.string.localizable.measurementMl()
+                    || serving.size == R.string.localizable.gram() {
                     return 1
+                } else {
+                    return serving.weight ?? 1
                 }
-            }()
-            
-            return SelectView(
-                presenter?.getProduct()?.units?
-                    .sorted(by: {
-                        $0.isReference != $1.isReference }).compactMap { $0.convenientUnit }
-                ?? product?.servings?.compactMap {
-                    .custom(title: $0.size ?? "", shortTitle: $0.size ?? "", coefficient: coefficient)
-                }
-                ?? [.gram(title: R.string.localizable.gram(), shortTitle: R.string.localizable.gram(), coefficient: 1)],
-                shouldHideAtStartup: true
+            } else {
+                return 1
+            }
+        }()
+        
+        return SelectView(
+            presenter?.getProduct()?.units?
+                .sorted(by: {
+                    $0.isReference != $1.isReference }).compactMap { $0.convenientUnit }
+            ?? product?.servings?.compactMap {
+                .custom(title: $0.size ?? "", shortTitle: $0.size ?? "", coefficient: coefficient)
+            }
+            ?? [.gram(title: R.string.localizable.gram(), shortTitle: R.string.localizable.gram(), coefficient: 1)],
+            shouldHideAtStartup: true
+        )
+    }
+    
+    func getOverlayView() -> UIView {
+        let view = UIView()
+        view.isHidden = true
+        view.layer.opacity = 0
+        view.backgroundColor = R.color.foodViewing.basicPrimary()?
+            .withAlphaComponent(0.25)
+        return view
+    }
+    
+    func getHeaderKeyboardView() -> ViewWithShadow {
+        let view = ViewWithShadow(Const.shadowsForKeyboard)
+        view.layer.cornerCurve = .continuous
+        view.layer.maskedCorners = .topCorners
+        view.layer.cornerRadius = 36
+        view.backgroundColor = R.color.keyboardLightColor()
+        return view
+    }
+}
+
+extension ProductViewController {
+    struct Const {
+        static let shadowsForKeyboard: [Shadow] = [
+            .init(
+                color: R.color.foodViewing.basicSecondaryDark()!,
+                opacity: 0.2,
+                offset: CGSize(width: 0, height: -2),
+                radius: 10,
+                spread: 0
+            ),
+            .init(
+                color: R.color.foodViewing.basicPrimary()!,
+                opacity: 0.7,
+                offset: CGSize(width: 0, height: -0.5),
+                radius: 2,
+                spread: 0
             )
-        }
+        ]
+    }
+}
+
+extension ProductViewController: UIViewControllerTransitioningDelegate {
+    func animationController(
+        forPresented presented: UIViewController,
+        presenting: UIViewController,
+        source: UIViewController
+    ) -> UIViewControllerAnimatedTransitioning? {
         
-        func getOverlayView() -> UIView {
-            let view = UIView()
-            view.isHidden = true
-            view.layer.opacity = 0
-            view.backgroundColor = R.color.foodViewing.basicPrimary()?
-                .withAlphaComponent(0.25)
-            return view
-        }
-        
-        func getHeaderKeyboardView() -> ViewWithShadow {
-            let view = ViewWithShadow(Const.shadowsForKeyboard)
-            view.layer.cornerCurve = .continuous
-            view.layer.maskedCorners = .topCorners
-            view.layer.cornerRadius = 36
-            view.backgroundColor = R.color.keyboardLightColor()
-            return view
+        if shouldUseCustomTransition {
+            return ModalSideTransitionAppearing()
+        } else {
+            return nil
         }
     }
     
-    extension ProductViewController {
-        struct Const {
-            static let shadowsForKeyboard: [Shadow] = [
-                .init(
-                    color: R.color.foodViewing.basicSecondaryDark()!,
-                    opacity: 0.2,
-                    offset: CGSize(width: 0, height: -2),
-                    radius: 10,
-                    spread: 0
-                ),
-                .init(
-                    color: R.color.foodViewing.basicPrimary()!,
-                    opacity: 0.7,
-                    offset: CGSize(width: 0, height: -0.5),
-                    radius: 2,
-                    spread: 0
-                )
-            ]
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        if shouldUseCustomTransition {
+            return ModalSideTransitionDissapearing()
+        } else {
+            return nil
+        }
+    }
+}
+
+extension ProductViewController: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        guard textField === valueTextField else { return }
+        textField.selectAll(textField)
+        if !selectView.isCollapsed {
+            selectView.collapse()
         }
     }
     
-    extension ProductViewController: UIViewControllerTransitioningDelegate {
-        func animationController(
-            forPresented presented: UIViewController,
-            presenting: UIViewController,
-            source: UIViewController
-        ) -> UIViewControllerAnimatedTransitioning? {
-            
-            if shouldUseCustomTransition {
-                return ModalSideTransitionAppearing()
-            } else {
-                return nil
-            }
-        }
+    func textFieldDidEndEditing(_ textField: UITextField) {
         
-        func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-            if shouldUseCustomTransition {
-                return ModalSideTransitionDissapearing()
-            } else {
-                return nil
-            }
-        }
     }
     
-    extension ProductViewController: UITextFieldDelegate {
-        func textFieldDidBeginEditing(_ textField: UITextField) {
-            guard textField === valueTextField else { return }
-            textField.selectAll(textField)
-            if !selectView.isCollapsed {
-                selectView.collapse()
-            }
-        }
-        
-        func textFieldDidEndEditing(_ textField: UITextField) {
-        
-        }
-        
-    }
+}

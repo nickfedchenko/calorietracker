@@ -97,7 +97,7 @@ final class AppCoordinator: ApphudDelegate {
 //            self?.localDomainService.saveBurnedKcal(data: burnedKCal)
 //        }
 //        
-        setupPeriodicUpdate()
+//        setupPeriodicUpdate()
     }
     
     private func startApphud() {
@@ -163,9 +163,5 @@ final class AppCoordinator: ApphudDelegate {
     
     func checkIsPaid() {
         Amplitude.instance().setUserProperties(["isPaid": Apphud.hasActiveSubscription()])
-    }
-    
-    private func migrateOldFoodData() {
-        
     }
 }
