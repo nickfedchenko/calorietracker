@@ -350,8 +350,10 @@ extension FDS: FoodDataServiceInterface {
     func getFrequentDishes(_ count: Int) -> [Food] {
         let dishes: [Food] = getFrequentFood(count).compactMap {
             switch $0.food {
-            case .dishes:
-                return $0.food
+            case .dishes(var dish, customAmount: let amount):
+                dish.tempDateLastUse = $0.dateLastUse
+                dish.tempNumberOfUses = $0.numberUses
+                return .dishes(dish, customAmount: amount)
             default:
                 return nil
             }
@@ -362,8 +364,10 @@ extension FDS: FoodDataServiceInterface {
     func getFrequentProducts(_ count: Int) -> [Food] {
         let products: [Food] = getFrequentFood(count).compactMap {
             switch $0.food {
-            case .product:
-                return $0.food
+            case .product(var product, customAmount: let amount, unit: let unit):
+                product.tempDateLastUse = $0.dateLastUse
+                product.tempNumberOfUses = $0.numberUses
+                return .product(product, customAmount: amount, unit: unit)
             default:
                 return nil
             }
@@ -375,8 +379,10 @@ extension FDS: FoodDataServiceInterface {
     func getFrequentCustomEntries(_ count: Int) -> [Food] {
         let customEntries: [Food] = getFrequentFood(count) .compactMap { food in
             switch food.food {
-            case .customEntry:
-                return food.food
+            case .customEntry(var entry):
+                entry.tempDateLastUse = food.dateLastUse
+                entry.tempNumberOfUses = food.numberUses
+                return .customEntry(entry)
             default:
                 return nil
             }
@@ -450,8 +456,10 @@ extension FDS: FoodDataServiceInterface {
         let allFoodData = localPersistentStore.fetchFoodData(with: count, sortDescriptor: descriptor)
         return allFoodData.compactMap {
             switch $0.food {
-            case .product(let product, customAmount: _, unit: _):
-                return $0.food
+            case .product(var product, customAmount: let amount, unit: let unit):
+                product.tempDateLastUse = $0.dateLastUse
+                product.tempNumberOfUses = $0.numberUses
+                return .product(product, customAmount: amount, unit: unit)
             default:
                 return nil
             }
@@ -463,8 +471,10 @@ extension FDS: FoodDataServiceInterface {
         let allFoodData = localPersistentStore.fetchFoodData(with: count, sortDescriptor: descriptor)
         return allFoodData.compactMap {
             switch $0.food {
-            case .dishes:
-                return $0.food
+            case .dishes(var dish, customAmount: let amount):
+                dish.tempDateLastUse = $0.dateLastUse
+                dish.tempNumberOfUses = $0.numberUses
+                return .dishes(dish, customAmount: amount)
             default:
                 return nil
             }
@@ -481,8 +491,10 @@ extension FDS: FoodDataServiceInterface {
         
         return foodData.compactMap {
             switch $0.food {
-            case .customEntry:
-                return $0.food
+            case .customEntry(var entry):
+                entry.tempDateLastUse = $0.dateLastUse
+                entry.tempNumberOfUses = $0.numberUses
+                return .customEntry(entry)
             default:
                 return nil
             }

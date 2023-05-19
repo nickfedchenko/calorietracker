@@ -389,12 +389,17 @@ extension FoodCellView.FoodViewModel {
         self.tag = R.string.localizable.recipe()
         self.image = nil
         self.verified = true
+        let numberFormatter = NumberFormatter()
+        numberFormatter.maximumFractionDigits = 1
+        numberFormatter.minimumFractionDigits = 0
         
         if let weight = weight,
            let totalWeight = dish.dishWeight {
             
             let portionWeight = (dish.dishWeight ?? 1) / Double(dish.totalServings ?? 1)
             let portions = weight / portionWeight
+            let portionsString = numberFormatter
+                .string(from: NSNumber(value: portions)) ?? String(format: "%.1f", portions)
             let servingText: String = {
                 switch portions {
                 case 1:
@@ -406,7 +411,7 @@ extension FoodCellView.FoodViewModel {
                 }
             }()
             self.kcal = BAMeasurement((weight / totalWeight) * dish.kcal, .energy, isMetric: true).localized
-            self.description = "\(portions) \(servingText) "
+            self.description = "\(portionsString) \(servingText) "
             + "(\(BAMeasurement(portionWeight * Double(portions), .serving, isMetric: true).string(with: 1)))"
         } else {
             var servingWeight: Double = 0
@@ -447,6 +452,9 @@ extension FoodCellView.FoodViewModel {
         } else {
             tag = R.string.localizable.baseFood()
         }
+        let formatter = NumberFormatter()
+        formatter.maximumFractionDigits = 2
+        formatter.minimumFractionDigits = 0
         self.tag = tag
         if let serving = product.servings?.first?.weight {
             if unitData.unit.id != 2 {
@@ -472,21 +480,23 @@ extension FoodCellView.FoodViewModel {
             }
             let unit = unitData.unit
             let unitCount = unitData.count
+         
+            let unitCountString = formatter.string(from: NSNumber(value: unitCount)) ?? unitCount.clean(with: 1)
             let unitTitle = unit.getTitle(.short) ?? "error getting title"
             if unitData.unit.id != 1 && unitData.unit.id != 2 {
-                self.description = "\(unitCount) \(unitTitle) (\(descriptionWeight))"
+                self.description = "\(unitCountString) \(unitTitle) (\(descriptionWeight))"
             } else {
                 if UDM.servingIsMetric {
                     if unitData.unit.id == 1 {
                         self.description = "\(descriptionWeight)"
                     } else {
-                        self.description = "\(unitCount) \(unitTitle) (\(descriptionWeight))"
+                        self.description = "\(unitCountString) \(unitTitle) (\(descriptionWeight))"
                     }
                 } else {
                     if unitData.unit.id == 2 {
                         self.description = "\(descriptionWeight)"
                     } else {
-                        self.description = "\(unitCount) \(unitTitle) (\(descriptionWeight))"
+                        self.description = "\(unitCountString) \(unitTitle) (\(descriptionWeight))"
                     }
                 }
             }

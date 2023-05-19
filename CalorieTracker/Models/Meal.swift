@@ -13,6 +13,8 @@ struct Meal {
     let mealTime: MealTime
     let foods: [Food]
     let photoURL: String
+    var tempDateLastUse: Date?
+    var tempNumberOfUses: Int?
     
     var foodDataId: String?
     

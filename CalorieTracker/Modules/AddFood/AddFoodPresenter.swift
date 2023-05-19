@@ -80,15 +80,31 @@ final class AddFoodPresenter {
         
         switch foodType {
         case .frequent:
-            let dishes = FDS.shared.getFrequentDishes(10)
-            var products = FDS.shared.getFrequentProducts(10)
-            let customEntries = FDS.shared.getFrequentCustomEntries(10)
-            self.foods = products + dishes + customEntries
+            let dishes = FDS.shared.getFrequentDishes(50)
+            var products = FDS.shared.getFrequentProducts(50)
+            let customEntries = FDS.shared.getFrequentCustomEntries(50)
+            self.foods = (products + dishes + customEntries).sorted(by: {
+                if
+                    let lhsCount = $0.numberOfUses,
+                    let rhsCount = $1.numberOfUses {
+                    return lhsCount > rhsCount
+                } else {
+                    return false
+                }
+            })
         case .recent:
-            let dishes = FDS.shared.getRecentDishes(10)
-            let products = FDS.shared.getRecentProducts(10)
-            let customEntries = FDS.shared.getRecentCustomEntries(10)
-            self.foods = products + dishes + customEntries
+            let dishes = FDS.shared.getRecentDishes(50)
+            let products = FDS.shared.getRecentProducts(50)
+            let customEntries = FDS.shared.getRecentCustomEntries(50)
+            self.foods = (products + dishes + customEntries).sorted(by: {
+                if
+                    let rhsDate = $0.dateLastUse,
+                    let lhsDate = $1.dateLastUse {
+                    return lhsDate < rhsDate
+                } else {
+                    return false
+                }
+            })
         case .favorites:
             let dishes = FDS.shared.getFavoriteDishes()
             let products = FDS.shared.getFavoriteProducts()
@@ -316,7 +332,10 @@ extension AddFoodPresenter: AddFoodPresenterInterface {
                     )
                 )
             }
+            FDS.shared.foodUpdateNew(food: $0, favorites: nil)
         }
+        
+        
         
         FDS.shared.addFoodsMeal(
             mealTime: mealTime,

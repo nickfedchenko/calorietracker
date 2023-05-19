@@ -29,6 +29,8 @@ struct Dish: Codable {
     let createdAt: String
     var foodDataId: String?
     var isFavorite: Bool?
+    var tempDateLastUse: Date?
+    var tempNumberOfUses: Int?
     
     //    let id: Int
     //    let title: String

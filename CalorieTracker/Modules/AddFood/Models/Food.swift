@@ -139,6 +139,33 @@ extension Food {
             return customEntry.title
         }
     }
+    
+    var dateLastUse: Date? {
+        switch self {
+        case .product(let product, let _, let _):
+            return product.tempDateLastUse
+        case .dishes(let dish, let _):
+            return dish.tempDateLastUse
+        case .meal(let meal):
+            return meal.tempDateLastUse
+        case .customEntry(let customEntry):
+            return customEntry.tempDateLastUse
+        }
+    }
+    
+    var numberOfUses: Int? {
+        switch self {
+        case .product(let product, let _, let _):
+            return product.tempNumberOfUses
+        case .dishes(let dish, let _):
+            return dish.tempNumberOfUses
+        case .meal(let meal):
+            return meal.tempNumberOfUses
+        case .customEntry(let customEntry):
+            return customEntry.tempNumberOfUses
+        }
+    }
+    
 }
 
 extension Food: Equatable {

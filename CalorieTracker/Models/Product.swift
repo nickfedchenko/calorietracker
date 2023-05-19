@@ -26,6 +26,8 @@ struct Product: Codable {
     var isFavorite: Bool?
     var foodDataId: String?
     var foodDataIds: [String]
+    var tempDateLastUse: Date?
+    var tempNumberOfUses: Int?
     
     enum Photo: Codable {
         case url(URL)

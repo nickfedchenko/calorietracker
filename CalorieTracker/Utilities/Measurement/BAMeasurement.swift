@@ -163,16 +163,19 @@ struct BAMeasurement {
 extension Double {
     func clean(with precision: Int = 2) -> String {
         if self.isNaN { return "0" }
-        var string = self > 0 ? self.truncatingRemainder(dividingBy: 1) < 0.049
-        ? String(format: "%.0f", self)
-        : String(format: "%.\(precision)f", self)
-        : self.truncatingRemainder(dividingBy: 1) > -0.049
-        ? String(format: "%.0f", self)
-        : String(format: "%.\(precision)f", self)
-        if string.hasSuffix(".0") { string = string.replacingOccurrences(of: ".0", with: "") }
-        if string != "0" && string.contains(".") && string.hasSuffix("00") {
-            string = String(string.dropLast(2))
-        }
+        let formatter = NumberFormatter()
+        formatter.minimumFractionDigits = 0
+        formatter.maximumFractionDigits = precision
+        let string = formatter.string(from: NSNumber(value: self)) ?? String(format: "%.1f", self)
+//        ? String(format: "%.0f", self)
+//        : String(format: "%.\(precision)f", self)
+//        : self.truncatingRemainder(dividingBy: 1) > -0.049
+//        ? String(format: "%.0f", self)
+//        : String(format: "%.\(precision)f", self)
+//        if string.hasSuffix(".0") { string = string.replacingOccurrences(of: ".0", with: "") }
+//        if string != "0" && string.contains(".") && string.hasSuffix("00") {
+//            string = String(string.dropLast(2))
+//        }
         return string
     }
 }

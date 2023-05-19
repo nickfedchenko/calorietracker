@@ -12,6 +12,8 @@ struct CustomEntry {
     let title: String
     let nutrients: CustomEntryNutrients
     let mealTime: MealTime
+    var tempDateLastUse: Date?
+    var tempNumberOfUses: Int?
     
     var foodDataId: String?
     

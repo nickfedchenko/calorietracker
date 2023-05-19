@@ -59,7 +59,7 @@ final class CircleActivityNode: ASDisplayNode {
     
     override func willEnterHierarchy() {
         super.willEnterHierarchy()
-//        reloadData()
+        reloadData()
     }
     
     func reloadData() {
