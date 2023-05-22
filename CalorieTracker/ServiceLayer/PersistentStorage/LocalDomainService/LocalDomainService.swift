@@ -82,6 +82,8 @@ protocol LocalDomainServiceInterface {
     func deleteWeightRecord(at day: Day)
     func updateFoodData(_ food: Food, incrementingUses: Int, dateLastUsed: Date, isFavorite: Bool?) -> String?
     func transformExistingFoodData()
+    func getPersistentProductsCount() -> Int
+    func getPersistentDishCount() -> Int
 }
 
 extension LocalDomainServiceInterface {
@@ -290,6 +292,18 @@ final class LocalDomainService {
 
 // MARK: - LocalDomainServiceInterface
 extension LocalDomainService: LocalDomainServiceInterface {
+    func getPersistentProductsCount() -> Int {
+        let fetchRequest = DomainProduct.fetchRequest()
+        let count = try? context.count(for: fetchRequest)
+        return count ?? 0
+    }
+    
+    func getPersistentDishCount() -> Int {
+        let fetchRequest = DomainDish.fetchRequest()
+        let count = try? context.count(for: fetchRequest)
+        return count ?? 0
+    }
+    
     func deleteWeightRecord(at day: Day) {
         let dayPredicate = NSPredicate(format: "day == %i", day.day)
         let monthPredicate = NSPredicate(format: "month == %i", day.month)

@@ -97,6 +97,7 @@ protocol FoodDataServiceInterface {
     func getCustomEntry(by id: String) -> CustomEntry?
     func saveProduct(product: Product)
     func foodUpdateNew(food: Food, favorites: Bool?) -> String?
+    func baseFoodDBExists() -> Bool
 }
 
 final class FDS {
@@ -169,6 +170,9 @@ final class FDS {
 }
 
 extension FDS: FoodDataServiceInterface {
+    func baseFoodDBExists() -> Bool {
+        localPersistentStore.getPersistentProductsCount() > 5000 && localPersistentStore.getPersistentDishCount() > 500
+    }
     
     func deleteMealData(_ id: String) -> Bool {
         localPersistentStore.deleteMealData(id)

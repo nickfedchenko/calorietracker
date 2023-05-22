@@ -11,12 +11,24 @@ import Gzip
 typealias GenericResult<T> = (Result<T, ErrorDomain>) -> Void
 
 protocol NetworkEngineInterface {
-    func fetchProducts(completion: @escaping ProductsResult )
-    func fetchDishes(completion: @escaping DishesResponse)
+    func fetchProducts(progressObserver: ((Double) -> Void)?, completion: @escaping ProductsResult)
+    func fetchDishes(progressObserver: ((Double) -> Void)?, completion: @escaping DishesResponse)
     func remoteSearch(by phrase: String, completion: @escaping SearchProductsResponse)
     func remoteSearchSecond(by phrase: String, completion: @escaping ProductsSearchResult)
     func remoteSearchByBarcode(by barcode: String, completion: @escaping ProductsSearchResult)
     func uploadUserProduct(product: BackendSubmitModel, completion: @escaping BackendSubmitResult)
+    func fetchDishArchivesList(completion: @escaping ArchivesListListResult)
+    func fetchProductsArchivesList(completion: @escaping ArchivesListListResult)
+}
+
+extension NetworkEngineInterface {
+    func fetchProducts(progressObserver: ((Double) -> Void)? = nil, completion: @escaping ProductsResult) {
+        fetchProducts(progressObserver: progressObserver, completion: completion)
+    }
+    
+    func fetchDishes(progressObserver: ((Double) -> Void)? = nil, completion: @escaping DishesResponse) {
+        fetchDishes(progressObserver: progressObserver, completion: completion)
+    }
 }
 
 enum ErrorDomain: Error {
@@ -59,7 +71,19 @@ enum RequestGenerator {
                 } else {
                     return .en
                 }
-            case .uploadProduct(product: let product):
+            case .uploadProduct:
+                if let targetCode = LinkLanguageCodes.allCases.first(where: { $0.rawValue == currentLanguageCode }) {
+                    return targetCode
+                } else {
+                    return .en
+                }
+            case .getListOfProductUpdates:
+                if let targetCode = LinkLanguageCodes.allCases.first(where: { $0.rawValue == currentLanguageCode }) {
+                    return targetCode
+                } else {
+                    return .en
+                }
+            case .getListOfDishUpdates:
                 if let targetCode = LinkLanguageCodes.allCases.first(where: { $0.rawValue == currentLanguageCode }) {
                     return targetCode
                 } else {
@@ -73,6 +97,8 @@ enum RequestGenerator {
     case searchProduct(by: String)
     case searchProductByBarcode(barcode: String)
     case uploadProduct(product: BackendSubmitModel)
+    case getListOfProductUpdates
+    case getListOfDishUpdates
     
     private var backendToken: String {
         guard let filePath = Bundle.main.path(forResource: "Info", ofType: "plist") else {
@@ -147,6 +173,20 @@ enum RequestGenerator {
                 fatalError("wrong url")
             }
             url = optUrl
+        case .getListOfDishUpdates:
+            guard let optUrl = URL(
+                string: "https://ketodietapplication.site/api/archive/incremental/list?lang=\(langCode)&type=dish"
+            ) else {
+                fatalError("wrong url")
+            }
+            url = optUrl
+        case .getListOfProductUpdates:
+            guard let optUrl = URL(
+                string: "https://ketodietapplication.site/api/archive/incremental/list?lang=\(langCode)&type=product"
+            ) else {
+                fatalError("wrong url")
+            }
+            url = optUrl
         }
        
         var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData)
@@ -172,15 +212,24 @@ final class NetworkEngine {
     ///   то угодно комформящееся Codable
     private func performDecodableRequest<T: Codable>(
         request: RequestGenerator,
+        progressObserver: ((Double) -> Void)? = nil,
         completion: @escaping ((Result<T, ErrorDomain>) -> Void)
     ) {
         let secondsNow = Date().timeIntervalSince1970
+        let decoder = JSONDecoder()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
         AF.request(request.request)
             .validate()
+            .downloadProgress(closure: { progress in
+                progressObserver?(progress.fractionCompleted)
+            })
             .responseDecodable(
                 of: T.self,
                 queue: .global(qos: .userInitiated),
-                dataPreprocessor: .gzipPreprocessor
+                dataPreprocessor: .gzipPreprocessor,
+                decoder: decoder
             ) { result in
                 guard let data = result.value else {
                     completion(.failure(.AFError(error: result.error)))
@@ -242,16 +291,32 @@ final class NetworkEngine {
 }
 
 extension NetworkEngine: NetworkEngineInterface {
+    func fetchDishArchivesList(completion: @escaping ArchivesListListResult) {
+        performDecodableRequest(request: .getListOfDishUpdates, completion: completion)
+    }
+    
+    func fetchProductsArchivesList(completion: @escaping ArchivesListListResult) {
+        performDecodableRequest(request: .getListOfProductUpdates, completion: completion)
+    }
+    
     func uploadUserProduct(product: BackendSubmitModel, completion: @escaping BackendSubmitResult) {
         performDecodableUploadRequest(request: .uploadProduct(product: product), completion: completion)
     }
     
-    func fetchProducts(completion: @escaping ProductsResult ) {
-        performDecodableRequest(request: .fetchProductZipped, completion: completion)
+    func fetchProducts(progressObserver: ((Double) -> Void)? = nil, completion: @escaping ProductsResult) {
+        performDecodableRequest(
+            request: .fetchProductZipped,
+            progressObserver: progressObserver,
+            completion: completion
+        )
     }
     
-    func fetchDishes(completion: @escaping DishesResponse) {
-        performDecodableRequest(request: .fetchDishesZipped, completion: completion)
+    func fetchDishes(progressObserver: ((Double) -> Void)? = nil, completion: @escaping DishesResponse) {
+        performDecodableRequest(
+            request: .fetchDishesZipped,
+            progressObserver: progressObserver,
+            completion: completion
+        )
     }
     
     func remoteSearch(by phrase: String, completion: @escaping SearchProductsResponse) {

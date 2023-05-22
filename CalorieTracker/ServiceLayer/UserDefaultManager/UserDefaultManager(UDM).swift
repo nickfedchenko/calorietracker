@@ -45,6 +45,32 @@ final class UDM {
         case reachTargetDate
         case allergicRestrictions
         case weightsListShouldShowHK
+        case lastProductsIncrementalUpdate
+        case lastDishIncrementalUpdate
+    }
+    
+    static var lastProductsIncrementalUpdate: Date? {
+        get {
+            guard let value: Date = getValue(for: .lastProductsIncrementalUpdate) else {
+                return nil
+            }
+            return value
+        }
+        set {
+            setValue(value: newValue, for: .lastProductsIncrementalUpdate)
+        }
+    }
+    
+    static var lastDishIncrementalUpdate: Date? {
+        get {
+            guard let value: Date = getValue(for: .lastDishIncrementalUpdate) else {
+                return nil
+            }
+            return value
+        }
+        set {
+            setValue(value: newValue, for: .lastDishIncrementalUpdate)
+        }
     }
     
     static var weightsListShouldShowHKRecords: Bool {

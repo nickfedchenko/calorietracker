@@ -41,18 +41,18 @@ final class AppCoordinator: ApphudDelegate {
         //        }
         updateHealthKitData()
         updateFoodData()
-        if UDM.userData == nil {
-            getStartedViewController = WelcomeRouter.setupModule()
-            //            getStartedViewController = ChooseDietaryPreferenceRouter.setupModule()
-        } else {
-            if Apphud.hasActiveSubscription() {
-                getStartedViewController = CTTabBarController()
-            } else {
-                getStartedViewController = PaywallRouter.setupModule()
-            }
-        }
+//        if UDM.userData == nil {
+//            getStartedViewController = WelcomeRouter.setupModule()
+//            //            getStartedViewController = ChooseDietaryPreferenceRouter.setupModule()
+//        } else {
+//            if Apphud.hasActiveSubscription() {
+//                getStartedViewController = CTTabBarController()
+//            } else {
+//                getStartedViewController = PaywallRouter.setupModule()
+//            }
+//        }
 //#if DEBUG
-//getStartedViewController = LandingRouter.setupModule()
+        getStartedViewController = LoadingScreenRouter.setupModule()
 //#endif
         checkIsPaid()
         let navigationController = UINavigationController(rootViewController: getStartedViewController)
@@ -76,8 +76,8 @@ final class AppCoordinator: ApphudDelegate {
     private func updateFoodData() {
         DSF.shared.resaveOldFoodData()
         if abs(Calendar.current.dateComponents([.day], from: Date(), to: UDM.lastBaseUpdateDay).day ?? 0) > 6 {
-            DSF.shared.updateStoredDishes()
-            DSF.shared.updateStoredProducts()
+//            DSF.shared.updateStoredDishes()
+//            DSF.shared.updateStoredProducts()
         }
     }
     
